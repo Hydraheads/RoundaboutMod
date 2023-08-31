@@ -2,6 +2,7 @@ package net.hydra.jojomod;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.ModItemGroups;
 import net.hydra.jojomod.item.ModItems;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ public class RoundaboutMod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		ModItems.registerModItems();
 		ModItemGroups.registerItemGroups();
+		ModBlocks.registerModBlocks();
 		LOGGER.info("Hello Fabric world!");
 	}
 }
