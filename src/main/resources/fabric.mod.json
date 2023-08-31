@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "roundabout",
+	"version": "${version}",
+	"name": "Roundabout",
+	"description": "The Ultimate Jojo's Bizarre Adventure Mod!",
+	"authors": [
+		"Hydraheads",
+		"GenericName"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/roundabout/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.hydra.jojomod.RoundaboutMod"
+		],
+		"client": [
+			"net.hydra.jojomod.RoundaboutModClient"
+		],
+		"fabric-datagen": [
+			"net.hydra.jojomod.RoundaboutModDataGenerator"
+		]
+	},
+	"mixins": [
+		"roundabout.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.22",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
