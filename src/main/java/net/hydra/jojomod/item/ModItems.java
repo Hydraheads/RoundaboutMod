@@ -12,13 +12,16 @@ import net.minecraft.util.Identifier;
 
 public class ModItems {
     public static final Item STAND_ARROW = registerItem("stand_arrow", new Item(new FabricItemSettings()));
+    public static final Item STAND_DISC = registerItem("stand_disc", new Item(new FabricItemSettings()));
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
-        entries.add(STAND_ARROW);
+        //entries.add(STAND_ARROW);
     }
+
     private static Item registerItem(String name, Item item){
         return Registry.register(Registries.ITEM, new Identifier(RoundaboutMod.MOD_ID,name), item);
     }
+
     public static void registerModItems(){
         RoundaboutMod.LOGGER.info("Registering Mod Items for " + RoundaboutMod.MOD_ID);
 

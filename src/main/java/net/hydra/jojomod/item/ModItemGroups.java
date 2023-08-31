@@ -19,6 +19,7 @@ public class ModItemGroups {
                         //Add all items from the Jojo mod tab here
 
                         entries.add(ModItems.STAND_ARROW);
+                        entries.add(ModItems.STAND_DISC);
 
                         entries.add(ModBlocks.METEOR_BLOCK);
 
