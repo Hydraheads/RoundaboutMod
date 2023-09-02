@@ -4,5 +4,14 @@
 
   "block.roundabout.meteor_block": "Meteorite Block",
 
-  "itemgroup.jojo": "Jojo Mod Items"
+  "itemgroup.jojo": "Roundabout",
+
+  "key.roundabout.summon.stand": "Summon Stand",
+  "key.roundabout.ability.one": "Ability 1",
+  "key.roundabout.ability.two": "Ability 2",
+  "key.roundabout.ability.three": "Ability 3",
+
+  "key.category.roundabout.jojo": "Roundabout Controls"
+
+
 }
