@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyInputHandler {
@@ -22,6 +23,7 @@ public class KeyInputHandler {
     //This is what the keys do, what code they run
     public static void registerKeyInputs(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            assert client.player != null;
             if (summonKey.wasPressed()){
                 client.player.sendMessage(Text.of("Summon Key"));
             } else if (abilityOneKey.wasPressed()){

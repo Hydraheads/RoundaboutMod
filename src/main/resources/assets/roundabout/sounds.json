@@ -1,0 +1,8 @@
+{
+  "summon_sound": {
+    "subtitle": "sounds.roundabout.summon_stand",
+    "sounds": [
+      "roundabout:summon_stand"
+    ]
+  }
+}
