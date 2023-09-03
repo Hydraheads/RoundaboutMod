@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.ModItemGroups;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.util.ModLootTableModifiers;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class RoundaboutMod implements ModInitializer {
 		ModItemGroups.registerItemGroups();
 		ModBlocks.registerModBlocks();
 		ModLootTableModifiers.modifyLootTables();
+		ModMessages.registerC2SPackets();
 		LOGGER.info("Hello Fabric world!");
 	}
 }
