@@ -8,7 +8,13 @@ import net.minecraft.util.Identifier;
 
 public class ModSounds {
 
-    public static SoundEvent SUMMON_SOUND = registerSoundEvent("summon_sound");
+    public static final Identifier SUMMON_SOUND_ID = new Identifier("roundabout:summon_sound");
+    public static SoundEvent SUMMON_SOUND_EVENT = SoundEvent.of(SUMMON_SOUND_ID);
+
+    public static void registerSoundEvents(){
+        Registry.register(Registries.SOUND_EVENT, SUMMON_SOUND_ID, SUMMON_SOUND_EVENT);
+    }
+
     private static SoundEvent registerSoundEvent(String name){
         Identifier id = new Identifier(RoundaboutMod.MOD_ID,name);
         return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));

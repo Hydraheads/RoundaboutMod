@@ -24,7 +24,7 @@ public class SummonC2SPacket {
 
 
         world.playSound(null, player.getBlockPos(),
-                SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS,
+                ModSounds.SUMMON_SOUND_EVENT, SoundCategory.PLAYERS,
                 1F,1F);
         EntityType.COW.spawn((ServerWorld) player.getWorld(),
                 player.getBlockPos(), SpawnReason.TRIGGERED);
