@@ -1,6 +1,11 @@
 package net.hydra.jojomod.util;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.hydra.jojomod.networking.ModMessages;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class StandData {
     public static void setStand(IEntityDataSaver entity, int setTo){
@@ -18,10 +23,16 @@ public class StandData {
     public static boolean isActive(IEntityDataSaver entity){
         NbtCompound nbt = entity.getPersistentData();
         return nbt.getBoolean("active_stand");
-    } public static void setActive(IEntityDataSaver entity){
-        NbtCompound nbt = entity.getPersistentData();
+    } public static void setActive(IEntityDataSaver player, boolean yes){
+        NbtCompound nbt = player.getPersistentData();
         boolean active_stand = nbt.getBoolean("active_stand");
-        active_stand= !active_stand;
-        nbt.putBoolean("active_stand",active_stand);
+        nbt.putBoolean("active_stand",yes);
+        syncStandActive(yes, (ServerPlayerEntity) player);
+    }
+
+    public static void syncStandActive(boolean active, ServerPlayerEntity player){
+        PacketByteBuf buffer = PacketByteBufs.create();
+        buffer.writeBoolean(active);
+        ServerPlayNetworking.send(player, ModMessages.STAND_SYNC_ID, buffer);
     }
 }

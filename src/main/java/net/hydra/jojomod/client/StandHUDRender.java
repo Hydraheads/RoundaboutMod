@@ -1,10 +1,13 @@
 package net.hydra.jojomod.client;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.hydra.jojomod.util.IEntityDataSaver;
+import net.hydra.jojomod.util.StandData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.nbt.NbtCompound;
 
 public class StandHUDRender implements HudRenderCallback {
 
@@ -21,8 +24,16 @@ public class StandHUDRender implements HudRenderCallback {
 
             x = width/2;
             y = height;
-            TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
-           drawContext.drawText(renderer, DEBUG_TEXT_1,x-50,y-50,0xffffff,true);
+            //NbtCompound pd = ((IEntityDataSaver) MinecraftClient.getInstance().player).getPersistentData();
+            if (StandData.isActive((IEntityDataSaver) MinecraftClient.getInstance().player)){
+
+                TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+                drawContext.drawText(renderer, DEBUG_TEXT_1,x-50,y-50,0xffffff,true);
+            } else {
+                TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+                drawContext.drawText(renderer, ""+StandData.isActive((IEntityDataSaver) MinecraftClient.getInstance().player),x-50,y-50,0xffffff,true);
+            }
+
 
         }
 
