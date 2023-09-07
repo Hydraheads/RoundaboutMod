@@ -14,7 +14,10 @@ public class StandSyncS2CPacket {
         assert client.player != null;
         //boolean active;
         //NbtCompound nbt = ((IEntityDataSaver) client.player).getPersistentData();
-        //RoundaboutMod.LOGGER.info("LMAO " + buf.readBoolean());
-        ((IEntityDataSaver) client.player).getPersistentData().putBoolean("active_stand",buf.readBoolean());
+        //RoundaboutMod.LOGGER.info("LMAO " +client.player.age+200);
+       // ((IEntityDataSaver) client.player).getPersistentData().putBoolean("active_stand",buf.readNbt().getBoolean("active_stand"));
+        ((IEntityDataSaver) client.player).getPersistentData().copyFrom(buf.readNbt());
+        //((IEntityDataSaver) client.player).getPersistentData().putInt("guard",buf.readNbt().getInt("guard"));
+        //((IEntityDataSaver) client.player).getPersistentData().putInt("guard",(client.player.age+200));
     }
 }

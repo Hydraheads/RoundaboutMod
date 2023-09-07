@@ -31,13 +31,23 @@ public class StandHUDRender implements HudRenderCallback {
         if (client != null){
             int width = client.getWindow().getScaledWidth();
             int height = client.getWindow().getScaledHeight();
-
+            int twidth = 51;
             x = width/2;
             y = height;
-            //NbtCompound pd = ((IEntityDataSaver) MinecraftClient.getInstance().player).getPersistentData();
-            if (StandData.isActive((IEntityDataSaver) MinecraftClient.getInstance().player)){
-                drawContext.drawTexture(GUARD_FILLED,x-20,y-67,0, 0, 51, 5, 51, 5);
-                drawContext.drawTexture(GUARD_ICON,x-30,y-68,0, 0, 7, 7, 7, 7);
+            //RoundaboutMod.LOGGER.info("LMAO " + client.player.age);
+            NbtCompound pd = ((IEntityDataSaver) MinecraftClient.getInstance().player).getPersistentData();
+            if (pd.getBoolean("active_stand")){
+
+                int age = pd.getInt("guard") - client.player.age;
+                if (age <=0 || age > 200){age=0;}
+                int twidth2 = (twidth*(200-age))/200;
+
+                //Draws the empty bar
+                    drawContext.drawTexture(GUARD_EMPTY,x-20,y-67,0, 0, twidth, 5, twidth, 5);
+                //Draws the full bar over it. Scales to age.
+                    drawContext.drawTexture(GUARD_FILLED,x-20,y-67,0, 0, twidth2, 5, twidth, 5);
+                //Draws the little shield icon
+                    drawContext.drawTexture(GUARD_ICON,x-30,y-68,0, 0, 7, 7, 7, 7);
 
                 //TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
                 //drawContext.drawText(renderer, DEBUG_TEXT_1,x-50,y-50,0xffffff,true);

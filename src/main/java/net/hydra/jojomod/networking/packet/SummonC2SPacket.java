@@ -26,15 +26,13 @@ public class SummonC2SPacket {
 
         boolean active;
         if (!StandData.isActive((IEntityDataSaver) player)) {
-            world.playSound(null, player.getBlockPos(),
-                    ModSounds.SUMMON_SOUND_EVENT, SoundCategory.PLAYERS,
-                    1F, 1F);
-            EntityType.COW.spawn((ServerWorld) player.getWorld(),
-                    player.getBlockPos(), SpawnReason.TRIGGERED);
+            world.playSound(null, player.getBlockPos(), ModSounds.SUMMON_SOUND_EVENT, SoundCategory.PLAYERS, 1F, 1F);
+            //EntityType.COW.spawn((ServerWorld) player.getWorld(), player.getBlockPos(), SpawnReason.TRIGGERED);
             active=true;
         } else {
             active=false;
         }
+        ((IEntityDataSaver) player).getPersistentData().putInt("guard",player.age+200);
         StandData.setActive((IEntityDataSaver) player,active);
         StandData.syncStandActive(active, (ServerPlayerEntity) player);
     }

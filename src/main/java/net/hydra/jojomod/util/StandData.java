@@ -32,7 +32,7 @@ public class StandData {
 
     public static void syncStandActive(boolean active, ServerPlayerEntity player){
         PacketByteBuf buffer = PacketByteBufs.create();
-        buffer.writeBoolean(active);
+        buffer.writeNbt(((IEntityDataSaver) player).getPersistentData());
         ServerPlayNetworking.send(player, ModMessages.STAND_SYNC_ID, buffer);
     }
 }
