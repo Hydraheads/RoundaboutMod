@@ -8,9 +8,7 @@ public class PlayerCopyHandler implements ServerPlayerEvents.CopyFrom {
     @Override
     public void copyFromPlayer(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer,
                                boolean alive) {
-        boolean npbool = ((IEntityDataSaver) oldPlayer).getPersistentData().getBoolean("active_stand");
-        ((IEntityDataSaver) newPlayer).getPersistentData().putBoolean("active_stand",
-                npbool);
-        StandData.syncStandActive(npbool,newPlayer);
+        ((IEntityDataSaver) newPlayer).getPersistentData().copyFrom(((IEntityDataSaver) oldPlayer).getPersistentData());
+        StandData.syncStandActive(newPlayer);
     }
 }

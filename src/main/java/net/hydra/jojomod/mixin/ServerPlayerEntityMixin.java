@@ -27,7 +27,7 @@ import static net.hydra.jojomod.stand.StandData.syncStandActive;
             if (compatSync > 0) {
                 compatSync--;
                 if (compatSync == 1) {
-                    syncStandActive(false, (ServerPlayerEntity) (Object) this);
+                    syncStandActive((ServerPlayerEntity) (Object) this);
                 }
             }
         }

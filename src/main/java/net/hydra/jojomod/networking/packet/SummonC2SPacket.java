@@ -30,6 +30,6 @@ public class SummonC2SPacket {
         }
         ((IEntityDataSaver) player).getPersistentData().putLong("guard",(player.getWorld().getTime()+200));
         StandData.setActive((IEntityDataSaver) player,active);
-        StandData.syncStandActive(active, (ServerPlayerEntity) player);
+        StandData.syncStandActive((ServerPlayerEntity) player);
     }
 }

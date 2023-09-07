@@ -11,8 +11,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.EventInit;
 import net.hydra.jojomod.util.ModLootTableModifiers;
 import net.hydra.jojomod.util.PlayerCopyHandler;
-import net.hydra.jojomod.util.PlayerRespawnHandler;
-import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +32,7 @@ public class RoundaboutMod implements ModInitializer {
 		EventInit.init();
 
 		ServerPlayerEvents.COPY_FROM.register(new PlayerCopyHandler());
-		ServerPlayerEvents.AFTER_RESPAWN.register(new PlayerRespawnHandler());
+		//ServerPlayerEvents.AFTER_RESPAWN.register(new PlayerRespawnHandler());
 
 		LOGGER.info("Hello Fabric world!");
 	}

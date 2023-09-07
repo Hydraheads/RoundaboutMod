@@ -26,12 +26,11 @@ public class StandData {
         return nbt.getBoolean("active_stand");
     } public static void setActive(IEntityDataSaver player, boolean yes){
         NbtCompound nbt = player.getPersistentData();
-        boolean active_stand = nbt.getBoolean("active_stand");
         nbt.putBoolean("active_stand",yes);
-        syncStandActive(yes, (ServerPlayerEntity) player);
+        syncStandActive((ServerPlayerEntity) player);
     }
 
-    public static void syncStandActive(boolean active, ServerPlayerEntity player){
+    public static void syncStandActive(ServerPlayerEntity player){
         PacketByteBuf buffer = PacketByteBufs.create();
         buffer.writeNbt(((IEntityDataSaver) player).getPersistentData());
         ServerPlayNetworking.send(player, ModMessages.STAND_SYNC_ID, buffer);
