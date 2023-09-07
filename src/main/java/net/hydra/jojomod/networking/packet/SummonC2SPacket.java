@@ -3,17 +3,13 @@ package net.hydra.jojomod.networking.packet;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.IEntityDataSaver;
-import net.hydra.jojomod.util.StandData;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.hydra.jojomod.stand.StandData;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 
 public class SummonC2SPacket {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
@@ -32,7 +28,7 @@ public class SummonC2SPacket {
         } else {
             active=false;
         }
-        ((IEntityDataSaver) player).getPersistentData().putInt("guard",player.age+200);
+        ((IEntityDataSaver) player).getPersistentData().putLong("guard",(player.getWorld().getTime()+200));
         StandData.setActive((IEntityDataSaver) player,active);
         StandData.syncStandActive(active, (ServerPlayerEntity) player);
     }

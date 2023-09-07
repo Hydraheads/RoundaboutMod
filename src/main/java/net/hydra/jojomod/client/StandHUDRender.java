@@ -1,15 +1,10 @@
 package net.hydra.jojomod.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.util.IEntityDataSaver;
-import net.hydra.jojomod.util.StandData;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
@@ -35,11 +30,14 @@ public class StandHUDRender implements HudRenderCallback {
             x = width/2;
             y = height;
             //RoundaboutMod.LOGGER.info("LMAO " + client.player.age);
+
             NbtCompound pd = ((IEntityDataSaver) MinecraftClient.getInstance().player).getPersistentData();
             if (pd.getBoolean("active_stand")){
 
-                int age = pd.getInt("guard") - client.player.age;
-                if (age <=0 || age > 200){age=0;}
+                int age = Math.toIntExact(pd.getLong("guard") - Math.round(client.player.getWorld().getTime()));
+                if (age <=0 || age > 201){age=0;}
+                //1000 -> 10
+                //1200
                 int twidth2 = (twidth*(200-age))/200;
 
                 //Draws the empty bar

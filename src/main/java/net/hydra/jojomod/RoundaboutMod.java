@@ -8,6 +8,7 @@ import net.hydra.jojomod.item.ModItemGroups;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.EventInit;
 import net.hydra.jojomod.util.ModLootTableModifiers;
 import net.hydra.jojomod.util.PlayerCopyHandler;
 import net.hydra.jojomod.util.PlayerRespawnHandler;
@@ -30,6 +31,7 @@ public class RoundaboutMod implements ModInitializer {
 		ModLootTableModifiers.modifyLootTables();
 		ModMessages.registerC2SPackets();
 		ModSounds.registerSoundEvents();
+		EventInit.init();
 
 		ServerPlayerEvents.COPY_FROM.register(new PlayerCopyHandler());
 		ServerPlayerEvents.AFTER_RESPAWN.register(new PlayerRespawnHandler());

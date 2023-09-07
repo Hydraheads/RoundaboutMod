@@ -3,7 +3,8 @@
 	"package": "net.hydra.jojomod.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ModEntityDataSaverMixin"
+		"ModEntityDataSaverMixin",
+		"ServerPlayerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

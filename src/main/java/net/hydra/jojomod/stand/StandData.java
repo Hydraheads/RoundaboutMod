@@ -1,8 +1,9 @@
-package net.hydra.jojomod.util;
+package net.hydra.jojomod.stand;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.networking.ModMessages;
+import net.hydra.jojomod.util.IEntityDataSaver;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;

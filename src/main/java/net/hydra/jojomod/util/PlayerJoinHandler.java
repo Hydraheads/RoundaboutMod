@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.hydra.jojomod.stand.StandData;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class PlayerJoinHandler implements ServerPlayerEvents.AfterRespawn {

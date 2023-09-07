@@ -1,8 +1,7 @@
 package net.hydra.jojomod.util;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.hydra.jojomod.networking.ModMessages;
+import net.hydra.jojomod.stand.StandData;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class PlayerCopyHandler implements ServerPlayerEvents.CopyFrom {
