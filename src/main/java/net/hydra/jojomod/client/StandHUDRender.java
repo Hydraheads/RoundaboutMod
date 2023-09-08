@@ -23,7 +23,7 @@ public class StandHUDRender implements HudRenderCallback {
         MinecraftClient client = MinecraftClient.getInstance();
         int x = 0;
         int y = 0;
-        if (client != null){
+        if (client != null && client.player != null){
             int width = client.getWindow().getScaledWidth();
             int height = client.getWindow().getScaledHeight();
             int twidth = 51;

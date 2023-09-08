@@ -2,6 +2,10 @@
   "item.roundabout.stand_arrow": "Stand Arrow",
   "item.roundabout.stand_disc": "Stand Disc",
 
+  "item.roundabout.terrier_spawn_egg": "Terrier Spawn Egg",
+
+  "entity.roundabout.terrier": "Terrier",
+
   "block.roundabout.meteor_block": "Meteorite Block",
 
   "itemgroup.jojo": "Roundabout",

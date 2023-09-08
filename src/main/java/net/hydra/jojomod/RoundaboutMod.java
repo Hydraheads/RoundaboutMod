@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.item.ModItemGroups;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModMessages;
@@ -29,6 +30,7 @@ public class RoundaboutMod implements ModInitializer {
 		ModLootTableModifiers.modifyLootTables();
 		ModMessages.registerC2SPackets();
 		ModSounds.registerSoundEvents();
+		ModEntities.registerModEntities();
 		EventInit.init();
 
 		ServerPlayerEvents.COPY_FROM.register(new PlayerCopyHandler());
