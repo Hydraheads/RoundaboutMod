@@ -20,6 +20,6 @@
   "key.category.roundabout.jojo": "Roundabout Controls",
   "hud.roundabout.standout": "Stand Summoned",
 
-  "sounds.roundabout.summon_stand":  "Stand Summoned",
-  "sounds.roundabout.terrier_pass": "Terrier Fart"
+  "sounds.roundabout.summon_stand":  "Stand summoned",
+  "sounds.roundabout.terrier_pass": "Terrier fart"
 }

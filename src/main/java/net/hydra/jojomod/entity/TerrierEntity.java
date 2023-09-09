@@ -4,11 +4,9 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -48,6 +46,13 @@ public class TerrierEntity extends WolfEntity {
     public boolean isBreedingItem(ItemStack stack) {
         Item item = stack.getItem();
         return item.isFood() && (Objects.requireNonNull(item.getFoodComponent()).isMeat() || stack.isOf(ModItems.COFFEE_GUM));
+    }
+
+    @Override
+    protected void initGoals() {
+        super.initGoals();
+        this.goalSelector.getGoals().removeIf(e -> e.getPriority() == 9);
+        this.goalSelector.add(9, new TerrierBegGoal(this, 8.0f));
     }
 
     @Override

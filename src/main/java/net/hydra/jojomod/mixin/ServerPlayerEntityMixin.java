@@ -16,7 +16,7 @@ import static net.hydra.jojomod.stand.StandData.syncStandActive;
 
 @Mixin(ServerPlayerEntity.class)
     public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ServerPlayerAccess {
-        public int compatSync = 0;
+        public int compatSync = 2;
 
         public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
             super(world, pos, yaw, gameProfile);
