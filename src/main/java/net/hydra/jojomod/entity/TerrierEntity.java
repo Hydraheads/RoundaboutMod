@@ -1,21 +1,25 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.RabbitEntity;
 import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.registry.Registry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Overwrite;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class TerrierEntity extends WolfEntity {
@@ -24,7 +28,7 @@ public class TerrierEntity extends WolfEntity {
     }
 
 
-
+//world.playSound(null, player.getBlockPos(), ModSounds.SUMMON_SOUND_EVENT, SoundCategory.PLAYERS, 1F, 1F);
     public static boolean canSpawn(EntityType<TerrierEntity> terrierEntityEntityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
         return serverWorldAccess.getBlockState(blockPos.down()).isIn(BlockTags.RABBITS_SPAWNABLE_ON) && WolfEntity.isLightLevelValidForNaturalSpawn(serverWorldAccess, blockPos);
     }
@@ -39,4 +43,29 @@ public class TerrierEntity extends WolfEntity {
         }
         return wolfEntity;
     }
+
+    @Override
+    public boolean isBreedingItem(ItemStack stack) {
+        Item item = stack.getItem();
+        return item.isFood() && (Objects.requireNonNull(item.getFoodComponent()).isMeat() || stack.isOf(ModItems.COFFEE_GUM));
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        if (this.hasAngerTime()) {
+            return SoundEvents.ENTITY_WOLF_GROWL;
+        }
+        if (this.random.nextInt(3) == 0) {
+            if (this.isTamed() && this.getHealth() < 10.0f) {
+                return SoundEvents.ENTITY_WOLF_WHINE;
+            }
+            return SoundEvents.ENTITY_WOLF_PANT;
+        }
+        if (!this.isTamed() && Math.random() > 0.9) {
+            return ModSounds.TERRIER_SOUND_EVENT;
+        } else {
+            return SoundEvents.ENTITY_WOLF_AMBIENT;
+        }
+    }
+
 }

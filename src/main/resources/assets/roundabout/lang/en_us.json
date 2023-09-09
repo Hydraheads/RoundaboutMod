@@ -1,6 +1,7 @@
 {
   "item.roundabout.stand_arrow": "Stand Arrow",
   "item.roundabout.stand_disc": "Stand Disc",
+  "item.roundabout.coffee_gum": "Coffee Gum",
 
   "item.roundabout.terrier_spawn_egg": "Terrier Spawn Egg",
 
@@ -17,7 +18,8 @@
   "key.roundabout.ability.four": "Special Move",
 
   "key.category.roundabout.jojo": "Roundabout Controls",
-  "hud.roundabout.standout": "Stand Summoned"
+  "hud.roundabout.standout": "Stand Summoned",
 
-
+  "sounds.roundabout.summon_stand":  "Stand Summoned",
+  "sounds.roundabout.terrier_pass": "Terrier Fart"
 }

@@ -4,5 +4,11 @@
     "sounds": [
       "roundabout:summon_stand"
     ]
+  },
+  "terrier_pass": {
+    "subtitle": "sounds.roundabout.terrier_pass",
+    "sounds": [
+      "roundabout:terrier_pass"
+    ]
   }
 }

@@ -21,6 +21,7 @@ public class ModItemGroups {
                         entries.add(ModItems.STAND_ARROW);
                         entries.add(ModItems.TERRIER_SPAWN_EGG);
                         entries.add(ModItems.STAND_DISC);
+                        entries.add(ModItems.COFFEE_GUM);
 
                         entries.add(ModBlocks.METEOR_BLOCK);
 
