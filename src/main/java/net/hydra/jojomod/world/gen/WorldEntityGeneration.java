@@ -16,7 +16,7 @@ import net.minecraft.world.biome.BiomeKeys;
 public class WorldEntityGeneration {
     public static void addSpawns(){
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.DESERT), SpawnGroup.CREATURE,
-                ModEntities.TERRIER_DOG, 6, 1, 3);
+                ModEntities.TERRIER_DOG, 4, 1, 3);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.TAIGA), SpawnGroup.CREATURE,
                 ModEntities.TERRIER_DOG, 3, 1, 3);
         SpawnRestriction.register(ModEntities.TERRIER_DOG, SpawnRestriction.Location.ON_GROUND,

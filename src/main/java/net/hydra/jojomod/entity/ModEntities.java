@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.entity.stands.StandTheWorld;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -20,10 +21,19 @@ public class ModEntities {
                     FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TerrierEntity::new).dimensions(EntityDimensions.fixed(0.6f, 0.55f)).build()
             );
 
+    public static final EntityType<StandTheWorld> THE_WORLD =
+            Registry.register(
+                    Registries.ENTITY_TYPE,
+                    new Identifier(RoundaboutMod.MOD_ID, "stand_the_world"),
+                    FabricEntityTypeBuilder.create(SpawnGroup.MISC, StandTheWorld::new).build()
+            );
+
+
     public static void registerModEntities(){
         RoundaboutMod.LOGGER.info("Registering Mod Entities for " + RoundaboutMod.MOD_ID);
 
         FabricDefaultAttributeRegistry.register(TERRIER_DOG, WolfEntity.createWolfAttributes());
+        FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
 
     }
 }
