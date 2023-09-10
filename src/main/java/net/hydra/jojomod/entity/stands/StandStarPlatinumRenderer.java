@@ -7,10 +7,10 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 
 
 @Environment(value= EnvType.CLIENT)
-public class StandTheWorldRenderer
-    extends StandEntityRenderer {
+public class StandStarPlatinumRenderer
+        extends StandEntityRenderer {
 
-    public StandTheWorldRenderer(EntityRendererFactory.Context renderManager) {
+    public StandStarPlatinumRenderer(EntityRendererFactory.Context renderManager) {
         super(renderManager);
     }
 }

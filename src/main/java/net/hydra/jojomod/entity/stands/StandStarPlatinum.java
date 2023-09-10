@@ -7,8 +7,8 @@ import net.minecraft.world.World;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 
-public class StandTheWorld extends StandEntity {
-    public StandTheWorld(EntityType<? extends MobEntity> entityType, World world) {
+public class StandStarPlatinum extends StandEntity {
+    public StandStarPlatinum(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -16,5 +16,4 @@ public class StandTheWorld extends StandEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
 
     }
-
 }

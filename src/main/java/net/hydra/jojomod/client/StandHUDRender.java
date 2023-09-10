@@ -1,5 +1,7 @@
 package net.hydra.jojomod.client;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.util.IEntityDataSaver;
@@ -8,6 +10,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
+
+@Environment(value= EnvType.CLIENT)
 public class StandHUDRender implements HudRenderCallback {
 
     public static final String DEBUG_TEXT_1 = "hud.roundabout.standout";

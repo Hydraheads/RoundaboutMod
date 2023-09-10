@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.entity.stands.StandStarPlatinum;
 import net.hydra.jojomod.entity.stands.StandTheWorld;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -24,8 +25,14 @@ public class ModEntities {
     public static final EntityType<StandTheWorld> THE_WORLD =
             Registry.register(
                     Registries.ENTITY_TYPE,
-                    new Identifier(RoundaboutMod.MOD_ID, "stand_the_world"),
+                    new Identifier(RoundaboutMod.MOD_ID, "the_world"),
                     FabricEntityTypeBuilder.create(SpawnGroup.MISC, StandTheWorld::new).build()
+            );
+    public static final EntityType<StandStarPlatinum> STAR_PLATINUM =
+            Registry.register(
+                    Registries.ENTITY_TYPE,
+                    new Identifier(RoundaboutMod.MOD_ID, "star_platinum"),
+                    FabricEntityTypeBuilder.create(SpawnGroup.MISC, StandStarPlatinum::new).build()
             );
 
 
@@ -34,6 +41,7 @@ public class ModEntities {
 
         FabricDefaultAttributeRegistry.register(TERRIER_DOG, WolfEntity.createWolfAttributes());
         FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
 
     }
 }

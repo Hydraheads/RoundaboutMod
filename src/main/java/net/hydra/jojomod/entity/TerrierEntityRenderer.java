@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.client.ModEntityRendererClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -11,6 +13,9 @@ import net.minecraft.client.render.entity.model.WolfEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.util.Identifier;
+
+
+@Environment(value= EnvType.CLIENT)
 public class TerrierEntityRenderer extends MobEntityRenderer<WolfEntity, WolfEntityModel<WolfEntity>> {
     private static final Identifier WILD_TEXTURE = new Identifier(RoundaboutMod.MOD_ID, "textures/entity/terrier.png");
     private static final Identifier TAMED_TEXTURE = new Identifier(RoundaboutMod.MOD_ID,"textures/entity/terrier_tame.png");

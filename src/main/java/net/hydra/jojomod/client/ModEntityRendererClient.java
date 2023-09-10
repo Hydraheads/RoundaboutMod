@@ -8,6 +8,7 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TerrierEntityModel;
 import net.hydra.jojomod.entity.TerrierEntityRenderer;
+import net.hydra.jojomod.entity.stands.StandStarPlatinumRenderer;
 import net.hydra.jojomod.entity.stands.StandTheWorldRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.WolfEntityModel;
@@ -19,6 +20,7 @@ public class ModEntityRendererClient {
     public static void register(){
         EntityRendererRegistry.register(ModEntities.TERRIER_DOG, TerrierEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.THE_WORLD, StandTheWorldRenderer::new);
+        EntityRendererRegistry.register(ModEntities.STAR_PLATINUM, StandStarPlatinumRenderer::new);
         //EntityModelLayerRegistry.registerModelLayer(WOLF_LAYER, WolfEntityModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(WOLF_LAYER, TerrierEntityModel::getTexturedModelData);
     }
