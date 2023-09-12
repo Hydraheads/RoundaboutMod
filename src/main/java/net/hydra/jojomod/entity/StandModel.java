@@ -7,12 +7,12 @@ import software.bernie.geckolib.model.GeoModel;
 public class StandModel extends GeoModel<StandEntity> {
     @Override
     public Identifier getModelResource(StandEntity animatable) {
-        return new Identifier(RoundaboutMod.MOD_ID,"geo/star_platinum.json");
+        return new Identifier(RoundaboutMod.MOD_ID,"geo/the_world.json");
     }
 
     @Override
     public Identifier getTextureResource(StandEntity animatable) {
-        return new Identifier(RoundaboutMod.MOD_ID,"textures/stand/star_platinum.png");
+        return new Identifier(RoundaboutMod.MOD_ID,"textures/stand/the_world.png");
     }
 
     @Override

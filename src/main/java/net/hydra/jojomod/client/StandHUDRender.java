@@ -36,7 +36,7 @@ public class StandHUDRender implements HudRenderCallback {
             //RoundaboutMod.LOGGER.info("LMAO " + client.player.age);
 
             NbtCompound pd = ((IEntityDataSaver) MinecraftClient.getInstance().player).getPersistentData();
-            if (pd.getBoolean("active_stand")){
+            if (pd.getBoolean("stand_on")){
 
                 int age = Math.toIntExact(pd.getLong("guard") - Math.round(client.player.getWorld().getTime()));
                 if (age <=0 || age > 201){age=0;}

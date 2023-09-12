@@ -23,10 +23,10 @@ public class StandData {
 
     public static boolean isActive(IEntityDataSaver entity){
         NbtCompound nbt = entity.getPersistentData();
-        return nbt.getBoolean("active_stand");
+        return nbt.getBoolean("stand_on");
     } public static void setActive(IEntityDataSaver player, boolean yes){
         NbtCompound nbt = player.getPersistentData();
-        nbt.putBoolean("active_stand",yes);
+        nbt.putBoolean("stand_on",yes);
         syncStandActive((ServerPlayerEntity) player);
     }
 

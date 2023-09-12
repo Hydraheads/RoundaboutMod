@@ -8,6 +8,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 
 public class StandStarPlatinum extends StandEntity {
+
     public StandStarPlatinum(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
