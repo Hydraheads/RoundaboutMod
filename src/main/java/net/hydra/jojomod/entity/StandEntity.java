@@ -33,6 +33,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     protected static final TrackedData<Optional<UUID>> OWNER_UUID = DataTracker.registerData(TameableEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
     private static final Integer MaxFade = 8;
 
+    public Integer getMaxFade() {return MaxFade;}
     public Integer getFadeOut() {
         return this.dataTracker.get(FadeOut);
     }
@@ -65,21 +66,9 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public void tick() {
         this.noClip = true;
 
-        //RoundaboutMod.LOGGER.info("Not Null:  " + (GetUser().getId()) + this.getId());
-        //RoundaboutMod.LOGGER.info("Not Null:  " + (standUser != null));
-        //RoundaboutMod.LOGGER.info("Fade:  " + FadeOut);
-
-
         if (!this.getWorld().isClient() && this.isAlive() && !this.dead) {
             Entity standUser = getStandUser();
             if (standUser != null && standUser.isAlive() && userActive()) {
-                if (this.getWorld().isClient()) {
-                    RoundaboutMod.LOGGER.info("Client Life");
-                } else {
-                    RoundaboutMod.LOGGER.info("Server Life");
-
-                }
-
                 if (getFadeOut() < MaxFade) {
                     incFadeOut(1);
                 }
@@ -87,11 +76,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
                 incFadeOut(-1);
                 if (getFadeOut() <= 0) {
 
-                    if (this.getWorld().isClient()) {
-                        RoundaboutMod.LOGGER.info("Client Death");
-                    } else {
-                        RoundaboutMod.LOGGER.info("Server Death");
-                    }
                     this.remove(RemovalReason.DISCARDED);
                 }
             }
@@ -105,11 +89,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public Entity getStandUser(){
         UUID user = getOwnerUuid();
         if (user != null && this.getWorld().isClient()){
-            RoundaboutMod.LOGGER.info("Client Owner UUID "+user);
-            RoundaboutMod.LOGGER.info("Client Owner "+((ServerWorld) this.getWorld()).getEntity(getOwnerUuid()));
         } else {
-            RoundaboutMod.LOGGER.info("Server Owner UUID "+user);
-            RoundaboutMod.LOGGER.info("Server Owner "+((ServerWorld) this.getWorld()).getEntity(getOwnerUuid()));
         }
         return ((ServerWorld) this.getWorld()).getEntity(getOwnerUuid());
     }  public boolean userActive(){
@@ -118,14 +98,10 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         Entity user2 = ((ServerWorld) this.getWorld()).getEntity(getOwnerUuid());
         RoundaboutMod.LOGGER.info("Earth to UA ");
         if (user2 != null){
-            RoundaboutMod.LOGGER.info("Earth to UA2");
             if (((IEntityDataSaver) user2).getPersistentData().get("active_stand") != null){
             UUID user3 = ((IEntityDataSaver) user2).getPersistentData().getUuid("active_stand");
-            RoundaboutMod.LOGGER.info("Earth to UA3 ");
             UUID user4 = this.getUuid();
-            RoundaboutMod.LOGGER.info("Earth to U4 ");
             if (user3 != null && user4 != null) {
-                RoundaboutMod.LOGGER.info("Earth to UA5 ");
                 return user3.equals(user4);
             }
         }}
