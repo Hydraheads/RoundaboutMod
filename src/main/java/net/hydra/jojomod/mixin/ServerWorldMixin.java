@@ -2,7 +2,9 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IStandUser;
 import net.minecraft.entity.Entity;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.profiler.Profiler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +29,11 @@ public class ServerWorldMixin {
         }
         passenger.resetPosition();
         ++passenger.age;
+        //Profiler profiler = this.getProfiler();
+        //profiler.push(() -> Registries.ENTITY_TYPE.getId(passenger.getType()).toString());
+        //profiler.visit("tickPassenger");
         ((IStandUser) passenger).tickStandOut();
+        //profiler.pop();
     }
 
 }

@@ -17,6 +17,7 @@ import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -74,6 +75,16 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
 
     @Override
+    public boolean hasVehicle() {
+        return ((IStandUser) this).getMaster() != null;
+    }
+
+    @Override
+    public Entity getVehicle() {
+        return ((IStandUser) this).getMaster();
+    }
+
+    @Override
     public void tick() {
         this.noClip = true;
 
@@ -83,6 +94,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
                 Entity ep = this.getWorld().getEntityById(id);
                 if (ep != null && ep.isAlive()){
                     ((IStandUser) ep).startStandRiding(this, true);
+                    //this.startRiding(ep, true);
                 }
             }
             // ((IStandUser) (PlayerEntity) player).startStandRiding(stand, true);
@@ -123,6 +135,16 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.setNoGravity(true);
     }
 
+
+    public Vec3d getStandOffsetVector(Entity standUser){
+        Direction test= this.getHorizontalFacing();
+        double r = 1.5;
+        double yawfix = standUser.getYaw(); yawfix+= 50; if (yawfix >360){yawfix-=360;}
+        double ang = (yawfix-180)*Math.PI;
+        double x1=standUser.getX() - -1*(r*(Math.sin(ang/180)));
+        double z1=standUser.getZ()- (r*(Math.cos(ang/180)));
+        return new Vec3d(x1, standUser.getY(), z1);
+    }
 
 
     public Entity getStandUser(){

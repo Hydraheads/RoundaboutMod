@@ -2,16 +2,15 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IStandUser;
+import net.hydra.jojomod.entity.StandEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 
 
 @Mixin(Entity.class)
@@ -60,11 +59,11 @@ public class EntityStandMixin implements IStandUser {
             return;
         }
         RoundaboutMod.LOGGER.info("updateStandOutPosition");
-        double d = ((Entity) (Object) this).getY() + ((Entity) (Object) this).getMountedHeightOffset() + passenger.getHeightOffset();
-        positionUpdater.accept(passenger, ((Entity) (Object) this).getX(), d, ((Entity) (Object) this).getZ());
-        passenger.setYaw(((Entity) (Object) this).getYaw());
+        Vec3d grabPos = ((StandEntity)passenger).getStandOffsetVector(((Entity) (Object) this));
+        positionUpdater.accept(passenger, grabPos.x, grabPos.y, grabPos.z);
+        passenger.setYaw(((Entity) (Object) this).getHeadYaw());
         passenger.setPitch(((Entity) (Object) this).getPitch());
-        passenger.setBodyYaw(((Entity) (Object) this).getBodyYaw());
+        passenger.setBodyYaw(((Entity) (Object) this).getHeadYaw());
         passenger.setHeadYaw(((Entity) (Object) this).getHeadYaw());
     }
 
@@ -94,6 +93,9 @@ public class EntityStandMixin implements IStandUser {
     @Override
     public boolean startStandRiding(Entity entity) {
         RoundaboutMod.LOGGER.info("startStandRiding");
+
+        ((Entity) (Object) entity).setPose(EntityPose.STANDING);
+        //entity.streamIntoPassengers().filter(passenger -> passenger instanceof ServerPlayerEntity).forEach(player -> Criteria.STARTED_RIDING.trigger((ServerPlayerEntity)player));
         return this.startStandRiding(entity, false);
     }
 
