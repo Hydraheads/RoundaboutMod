@@ -10,5 +10,17 @@
     "sounds": [
       "roundabout:terrier_pass"
     ]
+  },
+  "summon_world": {
+    "subtitle": "sounds.roundabout.summon_world",
+    "sounds": [
+      "roundabout:summon_world"
+    ]
+  },
+  "summon_star": {
+    "subtitle": "sounds.roundabout.summon_star",
+    "sounds": [
+      "roundabout:summon_star"
+    ]
   }
 }

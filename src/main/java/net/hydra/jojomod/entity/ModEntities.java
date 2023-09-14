@@ -26,13 +26,13 @@ public class ModEntities {
             Registry.register(
                     Registries.ENTITY_TYPE,
                     new Identifier(RoundaboutMod.MOD_ID, "the_world"),
-                    FabricEntityTypeBuilder.create(SpawnGroup.MISC, StandTheWorld::new).dimensions(EntityDimensions.fixed(0f, 2.05f)).build()
+                    FabricEntityTypeBuilder.create(SpawnGroup.MISC, StandTheWorld::new).dimensions(EntityDimensions.fixed(0.001F, 2.05f)).build()
             );
     public static final EntityType<StandStarPlatinum> STAR_PLATINUM =
             Registry.register(
                     Registries.ENTITY_TYPE,
                     new Identifier(RoundaboutMod.MOD_ID, "star_platinum"),
-                    FabricEntityTypeBuilder.create(SpawnGroup.MISC, StandStarPlatinum::new).dimensions(EntityDimensions.fixed(0f, 2.05f)).build()
+                    FabricEntityTypeBuilder.create(SpawnGroup.MISC, StandStarPlatinum::new).dimensions(EntityDimensions.fixed(0.001F, 2.05f)).build()
             );
 
 

@@ -35,7 +35,12 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
 
     public float getStandOpacity(){
         int vis = this.animatable.getFadeOut();
-        return (((float) vis/this.animatable.getMaxFade()));
+        int max = this.animatable.getMaxFade();
+        float tot = (float) ((((float) vis/max)*1.3)-0.3);
+        if (tot < 0) {
+            tot=0;
+        }
+            return tot;
     }
 
     @Override

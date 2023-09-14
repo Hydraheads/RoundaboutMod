@@ -4,6 +4,7 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IStandUser;
 import net.hydra.jojomod.mixin.EntityStandMixin;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -16,6 +17,9 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -26,6 +30,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Max;
 
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -35,8 +40,16 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     private static final TrackedData<Integer> FadeOut = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Optional<UUID>> OWNER_UUID = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
     protected static final TrackedData<Integer> OWNER_ID = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final Integer MaxFade = 8;
 
+    protected SoundEvent getSummonSound() {
+            return ModSounds.SUMMON_SOUND_EVENT;
+    }
+
+    public void playSummonSound() {
+        this.getWorld().playSound(null, this.getBlockPos(), getSummonSound(), SoundCategory.PLAYERS, 1F, 1F);
+    }
 
     public Integer getMaxFade() {return MaxFade;}
     public Integer getFadeOut() {
@@ -44,6 +57,12 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     }
     public Integer getOwnerID() {
         return this.dataTracker.get(OWNER_ID);
+    }
+    public Integer getAnchorPlace() {
+        return this.dataTracker.get(ANCHOR_PLACE);
+    }
+    public void setAnchorPlace(Integer degrees) {
+        this.dataTracker.set(ANCHOR_PLACE, degrees);
     }
     public void setOwnerID(Integer yeet){this.dataTracker.set(OWNER_ID, yeet);
     }
@@ -63,6 +82,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.dataTracker.startTracking(FadeOut, 1);
         this.dataTracker.startTracking(OWNER_UUID, Optional.empty());
         this.dataTracker.startTracking(OWNER_ID, -1);
+        this.dataTracker.startTracking(ANCHOR_PLACE, 55);
     }
 
     private final AnimatableInstanceCache cache =
@@ -125,7 +145,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 //                this.setPosition(x1,standUser.getY(),z1);
             } else {
                 incFadeOut(-1);
-                if (getFadeOut() <= 0) {
+                if (getFadeOut() == 1) {
+                } else if (getFadeOut() <= 0) {
 
                     this.remove(RemovalReason.DISCARDED);
                 }
@@ -137,13 +158,24 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
 
     public Vec3d getStandOffsetVector(Entity standUser){
-        Direction test= this.getHorizontalFacing();
-        double r = 1.5;
-        double yawfix = standUser.getYaw(); yawfix+= 50; if (yawfix >360){yawfix-=360;}
+
+
+
+        int vis = this.getFadeOut();
+        double r = (((double) vis /MaxFade)*1.45);
+        if (r < 0.5) { r=0.5; }
+        double yawfix = standUser.getYaw(); yawfix+= getAnchorPlace(); if (yawfix >360){yawfix-=360;}else if (yawfix <0){yawfix+=360;}
         double ang = (yawfix-180)*Math.PI;
+
+        double mcap = 0.3;
+        Vec3d xyz = standUser.getVelocity();
+        double yy = xyz.getY()*0.3; if (yy>mcap){yy=mcap;} else if (yy<-mcap){yy=-mcap;}
         double x1=standUser.getX() - -1*(r*(Math.sin(ang/180)));
+        double y1=standUser.getY()+0.1-yy;
         double z1=standUser.getZ()- (r*(Math.cos(ang/180)));
-        return new Vec3d(x1, standUser.getY(), z1);
+
+
+        return new Vec3d(x1, y1, z1);
     }
 
 

@@ -24,5 +24,7 @@
   "hud.roundabout.standout": "Stand Summoned",
 
   "sounds.roundabout.summon_stand":  "Stand summoned",
+  "sounds.roundabout.summon_star":  "Stand summoned",
+  "sounds.roundabout.summon_world":  "Stand summoned",
   "sounds.roundabout.terrier_pass": "Terrier fart"
 }
