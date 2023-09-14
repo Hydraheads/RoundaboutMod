@@ -18,6 +18,7 @@ public class ModItems {
     public static final Item STAND_ARROW = registerItem("stand_arrow", new Item(new FabricItemSettings()));
     public static final Item STAND_DISC = registerItem("stand_disc", new Item(new FabricItemSettings()));
     public static final Item COFFEE_GUM = registerItem("coffee_gum", new Item(new FabricItemSettings().food(ModFoodComponents.COFFEE_GUM)));
+    public static final Item METEORITE = registerItem("meteorite", new Item(new FabricItemSettings()));
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(TERRIER_DOG,
             0xc9c071, 0xfffded, new FabricItemSettings()));

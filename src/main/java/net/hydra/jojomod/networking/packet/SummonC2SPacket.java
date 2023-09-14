@@ -1,17 +1,13 @@
 package net.hydra.jojomod.networking.packet;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.client.ModEntityRendererClient;
+import net.hydra.jojomod.access.IStandUser;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.IEntityDataSaver;
+import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.stand.StandData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -38,6 +34,10 @@ public class SummonC2SPacket {
                 stand.setOwnerUuid(player.getUuid());
                 ((IEntityDataSaver) player).getPersistentData().putUuid("active_stand",stand.getUuid());
                 world.spawnEntity(stand);
+                stand.setOwnerID(player.getId());
+                //((IStandUser) (PlayerEntity) player).startStandRiding(stand, true);
+                //StandData.syncRidingID((ServerPlayerEntity) player,stand.getId());
+               // player.startRiding(stand,true);
             }
 
             //ModEntities.THE_WORLD.spawn((ServerWorld) player.getWorld(), player.getBlockPos(), SpawnReason.TRIGGERED);

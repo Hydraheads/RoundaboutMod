@@ -35,7 +35,6 @@ import static net.hydra.jojomod.stand.StandData.syncStandActive;
 
         @Override
     public void compatSync() {
-           RoundaboutMod.LOGGER.info("LMAO " + 5);
         compatSync = 5;
     }
 }

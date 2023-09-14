@@ -11,6 +11,7 @@ public class ModMessages {
     //packets!
     public static final Identifier SUMMON_ID = new Identifier(RoundaboutMod.MOD_ID,"summon");
     public static final Identifier STAND_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"stand_sync");
+    public static final Identifier RIDE_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"ride_sync");
 
     //Client To Server
     public static void registerC2SPackets(){
@@ -20,5 +21,6 @@ public class ModMessages {
     //Server to Client
     public static void registerS2CPackets(){
         ClientPlayNetworking.registerGlobalReceiver(STAND_SYNC_ID, StandSyncS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(RIDE_SYNC_ID, StandSyncS2CPacket::riding);
     }
 }

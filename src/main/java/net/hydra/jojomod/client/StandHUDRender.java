@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.util.IEntityDataSaver;
+import net.hydra.jojomod.access.IEntityDataSaver;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.nbt.NbtCompound;

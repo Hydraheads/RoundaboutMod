@@ -5,7 +5,10 @@
 	"mixins": [
 		"ModEntityDataSaverMixin",
 		"ServerPlayerEntityMixin",
-		"PlayerManagerMixin"
+		"PlayerManagerMixin",
+		"ClientWorldMixin",
+		"EntityStandMixin",
+		"ServerWorldMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
