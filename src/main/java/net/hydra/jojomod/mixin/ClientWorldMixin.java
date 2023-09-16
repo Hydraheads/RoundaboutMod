@@ -18,7 +18,6 @@ public class ClientWorldMixin {
     private void teleportStandOut(Entity entity, CallbackInfo ci) {
 
         if (((IStandUser) entity).hasStandOut()){
-            RoundaboutMod.LOGGER.info("CLIENT teleportStandOut");
             this.tickStandIn(entity,((IStandUser) entity).getStandOut());
         }
     }
@@ -30,7 +29,6 @@ public class ClientWorldMixin {
         }
         passenger.resetPosition();
         ++passenger.age;
-        RoundaboutMod.LOGGER.info("CLIENT tickStandIn");
         ((IStandUser) passenger).tickStandOut();
     }
 
