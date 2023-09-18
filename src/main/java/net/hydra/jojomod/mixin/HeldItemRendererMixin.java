@@ -8,6 +8,7 @@ import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,11 +41,10 @@ public class HeldItemRendererMixin {
     public void injectHeldItems(CallbackInfo ci) {
         ClientPlayerEntity clientPlayerEntity2 = this.client.player;
         if (!this.client.player.isRiding()) {
-        NbtCompound pd = ((IEntityDataSaver) client.player).getPersistentData();
-        if (pd.getBoolean("stand_on")) {
+        if (((IEntityDataSaver) client.player).getStandOn()) {
             ItemStack itemStack3 = clientPlayerEntity2.getMainHandStack();
             ItemStack itemStack4 = clientPlayerEntity2.getOffHandStack();
-            if (EnchantmentTarget.WEAPON.isAcceptableItem(itemStack3.getItem())){
+            if (itemStack3.getItem() instanceof ToolItem){
             if (this.equipProgressMainHand > 0.6) {
                 this.equipProgressMainHand = MathHelper.clamp(this.equipProgressMainHand - 0.4f, 0.6f, 1.0f);
             }}
@@ -52,7 +52,7 @@ public class HeldItemRendererMixin {
             if (this.equipProgressOffHand > 0.6) {
                 this.equipProgressOffHand = MathHelper.clamp(this.equipProgressOffHand - 0.4f, 0.6f, 1.0f);
             }
-            RoundaboutMod.LOGGER.info(""+equipProgressMainHand);
+
         }}
     }
     //renderArmHoldingItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm)

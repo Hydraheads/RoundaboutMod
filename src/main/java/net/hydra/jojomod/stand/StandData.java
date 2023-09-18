@@ -32,6 +32,7 @@ public class StandData {
 
     public static void syncStandActive(ServerPlayerEntity player){
         // Updates your stand info for gui
+        ((IEntityDataSaver) player).syncPersistentData();
         PacketByteBuf buffer = PacketByteBufs.create();
         buffer.writeNbt(((IEntityDataSaver) player).getPersistentData());
         ServerPlayNetworking.send(player, ModMessages.STAND_SYNC_ID, buffer);

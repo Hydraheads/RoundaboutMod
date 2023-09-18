@@ -14,6 +14,7 @@ public class StandSyncS2CPacket {
                                PacketByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {
             ((IEntityDataSaver) client.player).getPersistentData().copyFrom(buf.readNbt());
+            ((IEntityDataSaver) client.player).syncPersistentData();
         }
     }
     public static void riding(MinecraftClient client, ClientPlayNetworkHandler handler,
