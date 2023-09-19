@@ -156,7 +156,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.setNoGravity(true);
     }
 
-
     public Vec3d getStandOffsetVector(Entity standUser){
 
 

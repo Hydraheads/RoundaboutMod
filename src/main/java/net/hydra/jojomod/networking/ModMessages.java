@@ -21,6 +21,5 @@ public class ModMessages {
     //Server to Client
     public static void registerS2CPackets(){
         ClientPlayNetworking.registerGlobalReceiver(STAND_SYNC_ID, StandSyncS2CPacket::receive);
-        ClientPlayNetworking.registerGlobalReceiver(RIDE_SYNC_ID, StandSyncS2CPacket::riding);
     }
 }

@@ -17,16 +17,4 @@ public class StandSyncS2CPacket {
             ((IEntityDataSaver) client.player).syncPersistentData();
         }
     }
-    public static void riding(MinecraftClient client, ClientPlayNetworkHandler handler,
-                               PacketByteBuf buf, PacketSender responseSender) {
-        RoundaboutMod.LOGGER.info("step 1");
-        if (client.player != null && client.world != null) {
-            RoundaboutMod.LOGGER.info("step 2");
-            Entity Stando = client.world.getEntityById(buf.readInt());
-            if (Stando != null && Stando.isAlive()){
-                RoundaboutMod.LOGGER.info("Packet Wins");
-                ((IStandUser) client.player).startStandRiding(Stando, true);
-            }
-        }
-    }
 }
