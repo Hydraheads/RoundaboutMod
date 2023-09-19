@@ -64,7 +64,7 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
         if(entity.isBaby()) {
             poseStack.scale(0.4f,0.4f,0.4f);
         } else {
-            poseStack.scale(0.9375f, 0.9375f, 0.9375f);
+            poseStack.scale(0.87f, 0.87f, 0.87f);
         }
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, 255);
     }

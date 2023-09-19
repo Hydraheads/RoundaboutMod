@@ -35,7 +35,6 @@ public abstract class ModEntityDataSaverMixin implements IEntityDataSaver {
     @Nullable
     public UUID getActiveStand() {
         if (activeStand != null){
-            RoundaboutMod.LOGGER.info(""+activeStand);
             return activeStand;}
         else {return null;}
     }

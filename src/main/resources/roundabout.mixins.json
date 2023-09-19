@@ -9,7 +9,8 @@
 		"ClientWorldMixin",
 		"EntityStandMixin",
 		"ServerWorldMixin",
-		"HeldItemRendererMixin"
+		"HeldItemRendererMixin",
+		"GameHudMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
