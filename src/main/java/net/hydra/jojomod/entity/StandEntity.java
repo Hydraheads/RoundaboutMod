@@ -3,24 +3,19 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IStandUser;
-import net.hydra.jojomod.mixin.EntityStandMixin;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +25,6 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Max;
 
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -44,6 +38,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final Integer MaxFade = 8;
+    private Entity master;
 
     private int moveForward;
 
@@ -78,13 +73,17 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public void setAnchorPlace(Integer degrees) {
         this.dataTracker.set(ANCHOR_PLACE, degrees);
     }
-    public void setOwnerID(Integer yeet){this.dataTracker.set(OWNER_ID, yeet);
-    }
-    public UUID getOwnerUuid() {
-        return this.dataTracker.get(OWNER_UUID).orElse(null);
-    }
+    public void setOwnerID(Integer yeet){this.dataTracker.set(OWNER_ID, yeet);}
+    public UUID getOwnerUuid() {return this.dataTracker.get(OWNER_UUID).orElse(null);}
     public void setOwnerUuid(@Nullable UUID uuid) {
         this.dataTracker.set(OWNER_UUID, Optional.ofNullable(uuid));
+    }
+    public boolean isSwimming() {
+        if (this.master != null){
+            return this.master.isSwimming();
+        } else {
+            return false;
+        }
     }
 
     public void incFadeOut(Integer inc) {
@@ -111,24 +110,70 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public boolean hasVehicle() {
-        return ((IStandUser) this).getMaster() != null;
+        return this.getMaster() != null;
     }
 
     @Override
     public Entity getVehicle() {
-        return ((IStandUser) this).getMaster();
+        return this.getMaster();
+    }
+
+
+    public boolean hasMaster() {
+        return this.getMaster() != null;
+    }
+
+    public void dismountMaster() {
+        if (this.master != null) {
+            Entity entity = this.master;
+            this.master = null;
+            ((IStandUser) entity).removeStandOut();
+        }
+    }
+    public void setMaster(Entity Master) {
+        this.master = Master;
+    }
+
+    public Entity getMaster() {
+        return this.master;
+    }
+
+    public boolean startStandRiding(Entity entity, boolean force) {
+        if (entity == this.getMaster()) {
+            return false;
+        }
+        this.setMaster(entity);
+        ((IStandUser) (Object) entity).addStandOut(this);
+        return true;
+    }
+
+    public void tickStandOut() {
+        ((Entity) (Object) this).setVelocity(Vec3d.ZERO);
+        ((Entity) (Object) this).tick();
+        if (!(((StandEntity) (Object) this).hasMaster())) {
+            return;
+        }
+        ((IStandUser) ((Entity) (Object) this.getMaster())).updateStandOutPosition(this);
+    }
+
+
+    public boolean startStandRiding(Entity entity) {
+
+        ((Entity) (Object) entity).setPose(EntityPose.STANDING);
+        //entity.streamIntoPassengers().filter(passenger -> passenger instanceof ServerPlayerEntity).forEach(player -> Criteria.STARTED_RIDING.trigger((ServerPlayerEntity)player));
+        return this.startStandRiding(entity, false);
     }
 
     @Override
     public void tick() {
         this.noClip = true;
 
-        if (!((IStandUser) this).hasMaster()){
+        if (!this.hasMaster()){
             int id = getOwnerID();
             if (id > 0){
                 Entity ep = this.getWorld().getEntityById(id);
                 if (ep != null && ep.isAlive()){
-                    ((IStandUser) ep).startStandRiding(this, true);
+                    this.startStandRiding(ep, true);
                     //this.startRiding(ep, true);
                 }
             }

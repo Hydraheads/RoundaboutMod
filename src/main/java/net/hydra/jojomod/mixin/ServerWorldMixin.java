@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IStandUser;
+import net.hydra.jojomod.entity.StandEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
@@ -22,9 +23,9 @@ public class ServerWorldMixin {
         }
     }
 
-    private void tickStandIn(Entity entity, Entity passenger) {
-        if (passenger.isRemoved() || ((IStandUser)passenger).getMaster() != entity) {
-            ((IStandUser) passenger).stopStandOut();
+    private void tickStandIn(Entity entity, StandEntity passenger) {
+        if (passenger.isRemoved() || passenger.getMaster() != entity) {
+            passenger.dismountMaster();
             return;
         }
         passenger.resetPosition();
@@ -32,7 +33,7 @@ public class ServerWorldMixin {
         //Profiler profiler = this.getProfiler();
         //profiler.push(() -> Registries.ENTITY_TYPE.getId(passenger.getType()).toString());
         //profiler.visit("tickPassenger");
-        ((IStandUser) passenger).tickStandOut();
+        passenger.tickStandOut();
         //profiler.pop();
     }
 

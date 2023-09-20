@@ -19,38 +19,22 @@ public class EntityStandMixin implements IStandUser {
 
     //This Code gives every entity the potential to be a stand user.
     //It provides movement sync code for stands as well, by offering a modified copy of mount code
-    private Entity standOut;
-    private Entity master;
+    private StandEntity standOut;
 
 
     @Override
     public void setDI(int forward, int strafe){
         //RoundaboutMod.LOGGER.info("MF:"+ forward);
         if (standOut != null){
-            if (((Entity) (Object) this).isSprinting()){forward*=2;}
-            ((StandEntity) standOut).setMoveForward(forward);
+            if (!((Entity) (Object) this).isSneaking() && ((Entity) (Object) this).isSprinting()){
+                forward*=2;}
+            standOut.setMoveForward(forward);
         }
     }
 
     @Override
-    public Entity getStandOut() {
+    public StandEntity getStandOut() {
         return this.standOut;
-    }
-
-    @Override
-    public boolean hasMaster() {
-        return this.getMaster() != null;
-    }
-
-
-    @Override
-    public void setMaster(Entity Master) {
-        this.master = Master;
-    }
-
-    @Override
-    public Entity getMaster() {
-        return this.master;
     }
 
     @Override
@@ -59,16 +43,16 @@ public class EntityStandMixin implements IStandUser {
     }
 
     @Override
-    public void updateStandOutPosition(Entity passenger) {
+    public void updateStandOutPosition(StandEntity passenger) {
         this.updateStandOutPosition(passenger, Entity::setPosition);
     }
 
     @Override
-    public void updateStandOutPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
+    public void updateStandOutPosition(StandEntity passenger, Entity.PositionUpdater positionUpdater) {
         if (!(this.hasStandOut())) {
             return;
         }
-        Vec3d grabPos = ((StandEntity)passenger).getStandOffsetVector(((Entity) (Object) this));
+        Vec3d grabPos = passenger.getStandOffsetVector(((Entity) (Object) this));
         positionUpdater.accept(passenger, grabPos.x, grabPos.y, grabPos.z);
         passenger.setYaw(((Entity) (Object) this).getHeadYaw());
         passenger.setPitch(((Entity) (Object) this).getPitch());
@@ -84,64 +68,21 @@ public class EntityStandMixin implements IStandUser {
     }
 
     @Override
-    public void tickStandOut() {
-        ((Entity) (Object) this).setVelocity(Vec3d.ZERO);
-        ((Entity) (Object) this).tick();
-        if (!(this.hasMaster())) {
-            return;
-        }
-        ((IStandUser) this.getMaster()).updateStandOutPosition( ((Entity) (Object) this));
+    public void onStandOutLookAround(StandEntity passenger) {
     }
 
-    @Override
-    public void onStandOutLookAround(Entity passenger) {
-    }
+
+
+
 
     @Override
-    public boolean startStandRiding(Entity entity) {
-
-        ((Entity) (Object) entity).setPose(EntityPose.STANDING);
-        //entity.streamIntoPassengers().filter(passenger -> passenger instanceof ServerPlayerEntity).forEach(player -> Criteria.STARTED_RIDING.trigger((ServerPlayerEntity)player));
-        return this.startStandRiding(entity, false);
-    }
-
-    @Override
-    public boolean startStandRiding(Entity entity, boolean force) {
-        if (entity == this.getMaster()) {
-            return false;
-        }
-        ((IStandUser) entity).setMaster(((Entity) (Object) this));
-        this.addStandOut(entity);
-        return true;
-    }
-
-    @Override
-    public void removeAllStandOuts() {
-        ((IStandUser) standOut).stopStandOut();
-    }
-
-    @Override
-    public void dismountMaster() {
-        if (this.master != null) {
-            Entity entity = this.master;
-            this.master = null;
-            ((IStandUser) entity).removeStandOut(((Entity) (Object) this));
-        }
-    }
-
-    @Override
-    public void stopStandOut() {
-        this.dismountMaster();
-    }
-
-    @Override
-    public void addStandOut(Entity passenger) {
+    public void addStandOut(StandEntity passenger) {
             this.standOut = passenger;
         //this.emitGameEvent(GameEvent.ENTITY_MOUNT, passenger);
     }
 
     @Override
-    public void removeStandOut(Entity passenger) {
+    public void removeStandOut() {
         this.standOut = null;
         //this.emitGameEvent(GameEvent.ENTITY_DISMOUNT, passenger);
     }

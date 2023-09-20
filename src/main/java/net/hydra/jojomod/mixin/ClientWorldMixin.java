@@ -22,14 +22,14 @@ public class ClientWorldMixin {
         }
     }
 
-    private void tickStandIn(Entity entity, Entity passenger) {
-        if (passenger.isRemoved() || ((IStandUser)passenger).getMaster() != entity) {
-            ((IStandUser) passenger).stopStandOut();
+    private void tickStandIn(Entity entity, StandEntity passenger) {
+        if (passenger.isRemoved() || passenger.getMaster() != entity) {
+            passenger.dismountMaster();
             return;
         }
         passenger.resetPosition();
         ++passenger.age;
-        ((IStandUser) passenger).tickStandOut();
+        passenger.tickStandOut();
     }
 
 }

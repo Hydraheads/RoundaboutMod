@@ -1,25 +1,17 @@
 package net.hydra.jojomod.access;
 
+import net.hydra.jojomod.entity.StandEntity;
 import net.minecraft.entity.Entity;
 
 public interface IStandUser {
-    public Entity getStandOut();
-    public boolean hasMaster();
-    public Entity getMaster();
-    public void setMaster(Entity Master);
+    public StandEntity getStandOut();
     public boolean hasStandOut();
-    public void tickStandOut();
-    public void onStandOutLookAround(Entity passenger);
-    public boolean startStandRiding(Entity entity);
-    public boolean startStandRiding(Entity entity, boolean force);
+    public void onStandOutLookAround(StandEntity passenger);
 
-    public void updateStandOutPosition(Entity passenger);
+    public void updateStandOutPosition(StandEntity passenger);
 
-    public void updateStandOutPosition(Entity passenger, Entity.PositionUpdater positionUpdater);
-    public void removeStandOut(Entity passenger);
-    public void removeAllStandOuts();
-    public void addStandOut(Entity passenger);
-    public void dismountMaster();
-    public void stopStandOut();
+    public void updateStandOutPosition(StandEntity passenger, Entity.PositionUpdater positionUpdater);
+    public void removeStandOut();
+    public void addStandOut(StandEntity passenger);
     public void setDI(int forward, int strafe);
 }

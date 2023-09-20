@@ -49,6 +49,7 @@ public class StandModel extends GeoModel<StandEntity> {
             } else {
                 cRot = 0;
             }
+            cRot*= 0.6F;
             if (Math.abs(rotX - cRot)<= minRotX){cRot=maxRotX;}
             else if (rotX > cRot){rotX-=cRot2;} else if (rotX < cRot){rotX+=cRot2;}
             body.setRotX(rotX);
