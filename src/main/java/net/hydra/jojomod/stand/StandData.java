@@ -36,10 +36,5 @@ public class StandData {
         PacketByteBuf buffer = PacketByteBufs.create();
         buffer.writeNbt(((IEntityDataSaver) player).getPersistentData());
         ServerPlayNetworking.send(player, ModMessages.STAND_SYNC_ID, buffer);
-    } public static void syncRidingID(ServerPlayerEntity player, int rid){
-        // Riding Packet
-        PacketByteBuf buffer2 = PacketByteBufs.create();
-        buffer2.writeInt(rid);
-        ServerPlayNetworking.send(player, ModMessages.RIDE_SYNC_ID, buffer2);
     }
 }

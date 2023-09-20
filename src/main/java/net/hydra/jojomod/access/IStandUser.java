@@ -21,4 +21,5 @@ public interface IStandUser {
     public void addStandOut(Entity passenger);
     public void dismountMaster();
     public void stopStandOut();
+    public void setDI(int forward, int strafe);
 }

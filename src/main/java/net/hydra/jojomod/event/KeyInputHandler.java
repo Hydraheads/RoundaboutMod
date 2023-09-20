@@ -4,9 +4,13 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.networking.ModMessages;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.lwjgl.glfw.GLFW;
@@ -28,22 +32,33 @@ public class KeyInputHandler {
     //This is what the keys do, what code they run
     public static void registerKeyInputs(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            assert client.player != null;
-            while (summonKey.wasPressed()){
-                //client.player.sendMessage(Text.of("Summon Key"));
-                ClientPlayNetworking.send(ModMessages.SUMMON_ID, PacketByteBufs.create());
-            }
-            while (abilityOneKey.wasPressed()){
-                //client.player.sendMessage(Text.of("Ability Key"));
-            }
-            while (abilityTwoKey.wasPressed()){
-                //client.player.sendMessage(Text.of("Ability Key 2"));
-            }
-            while (abilityThreeKey.wasPressed()){
-                //client.player.sendMessage(Text.of("Ability Key 3"));
-            }
-            while (abilityFourKey.wasPressed()){
-                client.player.sendMessage(Text.of("Special Move"));
+            if (client.player != null) {
+                //RoundaboutMod.LOGGER.info("px");
+                if (client.player.isAlive()) {
+                    //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
+                    PacketByteBuf buffer = PacketByteBufs.create();
+                    buffer.writeBoolean(client.options.forwardKey.isPressed());
+                    buffer.writeBoolean(client.options.backKey.isPressed());
+                    buffer.writeBoolean(client.options.leftKey.isPressed());
+                    buffer.writeBoolean(client.options.rightKey.isPressed());
+                    ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
+                }
+                while (summonKey.wasPressed()) {
+                    //client.player.sendMessage(Text.of("Summon Key"));
+                    ClientPlayNetworking.send(ModMessages.SUMMON_ID, PacketByteBufs.create());
+                }
+                while (abilityOneKey.wasPressed()) {
+                    //client.player.sendMessage(Text.of("Ability Key"));
+                }
+                while (abilityTwoKey.wasPressed()) {
+                    //client.player.sendMessage(Text.of("Ability Key 2"));
+                }
+                while (abilityThreeKey.wasPressed()) {
+                    //client.player.sendMessage(Text.of("Ability Key 3"));
+                }
+                while (abilityFourKey.wasPressed()) {
+                    client.player.sendMessage(Text.of("Special Move"));
+                }
             }
         });
     }

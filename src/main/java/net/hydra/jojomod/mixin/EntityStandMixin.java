@@ -22,6 +22,16 @@ public class EntityStandMixin implements IStandUser {
     private Entity standOut;
     private Entity master;
 
+
+    @Override
+    public void setDI(int forward, int strafe){
+        //RoundaboutMod.LOGGER.info("MF:"+ forward);
+        if (standOut != null){
+            if (((Entity) (Object) this).isSprinting()){forward*=2;}
+            ((StandEntity) standOut).setMoveForward(forward);
+        }
+    }
+
     @Override
     public Entity getStandOut() {
         return this.standOut;

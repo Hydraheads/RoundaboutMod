@@ -35,13 +35,17 @@ import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Max;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.UUID;
+import java.util.Vector;
 
 public abstract class StandEntity extends MobEntity implements GeoEntity {
     private static final TrackedData<Integer> FadeOut = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Optional<UUID>> OWNER_UUID = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
     protected static final TrackedData<Integer> OWNER_ID = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final Integer MaxFade = 8;
+
+    private int moveForward;
 
     protected SoundEvent getSummonSound() {
             return ModSounds.SUMMON_SOUND_EVENT;
@@ -49,6 +53,16 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     public void playSummonSound() {
         this.getWorld().playSound(null, this.getBlockPos(), getSummonSound(), SoundCategory.PLAYERS, 1F, 1F);
+    }
+
+    public Integer getMoveForward() {
+        return this.dataTracker.get(MOVE_FORWARD);
+    }
+
+    public void setMoveForward(Integer MF) {
+        //RoundaboutMod.LOGGER.info("MF:"+ this.moveForward);
+        //this.moveForward = MF;
+        this.dataTracker.set(MOVE_FORWARD, MF);
     }
 
     public Integer getMaxFade() {return MaxFade;}
@@ -83,6 +97,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.dataTracker.startTracking(OWNER_UUID, Optional.empty());
         this.dataTracker.startTracking(OWNER_ID, -1);
         this.dataTracker.startTracking(ANCHOR_PLACE, 55);
+        this.dataTracker.startTracking(MOVE_FORWARD, 0);
     }
 
     private final AnimatableInstanceCache cache =
@@ -121,10 +136,12 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         }
 
         super.tick();
+        //RoundaboutMod.LOGGER.info("MF:"+ this.getMoveForward());
 
         if (!this.getWorld().isClient() && this.isAlive() && !this.dead) {
             Entity standUser = getStandUser();
             if (standUser != null && standUser.isAlive() && userActive()) {
+
                 //Make it fade in
                 if (getFadeOut() < MaxFade) {incFadeOut(1);}
                 //Here is the Stand Movement Code
