@@ -7,6 +7,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
@@ -78,9 +79,27 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public void setOwnerUuid(@Nullable UUID uuid) {
         this.dataTracker.set(OWNER_UUID, Optional.ofNullable(uuid));
     }
+
+    @Override
     public boolean isSwimming() {
         if (this.master != null){
             return this.master.isSwimming();
+        } else {
+            return false;
+        }
+    }
+    @Override
+    public boolean isCrawling() {
+        if (this.master != null){
+            return this.master.isCrawling();
+        } else {
+            return false;
+        }
+    }
+    @Override
+    public boolean isFallFlying() {
+        if (this.master != null){
+            return ((LivingEntity) this.master).isFallFlying();
         } else {
             return false;
         }
@@ -231,6 +250,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         double mcap = 0.3;
         Vec3d xyz = standUser.getVelocity();
         double yy = xyz.getY()*0.3; if (yy>mcap){yy=mcap;} else if (yy<-mcap){yy=-mcap;}
+        if (isSwimming() || isCrawling() || isFallFlying()){yy+=1;}
+
         double x1=standUser.getX() - -1*(r*(Math.sin(ang/180)));
         double y1=standUser.getY()+0.1-yy;
         double z1=standUser.getZ()- (r*(Math.cos(ang/180)));
