@@ -4,10 +4,13 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.event.KeyInputHandler;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
@@ -18,6 +21,93 @@ public class StandHudRender {
             "textures/gui/guard_filled.png");
     private static final Identifier GUARD_ICON = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/guard_icon.png");
+
+    private static final Identifier ARROW_ICON = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/stand_hud.png");
+
+    private static final Identifier SQUARE_ICON = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/move_square.png");
+
+    private static final int guiSize = 174;
+    private static float animated = 0;
+    public static void renderStandHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
+                                      int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                      float flashAlpha, float otherFlashAlpha) {
+        if (playerEntity != null) {
+
+            int x = 0;
+            int y = 0;
+
+            int width = scaledWidth;
+            int height = scaledHeight;
+            int textureWidth = guiSize;
+            int textureHeight = 30;
+
+            int squareHeight = 23;
+            int squareWidth = 23;
+            x = (int) (-20-guiSize+animated);
+            y = 5;
+            MinecraftClient mc = MinecraftClient.getInstance();
+            float tickDelta = mc.getLastFrameDuration();
+
+            boolean standOn = ((IEntityDataSaver) playerEntity).getStandOn();
+            if (standOn || animated > 0){
+                if (!standOn){
+                    animated = Math.max(controlledLerp(tickDelta, animated,0,0.5f),0);
+                } else {
+                    if (animated < guiSize) {
+                        animated++;
+                        animated = Math.min(controlledLerp(tickDelta, animated,guiSize,0.5f),guiSize);
+                    }
+                }
+                //Draws the empty bar
+                context.drawTexture(ARROW_ICON,x,y+2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
+                context.drawTexture(SQUARE_ICON,x+22,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.drawTexture(SQUARE_ICON,x+47,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.drawTexture(SQUARE_ICON,x+72,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.drawTexture(SQUARE_ICON,x+97,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+
+                TextRenderer renderer = mc.textRenderer;
+                Text dashKey = KeyInputHandler.abilityOneKey.getBoundKeyLocalizedText();
+                Text special1Key = KeyInputHandler.abilityTwoKey.getBoundKeyLocalizedText();
+                Text special2Key = KeyInputHandler.abilityThreeKey.getBoundKeyLocalizedText();
+                Text ultimateKey = KeyInputHandler.abilityFourKey.getBoundKeyLocalizedText();
+                dashKey = fixKey(dashKey);
+                special1Key = fixKey(special1Key);
+                special2Key = fixKey(special2Key);
+                ultimateKey = fixKey(ultimateKey);
+                context.drawText(renderer, special1Key,x+27,y+18,0xffffff,true);
+                context.drawText(renderer, special2Key,x+52,y+18,0xffffff,true);
+                context.drawText(renderer, dashKey,x+77,y+18,0xffffff,true);
+                context.drawText(renderer, ultimateKey,x+102,y+18,0xffffff,true);
+
+            }
+        }
+    }
+
+    public static Text fixKey(Text textIn){
+
+        String X = textIn.getString();
+        if (X.length() > 1){
+        String[] split = X.split("\\s");
+        if (split.length > 1){
+            return Text.of(""+split[0].charAt(0)+split[1].charAt(0));
+        } else {
+            if (split[0].length() > 1){
+                return Text.of(""+split[0].charAt(0)+split[0].charAt(1));
+            } else {
+                return Text.of(""+split[0].charAt(0));
+            }
+        }
+        } else {
+            return textIn;
+        }
+    }
+    public static float controlledLerp(float delta, float start, float end, float multiplier) {
+        return start + (delta * (end - start))*multiplier;
+    }
+
+
     public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
                                        int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                        float flashAlpha, float otherFlashAlpha) {

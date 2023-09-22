@@ -75,21 +75,21 @@ public class KeyInputHandler {
         abilityOneKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 KEY_ABILITY_1,
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_Z,
+                GLFW.GLFW_KEY_G,
                 KEY_CATEGORY_JOJO
         ));
 
         abilityTwoKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 KEY_ABILITY_2,
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_V,
+                GLFW.GLFW_KEY_Z,
                 KEY_CATEGORY_JOJO
         ));
 
         abilityThreeKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 KEY_ABILITY_3,
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_G,
+                GLFW.GLFW_KEY_V,
                 KEY_CATEGORY_JOJO
         ));
 
