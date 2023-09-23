@@ -43,6 +43,8 @@ public class StandModel extends GeoModel<StandEntity> {
         if (!this.turnsHead)
             return;
         MinecraftClient mc = MinecraftClient.getInstance();
+        if (!mc.isPaused() || animatable.shouldPlayAnimsWhileGamePaused()){
+            //When Game is Paused, don't procede
         EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
         CoreGeoBone body = getAnimationProcessor().getBone("body");
         float tickDelta = mc.getLastFrameDuration();
@@ -52,8 +54,6 @@ public class StandModel extends GeoModel<StandEntity> {
             float cRot = maxRotX;
 
 
-            if (!mc.isPaused() || animatable.shouldPlayAnimsWhileGamePaused()){
-            //When Game is Paused, don't procede
             if (animatable.isSwimming() || animatable.isFallFlying()) {
                 cRot = (entityData.headPitch() - 90) * MathHelper.RADIANS_PER_DEGREE;
             } else if (animatable.isCrawling()) {
@@ -70,7 +70,6 @@ public class StandModel extends GeoModel<StandEntity> {
                 cRot*= 0.6F;
             }
 
-            }
             body.setRotX(controlledLerp(tickDelta,rotX,cRot,0.2f));
         }
 
@@ -87,6 +86,6 @@ public class StandModel extends GeoModel<StandEntity> {
             }
             head.setRotX((entityData.headPitch()+swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE);
             head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
-        }
+        }}
     }
 }

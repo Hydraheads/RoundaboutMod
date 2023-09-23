@@ -43,13 +43,13 @@ public abstract class GameHudMixin implements IHudAccess {
 
 
     @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
-    private void renderStatusBarsMixin(float tickDelta, DrawContext context, CallbackInfo info) {
+    private void renderHotbarMixin(float tickDelta, DrawContext context, CallbackInfo info) {
         StandHudRender.renderStandHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);
     }
 
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", ordinal = 1))
     private void renderStatusBarsMixin(DrawContext context, CallbackInfo info) {
-        StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);
+        //StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);
     }
 
     @Shadow

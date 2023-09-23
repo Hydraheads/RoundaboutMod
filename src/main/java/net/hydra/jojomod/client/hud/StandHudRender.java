@@ -26,7 +26,16 @@ public class StandHudRender {
             "textures/gui/stand_hud.png");
 
     private static final Identifier SQUARE_ICON = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/move_square.png");
+            "textures/gui/move_square2.png");
+
+    private static final Identifier SPECIAL_ICON = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/icons/the_world/stop_time.png");
+
+    private static final Identifier SKILL2_ICON = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/icons/the_world/assault.png");
+
+    private static final Identifier HASTE_ICON = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/icons/the_world/haste.png");
 
     private static final int guiSize = 174;
     private static float animated = 0;
@@ -34,7 +43,6 @@ public class StandHudRender {
                                       int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                       float flashAlpha, float otherFlashAlpha) {
         if (playerEntity != null) {
-
             int x = 0;
             int y = 0;
 
@@ -43,15 +51,19 @@ public class StandHudRender {
             int textureWidth = guiSize;
             int textureHeight = 30;
 
-            int squareHeight = 23;
-            int squareWidth = 23;
+            int squareHeight = 24;
+            int squareWidth = 24;
+
+            int iconHeight = 18;
+            int iconWidth = 18;
             x = (int) (-20-guiSize+animated);
+            //x = (int) (-20);
             y = 5;
             MinecraftClient mc = MinecraftClient.getInstance();
             float tickDelta = mc.getLastFrameDuration();
 
             boolean standOn = ((IEntityDataSaver) playerEntity).getStandOn();
-            if (standOn || animated > 0){
+            if (standOn || animated > 0.1){
                 if (!standOn){
                     animated = Math.max(controlledLerp(tickDelta, animated,0,0.5f),0);
                 } else {
@@ -60,12 +72,18 @@ public class StandHudRender {
                         animated = Math.min(controlledLerp(tickDelta, animated,guiSize,0.5f),guiSize);
                     }
                 }
+                context.setShaderColor(1.0f, 1.0f, 1.0f, 0.9f);
                 //Draws the empty bar
-                context.drawTexture(ARROW_ICON,x,y+2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
-                context.drawTexture(SQUARE_ICON,x+22,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.drawTexture(SQUARE_ICON,x+47,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.drawTexture(SQUARE_ICON,x+72,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.drawTexture(SQUARE_ICON,x+97,y+5,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
+                context.drawTexture(SQUARE_ICON,x+21,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.drawTexture(SQUARE_ICON,x+47,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.drawTexture(SQUARE_ICON,x+72,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.drawTexture(SQUARE_ICON,x+97,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+
+                context.drawTexture(SKILL2_ICON,x+50,y-1,0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+                context.drawTexture(SPECIAL_ICON,x+100,y-1,0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+
+
 
                 TextRenderer renderer = mc.textRenderer;
                 Text dashKey = KeyInputHandler.abilityOneKey.getBoundKeyLocalizedText();
@@ -76,11 +94,12 @@ public class StandHudRender {
                 special1Key = fixKey(special1Key);
                 special2Key = fixKey(special2Key);
                 ultimateKey = fixKey(ultimateKey);
-                context.drawText(renderer, special1Key,x+27,y+18,0xffffff,true);
-                context.drawText(renderer, special2Key,x+52,y+18,0xffffff,true);
-                context.drawText(renderer, dashKey,x+77,y+18,0xffffff,true);
-                context.drawText(renderer, ultimateKey,x+102,y+18,0xffffff,true);
+                context.drawText(renderer, special1Key,x+24,y+11,0xffffff,true);
+                context.drawText(renderer, special2Key,x+49,y+11,0xffffff,true);
+                context.drawText(renderer, dashKey,x+74,y+11,0xffffff,true);
+                context.drawText(renderer, ultimateKey,x+99,y+11,0xffffff,true);
 
+                context.setShaderColor(1.0f, 1.0f, 1.0f, 1f);
             }
         }
     }

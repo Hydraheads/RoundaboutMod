@@ -242,7 +242,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
 
         int vis = this.getFadeOut();
-        double r = (((double) vis /MaxFade)*1.45);
+        double r = (((double) vis /MaxFade)*1.37);
         if (r < 0.5) { r=0.5; }
         double yawfix = standUser.getYaw(); yawfix+= getAnchorPlace(); if (yawfix >360){yawfix-=360;}else if (yawfix <0){yawfix+=360;}
         double ang = (yawfix-180)*Math.PI;

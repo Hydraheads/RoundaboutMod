@@ -5,8 +5,10 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.networking.ModMessages;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -22,12 +24,14 @@ public class KeyInputHandler {
     public static final String KEY_ABILITY_3 = "key.roundabout.ability.three";
     public static final String KEY_ABILITY_4 = "key.roundabout.ability.four";
     public static final String KEY_SUMMON_STAND = "key.roundabout.summon.stand";
+    public static final String KEY_JOJO_MENU = "key.roundabout.menu";
 
     public static KeyBinding summonKey;
     public static KeyBinding abilityOneKey;
     public static KeyBinding abilityTwoKey;
     public static KeyBinding abilityThreeKey;
     public static KeyBinding abilityFourKey;
+    public static KeyBinding menuKey;
 
     //This is what the keys do, what code they run
     public static void registerKeyInputs(){
@@ -58,6 +62,9 @@ public class KeyInputHandler {
                 }
                 while (abilityFourKey.wasPressed()) {
                     client.player.sendMessage(Text.of("Special Move"));
+                }
+                while (menuKey.wasPressed()) {
+                    client.setScreen(new PowerInventoryScreen(client.player));
                 }
             }
         });
@@ -97,6 +104,13 @@ public class KeyInputHandler {
                 KEY_ABILITY_4,
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_H,
+                KEY_CATEGORY_JOJO
+        ));
+
+        menuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                KEY_JOJO_MENU,
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_Y,
                 KEY_CATEGORY_JOJO
         ));
         registerKeyInputs();
