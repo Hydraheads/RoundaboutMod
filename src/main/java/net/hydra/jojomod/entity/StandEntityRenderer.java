@@ -23,7 +23,9 @@ import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import software.bernie.example.entity.BatEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.Color;
 import software.bernie.geckolib.model.data.EntityModelData;
@@ -59,6 +61,16 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
             return tot;
     }
 
+    public float getStandSwimming(){
+        int vis = this.animatable.getFadeOut();
+        int max = this.animatable.getMaxFade();
+        float tot = (float) ((((float) vis/max)*1.3)-0.3);
+        if (tot < 0) {
+            tot=0;
+        }
+        return tot;
+    }
+
     @Override
     public void render(StandEntity entity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
         if(entity.isBaby()) {
@@ -69,32 +81,23 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, 255);
     }
 
+
+    private final float maxRotX = 0.25F;
+    private final float minRotX = 0.04F;
+    private float swimRotCorrect = 0.0F;
+
     private int currentTick = -1;
     @Override
     public void renderFinal(MatrixStack poseStack, StandEntity animatable, BakedGeoModel model, VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        if (this.currentTick < 0 || this.currentTick != animatable.age) {
-            this.currentTick = animatable.age;
-
-            // Find the earbone and use it as the point of reference
-//            this.model.getBone("head").ifPresent(ear -> {
-//                Random rand = animatable.getRandom();
-//                Vector3d earPos = ear.getWorldPosition();
-//                ear.set
-//
-//                animatable.getEntityWorld().addParticle(ParticleTypes.PORTAL,
-//                        earPos.x(),
-//                        earPos.y(),
-//                        earPos.z(),
-//                        rand.nextDouble() - 0.5D,
-//                        -rand.nextDouble(),
-//                        rand.nextDouble() - 0.5D);
-//            });
-        }
 
         super.renderFinal(poseStack, animatable, model, bufferSource, buffer, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     //Note: To properly override, needs to copy most of the code from Geckolib.
 
+
+    public static float controlledLerp(float delta, float start, float end, float multiplier) {
+        return start + (delta * (end - start))*multiplier;
+    }
 
 }

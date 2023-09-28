@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity.stands;
+package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.sound.ModSounds;
@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.world.World;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 
 public class StandStarPlatinum extends StandEntity {

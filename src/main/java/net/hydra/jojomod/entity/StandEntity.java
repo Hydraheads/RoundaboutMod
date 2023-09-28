@@ -2,24 +2,22 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
-import net.hydra.jojomod.access.IStandUser;
+import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.networking.component.StandComponent;
+import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -27,93 +25,96 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.UUID;
-import java.util.Vector;
 
 public abstract class StandEntity extends MobEntity implements GeoEntity {
-    private static final TrackedData<Integer> FadeOut = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    protected static final TrackedData<Optional<UUID>> OWNER_UUID = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
-    protected static final TrackedData<Integer> OWNER_ID = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final Integer MaxFade = 8;
-    private Entity master;
+    private int FadeOut; //The stand's current transparency
+    private final int MaxFade = 8;  //The stand's maximum transparency
 
-    private int moveForward;
+    protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.INTEGER); //The stand's position relative to the player. Between 0 and 360.
+
+    protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.INTEGER);
+            //If the stand's user is moving forward or backwards, this value gets changed to make it lean
+
+    private LivingEntity master; //A better reference to the stand's user. Initially derived from ID.
+
+    public float bodyRotation;
 
     protected SoundEvent getSummonSound() {
             return ModSounds.SUMMON_SOUND_EVENT;
     }
+    //Every stand has a Summon sound, so they should overwrite this function, or they will play the generic one.
 
     public void playSummonSound() {
         this.getWorld().playSound(null, this.getBlockPos(), getSummonSound(), SoundCategory.PLAYERS, 1F, 1F);
-    }
+    } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
-    public Integer getMoveForward() {
+    public final int getMoveForward() {
         return this.dataTracker.get(MOVE_FORWARD);
-    }
+    } //returns leaning direction
 
-    public void setMoveForward(Integer MF) {
-        //RoundaboutMod.LOGGER.info("MF:"+ this.moveForward);
-        //this.moveForward = MF;
+    public final void setMoveForward(Integer MF) {
         this.dataTracker.set(MOVE_FORWARD, MF);
-    }
+    } //sets leaning direction
 
     public Integer getMaxFade() {return MaxFade;}
     public Integer getFadeOut() {
-        return this.dataTracker.get(FadeOut);
+        return this.FadeOut;
     }
-    public Integer getOwnerID() {
-        return this.dataTracker.get(OWNER_ID);
-    }
-    public Integer getAnchorPlace() {
+    public final int getAnchorPlace() {
         return this.dataTracker.get(ANCHOR_PLACE);
     }
-    public void setAnchorPlace(Integer degrees) {
+
+    public float getBodyRotation(){
+        return this.bodyRotation;
+    } public void setBodyRotation(float bodRot){
+       this.bodyRotation = bodRot;
+    }
+    public final void setAnchorPlace(Integer degrees) {
         this.dataTracker.set(ANCHOR_PLACE, degrees);
     }
-    public void setOwnerID(Integer yeet){this.dataTracker.set(OWNER_ID, yeet);}
-    public UUID getOwnerUuid() {return this.dataTracker.get(OWNER_UUID).orElse(null);}
-    public void setOwnerUuid(@Nullable UUID uuid) {
-        this.dataTracker.set(OWNER_UUID, Optional.ofNullable(uuid));
-    }
+
 
     @Override
     public boolean isSwimming() {
-        if (this.master != null){
-            return this.master.isSwimming();
+        if (getSelfData().getUser() != null){
+            return getSelfData().getUser().isSwimming();
         } else {
             return false;
         }
-    }
+    } //The stand is swimming only if its user is
+
     @Override
     public boolean isCrawling() {
-        if (this.master != null){
-            return this.master.isCrawling();
+        if (getSelfData().getUser() != null){
+            return getSelfData().getUser().isCrawling();
         } else {
             return false;
         }
-    }
+    } //The stand is crawling only if its user is
+
     @Override
     public boolean isFallFlying() {
-        if (this.master != null){
-            return ((LivingEntity) this.master).isFallFlying();
+        if (getSelfData().getUser() != null){
+            return ((LivingEntity) getSelfData().getUser()).isFallFlying();
         } else {
             return false;
         }
-    }
+    } //The stand is elytra flying only if its user is
 
     public void incFadeOut(Integer inc) {
-        this.dataTracker.set(FadeOut, this.dataTracker.get(FadeOut)+inc);
-    }
+        this.FadeOut+=inc;
+    } //Positive values make the stand less see-through. Negative ones make it fade and eventually despawn.
+
+    public void setFadeOut(Integer inc) {
+        this.FadeOut=inc;
+    } //Immediately makes the stand visible/invisible
+
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(FadeOut, 1);
-        this.dataTracker.startTracking(OWNER_UUID, Optional.empty());
-        this.dataTracker.startTracking(OWNER_ID, -1);
         this.dataTracker.startTracking(ANCHOR_PLACE, 55);
         this.dataTracker.startTracking(MOVE_FORWARD, 0);
     }
@@ -124,127 +125,99 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     protected StandEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
-    }
+        //FadeOut = 10;
+    } // Initialize Stand
 
 
     @Override
     public boolean hasVehicle() {
         return this.getMaster() != null;
-    }
+    } //Stand is always riding... in a sense
 
     @Override
-    public Entity getVehicle() {
+    public LivingEntity getVehicle() {
         return this.getMaster();
-    }
+    } //returns master when vanilla calls for rider
 
 
     public boolean hasMaster() {
         return this.getMaster() != null;
-    }
+    } //returns IF stand has a master
 
+    public StandUserComponent getUserData (LivingEntity User){
+        return MyComponents.STAND_USER.get(User);
+    }
+    public StandComponent getSelfData (){
+        return MyComponents.STAND.get(this);
+    }
     public void dismountMaster() {
-        if (this.master != null) {
-            Entity entity = this.master;
-            this.master = null;
-            ((IStandUser) entity).removeStandOut();
+        if (getSelfData().getUser() != null) {
+            LivingEntity entity = getSelfData().getUser();
+            StandUserComponent UD = getUserData(entity);
+            UD.removeStandOut();
         }
-    }
-    public void setMaster(Entity Master) {
-        this.master = Master;
-    }
+    } //takes stand's data off of its user
 
-    public Entity getMaster() {
-        return this.master;
-    }
+    public void setMaster(LivingEntity Master) {
+        getSelfData().setUser(Master);
+    } //Sets stand user
 
-    public boolean startStandRiding(Entity entity, boolean force) {
-        if (entity == this.getMaster()) {
-            return false;
-        }
-        this.setMaster(entity);
-        ((IStandUser) (Object) entity).addStandOut(this);
+    public LivingEntity getMaster() {
+        return getSelfData().getUser();
+    } //Returns stand user
+
+    public boolean startStandRiding(LivingEntity entity, boolean force) {
+        StandUserComponent UD = getUserData(entity);
+        UD.setStand(this);
         return true;
+        //RoundaboutMod.LOGGER.info("MF");
     }
 
     public void tickStandOut() {
-        ((Entity) (Object) this).setVelocity(Vec3d.ZERO);
-        ((Entity) (Object) this).tick();
-        if (!(((StandEntity) (Object) this).hasMaster())) {
+        this.setVelocity(Vec3d.ZERO);
+        this.tick();
+        if (!(this.hasMaster())) {
+            //RoundaboutMod.LOGGER.info("MF No Master");
             return;
         }
-        ((IStandUser) ((Entity) (Object) this.getMaster())).updateStandOutPosition(this);
-    }
-
-
-    public boolean startStandRiding(Entity entity) {
-
-        ((Entity) (Object) entity).setPose(EntityPose.STANDING);
-        //entity.streamIntoPassengers().filter(passenger -> passenger instanceof ServerPlayerEntity).forEach(player -> Criteria.STARTED_RIDING.trigger((ServerPlayerEntity)player));
-        return this.startStandRiding(entity, false);
+        StandUserComponent UD = getUserData(this.getMaster());
+        //RoundaboutMod.LOGGER.info("MF Update Pos");
+        UD.updateStandOutPosition(this);
     }
 
     @Override
     public void tick() {
         this.noClip = true;
 
-        if (!this.hasMaster()){
-            int id = getOwnerID();
-            if (id > 0){
-                Entity ep = this.getWorld().getEntityById(id);
-                if (ep != null && ep.isAlive()){
-                    this.startStandRiding(ep, true);
-                    //this.startRiding(ep, true);
-                }
-            }
-            // ((IStandUser) (PlayerEntity) player).startStandRiding(stand, true);
-        }
-
         super.tick();
-        //RoundaboutMod.LOGGER.info("MF:"+ this.getMoveForward());
 
-        if (!this.getWorld().isClient() && this.isAlive() && !this.dead) {
-            Entity standUser = getStandUser();
-            if (standUser != null && standUser.isAlive() && userActive()) {
+            if (this.isAlive() && !this.dead){
+            if (this.getSelfData().getUser() != null){
+            if (this.getSelfData().getUser().isAlive() && this.userActive()) {
 
                 //Make it fade in
-                if (getFadeOut() < MaxFade) {incFadeOut(1);}
-                //Here is the Stand Movement Code
-
-//                this.setPitch(standUser.getPitch());
-//                this.setYaw(standUser.getYaw());
-//                this.setBodyYaw(standUser.getBodyYaw());
-//                this.setHeadYaw(standUser.getHeadYaw());
-//
-//                Direction test= this.getHorizontalFacing();
-//
-//                double r = 1.5;
-//                double yawfix = standUser.getYaw(); yawfix+= 50; if (yawfix >360){yawfix-=360;}
-//                double ang = (yawfix-180)*Math.PI;
-//                double x1=standUser.getX() - -1*(r*(Math.sin(ang/180)));
-//                double z1=standUser.getZ()- (r*(Math.cos(ang/180)));
-//
-//                this.setPosition(x1,standUser.getY(),z1);
+                if (this.getFadeOut() < MaxFade) {this.incFadeOut(1);}
             } else {
-                incFadeOut(-1);
-                if (getFadeOut() == 1) {
-                } else if (getFadeOut() <= 0) {
+                this.incFadeOut(-1);
+                if (this.getFadeOut() <= 0) {
 
                     this.remove(RemovalReason.DISCARDED);
                 }
             }
-        }
+            } else {
+                this.setFadeOut(this.getMaxFade());
+            }
+
+            }
         //this.noClip = false;
         this.setNoGravity(true);
-    }
+    } // Happens every tick
 
     public Vec3d getStandOffsetVector(Entity standUser){
-
-
-
         int vis = this.getFadeOut();
         double r = (((double) vis /MaxFade)*1.37);
         if (r < 0.5) { r=0.5; }
-        double yawfix = standUser.getYaw(); yawfix+= getAnchorPlace(); if (yawfix >360){yawfix-=360;}else if (yawfix <0){yawfix+=360;}
+        double yawfix = standUser.getYaw(); yawfix+=  this.getAnchorPlace(); if (yawfix >360){yawfix-=360;}else if (yawfix <0){yawfix+=360;}
         double ang = (yawfix-180)*Math.PI;
 
         double mcap = 0.3;
@@ -258,42 +231,26 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
 
         return new Vec3d(x1, y1, z1);
-    }
+    } //A math equation to determine where the stand floats relative to its user's body. Configurable.
 
 
-    public Entity getStandUser(){
-        UUID user = getOwnerUuid();
-        return ((ServerWorld) this.getWorld()).getEntity(getOwnerUuid());
-    }  public boolean userActive(){
-        UUID user = getOwnerUuid();
-        if (user != null){
-        Entity user2 = ((ServerWorld) this.getWorld()).getEntity(getOwnerUuid());
-        if (user2 != null){
-            if (((IEntityDataSaver) user2).getPersistentData().get("active_stand") != null){
-            UUID user3 = ((IEntityDataSaver) user2).getPersistentData().getUuid("active_stand");
+    public boolean userActive(){
+        if (getSelfData().getUser() != null){
+            if (((IEntityDataSaver) getSelfData().getUser()).getPersistentData().get("active_stand") != null){
+            UUID user3 = ((IEntityDataSaver) getSelfData().getUser()).getPersistentData().getUuid("active_stand");
             UUID user4 = this.getUuid();
             if (user3 != null && user4 != null) {
                 return user3.equals(user4);
             }
-        }}
+        }
         }
         return false;
-    }
-
-//    public void tickRiding() {
-//        this.setVelocity(Vec3d.ZERO);
-//        this.tick();
-//        if (!this.hasVehicle()) {
-//            return;
-//        }
-//        this.getVehicle().updatePassengerPosition(this);
-//    }
-
+    } // Returns if stand is currently the user's summoned stand. Basically, if you resummon the old stand should go away.
 
     public static DefaultAttributeContainer.Builder createStandAttributes() {
         return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2F).add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
-    }
-    //
+    } // Builds Minecraft entity attributes like speed and health
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "idle", 5, state -> state.setAndContinue(DefaultAnimations.IDLE)));

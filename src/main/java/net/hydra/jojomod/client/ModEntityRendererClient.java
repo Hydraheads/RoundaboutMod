@@ -8,10 +8,9 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TerrierEntityModel;
 import net.hydra.jojomod.entity.TerrierEntityRenderer;
-import net.hydra.jojomod.entity.stands.StandStarPlatinumRenderer;
-import net.hydra.jojomod.entity.stands.StandTheWorldRenderer;
+import net.hydra.jojomod.entity.stand.StandStarPlatinumRenderer;
+import net.hydra.jojomod.entity.stand.StandTheWorldRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.WolfEntityModel;
 import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class ModEntityRendererClient {

@@ -4,14 +4,14 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
-import net.hydra.jojomod.networking.packet.s2c.StandSyncPacket;
+import net.hydra.jojomod.networking.packet.s2c.NbtSyncPacket;
 import net.hydra.jojomod.networking.packet.c2s.SummonPacket;
 import net.minecraft.util.Identifier;
 
 public class ModMessages {
     //packets!
     public static final Identifier SUMMON_ID = new Identifier(RoundaboutMod.MOD_ID,"summon");
-    public static final Identifier STAND_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"stand_sync");
+    public static final Identifier NBT_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"nbt_sync");
     public static final Identifier MOVE_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"move_sync");
 
     //Client To Server
@@ -22,6 +22,6 @@ public class ModMessages {
     }
     //Server to Client
     public static void registerS2CPackets(){
-        ClientPlayNetworking.registerGlobalReceiver(STAND_SYNC_ID, StandSyncPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(NBT_SYNC_ID, NbtSyncPacket::receive);
     }
 }

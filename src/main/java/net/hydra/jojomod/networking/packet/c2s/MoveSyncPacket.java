@@ -1,10 +1,8 @@
 package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.access.IStandUser;
-import net.hydra.jojomod.entity.StandEntity;
-import net.minecraft.entity.Entity;
+import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -27,8 +25,9 @@ public class MoveSyncPacket {
 
         int finalForward = forward;
         int finalStrafe = strafe;
+        StandUserComponent standUserData = MyComponents.STAND_USER.get(player);
         server.execute(() -> {
-            ((IStandUser) player).setDI(finalForward, finalStrafe);
+            standUserData.setDI(finalForward, finalStrafe);
         });
 
 

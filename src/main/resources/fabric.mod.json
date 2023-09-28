@@ -15,6 +15,12 @@
 	"license": "CC0-1.0",
 	"icon": "assets/roundabout/icon.png",
 	"environment": "*",
+	"custom": {
+		"cardinal-components": [
+			"roundabout:stand",
+			"roundabout:stand_user"
+		]
+	},
 	"entrypoints": {
 		"main": [
 			"net.hydra.jojomod.RoundaboutMod"
@@ -24,6 +30,9 @@
 		],
 		"fabric-datagen": [
 			"net.hydra.jojomod.RoundaboutModDataGenerator"
+		],
+		"cardinal-components": [
+			"net.hydra.jojomod.networking.MyComponents"
 		]
 	},
 	"mixins": [

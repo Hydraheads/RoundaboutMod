@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity.stands;
+package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.sound.ModSounds;

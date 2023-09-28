@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
@@ -48,9 +49,8 @@ public class StandModel extends GeoModel<StandEntity> {
         EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
         CoreGeoBone body = getAnimationProcessor().getBone("body");
         float tickDelta = mc.getLastFrameDuration();
-         RoundaboutMod.LOGGER.info("MF:"+ tickDelta);
         if (body != null) {
-            float rotX = body.getRotX();
+            float rotX = animatable.getBodyRotation();
             float cRot = maxRotX;
 
 
@@ -69,8 +69,9 @@ public class StandModel extends GeoModel<StandEntity> {
                 }
                 cRot*= 0.6F;
             }
-
-            body.setRotX(controlledLerp(tickDelta,rotX,cRot,0.2f));
+            rotX = MainUtil.controlledLerp(tickDelta,rotX,cRot,0.2f);
+            animatable.setBodyRotation(rotX);
+            body.setRotX(rotX);
         }
 
         CoreGeoBone head = getAnimationProcessor().getBone("head");

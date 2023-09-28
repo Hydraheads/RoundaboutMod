@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.authlib.GameProfile;
-import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.ServerPlayerAccess;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -12,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.hydra.jojomod.stand.StandData.syncStandActive;
+import static net.hydra.jojomod.stand.NBTData.syncModNbt;
 
 @Mixin(ServerPlayerEntity.class)
     public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ServerPlayerAccess {
@@ -27,7 +26,7 @@ import static net.hydra.jojomod.stand.StandData.syncStandActive;
             if (compatSync > 0) {
                 compatSync--;
                 if (compatSync == 1) {
-                    syncStandActive((ServerPlayerEntity) (Object) this);
+                    syncModNbt((ServerPlayerEntity) (Object) this);
                 }
             }
         }
