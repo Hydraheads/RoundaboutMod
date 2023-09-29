@@ -20,12 +20,23 @@ public class ClientWorldMixin {
 
     @Inject(method = "tickEntity", at = @At(value = "TAIL"))
     private void tickEntity2(Entity entity, CallbackInfo ci) {
+
+        this.standTickCheck(entity);
+        for (Entity entity2 : entity.getPassengerList()) {
+            this.standTickCheck(entity2);
+        }
+    }
+
+    private void standTickCheck(Entity entity){
         if (entity.isLiving()) {
             LivingEntity livingEntity = (LivingEntity) entity;
             StandUserComponent standUserData = MyComponents.STAND_USER.get(livingEntity);
 
-            if (standUserData.hasStandOut()) {
-                this.tickStandIn(livingEntity, Objects.requireNonNull(standUserData.getStand()));
+            if (standUserData.getStand() != null) {
+                StandEntity stand = standUserData.getStand();
+                if (stand.getFollowing().getId() == livingEntity.getId()){
+                    this.tickStandIn(livingEntity, stand);
+                }
             }
         }
     }

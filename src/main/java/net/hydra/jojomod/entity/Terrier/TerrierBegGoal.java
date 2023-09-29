@@ -1,13 +1,11 @@
 /*
  * Decompiled with CFR 0.2.1 (FabricMC 53fa44c9).
  */
-package net.hydra.jojomod.entity;
+package net.hydra.jojomod.entity.Terrier;
 import java.util.EnumSet;
 
-import net.hydra.jojomod.entity.TerrierEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

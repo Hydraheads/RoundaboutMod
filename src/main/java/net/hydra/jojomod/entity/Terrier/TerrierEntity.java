@@ -1,5 +1,6 @@
-package net.hydra.jojomod.entity;
+package net.hydra.jojomod.entity.Terrier;
 
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.EntityType;

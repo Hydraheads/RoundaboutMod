@@ -80,10 +80,9 @@ public class StandUserData implements StandUserComponent {
 
     @Override
     public void applySyncPacket(PacketByteBuf buf) {
-        //RoundaboutMod.LOGGER.info("Apply");
         Entity standEntity = buf.readBoolean() ?
                 this.User.getWorld().getEntityById(buf.readInt()) : null;
-        if (standEntity == null || standEntity.isLiving()) {
+        if (standEntity == null || standEntity instanceof StandEntity) {
             this.Stand = (StandEntity) standEntity;
         }
 
@@ -91,7 +90,6 @@ public class StandUserData implements StandUserComponent {
 
     @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
-        //RoundaboutMod.LOGGER.info("Write");
         buf.writeBoolean(this.Stand != null);
         if (this.Stand != null) {
             buf.writeInt(this.Stand.getId());

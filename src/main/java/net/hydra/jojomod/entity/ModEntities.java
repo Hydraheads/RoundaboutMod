@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.stand.StandStarPlatinum;
 import net.hydra.jojomod.entity.stand.StandTheWorld;
 import net.minecraft.entity.EntityDimensions;

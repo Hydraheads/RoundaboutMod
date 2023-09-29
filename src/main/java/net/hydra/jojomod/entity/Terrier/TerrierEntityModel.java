@@ -1,11 +1,11 @@
-package net.hydra.jojomod.entity;
+package net.hydra.jojomod.entity.Terrier;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.render.entity.model.WolfEntityModel;
-import net.minecraft.entity.passive.WolfEntity;
 
 @Environment(value= EnvType.CLIENT)
 public class TerrierEntityModel<T extends TerrierEntity> extends WolfEntityModel<T> {

@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity;
+package net.hydra.jojomod.entity.Terrier;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

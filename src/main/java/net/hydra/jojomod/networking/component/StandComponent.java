@@ -9,6 +9,9 @@ import org.jetbrains.annotations.Nullable;
 public interface StandComponent extends Component, AutoSyncedComponent {
     @Nullable
     LivingEntity getUser();
+    @Nullable
+    LivingEntity getFollowing();
+
 
     void setUser(LivingEntity StandSet);
     @Override

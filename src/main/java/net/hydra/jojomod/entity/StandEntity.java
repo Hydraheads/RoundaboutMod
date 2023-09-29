@@ -25,6 +25,7 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class StandEntity extends MobEntity implements GeoEntity {
@@ -37,8 +38,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
             //If the stand's user is moving forward or backwards, this value gets changed to make it lean
-
-    private LivingEntity master; //A better reference to the stand's user. Initially derived from ID.
 
     public float bodyRotation;
 
@@ -59,8 +58,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.dataTracker.set(MOVE_FORWARD, MF);
     } //sets leaning direction
 
-    public Integer getMaxFade() {return MaxFade;}
-    public Integer getFadeOut() {
+    public int getMaxFade() {return MaxFade;}
+    public int getFadeOut() {
         return this.FadeOut;
     }
     public final int getAnchorPlace() {
@@ -79,8 +78,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public boolean isSwimming() {
-        if (getSelfData().getUser() != null){
-            return getSelfData().getUser().isSwimming();
+        if (this.getSelfData().getUser() != null){
+            return this.getSelfData().getUser().isSwimming();
         } else {
             return false;
         }
@@ -88,8 +87,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public boolean isCrawling() {
-        if (getSelfData().getUser() != null){
-            return getSelfData().getUser().isCrawling();
+        if (this.getSelfData().getUser() != null){
+            return this.getSelfData().getUser().isCrawling();
         } else {
             return false;
         }
@@ -97,18 +96,18 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public boolean isFallFlying() {
-        if (getSelfData().getUser() != null){
-            return ((LivingEntity) getSelfData().getUser()).isFallFlying();
+        if (this.getSelfData().getUser() != null){
+            return ((LivingEntity) this.getSelfData().getUser()).isFallFlying();
         } else {
             return false;
         }
     } //The stand is elytra flying only if its user is
 
-    public void incFadeOut(Integer inc) {
+    public void incFadeOut(int inc) {
         this.FadeOut+=inc;
     } //Positive values make the stand less see-through. Negative ones make it fade and eventually despawn.
 
-    public void setFadeOut(Integer inc) {
+    public void setFadeOut(int inc) {
         this.FadeOut=inc;
     } //Immediately makes the stand visible/invisible
 
@@ -131,12 +130,12 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public boolean hasVehicle() {
-        return this.getMaster() != null;
+        return this.getFollowing() != null;
     } //Stand is always riding... in a sense
 
     @Override
     public LivingEntity getVehicle() {
-        return this.getMaster();
+        return this.getFollowing();
     } //returns master when vanilla calls for rider
 
 
@@ -152,18 +151,19 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     }
     public void dismountMaster() {
         if (getSelfData().getUser() != null) {
-            LivingEntity entity = getSelfData().getUser();
-            StandUserComponent UD = getUserData(entity);
-            UD.removeStandOut();
         }
     } //takes stand's data off of its user
 
     public void setMaster(LivingEntity Master) {
-        getSelfData().setUser(Master);
+        this.getSelfData().setUser(Master);
     } //Sets stand user
 
+    public LivingEntity getFollowing() {
+        return this.getSelfData().getFollowing();
+    }
+
     public LivingEntity getMaster() {
-        return getSelfData().getUser();
+        return this.getSelfData().getUser();
     } //Returns stand user
 
     public boolean startStandRiding(LivingEntity entity, boolean force) {
@@ -176,11 +176,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public void tickStandOut() {
         this.setVelocity(Vec3d.ZERO);
         this.tick();
-        if (!(this.hasMaster())) {
+        if (this.getFollowing() == null) {
             //RoundaboutMod.LOGGER.info("MF No Master");
             return;
         }
-        StandUserComponent UD = getUserData(this.getMaster());
+        StandUserComponent UD = getUserData(this.getFollowing());
         //RoundaboutMod.LOGGER.info("MF Update Pos");
         UD.updateStandOutPosition(this);
     }
@@ -191,12 +191,20 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
         super.tick();
 
+        RoundaboutMod.LOGGER.info("CHi0");
             if (this.isAlive() && !this.dead){
+                RoundaboutMod.LOGGER.info("CHi");
+                RoundaboutMod.LOGGER.info(""+this.getSelfData());
+                RoundaboutMod.LOGGER.info(""+this.getSelfData().getUser());
             if (this.getSelfData().getUser() != null){
-            if (this.getSelfData().getUser().isAlive() && this.userActive()) {
+                //RoundaboutMod.LOGGER.info("Hi ");
+                StandEntity userStand = this.getUserData(this.getMaster()).getStand();
+            if (this.getSelfData().getUser().isAlive() && userStand != null && this.getId() == userStand.getId()) {
 
                 //Make it fade in
-                if (this.getFadeOut() < MaxFade) {this.incFadeOut(1);}
+                if (this.getFadeOut() < MaxFade) {
+                    this.incFadeOut(1);
+                }
             } else {
                 this.incFadeOut(-1);
                 if (this.getFadeOut() <= 0) {
@@ -235,7 +243,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
 
     public boolean userActive(){
-        if (getSelfData().getUser() != null){
+        if (this.getSelfData().getUser() != null){
             if (((IEntityDataSaver) getSelfData().getUser()).getPersistentData().get("active_stand") != null){
             UUID user3 = ((IEntityDataSaver) getSelfData().getUser()).getPersistentData().getUuid("active_stand");
             UUID user4 = this.getUuid();

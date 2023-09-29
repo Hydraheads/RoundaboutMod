@@ -15,6 +15,8 @@ public class StandData implements StandComponent {
     private final StandEntity Stand;
     @Nullable
     private LivingEntity User;
+    @Nullable
+    private LivingEntity Following;
     private boolean syncOn;
     public StandData(StandEntity entity) {
         this.Stand = entity;
@@ -32,6 +34,12 @@ public class StandData implements StandComponent {
 
     public void setUser(LivingEntity StandSet){
         this.User = StandSet;
+        this.Following = StandSet;
+        this.sync();
+    }
+
+    public void setFollowing(LivingEntity StandSet){
+        this.Following = StandSet;
         this.sync();
     }
 
@@ -39,23 +47,40 @@ public class StandData implements StandComponent {
     public LivingEntity getUser(){
         return this.User;
     }
+    @Nullable
+    public LivingEntity getFollowing(){
+        return this.Following;
+    }
 
 
     @Override
     public void applySyncPacket(PacketByteBuf buf) {
-        //RoundaboutMod.LOGGER.info("Apply");
         Entity userEntity = buf.readBoolean() ?
                 this.Stand.getWorld().getEntityById(buf.readInt()) : null;
         if (userEntity == null || userEntity.isLiving()) {
             this.User = (LivingEntity) userEntity;
+
+
+            Entity followEntity = buf.readBoolean() ?
+                    this.Stand.getWorld().getEntityById(buf.readInt()) : null;
+            if (followEntity == null || followEntity.isLiving()) {
+                this.Following = (LivingEntity) followEntity;
+
+            }
         }
     }
 
+
+    @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
         //RoundaboutMod.LOGGER.info("Write");
         buf.writeBoolean(this.User != null);
         if (this.User != null) {
             buf.writeInt(this.User.getId());
+            buf.writeBoolean(this.Following != null);
+            if (this.Following != null) {
+                buf.writeInt(this.Following.getId());
+            }
         }
     }
     @Override

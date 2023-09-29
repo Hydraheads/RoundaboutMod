@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.access.IEntityDataSaver;
@@ -25,7 +26,7 @@ public class SummonPacket {
                                PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         ServerWorld world = (ServerWorld) player.getWorld();
-        StandUserComponent standUserData = MyComponents.STAND_USER.get(player);
+        StandUserComponent userData = MyComponents.STAND_USER.get(player);
 
         //playsound ModSounds.SUMMON_SOUND
         //SoundEvents.ENTITY_GENERIC_DRINK
@@ -43,12 +44,16 @@ public class SummonPacket {
                 world.spawnEntity(stand);
                 stand.playSummonSound();
 
-                standUserData.standMount(stand);
+                userData.standMount(stand);
             }
 
             //ModEntities.THE_WORLD.spawn((ServerWorld) player.getWorld(), player.getBlockPos(), SpawnReason.TRIGGERED);
             active=true;
         } else {
+
+            RoundaboutMod.LOGGER.info("Hi ");
+            userData.setStand(null);
+            RoundaboutMod.LOGGER.info("Hi 2");
             ((IEntityDataSaver) player).getPersistentData().remove("active_stand");
             active=false;
         }
