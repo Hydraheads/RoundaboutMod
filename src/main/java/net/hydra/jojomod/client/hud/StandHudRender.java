@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.KeyInputHandler;
+import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -62,7 +63,7 @@ public class StandHudRender {
             MinecraftClient mc = MinecraftClient.getInstance();
             float tickDelta = mc.getLastFrameDuration();
 
-            boolean standOn = ((IEntityDataSaver) playerEntity).getStandOn();
+            boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
             if (standOn || animated > 0.1){
                 if (!standOn){
                     animated = Math.max(controlledLerp(tickDelta, animated,0,0.5f),0);
@@ -140,9 +141,9 @@ public class StandHudRender {
             int twidth = 51;
             x = width/2;
             y = height;
-
+            boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
             NbtCompound pd = ((IEntityDataSaver) playerEntity).getPersistentData();
-            if (((IEntityDataSaver) playerEntity).getStandOn()){
+            if (standOn){
                 int age = Math.toIntExact(pd.getLong("guard") - Math.round(playerEntity.getWorld().getTime()));
                 if (age <=0 || age > 201){age=0;}
                 //1000 -> 10

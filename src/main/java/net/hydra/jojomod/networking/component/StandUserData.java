@@ -16,15 +16,24 @@ public class StandUserData implements StandUserComponent {
     private final LivingEntity User;
     @Nullable
     private StandEntity Stand;
-
+    private boolean standActive;
     private boolean syncOn;
     public StandUserData(LivingEntity entity) {
         this.User = entity;
     }
-    private void sync() {
+    public void sync() {
         syncOn = true;
         MyComponents.STAND_USER.sync(this.User);
         syncOn = false;
+    }
+
+    public void setActive(boolean active){
+     this.standActive = active;
+        this.sync();
+    }
+
+    public boolean getActive() {
+        return this.standActive;
     }
 
     public void standMount(StandEntity StandSet){
@@ -80,9 +89,11 @@ public class StandUserData implements StandUserComponent {
 
     @Override
     public void applySyncPacket(PacketByteBuf buf) {
+        boolean active = buf.readBoolean();
         Entity standEntity = buf.readBoolean() ?
                 this.User.getWorld().getEntityById(buf.readInt()) : null;
         if (standEntity == null || standEntity instanceof StandEntity) {
+            this.standActive = active;
             this.Stand = (StandEntity) standEntity;
         }
 
@@ -90,6 +101,7 @@ public class StandUserData implements StandUserComponent {
 
     @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
+        buf.writeBoolean(this.standActive);
         buf.writeBoolean(this.Stand != null);
         if (this.Stand != null) {
             buf.writeInt(this.Stand.getId());

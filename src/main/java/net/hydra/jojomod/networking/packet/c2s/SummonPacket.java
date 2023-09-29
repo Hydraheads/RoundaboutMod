@@ -32,7 +32,7 @@ public class SummonPacket {
         //SoundEvents.ENTITY_GENERIC_DRINK
 
         boolean active;
-        if (!NBTData.isActive((IEntityDataSaver) player)) {
+        if (!userData.getActive()) {
 
             //world.getEntity
             StandEntity stand = ModEntities.THE_WORLD.create(world);
@@ -51,14 +51,11 @@ public class SummonPacket {
             active=true;
         } else {
 
-            RoundaboutMod.LOGGER.info("Hi ");
-            userData.setStand(null);
-            RoundaboutMod.LOGGER.info("Hi 2");
             ((IEntityDataSaver) player).getPersistentData().remove("active_stand");
             active=false;
         }
+        userData.setActive(active);
         ((IEntityDataSaver) player).getPersistentData().putLong("guard",(player.getWorld().getTime()+200));
-        NBTData.setActive((IEntityDataSaver) player,active);
-        NBTData.syncModNbt((ServerPlayerEntity) player);
+        //NBTData.syncModNbt((ServerPlayerEntity) player);
     }
 }

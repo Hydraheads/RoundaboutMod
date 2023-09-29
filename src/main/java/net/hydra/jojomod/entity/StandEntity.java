@@ -191,15 +191,10 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
         super.tick();
 
-        RoundaboutMod.LOGGER.info("CHi0");
             if (this.isAlive() && !this.dead){
-                RoundaboutMod.LOGGER.info("CHi");
-                RoundaboutMod.LOGGER.info(""+this.getSelfData());
-                RoundaboutMod.LOGGER.info(""+this.getSelfData().getUser());
             if (this.getSelfData().getUser() != null){
-                //RoundaboutMod.LOGGER.info("Hi ");
-                StandEntity userStand = this.getUserData(this.getMaster()).getStand();
-            if (this.getSelfData().getUser().isAlive() && userStand != null && this.getId() == userStand.getId()) {
+                boolean userActive = this.getUserData(this.getMaster()).getActive();
+            if (this.getSelfData().getUser().isAlive() && userActive) {
 
                 //Make it fade in
                 if (this.getFadeOut() < MaxFade) {

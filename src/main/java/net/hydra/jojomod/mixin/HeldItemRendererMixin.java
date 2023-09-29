@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
@@ -41,7 +42,7 @@ public class HeldItemRendererMixin {
     public void injectHeldItems(CallbackInfo ci) {
         ClientPlayerEntity clientPlayerEntity2 = this.client.player;
         if (!this.client.player.isRiding()) {
-        if (((IEntityDataSaver) client.player).getStandOn()) {
+        if (MyComponents.STAND_USER.get(this.client.player).getActive()) {
             ItemStack itemStack3 = clientPlayerEntity2.getMainHandStack();
             ItemStack itemStack4 = clientPlayerEntity2.getOffHandStack();
             if (itemStack3.getItem() instanceof ToolItem){

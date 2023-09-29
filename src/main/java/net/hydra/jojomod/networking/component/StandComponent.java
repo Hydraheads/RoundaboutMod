@@ -12,8 +12,10 @@ public interface StandComponent extends Component, AutoSyncedComponent {
     @Nullable
     LivingEntity getFollowing();
 
+    void sync();
 
     void setUser(LivingEntity StandSet);
+    void setFollowing(LivingEntity StandSet);
     @Override
     public boolean shouldSyncWith(ServerPlayerEntity player);
 }

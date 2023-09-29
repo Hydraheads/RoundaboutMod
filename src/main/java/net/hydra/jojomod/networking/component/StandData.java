@@ -21,7 +21,7 @@ public class StandData implements StandComponent {
     public StandData(StandEntity entity) {
         this.Stand = entity;
     }
-    private void sync() {
+    public void sync() {
         syncOn = true;
         MyComponents.STAND.sync(this.Stand);
         syncOn = false;

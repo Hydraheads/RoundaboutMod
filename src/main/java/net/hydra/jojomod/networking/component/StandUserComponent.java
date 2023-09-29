@@ -21,6 +21,13 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void setDI(int forward, int strafe);
     void standMount(StandEntity StandSet);
     void setStand(StandEntity StandSet);
+
+    void setActive(boolean active);
+
+    void sync();
+
+    boolean getActive();
+
     @Nullable
     StandEntity getStand();
     @Override
