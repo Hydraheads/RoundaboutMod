@@ -31,30 +31,7 @@ public class SummonPacket {
         //playsound ModSounds.SUMMON_SOUND
         //SoundEvents.ENTITY_GENERIC_DRINK
 
-        boolean active;
-        if (!userData.getActive()) {
-
-            //world.getEntity
-            StandEntity stand = ModEntities.THE_WORLD.create(world);
-            if (stand != null) {
-                Vec3d spos = stand.getStandOffsetVector(player);
-                stand.updatePosition(spos.getX(), spos.getY(), spos.getZ());
-                ((IEntityDataSaver) player).getPersistentData().putUuid("active_stand",stand.getUuid());
-
-                world.spawnEntity(stand);
-                stand.playSummonSound();
-
-                userData.standMount(stand);
-            }
-
-            //ModEntities.THE_WORLD.spawn((ServerWorld) player.getWorld(), player.getBlockPos(), SpawnReason.TRIGGERED);
-            active=true;
-        } else {
-
-            ((IEntityDataSaver) player).getPersistentData().remove("active_stand");
-            active=false;
-        }
-        userData.setActive(active);
+        userData.summonStand(false,true);
         ((IEntityDataSaver) player).getPersistentData().putLong("guard",(player.getWorld().getTime()+200));
         //NBTData.syncModNbt((ServerPlayerEntity) player);
     }

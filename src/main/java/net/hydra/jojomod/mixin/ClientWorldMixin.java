@@ -34,7 +34,7 @@ public class ClientWorldMixin {
 
             if (standUserData.getStand() != null) {
                 StandEntity stand = standUserData.getStand();
-                if (stand.getFollowing().getId() == livingEntity.getId()){
+                if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
                     this.tickStandIn(livingEntity, stand);
                 }
             }

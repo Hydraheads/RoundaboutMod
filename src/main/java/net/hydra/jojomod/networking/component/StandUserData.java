@@ -1,6 +1,8 @@
 package net.hydra.jojomod.networking.component;
 
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.entity.Entity;
@@ -24,7 +26,6 @@ public class StandUserData implements StandUserComponent {
     public void sync() {
         syncOn = true;
         MyComponents.STAND_USER.sync(this.User);
-        syncOn = false;
     }
 
     public void setActive(boolean active){
@@ -37,7 +38,7 @@ public class StandUserData implements StandUserComponent {
     }
 
     public void standMount(StandEntity StandSet){
-        //RoundaboutMod.LOGGER.info("MF4");
+        RoundaboutMod.LOGGER.info("MFX1");
         this.Stand = StandSet;
         StandSet.setMaster(User);
         this.sync();
@@ -45,6 +46,33 @@ public class StandUserData implements StandUserComponent {
     public void setStand(StandEntity StandSet){
         this.Stand = StandSet;
         this.sync();
+    }
+
+    public void summonStand(boolean forced, boolean sound){
+        boolean active;
+        if ((!this.getActive() && !forced) || (forced && this.getActive())) {
+            //world.getEntity
+            StandEntity stand = ModEntities.THE_WORLD.create(User.getWorld());
+            RoundaboutMod.LOGGER.info("MF");
+            if (stand != null) {
+                RoundaboutMod.LOGGER.info("MF2");
+                Vec3d spos = stand.getStandOffsetVector(User);
+                stand.updatePosition(spos.getX(), spos.getY(), spos.getZ());
+
+                User.getWorld().spawnEntity(stand);
+
+                if (sound) {
+                    stand.playSummonSound();
+                }
+
+                this.standMount(stand);
+            }
+
+            active=true;
+        } else {
+            active=false;
+        }
+        this.setActive(active);
     }
 
     @Nullable
@@ -101,6 +129,7 @@ public class StandUserData implements StandUserComponent {
 
     @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
+        syncOn = false;
         buf.writeBoolean(this.standActive);
         buf.writeBoolean(this.Stand != null);
         if (this.Stand != null) {

@@ -24,6 +24,7 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
 
     void setActive(boolean active);
 
+    void summonStand(boolean forced, boolean sound);
     void sync();
 
     boolean getActive();

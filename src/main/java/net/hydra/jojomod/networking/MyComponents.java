@@ -23,7 +23,9 @@ public class MyComponents implements EntityComponentInitializer {
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.registerFor(StandEntity.class, STAND, StandData::new);
-        registry.registerFor(LivingEntity.class, STAND_USER, StandUserData::new);
+        registry.beginRegistration(StandEntity.class, STAND).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandData.class).end(StandData::new);
+        registry.beginRegistration(LivingEntity.class, STAND_USER).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandUserData.class).end(StandUserData::new);
+        //registry.registerFor(StandEntity.class, STAND, StandData::new);
+        //registry.registerFor(LivingEntity.class, STAND_USER, StandUserData::new);
     }
 }

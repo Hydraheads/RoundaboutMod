@@ -41,6 +41,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     public float bodyRotation;
 
+    private boolean isDisplay;
+
     protected SoundEvent getSummonSound() {
             return ModSounds.SUMMON_SOUND_EVENT;
     }
@@ -64,6 +66,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     }
     public final int getAnchorPlace() {
         return this.dataTracker.get(ANCHOR_PLACE);
+    }
+
+
+    public final boolean getNeedsUser(){
+        return true;
     }
 
     public float getBodyRotation(){
@@ -102,6 +109,14 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
             return false;
         }
     } //The stand is elytra flying only if its user is
+
+    public boolean getDisplay() {
+        return this.isDisplay;
+    }
+    public void setDisplay(boolean display) {
+       this.isDisplay = display;
+    }
+
 
     public void incFadeOut(int inc) {
         this.FadeOut+=inc;
@@ -192,29 +207,36 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         super.tick();
 
             if (this.isAlive() && !this.dead){
-            if (this.getSelfData().getUser() != null){
-                boolean userActive = this.getUserData(this.getMaster()).getActive();
-            if (this.getSelfData().getUser().isAlive() && userActive) {
+                if (this.getNeedsUser() && !this.isDisplay) {
+                    if (this.getSelfData().getUser() != null) {
+                        boolean userActive = this.getUserData(this.getMaster()).getActive();
+                        if (this.getSelfData().getUser().isAlive() && userActive) {
 
-                //Make it fade in
-                if (this.getFadeOut() < MaxFade) {
-                    this.incFadeOut(1);
+                            //Make it fade in
+                            if (this.getFadeOut() < MaxFade) {
+                                this.incFadeOut(1);
+                            }
+                        } else {
+                            TickDown();
+                        }
+                    } else {
+                        TickDown();
+                    }
+                } else {
+                    this.setFadeOut(this.getMaxFade());
                 }
-            } else {
-                this.incFadeOut(-1);
-                if (this.getFadeOut() <= 0) {
-
-                    this.remove(RemovalReason.DISCARDED);
-                }
-            }
-            } else {
-                this.setFadeOut(this.getMaxFade());
-            }
-
             }
         //this.noClip = false;
         this.setNoGravity(true);
     } // Happens every tick
+
+    private void TickDown(){
+        this.incFadeOut(-1);
+        if (this.getFadeOut() <= 0) {
+
+            this.remove(RemovalReason.DISCARDED);
+        }
+    }
 
     public Vec3d getStandOffsetVector(Entity standUser){
         int vis = this.getFadeOut();
