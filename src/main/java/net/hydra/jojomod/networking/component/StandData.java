@@ -17,24 +17,25 @@ public class StandData implements StandComponent {
     private LivingEntity RUser;
     @Nullable
     private LivingEntity Following;
-    private boolean RsyncOn;
+    //private boolean RsyncOn;
+
     public StandData(StandEntity entity) {
         this.RStand = entity;
     }
     public void sync() {
-        RsyncOn = true;
+        //RsyncOn = true;
         MyComponents.STAND.sync(this.RStand);
     }
 
     @Override
     public boolean shouldSyncWith(ServerPlayerEntity player){
-        return RsyncOn;
+        return true;
+        //return RsyncOn;
     };
 
     public void setUser(LivingEntity StandSet){
         this.RUser = StandSet;
         this.Following = StandSet;
-        RoundaboutMod.LOGGER.info("MFX2");
         this.sync();
     }
 
@@ -53,8 +54,6 @@ public class StandData implements StandComponent {
     }
     @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
-        RsyncOn = false;
-        RoundaboutMod.LOGGER.info("MF3");
         int usID; if (this.RUser == null){usID=-1;} else {usID = this.RUser.getId();}
         int foID; if (this.Following == null){foID=-1;} else {foID = this.Following.getId();}
         buf.writeInt(usID);
@@ -70,10 +69,11 @@ public class StandData implements StandComponent {
     }
     @Override
     public void readFromNbt(NbtCompound tag) {
-        int UserID = tag.getInt("standUser");
-        int FollowingID = tag.getInt("standFollowing");
-        Entity UserEnt = RStand.getWorld().getEntityById(UserID);
-        Entity UserFollowingEnt = RStand.getWorld().getEntityById(FollowingID);
+        int usID = tag.getInt("standUser");
+        int foID = tag.getInt("standFollowing");
+
+        Entity UserEnt = RStand.getWorld().getEntityById(usID);
+        Entity UserFollowingEnt = RStand.getWorld().getEntityById(foID);
         if (UserEnt != null && UserEnt.isLiving()){
             this.setUser((LivingEntity) UserEnt);
         } if (UserFollowingEnt != null && UserFollowingEnt.isLiving()) {

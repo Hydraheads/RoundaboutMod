@@ -7,6 +7,7 @@ import dev.onyxstudios.cca.api.v3.component.sync.PlayerSyncPredicate;
 import net.hydra.jojomod.entity.StandEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public interface StandUserComponent extends Component, AutoSyncedComponent {
@@ -24,13 +25,11 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
 
     void setActive(boolean active);
 
-    void summonStand(boolean forced, boolean sound);
+    void summonStand(World theWorld, boolean forced, boolean sound);
     void sync();
 
     boolean getActive();
 
     @Nullable
     StandEntity getStand();
-    @Override
-    boolean shouldSyncWith(ServerPlayerEntity player);
 }

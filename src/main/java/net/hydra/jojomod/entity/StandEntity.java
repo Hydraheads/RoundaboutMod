@@ -205,7 +205,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.noClip = true;
 
         super.tick();
-
             if (this.isAlive() && !this.dead){
                 if (this.getNeedsUser() && !this.isDisplay) {
                     if (this.getSelfData().getUser() != null) {
@@ -231,9 +230,9 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     } // Happens every tick
 
     private void TickDown(){
+        var currFade = this.getFadeOut();
         this.incFadeOut(-1);
-        if (this.getFadeOut() <= 0) {
-
+        if (currFade <= 0) {
             this.remove(RemovalReason.DISCARDED);
         }
     }

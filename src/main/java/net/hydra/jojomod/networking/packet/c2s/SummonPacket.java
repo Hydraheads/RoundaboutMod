@@ -26,13 +26,10 @@ public class SummonPacket {
                                PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         ServerWorld world = (ServerWorld) player.getWorld();
-        StandUserComponent userData = MyComponents.STAND_USER.get(player);
-
-        //playsound ModSounds.SUMMON_SOUND
-        //SoundEvents.ENTITY_GENERIC_DRINK
-
-        userData.summonStand(false,true);
-        ((IEntityDataSaver) player).getPersistentData().putLong("guard",(player.getWorld().getTime()+200));
-        //NBTData.syncModNbt((ServerPlayerEntity) player);
+        server.execute(() -> {
+            StandUserComponent userData = MyComponents.STAND_USER.get(player);
+            userData.summonStand(world, false, true);
+            ((IEntityDataSaver) player).getPersistentData().putLong("guard", (player.getWorld().getTime() + 200));
+        });
     }
 }

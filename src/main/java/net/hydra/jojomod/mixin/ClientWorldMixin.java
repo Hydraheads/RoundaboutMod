@@ -31,7 +31,14 @@ public class ClientWorldMixin {
         if (entity.isLiving()) {
             LivingEntity livingEntity = (LivingEntity) entity;
             StandUserComponent standUserData = MyComponents.STAND_USER.get(livingEntity);
-
+            if (livingEntity.isPlayer()){
+                RoundaboutMod.LOGGER.info("GS: "+standUserData.getStand());
+                if (standUserData.getStand() != null) {
+                    RoundaboutMod.LOGGER.info("GF: "+standUserData.getStand().getFollowing());
+                }
+                RoundaboutMod.LOGGER.info(""+standUserData.getStand());
+                RoundaboutMod.LOGGER.info(""+standUserData.getStand());
+            }
             if (standUserData.getStand() != null) {
                 StandEntity stand = standUserData.getStand();
                 if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){

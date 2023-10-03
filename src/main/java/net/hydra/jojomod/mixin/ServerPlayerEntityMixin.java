@@ -36,7 +36,7 @@ import static net.hydra.jojomod.stand.NBTData.syncModNbt;
     public void compatSync() {
             //MyComponents.STAND_USER.get(((ServerPlayerEntity) (Object) this)).sync();
             syncModNbt((ServerPlayerEntity) (Object) this);
-            MyComponents.STAND_USER.get(((ServerPlayerEntity) (Object) this)).summonStand(true,false);
+            MyComponents.STAND_USER.get(((ServerPlayerEntity) (Object) this)).summonStand(this.getWorld(), true,false);
         compatSync = 5;
     }
 }

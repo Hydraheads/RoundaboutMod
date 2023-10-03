@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class StandUserData implements StandUserComponent {
@@ -19,12 +20,14 @@ public class StandUserData implements StandUserComponent {
     @Nullable
     private StandEntity Stand;
     private boolean standActive;
-    private boolean syncOn;
+
+    //StandID is clientside only
+    private int StandID = -1;
+
     public StandUserData(LivingEntity entity) {
         this.User = entity;
     }
     public void sync() {
-        syncOn = true;
         MyComponents.STAND_USER.sync(this.User);
     }
 
@@ -38,7 +41,6 @@ public class StandUserData implements StandUserComponent {
     }
 
     public void standMount(StandEntity StandSet){
-        RoundaboutMod.LOGGER.info("MFX1");
         this.Stand = StandSet;
         StandSet.setMaster(User);
         this.sync();
@@ -48,18 +50,16 @@ public class StandUserData implements StandUserComponent {
         this.sync();
     }
 
-    public void summonStand(boolean forced, boolean sound){
+    public void summonStand(World theWorld, boolean forced, boolean sound){
         boolean active;
         if ((!this.getActive() && !forced) || (forced && this.getActive())) {
             //world.getEntity
             StandEntity stand = ModEntities.THE_WORLD.create(User.getWorld());
-            RoundaboutMod.LOGGER.info("MF");
             if (stand != null) {
-                RoundaboutMod.LOGGER.info("MF2");
                 Vec3d spos = stand.getStandOffsetVector(User);
                 stand.updatePosition(spos.getX(), spos.getY(), spos.getZ());
 
-                User.getWorld().spawnEntity(stand);
+                theWorld.spawnEntity(stand);
 
                 if (sound) {
                     stand.playSummonSound();
@@ -77,6 +77,11 @@ public class StandUserData implements StandUserComponent {
 
     @Nullable
     public StandEntity getStand(){
+        if (this.User.getWorld().isClient) {
+            if ((this.Stand == null || this.Stand.isRemoved()) && this.StandID > -1) {
+                this.Stand = (StandEntity) User.getWorld().getEntityById(this.StandID);
+            }
+        }
         return this.Stand;
     }
     public boolean hasStandOut() {
@@ -109,32 +114,20 @@ public class StandUserData implements StandUserComponent {
     }
 
 
-
-    @Override
-    public boolean shouldSyncWith(ServerPlayerEntity player){
-        return syncOn;
-    };
-
     @Override
     public void applySyncPacket(PacketByteBuf buf) {
-        boolean active = buf.readBoolean();
-        Entity standEntity = buf.readBoolean() ?
-                this.User.getWorld().getEntityById(buf.readInt()) : null;
-        if (standEntity == null || standEntity instanceof StandEntity) {
-            this.standActive = active;
-            this.Stand = (StandEntity) standEntity;
-        }
-
+        this.standActive = buf.readBoolean();
+        int stID = buf.readInt();
+        this.StandID = stID;
+        this.Stand = (StandEntity) User.getWorld().getEntityById(stID);
     }
+
 
     @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
-        syncOn = false;
         buf.writeBoolean(this.standActive);
-        buf.writeBoolean(this.Stand != null);
-        if (this.Stand != null) {
-            buf.writeInt(this.Stand.getId());
-        }
+        int stID; if (this.Stand == null){stID=-1;} else {stID = this.Stand.getId();}
+        buf.writeInt(stID);
     }
     public void onStandOutLookAround(StandEntity passenger) {
     }
