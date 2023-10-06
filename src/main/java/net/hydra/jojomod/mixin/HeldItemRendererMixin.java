@@ -20,7 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin {
-    //Use this to make the item you hold lower down when a stand is active
+    /** Code for vanilla item rendering in first person.*/
+
     @Shadow
     private float equipProgressMainHand;
     @Shadow
@@ -36,8 +37,10 @@ public class HeldItemRendererMixin {
         this.client = client;
     }
 
-    //prevEquipProgressMainHand
-    //equipProgressMainHand
+    /** This makes certain items lower when your stand is out. Indicates that you can't really use tools
+     * like swords or pickaxes while a stand is out.
+     * The reason for that design decision is mostly to prevent sword swings overriding stand attacks
+     * to mobs in a close range, and accidentally breaking blocks when attacking.*/
     @Inject(method = "updateHeldItems", at = @At(value = "TAIL"))
     public void injectHeldItems(CallbackInfo ci) {
         ClientPlayerEntity clientPlayerEntity2 = this.client.player;
@@ -56,14 +59,4 @@ public class HeldItemRendererMixin {
 
         }}
     }
-    //renderArmHoldingItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm)
-//    @Inject(method = "renderFirstPersonItem", at = @At(value = ".-Head"))
-//    public void updateHeldItems(CallbackInfo ci) {
-//        ClientPlayerEntity clientPlayerEntity = client.player;
-//        NbtCompound pd = ((IEntityDataSaver) client.player).getPersistentData();
-//        if (pd.getBoolean("stand_on")) {
-//
-//        }
-//        RoundaboutMod.LOGGER.info("CLIENT tickStandIn");
-//    }
 }

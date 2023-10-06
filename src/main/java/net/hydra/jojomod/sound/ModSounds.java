@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 
 public class ModSounds {
 
+    /** Registers mod sounds... but JSON files are still needed to complete registration!*/
     public static final Identifier SUMMON_SOUND_ID = new Identifier("roundabout:summon_sound");
     public static final Identifier TERRIER_SOUND_ID = new Identifier("roundabout:terrier_pass");
     public static final Identifier WORLD_SUMMON_SOUND_ID = new Identifier("roundabout:summon_world");

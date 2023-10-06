@@ -18,9 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public class EntityStandMixin {
 
-    //This Code gives every entity the potential to be a stand user.
-    //It provides movement sync code for stands as well, by offering a modified copy of mount code
-
+    /** Honestly, I don't know if this code actually does anything significant, but allegedly it updates
+     * the position when a stand is teleported. Mount code in vanilla does this, so it is a safety
+     * measurement. Injects into the Entity Class.*/
     @Inject(method = "teleportPassengers", at = @At(value = "TAIL"))
     private void teleportPassengersRoundabout(CallbackInfo ci) {
         LivingEntity living = ((LivingEntity) (Object) this);

@@ -16,6 +16,7 @@ import net.minecraft.util.Identifier;
 
 public class ModEntities {
 
+    /** Registers entities.*/
     public static final EntityType<TerrierEntity> TERRIER_DOG =
             Registry.register(
                     Registries.ENTITY_TYPE,

@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public abstract class GameHudMixin implements IHudAccess {
 
+    /** Code for when the client renders its huds*/
     @Shadow
     @Final
     @Mutable
@@ -42,11 +43,13 @@ public abstract class GameHudMixin implements IHudAccess {
     //private void renderHotbar(float tickDelta, DrawContext context) {
 
 
+    /** The stand move HUD renders with the hotbar so that it may exist in all gamemodes.*/
     @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
     private void renderHotbarMixin(float tickDelta, DrawContext context, CallbackInfo info) {
         StandHudRender.renderStandHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);
     }
 
+    /** The guard HUD renders with status bars because it is arbitrary in creative mode.*/
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", ordinal = 1))
     private void renderStatusBarsMixin(DrawContext context, CallbackInfo info) {
         //StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);

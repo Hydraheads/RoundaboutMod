@@ -10,6 +10,7 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.BiomeKeys;
 
 public class WorldEntityGeneration {
+    /** The spawning of mobs like Terrier in the wild.*/
     public static void addSpawns(){
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.DESERT), SpawnGroup.CREATURE,
                 ModEntities.TERRIER_DOG, 2, 1, 2);

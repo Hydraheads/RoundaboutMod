@@ -16,6 +16,9 @@ import static net.hydra.jojomod.stand.NBTData.syncModNbt;
 
 @Mixin(ServerPlayerEntity.class)
     public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ServerPlayerAccess {
+
+    /** This code makes sure stand is summoned properly when switching dimensions or performing other tasks
+     * @see net.hydra.jojomod.util.EventInit*/
         public int compatSync = 2;
 
         public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {

@@ -16,6 +16,8 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class StandHudRender {
+    /** Renders the HUD for stand attacks/abilities.
+     * Keep in mind it has to slide in so some of the code may look awkward.*/
     private static final Identifier GUARD_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/guard_meter.png");
     private static final Identifier GUARD_FILLED = new Identifier(RoundaboutMod.MOD_ID,

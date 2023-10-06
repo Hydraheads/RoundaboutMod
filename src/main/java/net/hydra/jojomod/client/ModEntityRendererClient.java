@@ -14,6 +14,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class ModEntityRendererClient {
+    /** Registers the visual component of mobs. Note: Renderers render models, but models are different files*/
     public static final EntityModelLayer WOLF_LAYER = new EntityModelLayer(new Identifier(RoundaboutMod.MOD_ID, "wolf"), "main");
 
     public static void register(){

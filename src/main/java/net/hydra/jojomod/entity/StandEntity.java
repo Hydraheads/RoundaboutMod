@@ -14,6 +14,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -23,21 +24,22 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Objects;
 import java.util.UUID;
 
 public abstract class StandEntity extends MobEntity implements GeoEntity {
-    private int FadeOut; //The stand's current transparency
-    private final int MaxFade = 8;  //The stand's maximum transparency
+    private int FadeOut;
+    private final int MaxFade = 8;
 
     protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class,
-            TrackedDataHandlerRegistry.INTEGER); //The stand's position relative to the player. Between 0 and 360.
+            TrackedDataHandlerRegistry.INTEGER);
 
     protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
-            //If the stand's user is moving forward or backwards, this value gets changed to make it lean
+
 
     public float bodyRotation;
 
@@ -46,7 +48,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     protected SoundEvent getSummonSound() {
             return ModSounds.SUMMON_SOUND_EVENT;
     }
-    //Every stand has a Summon sound, so they should overwrite this function, or they will play the generic one.
 
     public void playSummonSound() {
         this.getWorld().playSound(null, this.getBlockPos(), getSummonSound(), SoundCategory.PLAYERS, 1F, 1F);
@@ -56,6 +57,10 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return this.dataTracker.get(MOVE_FORWARD);
     } //returns leaning direction
 
+    /** Presently, this is how the stand knows to lean in any direction based on player movement.
+     * Creates the illusion of floaty movement within the stand.
+     * Relevant in stand model code:
+     * @see StandModel#setCustomAnimations */
     public final void setMoveForward(Integer MF) {
         this.dataTracker.set(MOVE_FORWARD, MF);
     } //sets leaning direction
@@ -78,11 +83,21 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     } public void setBodyRotation(float bodRot){
        this.bodyRotation = bodRot;
     }
+
+    /** This is called when setting the anchor place of a stand, which is to say whether it will position itself
+     * next to the player to the left, right, front, back, or anywhere in between. Players individually can set
+     * this to accommodate their style and FOV settings. Purely cosmetic, as stands will teleport before taking
+     * actions..*/
     public final void setAnchorPlace(Integer degrees) {
         this.dataTracker.set(ANCHOR_PLACE, degrees);
     }
 
 
+    /** These functions tell the game if the stand's user is Swimming, Crawling, or Elytra Flying.
+     * Currently used for idle animation variants.
+     * 
+     * @see StandModel#setCustomAnimations
+     * */
     @Override
     public boolean isSwimming() {
         if (this.getSelfData().getUser() != null){
@@ -90,7 +105,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         } else {
             return false;
         }
-    } //The stand is swimming only if its user is
+    }
 
     @Override
     public boolean isCrawling() {
@@ -99,16 +114,16 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         } else {
             return false;
         }
-    } //The stand is crawling only if its user is
+    }
 
     @Override
     public boolean isFallFlying() {
         if (this.getSelfData().getUser() != null){
-            return ((LivingEntity) this.getSelfData().getUser()).isFallFlying();
+            return (this.getSelfData().getUser()).isFallFlying();
         } else {
             return false;
         }
-    } //The stand is elytra flying only if its user is
+    }
 
     public boolean getDisplay() {
         return this.isDisplay;
@@ -118,14 +133,24 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     }
 
 
+    /** Controls the visibility of stands, specifically their fading in or out when summoned.
+     * Potentially can be used to make stand blink on the verge of death?
+     *
+     * @see StandEntityRenderer#getStandOpacity
+     *
+     * When a stand hits negative opacity, it automatically despawns
+     * @see #TickDown
+     * */
     public void incFadeOut(int inc) {
         this.FadeOut+=inc;
-    } //Positive values make the stand less see-through. Negative ones make it fade and eventually despawn.
+    }
 
     public void setFadeOut(int inc) {
         this.FadeOut=inc;
-    } //Immediately makes the stand visible/invisible
+    }
 
+    /** These are not components as they are simpler variables to store/load than entities.
+     * It would be nice if move forward were to be less packet intensive. */
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
@@ -137,50 +162,73 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
             GeckoLibUtil.createInstanceCache(this);
 
 
+
+    /** Initialize Stands*/
     protected StandEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
         //FadeOut = 10;
-    } // Initialize Stand
+    }
 
 
+    /** Tricks Minecraft's rendering to make stands look like they are attached to mobs.
+     * In vanilla, this is how mounts are handled in general, but we have a custom mount system.
+     * @see #startStandRiding */
     @Override
     public boolean hasVehicle() {
         return this.getFollowing() != null;
-    } //Stand is always riding... in a sense
+    }
 
     @Override
     public LivingEntity getVehicle() {
         return this.getFollowing();
-    } //returns master when vanilla calls for rider
+    }
 
 
     public boolean hasMaster() {
         return this.getMaster() != null;
     } //returns IF stand has a master
 
+
     public StandUserComponent getUserData (LivingEntity User){
         return MyComponents.STAND_USER.get(User);
     }
+
+
+    /** Returns the Component of StandData on the entity,
+     * Use this to get the User, who the stand is following, etc
+     *
+     *  @see net.hydra.jojomod.networking.component.StandData
+     */
     public StandComponent getSelfData (){
         return MyComponents.STAND.get(this);
     }
-    public void dismountMaster() {
-        if (getSelfData().getUser() != null) {
-        }
-    } //takes stand's data off of its user
 
+    /** Sets stand User, the mob who "owns" the stand */
     public void setMaster(LivingEntity Master) {
         this.getSelfData().setUser(Master);
-    } //Sets stand user
+    }
+
+    /** Unused, will be used to lock a stand onto another mob.
+     * Use case example: Killer Queen BTD following someone else
+     * Code to tick on follower will be needed in client world mixin*/
+    public void setFollowing(LivingEntity Following) {
+        this.getSelfData().setFollowing(Following);
+    }
 
     public LivingEntity getFollowing() {
         return this.getSelfData().getFollowing();
     }
 
+    /** Sets stand User, the mob who "owns" the stand */
     public LivingEntity getMaster() {
         return this.getSelfData().getUser();
-    } //Returns stand user
+    }
 
+    /** When this is called, sets the User's owned stand to this one. Both the Stand and the User store
+     * each other, and this is for setting the User's storage.
+     *
+     * @see net.hydra.jojomod.networking.component.StandUserData#setStand
+     * */
     public boolean startStandRiding(LivingEntity entity, boolean force) {
         StandUserComponent UD = getUserData(entity);
         UD.setStand(this);
@@ -188,6 +236,13 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         //RoundaboutMod.LOGGER.info("MF");
     }
 
+    /** Called every tick in
+     * @see net.hydra.jojomod.mixin.ClientWorldMixin for the client and
+     * @see net.hydra.jojomod.mixin.ServerWorldMixin for the server.
+     * Basically, this lets the user/followee tick the stand so that it moves exactly with them.
+     * The main purpose for this is to make the smooth visual effect of being ridden.
+     * Also, if a stand is perfectly still, it's possible it is just not ticking due to not being mounted properly
+     * with a follower.*/
     public void tickStandOut() {
         this.setVelocity(Vec3d.ZERO);
         this.tick();
@@ -200,6 +255,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         UD.updateStandOutPosition(this);
     }
 
+    /** This happens every tick. Basic stand movement/fade code, also see vex code for turning on noclip.*/
     @Override
     public void tick() {
         this.noClip = true;
@@ -229,6 +285,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.setNoGravity(true);
     } // Happens every tick
 
+    /** Makes the stand fade out every tick, eventually despawning.*/
     private void TickDown(){
         var currFade = this.getFadeOut();
         if (currFade > 0) {
@@ -239,6 +296,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         }
     }
 
+    /** Math to determine the position of the stand floating away from its user.
+     * Based on Jojovein donut code with great help from Urbancase.*/
     public Vec3d getStandOffsetVector(Entity standUser){
         int vis = this.getFadeOut();
         double r = (((double) vis /MaxFade)*1.37);
@@ -255,27 +314,16 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         double y1=standUser.getY()+0.1-yy;
         double z1=standUser.getZ()- (r*(Math.cos(ang/180)));
 
-
         return new Vec3d(x1, y1, z1);
-    } //A math equation to determine where the stand floats relative to its user's body. Configurable.
+    }
 
-
-    public boolean userActive(){
-        if (this.getSelfData().getUser() != null){
-            if (((IEntityDataSaver) getSelfData().getUser()).getPersistentData().get("active_stand") != null){
-            UUID user3 = ((IEntityDataSaver) getSelfData().getUser()).getPersistentData().getUuid("active_stand");
-            UUID user4 = this.getUuid();
-            if (user3 != null && user4 != null) {
-                return user3.equals(user4);
-            }
-        }
-        }
-        return false;
-    } // Returns if stand is currently the user's summoned stand. Basically, if you resummon the old stand should go away.
-
+    /** Builds Minecraft entity attributes like speed and health.
+     * Admittedly, I think these numbers are arbitrary given how stands work.
+     * The most notable thing about a stand is its hitbox size but that's factored in
+     * @see ModEntities for now. */
     public static DefaultAttributeContainer.Builder createStandAttributes() {
         return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2F).add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
-    } // Builds Minecraft entity attributes like speed and health
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

@@ -15,10 +15,12 @@ import java.util.UUID;
 
 @Mixin(Entity.class)
 public abstract class ModEntityDataSaverMixin implements IEntityDataSaver {
-    private NbtCompound persistentData;
-    //protected static final TrackedData<Optional<UUID>> OWNER_UUID = DataTracker.registerData(TameableEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
-    //return this.dataTracker.get(OWNER_UUID).orElse(null);
 
+    /** Code to store NBT on player. Undecided if this will remain.
+     * @see PlayerManagerMixin
+     * @see net.hydra.jojomod.stand.NBTData
+     * @see net.hydra.jojomod.util.PlayerCopyHandler*/
+    private NbtCompound persistentData;
     private boolean standOn;
     private UUID activeStand;
 

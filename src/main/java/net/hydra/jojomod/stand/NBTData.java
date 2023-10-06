@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 public class NBTData {
 
+    /**Only relevant whilst mod nbt is saved in the way it was initially.*/
     public static void setStanIdd(IEntityDataSaver entity, int setTo){
         NbtCompound nbt = entity.getPersistentData();
         //int standid = nbt.getInt("stand_id");

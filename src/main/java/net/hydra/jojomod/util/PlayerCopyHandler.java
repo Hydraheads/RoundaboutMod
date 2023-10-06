@@ -7,6 +7,8 @@ import net.hydra.jojomod.stand.NBTData;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class PlayerCopyHandler implements ServerPlayerEvents.CopyFrom {
+
+    /**Only relevant whilst mod nbt is saved in the way it was initially.*/
     @Override
     public void copyFromPlayer(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer,
                                boolean alive) {

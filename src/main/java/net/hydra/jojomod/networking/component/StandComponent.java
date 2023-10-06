@@ -6,6 +6,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
+/** @see StandData
+ * the code needs an interface for other classes to call on.*/
 public interface StandComponent extends Component, AutoSyncedComponent {
     @Nullable
     LivingEntity getUser();

@@ -18,7 +18,9 @@ import java.util.Optional;
 
 @Mixin(PlayerManager.class)
 public class PlayerManagerMixin {
-
+    /** Makes absolutely certain NBT is saved and loaded from players...
+     * only relevant so long as
+     * @see ModEntityDataSaverMixin is.*/
     @Inject(method = "onPlayerConnect", at = @At(value = "TAIL"))
     private void onPlayerConnectMixin(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info) {
         NBTData.syncModNbt(player);

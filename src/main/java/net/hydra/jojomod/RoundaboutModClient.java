@@ -15,8 +15,6 @@ public class RoundaboutModClient implements ClientModInitializer {
         KeyInputHandler.register();
         ModMessages.registerS2CPackets();
 
-        //HudRenderCallback.EVENT.register(new StandHudRender());
-        //ClientPlayConnectionEvents.JOIN.register(new ClientPlayConnectionJoin());
         ModEntityRendererClient.register();
     }
 }

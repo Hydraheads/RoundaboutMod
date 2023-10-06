@@ -14,6 +14,15 @@ import net.hydra.jojomod.networking.component.StandUserData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 
+/** This is the main file which registers components for the Cardinal Components library.
+ * Cardinal components is essentially the Capabilities system that is built into
+ * Forge, but for fabric.
+ * We are using Cardinal components because syncing data with custom packets is fairly difficult and
+ * at times clunky, especially when the data that needs to be synced cannot be put in a data tracker.
+ * This will only exist for the Fabric release of the mod, and the Forge version will use
+ * Forge's native Capabilities system instead.
+ * */
+
 public class MyComponents implements EntityComponentInitializer {
 
     public static final ComponentKey<StandUserComponent> STAND_USER =

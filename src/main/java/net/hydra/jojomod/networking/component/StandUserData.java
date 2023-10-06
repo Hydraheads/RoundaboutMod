@@ -14,6 +14,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+/** This code is attached to every single
+ * @see LivingEntity
+ * and is to store the stand that the mob may or may not have.
+ * It is also a cleaner method than a mixin.*/
 public class StandUserData implements StandUserComponent {
     //StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND.get(player);
     private final LivingEntity User;
@@ -21,36 +25,45 @@ public class StandUserData implements StandUserComponent {
     private StandEntity Stand;
     private boolean standActive;
 
-    //StandID is clientside only
+    /** StandID is used clientside only*/
     private int StandID = -1;
-
-    public StandUserData(LivingEntity entity) {
-        this.User = entity;
-    }
-    public void sync() {
-        MyComponents.STAND_USER.sync(this.User);
-    }
-
-    public void setActive(boolean active){
-     this.standActive = active;
-        this.sync();
-    }
 
     public boolean getActive() {
         return this.standActive;
     }
 
+    public StandUserData(LivingEntity entity) {
+        this.User = entity;
+    }
+
+    /** Calling sync sends packets which update data on the client side.
+     * @see #applySyncPacket */
+    public void sync() {
+        MyComponents.STAND_USER.sync(this.User);
+    }
+
+
+    /** Turns your stand "on". This updates the HUD, and is necessary in case the stand doesn't have a body.*/
+    public void setActive(boolean active){
+     this.standActive = active;
+        this.sync();
+    }
+
+    /** Sets a stand to a user, and a user to a stand.*/
     public void standMount(StandEntity StandSet){
         this.Stand = StandSet;
         StandSet.setMaster(User);
         this.sync();
     }
+
+    /**Only sets a user's stand. Distinction may be important depending on when it is called.*/
     public void setStand(StandEntity StandSet){
         this.Stand = StandSet;
         this.sync();
     }
 
-    public void summonStand(World theWorld, boolean forced, boolean sound){
+    /** Code that brings out a user's stand, based on the stand's summon sounds and conditions. */
+     public void summonStand(World theWorld, boolean forced, boolean sound){
         boolean active;
         if ((!this.getActive() && !forced) || (forced && this.getActive())) {
             //world.getEntity
@@ -75,6 +88,8 @@ public class StandUserData implements StandUserComponent {
         this.setActive(active);
     }
 
+    /** Returns the stand of a User, and makes necessary checks to reload the stand on a client
+     * if the client does not have the stand loaded*/
     @Nullable
     public StandEntity getStand(){
         if (this.User.getWorld().isClient) {
@@ -88,7 +103,9 @@ public class StandUserData implements StandUserComponent {
         return (Stand != null && Stand.isAlive() && !Stand.isRemoved());
     }
 
-    public void setDI(int forward, int strafe){
+    /** Set Direction input. This is part of stand rendering as leaning.
+     * @see StandEntity#setMoveForward */
+     public void setDI(int forward, int strafe){
         //RoundaboutMod.LOGGER.info("MF:"+ forward);
         if (Stand != null){
             if (!User.isSneaking() && User.isSprinting()){
@@ -97,6 +114,9 @@ public class StandUserData implements StandUserComponent {
         }
     }
 
+    /** Retooled vanilla riding code to update the location of a stand every tick relative to the entity it
+     * is the user of.
+     * @see StandEntity#getAnchorPlace */
     public void updateStandOutPosition(StandEntity passenger) {
         this.updateStandOutPosition(passenger, Entity::setPosition);
     }
@@ -113,7 +133,16 @@ public class StandUserData implements StandUserComponent {
         passenger.setHeadYaw(User.getHeadYaw());
     }
 
+    /** This is where the server writes out the id of the user's stand, to send to the client as a packet.*/
+    @Override
+    public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
+        buf.writeBoolean(this.standActive);
+        int stID; if (this.Stand == null){stID=-1;} else {stID = this.Stand.getId();}
+        buf.writeInt(stID);
+    }
 
+    /** This is where the client reads the entity ids sent by the server and puts them into code.
+     * Basically, it's how the client learns the user's stand, and any other stand following them.*/
     @Override
     public void applySyncPacket(PacketByteBuf buf) {
         this.standActive = buf.readBoolean();
@@ -122,13 +151,6 @@ public class StandUserData implements StandUserComponent {
         this.Stand = (StandEntity) User.getWorld().getEntityById(stID);
     }
 
-
-    @Override
-    public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
-        buf.writeBoolean(this.standActive);
-        int stID; if (this.Stand == null){stID=-1;} else {stID = this.Stand.getId();}
-        buf.writeInt(stID);
-    }
     public void onStandOutLookAround(StandEntity passenger) {
     }
 
@@ -136,11 +158,6 @@ public class StandUserData implements StandUserComponent {
         this.Stand = null;
         //this.emitGameEvent(GameEvent.ENTITY_DISMOUNT, passenger);
     }
-
-
-
-
-
 
 
     public void readFromNbt(NbtCompound tag) {

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ModLootTableModifiers {
 
-
+    /** This is where stand arrows are found via archaeology.*/
 
     public static final Identifier PYRAMID_ID
             = new Identifier("minecraft", "archaeology/desert_pyramid");

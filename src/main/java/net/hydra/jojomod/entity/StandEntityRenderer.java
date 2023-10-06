@@ -35,6 +35,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 @Environment(value= EnvType.CLIENT)
 public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implements GeoRenderer<StandEntity> {
 
+    /** Ideally, all stands share 1 renderer. There is common code that they all use like fading and opacity.*/
     public StandEntityRenderer(EntityRendererFactory.Context renderManager) {
 
         super(renderManager, new StandModel());

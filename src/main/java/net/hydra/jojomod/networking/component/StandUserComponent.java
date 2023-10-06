@@ -10,6 +10,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+/** @see StandUserData
+ * the code needs an interface for other classes to call on.*/
 public interface StandUserComponent extends Component, AutoSyncedComponent {
 
     boolean hasStandOut();

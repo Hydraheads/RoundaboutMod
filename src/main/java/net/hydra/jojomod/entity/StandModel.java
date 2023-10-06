@@ -39,6 +39,8 @@ public class StandModel extends GeoModel<StandEntity> {
         return start + (delta * (end - start))*multiplier;
     }
 
+    /** Sets the pose of a stand when it's in idle animation. This sets pose of ALL stand models ever in existence.
+     * So basically, it needs to be reset when iterating through models to render. Necessary to show movement.*/
     @Override
     public void setCustomAnimations(StandEntity animatable, long instanceId, AnimationState<StandEntity> animationState) {
         if (!this.turnsHead)

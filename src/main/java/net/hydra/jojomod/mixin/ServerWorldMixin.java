@@ -17,6 +17,9 @@ import java.util.Objects;
 public class ServerWorldMixin {
 
 
+    /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
+     * @see StandEntity#tickStandOut */
+
     @Inject(method = "tickEntity", at = @At(value = "TAIL"))
     private void tickEntity2(Entity entity, CallbackInfo ci) {
         if (entity.isLiving()) {
@@ -30,7 +33,6 @@ public class ServerWorldMixin {
 
     private void tickStandIn(LivingEntity entity, StandEntity passenger) {
         if (passenger.isRemoved() || passenger.getMaster() != entity) {
-            passenger.dismountMaster();
             return;
         }
         passenger.resetPosition();

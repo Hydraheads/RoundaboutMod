@@ -9,7 +9,8 @@ import net.hydra.jojomod.networking.packet.c2s.SummonPacket;
 import net.minecraft.util.Identifier;
 
 public class ModMessages {
-    //packets!
+
+    /** Register packets for client and server to communicate. */
     public static final Identifier SUMMON_ID = new Identifier(RoundaboutMod.MOD_ID,"summon");
     public static final Identifier NBT_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"nbt_sync");
     public static final Identifier MOVE_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"move_sync");

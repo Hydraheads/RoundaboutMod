@@ -8,7 +8,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 
 public class EventInit {
-
+    /** @see net.hydra.jojomod.mixin.ServerPlayerEntityMixin*/
     public static void init() {
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
             ((ServerPlayerAccess) player).compatSync();
