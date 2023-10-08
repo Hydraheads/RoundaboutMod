@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.client.gui.ExampleGui;
+import net.hydra.jojomod.client.gui.ExampleScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.networking.ModMessages;
 import net.minecraft.client.MinecraftClient;
@@ -64,7 +66,7 @@ public class KeyInputHandler {
                     client.player.sendMessage(Text.of("Special Move"));
                 }
                 while (menuKey.wasPressed()) {
-                    client.setScreen(new PowerInventoryScreen(client.player));
+                  client.setScreen(new ExampleScreen(new ExampleGui()));
                 }
             }
         });
