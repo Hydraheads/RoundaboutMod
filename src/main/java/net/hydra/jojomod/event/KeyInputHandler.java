@@ -51,7 +51,7 @@ public class KeyInputHandler {
                 }
                 while (summonKey.wasPressed()) {
                     //client.player.sendMessage(Text.of("Summon Key"));
-                    ClientPlayNetworking.send(ModMessages.SUMMON_ID, PacketByteBufs.create());
+                    ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());
                 }
                 while (abilityOneKey.wasPressed()) {
                     //client.player.sendMessage(Text.of("Ability Key"));

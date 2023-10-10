@@ -1,9 +1,13 @@
 package net.hydra.jojomod.mixin;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.option.GameOptions;
@@ -30,9 +34,11 @@ public class InputMixin {
     @Shadow
     @Nullable
     public ClientPlayerInteractionManager interactionManager;
-
     @Shadow
     public int attackCooldown;
+    @Shadow
+    @Nullable
+    public Screen currentScreen;
 
     /** This class is in part for detecting and canceling mouse inputs during stand attacks.
      * Please note this should
@@ -62,4 +68,32 @@ public class InputMixin {
                 }
             }
         }
+        @Inject(method = "handleInputEvents", at = @At("HEAD"), cancellable = true)
+        public void roundaboutInput(CallbackInfo ci){
+            if (player != null) {
+                StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+                if (standComp.getActive()) {
+                    while (this.options.attackKey.wasPressed()) {
+                        ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
+                    }
+                    this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
+                }
+            }
+        }
+
+        public void handleStandRush(boolean standRush){
+            if (!standRush) {
+                //Make stand attack cooldown for repeated attacks here?
+                //this.attackCooldown = 0;
+            }
+            if (standRush){
+                return;
+            }
+
+            //Make the packet below ONLY run when the cooldown runs dry
+
+            //ClientPlayNetworking.send(ModMessages.STAND_ATTACK_CANCEL_PACKET, PacketByteBufs.create());
+        }
+
+    //
 }
