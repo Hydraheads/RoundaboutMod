@@ -32,16 +32,12 @@ public class ServerWorldMixin {
     }
 
     private void tickStandIn(LivingEntity entity, StandEntity passenger) {
-        if (passenger.isRemoved() || passenger.getMaster() != entity) {
+        if (passenger == null || passenger.isRemoved() || passenger.getMaster() != entity) {
             return;
         }
         passenger.resetPosition();
         ++passenger.age;
-        //Profiler profiler = this.getProfiler();
-        //profiler.push(() -> Registries.ENTITY_TYPE.getId(passenger.getType()).toString());
-        //profiler.visit("tickPassenger");
         passenger.tickStandOut();
-        //profiler.pop();
     }
 
 }

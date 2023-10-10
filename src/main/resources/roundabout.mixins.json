@@ -10,7 +10,8 @@
 		"EntityStandMixin",
 		"ServerWorldMixin",
 		"HeldItemRendererMixin",
-		"GameHudMixin"
+		"GameHudMixin",
+		"InputMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -175,12 +175,26 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * @see #startStandRiding */
     @Override
     public boolean hasVehicle() {
-        return this.getFollowing() != null;
+        return this.getVehicle() != null;
     }
 
     @Override
     public LivingEntity getVehicle() {
-        return this.getFollowing();
+        LivingEntity follower = this.getFollowing();
+        if (follower != null && !follower.isRemoved()){
+            StandUserComponent follower2 = MyComponents.STAND_USER.get(follower);
+            //this will be changed to getfollower
+            if (follower2.getStand() != null){
+                if (follower2.getStand() != this){
+                    follower = null;
+                }
+            } else {
+                follower = null;
+            }
+        } else {
+            follower = null;
+        }
+        return follower;
     }
 
 
@@ -265,7 +279,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
                 if (this.getNeedsUser() && !this.isDisplay) {
                     if (this.getSelfData().getUser() != null) {
                         boolean userActive = this.getUserData(this.getMaster()).getActive();
-                        if (this.getSelfData().getUser().isAlive() && userActive) {
+                        LivingEntity thisStand = this.getUserData(this.getMaster()).getStand();
+                        if (this.getSelfData().getUser().isAlive() && userActive && (thisStand != null && thisStand.getId() == this.getId())) {
 
                             //Make it fade in
                             if (this.getFadeOut() < MaxFade) {
