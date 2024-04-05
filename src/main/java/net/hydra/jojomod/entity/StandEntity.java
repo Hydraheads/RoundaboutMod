@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandComponent;
 import net.hydra.jojomod.networking.component.StandUserComponent;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -45,8 +47,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     private boolean isDisplay;
 
+    private int offsetType = 0;
+
+
     protected SoundEvent getSummonSound() {
-            return ModSounds.SUMMON_SOUND_EVENT;
+        return ModSounds.SUMMON_SOUND_EVENT;
     }
 
     public void playSummonSound() {
@@ -57,50 +62,71 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return this.dataTracker.get(MOVE_FORWARD);
     } //returns leaning direction
 
-    /** Presently, this is how the stand knows to lean in any direction based on player movement.
+    public int getOffsetType() {
+        return offsetType;
+    }
+
+    public void setOffsetType(int offsetType) {
+        this.offsetType = offsetType;
+    }
+
+
+    /**
+     * Presently, this is how the stand knows to lean in any direction based on player movement.
      * Creates the illusion of floaty movement within the stand.
      * Relevant in stand model code:
-     * @see StandModel#setCustomAnimations */
+     *
+     * @see StandModel#setCustomAnimations
+     */
     public final void setMoveForward(Integer MF) {
         this.dataTracker.set(MOVE_FORWARD, MF);
     } //sets leaning direction
 
-    public int getMaxFade() {return MaxFade;}
+    public int getMaxFade() {
+        return MaxFade;
+    }
+
     public int getFadeOut() {
         return this.FadeOut;
     }
+
     public final int getAnchorPlace() {
         return this.dataTracker.get(ANCHOR_PLACE);
     }
 
 
-    public final boolean getNeedsUser(){
+    public final boolean getNeedsUser() {
         return true;
     }
 
-    public float getBodyRotation(){
+    public float getBodyRotation() {
         return this.bodyRotation;
-    } public void setBodyRotation(float bodRot){
-       this.bodyRotation = bodRot;
     }
 
-    /** This is called when setting the anchor place of a stand, which is to say whether it will position itself
+    public void setBodyRotation(float bodRot) {
+        this.bodyRotation = bodRot;
+    }
+
+    /**
+     * This is called when setting the anchor place of a stand, which is to say whether it will position itself
      * next to the player to the left, right, front, back, or anywhere in between. Players individually can set
      * this to accommodate their style and FOV settings. Purely cosmetic, as stands will teleport before taking
-     * actions..*/
+     * actions..
+     */
     public final void setAnchorPlace(Integer degrees) {
         this.dataTracker.set(ANCHOR_PLACE, degrees);
     }
 
 
-    /** These functions tell the game if the stand's user is Swimming, Crawling, or Elytra Flying.
+    /**
+     * These functions tell the game if the stand's user is Swimming, Crawling, or Elytra Flying.
      * Currently used for idle animation variants.
-     * 
+     *
      * @see StandModel#setCustomAnimations
-     * */
+     */
     @Override
     public boolean isSwimming() {
-        if (this.getSelfData().getUser() != null){
+        if (this.getSelfData().getUser() != null) {
             return this.getSelfData().getUser().isSwimming();
         } else {
             return false;
@@ -109,7 +135,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public boolean isCrawling() {
-        if (this.getSelfData().getUser() != null){
+        if (this.getSelfData().getUser() != null) {
             return this.getSelfData().getUser().isCrawling();
         } else {
             return false;
@@ -118,7 +144,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public boolean isFallFlying() {
-        if (this.getSelfData().getUser() != null){
+        if (this.getSelfData().getUser() != null) {
             return (this.getSelfData().getUser()).isFallFlying();
         } else {
             return false;
@@ -128,29 +154,33 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public boolean getDisplay() {
         return this.isDisplay;
     }
+
     public void setDisplay(boolean display) {
-       this.isDisplay = display;
+        this.isDisplay = display;
     }
 
 
-    /** Controls the visibility of stands, specifically their fading in or out when summoned.
+    /**
+     * Controls the visibility of stands, specifically their fading in or out when summoned.
      * Potentially can be used to make stand blink on the verge of death?
      *
      * @see StandEntityRenderer#getStandOpacity
-     *
+     * <p>
      * When a stand hits negative opacity, it automatically despawns
      * @see #TickDown
-     * */
+     */
     public void incFadeOut(int inc) {
-        this.FadeOut+=inc;
+        this.FadeOut += inc;
     }
 
     public void setFadeOut(int inc) {
-        this.FadeOut=inc;
+        this.FadeOut = inc;
     }
 
-    /** These are not components as they are simpler variables to store/load than entities.
-     * It would be nice if move forward were to be less packet intensive. */
+    /**
+     * These are not components as they are simpler variables to store/load than entities.
+     * It would be nice if move forward were to be less packet intensive.
+     */
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
@@ -162,17 +192,21 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
             GeckoLibUtil.createInstanceCache(this);
 
 
-
-    /** Initialize Stands*/
+    /**
+     * Initialize Stands
+     */
     protected StandEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
         //FadeOut = 10;
     }
 
 
-    /** Tricks Minecraft's rendering to make stands look like they are attached to mobs.
+    /**
+     * Tricks Minecraft's rendering to make stands look like they are attached to mobs.
      * In vanilla, this is how mounts are handled in general, but we have a custom mount system.
-     * @see #startStandRiding */
+     *
+     * @see #startStandRiding
+     */
     @Override
     public boolean hasVehicle() {
         return this.getVehicle() != null;
@@ -181,11 +215,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     @Override
     public LivingEntity getVehicle() {
         LivingEntity follower = this.getFollowing();
-        if (follower != null && !follower.isRemoved()){
+        if (follower != null && !follower.isRemoved()) {
             StandUserComponent follower2 = MyComponents.STAND_USER.get(follower);
             //this will be changed to getfollower
-            if (follower2.getStand() != null){
-                if (follower2.getStand() != this){
+            if (follower2.getStand() != null) {
+                if (follower2.getStand() != this) {
                     follower = null;
                 }
             } else {
@@ -203,28 +237,33 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     } //returns IF stand has a master
 
 
-    public StandUserComponent getUserData (LivingEntity User){
+    public StandUserComponent getUserData(LivingEntity User) {
         return MyComponents.STAND_USER.get(User);
     }
 
 
-    /** Returns the Component of StandData on the entity,
+    /**
+     * Returns the Component of StandData on the entity,
      * Use this to get the User, who the stand is following, etc
      *
-     *  @see net.hydra.jojomod.networking.component.StandData
+     * @see net.hydra.jojomod.networking.component.StandData
      */
-    public StandComponent getSelfData (){
+    public StandComponent getSelfData() {
         return MyComponents.STAND.get(this);
     }
 
-    /** Sets stand User, the mob who "owns" the stand */
+    /**
+     * Sets stand User, the mob who "owns" the stand
+     */
     public void setMaster(LivingEntity Master) {
         this.getSelfData().setUser(Master);
     }
 
-    /** Unused, will be used to lock a stand onto another mob.
+    /**
+     * Unused, will be used to lock a stand onto another mob.
      * Use case example: Killer Queen BTD following someone else
-     * Code to tick on follower will be needed in client world mixin*/
+     * Code to tick on follower will be needed in client world mixin
+     */
     public void setFollowing(LivingEntity Following) {
         this.getSelfData().setFollowing(Following);
     }
@@ -233,16 +272,19 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return this.getSelfData().getFollowing();
     }
 
-    /** Sets stand User, the mob who "owns" the stand */
+    /**
+     * Sets stand User, the mob who "owns" the stand
+     */
     public LivingEntity getMaster() {
         return this.getSelfData().getUser();
     }
 
-    /** When this is called, sets the User's owned stand to this one. Both the Stand and the User store
+    /**
+     * When this is called, sets the User's owned stand to this one. Both the Stand and the User store
      * each other, and this is for setting the User's storage.
      *
      * @see net.hydra.jojomod.networking.component.StandUserData#setStand
-     * */
+     */
     public boolean startStandRiding(LivingEntity entity, boolean force) {
         StandUserComponent UD = getUserData(entity);
         UD.setStand(this);
@@ -250,13 +292,16 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         //RoundaboutMod.LOGGER.info("MF");
     }
 
-    /** Called every tick in
+    /**
+     * Called every tick in
+     *
      * @see net.hydra.jojomod.mixin.ClientWorldMixin for the client and
      * @see net.hydra.jojomod.mixin.ServerWorldMixin for the server.
      * Basically, this lets the user/followee tick the stand so that it moves exactly with them.
      * The main purpose for this is to make the smooth visual effect of being ridden.
      * Also, if a stand is perfectly still, it's possible it is just not ticking due to not being mounted properly
-     * with a follower.*/
+     * with a follower.
+     */
     public void tickStandOut() {
         this.setVelocity(Vec3d.ZERO);
         this.tick();
@@ -268,6 +313,13 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         //RoundaboutMod.LOGGER.info("MF Update Pos");
         UD.updateStandOutPosition(this);
     }
+
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        return false;
+    }
+
 
     /** This happens every tick. Basic stand movement/fade code, also see vex code for turning on noclip.*/
     @Override
@@ -314,22 +366,40 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     /** Math to determine the position of the stand floating away from its user.
      * Based on Jojovein donut code with great help from Urbancase.*/
     public Vec3d getStandOffsetVector(Entity standUser){
-        int vis = this.getFadeOut();
-        double r = (((double) vis /MaxFade)*1.37);
-        if (r < 0.5) { r=0.5; }
-        double yawfix = standUser.getYaw(); yawfix+=  this.getAnchorPlace(); if (yawfix >360){yawfix-=360;}else if (yawfix <0){yawfix+=360;}
-        double ang = (yawfix-180)*Math.PI;
+        if (this.getOffsetType() == 0) {
+            int vis = this.getFadeOut();
+            double r = (((double) vis / MaxFade) * 1.37);
+            if (r < 0.5) {
+                r = 0.5;
+            }
+            double yawfix = standUser.getYaw();
+            yawfix += this.getAnchorPlace();
+            if (yawfix > 360) {
+                yawfix -= 360;
+            } else if (yawfix < 0) {
+                yawfix += 360;
+            }
+            double ang = (yawfix - 180) * Math.PI;
 
-        double mcap = 0.3;
-        Vec3d xyz = standUser.getVelocity();
-        double yy = xyz.getY()*0.3; if (yy>mcap){yy=mcap;} else if (yy<-mcap){yy=-mcap;}
-        if (isSwimming() || isCrawling() || isFallFlying()){yy+=1;}
+            double mcap = 0.3;
+            Vec3d xyz = standUser.getVelocity();
+            double yy = xyz.getY() * 0.3;
+            if (yy > mcap) {
+                yy = mcap;
+            } else if (yy < -mcap) {
+                yy = -mcap;
+            }
+            if (isSwimming() || isCrawling() || isFallFlying()) {
+                yy += 1;
+            }
 
-        double x1=standUser.getX() - -1*(r*(Math.sin(ang/180)));
-        double y1=standUser.getY()+0.1-yy;
-        double z1=standUser.getZ()- (r*(Math.cos(ang/180)));
+            double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
+            double y1 = standUser.getY() + 0.1 - yy;
+            double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
 
-        return new Vec3d(x1, y1, z1);
+            return new Vec3d(x1, y1, z1);
+        }
+        return new Vec3d(this.getX(),this.getY(),this.getZ());
     }
 
     /** Builds Minecraft entity attributes like speed and health.
