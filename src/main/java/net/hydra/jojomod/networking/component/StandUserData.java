@@ -1,9 +1,11 @@
 package net.hydra.jojomod.networking.component;
 
+import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -18,34 +20,65 @@ import org.jetbrains.annotations.Nullable;
  * @see LivingEntity
  * and is to store the stand that the mob may or may not have.
  * It is also a cleaner method than a mixin.*/
-public class StandUserData implements StandUserComponent {
+public class StandUserData implements StandUserComponent, CommonTickingComponent {
     //StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND.get(player);
     private final LivingEntity User;
     @Nullable
     private StandEntity Stand;
-    private boolean standActive;
+    private boolean StandActive;
 
     /** StandID is used clientside only*/
     private int StandID = -1;
+    private boolean CanSync;
+    private StandPowers Powers;
 
-    public boolean getActive() {
-        return this.standActive;
-    }
 
     public StandUserData(LivingEntity entity) {
         this.User = entity;
+    }
+    public void tick() {
     }
 
     /** Calling sync sends packets which update data on the client side.
      * @see #applySyncPacket */
     public void sync() {
+        CanSync = true;
         MyComponents.STAND_USER.sync(this.User);
+        CanSync = false;
     }
 
 
+    public boolean getActive() {
+        return this.StandActive;
+    }
+
+    public void tryPower(int move, boolean forced){
+        this.getStandPowers().tryPower(move,forced);
+    }
+    public int getActivePower(){
+        return this.getStandPowers().getActivePower();
+    }
+
+    public StandPowers getStandPowers() {
+        if (Powers == null) {
+            Powers = new StandPowers(User);
+        }
+        return Powers;
+    }
+
+    public void setStandPowers(StandPowers standPowers){
+        this.Powers = standPowers;
+    }
+
+    /** This code is here in case we want to restrict when the syncing happens.*/
+    @Override
+    public boolean shouldSyncWith(ServerPlayerEntity player){
+        return CanSync;
+    };
+
     /** Turns your stand "on". This updates the HUD, and is necessary in case the stand doesn't have a body.*/
     public void setActive(boolean active){
-     this.standActive = active;
+     this.StandActive = active;
         this.sync();
     }
 
@@ -90,6 +123,7 @@ public class StandUserData implements StandUserComponent {
 
     /** Returns the stand of a User, and makes necessary checks to reload the stand on a client
      * if the client does not have the stand loaded*/
+
     @Nullable
     public StandEntity getStand(){
         if (this.User.getWorld().isClient) {
@@ -136,7 +170,7 @@ public class StandUserData implements StandUserComponent {
     /** This is where the server writes out the id of the user's stand, to send to the client as a packet.*/
     @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
-        buf.writeBoolean(this.standActive);
+        buf.writeBoolean(this.StandActive);
         int stID; if (this.Stand == null){stID=-1;} else {stID = this.Stand.getId();}
         buf.writeInt(stID);
     }
@@ -145,7 +179,7 @@ public class StandUserData implements StandUserComponent {
      * Basically, it's how the client learns the user's stand, and any other stand following them.*/
     @Override
     public void applySyncPacket(PacketByteBuf buf) {
-        this.standActive = buf.readBoolean();
+        this.StandActive = buf.readBoolean();
         int stID = buf.readInt();
         this.StandID = stID;
         this.Stand = (StandEntity) User.getWorld().getEntityById(stID);

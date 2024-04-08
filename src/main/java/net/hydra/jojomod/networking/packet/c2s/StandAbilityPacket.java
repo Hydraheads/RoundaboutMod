@@ -3,8 +3,10 @@ package net.hydra.jojomod.networking.packet.c2s;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -28,6 +30,7 @@ public class StandAbilityPacket {
         ServerWorld world = (ServerWorld) player.getWorld();
         server.execute(() -> {
             RoundaboutMod.LOGGER.info("attack");
+            DamageHandler.genHitbox((LivingEntity) player, 5, player.getX(), player.getY(), player.getZ(), 2, 2, 2);
         });
     }
 
