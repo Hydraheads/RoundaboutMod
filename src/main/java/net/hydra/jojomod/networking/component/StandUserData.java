@@ -1,6 +1,7 @@
 package net.hydra.jojomod.networking.component;
 
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.entity.ModEntities;
@@ -37,6 +38,10 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.User = entity;
     }
     public void tick() {
+        if (this.StandActive) {
+            this.getStandPowers().tickPower();
+            RoundaboutMod.LOGGER.info(String.valueOf(this.getPowerUser()));
+        }
     }
 
     /** Calling sync sends packets which update data on the client side.
@@ -47,6 +52,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         CanSync = false;
     }
 
+    public LivingEntity getUser() {
+        return this.User;
+    }
 
     public boolean getActive() {
         return this.StandActive;
@@ -58,12 +66,18 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public int getActivePower(){
         return this.getStandPowers().getActivePower();
     }
+    public LivingEntity getPowerUser(){
+        return this.getStandPowers().getSelf();
+    }
+    public void setPowerAttack(){
+        this.getStandPowers().setPowerAttack();
+    }
 
     public StandPowers getStandPowers() {
-        if (Powers == null) {
-            Powers = new StandPowers(User);
+        if (this.Powers == null) {
+            this.Powers = new StandPowers(User);
         }
-        return Powers;
+        return this.Powers;
     }
 
     public void setStandPowers(StandPowers standPowers){

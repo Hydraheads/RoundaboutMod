@@ -12,6 +12,7 @@ import net.hydra.jojomod.networking.component.StandData;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.networking.component.StandUserData;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
 /** This is the main file which registers components for the Cardinal Components library.
@@ -34,7 +35,8 @@ public class MyComponents implements EntityComponentInitializer {
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.beginRegistration(StandEntity.class, STAND).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandData.class).end(StandData::new);
         registry.beginRegistration(LivingEntity.class, STAND_USER).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandUserData.class).end(StandUserData::new);
-        registry.registerForPlayers(STAND_USER, StandUserData::new, RespawnCopyStrategy.ALWAYS_COPY);
+        registry.beginRegistration(PlayerEntity.class, STAND_USER).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandUserData.class).end(StandUserData::new);
+        //registry.registerForPlayers(STAND_USER, StandUserData::new, RespawnCopyStrategy.ALWAYS_COPY);
         //registry.registerFor(LivingEntity.class, STAND_USER, StandUserData::new);
     }
 }

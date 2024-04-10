@@ -35,11 +35,6 @@ public class DamageHandler {
             Vec3d vec3d2 = entity.getRotationVec(tickDelta);
             return vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);
     }
-    public static Vec3d getFloatPoint(LivingEntity entity, double maxDistance, float yaw, float tickDelta){
-        Vec3d vec3d = entity.getCameraPosVec(tickDelta);
-        Vec3d vec3d2 = DamageHandler.getRotationVector(entity.getPitch(), yaw);
-        return vec3d.add(vec3d2.x * maxDistance, 0, vec3d2.z * maxDistance);
-    }
     public static Vec3d getRotationVector(float pitch, float yaw) {
         float f = pitch * ((float)Math.PI / 180);
         float g = -yaw * ((float)Math.PI / 180);

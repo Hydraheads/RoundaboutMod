@@ -7,6 +7,7 @@ import dev.onyxstudios.cca.api.v3.component.sync.PlayerSyncPredicate;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -36,8 +37,11 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
    StandPowers getStandPowers();
 
    void setStandPowers(StandPowers standPowers);
+    void setPowerAttack();
 
    void tryPower(int move, boolean forced);
+
+   LivingEntity getPowerUser();
 
     @Nullable
     StandEntity getStand();
