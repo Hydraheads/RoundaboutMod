@@ -24,6 +24,8 @@
   "key.category.roundabout.jojo": "Roundabout Controls",
   "hud.roundabout.standout": "Stand Summoned",
 
+  "death.attack.stand": "%1$s died to a mysterious power!",
+
   "sounds.roundabout.summon_stand":  "Stand summoned",
   "sounds.roundabout.summon_star":  "Stand summoned",
   "sounds.roundabout.summon_world":  "Stand summoned",

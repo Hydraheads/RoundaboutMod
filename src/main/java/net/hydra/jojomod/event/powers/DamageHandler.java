@@ -19,12 +19,8 @@ public class DamageHandler {
     //}
 
     public static void genPointHitbox(double maxDistance, LivingEntity entity, float power, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ){
-        MinecraftClient mc = MinecraftClient.getInstance();
-        float tickDelta = mc.getLastFrameDuration();
-        Vec3d pointVec = getRayPoint(entity, maxDistance, tickDelta);
-        RoundaboutMod.LOGGER.info(String.valueOf(pointVec.x));
-        RoundaboutMod.LOGGER.info(String.valueOf(pointVec.y));
-        RoundaboutMod.LOGGER.info(String.valueOf(pointVec.z));
+
+        Vec3d pointVec = getRayPoint(entity, maxDistance);
         genHitbox(entity, power, pointVec.x, pointVec.y, pointVec.z, radiusX, radiusY, radiusZ);
         if (!entity.getWorld().isClient()){
             ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
@@ -32,10 +28,26 @@ public class DamageHandler {
         entity.getWorld().addParticle(ParticleTypes.EXPLOSION, true, pointVec.x, pointVec.y, pointVec.z, 0.0, 0.0, 0.0);
     }
 
-    public static Vec3d getRayPoint(LivingEntity entity, double maxDistance, float tickDelta){
+    public static Vec3d getRayPoint(LivingEntity entity, double maxDistance){
+            MinecraftClient mc = MinecraftClient.getInstance();
+            float tickDelta = mc.getLastFrameDuration();
             Vec3d vec3d = entity.getCameraPosVec(tickDelta);
             Vec3d vec3d2 = entity.getRotationVec(tickDelta);
             return vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);
+    }
+    public static Vec3d getFloatPoint(LivingEntity entity, double maxDistance, float yaw, float tickDelta){
+        Vec3d vec3d = entity.getCameraPosVec(tickDelta);
+        Vec3d vec3d2 = DamageHandler.getRotationVector(entity.getPitch(), yaw);
+        return vec3d.add(vec3d2.x * maxDistance, 0, vec3d2.z * maxDistance);
+    }
+    public static Vec3d getRotationVector(float pitch, float yaw) {
+        float f = pitch * ((float)Math.PI / 180);
+        float g = -yaw * ((float)Math.PI / 180);
+        float h = MathHelper.cos(g);
+        float i = MathHelper.sin(g);
+        float j = MathHelper.cos(f);
+        float k = MathHelper.sin(f);
+        return new Vec3d(i * j, -k, h * j);
     }
     public static void genHitbox(LivingEntity entity, float power, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {
         double k = MathHelper.floor(startX - radiusX);
@@ -48,7 +60,7 @@ public class DamageHandler {
         List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box(k, r, t, l, s, u));
         for (Entity value : list) {
             RoundaboutMod.LOGGER.info("2");
-            value.damage(entity.getWorld().getDamageSources().magic(), power);
+            value.damage(ModDamageTypes.of(entity.getWorld(), ModDamageTypes.STAND), power);
         }
     }
 }
