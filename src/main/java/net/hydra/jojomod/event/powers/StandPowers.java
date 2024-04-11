@@ -1,11 +1,16 @@
 package net.hydra.jojomod.event.powers;
 
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Objects;
 
 public class StandPowers {
     private final LivingEntity self;
@@ -94,6 +99,11 @@ public class StandPowers {
         }
     }
 
+    public StandEntity getStandEntity(LivingEntity User){
+        StandUserComponent standUserData = MyComponents.STAND_USER.get((LivingEntity) User);
+        return standUserData.getStand();
+    }
+
     public void standPunch(){
         float pow;
         if (this.activePowerPhase == 2) {
@@ -106,6 +116,10 @@ public class StandPowers {
         this.attackTime = 0;
         this.isAttacking = false;
 
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            stand.setOffsetType(0);
+        }
         Vec3d pointVec = DamageHandler.getRayPoint(self, 3);
         if (!self.getWorld().isClient()){
             ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
@@ -132,5 +146,10 @@ public class StandPowers {
         this.attackTimeMax = 30;
         this.isAttacking = true;
         this.switchActiveMove(PowerIndex.ATTACK);
+
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            stand.setOffsetType(1);
+        }
     }
 }

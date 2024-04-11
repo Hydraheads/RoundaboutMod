@@ -49,7 +49,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     private boolean isDisplay;
 
-    private int offsetType = 0;
+    protected static final TrackedData<Integer> offsetType = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.INTEGER);
 
 
     protected SoundEvent getSummonSound() {
@@ -64,12 +65,12 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return this.dataTracker.get(MOVE_FORWARD);
     } //returns leaning direction
 
-    public int getOffsetType() {
-        return offsetType;
-    }
+    public final int getOffsetType() {
+        return this.dataTracker.get(offsetType);
+    } //returns leaning direction
 
-    public void setOffsetType(int offsetType) {
-        this.offsetType = offsetType;
+    public final void setOffsetType(Integer oft) {
+        this.dataTracker.set(offsetType, oft);
     }
 
 
@@ -188,6 +189,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         super.initDataTracker();
         this.dataTracker.startTracking(ANCHOR_PLACE, 55);
         this.dataTracker.startTracking(MOVE_FORWARD, 0);
+        this.dataTracker.startTracking(offsetType, 0);
     }
 
     private final AnimatableInstanceCache cache =
@@ -365,43 +367,66 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         }
     }
 
+
     /** Math to determine the position of the stand floating away from its user.
      * Based on Jojovein donut code with great help from Urbancase.*/
     public Vec3d getStandOffsetVector(Entity standUser){
-        if (this.getOffsetType() == 0) {
-            int vis = this.getFadeOut();
-            double r = (((double) vis / MaxFade) * 1.37);
-            if (r < 0.5) {
-                r = 0.5;
-            }
-            double yawfix = standUser.getYaw();
-            yawfix += this.getAnchorPlace();
-            if (yawfix > 360) {
-                yawfix -= 360;
-            } else if (yawfix < 0) {
-                yawfix += 360;
-            }
-            double ang = (yawfix - 180) * Math.PI;
-
-            double mcap = 0.3;
-            Vec3d xyz = standUser.getVelocity();
-            double yy = xyz.getY() * 0.3;
-            if (yy > mcap) {
-                yy = mcap;
-            } else if (yy < -mcap) {
-                yy = -mcap;
-            }
-            if (isSwimming() || isCrawling() || isFallFlying()) {
-                yy += 1;
-            }
-
-            double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-            double y1 = standUser.getY() + 0.1 - yy;
-            double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
-
-            return new Vec3d(x1, y1, z1);
+        int ot = this.getOffsetType();
+        if (ot == 0) {
+            return getIdleOffset(standUser);
+        } else if (ot == 1) {
+            return getAttackOffset(standUser);
         }
         return new Vec3d(this.getX(),this.getY(),this.getZ());
+    }
+
+    public Vec3d getAttackOffset(Entity standUser) {
+        Vec3d frontVectors = FrontVectors(standUser, 0,0, 2);
+        return new Vec3d(frontVectors.x + standUser.getX(),frontVectors.y + standUser.getY(),
+                frontVectors.z + standUser.getZ());
+    }
+    public Vec3d FrontVectors(Entity standUser, float dr, float dp, float distance) {
+        double Angle = (standUser.getYaw()+dr)*Math.PI/180;
+        double Pitch = (standUser.getPitch()+dp)*Math.PI/180;
+        double cop = distance*Math.cos(Pitch);
+        double dx = -Math.sin(Angle)*cop;
+        double dz = Math.cos(Angle)*cop;
+        double dy = -Math.sin(Pitch)*distance;
+        return new Vec3d(dx,dy,dz);
+    }
+
+    public Vec3d getIdleOffset(Entity standUser) {
+        int vis = this.getFadeOut();
+        double r = (((double) vis / MaxFade) * 1.37);
+        if (r < 0.5) {
+            r = 0.5;
+        }
+        double yawfix = standUser.getYaw();
+        yawfix += this.getAnchorPlace();
+        if (yawfix > 360) {
+            yawfix -= 360;
+        } else if (yawfix < 0) {
+            yawfix += 360;
+        }
+        double ang = (yawfix - 180) * Math.PI;
+
+        double mcap = 0.3;
+        Vec3d xyz = standUser.getVelocity();
+        double yy = xyz.getY() * 0.3;
+        if (yy > mcap) {
+            yy = mcap;
+        } else if (yy < -mcap) {
+            yy = -mcap;
+        }
+        if (isSwimming() || isCrawling() || isFallFlying()) {
+            yy += 1;
+        }
+
+        double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
+        double y1 = standUser.getY() + 0.1 - yy;
+        double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
+
+        return new Vec3d(x1, y1, z1);
     }
 
     /** Builds Minecraft entity attributes like speed and health.
