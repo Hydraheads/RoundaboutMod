@@ -46,6 +46,9 @@ public class StandPowers {
     public void setAttackTime(int attackTime){
         this.attackTime = attackTime;
     }
+    public void setAttackTimeMax(int attackTimeMax){
+        this.attackTimeMax = attackTimeMax;
+    }
     public int getAttackTimeMax(){
         return this.attackTimeMax;
     }
@@ -71,7 +74,6 @@ public class StandPowers {
     }
 
     public void tickPower(){
-        RoundaboutMod.LOGGER.info(String.valueOf(this.activePower));
         if (this.activePower != PowerIndex.NONE) {
             if (this.activePower == PowerIndex.ATTACK && this.isAttacking){
                 //RoundaboutMod.LOGGER.info("attack4");
@@ -129,8 +131,6 @@ public class StandPowers {
     public void setPowerAttack(){
         this.attackTimeMax = 30;
         this.isAttacking = true;
-        RoundaboutMod.LOGGER.info(String.valueOf(this.activePower));
         this.switchActiveMove(PowerIndex.ATTACK);
-        RoundaboutMod.LOGGER.info(String.valueOf(this.activePower));
     }
 }

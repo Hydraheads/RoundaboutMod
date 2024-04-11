@@ -40,7 +40,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public void tick() {
         if (this.StandActive) {
             this.getStandPowers().tickPower();
-            RoundaboutMod.LOGGER.info(String.valueOf(this.getPowerUser()));
         }
     }
 
@@ -71,6 +70,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }
     public void setPowerAttack(){
         this.getStandPowers().setPowerAttack();
+        this.sync();
     }
 
     public StandPowers getStandPowers() {
@@ -187,6 +187,13 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         buf.writeBoolean(this.StandActive);
         int stID; if (this.Stand == null){stID=-1;} else {stID = this.Stand.getId();}
         buf.writeInt(stID);
+        StandPowers SP = this.getStandPowers();
+
+        buf.writeInt(SP.getAttackTime());
+        buf.writeInt(SP.getAttackTimeMax());
+        buf.writeInt(SP.getActivePower());
+        buf.writeInt(SP.getActivePowerPhase());
+        buf.writeBoolean(SP.getIsAttacking());
     }
 
     /** This is where the client reads the entity ids sent by the server and puts them into code.
@@ -197,6 +204,13 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         int stID = buf.readInt();
         this.StandID = stID;
         this.Stand = (StandEntity) User.getWorld().getEntityById(stID);
+        StandPowers SP = this.getStandPowers();
+
+        SP.setAttackTime(buf.readInt());
+        SP.setAttackTimeMax(buf.readInt());
+        SP.setActivePower(buf.readInt());
+        SP.setActivePowerPhase(buf.readInt());
+        SP.setIsAttacking(buf.readBoolean());
     }
 
     public void onStandOutLookAround(StandEntity passenger) {
