@@ -16,18 +16,12 @@ public class MoveSyncPacket {
         ServerWorld world = (ServerWorld) player.getWorld();
         //public MoveSyncPacket() {
         //}
-        int forward = 0;
-        int strafe = 0;
-        if (buf.readBoolean()) forward++;
-        if (buf.readBoolean()) forward--;
-        if (buf.readBoolean()) strafe++;
-        if (buf.readBoolean()) strafe--;
+        int forward = buf.readInt();
+        int strafe = buf.readInt();
 
-        int finalForward = forward;
-        int finalStrafe = strafe;
         StandUserComponent standUserData = MyComponents.STAND_USER.get(player);
         server.execute(() -> {
-            standUserData.setDI(finalForward, finalStrafe);
+            standUserData.setDI(forward, strafe);
         });
 
 

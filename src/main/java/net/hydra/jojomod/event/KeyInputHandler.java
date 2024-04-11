@@ -8,7 +8,10 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.client.gui.ExampleGui;
 import net.hydra.jojomod.client.gui.ExampleScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.networking.ModMessages;
+import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.option.GameOptions;
@@ -42,12 +45,30 @@ public class KeyInputHandler {
                 //RoundaboutMod.LOGGER.info("px");
                 if (client.player.isAlive()) {
                     //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
-                    PacketByteBuf buffer = PacketByteBufs.create();
-                    buffer.writeBoolean(client.options.forwardKey.isPressed());
-                    buffer.writeBoolean(client.options.backKey.isPressed());
-                    buffer.writeBoolean(client.options.leftKey.isPressed());
-                    buffer.writeBoolean(client.options.rightKey.isPressed());
-                    ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
+
+                    /*If you have a stand out, update the stand leaning attributes.
+                    * Currently, strafe is reported, but unused.*/
+                    StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
+                    if (standUserData.getActive()) {
+                        StandEntity stand = standUserData.getStand();
+                        if (stand != null) {
+                            var mf = stand.getMoveForward();
+                            int forward = 0;
+                            int strafe = 0;
+                            if (client.options.forwardKey.isPressed()) forward++;
+                            if (client.options.backKey.isPressed()) forward--;
+                            if (client.options.leftKey.isPressed()) strafe++;
+                            if (client.options.rightKey.isPressed()) strafe--;
+
+                            if (mf != forward) {
+                                PacketByteBuf buffer = PacketByteBufs.create();
+
+                                buffer.writeInt(forward);
+                                buffer.writeInt(strafe);
+                                ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
+                            }
+                        }
+                    }
                 }
                 while (summonKey.wasPressed()) {
                     //client.player.sendMessage(Text.of("Summon Key"));
