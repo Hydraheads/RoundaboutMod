@@ -381,11 +381,12 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     }
 
     public Vec3d getAttackOffset(Entity standUser) {
-        Vec3d frontVectors = FrontVectors(standUser, 0,0, 2);
-        return new Vec3d(frontVectors.x + standUser.getX(),frontVectors.y + standUser.getY(),
+        Vec3d frontVectors = FrontVectors(standUser, getPunchYaw(this.getAnchorPlace(),
+                        0.36), 0, 1.88F);
+        return new Vec3d(frontVectors.x + standUser.getX(),frontVectors.y + standUser.getY() +0.3,
                 frontVectors.z + standUser.getZ());
     }
-    public Vec3d FrontVectors(Entity standUser, float dr, float dp, float distance) {
+    public Vec3d FrontVectors(Entity standUser, double dr, double dp, float distance) {
         double Angle = (standUser.getYaw()+dr)*Math.PI/180;
         double Pitch = (standUser.getPitch()+dp)*Math.PI/180;
         double cop = distance*Math.cos(Pitch);
@@ -393,6 +394,13 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         double dz = Math.cos(Angle)*cop;
         double dy = -Math.sin(Pitch)*distance;
         return new Vec3d(dx,dy,dz);
+    }
+
+    public double getPunchYaw(double Yaw, double multi){
+        if (Yaw < 90){return Yaw*multi;}
+        else if (Yaw <= 180){return (180-Yaw)*multi;}
+        else if (Yaw <= 270){return -((Yaw-180)*multi);}
+        else{return -((360-Yaw)*multi);}
     }
 
     public Vec3d getIdleOffset(Entity standUser) {

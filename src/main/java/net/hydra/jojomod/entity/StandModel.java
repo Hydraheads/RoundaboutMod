@@ -48,47 +48,94 @@ public class StandModel extends GeoModel<StandEntity> {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (!mc.isPaused() || animatable.shouldPlayAnimsWhileGamePaused()){
             //When Game is Paused, don't procede
-        EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-        CoreGeoBone body = getAnimationProcessor().getBone("body");
-        float tickDelta = mc.getLastFrameDuration();
-        if (body != null) {
-            float rotX = animatable.getBodyRotation();
-            float cRot = maxRotX;
+            float tickDelta = mc.getLastFrameDuration();
+            var animationNumber = animatable.getOffsetType();
+            EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
+            CoreGeoBone stand = getAnimationProcessor().getBone("stand");
+            CoreGeoBone body = getAnimationProcessor().getBone("body");
+            CoreGeoBone head = getAnimationProcessor().getBone("head");
 
-            if (animatable.isSwimming() || animatable.isFallFlying()) {
-                cRot = (entityData.headPitch() - 90) * MathHelper.RADIANS_PER_DEGREE;
-            } else if (animatable.isCrawling()) {
-                cRot= -90 * MathHelper.RADIANS_PER_DEGREE;
-            } else {
-                int moveForward = animatable.getMoveForward();
-                if (moveForward < 0) {
-                    cRot *= -moveForward;
-                } else if (moveForward > 0) {
-                    cRot *= -moveForward;
-                } else {
-                    cRot = 0;
+            if (stand != null){
+                float rotY = stand.getRotX();
+                float cRY = 0;
+                if (animationNumber == 1) {
+                    cRY = entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE;
+                    RoundaboutMod.LOGGER.info(String.valueOf(cRY));
                 }
-                cRot*= 0.6F;
+                rotY = MainUtil.controlledLerp(tickDelta, rotY, cRY, 0.8f);
+                stand.setRotX(rotY);
             }
-            rotX = MainUtil.controlledLerp(tickDelta,rotX,cRot,0.2f);
-            animatable.setBodyRotation(rotX);
-            body.setRotX(rotX);
+
+            if (body != null) {
+                if (animationNumber == 0) {
+                    float rotX = animatable.getBodyRotation();
+                    float cRot = maxRotX;
+
+                    if (animatable.isSwimming() || animatable.isFallFlying()) {
+                        cRot = (entityData.headPitch() - 90) * MathHelper.RADIANS_PER_DEGREE;
+                    } else if (animatable.isCrawling()) {
+                        cRot = -90 * MathHelper.RADIANS_PER_DEGREE;
+                    } else {
+                        int moveForward = animatable.getMoveForward();
+                        if (moveForward < 0) {
+                            cRot *= -moveForward;
+                        } else if (moveForward > 0) {
+                            cRot *= -moveForward;
+                        } else {
+                            cRot = 0;
+                        }
+                        cRot *= 0.6F;
+                    }
+                    rotX = MainUtil.controlledLerp(tickDelta, rotX, cRot, 0.2f);
+                    animatable.setBodyRotation(rotX);
+                    body.setRotX(rotX);
+
+                    body.setRotY(0);
+                } else if (animationNumber == 1) {
+                    float rotX = animatable.getBodyRotation();
+                    rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.8f);
+                    animatable.setBodyRotation(rotX);
+                    body.setRotX(rotX);
+
+
+                    float yaw = 0;
+                    float rotHeadY = entityData.netHeadYaw()* MathHelper.RADIANS_PER_DEGREE;
+                    body.setRotY(rotHeadY);
+                } else {
+                    float rotX = animatable.getBodyRotation();
+                    float cRot = 0;
+                    rotX = MainUtil.controlledLerp(tickDelta, rotX, cRot, 0.2f);
+                    animatable.setBodyRotation(rotX);
+                    body.setRotY(rotX);
+
+                }
+            }
+            if (head != null) {
+                if (animationNumber == 0) {
+                    /*This code makes the head of the model turn towards swim rotation while swimming*/
+                    if (animatable.isSwimming() || animatable.isCrawling() || animatable.isFallFlying()) {
+                        if (swimRotCorrect > -45) {
+                            swimRotCorrect -= 2;
+                            swimRotCorrect = Math.min(swimRotCorrect, -45);
+                        }
+                    } else {
+                        if (swimRotCorrect < 0) {
+                            swimRotCorrect += 2;
+                            swimRotCorrect = Math.max(swimRotCorrect, 0);
+                        }
+                    }
+                    head.setRotX((entityData.headPitch() + swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE);
+                    head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
+                } else if (animationNumber == 1) {
+                    float yaw = 0;
+                    head.setRotX(0);
+                    head.setRotY((entityData.netHeadYaw()+yaw) * MathHelper.RADIANS_PER_DEGREE);
+                } else {
+                    head.setRotX((entityData.headPitch()) * MathHelper.RADIANS_PER_DEGREE);
+                    head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
+                }
+            }
         }
-
-        CoreGeoBone head = getAnimationProcessor().getBone("head");
-        if (head != null) {
-            float headRot = entityData.headPitch();
-                headRot-=45;
-
-                /*This code makes the head of the model turn towards swim rotation while swimming*/
-            if (animatable.isSwimming() || animatable.isCrawling() || animatable.isFallFlying()) {
-                if (swimRotCorrect > -45){swimRotCorrect-=2;swimRotCorrect=Math.min(swimRotCorrect,-45);}
-            } else {
-                if (swimRotCorrect < 0){swimRotCorrect+=2;swimRotCorrect=Math.max(swimRotCorrect,0);}
-            }
-            head.setRotX((entityData.headPitch()+swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE);
-            head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
-        }}
     }
 }
