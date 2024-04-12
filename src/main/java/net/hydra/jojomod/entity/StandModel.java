@@ -57,19 +57,21 @@ public class StandModel extends GeoModel<StandEntity> {
             CoreGeoBone head = getAnimationProcessor().getBone("head");
 
             if (stand != null){
-                float rotY = stand.getRotX();
+                float rotX = stand.getRotX();
                 float cRY = 0;
                 if (animationNumber == 1) {
                     cRY = entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE;
                     RoundaboutMod.LOGGER.info(String.valueOf(cRY));
                 }
-                rotY = MainUtil.controlledLerp(tickDelta, rotY, cRY, 0.8f);
-                stand.setRotX(rotY);
+                rotX = MainUtil.controlledLerp(tickDelta, rotX, cRY, 0.8f);
+                animatable.setStandRotationX(rotX);
+                stand.setRotX(rotX);
             }
 
             if (body != null) {
+                float rotX = animatable.getBodyRotationX();
+                float rotY = animatable.getBodyRotationY();
                 if (animationNumber == 0) {
-                    float rotX = animatable.getBodyRotation();
                     float cRot = maxRotX;
 
                     if (animatable.isSwimming() || animatable.isFallFlying()) {
@@ -88,28 +90,18 @@ public class StandModel extends GeoModel<StandEntity> {
                         cRot *= 0.6F;
                     }
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, cRot, 0.2f);
-                    animatable.setBodyRotation(rotX);
-                    body.setRotX(rotX);
-
-                    body.setRotY(0);
+                    rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.8f);
                 } else if (animationNumber == 1) {
-                    float rotX = animatable.getBodyRotation();
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.8f);
-                    animatable.setBodyRotation(rotX);
-                    body.setRotX(rotX);
-
-
-                    float yaw = 0;
-                    float rotHeadY = entityData.netHeadYaw()* MathHelper.RADIANS_PER_DEGREE;
-                    body.setRotY(rotHeadY);
+                    rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.8f);
                 } else {
-                    float rotX = animatable.getBodyRotation();
-                    float cRot = 0;
-                    rotX = MainUtil.controlledLerp(tickDelta, rotX, cRot, 0.2f);
-                    animatable.setBodyRotation(rotX);
-                    body.setRotY(rotX);
-
+                    rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.2f);
+                    rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.2f);
                 }
+                animatable.setBodyRotationX(rotX);
+                animatable.setBodyRotationY(rotY);
+                body.setRotX(rotX);
+                body.setRotY(rotY);
             }
             if (head != null) {
                 if (animationNumber == 0) {

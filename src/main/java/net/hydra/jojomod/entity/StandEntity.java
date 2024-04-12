@@ -45,7 +45,12 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
             TrackedDataHandlerRegistry.INTEGER);
 
 
-    public float bodyRotation;
+    public float bodyRotationX;
+    public float bodyRotationY;
+    public float headRotationX;
+    public float headRotationY;
+    public float standRotationX;
+    public float standRotationY;
 
     private boolean isDisplay;
 
@@ -102,12 +107,44 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return true;
     }
 
-    public float getBodyRotation() {
-        return this.bodyRotation;
+    public float getBodyRotationX() {
+        return this.bodyRotationX;
+    }
+    public float getBodyRotationY() {
+        return this.bodyRotationY;
     }
 
-    public void setBodyRotation(float bodRot) {
-        this.bodyRotation = bodRot;
+    public void setBodyRotationX(float bodRot) {
+        this.bodyRotationX = bodRot;
+    }
+    public void setBodyRotationY(float bodRot) {
+        this.bodyRotationY = bodRot;
+    }
+    public float getHeadRotationX() {
+        return this.headRotationX;
+    }
+    public float getHeadRotationY() {
+        return this.headRotationY;
+    }
+
+    public void setHeadRotationX(float bodRot) {
+        this.headRotationX = bodRot;
+    }
+    public void setHeadRotationY(float bodRot) {
+        this.headRotationY = bodRot;
+    }
+    public float getStandRotationX() {
+        return this.standRotationX;
+    }
+    public float getStandRotationY() {
+        return this.standRotationY;
+    }
+
+    public void setStandRotationX(float bodRot) {
+        this.standRotationX = bodRot;
+    }
+    public void setStandRotationY(float bodRot) {
+        this.standRotationY = bodRot;
     }
 
     /**
