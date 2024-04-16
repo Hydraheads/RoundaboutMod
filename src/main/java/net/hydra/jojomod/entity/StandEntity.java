@@ -21,6 +21,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -250,26 +251,44 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      */
     @Override
     public boolean hasVehicle() {
-        return this.getVehicle() != null;
+        int ot = this.getOffsetType();
+            return this.getVehicle() != null;
     }
+
+
+    @Override
+    public Entity getRootVehicle() {
+        Entity entity = this;
+        while (entity.hasVehicle() && Objects.requireNonNull(entity.getVehicle()).getUuid() != entity.getUuid()) {
+            entity = entity.getVehicle();
+        }
+        return entity;
+    }
+
 
     @Override
     public LivingEntity getVehicle() {
-        LivingEntity follower = this.getFollowing();
-        if (follower != null && !follower.isRemoved()) {
-            StandUserComponent follower2 = MyComponents.STAND_USER.get(follower);
-            //this will be changed to getfollower
-            if (follower2.getStand() != null) {
-                if (follower2.getStand() != this) {
-                    follower = null;
-                }
-            } else {
-                follower = null;
-            }
-        } else {
-            follower = null;
-        }
-        return follower;
+       int ot = this.getOffsetType();
+       if (ot == 1) {
+           RoundaboutMod.LOGGER.info("test");
+           return this;
+       } else {
+           LivingEntity follower = this.getFollowing();
+           if (follower != null && !follower.isRemoved()) {
+               StandUserComponent follower2 = MyComponents.STAND_USER.get(follower);
+               //this will be changed to getfollower
+               if (follower2.getStand() != null) {
+                   if (follower2.getStand() != this) {
+                       follower = null;
+                   }
+               } else {
+                   follower = null;
+               }
+           } else {
+               follower = null;
+           }
+           return follower;
+       }
     }
 
 

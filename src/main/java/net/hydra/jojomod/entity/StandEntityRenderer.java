@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.hydra.jojomod.RoundaboutMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -79,6 +80,7 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
         } else {
             poseStack.scale(0.87f, 0.87f, 0.87f);
         }
+        //poseStack.translate();
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, 255);
     }
 

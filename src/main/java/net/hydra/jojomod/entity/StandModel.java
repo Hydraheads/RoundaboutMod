@@ -92,11 +92,13 @@ public class StandModel extends GeoModel<StandEntity> {
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, cRot, 0.2f);
                     rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.8f);
                 } else if (animationNumber == 1) {
+                    //RoundaboutMod.LOGGER.info("MY:"+ animatable.getYaw());
+                    //RoundaboutMod.LOGGER.info("MBY:"+ animatable.getBodyYaw());
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.8f);
                     rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.8f);
                 } else {
-                    rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.2f);
-                    rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.2f);
+                    head.setRotX((entityData.headPitch()) * MathHelper.RADIANS_PER_DEGREE);
+                    head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
                 }
                 animatable.setBodyRotationX(rotX);
                 animatable.setBodyRotationY(rotY);

@@ -173,12 +173,17 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         if (!(this.hasStandOut())) {
             return;
         }
-        Vec3d grabPos = passenger.getStandOffsetVector(User);
-        positionUpdater.accept(passenger, grabPos.x, grabPos.y, grabPos.z);
-        passenger.setYaw(User.getHeadYaw());
-        passenger.setPitch(User.getPitch());
-        passenger.setBodyYaw(User.getHeadYaw());
-        passenger.setHeadYaw(User.getHeadYaw());
+        int OT = passenger.getOffsetType();
+        if (OT == 0 || OT == 1) {
+            Vec3d grabPos = passenger.getStandOffsetVector(User);
+            positionUpdater.accept(passenger, grabPos.x, grabPos.y, grabPos.z);
+        }
+        if (OT == 0 || OT == 1) {
+            passenger.setYaw(User.getHeadYaw());
+            passenger.setPitch(User.getPitch());
+            passenger.setBodyYaw(User.getHeadYaw());
+            passenger.setHeadYaw(User.getHeadYaw());
+        }
     }
 
     /** This is where the server writes out the id of the user's stand, to send to the client as a packet.*/
