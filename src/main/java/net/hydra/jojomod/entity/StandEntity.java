@@ -79,6 +79,18 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.dataTracker.set(offsetType, oft);
     }
 
+    public float getLookYaw(double maxDistance){
+        Vec3d pointVec = DamageHandler.getRayPoint(this.getMaster(), maxDistance);
+        if (pointVec != null) {
+            double d = pointVec.x - this.getX();
+            double e = pointVec.y - this.getY();
+            double f = pointVec.z - this.getZ();
+            double g = Math.sqrt(d * d + f * f);
+            return (MathHelper.wrapDegrees((float) ((MathHelper.atan2(e, g) * 57.2957763671875))));
+        } else {
+            return 0;
+        }
+    }
 
     /**
      * Presently, this is how the stand knows to lean in any direction based on player movement.
@@ -439,17 +451,14 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public Vec3d getAttackOffset(Entity standUser) {
         Vec3d frontVectors = FrontVectors(standUser, getPunchYaw(this.getAnchorPlace(),
                         0.36), 0, 1.88F);
-        return new Vec3d(frontVectors.x + standUser.getX(),frontVectors.y + standUser.getY() +0.3,
-                frontVectors.z + standUser.getZ());
+        return new Vec3d(frontVectors.x,frontVectors.y + +0.3,
+                frontVectors.z);
     }
     public Vec3d FrontVectors(Entity standUser, double dr, double dp, float distance) {
-        double Angle = (standUser.getYaw()+dr)*Math.PI/180;
-        double Pitch = (standUser.getPitch()+dp)*Math.PI/180;
-        double cop = distance*Math.cos(Pitch);
-        double dx = -Math.sin(Angle)*cop;
-        double dz = Math.cos(Angle)*cop;
-        double dy = -Math.sin(Pitch)*distance;
-        return new Vec3d(dx,dy,dz);
+
+        Vec3d vec3d = new Vec3d(standUser.getX(),standUser.getY(),standUser.getZ());
+        Vec3d vec3d2 = DamageHandler.getRotationVector(standUser.getPitch(), (float) (standUser.getYaw()+dr));
+        return vec3d.add(vec3d2.x * distance, vec3d2.y * distance, vec3d2.z * distance);
     }
 
     public double getPunchYaw(double Yaw, double multi){

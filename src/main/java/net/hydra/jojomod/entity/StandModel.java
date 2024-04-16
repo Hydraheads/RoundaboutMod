@@ -55,17 +55,26 @@ public class StandModel extends GeoModel<StandEntity> {
             CoreGeoBone stand = getAnimationProcessor().getBone("stand");
             CoreGeoBone body = getAnimationProcessor().getBone("body");
             CoreGeoBone head = getAnimationProcessor().getBone("head");
+            float rotation1 = 0;
+            if (animationNumber == 1){
+                rotation1 = (float) (animatable.getPunchYaw(animatable.getAnchorPlace(),
+                        0.36) * MathHelper.RADIANS_PER_DEGREE);
+            }
 
             if (stand != null){
                 float rotX = stand.getRotX();
+                float rotY = stand.getRotY();
+                float cRX = 0;
                 float cRY = 0;
                 if (animationNumber == 1) {
-                    cRY = entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE;
-                    RoundaboutMod.LOGGER.info(String.valueOf(cRY));
+                    cRX = entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE;
                 }
-                rotX = MainUtil.controlledLerp(tickDelta, rotX, cRY, 0.8f);
+                rotX = MainUtil.controlledLerp(tickDelta, rotX, cRX, 0.8f);
+                rotY = MainUtil.controlledLerp(tickDelta, rotY, cRY, 0.8f);
                 animatable.setStandRotationX(rotX);
+                animatable.setStandRotationY(rotY);
                 stand.setRotX(rotX);
+                stand.setRotY(rotY);
             }
 
             if (body != null) {
@@ -95,7 +104,7 @@ public class StandModel extends GeoModel<StandEntity> {
                     //RoundaboutMod.LOGGER.info("MY:"+ animatable.getYaw());
                     //RoundaboutMod.LOGGER.info("MBY:"+ animatable.getBodyYaw());
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.8f);
-                    rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.8f);
+                    rotY = MainUtil.controlledLerp(tickDelta, rotY, rotation1, 0.8f);
                 } else {
                     head.setRotX((entityData.headPitch()) * MathHelper.RADIANS_PER_DEGREE);
                     head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
@@ -122,9 +131,8 @@ public class StandModel extends GeoModel<StandEntity> {
                     head.setRotX((entityData.headPitch() + swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE);
                     head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
                 } else if (animationNumber == 1) {
-                    float yaw = 0;
                     head.setRotX(0);
-                    head.setRotY((entityData.netHeadYaw()+yaw) * MathHelper.RADIANS_PER_DEGREE);
+                    head.setRotY(rotation1);
                 } else {
                     head.setRotX((entityData.headPitch()) * MathHelper.RADIANS_PER_DEGREE);
                     head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
