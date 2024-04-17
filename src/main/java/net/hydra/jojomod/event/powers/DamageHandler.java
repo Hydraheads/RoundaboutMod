@@ -15,8 +15,6 @@ import java.util.Objects;
 
 public class DamageHandler {
 
-    //public Vec3d reachOut(){
-    //}
 
     public static void genPointHitbox(double maxDistance, LivingEntity entity, float power, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ){
 
@@ -28,6 +26,7 @@ public class DamageHandler {
         entity.getWorld().addParticle(ParticleTypes.EXPLOSION, true, pointVec.x, pointVec.y, pointVec.z, 0.0, 0.0, 0.0);
     }
 
+    /** Returns an offset away from a player's sight*/
     public static Vec3d getRayPoint(LivingEntity entity, double maxDistance){
             MinecraftClient mc = MinecraftClient.getInstance();
             float tickDelta = mc.getLastFrameDuration();
@@ -35,6 +34,8 @@ public class DamageHandler {
             Vec3d vec3d2 = entity.getRotationVec(tickDelta);
             return vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);
     }
+
+    /** Gets an offset one block away of the direction looked. Multiply to use any distance.*/
     public static Vec3d getRotationVector(float pitch, float yaw) {
         float f = pitch * ((float)Math.PI / 180);
         float g = -yaw * ((float)Math.PI / 180);
@@ -44,6 +45,7 @@ public class DamageHandler {
         float k = MathHelper.sin(f);
         return new Vec3d(i * j, -k, h * j);
     }
+    /**Generates a hitbox*/
     public static void genHitbox(LivingEntity entity, float power, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {
         double k = MathHelper.floor(startX - radiusX);
         double l = MathHelper.floor(startX + radiusX);

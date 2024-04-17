@@ -79,19 +79,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.dataTracker.set(offsetType, oft);
     }
 
-    public float getLookYaw(double maxDistance){
-        Vec3d pointVec = DamageHandler.getRayPoint(this.getMaster(), maxDistance);
-        if (pointVec != null) {
-            double d = pointVec.x - this.getX();
-            double e = pointVec.y - this.getY();
-            double f = pointVec.z - this.getZ();
-            double g = Math.sqrt(d * d + f * f);
-            return (MathHelper.wrapDegrees((float) ((MathHelper.atan2(e, g) * 57.2957763671875))));
-        } else {
-            return 0;
-        }
-    }
-
     /**
      * Presently, this is how the stand knows to lean in any direction based on player movement.
      * Creates the illusion of floaty movement within the stand.
@@ -267,7 +254,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
             return this.getVehicle() != null;
     }
 
-
+    /**This override prevents an infinite loop when an entity is riding itself*/
     @Override
     public Entity getRootVehicle() {
         Entity entity = this;
@@ -277,7 +264,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return entity;
     }
 
-
+    /**Chooses which offset animation types override stand direction rendering*/
     @Override
     public LivingEntity getVehicle() {
        int ot = this.getOffsetType();
@@ -448,19 +435,32 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return new Vec3d(this.getX(),this.getY(),this.getZ());
     }
 
+    /** The offset that can potentially can be used for rushes, punches, blocking, etc.
+     * Involves the stand being in an L shape away from the user,
+     * with the StandModel.java handling the inward rotation*/
     public Vec3d getAttackOffset(Entity standUser) {
-        Vec3d frontVectors = FrontVectors(standUser, getPunchYaw(this.getAnchorPlace(),
-                        0.36), 0, 1.88F);
+        Vec3d frontVectors = FrontVectors(standUser, 0, 1.5F);
+
+        float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
+                        1);
+        float standrotDir2 = 0;
+        if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
+        Vec3d vec3d2 = DamageHandler.getRotationVector(0, standUser.getHeadYaw()+ standrotDir2);
+        frontVectors = frontVectors.add(vec3d2.x * 0.7F, 0, vec3d2.z * 0.7F);
         return new Vec3d(frontVectors.x,frontVectors.y + +0.3,
                 frontVectors.z);
     }
-    public Vec3d FrontVectors(Entity standUser, double dr, double dp, float distance) {
+
+    /** Uses rotation to grab a point in front of an entity, with DR being an optional pitch offset*/
+    public Vec3d FrontVectors(Entity standUser, double dr, float distance) {
 
         Vec3d vec3d = new Vec3d(standUser.getX(),standUser.getY(),standUser.getZ());
         Vec3d vec3d2 = DamageHandler.getRotationVector(standUser.getPitch(), (float) (standUser.getYaw()+dr));
         return vec3d.add(vec3d2.x * distance, vec3d2.y * distance, vec3d2.z * distance);
     }
 
+    /**Ensures that no matter where the stand is passively configured to rest, an appropriate yaw
+     * position is returned. Useful for stand rotation in attack animations*/
     public double getPunchYaw(double Yaw, double multi){
         if (Yaw < 90){return Yaw*multi;}
         else if (Yaw <= 180){return (180-Yaw)*multi;}
@@ -468,6 +468,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         else{return -((360-Yaw)*multi);}
     }
 
+    /**This is the way a stand looks when it is passively floating by you*/
     public Vec3d getIdleOffset(Entity standUser) {
         int vis = this.getFadeOut();
         double r = (((double) vis / MaxFade) * 1.37);
@@ -508,6 +509,20 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * @see ModEntities for now. */
     public static DefaultAttributeContainer.Builder createStandAttributes() {
         return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2F).add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
+    }
+
+
+    public float getLookYaw(double maxDistance){
+        Vec3d pointVec = DamageHandler.getRayPoint(this.getMaster(), maxDistance);
+        if (pointVec != null) {
+            double d = pointVec.x - this.getX();
+            double e = pointVec.y - this.getY();
+            double f = pointVec.z - this.getZ();
+            double g = Math.sqrt(d * d + f * f);
+            return (MathHelper.wrapDegrees((float) ((MathHelper.atan2(e, g) * 57.2957763671875))));
+        } else {
+            return 0;
+        }
     }
 
     @Override

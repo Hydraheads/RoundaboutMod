@@ -101,8 +101,6 @@ public class StandModel extends GeoModel<StandEntity> {
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, cRot, 0.2f);
                     rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.8f);
                 } else if (animationNumber == 1) {
-                    //RoundaboutMod.LOGGER.info("MY:"+ animatable.getYaw());
-                    //RoundaboutMod.LOGGER.info("MBY:"+ animatable.getBodyYaw());
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.8f);
                     rotY = MainUtil.controlledLerp(tickDelta, rotY, rotation1, 0.8f);
                 } else {

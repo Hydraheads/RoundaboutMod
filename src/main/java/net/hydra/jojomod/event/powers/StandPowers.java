@@ -15,21 +15,21 @@ import java.util.Objects;
 public class StandPowers {
     private final LivingEntity self;
 
-    /*The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.
+    /**The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.
     * It is also used to */
     private int attackTime = 0;
 
-    /*The time until the generic ability cooldown passes.
+    /**The time until the generic ability cooldown passes.
     This exists so you have downtime that non-stand users can get it and attack you during.*/
     private int attackTimeMax = 0;
 
-    /*The id of the move being used. Ex: 1 = punch*/
+    /**The id of the move being used. Ex: 1 = punch*/
     private int activePower = 0;
 
-    /*The phase of the move being used, primarily to keep track of which punch you are on in a punch string.*/
+    /**The phase of the move being used, primarily to keep track of which punch you are on in a punch string.*/
     private int activePowerPhase = 0;
 
-    /*Once a move finishes, this turns off in order to prevent a loop of infinite attacks should the move roll over.*/
+    /**Once a move finishes, this turns off in order to prevent a loop of infinite attacks should the move roll over.*/
     private boolean isAttacking = false;
 
     public StandPowers(LivingEntity self) {
