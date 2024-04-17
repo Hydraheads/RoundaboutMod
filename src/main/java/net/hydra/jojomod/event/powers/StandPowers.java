@@ -5,11 +5,15 @@ import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class StandPowers {
@@ -124,7 +128,30 @@ public class StandPowers {
         if (!self.getWorld().isClient()){
             ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
         }
-        DamageHandler.genHitbox(self, pow, pointVec.x, pointVec.y, pointVec.z, 2, 2, 2);
+        StandAttackHitbox(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, 2, 2, 2)),pow);
+    }
+
+    public List<Entity> StandGrabHitbox(List<Entity> entities){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+            for (Entity value : entities) {
+                if (!value.isLiving() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())){
+                    hitEntities.remove(value);
+                }
+            }
+        return hitEntities;
+    }
+
+    public boolean StandAttackHitbox(List<Entity> entities, float pow){
+        boolean hitSomething = false;
+        if (entities != null){
+            for (Entity value : entities) {
+                if (DamageHandler.StandDamageEntity(value,pow)){
+                    hitSomething = true;
+                }
+            }
+        }
+        return hitSomething;
     }
 
     public void updateUniqueMoves(){

@@ -16,16 +16,6 @@ import java.util.Objects;
 public class DamageHandler {
 
 
-    public static void genPointHitbox(double maxDistance, LivingEntity entity, float power, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ){
-
-        Vec3d pointVec = getRayPoint(entity, maxDistance);
-        genHitbox(entity, power, pointVec.x, pointVec.y, pointVec.z, radiusX, radiusY, radiusZ);
-        if (!entity.getWorld().isClient()){
-            ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
-        }
-        entity.getWorld().addParticle(ParticleTypes.EXPLOSION, true, pointVec.x, pointVec.y, pointVec.z, 0.0, 0.0, 0.0);
-    }
-
     /** Returns an offset away from a player's sight*/
     public static Vec3d getRayPoint(LivingEntity entity, double maxDistance){
             MinecraftClient mc = MinecraftClient.getInstance();
@@ -46,18 +36,18 @@ public class DamageHandler {
         return new Vec3d(i * j, -k, h * j);
     }
     /**Generates a hitbox*/
-    public static void genHitbox(LivingEntity entity, float power, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {
+    public static List<Entity> genHitbox(LivingEntity entity, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {
         double k = MathHelper.floor(startX - radiusX);
         double l = MathHelper.floor(startX + radiusX);
         double r = (startY - radiusY);
         double s = (startY + radiusY);
         double t = (startZ - radiusZ);
         double u = (startZ + radiusZ);
-        RoundaboutMod.LOGGER.info("1");
-        List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box(k, r, t, l, s, u));
-        for (Entity value : list) {
-            RoundaboutMod.LOGGER.info("2");
-            value.damage(ModDamageTypes.of(entity.getWorld(), ModDamageTypes.STAND), power);
-        }
+        return entity.getWorld().getOtherEntities(entity, new Box(k, r, t, l, s, u));
+    }
+
+    public static boolean StandDamageEntity(Entity entity, float power){
+        RoundaboutMod.LOGGER.info("yeep");
+        return entity.damage(ModDamageTypes.of(entity.getWorld(), ModDamageTypes.STAND), power);
     }
 }

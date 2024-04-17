@@ -269,7 +269,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public LivingEntity getVehicle() {
        int ot = this.getOffsetType();
        if (ot == 1) {
-           RoundaboutMod.LOGGER.info("test");
            return this;
        } else {
            LivingEntity follower = this.getFollowing();
