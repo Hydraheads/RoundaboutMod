@@ -35,10 +35,10 @@
       "roundabout:punch_sfx2"
     ]
   },
-  "punch_sfx3": {
-    "subtitle": "sounds.roundabout.stomp",
+  "hit_sfx1": {
+    "subtitle": "sounds.roundabout.hit_sfx1",
     "sounds": [
-      "roundabout:stomp"
+      "roundabout:hit_sfx1"
     ]
   }
 }

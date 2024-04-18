@@ -15,14 +15,14 @@ public class ModSounds {
     public static final Identifier STAR_SUMMON_SOUND_ID = new Identifier("roundabout:summon_star");
     public static final Identifier PUNCH_1_SOUND_ID = new Identifier("roundabout:punch_sfx1");
     public static final Identifier PUNCH_2_SOUND_ID = new Identifier("roundabout:punch_sfx2");
-    public static final Identifier STOMP_SOUND_ID = new Identifier("roundabout:stomp");
+    public static final Identifier HIT_1_SOUND_ID = new Identifier("roundabout:hit_sfx1");
     public static SoundEvent SUMMON_SOUND_EVENT = SoundEvent.of(SUMMON_SOUND_ID);
     public static SoundEvent WORLD_SUMMON_SOUND_EVENT = SoundEvent.of(WORLD_SUMMON_SOUND_ID);
     public static SoundEvent STAR_SUMMON_SOUND_EVENT = SoundEvent.of(STAR_SUMMON_SOUND_ID);
     public static SoundEvent TERRIER_SOUND_EVENT = SoundEvent.of(TERRIER_SOUND_ID);
     public static SoundEvent PUNCH_1_SOUND_EVENT = SoundEvent.of(PUNCH_1_SOUND_ID);
     public static SoundEvent PUNCH_2_SOUND_EVENT = SoundEvent.of(PUNCH_2_SOUND_ID);
-    public static SoundEvent STOMP_SOUND_EVENT = SoundEvent.of(STOMP_SOUND_ID);
+    public static SoundEvent HIT_1_SOUND_EVENT = SoundEvent.of(HIT_1_SOUND_ID);
 
     public static void registerSoundEvents(){
         Registry.register(Registries.SOUND_EVENT, SUMMON_SOUND_ID, SUMMON_SOUND_EVENT);
@@ -31,7 +31,7 @@ public class ModSounds {
         Registry.register(Registries.SOUND_EVENT, WORLD_SUMMON_SOUND_ID, WORLD_SUMMON_SOUND_EVENT);
         Registry.register(Registries.SOUND_EVENT, PUNCH_1_SOUND_ID, PUNCH_1_SOUND_EVENT);
         Registry.register(Registries.SOUND_EVENT, PUNCH_2_SOUND_ID, PUNCH_2_SOUND_EVENT);
-        Registry.register(Registries.SOUND_EVENT, STOMP_SOUND_ID, STOMP_SOUND_EVENT);
+        Registry.register(Registries.SOUND_EVENT, HIT_1_SOUND_ID, HIT_1_SOUND_EVENT);
     }
 
     private static SoundEvent registerSoundEvent(String name){

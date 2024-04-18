@@ -31,6 +31,6 @@
   "sounds.roundabout.summon_world":  "Stand summoned",
   "sounds.roundabout.punch_sfx1":  "Punch",
   "sounds.roundabout.punch_sfx2":  "Punch",
-  "sounds.roundabout.stomp":  "Smack",
+  "sounds.roundabout.hit_sfx1":  "Heavy Hit",
   "sounds.roundabout.terrier_pass": "Terrier fart"
 }
