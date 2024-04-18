@@ -27,8 +27,11 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void standMount(StandEntity StandSet);
     void setStand(StandEntity StandSet);
 
-    float getAttackTimeMax();
-    float getAttackTime();
+    int getAttackTimeMax();
+    int getAttackTime();
+    int getActivePowerPhase();
+    int getActivePowerPhaseMax();
+    int getActivePower();
 
     void setActive(boolean active);
 

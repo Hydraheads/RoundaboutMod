@@ -68,11 +68,16 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public LivingEntity getPowerUser(){
         return this.getStandPowers().getSelf();
     }
-    public float getAttackTimeMax(){
+    public int getAttackTimeMax(){
         return this.getStandPowers().getAttackTimeMax();
     }
-    public float getAttackTime(){
+    public int getAttackTime(){
         return this.getStandPowers().getAttackTime();
+    }
+    public int getActivePowerPhase(){
+        return this.getStandPowers().getActivePowerPhase();
+    }public int getActivePowerPhaseMax(){
+        return this.getStandPowers().getActivePowerPhaseMax();
     }
     public void setPowerAttack(){
         this.getStandPowers().setPowerAttack();

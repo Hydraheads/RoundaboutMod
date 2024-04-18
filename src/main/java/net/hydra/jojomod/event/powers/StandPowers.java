@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class StandPowers {
     /**Once a move finishes, this turns off in order to prevent a loop of infinite attacks should the move roll over.*/
     private boolean isAttacking = false;
 
+    /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
+    private final int activePowerPhaseMax = 3;
+
     public StandPowers(LivingEntity self) {
         this.self = self;
     }
@@ -58,6 +62,9 @@ public class StandPowers {
     }
     public int getActivePowerPhase(){
         return this.activePowerPhase;
+    }
+    public int getActivePowerPhaseMax(){
+        return this.activePowerPhaseMax;
     }
 
     public void setAttackTime(int attackTime){
@@ -113,6 +120,9 @@ public class StandPowers {
                 }
             }
             this.attackTime++;
+            if (this.attackTime > this.attackTimeMax){
+                this.setActivePowerPhase(0);
+            }
         }
     }
     public void updateAttack(){
@@ -148,16 +158,18 @@ public class StandPowers {
 
     public void standPunch(){
         float pow;
-        if (this.activePowerPhase == 2) {
+        if (this.activePowerPhase == 3) {
             //this.attackTimeMax = 40;
             pow = 8;
         } else {
-            this.activePowerPhase++;
             pow=6;
         }
         this.attackTimeDuring = -10;
         this.isAttacking = false;
-        this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.PUNCH_1_SOUND_EVENT, SoundCategory.PLAYERS, 10F, 1F);
+        SoundEvent SE;
+        if (this.activePowerPhase >= this.activePowerPhaseMax){ SE = ModSounds.PUNCH_2_SOUND_EVENT; }
+        else { SE = ModSounds.PUNCH_1_SOUND_EVENT;}
+        this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 10F, 1F);
 
         Vec3d pointVec = DamageHandler.getRayPoint(self, 3);
         if (!self.getWorld().isClient()){
@@ -204,14 +216,27 @@ public class StandPowers {
         this.attackTimeMax = 0;
         this.switchActiveMove(PowerIndex.NONE);
     }
+
     public void setPowerAttack(){
         if (this.attackTimeDuring <= -1) {
-            this.attackTimeDuring = 0;
-            this.attackTimeMax = 30;
-            this.isAttacking = true;
-            this.switchActiveMove(PowerIndex.ATTACK);
+            if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                if (this.activePowerPhase >= this.activePowerPhaseMax){
+                    this.activePowerPhase = 1;
+                } else {
+                    this.activePowerPhase++;
+                    if (this.activePowerPhase == this.activePowerPhaseMax) {
+                        this.attackTimeMax= 35;
+                    } else {
+                        this.attackTimeMax= 30;
+                    }
 
-            poseStand(1);
+                }
+                this.attackTimeDuring = 0;
+                this.isAttacking = true;
+                this.switchActiveMove(PowerIndex.ATTACK);
+
+                poseStand(1);
+            }
         }
     }
 }

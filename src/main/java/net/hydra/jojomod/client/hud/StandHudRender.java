@@ -5,6 +5,8 @@ import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.KeyInputHandler;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.MinecraftClient;
@@ -25,8 +27,14 @@ public class StandHudRender {
             "textures/gui/guard_filled.png");
     private static final Identifier ATTACK_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/attack_meter.png");
+    private static final Identifier ATTACK_COMPLETE = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/attack_complete.png");
     private static final Identifier ATTACK_FILLED = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/attack_filled.png");
+    private static final Identifier ATTACK_PIP_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/attack_pip_empty.png");
+    private static final Identifier ATTACK_PIP_FILLED = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/attack_pip_filled.png");
     private static final Identifier GUARD_ICON = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/guard_icon.png");
 
@@ -150,11 +158,22 @@ public class StandHudRender {
                 if (attackTimeMax > 0) {
                     float attackTime = standUserData.getAttackTime();
                     float finalATime = attackTime / attackTimeMax;
-
                     if (finalATime <= 1) {
-                        context.drawTexture(ATTACK_EMPTY, k, j, 0, 0, 15, 5, 15, 5);
+
+                        Identifier barTexture;
+                        if (standUserData.getActivePowerPhase() == standUserData.getActivePowerPhaseMax()){
+                            barTexture = ATTACK_COMPLETE;
+                        } else {
+                            barTexture = ATTACK_FILLED;
+                        }
+
+
+                        context.drawTexture(ATTACK_EMPTY, k, j, 0, 0, 15, 6, 15, 6);
                         int finalATimeInt = Math.round(finalATime * 15);
-                        context.drawTexture(ATTACK_FILLED, k, j, 0, 0, finalATimeInt, 5, 15, 5);
+                        context.drawTexture(barTexture, k, j, 0, 0, finalATimeInt, 6, 15, 6);
+
+
+
                     }
                 }
         }
