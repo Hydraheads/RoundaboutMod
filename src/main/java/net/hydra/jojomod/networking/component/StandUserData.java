@@ -38,9 +38,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.User = entity;
     }
     public void tick() {
-        if (this.StandActive) {
+        //if (StandID > -1) {
             this.getStandPowers().tickPower();
-        }
+        //}
     }
 
     /** Calling sync sends packets which update data on the client side.
@@ -67,6 +67,12 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }
     public LivingEntity getPowerUser(){
         return this.getStandPowers().getSelf();
+    }
+    public float getAttackTimeMax(){
+        return this.getStandPowers().getAttackTimeMax();
+    }
+    public float getAttackTime(){
+        return this.getStandPowers().getAttackTime();
     }
     public void setPowerAttack(){
         this.getStandPowers().setPowerAttack();
@@ -196,6 +202,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
         buf.writeInt(SP.getAttackTime());
         buf.writeInt(SP.getAttackTimeMax());
+        buf.writeInt(SP.getAttackTimeDuring());
         buf.writeInt(SP.getActivePower());
         buf.writeInt(SP.getActivePowerPhase());
         buf.writeBoolean(SP.getIsAttacking());
@@ -213,6 +220,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
         SP.setAttackTime(buf.readInt());
         SP.setAttackTimeMax(buf.readInt());
+        SP.setAttackTimeDuring(buf.readInt());
         SP.setActivePower(buf.readInt());
         SP.setActivePowerPhase(buf.readInt());
         SP.setIsAttacking(buf.readBoolean());

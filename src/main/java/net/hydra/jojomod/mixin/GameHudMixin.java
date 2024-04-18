@@ -55,6 +55,11 @@ public abstract class GameHudMixin implements IHudAccess {
         //StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);
     }
 
+    @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
+    private void renderCrosshairMixin(DrawContext context, CallbackInfo info) {
+        StandHudRender.renderAttackHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);
+    }
+
     @Shadow
     private PlayerEntity getCameraPlayer() {
         return null;

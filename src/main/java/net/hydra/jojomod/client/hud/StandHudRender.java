@@ -6,6 +6,7 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.KeyInputHandler;
 import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -22,6 +23,10 @@ public class StandHudRender {
             "textures/gui/guard_meter.png");
     private static final Identifier GUARD_FILLED = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/guard_filled.png");
+    private static final Identifier ATTACK_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/attack_meter.png");
+    private static final Identifier ATTACK_FILLED = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/attack_filled.png");
     private static final Identifier GUARD_ICON = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/guard_icon.png");
 
@@ -39,6 +44,8 @@ public class StandHudRender {
 
     private static final Identifier HASTE_ICON = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/icons/the_world/haste.png");
+
+
 
     private static final int guiSize = 174;
     private static float animated = 0;
@@ -128,6 +135,31 @@ public class StandHudRender {
     public static float controlledLerp(float delta, float start, float end, float multiplier) {
         return start + (delta * (end - start))*multiplier;
     }
+
+    public static void renderAttackHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
+                                       int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                       float flashAlpha, float otherFlashAlpha){
+        if (playerEntity != null) {
+            boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
+                int j = scaledHeight / 2 - 7 - 5;
+                int k = scaledWidth / 2 - 8;
+
+                StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND_USER.get(playerEntity);
+
+                float attackTimeMax = standUserData.getAttackTimeMax();
+                if (attackTimeMax > 0) {
+                    float attackTime = standUserData.getAttackTime();
+                    float finalATime = attackTime / attackTimeMax;
+
+                    if (finalATime <= 1) {
+                        context.drawTexture(ATTACK_EMPTY, k, j, 0, 0, 15, 5, 15, 5);
+                        int finalATimeInt = Math.round(finalATime * 15);
+                        context.drawTexture(ATTACK_FILLED, k, j, 0, 0, finalATimeInt, 5, 15, 5);
+                    }
+                }
+        }
+    }
+
 
 
     public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,

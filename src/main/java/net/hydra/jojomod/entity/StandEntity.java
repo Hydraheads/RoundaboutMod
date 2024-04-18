@@ -372,7 +372,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         UD.updateStandOutPosition(this);
     }
 
-
+    /** Stand does not take damage under normal circumstances.*/
     @Override
     public boolean damage(DamageSource source, float amount) {
         return false;

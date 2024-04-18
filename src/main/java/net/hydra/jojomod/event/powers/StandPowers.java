@@ -21,11 +21,14 @@ public class StandPowers {
 
     /**The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.
     * It is also used to */
-    private int attackTime = 0;
+    private int attackTime = -1;
+
+    /**The time within an attack. This matters, because if you desummon a stand the attack time doesnt reset */
+    private int attackTimeDuring = -1;
 
     /**The time until the generic ability cooldown passes.
     This exists so you have downtime that non-stand users can get it and attack you during.*/
-    private int attackTimeMax = 0;
+    private int attackTimeMax = -1;
 
     /**The id of the move being used. Ex: 1 = punch*/
     private int activePower = 0;
@@ -45,6 +48,9 @@ public class StandPowers {
     public int getAttackTime(){
         return this.attackTime;
     }
+    public int getAttackTimeDuring(){
+        return this.attackTimeDuring;
+    }
     public int getActivePower(){
         return this.activePower;
     }
@@ -54,6 +60,9 @@ public class StandPowers {
 
     public void setAttackTime(int attackTime){
         this.attackTime = attackTime;
+    }
+    public void setAttackTimeDuring(int attackTimeDuring){
+        this.attackTimeDuring = attackTimeDuring;
     }
     public void setAttackTimeMax(int attackTimeMax){
         this.attackTimeMax = attackTimeMax;
@@ -84,17 +93,24 @@ public class StandPowers {
 
     public void tickPower(){
         if (this.activePower != PowerIndex.NONE) {
-            if (this.activePower == PowerIndex.ATTACK && this.isAttacking){
-                //RoundaboutMod.LOGGER.info("attack4");
-                this.updateAttack();
-            } else {
-                this.updateUniqueMoves();
+            if (this.attackTimeDuring > -1) {
+                if (this.hasStandActive(this.self)) {
+                    if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
+                        //RoundaboutMod.LOGGER.info("attack4");
+                        this.updateAttack();
+                    } else {
+                        this.updateUniqueMoves();
+                    }
+                    this.attackTimeDuring++;
+                } else {
+                    this.setAttackTimeDuring(-1);
+                }
             }
             this.attackTime++;
         }
     }
     public void updateAttack(){
-        if (this.attackTime > this.attackTimeMax) {
+        if (this.attackTimeDuring > this.attackTimeMax) {
             this.setPowerNone();
         } else {
             if (this.attackTime == 4) {
@@ -106,18 +122,25 @@ public class StandPowers {
     public StandEntity getStandEntity(LivingEntity User){
         StandUserComponent standUserData = MyComponents.STAND_USER.get((LivingEntity) User);
         return standUserData.getStand();
+    } public boolean hasStandEntity(LivingEntity User){
+        StandUserComponent standUserData = MyComponents.STAND_USER.get((LivingEntity) User);
+        return standUserData.hasStandOut();
+    } public boolean hasStandActive(LivingEntity User){
+        StandUserComponent standUserData = MyComponents.STAND_USER.get((LivingEntity) User);
+        return standUserData.getActive();
     }
+
 
     public void standPunch(){
         float pow;
         if (this.activePowerPhase == 2) {
-            this.attackTimeMax = 40;
+            //this.attackTimeMax = 40;
             pow = 8;
         } else {
             this.activePowerPhase++;
             pow=6;
         }
-        this.attackTime = 0;
+        this.attackTimeDuring = -1;
         this.isAttacking = false;
 
         StandEntity stand = getStandEntity(this.self);
@@ -170,6 +193,7 @@ public class StandPowers {
         this.switchActiveMove(PowerIndex.NONE);
     }
     public void setPowerAttack(){
+        this.attackTimeDuring = 0;
         this.attackTimeMax = 30;
         this.isAttacking = true;
         this.switchActiveMove(PowerIndex.ATTACK);
