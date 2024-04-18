@@ -5,10 +5,12 @@ import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -93,17 +95,21 @@ public class StandPowers {
 
     public void tickPower(){
         if (this.activePower != PowerIndex.NONE) {
-            if (this.attackTimeDuring > -1) {
-                if (this.hasStandActive(this.self)) {
-                    if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
-                        //RoundaboutMod.LOGGER.info("attack4");
-                        this.updateAttack();
-                    } else {
-                        this.updateUniqueMoves();
-                    }
-                    this.attackTimeDuring++;
+            if (this.attackTimeDuring != -1) {
+                this.attackTimeDuring++;
+                if (this.attackTimeDuring == -1) {
+                    poseStand(0);
                 } else {
-                    this.setAttackTimeDuring(-1);
+                    if (this.hasStandActive(this.self)) {
+                        if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
+                            //RoundaboutMod.LOGGER.info("attack4");
+                            this.updateAttack();
+                        } else {
+                            this.updateUniqueMoves();
+                        }
+                    } else {
+                        this.setAttackTimeDuring(-1);
+                    }
                 }
             }
             this.attackTime++;
@@ -111,11 +117,20 @@ public class StandPowers {
     }
     public void updateAttack(){
         if (this.attackTimeDuring > this.attackTimeMax) {
+            this.setAttackTimeDuring(-1);
+            poseStand(0);
             this.setPowerNone();
         } else {
-            if (this.attackTime == 4) {
+            if (this.attackTimeDuring == 7) {
                 this.standPunch();
             }
+        }
+    }
+
+    public void poseStand(int r){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            stand.setOffsetType(r);
         }
     }
 
@@ -140,13 +155,10 @@ public class StandPowers {
             this.activePowerPhase++;
             pow=6;
         }
-        this.attackTimeDuring = -1;
+        this.attackTimeDuring = -10;
         this.isAttacking = false;
+        this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.PUNCH_1_SOUND_EVENT, SoundCategory.PLAYERS, 10F, 1F);
 
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            stand.setOffsetType(0);
-        }
         Vec3d pointVec = DamageHandler.getRayPoint(self, 3);
         if (!self.getWorld().isClient()){
             ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
@@ -193,14 +205,13 @@ public class StandPowers {
         this.switchActiveMove(PowerIndex.NONE);
     }
     public void setPowerAttack(){
-        this.attackTimeDuring = 0;
-        this.attackTimeMax = 30;
-        this.isAttacking = true;
-        this.switchActiveMove(PowerIndex.ATTACK);
+        if (this.attackTimeDuring <= -1) {
+            this.attackTimeDuring = 0;
+            this.attackTimeMax = 30;
+            this.isAttacking = true;
+            this.switchActiveMove(PowerIndex.ATTACK);
 
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            stand.setOffsetType(1);
+            poseStand(1);
         }
     }
 }

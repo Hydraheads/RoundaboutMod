@@ -22,5 +22,23 @@
     "sounds": [
       "roundabout:summon_star"
     ]
+  },
+  "punch_sfx1": {
+    "subtitle": "sounds.roundabout.punch_sfx1",
+    "sounds": [
+      "roundabout:punch_sfx1"
+    ]
+  },
+  "punch_sfx2": {
+    "subtitle": "sounds.roundabout.punch_sfx2",
+    "sounds": [
+      "roundabout:punch_sfx2"
+    ]
+  },
+  "punch_sfx3": {
+    "subtitle": "sounds.roundabout.stomp",
+    "sounds": [
+      "roundabout:stomp"
+    ]
   }
 }

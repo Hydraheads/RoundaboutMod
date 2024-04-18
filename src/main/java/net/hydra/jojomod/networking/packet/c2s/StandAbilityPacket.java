@@ -29,9 +29,7 @@ public class StandAbilityPacket {
         //Everything here is server only!
         ServerWorld world = (ServerWorld) player.getWorld();
         server.execute(() -> {
-            RoundaboutMod.LOGGER.info("attack");
             MyComponents.STAND_USER.get((LivingEntity) player).setPowerAttack();
-            //DamageHandler.genPointHitbox(2,(LivingEntity) player, 5, player.getX(), player.getY(), player.getZ(), 2, 2, 2);
         });
     }
 

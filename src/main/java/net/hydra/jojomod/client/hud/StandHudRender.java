@@ -141,7 +141,7 @@ public class StandHudRender {
                                        float flashAlpha, float otherFlashAlpha){
         if (playerEntity != null) {
             boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
-                int j = scaledHeight / 2 - 7 - 5;
+                int j = scaledHeight / 2 - 7 - 4;
                 int k = scaledWidth / 2 - 8;
 
                 StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND_USER.get(playerEntity);
