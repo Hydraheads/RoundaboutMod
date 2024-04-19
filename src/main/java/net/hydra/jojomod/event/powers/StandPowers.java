@@ -12,6 +12,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -158,11 +159,14 @@ public class StandPowers {
 
     public void standPunch(){
         float pow;
+        float knockbackStrength;
         if (this.activePowerPhase == 3) {
             //this.attackTimeMax = 40;
-            pow = 8;
+            pow = 7;
+            knockbackStrength = 2F;
         } else {
-            pow=6;
+            pow=5;
+            knockbackStrength = 0.5F;
         }
         this.attackTimeDuring = -10;
         this.isAttacking = false;
@@ -175,7 +179,7 @@ public class StandPowers {
         if (!self.getWorld().isClient()){
             ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
         }
-        StandAttackHitbox(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, 2, 2, 2)),pow);
+        StandAttackHitbox(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, 2, 2, 2)),pow,knockbackStrength);
     }
 
     public List<Entity> StandGrabHitbox(List<Entity> entities){
@@ -188,13 +192,15 @@ public class StandPowers {
             }
         return hitEntities;
     }
-
-    public boolean StandAttackHitbox(List<Entity> entities, float pow){
+    public boolean StandAttackHitbox(List<Entity> entities, float pow, float knockbackStrength){
         boolean hitSomething = false;
         if (entities != null){
             for (Entity value : entities) {
                 if (DamageHandler.StandDamageEntity(value,pow)){
                     hitSomething = true;
+                    if (value instanceof LivingEntity) {
+                        ((LivingEntity) value).takeKnockback(knockbackStrength * 0.5f, MathHelper.sin(this.self.getYaw() * ((float) Math.PI / 180)), -MathHelper.cos(this.self.getYaw() * ((float) Math.PI / 180)));
+                    }
                 }
             }
         }
@@ -225,7 +231,7 @@ public class StandPowers {
                 } else {
                     this.activePowerPhase++;
                     if (this.activePowerPhase == this.activePowerPhaseMax) {
-                        this.attackTimeMax= 35;
+                        this.attackTimeMax= 40;
                     } else {
                         this.attackTimeMax= 30;
                     }

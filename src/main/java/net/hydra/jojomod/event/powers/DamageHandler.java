@@ -47,7 +47,6 @@ public class DamageHandler {
     }
 
     public static boolean StandDamageEntity(Entity entity, float power){
-        RoundaboutMod.LOGGER.info("yeep");
         return entity.damage(ModDamageTypes.of(entity.getWorld(), ModDamageTypes.STAND), power);
     }
 }
