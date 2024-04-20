@@ -10,9 +10,13 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -127,6 +131,14 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
             //world.getEntity
             StandEntity stand = ModEntities.THE_WORLD.create(User.getWorld());
             if (stand != null) {
+                Hand hand = User.getActiveHand();
+                if (hand == Hand.OFF_HAND) {
+                    ItemStack  itemStack = User.getActiveItem();
+                    Item item = itemStack.getItem();
+                    if (item.getUseAction(itemStack) == UseAction.BLOCK) {
+                        User.stopUsingItem();
+                    }
+                }
                 Vec3d spos = stand.getStandOffsetVector(User);
                 stand.updatePosition(spos.getX(), spos.getY(), spos.getZ());
 
