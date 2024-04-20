@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * and is to store the stand that the mob may or may not have.
  * It is also a cleaner method than a mixin.*/
 public class StandUserData implements StandUserComponent, CommonTickingComponent {
-    //StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND.get(player);
+    //StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND_USER.get(player);
     private final LivingEntity User;
     @Nullable
     private StandEntity Stand;

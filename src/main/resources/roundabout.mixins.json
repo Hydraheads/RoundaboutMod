@@ -11,7 +11,8 @@
 		"ServerWorldMixin",
 		"HeldItemRendererMixin",
 		"GameHudMixin",
-		"InputMixin"
+		"InputMixin",
+		"ItemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
