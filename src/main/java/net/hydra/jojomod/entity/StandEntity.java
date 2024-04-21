@@ -373,11 +373,14 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     }
 
     /** Stand does not take damage under normal circumstances.*/
-    @Override
     public boolean damage(DamageSource source, float amount) {
         return false;
     }
 
+    @Override
+    public boolean isInvulnerable() {
+        return true;
+    }
 
     /** This happens every tick. Basic stand movement/fade code, also see vex code for turning on noclip.*/
     @Override
@@ -420,7 +423,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
             this.remove(RemovalReason.DISCARDED);
         }
     }
-
 
     /** Math to determine the position of the stand floating away from its user.
      * Based on Jojovein donut code with great help from Urbancase.*/

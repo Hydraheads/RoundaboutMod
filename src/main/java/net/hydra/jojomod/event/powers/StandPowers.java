@@ -6,12 +6,15 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -156,10 +159,12 @@ public class StandPowers {
         return standUserData.getActive();
     }
 
+    float standReach = 5;
 
     public void standPunch(){
         float pow;
         float knockbackStrength;
+        float halfReach = (float) (standReach*0.5);
         if (this.activePowerPhase == 3) {
             //this.attackTimeMax = 40;
             pow = 7;
@@ -168,6 +173,9 @@ public class StandPowers {
             pow=5;
             knockbackStrength = 0.5F;
         }
+        MinecraftClient mc = MinecraftClient.getInstance();
+        float tickDelta = mc.getLastFrameDuration();
+        HitResult HR = this.self.raycast(standReach,tickDelta,false);
         this.attackTimeDuring = -10;
         this.isAttacking = false;
         SoundEvent SE;
@@ -175,18 +183,27 @@ public class StandPowers {
         else { SE = ModSounds.PUNCH_1_SOUND_EVENT;}
         this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 10F, 1F);
 
-        Vec3d pointVec = DamageHandler.getRayPoint(self, 3);
+        Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
         if (!self.getWorld().isClient()){
             ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
         }
-        StandAttackHitbox(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, 2, 2, 2)),pow,knockbackStrength);
+
+        RoundaboutMod.LOGGER.info(String.valueOf(HR.getType()));
+        if (HR.getType() == HitResult.Type.ENTITY){
+            RoundaboutMod.LOGGER.info("BB");
+            StandDamageEntityAttack(((EntityHitResult) HR).getEntity(), pow, knockbackStrength);
+        } else {
+            RoundaboutMod.LOGGER.info("BB2");
+            StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, halfReach, halfReach, halfReach),pointVec.x, pointVec.y - this.self.getEyeHeight(this.self.getPose()), pointVec.z, halfReach),pow,knockbackStrength);
+        }
     }
 
-    public List<Entity> StandGrabHitbox(List<Entity> entities){
+    public List<Entity> StandGrabHitbox(List<Entity> entities, double x, double y, double z, float maxDistance){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.isLiving() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())){
+                if (!value.isLiving() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())
+                || MathHelper.sqrt((float) value.squaredDistanceTo(x,y,z)) > maxDistance){
                     hitEntities.remove(value);
                 }
             }
@@ -194,14 +211,48 @@ public class StandPowers {
     }
     public boolean StandAttackHitbox(List<Entity> entities, float pow, float knockbackStrength){
         boolean hitSomething = false;
+        float nearestDistance = -1;
+        Entity nearestMob;
         if (entities != null){
             for (Entity value : entities) {
-                if (DamageHandler.StandDamageEntity(value,pow)){
+                if (this.StandDamageEntityAttack(value,pow, knockbackStrength)){
                     hitSomething = true;
-                    if (value instanceof LivingEntity) {
-                        ((LivingEntity) value).takeKnockback(knockbackStrength * 0.5f, MathHelper.sin(this.self.getYaw() * ((float) Math.PI / 180)), -MathHelper.cos(this.self.getYaw() * ((float) Math.PI / 180)));
+                }
+            }
+        }
+        return hitSomething;
+    }
+
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength){
+        if (DamageHandler.StandDamageEntity(target,pow)){
+            if (target instanceof LivingEntity) {
+                ((LivingEntity) target).takeKnockback(knockbackStrength * 0.5f, MathHelper.sin(this.self.getYaw() * ((float) Math.PI / 180)), -MathHelper.cos(this.self.getYaw() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean StandAttackHitboxNear(List<Entity> entities, float pow, float knockbackStrength){
+        boolean hitSomething = false;
+        float nearestDistance = -1;
+        Entity nearestMob = null;
+
+        if (entities != null){
+            for (Entity value : entities) {
+                if (!value.isInvulnerable() && value.getUuid() != this.self.getUuid()){
+                    float distanceTo = value.distanceTo(this.self);
+                    if ((nearestDistance < 0 || distanceTo < nearestDistance)){
+                        nearestDistance = distanceTo;
+                        nearestMob = value;
                     }
                 }
+            }
+        }
+
+        if (nearestMob != null) {
+            if (this.StandDamageEntityAttack(nearestMob,pow, knockbackStrength)){
+                hitSomething = true;
             }
         }
         return hitSomething;
