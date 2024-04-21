@@ -9,12 +9,14 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -166,16 +168,15 @@ public class StandPowers {
         float knockbackStrength;
         float halfReach = (float) (standReach*0.5);
         if (this.activePowerPhase == 3) {
-            //this.attackTimeMax = 40;
+            /*The last hit in a string has more power and knockback if you commit to it*/
             pow = 7;
             knockbackStrength = 2F;
         } else {
             pow=5;
             knockbackStrength = 0.5F;
         }
-        MinecraftClient mc = MinecraftClient.getInstance();
-        float tickDelta = mc.getLastFrameDuration();
-        HitResult HR = this.self.raycast(standReach,tickDelta,false);
+
+        /*By setting this to -10, there is a delay between the stand retracting*/
         this.attackTimeDuring = -10;
         this.isAttacking = false;
         SoundEvent SE;
@@ -188,14 +189,32 @@ public class StandPowers {
             ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
         }
 
-        RoundaboutMod.LOGGER.info(String.valueOf(HR.getType()));
-        if (HR.getType() == HitResult.Type.ENTITY){
-            RoundaboutMod.LOGGER.info("BB");
-            StandDamageEntityAttack(((EntityHitResult) HR).getEntity(), pow, knockbackStrength);
+        /*First, attempts to hit what you are looking at*/
+        Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
+        if (targetEntity != null){
+            StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
         } else {
-            RoundaboutMod.LOGGER.info("BB2");
             StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, halfReach, halfReach, halfReach),pointVec.x, pointVec.y - this.self.getEyeHeight(this.self.getPose()), pointVec.z, halfReach),pow,knockbackStrength);
         }
+    }
+
+    /** This code grabs an entity in front of you at the specified range, raycasting is used*/
+    public Entity rayCastEntity(LivingEntity User, float reach){
+        MinecraftClient mc = MinecraftClient.getInstance();
+        float tickDelta = mc.getLastFrameDuration();
+        Vec3d vec3d = User.getCameraPosVec(tickDelta);
+
+        Vec3d vec3d2 = User.getRotationVec(1.0f);
+        Vec3d vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
+        float f = 1.0f;
+        Box box = new Box(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
+
+        EntityHitResult entityHitResult = ProjectileUtil.raycast(User, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.canHit() && !entity.isInvulnerable(), reach*reach);
+        if (entityHitResult != null) {
+            return entityHitResult.getEntity();
+        }
+        return null;
     }
 
     public List<Entity> StandGrabHitbox(List<Entity> entities, double x, double y, double z, float maxDistance){
