@@ -24,12 +24,14 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import software.bernie.example.entity.DynamicExampleEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Objects;
@@ -431,7 +433,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         if (ot == 0) {
             return getIdleOffset(standUser);
         } else if (ot == 1) {
-            return getAttackOffset(standUser);
+            return getAttackOffset(standUser,true);
         }
         return new Vec3d(this.getX(),this.getY(),this.getZ());
     }
@@ -439,8 +441,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     /** The offset that can potentially can be used for rushes, punches, blocking, etc.
      * Involves the stand being in an L shape away from the user,
      * with the StandModel.java handling the inward rotation*/
-    public Vec3d getAttackOffset(Entity standUser) {
-        Vec3d frontVectors = FrontVectors(standUser, 0, 1.5F);
+    public Vec3d getAttackOffset(Entity standUser, boolean capped) {
+        StandUserComponent UD = getUserData((LivingEntity) standUser);
+        float distanceFront = UD.getDistanceOut(standUser,UD.getStandReach());
+
+        Vec3d frontVectors = FrontVectors(standUser, 0, distanceFront);
 
         float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
                         1);
@@ -509,9 +514,9 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * The most notable thing about a stand is its hitbox size but that's factored in
      * @see ModEntities for now. */
     public static DefaultAttributeContainer.Builder createStandAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2F).add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                0.2F).add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
     }
-
 
     public float getLookYaw(double maxDistance){
         Vec3d pointVec = DamageHandler.getRayPoint(this.getMaster(), maxDistance);
@@ -528,11 +533,19 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "idle", 5, state -> state.setAndContinue(DefaultAnimations.IDLE)));
+        controllers.add(
+                DefaultAnimations.genericIdleController(this)
+        );
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    // Create the animation handler for the body segment
+    protected PlayState poseBody(AnimationState<DynamicExampleEntity> state) {
+        state.setAnimation(DefaultAnimations.IDLE);
+        return PlayState.CONTINUE;
     }
 }

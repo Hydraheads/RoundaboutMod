@@ -62,6 +62,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public boolean getActive() {
         return this.StandActive;
     }
+    public float getRayDistance(Entity entity, float range){
+        return this.getStandPowers().getRayDistance(entity,range);
+    }
 
     public void tryPower(int move, boolean forced){
         this.getStandPowers().tryPower(move,forced);
@@ -83,9 +86,15 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }public int getActivePowerPhaseMax(){
         return this.getStandPowers().getActivePowerPhaseMax();
     }
+    public float getStandReach(){
+        return this.getStandPowers().getStandReach();
+    }
     public void setPowerAttack(){
         this.getStandPowers().setPowerAttack();
         this.sync();
+    }
+    public float getDistanceOut(Entity entity, float range){
+       return this.getStandPowers().getDistanceOut(entity,range);
     }
 
     public StandPowers getStandPowers() {

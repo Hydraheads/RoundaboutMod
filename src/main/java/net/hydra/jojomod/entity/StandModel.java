@@ -31,7 +31,7 @@ public class StandModel extends GeoModel<StandEntity> {
 
     @Override
     public Identifier getAnimationResource(StandEntity animatable) {
-        return new Identifier(RoundaboutMod.MOD_ID,"animations/star_platinum.json");
+        return new Identifier(RoundaboutMod.MOD_ID,"animations/the_world.json");
     }
 
 

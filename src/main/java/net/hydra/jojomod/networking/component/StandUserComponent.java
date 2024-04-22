@@ -39,6 +39,9 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void sync();
 
     boolean getActive();
+    float getRayDistance(Entity entity, float range);
+    float getDistanceOut(Entity entity, float range);
+    float getStandReach();
 
    StandPowers getStandPowers();
 

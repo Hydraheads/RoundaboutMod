@@ -14,11 +14,13 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,6 +89,9 @@ public class StandPowers {
     }
     public boolean getIsAttacking(){
         return this.isAttacking;
+    }
+    public float getStandReach(){
+        return this.standReach;
     }
     public void setIsAttacking(boolean isAttacking){
         this.isAttacking = isAttacking;
@@ -197,6 +202,50 @@ public class StandPowers {
         } else {
             StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, halfReach, halfReach, halfReach),pointVec.x, pointVec.y - this.self.getEyeHeight(this.self.getPose()), pointVec.z, halfReach),pow,knockbackStrength);
         }
+    }
+
+
+    public float getDistanceOut(Entity entity, float range){
+        float distanceFront = this.getRayDistance(entity, range);
+        Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
+        if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+            distanceFront = targetEntity.distanceTo(entity);
+        }
+        distanceFront -= 1;
+        distanceFront = Math.max(Math.min(distanceFront,1.7F),0.4F);
+        return distanceFront;
+    }
+
+    public float getRayDistance(Entity entity, float range){
+        Vec3d vec3d = entity.getCameraPosVec(0);
+        Vec3d vec3d2 = entity.getRotationVec(0);
+        Vec3d vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = entity.getWorld().raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity));
+        if (blockHit.getType() != HitResult.Type.MISS){
+            return MathHelper.sqrt((float) entity.squaredDistanceTo(blockHit.getPos()));
+        }
+        return range;
+    }
+
+    /**Returns the vertical angle between two mobs*/
+    public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
+        double f;
+        double d = targetEntity.getX() - user.getX();
+        double e = targetEntity.getZ() - user.getZ();
+        if (targetEntity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity)targetEntity;
+            f = livingEntity.getEyeY() - user.getEyeY();
+        } else {
+            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyeY();
+        }
+        double g = Math.sqrt(d * d + e * e);
+        return (float)(-(MathHelper.atan2(f, g) * 57.2957763671875));
+    }
+    /**Returns the horizontal angle between two mobs*/
+    public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
+        double d = targetEntity.getX() - user.getX();
+        double e = targetEntity.getZ() - user.getZ();
+        return (float)(MathHelper.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
 
     /** This code grabs an entity in front of you at the specified range, raycasting is used*/
