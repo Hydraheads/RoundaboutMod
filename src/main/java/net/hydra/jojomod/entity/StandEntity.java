@@ -443,7 +443,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * with the StandModel.java handling the inward rotation*/
     public Vec3d getAttackOffset(Entity standUser, boolean capped) {
         StandUserComponent UD = getUserData((LivingEntity) standUser);
-        float distanceFront = UD.getDistanceOut(standUser,UD.getStandReach());
+        float distanceFront = UD.getDistanceOut(standUser,UD.getStandReach(),true);
 
         Vec3d frontVectors = FrontVectors(standUser, 0, distanceFront);
 

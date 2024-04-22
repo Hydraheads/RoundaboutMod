@@ -93,8 +93,8 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.getStandPowers().setPowerAttack();
         this.sync();
     }
-    public float getDistanceOut(Entity entity, float range){
-       return this.getStandPowers().getDistanceOut(entity,range);
+    public float getDistanceOut(Entity entity, float range, boolean offset){
+       return this.getStandPowers().getDistanceOut(entity,range,offset);
     }
 
     public StandPowers getStandPowers() {

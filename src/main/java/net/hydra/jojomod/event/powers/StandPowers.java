@@ -171,7 +171,6 @@ public class StandPowers {
     public void standPunch(){
         float pow;
         float knockbackStrength;
-        float halfReach = (float) (standReach*0.5);
         if (this.activePowerPhase == 3) {
             /*The last hit in a string has more power and knockback if you commit to it*/
             pow = 7;
@@ -180,6 +179,10 @@ public class StandPowers {
             pow=5;
             knockbackStrength = 0.5F;
         }
+
+        /*Caps how far out the punch goes*/
+        float distMax = this.getDistanceOut(this.self,standReach,false);
+        float halfReach = (float) (distMax*0.5);
 
         /*By setting this to -10, there is a delay between the stand retracting*/
         this.attackTimeDuring = -10;
@@ -195,7 +198,7 @@ public class StandPowers {
         }
 
         /*First, attempts to hit what you are looking at*/
-        Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
+        Entity targetEntity = this.rayCastEntity(this.self,halfReach);
         if (targetEntity != null){
             StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
         /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
@@ -205,14 +208,16 @@ public class StandPowers {
     }
 
 
-    public float getDistanceOut(Entity entity, float range){
+    public float getDistanceOut(Entity entity, float range, boolean offset){
         float distanceFront = this.getRayDistance(entity, range);
-        Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
-        if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
-            distanceFront = targetEntity.distanceTo(entity);
+        if (offset) {
+            Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
+            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+                distanceFront = targetEntity.distanceTo(entity);
+            }
+            distanceFront -= 1;
+            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
         }
-        distanceFront -= 1;
-        distanceFront = Math.max(Math.min(distanceFront,1.7F),0.4F);
         return distanceFront;
     }
 
@@ -226,6 +231,7 @@ public class StandPowers {
         }
         return range;
     }
+
 
     /**Returns the vertical angle between two mobs*/
     public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
