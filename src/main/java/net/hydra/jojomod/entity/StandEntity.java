@@ -422,11 +422,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     private void TickDown(){
         var currFade = this.getFadeOut();
         if (!this.getWorld().isClient()) {
-            if (currFade > 0) {
+            if (currFade >= 0) {
                 this.incFadeOut(-1);
             }
         }
-        if (currFade <= 0) {
+        if (currFade < 0) {
             this.remove(RemovalReason.DISCARDED);
         }
     }
