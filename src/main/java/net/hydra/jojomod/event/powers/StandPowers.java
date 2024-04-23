@@ -21,6 +21,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -181,7 +182,7 @@ public class StandPowers {
         }
 
         /*Caps how far out the punch goes*/
-        float distMax = this.getDistanceOut(this.self,standReach,false);
+        float distMax = this.getDistanceOut(this.self,this.standReach,false);
         float halfReach = (float) (distMax*0.5);
 
         /*By setting this to -10, there is a delay between the stand retracting*/
@@ -198,12 +199,12 @@ public class StandPowers {
         }
 
         /*First, attempts to hit what you are looking at*/
-        Entity targetEntity = this.rayCastEntity(this.self,halfReach);
+        Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
         if (targetEntity != null){
             StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
         /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
         } else {
-            StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, halfReach, halfReach, halfReach),pointVec.x, pointVec.y - this.self.getEyeHeight(this.self.getPose()), pointVec.z, halfReach),pow,knockbackStrength);
+            StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, halfReach, halfReach, halfReach),distMax),pow,knockbackStrength);
         }
     }
 
@@ -230,8 +231,70 @@ public class StandPowers {
             return MathHelper.sqrt((float) entity.squaredDistanceTo(blockHit.getPos()));
         }
         return range;
+    } public Vec3d getRayBlock(Entity entity, float range){
+        Vec3d vec3d = entity.getCameraPosVec(0);
+        Vec3d vec3d2 = entity.getRotationVec(0);
+        Vec3d vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = entity.getWorld().raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity));
+        return blockHit.getPos();
     }
 
+
+    public float getRayAttackDeviation(Entity Player, Entity Target){
+        double refX = Math.pow(Target.getX()-Player.getX(),2);
+        double yawDev =  Math.sqrt(refX + Math.pow(Target.getZ()-Player.getZ(),2))
+                * Math.cos(Player.getHeadYaw()+getLookAtEntityYaw(Player,Target));
+        double pitchDev =  Math.sqrt(refX + Math.pow(Target.getY()-Player.getY(),2))
+                * Math.cos(Player.getPitch()+getLookAtEntityPitch(Player,Target));
+        return (float) Math.sqrt((Math.pow(yawDev,2)+Math.pow(pitchDev,2)));
+    }
+
+    public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {
+        Vector3d d = new Vector3d(axisEnd.x-axisStart.x,axisEnd.y-axisStart.y,axisEnd.z-axisStart.z).normalize();
+        Vector3d v = new Vector3d(pointToRotate.x-axisStart.x,pointToRotate.y-axisStart.y,pointToRotate.z-axisStart.z).normalize();
+        double t = v.dot(d);
+        return (float) pointToRotate.distance(axisStart.add(d.mul(t)));
+    }
+    /**
+     * Calculates the euclidean distance from a point to a line segment.
+     *
+     * @param v     the point
+     * @param a     start of line segment
+     * @param b     end of line segment
+     * @return      distance from v to line segment [a,b]
+     *
+     * @author      Afonso Santos
+     */
+    public static
+    double
+    distanceToSegment( final Vector3d v, final Vector3d a, final Vector3d b )
+    {
+        final Vector3d ab  = b.sub( a ) ;
+        final Vector3d av  = v.sub( a ) ;
+
+        if (av.dot(ab) <= 0.0)           // Point is lagging behind start of the segment, so perpendicular distance is not viable.
+            return modulus(av) ;         // Use distance to start of segment instead.
+
+        final Vector3d bv  = v.sub( b ) ;
+
+        if (bv.dot(ab) >= 0.0)           // Point is advanced past the end of the segment, so perpendicular distance is not viable.
+            return modulus(bv) ;         // Use distance to end of the segment instead.
+
+        return modulus(ab.cross( av )) / modulus(ab) ;       // Perpendicular distance of point to segment.
+    }
+
+    public static
+    double
+    modulus( final Vector3d v )
+    {
+        return Math.sqrt( dot( v, v ) ) ;
+    }
+    public static
+    double
+    dot( final Vector3d a, final Vector3d b )
+    {
+        return a.x * b.x  +  a.y * b.y  +  a.z * b.z ;
+    }
 
     /**Returns the vertical angle between two mobs*/
     public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
@@ -272,13 +335,22 @@ public class StandPowers {
         return null;
     }
 
-    public List<Entity> StandGrabHitbox(List<Entity> entities, double x, double y, double z, float maxDistance){
+    public List<Entity> StandGrabHitbox(List<Entity> entities, float maxDistance){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.isLiving() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())
-                || MathHelper.sqrt((float) value.squaredDistanceTo(x,y,z)) > maxDistance){
+                if (!value.isLiving() || value.isInvulnerable() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())){
                     hitEntities.remove(value);
+                } else {
+                    Vec3d raypoint = getRayBlock(this.self, maxDistance);
+                    float rayDist = getPivotPoint(new Vector3d(value.getX(), value.getEyeY(), value.getZ()),
+                            new Vector3d(this.self.getX(), this.self.getEyeY(), this.self.getZ()),
+                            new Vector3d(raypoint.getX(), raypoint.getY(), raypoint.getZ()));
+                    /*RoundaboutMod.LOGGER.info("RD = "+String.valueOf(rayDist));*/
+
+                    if (rayDist > 3){
+                        hitEntities.remove(value);
+                    }
                 }
             }
         return hitEntities;
@@ -316,7 +388,7 @@ public class StandPowers {
             for (Entity value : entities) {
                 if (!value.isInvulnerable() && value.getUuid() != this.self.getUuid()){
                     float distanceTo = value.distanceTo(this.self);
-                    if ((nearestDistance < 0 || distanceTo < nearestDistance)){
+                    if ((nearestDistance < 0 || distanceTo < nearestDistance) && distanceTo <= this.standReach){
                         nearestDistance = distanceTo;
                         nearestMob = value;
                     }
