@@ -107,6 +107,11 @@ public class StandPowers {
         this.activePowerPhase = activePowerPhase;
     }
 
+    public int interruptCD = 0;
+    public boolean getInterruptCD(){
+        return this.interruptCD <= 0;
+    }
+
     public void switchActiveMove(int activeMove){
         this.setActivePower(activeMove);
         this.setAttackTime(0);
@@ -119,7 +124,7 @@ public class StandPowers {
                 if (this.attackTimeDuring == -1) {
                     poseStand(0);
                 } else {
-                    if (this.hasStandActive(this.self)) {
+                    if (this.hasStandActive(this.self) && !this.self.isUsingItem()) {
                         if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
                             //RoundaboutMod.LOGGER.info("attack4");
                             this.updateAttack();
@@ -127,13 +132,16 @@ public class StandPowers {
                             this.updateUniqueMoves();
                         }
                     } else {
-                        this.setAttackTimeDuring(-1);
+                        resetAttackState();
                     }
                 }
             }
             this.attackTime++;
             if (this.attackTime > this.attackTimeMax){
                 this.setActivePowerPhase(0);
+            }
+            if (this.interruptCD > 0){
+                this.interruptCD--;
             }
         }
     }
@@ -147,6 +155,12 @@ public class StandPowers {
                 this.standPunch();
             }
         }
+    }
+
+    public void resetAttackState(){
+        this.interruptCD = 7;
+        this.setAttackTimeDuring(-1);
+        poseStand(0);
     }
 
     public void poseStand(int r){
@@ -378,6 +392,12 @@ public class StandPowers {
         this.switchActiveMove(PowerIndex.NONE);
     }
 
+    public boolean canAttack(){
+        if (this.attackTimeDuring <= -1) {
+            return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
+        }
+        return false;
+    }
     public void setPowerAttack(){
         if (this.attackTimeDuring <= -1) {
             if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {

@@ -32,13 +32,14 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     int getActivePowerPhase();
     int getActivePowerPhaseMax();
     int getActivePower();
-
+    public boolean getInterruptCD();
     void setActive(boolean active);
 
     void summonStand(World theWorld, boolean forced, boolean sound);
     void sync();
 
     boolean getActive();
+    boolean canAttack();
     float getRayDistance(Entity entity, float range);
     float getDistanceOut(Entity entity, float range, boolean offset);
     float getStandReach();

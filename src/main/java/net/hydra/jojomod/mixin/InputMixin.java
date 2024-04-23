@@ -74,8 +74,8 @@ public class InputMixin {
         public void roundaboutInput(CallbackInfo ci){
             if (player != null) {
                 StandUserComponent standComp = MyComponents.STAND_USER.get(player);
-                if (standComp.getActive()) {
-                    while (this.options.attackKey.wasPressed()) {
+                if (standComp.getActive() && standComp.getInterruptCD()) {
+                    if (this.options.attackKey.isPressed() && !player.isUsingItem() && standComp.canAttack()) {
                         ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
                     }
                     this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());

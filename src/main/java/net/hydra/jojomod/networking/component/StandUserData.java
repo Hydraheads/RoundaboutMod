@@ -69,6 +69,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public void tryPower(int move, boolean forced){
         this.getStandPowers().tryPower(move,forced);
     }
+    public boolean canAttack(){
+        return this.getStandPowers().canAttack();
+    }
     public int getActivePower(){
         return this.getStandPowers().getActivePower();
     }
@@ -80,6 +83,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }
     public int getAttackTime(){
         return this.getStandPowers().getAttackTime();
+    }
+    public boolean getInterruptCD(){
+        return this.getStandPowers().getInterruptCD();
     }
     public int getActivePowerPhase(){
         return this.getStandPowers().getActivePowerPhase();
