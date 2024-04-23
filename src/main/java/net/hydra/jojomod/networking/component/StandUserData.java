@@ -211,10 +211,10 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
             positionUpdater.accept(passenger, grabPos.x, grabPos.y, grabPos.z);
         }
         if (OT == 0 || OT == 1) {
-            passenger.setYaw(User.getHeadYaw());
+            passenger.setYaw(User.getHeadYaw()%360);
             passenger.setPitch(User.getPitch());
-            passenger.setBodyYaw(User.getHeadYaw());
-            passenger.setHeadYaw(User.getHeadYaw());
+            passenger.setBodyYaw(User.getHeadYaw()%360);
+            passenger.setHeadYaw(User.getHeadYaw()%360);
         }
     }
 

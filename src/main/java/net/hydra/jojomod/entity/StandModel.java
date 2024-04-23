@@ -113,6 +113,8 @@ public class StandModel extends GeoModel<StandEntity> {
                 body.setRotY(rotY);
             }
             if (head != null) {
+                float rotX = animatable.getHeadRotationX();
+                float rotY = animatable.getHeadRotationY();
                 if (animationNumber == 0) {
                     /*This code makes the head of the model turn towards swim rotation while swimming*/
                     if (animatable.isSwimming() || animatable.isCrawling() || animatable.isFallFlying()) {
@@ -126,15 +128,47 @@ public class StandModel extends GeoModel<StandEntity> {
                             swimRotCorrect = Math.max(swimRotCorrect, 0);
                         }
                     }
-                    head.setRotX((entityData.headPitch() + swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE);
-                    head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
+                    rotX = (entityData.headPitch() + swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE;
+                    rotY = entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE;
+                    head.setRotX(rotX);
+                    head.setRotY(rotY);
                 } else if (animationNumber == 1) {
-                    head.setRotX(0);
-                    head.setRotY(rotation1);
+                    rotX = 0;
+                    rotY = rotation1;
+                    head.setRotX(rotX);
+                    head.setRotY(rotY);
                 } else {
-                    head.setRotX((entityData.headPitch()) * MathHelper.RADIANS_PER_DEGREE);
-                    head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
+                    rotX = (entityData.headPitch()) * MathHelper.RADIANS_PER_DEGREE;
+                    rotY = entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE;
+                    head.setRotX(rotX);
+                    head.setRotY(rotY);
+
                 }
+                animatable.setHeadRotationX(rotX);
+                animatable.setHeadRotationY(rotY);
+            }
+        } else {
+            CoreGeoBone stand = getAnimationProcessor().getBone("stand");
+            CoreGeoBone body = getAnimationProcessor().getBone("body");
+            CoreGeoBone head = getAnimationProcessor().getBone("head");
+
+            if (body != null) {
+                float rotX = animatable.getBodyRotationX();
+                float rotY = animatable.getBodyRotationY();
+                body.setRotX(rotX);
+                body.setRotY(rotY);
+            }
+            if (stand != null) {
+                float rotX = animatable.getStandRotationX();
+                float rotY = animatable.getStandRotationY();
+                stand.setRotX(rotX);
+                stand.setRotY(rotY);
+            }
+            if (head != null) {
+                float rotX = animatable.getHeadRotationX();
+                float rotY = animatable.getHeadRotationY();
+                head.setRotX(rotX);
+                head.setRotY(rotY);
             }
         }
     }

@@ -38,13 +38,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 public abstract class StandEntity extends MobEntity implements GeoEntity {
-    private int FadeOut;
     private final int MaxFade = 8;
 
     protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
 
     protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Integer> FADE_OUT = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
 
 
@@ -96,8 +97,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return MaxFade;
     }
 
+    public final void setFadeOut(Integer FadeOut) {
+        this.dataTracker.set(FADE_OUT, FadeOut);
+    } //sets leaning direction
     public int getFadeOut() {
-        return this.FadeOut;
+        return this.dataTracker.get(FADE_OUT);
     }
 
     public final int getAnchorPlace() {
@@ -212,11 +216,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * @see #TickDown
      */
     public void incFadeOut(int inc) {
-        this.FadeOut += inc;
-    }
-
-    public void setFadeOut(int inc) {
-        this.FadeOut = inc;
+        this.setFadeOut(this.getFadeOut()+inc);
     }
 
     /**
@@ -227,6 +227,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(ANCHOR_PLACE, 55);
+        this.dataTracker.startTracking(FADE_OUT, 0);
         this.dataTracker.startTracking(MOVE_FORWARD, 0);
         this.dataTracker.startTracking(offsetType, 0);
     }
@@ -399,7 +400,9 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
                             //Make it fade in
                             if (this.getFadeOut() < MaxFade) {
-                                this.incFadeOut(1);
+                                if (!this.getWorld().isClient()) {
+                                    this.incFadeOut(1);
+                                }
                             }
                         } else {
                             TickDown();
@@ -418,8 +421,10 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     /** Makes the stand fade out every tick, eventually despawning.*/
     private void TickDown(){
         var currFade = this.getFadeOut();
-        if (currFade > 0) {
-            this.incFadeOut(-1);
+        if (!this.getWorld().isClient()) {
+            if (currFade > 0) {
+                this.incFadeOut(-1);
+            }
         }
         if (currFade <= 0) {
             this.remove(RemovalReason.DISCARDED);
