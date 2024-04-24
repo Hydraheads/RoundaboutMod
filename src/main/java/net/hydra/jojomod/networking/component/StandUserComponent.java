@@ -54,6 +54,7 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
    void setSummonCD(int summonCD);
    boolean getSummonCD();
   int getSummonCD2();
+  Entity getTargetEntity(Entity User, float distMax);
 
    LivingEntity getPowerUser();
 

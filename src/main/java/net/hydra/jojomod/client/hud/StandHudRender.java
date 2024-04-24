@@ -12,6 +12,7 @@ import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -31,6 +32,10 @@ public class StandHudRender {
             "textures/gui/attack_complete.png");
     private static final Identifier ATTACK_FILLED = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/attack_filled.png");
+    private static final Identifier ATTACK_METER_MAX = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/attack_meter_max.png");
+    private static final Identifier ATTACK_MISS = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/attack_miss.png");
     private static final Identifier ATTACK_PIP_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/attack_pip_empty.png");
     private static final Identifier ATTACK_PIP_FILLED = new Identifier(RoundaboutMod.MOD_ID,
@@ -144,27 +149,34 @@ public class StandHudRender {
         return start + (delta * (end - start))*multiplier;
     }
 
+    /**Attack Meter code for combat stands here*/
     public static void renderAttackHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
                                        int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                        float flashAlpha, float otherFlashAlpha){
         if (playerEntity != null) {
-            boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
+            StandUserComponent standUserData = MyComponents.STAND_USER.get(playerEntity);
+            boolean standOn = standUserData.getActive();
                 int j = scaledHeight / 2 - 7 - 4;
                 int k = scaledWidth / 2 - 8;
 
-                StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND_USER.get(playerEntity);
 
+                Identifier barTexture = null;
+                Entity TE = standUserData.getTargetEntity(playerEntity, -1);
                 float attackTimeMax = standUserData.getAttackTimeMax();
                 if (attackTimeMax > 0) {
                     float attackTime = standUserData.getAttackTime();
                     float finalATime = attackTime / attackTimeMax;
                     if (finalATime <= 1) {
 
-                        Identifier barTexture;
+
                         if (standUserData.getActivePowerPhase() == standUserData.getActivePowerPhaseMax()){
                             barTexture = ATTACK_COMPLETE;
                         } else {
-                            barTexture = ATTACK_FILLED;
+                            if (TE != null) {
+                                barTexture = ATTACK_FILLED;
+                            } else {
+                                barTexture = ATTACK_MISS;
+                            }
                         }
 
 
@@ -174,6 +186,13 @@ public class StandHudRender {
 
 
 
+                    }
+                }
+                if (standOn){
+                    if (TE != null) {
+                        if (barTexture == null) {
+                            context.drawTexture(ATTACK_METER_MAX, k, j, 0, 0, 15, 6, 15, 6);
+                        }
                     }
                 }
         }

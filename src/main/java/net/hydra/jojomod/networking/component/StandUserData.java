@@ -72,6 +72,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public int getSummonCD2(){
         return this.getStandPowers().getSummonCD2();
     }
+    public Entity getTargetEntity(Entity User, float distMax){
+        return this.getStandPowers().getTargetEntity(User, distMax);
+    }
     public boolean getSummonCD(){
         return this.getStandPowers().getSummonCD();
     } public void setSummonCD(int summonCD){

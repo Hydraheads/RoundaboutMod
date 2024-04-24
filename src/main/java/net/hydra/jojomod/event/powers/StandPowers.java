@@ -220,23 +220,32 @@ public class StandPowers {
         else { SE = ModSounds.PUNCH_1_SOUND_EVENT;}
         this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 10F, 1F);
 
-        Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
         if (!self.getWorld().isClient()){
-            ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z, 1,0.0, 0.0, 0.0,1);
+            Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
+            ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
+                    1,0.0, 0.0, 0.0,1);
         }
 
-        /*First, attempts to hit what you are looking at*/
-        Entity targetEntity = this.rayCastEntity(this.self,distMax);
-        if (targetEntity != null){
-            if (!self.getWorld().isClient()) {
-                StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
-            }
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        } else {
-            if (!self.getWorld().isClient()) {
-                StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y, pointVec.z, halfReach, halfReach, halfReach), distMax), pow, knockbackStrength);
-            }
+        Entity targetEntity = getTargetEntity(this.self,distMax);
+        if (!self.getWorld().isClient() && targetEntity != null) {
+            StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
         }
+    }
+
+    public Entity getTargetEntity(Entity User, float distMax){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(this.self, this.standReach, false);
+        }
+        Entity targetEntity = this.rayCastEntity(this.self,distMax);
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distMax*0.5);
+            Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
+            targetEntity = StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax));
+        }
+        return targetEntity;
     }
 
 
@@ -329,7 +338,7 @@ public class StandPowers {
                 if (!value.isLiving() || value.isInvulnerable() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())){
                     hitEntities.remove(value);
                 } else {
-                    int angle = 35;
+                    int angle = 25;
                     /*RoundaboutMod.LOGGER.info("RD = "+String.valueOf(rayDist));*/
                     if (!(angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getHeadYaw()%360f)) <= angle && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getPitch()) <= angle)){
                         hitEntities.remove(value);
@@ -364,8 +373,7 @@ public class StandPowers {
         return false;
     }
 
-    public boolean StandAttackHitboxNear(List<Entity> entities, float pow, float knockbackStrength){
-        boolean hitSomething = false;
+    public Entity StandAttackHitboxNear(List<Entity> entities){
         float nearestDistance = -1;
         Entity nearestMob = null;
 
@@ -381,12 +389,7 @@ public class StandPowers {
             }
         }
 
-        if (nearestMob != null) {
-            if (this.StandDamageEntityAttack(nearestMob,pow, knockbackStrength)){
-                hitSomething = true;
-            }
-        }
-        return hitSomething;
+        return nearestMob;
     }
 
     public void updateUniqueMoves(){
