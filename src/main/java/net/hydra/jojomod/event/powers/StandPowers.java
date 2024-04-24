@@ -107,7 +107,7 @@ public class StandPowers {
         this.activePowerPhase = activePowerPhase;
     }
 
-
+    /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/
     private int summonCD = 0;
     public boolean getSummonCD(){
         return this.summonCD <= 0;
@@ -117,18 +117,14 @@ public class StandPowers {
         return this.summonCD;
     }
 
+    /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
     public int interruptCD = 0;
     public boolean getInterruptCD(){
         return this.interruptCD <= 0;
     }
 
-    public void switchActiveMove(int activeMove){
-        this.setActivePower(activeMove);
-        this.setAttackTime(0);
-    }
 
     public void tickPower(){
-        if (this.activePower != PowerIndex.NONE) {
             if (this.attackTimeDuring != -1) {
                 this.attackTimeDuring++;
                 if (this.attackTimeDuring == -1) {
@@ -153,7 +149,6 @@ public class StandPowers {
             if (this.interruptCD > 0){
                 this.interruptCD--;
             }
-        }
         if (this.summonCD > 0){
             this.summonCD--;
         }
@@ -162,6 +157,7 @@ public class StandPowers {
         if (this.attackTimeDuring > this.attackTimeMax) {
             this.setAttackTimeDuring(-1);
             poseStand(0);
+            this.attackTimeMax = 0;
             this.setPowerNone();
         } else {
             if (this.attackTimeDuring == 7) {
@@ -335,7 +331,7 @@ public class StandPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.isLiving() || value.isInvulnerable() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())){
+                if (!value.isLiving() || value.isInvulnerable() || !value.isAlive() || (this.self.hasVehicle() && this.self.getVehicle().getUuid() == value.getUuid())){
                     hitEntities.remove(value);
                 } else {
                     int angle = 25;
@@ -379,7 +375,7 @@ public class StandPowers {
 
         if (entities != null){
             for (Entity value : entities) {
-                if (!value.isInvulnerable() && value.getUuid() != this.self.getUuid()){
+                if (!value.isInvulnerable() && value.isAlive() && value.getUuid() != this.self.getUuid()){
                     float distanceTo = value.distanceTo(this.self);
                     if ((nearestDistance < 0 || distanceTo < nearestDistance) && distanceTo <= this.standReach){
                         nearestDistance = distanceTo;
@@ -398,14 +394,19 @@ public class StandPowers {
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public void tryPower(int move, boolean forced){
         if (this.activePower == PowerIndex.NONE || forced){
-        if (move == PowerIndex.ATTACK){
-            this.setPowerAttack();
-        }}
+            if (move == PowerIndex.NONE) {
+                this.setPowerNone();
+            } else if (move == PowerIndex.ATTACK) {
+                this.setPowerAttack();
+            } else if (move == PowerIndex.GUARD) {
+                 this.setPowerGuard();
+            }
+        }
     }
-
-    private void setPowerNone(){
-        this.attackTimeMax = 0;
-        this.switchActiveMove(PowerIndex.NONE);
+    public void setPowerNone(){
+        this.attackTimeDuring = -1;
+        this.setActivePower(PowerIndex.NONE);
+        this.poseStand(0);
     }
 
     public boolean canAttack(){
@@ -414,6 +415,15 @@ public class StandPowers {
         }
         return false;
     }
+    public void setPowerGuard() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.GUARD);
+        this.poseStand(1);
+    }
+    public boolean isGuarding(){
+        return this.activePower == PowerIndex.GUARD;
+    }
+
     public void setPowerAttack(){
         if (this.attackTimeDuring <= -1) {
             if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
@@ -430,9 +440,10 @@ public class StandPowers {
                 }
                 this.attackTimeDuring = 0;
                 this.isAttacking = true;
-                this.switchActiveMove(PowerIndex.ATTACK);
+                this.setActivePower(PowerIndex.ATTACK);
+                this.setAttackTime(0);
 
-                poseStand(1);
+                this.poseStand(1);
             }
         }
     }

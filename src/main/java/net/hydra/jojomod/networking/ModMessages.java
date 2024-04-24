@@ -16,6 +16,8 @@ public class ModMessages {
     public static final Identifier STAND_ATTACK_CANCEL_PACKET = new Identifier(RoundaboutMod.MOD_ID,"attack_cancel_packet");
     public static final Identifier NBT_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"nbt_sync");
     public static final Identifier MOVE_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"move_sync");
+    public static final Identifier STAND_GUARD_PACKET = new Identifier(RoundaboutMod.MOD_ID,"guard_packet");
+    public static final Identifier STAND_GUARD_CANCEL_PACKET = new Identifier(RoundaboutMod.MOD_ID,"guard_cancel_packet");
 
     //Client To Server
     public static void registerC2SPackets(){
@@ -23,6 +25,8 @@ public class ModMessages {
         ServerPlayNetworking.registerGlobalReceiver(STAND_ATTACK_PACKET, StandAbilityPacket::attack);
         ServerPlayNetworking.registerGlobalReceiver(STAND_ATTACK_CANCEL_PACKET, StandAbilityPacket::attackCancel);
         ServerPlayNetworking.registerGlobalReceiver(MOVE_SYNC_ID, MoveSyncPacket::receive);
+        ServerPlayNetworking.registerGlobalReceiver(STAND_GUARD_PACKET, StandAbilityPacket::guard);
+        ServerPlayNetworking.registerGlobalReceiver(STAND_GUARD_CANCEL_PACKET, StandAbilityPacket::guardCancel);
 
     }
     //Server to Client

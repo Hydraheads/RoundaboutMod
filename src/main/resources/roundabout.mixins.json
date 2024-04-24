@@ -12,7 +12,7 @@
 		"HeldItemRendererMixin",
 		"GameHudMixin",
 		"InputMixin",
-		"ItemMixin"
+		"ShieldItemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

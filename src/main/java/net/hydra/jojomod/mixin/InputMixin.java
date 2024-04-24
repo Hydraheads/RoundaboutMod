@@ -70,15 +70,45 @@ public class InputMixin {
                 }
             }
         }
+        @Inject(method = "doItemUse", at = @At("TAIL"), cancellable = true)
+        public void roundaboutDoItemUse(CallbackInfo ci) {
+            if (player != null) {
+                StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+                if (standComp.getActive()) {
+                    if (!standComp.isGuarding()) {
+                        ClientPlayNetworking.send(ModMessages.STAND_GUARD_PACKET, PacketByteBufs.create());
+                    }
+                }
+            }
+        }
+    @Inject(method = "doItemUse", at = @At("Head"), cancellable = true)
+    public void roundaboutDoItemUseCancel(CallbackInfo ci) {
+        if (player != null) {
+            StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+            if (standComp.getActive()) {
+                if (standComp.isGuarding()) {
+                    ci.cancel();
+                }
+            }
+        }
+    }
+
         @Inject(method = "handleInputEvents", at = @At("HEAD"), cancellable = true)
         public void roundaboutInput(CallbackInfo ci){
             if (player != null) {
                 StandUserComponent standComp = MyComponents.STAND_USER.get(player);
-                if (standComp.getActive() && standComp.getInterruptCD()) {
-                    if (this.options.attackKey.isPressed() && !player.isUsingItem() && standComp.canAttack()) {
-                        ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
+                if (standComp.getActive()) {
+                    if (!this.options.useKey.isPressed()) {
+                        if (standComp.isGuarding()) {
+                            ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
+                        }
                     }
-                    this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
+                    if (standComp.getInterruptCD()) {
+                        if (this.options.attackKey.isPressed() && !player.isUsingItem() && standComp.canAttack()) {
+                            ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
+                        }
+                    }
+                    //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
                 }
             }
         }

@@ -448,17 +448,27 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * with the StandModel.java handling the inward rotation*/
     public Vec3d getAttackOffset(Entity standUser, boolean capped) {
         StandUserComponent UD = getUserData((LivingEntity) standUser);
-        float distanceFront = UD.getDistanceOut(standUser,UD.getStandReach(),true);
+        float distanceFront;
+        float standrotDir2 = 0;
+        float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
+                1);
+        if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
+        float addY = 0.3F;
+        float addXYZ = 0.3F;
+        float addXZ = 0.7F;
+
+        if (UD.isGuarding()) {
+            addXZ+=0F;
+            distanceFront = 1.05F;
+        } else {
+            distanceFront = UD.getDistanceOut(standUser,UD.getStandReach(),true);
+        }
 
         Vec3d frontVectors = FrontVectors(standUser, 0, distanceFront);
 
-        float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
-                        1);
-        float standrotDir2 = 0;
-        if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
         Vec3d vec3d2 = DamageHandler.getRotationVector(0, standUser.getHeadYaw()+ standrotDir2);
-        frontVectors = frontVectors.add(vec3d2.x * 0.7F, 0, vec3d2.z * 0.7F);
-        return new Vec3d(frontVectors.x,frontVectors.y + +0.3,
+        frontVectors = frontVectors.add(vec3d2.x * addXZ, 0, vec3d2.z * addXZ);
+        return new Vec3d(frontVectors.x,frontVectors.y + addY,
                 frontVectors.z);
     }
 

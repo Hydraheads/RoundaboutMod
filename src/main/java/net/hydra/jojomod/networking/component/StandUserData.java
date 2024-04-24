@@ -65,6 +65,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
     public void tryPower(int move, boolean forced){
         this.getStandPowers().tryPower(move,forced);
+        this.sync();
     }
     public boolean canAttack(){
         return this.getStandPowers().canAttack();
@@ -105,6 +106,17 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }
     public void setPowerAttack(){
         this.getStandPowers().setPowerAttack();
+        this.sync();
+    }
+    public boolean isGuarding(){
+        return this.getStandPowers().isGuarding();
+    }
+    public void setPowerGuard(){
+        this.getStandPowers().setPowerGuard();
+        this.sync();
+    }
+    public void setPowerNone(){
+        this.getStandPowers().setPowerNone();
         this.sync();
     }
     public float getDistanceOut(Entity entity, float range, boolean offset){
