@@ -72,7 +72,15 @@ public class KeyInputHandler {
                 }
                 while (summonKey.wasPressed()) {
                     //client.player.sendMessage(Text.of("Summon Key"));
-                    ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());
+                    StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
+                    if (standUserData.getSummonCD()) {
+                        if (standUserData.getActive()){
+                            standUserData.setSummonCD(8);
+                        } else {
+                            standUserData.setSummonCD(2);
+                        }
+                        ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());
+                    }
                 }
                 while (abilityOneKey.wasPressed()) {
                     //client.player.sendMessage(Text.of("Ability Key"));

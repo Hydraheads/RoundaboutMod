@@ -107,6 +107,16 @@ public class StandPowers {
         this.activePowerPhase = activePowerPhase;
     }
 
+
+    private int summonCD = 0;
+    public boolean getSummonCD(){
+        return this.summonCD <= 0;
+    } public void setSummonCD(int summonCD){
+        this.summonCD = summonCD;
+    } public int getSummonCD2(){
+        return this.summonCD;
+    }
+
     public int interruptCD = 0;
     public boolean getInterruptCD(){
         return this.interruptCD <= 0;
@@ -143,6 +153,9 @@ public class StandPowers {
             if (this.interruptCD > 0){
                 this.interruptCD--;
             }
+        }
+        if (this.summonCD > 0){
+            this.summonCD--;
         }
     }
     public void updateAttack(){

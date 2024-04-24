@@ -1,9 +1,6 @@
 package net.hydra.jojomod.networking.component;
 
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -71,6 +68,14 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }
     public boolean canAttack(){
         return this.getStandPowers().canAttack();
+    }
+    public int getSummonCD2(){
+        return this.getStandPowers().getSummonCD2();
+    }
+    public boolean getSummonCD(){
+        return this.getStandPowers().getSummonCD();
+    } public void setSummonCD(int summonCD){
+        this.getStandPowers().setSummonCD(summonCD);
     }
     public int getActivePower(){
         return this.getStandPowers().getActivePower();
