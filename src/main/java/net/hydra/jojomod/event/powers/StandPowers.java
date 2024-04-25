@@ -122,6 +122,9 @@ public class StandPowers {
     public boolean getInterruptCD(){
         return this.interruptCD <= 0;
     }
+    public void setInterruptCD(int interruptCD){
+        this.interruptCD = interruptCD;
+    }
 
 
     public void tickPower(){
@@ -167,7 +170,7 @@ public class StandPowers {
     }
 
     public void resetAttackState(){
-        this.interruptCD = 7;
+        this.interruptCD = 3;
         this.setAttackTimeDuring(-1);
         poseStand(0);
     }

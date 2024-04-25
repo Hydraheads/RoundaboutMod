@@ -56,6 +56,7 @@ public class StandAbilityPacket {
         });
     }
 
+    /**When you release right click, stops guarding.*/
     public static void guardCancel(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                              PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!

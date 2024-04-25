@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking.component;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.entity.Entity;
@@ -122,6 +123,11 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public float getDistanceOut(Entity entity, float range, boolean offset){
        return this.getStandPowers().getDistanceOut(entity,range,offset);
     }
+    public void setAttackTimeDuring(int attackTimeDuring){
+        this.getStandPowers().setAttackTimeDuring(attackTimeDuring);
+    } public void setInterruptCD(int interruptCD){
+        this.getStandPowers().setInterruptCD(interruptCD);
+    }
 
     public StandPowers getStandPowers() {
         if (this.Powers == null) {
@@ -188,6 +194,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
             active=true;
         } else {
+            this.tryPower(PowerIndex.NONE,true);
             active=false;
         }
         this.setActive(active);

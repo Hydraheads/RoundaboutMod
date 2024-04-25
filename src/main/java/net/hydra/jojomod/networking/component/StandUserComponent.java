@@ -47,6 +47,8 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
    StandPowers getStandPowers();
 
    void setStandPowers(StandPowers standPowers);
+    void setAttackTimeDuring(int attackTimeDuring);
+    void setInterruptCD(int interruptCD);
     void setPowerAttack();
     boolean isGuarding();
     void setPowerGuard();

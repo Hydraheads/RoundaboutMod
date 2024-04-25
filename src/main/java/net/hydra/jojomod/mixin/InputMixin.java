@@ -97,19 +97,24 @@ public class InputMixin {
         public void roundaboutInput(CallbackInfo ci){
             if (player != null) {
                 StandUserComponent standComp = MyComponents.STAND_USER.get(player);
-                if (standComp.getActive()) {
                     if (!this.options.useKey.isPressed()) {
                         if (standComp.isGuarding()) {
+                            /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
+                            * This delay exists so you can't right click left click chain for instant full power punches.*/
+                            if (standComp.getActivePowerPhase() > 0 ) {
+                                standComp.setInterruptCD(3);
+                            }
                             ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
                         }
                     }
+                if (standComp.getActive()) {
                     if (standComp.getInterruptCD()) {
                         if (this.options.attackKey.isPressed() && !player.isUsingItem() && standComp.canAttack()) {
                             ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
                         }
                     }
-                    //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
                 }
+                    //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
             }
         }
 
