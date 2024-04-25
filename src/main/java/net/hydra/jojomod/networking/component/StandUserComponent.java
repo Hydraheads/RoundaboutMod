@@ -29,6 +29,7 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
 
     int getAttackTimeMax();
     int getAttackTime();
+    int getAttackTimeDuring();
     int getActivePowerPhase();
     int getActivePowerPhaseMax();
     int getActivePower();

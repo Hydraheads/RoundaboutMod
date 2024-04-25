@@ -8,6 +8,7 @@
 		"PlayerManagerMixin",
 		"ClientWorldMixin",
 		"EntityStandMixin",
+		"LivingEntityMixin",
 		"ServerWorldMixin",
 		"HeldItemRendererMixin",
 		"GameHudMixin",

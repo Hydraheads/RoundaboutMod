@@ -94,6 +94,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public int getAttackTime(){
         return this.getStandPowers().getAttackTime();
     }
+    public int getAttackTimeDuring(){
+        return this.getStandPowers().getAttackTimeDuring();
+    }
     public boolean getInterruptCD(){
         return this.getStandPowers().getInterruptCD();
     }
