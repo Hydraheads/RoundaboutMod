@@ -214,20 +214,40 @@ public class StandPowers {
         /*By setting this to -10, there is a delay between the stand retracting*/
         this.attackTimeDuring = -10;
         this.isAttacking = false;
-        SoundEvent SE;
-        if (this.activePowerPhase >= this.activePowerPhaseMax){ SE = ModSounds.PUNCH_2_SOUND_EVENT; }
-        else { SE = ModSounds.PUNCH_1_SOUND_EVENT;}
-        this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 10F, 1F);
 
         if (!self.getWorld().isClient()){
             Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
             ((ServerWorld) self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
                     1,0.0, 0.0, 0.0,1);
+
+
         }
 
         Entity targetEntity = getTargetEntity(this.self,distMax);
-        if (!self.getWorld().isClient() && targetEntity != null) {
-            StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
+        if (!self.getWorld().isClient()) {
+            if (targetEntity != null) {
+                StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
+            }
+
+            SoundEvent SE;
+            float pitch = 1F;
+            if (this.activePowerPhase >= this.activePowerPhaseMax){
+                if (targetEntity != null) {
+                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                    pitch = 1.2F;
+                } else {
+                    SE = ModSounds.PUNCH_2_SOUND_EVENT;
+                }
+            }
+            else {
+                if (targetEntity != null) {
+                    SE = ModSounds.PUNCH_3_SOUND_EVENT;
+                        pitch = 1.1F + 0.07F*activePowerPhase;
+                } else {
+                    SE = ModSounds.PUNCH_1_SOUND_EVENT;
+                }
+            }
+            this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 0.95F, pitch);
         }
     }
 

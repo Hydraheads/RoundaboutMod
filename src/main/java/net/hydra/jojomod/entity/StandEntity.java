@@ -458,7 +458,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         float addXZ = 0.7F;
 
         if (UD.isGuarding()) {
-            addXZ+=0F;
+            addXZ-= 0.015F;
             distanceFront = 1.05F;
         } else {
             distanceFront = UD.getDistanceOut(standUser,UD.getStandReach(),true);

@@ -35,10 +35,28 @@
       "roundabout:punch_sfx2"
     ]
   },
+  "punch_sfx3": {
+    "subtitle": "sounds.roundabout.punch_sfx3",
+    "sounds": [
+      "roundabout:punch_sfx3"
+    ]
+  },
+  "punch_sfx4": {
+    "subtitle": "sounds.roundabout.punch_sfx4",
+    "sounds": [
+      "roundabout:punch_sfx4"
+    ]
+  },
   "hit_sfx1": {
     "subtitle": "sounds.roundabout.hit_sfx1",
     "sounds": [
       "roundabout:hit_sfx1"
+    ]
+  },
+  "stand_guard": {
+    "subtitle": "sounds.roundabout.stand_guard",
+    "sounds": [
+      "roundabout:stand_guard"
     ]
   }
 }
