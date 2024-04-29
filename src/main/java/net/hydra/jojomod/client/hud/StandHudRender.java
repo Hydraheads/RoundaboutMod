@@ -22,10 +22,8 @@ import net.minecraft.util.Identifier;
 public class StandHudRender {
     /** Renders the HUD for stand attacks/abilities.
      * Keep in mind it has to slide in so some of the code may look awkward.*/
-    private static final Identifier GUARD_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/guard_meter.png");
-    private static final Identifier GUARD_FILLED = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/guard_filled.png");
+    private static final Identifier JOJO_ICONS = new Identifier(RoundaboutMod.MOD_ID,
+            "textures/gui/jojo_icons.png");
     private static final Identifier ATTACK_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/attack_meter.png");
     private static final Identifier ATTACK_COMPLETE = new Identifier(RoundaboutMod.MOD_ID,
@@ -40,8 +38,6 @@ public class StandHudRender {
             "textures/gui/attack_pip_empty.png");
     private static final Identifier ATTACK_PIP_FILLED = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/attack_pip_filled.png");
-    private static final Identifier GUARD_ICON = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/guard_icon.png");
 
     private static final Identifier ARROW_ICON = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/stand_hud.png");
@@ -197,9 +193,25 @@ public class StandHudRender {
                 }
         }
     }
+    public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
+                                      int scaledWidth, int scaledHeight, int ticks, int x,
+                                      float flashAlpha, float otherFlashAlpha) {
+        int l;
+        int k;
+        k = 50;
+        l = scaledHeight - 32 + 3;
+        context.drawTexture(JOJO_ICONS, x, l, 0, 0, 182, 5);
+        if (k > 0) {
+           context.drawTexture(JOJO_ICONS, x, l, 0, 5, k, 5);
+        }
+
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+        context.drawTexture(JOJO_ICONS, k, l, 183, 0, 9, 9);
+    }
 
 
-
+/**
     public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
                                        int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                        float flashAlpha, float otherFlashAlpha) {
@@ -238,5 +250,5 @@ public class StandHudRender {
 
 
         }
-    }
+    }*/
 }

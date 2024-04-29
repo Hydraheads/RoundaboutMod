@@ -6,6 +6,8 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -53,6 +55,18 @@ public abstract class GameHudMixin implements IHudAccess {
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", ordinal = 1))
     private void renderStatusBarsMixin(DrawContext context, CallbackInfo info) {
         //StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, this.getHeartCount(this.getRiddenEntity()), flashAlpha, otherFlashAlpha);
+    }
+
+    /** The guard HUD uses the exp bar, because you dont need to check exp
+     *  while you are blocking, efficient HUD use.*/
+    @Inject(method = "renderExperienceBar", at = @At(value = "HEAD"), cancellable = true)
+    public void roundaboutRenderExperienceBar(DrawContext context, int x, CallbackInfo ci){
+        assert client.player != null;
+        StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
+        if (standUserData.isGuarding()) {
+            StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
+            ci.cancel();
+        }
     }
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
