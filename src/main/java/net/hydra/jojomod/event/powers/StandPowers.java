@@ -43,16 +43,16 @@ public class StandPowers {
     private int attackTimeMax = -1;
 
     /**The id of the move being used. Ex: 1 = punch*/
-    private int activePower = 0;
+    private byte activePower = 0;
 
     /**The phase of the move being used, primarily to keep track of which punch you are on in a punch string.*/
-    private int activePowerPhase = 0;
+    private byte activePowerPhase = 0;
 
     /**Once a move finishes, this turns off in order to prevent a loop of infinite attacks should the move roll over.*/
     private boolean isAttacking = false;
 
     /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
-    private final int activePowerPhaseMax = 3;
+    private final byte activePowerPhaseMax = 3;
 
     public StandPowers(LivingEntity self) {
         this.self = self;
@@ -66,13 +66,13 @@ public class StandPowers {
     public int getAttackTimeDuring(){
         return this.attackTimeDuring;
     }
-    public int getActivePower(){
+    public byte getActivePower(){
         return this.activePower;
     }
-    public int getActivePowerPhase(){
+    public byte getActivePowerPhase(){
         return this.activePowerPhase;
     }
-    public int getActivePowerPhaseMax(){
+    public byte getActivePowerPhaseMax(){
         return this.activePowerPhaseMax;
     }
 
@@ -100,10 +100,10 @@ public class StandPowers {
     public void setMaxAttackTime(int attackTimeMax){
         this.attackTimeMax = attackTimeMax;
     }
-    public void setActivePower(int activeMove){
+    public void setActivePower(byte activeMove){
         this.activePower = activeMove;
     }
-    public void setActivePowerPhase(int activePowerPhase){
+    public void setActivePowerPhase(byte activePowerPhase){
         this.activePowerPhase = activePowerPhase;
     }
 
@@ -147,7 +147,7 @@ public class StandPowers {
             }
             this.attackTime++;
             if (this.attackTime > this.attackTimeMax){
-                this.setActivePowerPhase(0);
+                this.setActivePowerPhase((byte) 0);
             }
             if (this.interruptCD > 0){
                 this.interruptCD--;

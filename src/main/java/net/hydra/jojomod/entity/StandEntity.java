@@ -43,8 +43,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
 
-    protected static final TrackedData<Integer> MOVE_FORWARD = DataTracker.registerData(StandEntity.class,
-            TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Byte> MOVE_FORWARD = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.BYTE);
     protected static final TrackedData<Integer> FADE_OUT = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
 
@@ -70,7 +70,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.getWorld().playSound(null, this.getBlockPos(), getSummonSound(), SoundCategory.PLAYERS, 1F, 1F);
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
-    public final int getMoveForward() {
+    public final byte getMoveForward() {
         return this.dataTracker.get(MOVE_FORWARD);
     } //returns leaning direction
 
@@ -89,7 +89,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      *
      * @see StandModel#setCustomAnimations
      */
-    public final void setMoveForward(Integer MF) {
+    public final void setMoveForward(Byte MF) {
         this.dataTracker.set(MOVE_FORWARD, MF);
     } //sets leaning direction
 
@@ -228,7 +228,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         super.initDataTracker();
         this.dataTracker.startTracking(ANCHOR_PLACE, 55);
         this.dataTracker.startTracking(FADE_OUT, 0);
-        this.dataTracker.startTracking(MOVE_FORWARD, 0);
+        this.dataTracker.startTracking(MOVE_FORWARD, (byte) 0);
         this.dataTracker.startTracking(offsetType, 0);
     }
 

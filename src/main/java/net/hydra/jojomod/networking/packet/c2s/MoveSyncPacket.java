@@ -16,8 +16,8 @@ public class MoveSyncPacket {
         ServerWorld world = (ServerWorld) player.getWorld();
         //public MoveSyncPacket() {
         //}
-        int forward = buf.readInt();
-        int strafe = buf.readInt();
+        byte forward = buf.readByte();
+        byte strafe = buf.readByte();
 
         StandUserComponent standUserData = MyComponents.STAND_USER.get(player);
         server.execute(() -> {

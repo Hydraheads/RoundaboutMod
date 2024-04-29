@@ -82,7 +82,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     } public void setSummonCD(int summonCD){
         this.getStandPowers().setSummonCD(summonCD);
     }
-    public int getActivePower(){
+    public byte getActivePower(){
         return this.getStandPowers().getActivePower();
     }
     public LivingEntity getPowerUser(){
@@ -100,9 +100,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public boolean getInterruptCD(){
         return this.getStandPowers().getInterruptCD();
     }
-    public int getActivePowerPhase(){
+    public byte getActivePowerPhase(){
         return this.getStandPowers().getActivePowerPhase();
-    }public int getActivePowerPhaseMax(){
+    }public byte getActivePowerPhaseMax(){
         return this.getStandPowers().getActivePowerPhaseMax();
     }
     public float getStandReach(){
@@ -221,7 +221,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
     /** Set Direction input. This is part of stand rendering as leaning.
      * @see StandEntity#setMoveForward */
-     public void setDI(int forward, int strafe){
+     public void setDI(byte forward, byte strafe){
         //RoundaboutMod.LOGGER.info("MF:"+ forward);
         if (Stand != null){
             if (!User.isSneaking() && User.isSprinting()){
@@ -265,8 +265,8 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         buf.writeInt(SP.getAttackTime());
         buf.writeInt(SP.getAttackTimeMax());
         buf.writeInt(SP.getAttackTimeDuring());
-        buf.writeInt(SP.getActivePower());
-        buf.writeInt(SP.getActivePowerPhase());
+        buf.writeByte(SP.getActivePower());
+        buf.writeByte(SP.getActivePowerPhase());
         buf.writeBoolean(SP.getIsAttacking());
     }
 
@@ -283,8 +283,8 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         SP.setAttackTime(buf.readInt());
         SP.setAttackTimeMax(buf.readInt());
         SP.setAttackTimeDuring(buf.readInt());
-        SP.setActivePower(buf.readInt());
-        SP.setActivePowerPhase(buf.readInt());
+        SP.setActivePower(buf.readByte());
+        SP.setActivePowerPhase(buf.readByte());
         SP.setIsAttacking(buf.readBoolean());
     }
 

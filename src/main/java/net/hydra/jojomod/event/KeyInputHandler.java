@@ -53,8 +53,8 @@ public class KeyInputHandler {
                         StandEntity stand = standUserData.getStand();
                         if (stand != null) {
                             var mf = stand.getMoveForward();
-                            int forward = 0;
-                            int strafe = 0;
+                            byte forward = 0;
+                            byte strafe = 0;
                             if (client.options.forwardKey.isPressed()) forward++;
                             if (client.options.backKey.isPressed()) forward--;
                             if (client.options.leftKey.isPressed()) strafe++;
@@ -63,8 +63,8 @@ public class KeyInputHandler {
                             if (mf != forward) {
                                 PacketByteBuf buffer = PacketByteBufs.create();
 
-                                buffer.writeInt(forward);
-                                buffer.writeInt(strafe);
+                                buffer.writeByte(forward);
+                                buffer.writeByte(strafe);
                                 ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
                             }
                         }

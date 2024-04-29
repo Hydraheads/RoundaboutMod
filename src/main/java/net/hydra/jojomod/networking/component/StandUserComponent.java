@@ -23,16 +23,16 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
 
     void updateStandOutPosition(StandEntity passenger, Entity.PositionUpdater positionUpdater);
     void removeStandOut();
-    void setDI(int forward, int strafe);
+    void setDI(byte forward, byte strafe);
     void standMount(StandEntity StandSet);
     void setStand(StandEntity StandSet);
 
     int getAttackTimeMax();
     int getAttackTime();
     int getAttackTimeDuring();
-    int getActivePowerPhase();
-    int getActivePowerPhaseMax();
-    int getActivePower();
+    byte getActivePowerPhase();
+    byte getActivePowerPhaseMax();
+    byte getActivePower();
     public boolean getInterruptCD();
     void setActive(boolean active);
 
