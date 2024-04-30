@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -15,6 +16,7 @@ public class PlayerEntityMixin {
     protected void roundaboutDamageShield(float amount, CallbackInfo ci) {
         StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
         if (standUserData.isGuarding()) {
+            standUserData.damageGuard(amount);
             ci.cancel();
         }
     }

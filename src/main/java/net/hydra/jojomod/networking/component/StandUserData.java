@@ -34,6 +34,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     private int StandID = -1;
     private boolean CanSync;
     private StandPowers Powers;
+    public final float maxGuardPoints = 15F;
+    private float GuardPoints = maxGuardPoints;
+    private boolean GuardBroken = false;
 
 
     public StandUserData(LivingEntity entity) {
@@ -41,7 +44,8 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }
     public void tick() {
         //if (StandID > -1) {
-            this.getStandPowers().tickPower();
+        this.getStandPowers().tickPower();
+        this.tickGuard();
         //}
     }
 
@@ -60,6 +64,46 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public boolean getActive() {
         return this.StandActive;
     }
+    public float getMaxGuardPoints(){
+        return this.maxGuardPoints;
+    }
+    public float getGuardPoints(){
+        return this.GuardPoints;
+    } public void setGuardPoints(float GuardPoints){
+        this.GuardPoints = GuardPoints;
+    }
+    public boolean getGuardBroken(){
+        return this.GuardBroken;
+     } public void breakGuard() {
+        this.GuardPoints = 0;
+        this.GuardBroken = true;
+        this.sync();
+    } public void damageGuard(float damage){
+        float finalGuard = this.GuardPoints - damage;
+        if (finalGuard <= 0){
+            this.breakGuard();
+        } else {
+            this.GuardPoints = finalGuard;
+            this.sync();
+        }
+    } public void fixGuard() {
+        this.GuardPoints = this.maxGuardPoints;
+        this.GuardBroken = false;
+        this.sync();
+    } public void regenGuard(float regen){
+        float finalGuard = this.GuardPoints + regen;
+        if (finalGuard >= this.maxGuardPoints){
+            this.fixGuard();
+        } else {
+            this.GuardPoints = finalGuard;
+            this.sync();
+        }
+    } public void tickGuard(){
+        if (this.GuardPoints < this.maxGuardPoints && (!this.isGuarding() || this.GuardBroken)){
+            this.regenGuard(0.1F);
+        }
+    }
+
     public float getRayDistance(Entity entity, float range){
         return this.getStandPowers().getRayDistance(entity,range);
     }
@@ -114,6 +158,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     }
     public boolean isGuarding(){
         return this.getStandPowers().isGuarding();
+    }
+    public boolean isGuardingEffectively(){
+        return (this.getStandPowers().isGuarding() && this.getStandPowers().getAttackTimeDuring() >= 5 && !this.GuardBroken);
     }
     public void setPowerGuard(){
         this.getStandPowers().setPowerGuard();
@@ -260,6 +307,8 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         buf.writeBoolean(this.StandActive);
         int stID; if (this.Stand == null){stID=-1;} else {stID = this.Stand.getId();}
         buf.writeInt(stID);
+        buf.writeFloat(this.GuardPoints);
+        buf.writeBoolean(this.GuardBroken);
         StandPowers SP = this.getStandPowers();
 
         buf.writeInt(SP.getAttackTime());
@@ -278,6 +327,8 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         int stID = buf.readInt();
         this.StandID = stID;
         this.Stand = (StandEntity) User.getWorld().getEntityById(stID);
+        GuardPoints = buf.readFloat();
+        GuardBroken = buf.readBoolean();
         StandPowers SP = this.getStandPowers();
 
         SP.setAttackTime(buf.readInt());

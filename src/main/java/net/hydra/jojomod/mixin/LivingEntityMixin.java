@@ -33,7 +33,7 @@ public class LivingEntityMixin {
     private void isBlockingRoundabout(CallbackInfoReturnable<Boolean> ci) {
         StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
         if (standUserData.isGuarding()){
-            ci.setReturnValue(standUserData.getAttackTimeDuring() >= 5);
+            ci.setReturnValue(standUserData.isGuardingEffectively());
         }
     }
 }

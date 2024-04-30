@@ -28,10 +28,8 @@ public class ClientPlayerEntityMixin {
      * The purpose of this mixin is to make stand blocking slow you down.*/
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/TutorialManager;onMovement(Lnet/minecraft/client/input/Input;)V", shift = At.Shift.AFTER))
     private void RoundaboutTickMovement(CallbackInfo ci) {
-        RoundaboutMod.LOGGER.info("1");
         StandUserComponent standComp = MyComponents.STAND_USER.get(this);
         if (standComp.isGuarding()) {
-            RoundaboutMod.LOGGER.info("2");
             this.input.movementSideways *= 0.2f;
             this.input.movementForward *= 0.2f;
             this.ticksLeftToDoubleTapSprint = 0;

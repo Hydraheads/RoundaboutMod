@@ -14,7 +14,8 @@
 		"GameHudMixin",
 		"InputMixin",
 		"ShieldItemMixin",
-		"ClientPlayerEntityMixin"
+		"ClientPlayerEntityMixin",
+		"PlayerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

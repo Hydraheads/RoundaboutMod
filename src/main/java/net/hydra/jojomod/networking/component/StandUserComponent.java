@@ -26,6 +26,14 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void setDI(byte forward, byte strafe);
     void standMount(StandEntity StandSet);
     void setStand(StandEntity StandSet);
+    float getGuardPoints();
+    float getMaxGuardPoints();
+    void setGuardPoints(float GuardPoints);
+    boolean getGuardBroken();
+    void fixGuard();
+    void regenGuard(float regen);
+    void damageGuard(float damage);
+    void breakGuard();
 
     int getAttackTimeMax();
     int getAttackTime();
@@ -52,6 +60,7 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void setInterruptCD(int interruptCD);
     void setPowerAttack();
     boolean isGuarding();
+    boolean isGuardingEffectively();
     void setPowerGuard();
     void setPowerNone();
 

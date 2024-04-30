@@ -63,7 +63,7 @@ public abstract class GameHudMixin implements IHudAccess {
     public void roundaboutRenderExperienceBar(DrawContext context, int x, CallbackInfo ci){
         assert client.player != null;
         StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
-        if (standUserData.isGuarding()) {
+        if (standUserData.isGuarding() || standUserData.getGuardPoints() < standUserData.getMaxGuardPoints()) {
             StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
             ci.cancel();
         }

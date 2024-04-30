@@ -45,9 +45,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     protected static final TrackedData<Byte> MOVE_FORWARD = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.BYTE);
-    protected static final TrackedData<Integer> FADE_OUT = DataTracker.registerData(StandEntity.class,
-            TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Byte> FADE_OUT = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.BYTE);
 
+    protected static final TrackedData<Byte> OFFSET_TYPE = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.BYTE);
 
     public float bodyRotationX;
     public float bodyRotationY;
@@ -58,8 +60,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
     private boolean isDisplay;
 
-    protected static final TrackedData<Integer> offsetType = DataTracker.registerData(StandEntity.class,
-            TrackedDataHandlerRegistry.INTEGER);
 
 
     protected SoundEvent getSummonSound() {
@@ -74,12 +74,12 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         return this.dataTracker.get(MOVE_FORWARD);
     } //returns leaning direction
 
-    public final int getOffsetType() {
-        return this.dataTracker.get(offsetType);
+    public final byte getOffsetType() {
+        return this.dataTracker.get(OFFSET_TYPE);
     } //returns leaning direction
 
-    public final void setOffsetType(Integer oft) {
-        this.dataTracker.set(offsetType, oft);
+    public final void setOffsetType(byte oft) {
+        this.dataTracker.set(OFFSET_TYPE, oft);
     }
 
     /**
@@ -93,11 +93,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.dataTracker.set(MOVE_FORWARD, MF);
     } //sets leaning direction
 
-    public int getMaxFade() {
+    public byte getMaxFade() {
         return MaxFade;
     }
 
-    public final void setFadeOut(Integer FadeOut) {
+    public final void setFadeOut(Byte FadeOut) {
         this.dataTracker.set(FADE_OUT, FadeOut);
     } //sets leaning direction
     public int getFadeOut() {
@@ -215,8 +215,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * When a stand hits negative opacity, it automatically despawns
      * @see #TickDown
      */
-    public void incFadeOut(int inc) {
-        this.setFadeOut(this.getFadeOut()+inc);
+    public void incFadeOut(byte inc) {
+        this.setFadeOut((byte) (this.getFadeOut()+inc));
     }
 
     /**
@@ -227,9 +227,9 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(ANCHOR_PLACE, 55);
-        this.dataTracker.startTracking(FADE_OUT, 0);
+        this.dataTracker.startTracking(FADE_OUT, (byte) 0);
         this.dataTracker.startTracking(MOVE_FORWARD, (byte) 0);
-        this.dataTracker.startTracking(offsetType, 0);
+        this.dataTracker.startTracking(OFFSET_TYPE, (byte) 0);
     }
 
     private final AnimatableInstanceCache cache =
@@ -401,7 +401,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
                             //Make it fade in
                             if (this.getFadeOut() < MaxFade) {
                                 if (!this.getWorld().isClient()) {
-                                    this.incFadeOut(1);
+                                    this.incFadeOut((byte) 1);
                                 }
                             }
                         } else {
@@ -423,7 +423,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         var currFade = this.getFadeOut();
         if (!this.getWorld().isClient()) {
             if (currFade >= 0) {
-                this.incFadeOut(-1);
+                this.incFadeOut((byte) -1);
             }
         }
         if (currFade < 0) {

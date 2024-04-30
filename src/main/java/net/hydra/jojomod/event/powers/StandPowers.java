@@ -131,7 +131,7 @@ public class StandPowers {
             if (this.attackTimeDuring != -1) {
                 this.attackTimeDuring++;
                 if (this.attackTimeDuring == -1) {
-                    poseStand(0);
+                    poseStand((byte) 0);
                 } else {
                     if (this.hasStandActive(this.self) && !this.self.isUsingItem()) {
                         if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
@@ -159,7 +159,7 @@ public class StandPowers {
     public void updateAttack(){
         if (this.attackTimeDuring > this.attackTimeMax) {
             this.setAttackTimeDuring(-1);
-            poseStand(0);
+            poseStand((byte) 0);
             this.attackTimeMax = 0;
             this.setPowerNone();
         } else {
@@ -172,10 +172,10 @@ public class StandPowers {
     public void resetAttackState(){
         this.interruptCD = 3;
         this.setAttackTimeDuring(-1);
-        poseStand(0);
+        poseStand((byte) 0);
     }
 
-    public void poseStand(int r){
+    public void poseStand(byte r){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
             stand.setOffsetType(r);
@@ -362,8 +362,8 @@ public class StandPowers {
                     if (!(angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getHeadYaw()%360f)) <= angle && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getPitch()) <= angle)){
                         hitEntities.remove(value);
                     }
-                    RoundaboutMod.LOGGER.info("Yaw = "+angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getHeadYaw()%360f))+" "+value.getName());
-                    RoundaboutMod.LOGGER.info("Pitch = "+angleDistance(getLookAtEntityPitch(this.self, value), this.self.getPitch())+" "+value.getName());
+                    //RoundaboutMod.LOGGER.info("Yaw = "+angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getHeadYaw()%360f))+" "+value.getName());
+                    //RoundaboutMod.LOGGER.info("Pitch = "+angleDistance(getLookAtEntityPitch(this.self, value), this.self.getPitch())+" "+value.getName());
                 }
             }
         return hitEntities;
@@ -429,7 +429,7 @@ public class StandPowers {
     public void setPowerNone(){
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
-        this.poseStand(0);
+        this.poseStand((byte) 0);
     }
 
     public boolean canAttack(){
@@ -441,7 +441,7 @@ public class StandPowers {
     public void setPowerGuard() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.GUARD);
-        this.poseStand(1);
+        this.poseStand((byte) 1);
     }
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
@@ -466,7 +466,7 @@ public class StandPowers {
                 this.setActivePower(PowerIndex.ATTACK);
                 this.setAttackTime(0);
 
-                this.poseStand(1);
+                this.poseStand((byte) 1);
             }
         }
     }

@@ -198,16 +198,24 @@ public class StandHudRender {
                                       float flashAlpha, float otherFlashAlpha) {
         int l;
         int k;
-        k = 50;
+        int v;
         l = scaledHeight - 32 + 3;
-        context.drawTexture(JOJO_ICONS, x, l, 0, 0, 182, 5);
+        StandUserComponent standUserData = MyComponents.STAND_USER.get(playerEntity);
+        if (standUserData.getGuardBroken()){
+            v = 9;
+        } else {
+            v = 0;
+        }
+        k = (int) Math.floor((182/standUserData.getMaxGuardPoints())*standUserData.getGuardPoints());
+        context.drawTexture(JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
-           context.drawTexture(JOJO_ICONS, x, l, 0, 5, k, 5);
+           context.drawTexture(JOJO_ICONS, x, l, 0, v+5, k, 5);
         }
 
+        int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        context.drawTexture(JOJO_ICONS, k, l, 183, 0, 9, 9);
+        context.drawTexture(JOJO_ICONS, k, l, u, v, 9, 9);
     }
 
 
