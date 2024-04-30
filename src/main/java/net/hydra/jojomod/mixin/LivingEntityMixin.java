@@ -5,8 +5,12 @@ import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -38,6 +42,18 @@ public class LivingEntityMixin {
         StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
         if (standUserData.isGuarding()){
             ci.setReturnValue(standUserData.isGuardingEffectively());
+        }
+    }
+
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V", shift = At.Shift.BEFORE))
+    private void RoundaboutDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
+        StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
+        if (standUserData.isGuarding()) {
+            if (!source.isIn(DamageTypeTags.BYPASSES_COOLDOWN) && standUserData.getGuardCooldown() > 0) {
+                return;
+            }
+            standUserData.damageGuard(amount);
         }
     }
 }

@@ -33,7 +33,6 @@ public class PlayerEntityMixin {
     protected void roundaboutDamageShield(float amount, CallbackInfo ci) {
         StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
         if (standUserData.isGuarding()) {
-            standUserData.damageGuard(amount);
             ci.cancel();
         }
     }

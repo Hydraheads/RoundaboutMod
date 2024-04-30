@@ -60,6 +60,7 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void setInterruptCD(int interruptCD);
     void setPowerAttack();
     boolean isGuarding();
+    float getGuardCooldown();
     boolean isGuardingEffectively();
     boolean isGuardingEffectively2();
     boolean shieldNotDisabled();

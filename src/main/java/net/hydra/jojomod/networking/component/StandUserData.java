@@ -36,9 +36,13 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     private int StandID = -1;
     private boolean CanSync;
     private StandPowers Powers;
+
+    /** Guard variables for stand blocking**/
     public final float maxGuardPoints = 15F;
     private float GuardPoints = maxGuardPoints;
     private boolean GuardBroken = false;
+    private int GuardCooldown = 0;
+
 
 
     public StandUserData(LivingEntity entity) {
@@ -69,6 +73,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public float getMaxGuardPoints(){
         return this.maxGuardPoints;
     }
+    public float getGuardCooldown(){
+        return this.GuardCooldown;
+    }
     public float getGuardPoints(){
         return this.GuardPoints;
     } public void setGuardPoints(float GuardPoints){
@@ -82,6 +89,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.sync();
     } public void damageGuard(float damage){
         float finalGuard = this.GuardPoints - damage;
+        this.GuardCooldown = 10;
         if (finalGuard <= 0){
             this.breakGuard();
         } else {
@@ -101,9 +109,16 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
             this.sync();
         }
     } public void tickGuard(){
-        if (this.GuardPoints < this.maxGuardPoints && (!this.isGuarding() || this.GuardBroken)){
-            this.regenGuard(0.1F);
+        if (this.GuardPoints < this.maxGuardPoints) {
+            if (this.GuardBroken){
+                float guardRegen = maxGuardPoints / 140;
+                this.regenGuard(guardRegen);
+            } else if (!this.isGuarding()){
+                float guardRegen = maxGuardPoints / 200;
+                this.regenGuard(guardRegen);
+            }
         }
+        if (this.GuardCooldown > 0){this.GuardCooldown--;}
     }
 
     public float getRayDistance(Entity entity, float range){
