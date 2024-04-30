@@ -61,6 +61,8 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void setPowerAttack();
     boolean isGuarding();
     boolean isGuardingEffectively();
+    boolean isGuardingEffectively2();
+    boolean shieldNotDisabled();
     void setPowerGuard();
     void setPowerNone();
 

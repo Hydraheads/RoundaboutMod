@@ -201,7 +201,7 @@ public class StandHudRender {
         int v;
         l = scaledHeight - 32 + 3;
         StandUserComponent standUserData = MyComponents.STAND_USER.get(playerEntity);
-        if (standUserData.getGuardBroken()){
+        if (standUserData.getGuardBroken() || !standUserData.shieldNotDisabled()){
             v = 9;
         } else {
             v = 0;

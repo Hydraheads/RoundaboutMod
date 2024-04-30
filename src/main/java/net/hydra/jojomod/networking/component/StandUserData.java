@@ -8,8 +8,10 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -160,7 +162,16 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         return this.getStandPowers().isGuarding();
     }
     public boolean isGuardingEffectively(){
-        return (this.getStandPowers().isGuarding() && this.getStandPowers().getAttackTimeDuring() >= 5 && !this.GuardBroken);
+        if (this.GuardBroken){return false;}
+        return this.isGuardingEffectively2();
+    }
+    public boolean isGuardingEffectively2(){
+        return (this.shieldNotDisabled() && this.getStandPowers().isGuarding() && this.getStandPowers().getAttackTimeDuring() >= 3);
+    }
+
+    public boolean shieldNotDisabled(){
+        return !(this.User instanceof PlayerEntity) || !(((PlayerEntity) this.User).getItemCooldownManager().getCooldownProgress(Items.SHIELD, 0f) > 0);
+
     }
     public void setPowerGuard(){
         this.getStandPowers().setPowerGuard();

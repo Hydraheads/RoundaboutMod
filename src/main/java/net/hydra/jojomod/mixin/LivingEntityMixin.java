@@ -23,8 +23,12 @@ public class LivingEntityMixin {
     public void roundaboutHandleStatus(byte status, CallbackInfo ci) {
         if (status == 29){
             StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
-            if (standUserData.isGuarding()) {
-                ((Entity) (Object) this).playSound(ModSounds.STAND_GUARD_SOUND_EVENT, 1f, 0.9f + ((Entity) (Object) this).getWorld().random.nextFloat() * 0.3f);
+            if (standUserData.isGuardingEffectively2()) {
+                if (!standUserData.getGuardBroken()) {
+                    ((Entity) (Object) this).playSound(ModSounds.STAND_GUARD_SOUND_EVENT, 0.8f, 0.9f + ((Entity) (Object) this).getWorld().random.nextFloat() * 0.3f);
+                } else {
+                    ((Entity) (Object) this).playSound(SoundEvents.ITEM_SHIELD_BREAK, 1f, 1.5f);
+                }
                 ci.cancel();
             }
         }
