@@ -24,23 +24,6 @@ public class StandHudRender {
      * Keep in mind it has to slide in so some of the code may look awkward.*/
     private static final Identifier JOJO_ICONS = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/jojo_icons.png");
-    private static final Identifier ATTACK_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/attack_meter.png");
-    private static final Identifier ATTACK_COMPLETE = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/attack_complete.png");
-    private static final Identifier ATTACK_FILLED = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/attack_filled.png");
-    private static final Identifier ATTACK_METER_MAX = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/attack_meter_max.png");
-    private static final Identifier ATTACK_MISS = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/attack_miss.png");
-    private static final Identifier ATTACK_PIP_EMPTY = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/attack_pip_empty.png");
-    private static final Identifier ATTACK_PIP_FILLED = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/attack_pip_filled.png");
-
-    private static final Identifier ARROW_ICON = new Identifier(RoundaboutMod.MOD_ID,
-            "textures/gui/stand_hud.png");
 
     private static final Identifier SQUARE_ICON = new Identifier(RoundaboutMod.MOD_ID,
             "textures/gui/move_square2.png");
@@ -156,7 +139,7 @@ public class StandHudRender {
                 int k = scaledWidth / 2 - 8;
 
 
-                Identifier barTexture = null;
+                int barTexture = 0;
                 Entity TE = standUserData.getTargetEntity(playerEntity, -1);
                 float attackTimeMax = standUserData.getAttackTimeMax();
                 if (attackTimeMax > 0) {
@@ -166,19 +149,19 @@ public class StandHudRender {
 
 
                         if (standUserData.getActivePowerPhase() == standUserData.getActivePowerPhaseMax()){
-                            barTexture = ATTACK_COMPLETE;
+                            barTexture = 24;
                         } else {
                             if (TE != null) {
-                                barTexture = ATTACK_FILLED;
+                                barTexture = 12;
                             } else {
-                                barTexture = ATTACK_MISS;
+                                barTexture = 18;
                             }
                         }
 
 
-                        context.drawTexture(ATTACK_EMPTY, k, j, 0, 0, 15, 6, 15, 6);
+                        context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
                         int finalATimeInt = Math.round(finalATime * 15);
-                        context.drawTexture(barTexture, k, j, 0, 0, finalATimeInt, 6, 15, 6);
+                        context.drawTexture(JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
 
 
 
@@ -186,8 +169,8 @@ public class StandHudRender {
                 }
                 if (standOn){
                     if (TE != null) {
-                        if (barTexture == null) {
-                            context.drawTexture(ATTACK_METER_MAX, k, j, 0, 0, 15, 6, 15, 6);
+                        if (barTexture == 0) {
+                            context.drawTexture(JOJO_ICONS, k, j, 193, 0, 15, 6);
                         }
                     }
                 }
@@ -202,7 +185,7 @@ public class StandHudRender {
         l = scaledHeight - 32 + 3;
         StandUserComponent standUserData = MyComponents.STAND_USER.get(playerEntity);
         if (standUserData.getGuardBroken() || !standUserData.shieldNotDisabled()){
-            v = 9;
+            v = 10;
         } else {
             v = 0;
         }
