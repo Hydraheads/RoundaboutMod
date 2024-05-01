@@ -46,7 +46,7 @@ public class DamageHandler {
         return entity.getWorld().getOtherEntities(entity, new Box(k, r, t, l, s, u));
     }
 
-    public static boolean StandDamageEntity(Entity entity, float power){
-        return entity.damage(ModDamageTypes.of(entity.getWorld(), ModDamageTypes.STAND), power);
+    public static boolean StandDamageEntity(Entity entity, float power, Entity attacker){
+        return entity.damage(ModDamageTypes.of(entity.getWorld(), ModDamageTypes.STAND, attacker), power);
     }
 }

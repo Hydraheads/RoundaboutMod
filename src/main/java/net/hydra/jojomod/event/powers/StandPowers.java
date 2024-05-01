@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers;
 
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -226,7 +227,7 @@ public class StandPowers {
         Entity targetEntity = getTargetEntity(this.self,distMax);
         if (!self.getWorld().isClient()) {
             if (targetEntity != null) {
-                StandDamageEntityAttack(targetEntity, pow, knockbackStrength);
+                StandDamageEntityAttack(targetEntity, pow, knockbackStrength, this.self);
             }
 
             SoundEvent SE;
@@ -374,7 +375,7 @@ public class StandPowers {
         Entity nearestMob;
         if (entities != null){
             for (Entity value : entities) {
-                if (this.StandDamageEntityAttack(value,pow, knockbackStrength)){
+                if (this.StandDamageEntityAttack(value,pow, knockbackStrength, this.self)){
                     hitSomething = true;
                 }
             }
@@ -382,8 +383,8 @@ public class StandPowers {
         return hitSomething;
     }
 
-    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength){
-        if (DamageHandler.StandDamageEntity(target,pow)){
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (DamageHandler.StandDamageEntity(target,pow, attacker)){
             if (target instanceof LivingEntity) {
                 ((LivingEntity) target).takeKnockback(knockbackStrength * 0.5f, MathHelper.sin(this.self.getYaw() * ((float) Math.PI / 180)), -MathHelper.cos(this.self.getYaw() * ((float) Math.PI / 180)));
             }
