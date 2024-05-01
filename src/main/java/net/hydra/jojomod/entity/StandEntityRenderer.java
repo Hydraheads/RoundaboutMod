@@ -4,11 +4,14 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.VexEntity;
@@ -19,6 +22,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.LightType;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
@@ -73,6 +77,22 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
         return tot;
     }
 
+    public final int getTrueLight(Entity entity, float tickDelta) {
+        BlockPos blockPos = BlockPos.ofFloored(entity.getClientCameraPosVec(tickDelta));
+        return LightmapTextureManager.pack(this.getTrueBlockLight(entity, blockPos), this.getTrueSkyLight(entity, blockPos));
+    }
+
+    protected int getTrueSkyLight(Entity entity, BlockPos pos) {
+        return entity.getWorld().getLightLevel(LightType.SKY, pos);
+    }
+
+    protected int getTrueBlockLight(Entity entity, BlockPos pos) {
+        if (entity.isOnFire()) {
+            return 15;
+        }
+        return entity.getWorld().getLightLevel(LightType.BLOCK, pos);
+    }
+
     @Override
     public void render(StandEntity entity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
         if(entity.isBaby()) {
@@ -81,7 +101,16 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
             poseStack.scale(0.87f, 0.87f, 0.87f);
         }
         //poseStack.translate();
-        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, 255);
+        /**Stand uses its own lighting, unless clipped into a block/zero lighting, then it uses its users lighting if the user has higher lighting.*/
+        int plight = packedLight;
+        var owner = entity.getMaster();
+        if (owner != null) {
+            int tlight = getTrueLight(owner,partialTick);
+            if (plight < tlight && plight < 1){
+                plight = tlight;
+            }
+        }
+        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, plight);
     }
 
 
