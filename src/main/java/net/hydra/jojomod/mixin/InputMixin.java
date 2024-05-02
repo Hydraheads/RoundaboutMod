@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
@@ -77,6 +78,7 @@ public class InputMixin {
                 if (standComp.getActive()) {
                     if (!standComp.isGuarding()) {
                         ClientPlayNetworking.send(ModMessages.STAND_GUARD_PACKET, PacketByteBufs.create());
+                        standComp.tryPower(PowerIndex.GUARD,true);
                     }
                 }
             }
@@ -97,16 +99,17 @@ public class InputMixin {
         public void roundaboutInput(CallbackInfo ci){
             if (player != null) {
                 StandUserComponent standComp = MyComponents.STAND_USER.get(player);
-                    if (!this.options.useKey.isPressed()) {
-                        if (standComp.isGuarding()) {
+                if (!this.options.useKey.isPressed()) {
+                    if (standComp.isGuarding()) {
                             /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                             * This delay exists so you can't right click left click chain for instant full power punches.*/
-                            if (standComp.getActivePowerPhase() > 0 ) {
-                                standComp.setInterruptCD(3);
-                            }
-                            ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
-                        }
+                       if (standComp.getActivePowerPhase() > 0 ) {
+                           standComp.setInterruptCD(3);
+                       }
+                       ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
+                       standComp.tryPower(PowerIndex.NONE,true);
                     }
+                }
                 if (standComp.getActive()) {
                     if (standComp.getInterruptCD()) {
                         if (this.options.attackKey.isPressed() && !player.isUsingItem() && standComp.canAttack()) {
