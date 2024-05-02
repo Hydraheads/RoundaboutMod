@@ -242,27 +242,38 @@ public class StandPowers {
 
 
     public boolean knockShield(Entity entity, int duration){
-        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
-            if (entity instanceof LivingEntity) {
-                if (((LivingEntity) entity).isBlocking()) {
 
-                    StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
+        RoundaboutMod.LOGGER.info("BB1");
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            RoundaboutMod.LOGGER.info("BB2");
+            if (entity instanceof LivingEntity) {
+                RoundaboutMod.LOGGER.info("BB3");
+                if (((LivingEntity) entity).isBlocking()) {
+                    RoundaboutMod.LOGGER.info("BB4");
+
+                    StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
                     if (standUserData.isGuarding()) {
+                        RoundaboutMod.LOGGER.info("BB5");
                         if (!standUserData.getGuardBroken()){
+                            RoundaboutMod.LOGGER.info("BB6");
                             standUserData.breakGuard();
                             return true;
                         }
                     } else {
+                        RoundaboutMod.LOGGER.info("BB7");
                         if (entity instanceof PlayerEntity){
+                            RoundaboutMod.LOGGER.info("BB8");
                             ItemStack itemStack = ((LivingEntity) entity).getActiveItem();
                             Item item = itemStack.getItem();
                             if (item.getUseAction(itemStack) == UseAction.BLOCK) {
+                                RoundaboutMod.LOGGER.info("BB9");
                                 ((LivingEntity) entity).stopUsingItem();
                                 ((PlayerEntity) entity).getItemCooldownManager().set(Items.SHIELD, duration);
                                 return true;
                             }
                         }
                     }
+                    RoundaboutMod.LOGGER.info("BB10");
                     return true;
                 }
             }
@@ -291,7 +302,7 @@ public class StandPowers {
         if (entity != null) {
             float pow;
             float knockbackStrength;
-            if (this.activePowerPhase == 3) {
+            if (this.activePowerPhase >= this.activePowerPhaseMax){
                 /*The last hit in a string has more power and knockback if you commit to it*/
                 pow = getHeavyPunchStrength(entity);
                 knockbackStrength = 2F;
@@ -300,7 +311,8 @@ public class StandPowers {
                 knockbackStrength = 0.5F;
             }
              if (StandDamageEntityAttack(entity, pow, knockbackStrength, this.self)){
-                 if (this.activePowerPhase == 3) {
+             } else {
+                 if (this.activePowerPhase >= this.activePowerPhaseMax){
                      knockShield(entity, 40);
                  }
              }
