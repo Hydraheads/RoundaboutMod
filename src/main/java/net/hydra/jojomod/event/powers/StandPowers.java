@@ -243,37 +243,27 @@ public class StandPowers {
 
     public boolean knockShield(Entity entity, int duration){
 
-        RoundaboutMod.LOGGER.info("BB1");
         if (entity != null && entity.isAlive() && !entity.isRemoved()) {
-            RoundaboutMod.LOGGER.info("BB2");
             if (entity instanceof LivingEntity) {
-                RoundaboutMod.LOGGER.info("BB3");
                 if (((LivingEntity) entity).isBlocking()) {
-                    RoundaboutMod.LOGGER.info("BB4");
 
                     StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
                     if (standUserData.isGuarding()) {
-                        RoundaboutMod.LOGGER.info("BB5");
                         if (!standUserData.getGuardBroken()){
-                            RoundaboutMod.LOGGER.info("BB6");
                             standUserData.breakGuard();
                             return true;
                         }
                     } else {
-                        RoundaboutMod.LOGGER.info("BB7");
                         if (entity instanceof PlayerEntity){
-                            RoundaboutMod.LOGGER.info("BB8");
                             ItemStack itemStack = ((LivingEntity) entity).getActiveItem();
                             Item item = itemStack.getItem();
                             if (item.getUseAction(itemStack) == UseAction.BLOCK) {
-                                RoundaboutMod.LOGGER.info("BB9");
                                 ((LivingEntity) entity).stopUsingItem();
                                 ((PlayerEntity) entity).getItemCooldownManager().set(Items.SHIELD, duration);
                                 return true;
                             }
                         }
                     }
-                    RoundaboutMod.LOGGER.info("BB10");
                     return true;
                 }
             }

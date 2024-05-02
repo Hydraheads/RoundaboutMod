@@ -353,6 +353,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         int stID = buf.readInt();
         this.StandID = stID;
         this.Stand = (StandEntity) User.getWorld().getEntityById(stID);
+        if (this.Stand != null){
+            Stand.setMaster(User);
+        }
         GuardPoints = buf.readFloat();
         GuardBroken = buf.readBoolean();
         StandPowers SP = this.getStandPowers();
