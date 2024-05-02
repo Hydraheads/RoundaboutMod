@@ -17,6 +17,6 @@ public class ModDamageTypes {
         public static final RegistryKey<DamageType> STAND = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier("roundabout", "stand"));
 
         public static DamageSource of(World world, RegistryKey<DamageType> key, Entity attacker) {
-            return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key), attacker);
+            return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key), attacker, attacker);
         }
 }

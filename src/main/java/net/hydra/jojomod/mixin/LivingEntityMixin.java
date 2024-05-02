@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
@@ -45,6 +46,12 @@ public class LivingEntityMixin {
         }
     }
 
+    @Inject(method = "applyArmorToDamage", at = @At(value = "HEAD"), cancellable = true)
+    private void RoundaboutApplyArmorToDamage(DamageSource source, float amount,CallbackInfoReturnable<Float> ci){
+        if (source.isOf(ModDamageTypes.STAND)) {
+            ci.setReturnValue(amount);
+        }
+    }
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V", shift = At.Shift.BEFORE))
     private void RoundaboutDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {

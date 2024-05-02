@@ -300,7 +300,9 @@ public class StandPowers {
                 knockbackStrength = 0.5F;
             }
              if (StandDamageEntityAttack(entity, pow, knockbackStrength, this.self)){
-                 knockShield(entity, 40);
+                 if (this.activePowerPhase == 3) {
+                     knockShield(entity, 40);
+                 }
              }
         } else {
             // This is less accurate raycasting as it is server sided but it is important for particle effects
