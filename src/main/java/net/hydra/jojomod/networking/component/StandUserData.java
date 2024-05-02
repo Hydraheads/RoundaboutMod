@@ -84,13 +84,13 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public boolean getGuardBroken(){
         return this.GuardBroken;
      } public void breakGuard() {
-        this.GuardPoints = 0;
         this.GuardBroken = true;
         this.sync();
     } public void damageGuard(float damage){
         float finalGuard = this.GuardPoints - damage;
         this.GuardCooldown = 10;
         if (finalGuard <= 0){
+            this.GuardPoints = 0;
             this.breakGuard();
         } else {
             this.GuardPoints = finalGuard;

@@ -15,12 +15,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
@@ -30,7 +34,6 @@ import net.minecraft.world.RaycastContext;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -208,16 +211,18 @@ public class StandPowers {
 
         if (this.self instanceof PlayerEntity){
             if (this.self.getWorld().isClient()) {
-                Entity targetEntity = getTargetEntity(this.self,-1);
-                int id;
-                if (targetEntity != null){
-                    id = targetEntity.getId();
-                } else {
-                    id = -1;
+                if (isPacketPlayer()){
+                    Entity targetEntity = getTargetEntity(this.self, -1);
+                    int id;
+                    if (targetEntity != null) {
+                        id = targetEntity.getId();
+                    } else {
+                        id = -1;
+                    }
+                    PacketByteBuf buffer = PacketByteBufs.create();
+                    buffer.writeInt(id);
+                    ClientPlayNetworking.send(ModMessages.STAND_PUNCH_PACKET, buffer);
                 }
-                PacketByteBuf buffer = PacketByteBufs.create();
-                buffer.writeInt(id);
-                ClientPlayNetworking.send(ModMessages.STAND_PUNCH_PACKET, buffer);
             }
         } else {
             /*Caps how far out the punch goes*/
@@ -227,8 +232,60 @@ public class StandPowers {
 
     }
 
+    /**This function ensures the client sending attack packets is ONLY the player using the attack, prevents double attacking*/
+    public boolean isPacketPlayer(){
+        MinecraftClient mc = MinecraftClient.getInstance();
+        return mc.player != null && mc.player.getId() == this.self.getId();
+    }
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
+
+
+    public boolean knockShield(Entity entity, int duration){
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
+                    if (standUserData.isGuarding()) {
+                        if (!standUserData.getGuardBroken()){
+                            standUserData.breakGuard();
+                            return true;
+                        }
+                    } else {
+                        if (entity instanceof PlayerEntity){
+                            ItemStack itemStack = ((LivingEntity) entity).getActiveItem();
+                            Item item = itemStack.getItem();
+                            if (item.getUseAction(itemStack) == UseAction.BLOCK) {
+                                ((LivingEntity) entity).stopUsingItem();
+                                ((PlayerEntity) entity).getItemCooldownManager().set(Items.SHIELD, duration);
+                                return true;
+                            }
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2;
+        } else {
+            return 5;
+        }
+    } private float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 3;
+        } else {
+            return 7;
+        }
+    }
+    public boolean getReducedDamage(Entity entity){
+        return entity instanceof PlayerEntity;
+    }
 
     public void punchImpact(Entity entity){
         if (entity != null) {
@@ -236,13 +293,22 @@ public class StandPowers {
             float knockbackStrength;
             if (this.activePowerPhase == 3) {
                 /*The last hit in a string has more power and knockback if you commit to it*/
-                pow = 7;
+                pow = getHeavyPunchStrength(entity);
                 knockbackStrength = 2F;
             } else {
-                pow=5;
+                pow = getPunchStrength(entity);
                 knockbackStrength = 0.5F;
             }
-            StandDamageEntityAttack(entity, pow, knockbackStrength, this.self);
+             if (StandDamageEntityAttack(entity, pow, knockbackStrength, this.self)){
+                 knockShield(entity, 40);
+             }
+        } else {
+            // This is less accurate raycasting as it is server sided but it is important for particle effects
+            float distMax = this.getDistanceOut(this.self, this.standReach, false);
+            float halfReach = (float) (distMax*0.5);
+            Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
+            ((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
+                            1,0.0, 0.0, 0.0,1);
         }
 
         SoundEvent SE;

@@ -77,7 +77,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     public final byte getOffsetType() {
         return this.dataTracker.get(OFFSET_TYPE);
     } //returns leaning direction
-
     public final void setOffsetType(byte oft) {
         this.dataTracker.set(OFFSET_TYPE, oft);
     }

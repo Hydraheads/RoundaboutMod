@@ -62,8 +62,8 @@ public class StandModel extends GeoModel<StandEntity> {
             }
 
             if (stand != null){
-                float rotX = stand.getRotX();
-                float rotY = stand.getRotY();
+                float rotX = animatable.getStandRotationX();
+                float rotY = animatable.getStandRotationY();
                 float cRX = 0;
                 float cRY = 0;
                 if (animationNumber == 1) {
