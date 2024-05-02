@@ -9,6 +9,7 @@ import net.hydra.jojomod.networking.component.StandComponent;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -21,6 +22,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -467,7 +469,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
 
         Vec3d vec3d2 = DamageHandler.getRotationVector(0, standUser.getHeadYaw()+ standrotDir2);
         frontVectors = frontVectors.add(vec3d2.x * addXZ, 0, vec3d2.z * addXZ);
-        return new Vec3d(frontVectors.x,frontVectors.y + addY,
+        return new Vec3d(frontVectors.x,frontVectors.y + standUser.getEyeHeight(standUser.getPose()) + addY - 1.6,
                 frontVectors.z);
     }
 
