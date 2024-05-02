@@ -114,6 +114,7 @@ public class InputMixin {
                     if (standComp.getInterruptCD()) {
                         if (this.options.attackKey.isPressed() && !player.isUsingItem() && standComp.canAttack()) {
                             ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
+                            standComp.tryPower(PowerIndex.ATTACK,true);
                         }
                     }
                 }
