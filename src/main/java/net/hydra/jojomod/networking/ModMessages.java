@@ -14,6 +14,7 @@ public class ModMessages {
     public static final Identifier STAND_SUMMON_PACKET = new Identifier(RoundaboutMod.MOD_ID,"summon_packet");
     public static final Identifier STAND_ATTACK_PACKET = new Identifier(RoundaboutMod.MOD_ID,"attack_packet");
     public static final Identifier STAND_PUNCH_PACKET = new Identifier(RoundaboutMod.MOD_ID,"punch_packet");
+    public static final Identifier STAND_BARRAGE_PACKET = new Identifier(RoundaboutMod.MOD_ID,"barrage_packet");
     public static final Identifier NBT_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"nbt_sync");
     public static final Identifier MOVE_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"move_sync");
     public static final Identifier STAND_GUARD_PACKET = new Identifier(RoundaboutMod.MOD_ID,"guard_packet");
@@ -24,6 +25,7 @@ public class ModMessages {
         ServerPlayNetworking.registerGlobalReceiver(STAND_SUMMON_PACKET, StandAbilityPacket::summon);
         ServerPlayNetworking.registerGlobalReceiver(STAND_ATTACK_PACKET, StandAbilityPacket::attack);
         ServerPlayNetworking.registerGlobalReceiver(STAND_PUNCH_PACKET, StandAbilityPacket::punch);
+        ServerPlayNetworking.registerGlobalReceiver(STAND_BARRAGE_PACKET, StandAbilityPacket::barrage);
         ServerPlayNetworking.registerGlobalReceiver(MOVE_SYNC_ID, MoveSyncPacket::receive);
         ServerPlayNetworking.registerGlobalReceiver(STAND_GUARD_PACKET, StandAbilityPacket::guard);
         ServerPlayNetworking.registerGlobalReceiver(STAND_GUARD_CANCEL_PACKET, StandAbilityPacket::guardCancel);

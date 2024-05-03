@@ -76,7 +76,7 @@ public class InputMixin {
             if (player != null) {
                 StandUserComponent standComp = MyComponents.STAND_USER.get(player);
                 if (standComp.getActive()) {
-                    if (!standComp.isGuarding()) {
+                    if (!standComp.isGuarding() && !standComp.isBarraging()) {
                         ClientPlayNetworking.send(ModMessages.STAND_GUARD_PACKET, PacketByteBufs.create());
                         standComp.tryPower(PowerIndex.GUARD,true);
                     }
@@ -100,7 +100,7 @@ public class InputMixin {
             if (player != null) {
                 StandUserComponent standComp = MyComponents.STAND_USER.get(player);
                 if (!this.options.useKey.isPressed()) {
-                    if (standComp.isGuarding()) {
+                    if (standComp.isGuarding() || standComp.isBarraging()) {
                             /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                             * This delay exists so you can't right click left click chain for instant full power punches.*/
                        if (standComp.getActivePowerPhase() > 0 ) {
@@ -111,10 +111,18 @@ public class InputMixin {
                     }
                 }
                 if (standComp.getActive()) {
-                    if (standComp.getInterruptCD()) {
-                        if (this.options.attackKey.isPressed() && !player.isUsingItem() && standComp.canAttack()) {
-                            ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
-                            standComp.tryPower(PowerIndex.ATTACK,true);
+                    if (this.options.attackKey.isPressed() && !player.isUsingItem()) {
+
+                        if (standComp.getInterruptCD()) {
+                            if (standComp.canAttack()) {
+                                ClientPlayNetworking.send(ModMessages.STAND_ATTACK_PACKET, PacketByteBufs.create());
+                                standComp.tryPower(PowerIndex.ATTACK, true);
+                            }
+                        }
+
+                        if (standComp.isGuarding() && !standComp.isBarraging()){
+                            ClientPlayNetworking.send(ModMessages.STAND_BARRAGE_PACKET, PacketByteBufs.create());
+                            standComp.tryPower(PowerIndex.BARRAGE, true);
                         }
                     }
                 }

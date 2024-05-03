@@ -36,7 +36,7 @@ public class StandAbilityPacket {
     }
 
     public static void punch(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
-                              PacketByteBuf buf, PacketSender responseSender){
+                             PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         Entity targetEntity = player.getWorld().getEntityById(buf.readInt());
         server.execute(() -> {
@@ -56,13 +56,22 @@ public class StandAbilityPacket {
         });
     }
 
+    public static void barrage(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
+                               PacketByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        server.execute(() -> {
+            StandUserComponent userData = MyComponents.STAND_USER.get(player);
+            userData.tryPower(PowerIndex.BARRAGE,true);
+        });
+    }
+
     /**When you release right click, stops guarding.*/
     public static void guardCancel(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                              PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         server.execute(() -> {
             StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            if (userData.isGuarding()){
+            if (userData.isGuarding() || userData.isBarraging()){
                 userData.tryPower(PowerIndex.NONE,true);
             }
         });

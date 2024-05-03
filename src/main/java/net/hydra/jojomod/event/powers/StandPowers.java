@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.StandEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.MyComponents;
@@ -140,12 +141,13 @@ public class StandPowers {
             if (this.attackTimeDuring != -1) {
                 this.attackTimeDuring++;
                 if (this.attackTimeDuring == -1) {
-                    poseStand((byte) 0);
+                    poseStand(OffsetIndex.FOLLOW);
                 } else {
                     if (this.hasStandActive(this.self) && !this.self.isUsingItem()) {
                         if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
-                            //RoundaboutMod.LOGGER.info("attack4");
                             this.updateAttack();
+                        } else if (this.isBarraging()) {
+                            this.updateBarrage();
                         } else {
                             this.updateUniqueMoves();
                         }
@@ -165,10 +167,13 @@ public class StandPowers {
             this.summonCD--;
         }
     }
+    public void updateBarrage(){
+        if (this.attackTimeDuring >= (this.getBarrageWindup() + this.getBarrageLength())) {
+            this.setPowerGuard();
+        }
+    }
     public void updateAttack(){
         if (this.attackTimeDuring > this.attackTimeMax) {
-            this.setAttackTimeDuring(-1);
-            poseStand((byte) 0);
             this.attackTimeMax = 0;
             this.setPowerNone();
         } else {
@@ -181,7 +186,7 @@ public class StandPowers {
     public void resetAttackState(){
         this.interruptCD = 3;
         this.setAttackTimeDuring(-1);
-        poseStand((byte) 0);
+        poseStand(OffsetIndex.FOLLOW);
     }
 
     public void poseStand(byte r){
@@ -512,13 +517,15 @@ public class StandPowers {
                 this.setPowerAttack();
             } else if (move == PowerIndex.GUARD) {
                  this.setPowerGuard();
+            } else if (move == PowerIndex.BARRAGE) {
+                 this.setPowerBarrage();
             }
         }
     }
     public void setPowerNone(){
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
-        this.poseStand((byte) 0);
+        poseStand(OffsetIndex.FOLLOW);
     }
 
     public boolean canAttack(){
@@ -530,10 +537,25 @@ public class StandPowers {
     public void setPowerGuard() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.GUARD);
-        this.poseStand((byte) 1);
+        this.poseStand(OffsetIndex.GUARD);
+    }
+    public void setPowerBarrage() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE);
+        this.poseStand(OffsetIndex.ATTACK);
     }
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
+    }
+    public boolean isBarraging(){
+        return this.activePower == PowerIndex.BARRAGE;
+    }
+
+    public int getBarrageWindup(){
+        return 20;
+    }
+    public int getBarrageLength(){
+        return 60;
     }
 
     public void setPowerAttack(){
@@ -555,7 +577,7 @@ public class StandPowers {
                 this.setActivePower(PowerIndex.ATTACK);
                 this.setAttackTime(0);
 
-                this.poseStand((byte) 1);
+                poseStand(OffsetIndex.ATTACK);
             }
         }
     }

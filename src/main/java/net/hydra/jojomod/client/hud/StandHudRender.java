@@ -106,6 +106,7 @@ public class StandHudRender {
         }
     }
 
+
     public static Text fixKey(Text textIn){
 
         String X = textIn.getString();
@@ -135,10 +136,14 @@ public class StandHudRender {
         if (playerEntity != null) {
             StandUserComponent standUserData = MyComponents.STAND_USER.get(playerEntity);
             boolean standOn = standUserData.getActive();
-                int j = scaledHeight / 2 - 7 - 4;
-                int k = scaledWidth / 2 - 8;
+            int j = scaledHeight / 2 - 7 - 4;
+            int k = scaledWidth / 2 - 8;
 
-
+            if (standOn && standUserData.isBarraging()) {
+                int finalATimeInt = getFinalATimeInt(standUserData);
+                context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.drawTexture(JOJO_ICONS, k, j, 193, 30, finalATimeInt, 6);
+            } else {
                 int barTexture = 0;
                 Entity TE = standUserData.getTargetEntity(playerEntity, -1);
                 float attackTimeMax = standUserData.getAttackTimeMax();
@@ -148,7 +153,7 @@ public class StandHudRender {
                     if (finalATime <= 1) {
 
 
-                        if (standUserData.getActivePowerPhase() == standUserData.getActivePowerPhaseMax()){
+                        if (standUserData.getActivePowerPhase() == standUserData.getActivePowerPhaseMax()) {
                             barTexture = 24;
                         } else {
                             if (TE != null) {
@@ -164,18 +169,32 @@ public class StandHudRender {
                         context.drawTexture(JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
 
 
-
                     }
                 }
-                if (standOn){
+                if (standOn) {
                     if (TE != null) {
                         if (barTexture == 0) {
                             context.drawTexture(JOJO_ICONS, k, j, 193, 0, 15, 6);
                         }
                     }
                 }
+            }
         }
     }
+
+    private static int getFinalATimeInt(StandUserComponent standUserData) {
+        int barrageWindup = standUserData.getStandPowers().getBarrageWindup();
+        int barrageLength = standUserData.getStandPowers().getBarrageLength();
+        float attackTimeDuring = standUserData.getAttackTimeDuring();
+        int finalATimeInt;
+        if (attackTimeDuring <= barrageWindup){
+            finalATimeInt = Math.round((attackTimeDuring / barrageWindup)*15);
+        } else {
+            finalATimeInt = 15 - Math.round(((attackTimeDuring-barrageWindup) / barrageLength)*15);
+        }
+        return finalATimeInt;
+    }
+
     public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
                                       float flashAlpha, float otherFlashAlpha) {

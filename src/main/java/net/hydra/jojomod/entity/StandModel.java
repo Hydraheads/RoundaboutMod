@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -50,13 +51,14 @@ public class StandModel extends GeoModel<StandEntity> {
             //When Game is Paused, don't procede
             float tickDelta = mc.getLastFrameDuration();
             var animationNumber = animatable.getOffsetType();
+            var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
             EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
             CoreGeoBone stand = getAnimationProcessor().getBone("stand");
             CoreGeoBone body = getAnimationProcessor().getBone("body");
             CoreGeoBone head = getAnimationProcessor().getBone("head");
             float rotation1 = 0;
-            if (animationNumber == 1){
+            if (animationStyle == OffsetIndex.FIXED_STYLE){
                 rotation1 = (float) (animatable.getPunchYaw(animatable.getAnchorPlace(),
                         0.36) * MathHelper.RADIANS_PER_DEGREE);
             }
@@ -66,7 +68,7 @@ public class StandModel extends GeoModel<StandEntity> {
                 float rotY = animatable.getStandRotationY();
                 float cRX = 0;
                 float cRY = 0;
-                if (animationNumber == 1) {
+                if (animationStyle == OffsetIndex.FIXED_STYLE){
                     cRX = entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE;
                 }
                 rotX = MainUtil.controlledLerp(tickDelta, rotX, cRX, 0.8f);
@@ -80,7 +82,7 @@ public class StandModel extends GeoModel<StandEntity> {
             if (body != null) {
                 float rotX = animatable.getBodyRotationX();
                 float rotY = animatable.getBodyRotationY();
-                if (animationNumber == 0) {
+                if (animationStyle == OffsetIndex.FOLLOW_STYLE){
                     float cRot = maxRotX;
 
                     if (animatable.isSwimming() || animatable.isFallFlying()) {
@@ -100,7 +102,7 @@ public class StandModel extends GeoModel<StandEntity> {
                     }
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, cRot, 0.2f);
                     rotY = MainUtil.controlledLerp(tickDelta, rotY, 0, 0.8f);
-                } else if (animationNumber == 1) {
+                } else if (animationStyle == OffsetIndex.FIXED_STYLE) {
                     rotX = MainUtil.controlledLerp(tickDelta, rotX, 0, 0.8f);
                     rotY = MainUtil.controlledLerp(tickDelta, rotY, rotation1, 0.8f);
                 } else {
@@ -115,7 +117,7 @@ public class StandModel extends GeoModel<StandEntity> {
             if (head != null) {
                 float rotX = animatable.getHeadRotationX();
                 float rotY = animatable.getHeadRotationY();
-                if (animationNumber == 0) {
+                if (animationStyle == OffsetIndex.FOLLOW_STYLE){
                     /*This code makes the head of the model turn towards swim rotation while swimming*/
                     if (animatable.isSwimming() || animatable.isCrawling() || animatable.isFallFlying()) {
                         if (swimRotCorrect > -45) {
@@ -132,7 +134,7 @@ public class StandModel extends GeoModel<StandEntity> {
                     rotY = entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE;
                     head.setRotX(rotX);
                     head.setRotY(rotY);
-                } else if (animationNumber == 1) {
+                } else if (animationStyle == OffsetIndex.FIXED_STYLE){
                     rotX = 0;
                     rotY = rotation1;
                     head.setRotX(rotX);

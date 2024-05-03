@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking.component;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
@@ -176,6 +177,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public boolean isGuarding(){
         return this.getStandPowers().isGuarding();
     }
+    public boolean isBarraging(){
+        return this.getStandPowers().isBarraging();
+    }
     public boolean isGuardingEffectively(){
         if (this.GuardBroken){return false;}
         return this.isGuardingEffectively2();
@@ -314,12 +318,11 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         if (!(this.hasStandOut())) {
             return;
         }
-        int OT = passenger.getOffsetType();
-        if (OT == 0 || OT == 1) {
+        byte OT = passenger.getOffsetType();
+        if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
             Vec3d grabPos = passenger.getStandOffsetVector(User);
             positionUpdater.accept(passenger, grabPos.x, grabPos.y, grabPos.z);
-        }
-        if (OT == 0 || OT == 1) {
+
             passenger.setYaw(User.getHeadYaw()%360);
             passenger.setPitch(User.getPitch());
             passenger.setBodyYaw(User.getHeadYaw()%360);

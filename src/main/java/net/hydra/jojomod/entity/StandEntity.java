@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
@@ -254,8 +255,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      */
     @Override
     public boolean hasVehicle() {
-        int ot = this.getOffsetType();
-            return this.getVehicle() != null;
+       return this.getVehicle() != null;
     }
 
     /**This override prevents an infinite loop when an entity is riding itself*/
@@ -271,8 +271,8 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     /**Chooses which offset animation types override stand direction rendering*/
     @Override
     public LivingEntity getVehicle() {
-       int ot = this.getOffsetType();
-       if (ot == 1) {
+       byte ot = this.getOffsetType();
+       if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.FOLLOW_STYLE) {
            return this;
        } else {
            LivingEntity follower = this.getFollowing();
@@ -435,11 +435,11 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     /** Math to determine the position of the stand floating away from its user.
      * Based on Jojovein donut code with great help from Urbancase.*/
     public Vec3d getStandOffsetVector(Entity standUser){
-        int ot = this.getOffsetType();
-        if (ot == 0) {
+        byte ot = this.getOffsetType();
+        if (ot == OffsetIndex.FOLLOW) {
             return getIdleOffset(standUser);
-        } else if (ot == 1) {
-            return getAttackOffset(standUser,true);
+        } else if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FIXED_STYLE) {
+            return getAttackOffset(standUser,ot);
         }
         return new Vec3d(this.getX(),this.getY(),this.getZ());
     }
@@ -447,7 +447,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
     /** The offset that can potentially can be used for rushes, punches, blocking, etc.
      * Involves the stand being in an L shape away from the user,
      * with the StandModel.java handling the inward rotation*/
-    public Vec3d getAttackOffset(Entity standUser, boolean capped) {
+    public Vec3d getAttackOffset(Entity standUser, byte ot) {
         StandUserComponent UD = getUserData((LivingEntity) standUser);
         float distanceFront;
         float standrotDir2 = 0;
@@ -458,7 +458,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         float addXYZ = 0.3F;
         float addXZ = 0.7F;
 
-        if (UD.isGuarding()) {
+        if (ot == OffsetIndex.GUARD) {
             addXZ-= 0.015F;
             distanceFront = 1.05F;
         } else {
