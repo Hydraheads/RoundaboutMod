@@ -14,6 +14,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -105,6 +106,10 @@ public class InputMixin {
                             * This delay exists so you can't right click left click chain for instant full power punches.*/
                        if (standComp.getActivePowerPhase() > 0 ) {
                            standComp.setInterruptCD(3);
+                       }
+
+                       if (standComp.isBarraging()){
+                           MinecraftClient.getInstance().getSoundManager().stopSounds(standComp.getStandPowers().getBarrageCryID(), SoundCategory.PLAYERS);
                        }
                        ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
                        standComp.tryPower(PowerIndex.NONE,true);
