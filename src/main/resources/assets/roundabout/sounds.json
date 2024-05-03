@@ -47,6 +47,30 @@
       "roundabout:punch_sfx4"
     ]
   },
+  "stand_theworld_muda1": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda1",
+    "sounds": [
+      "roundabout:stand_theworld_muda1"
+    ]
+  },
+  "stand_theworld_muda2": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda2",
+    "sounds": [
+      "roundabout:stand_theworld_muda2"
+    ]
+  },
+  "stand_theworld_muda3": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda3",
+    "sounds": [
+      "roundabout:stand_theworld_muda3"
+    ]
+  },
+  "stand_theworld_muda4": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda4",
+    "sounds": [
+      "roundabout:stand_theworld_muda4"
+    ]
+  },
   "hit_sfx1": {
     "subtitle": "sounds.roundabout.hit_sfx1",
     "sounds": [

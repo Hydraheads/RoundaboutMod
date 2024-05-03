@@ -17,6 +17,10 @@ public class ModSounds {
     public static final Identifier PUNCH_2_SOUND_ID = new Identifier("roundabout:punch_sfx2");
     public static final Identifier PUNCH_3_SOUND_ID = new Identifier("roundabout:punch_sfx3");
     public static final Identifier PUNCH_4_SOUND_ID = new Identifier("roundabout:punch_sfx4");
+    public static final Identifier STAND_THEWORLD_MUDA1_SOUND_ID = new Identifier("roundabout:stand_theworld_muda1");
+    public static final Identifier STAND_THEWORLD_MUDA2_SOUND_ID = new Identifier("roundabout:stand_theworld_muda2");
+    public static final Identifier STAND_THEWORLD_MUDA3_SOUND_ID = new Identifier("roundabout:stand_theworld_muda3");
+    public static final Identifier STAND_THEWORLD_MUDA4_SOUND_ID = new Identifier("roundabout:stand_theworld_muda4");
     public static final Identifier STAND_GUARD_SOUND_ID = new Identifier("roundabout:stand_guard");
     public static final Identifier MELEE_GUARD_SOUND_ID = new Identifier("roundabout:melee_guard");
     public static final Identifier HIT_1_SOUND_ID = new Identifier("roundabout:hit_sfx1");
@@ -31,6 +35,10 @@ public class ModSounds {
     public static SoundEvent STAND_GUARD_SOUND_EVENT = SoundEvent.of(STAND_GUARD_SOUND_ID);
     public static SoundEvent MELEE_GUARD_SOUND_EVENT = SoundEvent.of(MELEE_GUARD_SOUND_ID);
     public static SoundEvent HIT_1_SOUND_EVENT = SoundEvent.of(HIT_1_SOUND_ID);
+    public static SoundEvent STAND_THEWORLD_MUDA1_SOUND_EVENT = SoundEvent.of(STAND_THEWORLD_MUDA1_SOUND_ID);
+    public static SoundEvent STAND_THEWORLD_MUDA2_SOUND_EVENT = SoundEvent.of(STAND_THEWORLD_MUDA2_SOUND_ID);
+    public static SoundEvent STAND_THEWORLD_MUDA3_SOUND_EVENT = SoundEvent.of(STAND_THEWORLD_MUDA3_SOUND_ID);
+    public static SoundEvent STAND_THEWORLD_MUDA4_SOUND_EVENT = SoundEvent.of(STAND_THEWORLD_MUDA4_SOUND_ID);
 
     public static void registerSoundEvents(){
         Registry.register(Registries.SOUND_EVENT, SUMMON_SOUND_ID, SUMMON_SOUND_EVENT);
@@ -44,6 +52,11 @@ public class ModSounds {
         Registry.register(Registries.SOUND_EVENT, STAND_GUARD_SOUND_ID, STAND_GUARD_SOUND_EVENT);
         Registry.register(Registries.SOUND_EVENT, MELEE_GUARD_SOUND_ID, MELEE_GUARD_SOUND_EVENT);
         Registry.register(Registries.SOUND_EVENT, HIT_1_SOUND_ID, HIT_1_SOUND_EVENT);
+
+        Registry.register(Registries.SOUND_EVENT, STAND_THEWORLD_MUDA1_SOUND_ID, STAND_THEWORLD_MUDA1_SOUND_EVENT);
+        Registry.register(Registries.SOUND_EVENT, STAND_THEWORLD_MUDA2_SOUND_ID, STAND_THEWORLD_MUDA2_SOUND_EVENT);
+        Registry.register(Registries.SOUND_EVENT, STAND_THEWORLD_MUDA3_SOUND_ID, STAND_THEWORLD_MUDA3_SOUND_EVENT);
+        Registry.register(Registries.SOUND_EVENT, STAND_THEWORLD_MUDA4_SOUND_ID, STAND_THEWORLD_MUDA4_SOUND_EVENT);
     }
 
     private static SoundEvent registerSoundEvent(String name){

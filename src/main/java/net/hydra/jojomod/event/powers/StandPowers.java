@@ -2,8 +2,6 @@ package net.hydra.jojomod.event.powers;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -24,7 +22,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -136,6 +133,21 @@ public class StandPowers {
         this.interruptCD = interruptCD;
     }
 
+    /**
+     * Returns the sound based on the punch # in the rush.
+     * -1 signifies the last hit in the rush
+     */
+    private SoundEvent getBarrageSoundFromIndex(int index){
+        if (index == 0){
+            return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
+        } else if (index == 60) {
+            return ModSounds.STAND_THEWORLD_MUDA4_SOUND_EVENT;
+        } else if ((index+1)%7 == 6){
+            return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+        } else {
+            return null;
+        }
+    }
 
     public void tickPower(){
             if (this.attackTimeDuring != -1) {
@@ -168,8 +180,16 @@ public class StandPowers {
         }
     }
     public void updateBarrage(){
-        if (this.attackTimeDuring >= (this.getBarrageWindup() + this.getBarrageLength())) {
-            this.setPowerGuard();
+        if (this.attackTimeDuring >= this.getBarrageWindup()) {
+            SoundEvent barrageSound = this.getBarrageSoundFromIndex(this.attackTimeDuring - this.getBarrageWindup());
+            if (this.attackTimeDuring >= this.getBarrageWindup() + this.getBarrageLength()) {
+                this.setPowerGuard();
+            }
+
+            if (barrageSound != null){
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageSound,
+                        SoundCategory.PLAYERS, 0.95F, 1);
+            }
         }
     }
     public void updateAttack(){
