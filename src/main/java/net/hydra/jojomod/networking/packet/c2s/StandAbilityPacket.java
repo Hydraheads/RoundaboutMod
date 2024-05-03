@@ -44,6 +44,15 @@ public class StandAbilityPacket {
             userData.getStandPowers().punchImpact(targetEntity);
         });
     }
+    public static void barrageHit(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
+                             PacketByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        Entity targetEntity = player.getWorld().getEntityById(buf.readInt());
+        server.execute(() -> {
+            StandUserComponent userData = MyComponents.STAND_USER.get(player);
+            userData.getStandPowers().barrageImpact(targetEntity);
+        });
+    }
 
     public static void guard(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                               PacketByteBuf buf, PacketSender responseSender){
