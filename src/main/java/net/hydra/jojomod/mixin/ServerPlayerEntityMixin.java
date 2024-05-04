@@ -2,7 +2,10 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.ServerPlayerAccess;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -35,7 +38,8 @@ import static net.hydra.jojomod.stand.NBTData.syncModNbt;
         }
 
 
-        @Override
+
+    @Override
     public void compatSync() {
             //MyComponents.STAND_USER.get(((ServerPlayerEntity) (Object) this)).sync();
             syncModNbt((ServerPlayerEntity) (Object) this);

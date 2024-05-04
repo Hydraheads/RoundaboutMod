@@ -53,7 +53,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
      * your movement, item usage, and stand ability usage. You also
      * have no gravity while dazed**/
 
-    private int dazeTime = 0;
+    private byte dazeTime = 0;
 
     private byte StopSound = -1;
 
@@ -71,6 +71,13 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.tickGuard();
         this.tickDaze();
         //}
+    }
+
+    public boolean isDazed(){
+        return this.dazeTime > 0;
+    } public void setDazed(byte dazeTime){
+        this.dazeTime = dazeTime;
+        this.sync();
     }
 
     /** Calling sync sends packets which update data on the client side.
@@ -114,6 +121,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         if (finalGuard <= 0){
             this.GuardPoints = 0;
             this.breakGuard();
+            this.sync();
         } else {
             this.GuardPoints = finalGuard;
             this.sync();
@@ -363,6 +371,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         buf.writeInt(stID);
         buf.writeFloat(this.GuardPoints);
         buf.writeBoolean(this.GuardBroken);
+        buf.writeByte(this.dazeTime);
         buf.writeByte(this.StopSound); this.StopSound = -1;
         StandPowers SP = this.getStandPowers();
 
@@ -385,8 +394,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         if (this.Stand != null){
             Stand.setMaster(User);
         }
-        GuardPoints = buf.readFloat();
-        GuardBroken = buf.readBoolean();
+        this.GuardPoints = buf.readFloat();
+        this.GuardBroken = buf.readBoolean();
+        this.dazeTime = buf.readByte();
         this.stopSounds(buf.readByte());
         StandPowers SP = this.getStandPowers();
 

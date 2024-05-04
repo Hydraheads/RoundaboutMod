@@ -6,7 +6,7 @@
 		"ModEntityDataSaverMixin",
 		"ServerPlayerEntityMixin",
 		"PlayerManagerMixin",
-		"EntityStandMixin",
+		"EntityMixin",
 		"LivingEntityMixin",
 		"ServerWorldMixin",
 		"ShieldItemMixin",
@@ -17,7 +17,8 @@
 		"HeldItemRendererMixin",
 		"GameHudMixin",
 		"ClientWorldMixin",
-		"ClientPlayerEntityMixin"
+		"ClientPlayerEntityMixin",
+		"GameRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

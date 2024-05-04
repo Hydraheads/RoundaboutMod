@@ -305,6 +305,10 @@ public class StandPowers {
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
 
+    private void setDazed(LivingEntity entity, byte dazeTime){
+        StandUserComponent standUserData = this.getUserData((LivingEntity) entity);
+        standUserData.setDazed(dazeTime);
+    }
 
     public boolean knockShield(Entity entity, int duration){
 
@@ -398,6 +402,13 @@ public class StandPowers {
             }
             if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                 barrageImpact2(entity,lastHit,knockbackStrength);
+                if (entity instanceof LivingEntity) {
+                    if (lastHit) {
+                        setDazed((LivingEntity) entity, (byte) 0);
+                    } else {
+                        setDazed((LivingEntity) entity, (byte) 2);
+                    }
+                }
             } else {
                 if (lastHit) {
                     knockShield(entity, 200);
