@@ -6,9 +6,11 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.networking.component.StandUserData;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -149,6 +151,15 @@ public class StandPowers {
         return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
     }
 
+    public Identifier getSoundID(byte soundNumber){
+        if (soundNumber == SoundIndex.BARRAGE_CRY_SOUND) {
+            return getBarrageCryID();
+        } else if (soundNumber == SoundIndex.BARRAGE_CHARGE_SOUND) {
+            return getBarrageCryID();
+        }
+        return null;
+    }
+
     public void tickPower(){
             if (this.attackTimeDuring != -1) {
                 this.attackTimeDuring++;
@@ -219,15 +230,15 @@ public class StandPowers {
         }
     }
 
+    public StandUserComponent getUserData(LivingEntity User){
+        return MyComponents.STAND_USER.get(User);
+    }
     public StandEntity getStandEntity(LivingEntity User){
-        StandUserComponent standUserData = MyComponents.STAND_USER.get((LivingEntity) User);
-        return standUserData.getStand();
+        return this.getUserData(User).getStand();
     } public boolean hasStandEntity(LivingEntity User){
-        StandUserComponent standUserData = MyComponents.STAND_USER.get((LivingEntity) User);
-        return standUserData.hasStandOut();
+        return this.getUserData(User).hasStandOut();
     } public boolean hasStandActive(LivingEntity User){
-        StandUserComponent standUserData = MyComponents.STAND_USER.get((LivingEntity) User);
-        return standUserData.getActive();
+        return this.getUserData(User).getActive();
     }
 
     float standReach = 5;
@@ -294,7 +305,7 @@ public class StandPowers {
             if (entity instanceof LivingEntity) {
                 if (((LivingEntity) entity).isBlocking()) {
 
-                    StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
+                    StandUserComponent standUserData = this.getUserData((LivingEntity) entity);
                     if (standUserData.isGuarding()) {
                         if (!standUserData.getGuardBroken()){
                             standUserData.breakGuard();
@@ -644,6 +655,14 @@ public class StandPowers {
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public void tryPower(int move, boolean forced){
         if (this.activePower == PowerIndex.NONE || forced){
+
+            if (this.isBarraging()){
+                StandUserComponent standUserData = this.getUserData(this.self);
+                if (this.getAttackTimeDuring() >= this.getBarrageWindup()) {
+                    standUserData.stopSounds(SoundIndex.BARRAGE_CRY_SOUND);
+                }
+            }
+
             if (move == PowerIndex.NONE) {
                 this.setPowerNone();
             } else if (move == PowerIndex.ATTACK) {

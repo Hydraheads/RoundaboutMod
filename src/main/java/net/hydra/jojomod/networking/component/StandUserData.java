@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +17,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
@@ -53,7 +55,12 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
     private int dazeTime = 0;
 
+    private byte StopSound = -1;
 
+
+    public void CancelStopSound(byte stopSound) {
+        this.StopSound = stopSound;
+    }
 
     public StandUserData(LivingEntity entity) {
         this.User = entity;
@@ -356,6 +363,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         buf.writeInt(stID);
         buf.writeFloat(this.GuardPoints);
         buf.writeBoolean(this.GuardBroken);
+        buf.writeByte(this.StopSound); this.StopSound = -1;
         StandPowers SP = this.getStandPowers();
 
         buf.writeInt(SP.getAttackTime());
@@ -379,6 +387,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         }
         GuardPoints = buf.readFloat();
         GuardBroken = buf.readBoolean();
+        this.stopSounds(buf.readByte());
         StandPowers SP = this.getStandPowers();
 
         SP.setAttackTime(buf.readInt());
@@ -387,6 +396,14 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         SP.setActivePower(buf.readByte());
         SP.setActivePowerPhase(buf.readByte());
         SP.setIsAttacking(buf.readBoolean());
+    }
+
+    public void stopSounds(byte soundNumber){
+        /**This is where we cancel sounds like barrage and barrage wind. Must change this.StopSound server side,
+         * then send a sync packet*/
+        if (soundNumber != -1) {
+            MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNumber), SoundCategory.PLAYERS);
+        }
     }
 
     public void onStandOutLookAround(StandEntity passenger) {

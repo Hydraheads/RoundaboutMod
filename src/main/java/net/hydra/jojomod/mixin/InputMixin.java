@@ -110,10 +110,6 @@ public class InputMixin {
                        if (standComp.getActivePowerPhase() > 0 ) {
                            standComp.setInterruptCD(3);
                        }
-
-                       if (standComp.isBarraging()){
-                           MinecraftClient.getInstance().getSoundManager().stopSounds(standComp.getStandPowers().getBarrageCryID(), SoundCategory.PLAYERS);
-                       }
                        ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
                        standComp.tryPower(PowerIndex.NONE,true);
                     }

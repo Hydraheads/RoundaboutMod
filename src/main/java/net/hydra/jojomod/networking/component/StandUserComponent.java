@@ -70,6 +70,7 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void setPowerNone();
 
    void tryPower(int move, boolean forced);
+  void stopSounds(byte soundNumber);
 
    void setSummonCD(int summonCD);
    boolean getSummonCD();
