@@ -564,8 +564,11 @@ public class StandPowers {
         Box box = new Box(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
 
         EntityHitResult entityHitResult = ProjectileUtil.raycast(User, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.canHit() && !entity.isInvulnerable(), reach*reach);
-        if (entityHitResult != null) {
-            return entityHitResult.getEntity();
+        if (entityHitResult != null){
+            Entity hitResult = entityHitResult.getEntity();
+            if (hitResult.isAlive() && !hitResult.isRemoved()) {
+                return hitResult;
+            }
         }
         return null;
     }
@@ -708,7 +711,7 @@ public class StandPowers {
         SoundEvent barrageChargeSound = this.getBarrageChargeSound();
         if (barrageChargeSound != null) {
             this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageChargeSound,
-                    SoundCategory.PLAYERS, 0.95F, 1);
+                    SoundCategory.PLAYERS, 0.96F, 1);
         }
     }
     public boolean isGuarding(){
