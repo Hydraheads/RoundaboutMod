@@ -5,6 +5,7 @@ import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
@@ -24,7 +25,11 @@ public class PlayerEntityMixin {
         if (standUserData.isGuarding()) {
             if (standUserData.getGuardBroken()){
                 ((PlayerEntity) (Object) this).getItemCooldownManager().set(Items.SHIELD, 100);
+                ((PlayerEntity) (Object) this).clearActiveItem();
+                ((PlayerEntity) (Object) this).getWorld().sendEntityStatus(((PlayerEntity) (Object) this), EntityStatuses.BREAK_SHIELD);
             }
+            ci.cancel();
+        } else if (MyComponents.STAND_USER.get(attacker).getMainhandOverride()){
             ci.cancel();
         }
     }

@@ -12,6 +12,7 @@ import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -306,6 +307,8 @@ public class StandPowers {
                             if (item.getUseAction(itemStack) == UseAction.BLOCK) {
                                 ((LivingEntity) entity).stopUsingItem();
                                 ((PlayerEntity) entity).getItemCooldownManager().set(Items.SHIELD, duration);
+                                ((PlayerEntity) entity).clearActiveItem();
+                                entity.getWorld().sendEntityStatus(entity, EntityStatuses.BREAK_SHIELD);
                                 return true;
                             }
                         }

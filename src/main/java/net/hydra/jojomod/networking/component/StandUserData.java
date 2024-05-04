@@ -81,6 +81,10 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public boolean getActive() {
         return this.StandActive;
     }
+    /**If the player currently is stand attacking vs using items*/
+    public boolean getMainhandOverride() {
+        return this.StandActive;
+    }
     public float getMaxGuardPoints(){
         return this.maxGuardPoints;
     }
