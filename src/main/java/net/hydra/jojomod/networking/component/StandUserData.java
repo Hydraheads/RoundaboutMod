@@ -44,6 +44,15 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     private boolean GuardBroken = false;
     private int GuardCooldown = 0;
 
+    /** These variables control if someone is dazed, stunned, frozen, or controlled.**/
+
+     /* dazeTime: how many ticks left of daze. Inflicted by stand barrage,
+     * daze lets you scroll items and look around, but it takes away
+     * your movement, item usage, and stand ability usage. You also
+     * have no gravity while dazed**/
+
+    private int dazeTime = 0;
+
 
 
     public StandUserData(LivingEntity entity) {
@@ -53,6 +62,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         //if (StandID > -1) {
         this.getStandPowers().tickPower();
         this.tickGuard();
+        this.tickDaze();
         //}
     }
 
@@ -120,6 +130,10 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
             }
         }
         if (this.GuardCooldown > 0){this.GuardCooldown--;}
+    } public void tickDaze(){
+        if (this.dazeTime > 0){
+            dazeTime--;
+        }
     }
 
     public float getRayDistance(Entity entity, float range){

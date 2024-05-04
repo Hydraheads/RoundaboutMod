@@ -337,17 +337,17 @@ public class StandPowers {
             return 8;
         }
     } private float getBarrageHitStrength(Entity entity){
-        float barrageLength = this.getBarrageLength() - this.getBarrageWindup();
+        float barrageLength = this.getBarrageLength();
         float power;
         if (this.getReducedDamage(entity)){
-            power = 7/barrageLength;
+            power = 8/barrageLength;
         } else {
             power = 20/barrageLength;
         }
         /**Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
             if (power >= ((LivingEntity) entity).getHealth()){
-                power = 0.000001F;
+                power = 0;
             }
         }
         return power;
@@ -360,6 +360,9 @@ public class StandPowers {
         if (entity != null) {
             float pow;
             float knockbackStrength = 0;
+            /**By saving the velocity before hitting, we can let people approach barraging foes
+             * through shields.*/
+            Vec3d prevVelocity = entity.getVelocity();
             boolean lastHit = (this.attackTimeDuring >= (this.getBarrageLength() + this.getBarrageWindup()));
             if (lastHit) {
                 pow = this.getBarrageFinisherStrength(entity);
@@ -373,6 +376,8 @@ public class StandPowers {
             } else {
                 if (lastHit) {
                     knockShield(entity, 200);
+                } else {
+                    entity.setVelocity(prevVelocity);
                 }
             }
         }
