@@ -1,6 +1,10 @@
 package net.hydra.jojomod.mixin;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
@@ -53,8 +57,20 @@ public class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V", shift = At.Shift.BEFORE))
+    /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
+    @Inject(method = "damage", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
+        StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
+        if (standUserData.isBarraging() && standUserData.getAttackTimeDuring()
+                < standUserData.getStandPowers().getBarrageWindup()) {
+            ClientPlayNetworking.send(ModMessages.STAND_GUARD_PACKET, PacketByteBufs.create());
+            standUserData.tryPower(PowerIndex.GUARD,true);
+        }
+    }
+
+    /**Part of Registering Stand Guarding as a form of Blocking*/
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V", shift = At.Shift.BEFORE))
+    private void RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
         StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
         if (standUserData.isGuarding()) {
             if (!source.isIn(DamageTypeTags.BYPASSES_COOLDOWN) && standUserData.getGuardCooldown() > 0) {
