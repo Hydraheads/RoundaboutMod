@@ -71,6 +71,12 @@
       "roundabout:stand_theworld_muda4"
     ]
   },
+  "stand_barrage_windup": {
+    "subtitle": "sounds.roundabout.stand_barrage_windup",
+    "sounds": [
+      "roundabout:stand_barrage_windup"
+    ]
+  },
   "hit_sfx1": {
     "subtitle": "sounds.roundabout.hit_sfx1",
     "sounds": [

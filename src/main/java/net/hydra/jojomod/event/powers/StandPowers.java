@@ -150,12 +150,19 @@ public class StandPowers {
     public Identifier getBarrageCryID(){
         return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
     }
+    private SoundEvent getBarrageChargeSound(){
+        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
+    }
+
+    public Identifier getBarrageChargeID(){
+        return ModSounds.STAND_BARRAGE_WINDUP_ID;
+    }
 
     public Identifier getSoundID(byte soundNumber){
         if (soundNumber == SoundIndex.BARRAGE_CRY_SOUND) {
             return getBarrageCryID();
         } else if (soundNumber == SoundIndex.BARRAGE_CHARGE_SOUND) {
-            return getBarrageCryID();
+            return getBarrageChargeID();
         }
         return null;
     }
@@ -660,6 +667,8 @@ public class StandPowers {
                 StandUserComponent standUserData = this.getUserData(this.self);
                 if (this.getAttackTimeDuring() >= this.getBarrageWindup()) {
                     standUserData.stopSounds(SoundIndex.BARRAGE_CRY_SOUND);
+                } else {
+                    standUserData.stopSounds(SoundIndex.BARRAGE_CHARGE_SOUND);
                 }
             }
 
@@ -695,6 +704,12 @@ public class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
+
+        SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+        if (barrageChargeSound != null) {
+            this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageChargeSound,
+                    SoundCategory.PLAYERS, 0.95F, 1);
+        }
     }
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
