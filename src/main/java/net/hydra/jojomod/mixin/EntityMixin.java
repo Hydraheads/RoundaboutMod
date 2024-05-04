@@ -20,10 +20,12 @@ public class EntityMixin {
      * measurement. Injects into the Entity Class.*/
     @Inject(method = "teleportPassengers", at = @At(value = "TAIL"))
     private void teleportPassengersRoundabout(CallbackInfo ci) {
-        LivingEntity living = ((LivingEntity) (Object) this);
-        StandUserComponent standUserData = MyComponents.STAND_USER.get(living);
-        if (standUserData.hasStandOut()){
-            standUserData.updateStandOutPosition(standUserData.getStand(), Entity::refreshPositionAfterTeleport);
+        if (((Entity) (Object) this) instanceof LivingEntity) {
+            LivingEntity living = ((LivingEntity) (Object) this);
+            StandUserComponent standUserData = MyComponents.STAND_USER.get(living);
+            if (standUserData.hasStandOut()) {
+                standUserData.updateStandOutPosition(standUserData.getStand(), Entity::refreshPositionAfterTeleport);
+            }
         }
     }
 
@@ -33,7 +35,6 @@ public class EntityMixin {
         if (((Entity) (Object) this) instanceof LivingEntity) {
             StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
             if (standUserData.isDazed()) {
-                RoundaboutMod.LOGGER.info("test");
                 ci.setReturnValue(true);
             }
         }
