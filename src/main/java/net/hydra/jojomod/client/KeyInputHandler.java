@@ -1,5 +1,7 @@
-package net.hydra.jojomod.event;
+package net.hydra.jojomod.client;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -21,7 +23,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.lwjgl.glfw.GLFW;
-
+@Environment(EnvType.CLIENT)
 public class KeyInputHandler {
     public static final String KEY_CATEGORY_JOJO = "key.category.roundabout.jojo";
     public static final String KEY_ABILITY_1 = "key.roundabout.ability.one";

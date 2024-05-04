@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.ModMessages;
@@ -63,7 +64,6 @@ public class LivingEntityMixin {
         StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
         if (standUserData.isBarraging() && standUserData.getAttackTimeDuring()
                 < standUserData.getStandPowers().getBarrageWindup()) {
-            ClientPlayNetworking.send(ModMessages.STAND_GUARD_PACKET, PacketByteBufs.create());
             standUserData.tryPower(PowerIndex.GUARD,true);
         }
     }

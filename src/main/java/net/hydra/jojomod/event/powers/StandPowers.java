@@ -347,7 +347,11 @@ public class StandPowers {
         /**Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
             if (power >= ((LivingEntity) entity).getHealth()){
-                power = 0;
+                if (entity instanceof PlayerEntity) {
+                    power = 0.00001F;
+                } else {
+                    power = 0F;
+                }
             }
         }
         return power;
@@ -592,11 +596,12 @@ public class StandPowers {
         if ((strength *= 1.0 - entity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) <= 0.0) {
             return;
         }
-        entity.velocityDirty = true;
+        entity.velocityModified = true;
         Vec3d vec3d2 = new Vec3d(x, y, z).normalize().multiply(strength);
         entity.setVelocity(- vec3d2.x,
                 -vec3d2.y,
                 - vec3d2.z);
+        entity.velocityDirty = true;
     }
 
 

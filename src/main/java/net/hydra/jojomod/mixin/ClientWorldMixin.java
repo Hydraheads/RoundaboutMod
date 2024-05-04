@@ -1,5 +1,7 @@
 package net.hydra.jojomod.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.networking.MyComponents;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 @Mixin(ClientWorld.class)
 public class ClientWorldMixin {
 
