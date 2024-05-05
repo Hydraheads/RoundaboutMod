@@ -412,7 +412,9 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         /**This is where we cancel sounds like barrage and barrage wind. Must change this.StopSound server side,
          * then send a sync packet*/
         if (soundNumber != -1) {
-            MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNumber), SoundCategory.PLAYERS);
+            if (this.User.getWorld().isClient) {
+                MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNumber), SoundCategory.PLAYERS);
+            }
         }
     }
 

@@ -212,10 +212,12 @@ public class StandPowers {
                 this.setPowerGuard();
             } else {
                 if (this.attackTimeDuring == this.getBarrageWindup()) {
-                    SoundEvent barrageCrySound = this.getBarrageCrySound();
-                    if (barrageCrySound != null) {
-                        this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageCrySound,
-                                SoundCategory.PLAYERS, 0.95F, 1);
+                    if (!this.self.getWorld().isClient()) {
+                        SoundEvent barrageCrySound = this.getBarrageCrySound();
+                        if (barrageCrySound != null) {
+                            this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageCrySound,
+                                    SoundCategory.PLAYERS, 0.95F, 1);
+                        }
                     }
                 }
                 standBarrageHit();
@@ -308,8 +310,11 @@ public class StandPowers {
 
     /**This function ensures the client sending attack packets is ONLY the player using the attack, prevents double attacking*/
     public boolean isPacketPlayer(){
-        MinecraftClient mc = MinecraftClient.getInstance();
-        return mc.player != null && mc.player.getId() == this.self.getId();
+        if (this.self.getWorld().isClient) {
+            MinecraftClient mc = MinecraftClient.getInstance();
+            return mc.player != null && mc.player.getId() == this.self.getId();
+        }
+        return false;
     }
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
@@ -477,10 +482,12 @@ public class StandPowers {
         float pitch = 1F;
         if (this.activePowerPhase >= this.activePowerPhaseMax){
 
-            SoundEvent LastHitSound = this.getLastHitSound();
-            if (LastHitSound != null) {
-                this.self.getWorld().playSound(null, this.self.getBlockPos(), LastHitSound,
-                        SoundCategory.PLAYERS, 1F, 1);
+            if (!this.self.getWorld().isClient()) {
+                SoundEvent LastHitSound = this.getLastHitSound();
+                if (LastHitSound != null) {
+                    this.self.getWorld().playSound(null, this.self.getBlockPos(), LastHitSound,
+                            SoundCategory.PLAYERS, 1F, 1);
+                }
             }
 
             if (entity != null) {
@@ -499,7 +506,9 @@ public class StandPowers {
             }
         }
 
-        this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 0.95F, pitch);
+        if (!this.self.getWorld().isClient()) {
+            this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 0.95F, pitch);
+        }
     }
 
     public void damage(Entity entity){
@@ -589,8 +598,11 @@ public class StandPowers {
 
     /** This code grabs an entity in front of you at the specified range, raycasting is used*/
     public Entity rayCastEntity(LivingEntity User, float reach){
-        MinecraftClient mc = MinecraftClient.getInstance();
-        float tickDelta = mc.getLastFrameDuration();
+        float tickDelta = 0;
+        if (this.self.getWorld().isClient()) {
+            MinecraftClient mc = MinecraftClient.getInstance();
+            tickDelta = mc.getLastFrameDuration();
+        }
         Vec3d vec3d = User.getCameraPosVec(tickDelta);
 
         Vec3d vec3d2 = User.getRotationVec(1.0f);
@@ -743,10 +755,12 @@ public class StandPowers {
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
 
-        SoundEvent barrageChargeSound = this.getBarrageChargeSound();
-        if (barrageChargeSound != null) {
-            this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageChargeSound,
-                    SoundCategory.PLAYERS, 0.96F, 1);
+        if (!this.self.getWorld().isClient()) {
+            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+            if (barrageChargeSound != null) {
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageChargeSound,
+                        SoundCategory.PLAYERS, 0.96F, 1);
+            }
         }
     }
     public boolean isGuarding(){

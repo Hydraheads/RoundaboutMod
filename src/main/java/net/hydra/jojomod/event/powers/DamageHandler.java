@@ -18,8 +18,11 @@ public class DamageHandler {
 
     /** Returns an offset away from a player's sight*/
     public static Vec3d getRayPoint(LivingEntity entity, double maxDistance){
-            MinecraftClient mc = MinecraftClient.getInstance();
-            float tickDelta = mc.getLastFrameDuration();
+            float tickDelta = 0;
+            if (entity.getWorld().isClient()) {
+                MinecraftClient mc = MinecraftClient.getInstance();
+                tickDelta = mc.getLastFrameDuration();
+            }
             Vec3d vec3d = entity.getCameraPosVec(tickDelta);
             Vec3d vec3d2 = entity.getRotationVec(tickDelta);
             return vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);
