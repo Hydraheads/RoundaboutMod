@@ -8,6 +8,7 @@
 		"PlayerManagerMixin",
 		"EntityMixin",
 		"LivingEntityMixin",
+		"MobEntityMixin",
 		"ServerWorldMixin",
 		"ShieldItemMixin",
 		"PlayerEntityMixin"

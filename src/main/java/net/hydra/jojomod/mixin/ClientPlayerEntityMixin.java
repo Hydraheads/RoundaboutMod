@@ -29,7 +29,11 @@ public class ClientPlayerEntityMixin {
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/TutorialManager;onMovement(Lnet/minecraft/client/input/Input;)V", shift = At.Shift.AFTER))
     private void RoundaboutTickMovement(CallbackInfo ci) {
         StandUserComponent standComp = MyComponents.STAND_USER.get(this);
-        if (standComp.isGuarding() || standComp.isBarraging()) {
+        if (standComp.isDazed()) {
+            this.input.movementSideways = 0;
+            this.input.movementForward = 0;
+            this.ticksLeftToDoubleTapSprint = 0;
+        } else if (standComp.isGuarding() || standComp.isBarraging()) {
             this.input.movementSideways *= 0.2f;
             this.input.movementForward *= 0.2f;
             this.ticksLeftToDoubleTapSprint = 0;

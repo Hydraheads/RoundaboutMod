@@ -68,6 +68,15 @@ public class LivingEntityMixin {
         }
     }
 
+    /**Prevent you from hearing every hit in a rush*/
+    @Inject(method = "playHurtSound", at = @At(value = "HEAD"), cancellable = true)
+    protected void RoundaboutPlayHurtSound(DamageSource source, CallbackInfo ci) {
+        StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
+        if (standUserData.isDazed()) {
+            ci.cancel();
+        }
+    }
+
     /**Part of Registering Stand Guarding as a form of Blocking*/
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V", shift = At.Shift.BEFORE))
     private void RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {

@@ -72,7 +72,9 @@ public class InputMixin {
                     if (!breaking){
                         this.attackCooldown = 0;
                     }
-                    this.interactionManager.cancelBlockBreaking();
+                    if (this.interactionManager != null) {
+                        this.interactionManager.cancelBlockBreaking();
+                    }
                     ci.cancel();
                 }
             }
