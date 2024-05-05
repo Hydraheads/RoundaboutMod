@@ -58,13 +58,17 @@ public class StandEntityRenderer extends GeoEntityRenderer<StandEntity> implemen
     }
 
     public float getStandOpacity(){
-        int vis = this.animatable.getFadeOut();
-        int max = this.animatable.getMaxFade();
-        float tot = (float) ((((float) vis/max)*1.3)-0.3);
-        if (tot < 0) {
-            tot=0;
-        }
+        if (!this.animatable.hasMaster()) {
+            return 1;
+        } else {
+            int vis = this.animatable.getFadeOut();
+            int max = this.animatable.getMaxFade();
+            float tot = (float) ((((float) vis / max) * 1.3) - 0.3);
+            if (tot < 0) {
+                tot = 0;
+            }
             return tot;
+        }
     }
 
     public float getStandSwimming(){

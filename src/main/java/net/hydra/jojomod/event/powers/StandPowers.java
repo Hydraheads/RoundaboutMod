@@ -155,9 +155,16 @@ public class StandPowers {
     private SoundEvent getBarrageChargeSound(){
         return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
     }
-
     public Identifier getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
+    }
+
+    private SoundEvent getLastHitSound(){
+        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+    }
+
+    public Identifier getLastHitID(){
+        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_ID;
     }
 
     public Identifier getSoundID(byte soundNumber){
@@ -469,6 +476,13 @@ public class StandPowers {
         SoundEvent SE;
         float pitch = 1F;
         if (this.activePowerPhase >= this.activePowerPhaseMax){
+
+            SoundEvent LastHitSound = this.getLastHitSound();
+            if (LastHitSound != null) {
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), LastHitSound,
+                        SoundCategory.PLAYERS, 1F, 1);
+            }
+
             if (entity != null) {
                 SE = ModSounds.PUNCH_4_SOUND_EVENT;
                 pitch = 1.2F;
@@ -484,6 +498,7 @@ public class StandPowers {
                 SE = ModSounds.PUNCH_1_SOUND_EVENT;
             }
         }
+
         this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 0.95F, pitch);
     }
 
