@@ -55,7 +55,9 @@ public class InputMixin {
             //handleInputEvents
             if (player != null) {
                 StandUserComponent standComp = MyComponents.STAND_USER.get(player);
-                if (standComp.getActive()){
+                if (standComp.isDazed()) {
+                    ci.setReturnValue(true);
+                } else if (standComp.getActive()){
                     ci.setReturnValue(true);
                 }
                 //while (this.options.attackKey.wasPressed()) {
@@ -91,8 +93,10 @@ public class InputMixin {
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
             StandUserComponent standComp = MyComponents.STAND_USER.get(player);
-            if (standComp.getActive()) {
-                if (standComp.isGuarding()) {
+            if (standComp.isDazed()) {
+                ci.cancel();
+            } else if (standComp.getActive()) {
+                if (standComp.isGuarding() || standComp.isBarraging()) {
                     ci.cancel();
                 }
             }

@@ -17,6 +17,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
@@ -306,7 +308,14 @@ public class StandPowers {
     //        1,0.0, 0.0, 0.0,1);
 
     private void setDazed(LivingEntity entity, byte dazeTime){
-        StandUserComponent standUserData = this.getUserData((LivingEntity) entity);
+        if ((1.0 - entity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) <= 0.0) {
+            /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
+            return;
+        } else if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity){
+            /*Bosses can't be dazed**/
+            return;
+        }
+        StandUserComponent standUserData = this.getUserData(entity);
         standUserData.setDazed(dazeTime);
     }
 
