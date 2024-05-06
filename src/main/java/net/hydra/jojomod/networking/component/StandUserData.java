@@ -150,8 +150,13 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         }
         if (this.GuardCooldown > 0){this.GuardCooldown--;}
     } public void tickDaze(){
-        if (this.dazeTime > 0){
-            dazeTime--;
+        if (!this.User.getWorld().isClient) {
+            if (this.dazeTime > 0) {
+                dazeTime--;
+                if (dazeTime <= 0){
+                    this.sync();
+                }
+            }
         }
     }
 

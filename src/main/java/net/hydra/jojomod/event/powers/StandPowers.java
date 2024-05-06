@@ -182,7 +182,7 @@ public class StandPowers {
                 if (this.attackTimeDuring == -1) {
                     poseStand(OffsetIndex.FOLLOW);
                 } else {
-                    if (this.hasStandActive(this.self) && !this.self.isUsingItem()) {
+                    if (this.hasStandActive(this.self) && !this.self.isUsingItem() && !this.isDazed(this.self)) {
                         if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
                             this.updateAttack();
                         } else if (this.isBarraging()) {
@@ -319,6 +319,10 @@ public class StandPowers {
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
 
+    private boolean isDazed(LivingEntity entity){
+        StandUserComponent standUserData = this.getUserData(entity);
+        return standUserData.isDazed();
+    }
     private void setDazed(LivingEntity entity, byte dazeTime){
         if ((1.0 - entity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) <= 0.0) {
             /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
@@ -422,14 +426,14 @@ public class StandPowers {
                 knockbackStrength=  0.01F;
             }
             if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                barrageImpact2(entity,lastHit,knockbackStrength);
                 if (entity instanceof LivingEntity) {
                     if (lastHit) {
                         setDazed((LivingEntity) entity, (byte) 0);
                     } else {
-                        setDazed((LivingEntity) entity, (byte) 2);
+                        setDazed((LivingEntity) entity, (byte) 3);
                     }
                 }
+                barrageImpact2(entity,lastHit,knockbackStrength);
             } else {
                 if (lastHit) {
                     knockShield(entity, 200);
@@ -713,7 +717,7 @@ public class StandPowers {
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public void tryPower(int move, boolean forced){
-        if (this.activePower == PowerIndex.NONE || forced){
+        if ((this.activePower == PowerIndex.NONE || forced) && !this.isDazed(this.self)){
 
             if (!this.self.getWorld().isClient()) {
                 if (this.isBarraging()) {
