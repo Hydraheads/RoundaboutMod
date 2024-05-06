@@ -412,33 +412,35 @@ public class StandPowers {
 
     public void barrageImpact(Entity entity){
         if (entity != null) {
-            float pow;
-            float knockbackStrength = 0;
-            /**By saving the velocity before hitting, we can let people approach barraging foes
-             * through shields.*/
-            Vec3d prevVelocity = entity.getVelocity();
-            boolean lastHit = (this.attackTimeDuring >= (this.getBarrageLength() + this.getBarrageWindup()));
-            if (lastHit) {
-                pow = this.getBarrageFinisherStrength(entity);
-                knockbackStrength= 2.2F;
-            } else {
-                pow = this.getBarrageHitStrength(entity);
-                knockbackStrength=  0.01F;
-            }
-            if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                if (entity instanceof LivingEntity) {
-                    if (lastHit) {
-                        setDazed((LivingEntity) entity, (byte) 0);
-                    } else {
-                        setDazed((LivingEntity) entity, (byte) 3);
-                    }
-                }
-                barrageImpact2(entity,lastHit,knockbackStrength);
-            } else {
+            if (this.attackTimeDuring >= this.getBarrageWindup()) {
+                float pow;
+                float knockbackStrength = 0;
+                /**By saving the velocity before hitting, we can let people approach barraging foes
+                 * through shields.*/
+                Vec3d prevVelocity = entity.getVelocity();
+                boolean lastHit = (this.attackTimeDuring >= (this.getBarrageLength() + this.getBarrageWindup()));
                 if (lastHit) {
-                    knockShield(entity, 200);
+                    pow = this.getBarrageFinisherStrength(entity);
+                    knockbackStrength = 2.2F;
                 } else {
-                    entity.setVelocity(prevVelocity);
+                    pow = this.getBarrageHitStrength(entity);
+                    knockbackStrength = 0.01F;
+                }
+                if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                    if (entity instanceof LivingEntity) {
+                        if (lastHit) {
+                            setDazed((LivingEntity) entity, (byte) 0);
+                        } else {
+                            setDazed((LivingEntity) entity, (byte) 3);
+                        }
+                    }
+                    barrageImpact2(entity, lastHit, knockbackStrength);
+                } else {
+                    if (lastHit) {
+                        knockShield(entity, 200);
+                    } else {
+                        entity.setVelocity(prevVelocity);
+                    }
                 }
             }
         }
@@ -718,17 +720,6 @@ public class StandPowers {
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public void tryPower(int move, boolean forced){
         if ((this.activePower == PowerIndex.NONE || forced) && !this.isDazed(this.self)){
-
-            if (!this.self.getWorld().isClient()) {
-                if (this.isBarraging()) {
-                    StandUserComponent standUserData = this.getUserData(this.self);
-                    if (this.getAttackTimeDuring() >= this.getBarrageWindup()) {
-                        standUserData.SetStopSound(SoundIndex.BARRAGE_CRY_SOUND);
-                    } else {
-                        standUserData.SetStopSound(SoundIndex.BARRAGE_CHARGE_SOUND);
-                    }
-                }
-            }
 
             if (move == PowerIndex.NONE) {
                 this.setPowerNone();

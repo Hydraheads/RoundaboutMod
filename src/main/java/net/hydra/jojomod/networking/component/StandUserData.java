@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.client.MinecraftClient;
@@ -55,12 +56,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
     private byte dazeTime = 0;
 
-    private byte StopSound = -1;
-
-
-    public void SetStopSound(byte stopSound) {
-        this.StopSound = stopSound;
-    }
 
     public StandUserData(LivingEntity entity) {
         this.User = entity;
@@ -70,6 +65,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.getStandPowers().tickPower();
         this.tickGuard();
         this.tickDaze();
+        this.updateBarrageNoise();
         //}
     }
 
@@ -271,6 +267,35 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.sync();
     }
 
+    public boolean barrageNoise = false;
+    public int barrageNoiseTime = 0;
+
+    public boolean hasBarrageNoise(){
+        return this.barrageNoise;
+    } public void updateBarrageNoise(){
+        if (this.User.getWorld().isClient) {
+            if (!this.isBarraging()) {
+                if (this.hasBarrageNoise()) {
+                    if (this.barrageNoiseTime >= this.getStandPowers().getBarrageWindup()-1) {
+                        this.stopSounds(SoundIndex.BARRAGE_CRY_SOUND);
+                    }
+                    this.stopSounds(SoundIndex.BARRAGE_CHARGE_SOUND);
+                    this.barrageNoise = false;
+                    this.barrageNoiseTime = 0;
+                }
+            } else {
+                if (!this.hasBarrageNoise()) {
+                    this.barrageNoise = true;
+                }
+                if (this.getAttackTimeDuring() >= (this.getStandPowers().getBarrageWindup() +
+                        this.getStandPowers().getBarrageLength())){
+                    this.barrageNoise = false;
+                }
+                this.barrageNoiseTime = this.getAttackTimeDuring();
+            }
+        }
+    }
+
     /** Code that brings out a user's stand, based on the stand's summon sounds and conditions. */
      public void summonStand(World theWorld, boolean forced, boolean sound){
         boolean active;
@@ -365,7 +390,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         buf.writeFloat(this.GuardPoints);
         buf.writeBoolean(this.GuardBroken);
         buf.writeByte(this.dazeTime);
-        buf.writeByte(this.StopSound); this.StopSound = -1;
         StandPowers SP = this.getStandPowers();
 
         buf.writeInt(SP.getAttackTime());
@@ -390,7 +414,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.GuardPoints = buf.readFloat();
         this.GuardBroken = buf.readBoolean();
         this.dazeTime = buf.readByte();
-        this.stopSounds(buf.readByte());
         StandPowers SP = this.getStandPowers();
 
         SP.setAttackTime(buf.readInt());
@@ -404,10 +427,8 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public void stopSounds(byte soundNo){
         /**This is where we cancel sounds like barrage and barrage wind. Must change this.StopSound server side,
          * then send a sync packet*/
-        if (soundNo != -1) {
-            if (this.User.getWorld().isClient) {
-                MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNo), SoundCategory.PLAYERS);
-            }
+        if (this.User.getWorld().isClient) {
+            MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNo), SoundCategory.PLAYERS);
         }
     }
 
