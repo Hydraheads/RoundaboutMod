@@ -26,6 +26,12 @@
 
   "death.attack.stand": "%1$s died to a mysterious power!",
 
+  "commands.roundabout.force_summon.multiple": "Summoned stands from %s entities",
+  "commands.roundabout.force_summon.single": "Summoned stand from %s",
+
+  "commands.roundabout.heal.multiple": "Healed %s entities",
+  "commands.roundabout.heal.single": "Healed %s",
+
   "sounds.roundabout.summon_stand":  "Stand summoned",
   "sounds.roundabout.summon_star":  "Stand summoned",
   "sounds.roundabout.summon_world":  "Stand summoned",

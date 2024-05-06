@@ -58,7 +58,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     private byte StopSound = -1;
 
 
-    public void CancelStopSound(byte stopSound) {
+    public void SetStopSound(byte stopSound) {
         this.StopSound = stopSound;
     }
 
@@ -203,10 +203,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public float getStandReach(){
         return this.getStandPowers().getStandReach();
     }
-    public void setPowerAttack(){
-        this.getStandPowers().setPowerAttack();
-        this.sync();
-    }
     public boolean isGuarding(){
         return this.getStandPowers().isGuarding();
     }
@@ -224,14 +220,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public boolean shieldNotDisabled(){
         return !(this.User instanceof PlayerEntity) || !(((PlayerEntity) this.User).getItemCooldownManager().getCooldownProgress(Items.SHIELD, 0f) > 0);
 
-    }
-    public void setPowerGuard(){
-        this.getStandPowers().setPowerGuard();
-        this.sync();
-    }
-    public void setPowerNone(){
-        this.getStandPowers().setPowerNone();
-        this.sync();
     }
     public float getDistanceOut(Entity entity, float range, boolean offset){
        return this.getStandPowers().getDistanceOut(entity,range,offset);
@@ -281,7 +269,7 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     /** Code that brings out a user's stand, based on the stand's summon sounds and conditions. */
      public void summonStand(World theWorld, boolean forced, boolean sound){
         boolean active;
-        if ((!this.getActive() && !forced) || (forced && this.getActive())) {
+        if (!this.getActive() || forced) {
             //world.getEntity
             StandEntity stand = ModEntities.THE_WORLD.create(User.getWorld());
             if (stand != null) {
@@ -408,12 +396,12 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         SP.setIsAttacking(buf.readBoolean());
     }
 
-    public void stopSounds(byte soundNumber){
+    public void stopSounds(byte soundNo){
         /**This is where we cancel sounds like barrage and barrage wind. Must change this.StopSound server side,
          * then send a sync packet*/
-        if (soundNumber != -1) {
+        if (soundNo != -1) {
             if (this.User.getWorld().isClient) {
-                MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNumber), SoundCategory.PLAYERS);
+                MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNo), SoundCategory.PLAYERS);
             }
         }
     }

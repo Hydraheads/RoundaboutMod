@@ -59,7 +59,6 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
    void setStandPowers(StandPowers standPowers);
     void setAttackTimeDuring(int attackTimeDuring);
     void setInterruptCD(int interruptCD);
-    void setPowerAttack();
     boolean isGuarding();
     boolean isBarraging();
     float getGuardCooldown();
@@ -68,11 +67,10 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     boolean shieldNotDisabled();
     boolean isDazed();
     void setDazed(byte dazeTime);
-    void setPowerGuard();
-    void setPowerNone();
 
    void tryPower(int move, boolean forced);
   void stopSounds(byte soundNumber);
+   void SetStopSound(byte stopSound);
 
    void setSummonCD(int summonCD);
    boolean getSummonCD();

@@ -474,8 +474,10 @@ public class StandPowers {
             float distMax = this.getDistanceOut(this.self, this.standReach, false);
             float halfReach = (float) (distMax*0.5);
             Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
-            ((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
-                            1,0.0, 0.0, 0.0,1);
+            if (!this.self.getWorld().isClient) {
+                ((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                        1, 0.0, 0.0, 0.0, 1);
+            }
         }
 
         SoundEvent SE;
@@ -713,12 +715,14 @@ public class StandPowers {
     public void tryPower(int move, boolean forced){
         if (this.activePower == PowerIndex.NONE || forced){
 
-            if (this.isBarraging()){
-                StandUserComponent standUserData = this.getUserData(this.self);
-                if (this.getAttackTimeDuring() >= this.getBarrageWindup()) {
-                    standUserData.stopSounds(SoundIndex.BARRAGE_CRY_SOUND);
-                } else {
-                    standUserData.stopSounds(SoundIndex.BARRAGE_CHARGE_SOUND);
+            if (!this.self.getWorld().isClient()) {
+                if (this.isBarraging()) {
+                    StandUserComponent standUserData = this.getUserData(this.self);
+                    if (this.getAttackTimeDuring() >= this.getBarrageWindup()) {
+                        standUserData.SetStopSound(SoundIndex.BARRAGE_CRY_SOUND);
+                    } else {
+                        standUserData.SetStopSound(SoundIndex.BARRAGE_CHARGE_SOUND);
+                    }
                 }
             }
 
