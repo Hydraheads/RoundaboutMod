@@ -1,20 +1,24 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.RoundaboutMod;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import software.bernie.shadowed.eliotlash.mclib.math.functions.rounding.Round;
 
 @Mixin(PlayerEntity.class)
@@ -39,6 +43,14 @@ public class PlayerEntityMixin {
         StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
         if (standUserData.isGuarding()) {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)
+    protected void RoundaboutGetHurtSound(DamageSource source, CallbackInfoReturnable<SoundEvent> ci) {
+        StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
+        if (standUserData.isDazed() && source.isOf(ModDamageTypes.STAND)) {
+            ci.setReturnValue(null);
         }
     }
 }
