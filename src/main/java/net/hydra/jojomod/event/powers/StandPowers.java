@@ -345,20 +345,17 @@ public class StandPowers {
                     if (standUserData.isGuarding()) {
                         if (!standUserData.getGuardBroken()){
                             standUserData.breakGuard();
-                            return true;
                         }
-                    } else {
-                        if (entity instanceof PlayerEntity){
-                            ItemStack itemStack = ((LivingEntity) entity).getActiveItem();
-                            Item item = itemStack.getItem();
-                            if (item.getUseAction(itemStack) == UseAction.BLOCK) {
-                                ((LivingEntity) entity).stopUsingItem();
-                                ((PlayerEntity) entity).getItemCooldownManager().set(Items.SHIELD, duration);
-                                ((PlayerEntity) entity).clearActiveItem();
-                                entity.getWorld().sendEntityStatus(entity, EntityStatuses.BREAK_SHIELD);
-                                return true;
-                            }
-                        }
+                    }
+                    if (entity instanceof PlayerEntity){
+                         ItemStack itemStack = ((LivingEntity) entity).getActiveItem();
+                         Item item = itemStack.getItem();
+                         if (item.getUseAction(itemStack) == UseAction.BLOCK) {
+                             ((LivingEntity) entity).stopUsingItem();
+                             ((PlayerEntity) entity).clearActiveItem();
+                         }
+                        ((PlayerEntity) entity).getItemCooldownManager().set(Items.SHIELD, duration);
+                        entity.getWorld().sendEntityStatus(entity, EntityStatuses.BREAK_SHIELD);
                     }
                     return true;
                 }
