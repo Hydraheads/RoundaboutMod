@@ -9,6 +9,7 @@ import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,9 +27,13 @@ public class ClientWorldMixin {
     @Inject(method = "tickEntity", at = @At(value = "TAIL"))
     private void tickEntity2(Entity entity, CallbackInfo ci) {
 
-        this.standTickCheck(entity);
-        for (Entity entity2 : entity.getPassengerList()) {
-            this.standTickCheck(entity2);
+        if (!entity.isRemoved()) {
+            this.standTickCheck(entity);
+            for (Entity entity2 : entity.getPassengerList()) {
+                if (!entity2.isRemoved()) {
+                    this.standTickCheck(entity2);
+                }
+            }
         }
     }
 
@@ -45,13 +50,13 @@ public class ClientWorldMixin {
         }
     }
 
-    private void tickStandIn(LivingEntity entity, StandEntity passenger) {
-        if (passenger == null || passenger.isRemoved() || passenger.getMaster() != entity) {
+    private void tickStandIn(LivingEntity entity, StandEntity stand) {
+        if (stand == null || stand.isRemoved() || stand.getMaster() != entity) {
             return;
         }
-        passenger.resetPosition();
-        ++passenger.age;
-        passenger.tickStandOut();
+        stand.resetPosition();
+        ++stand.age;
+        stand.tickStandOut();
     }
 
 }

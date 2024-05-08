@@ -1,6 +1,7 @@
 package net.hydra.jojomod.networking.component;
 
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
+import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.networking.MyComponents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -69,6 +71,13 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         //}
     }
 
+
+    /**returns if the mob has a stand. For now, returns if stand is active, but in the future will be more
+     * complicated**/
+    public boolean isStandUser(){
+        return this.StandActive;
+    }
+
     public boolean isDazed(){
         return this.dazeTime > 0;
     } public void setDazed(byte dazeTime){
@@ -81,7 +90,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     public void sync() {
         CanSync = true;
         MyComponents.STAND_USER.sync(this.User);
-        CanSync = false;
     }
 
     public LivingEntity getUser() {
@@ -245,7 +253,10 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     /** This code is here in case we want to restrict when the syncing happens.*/
     @Override
     public boolean shouldSyncWith(ServerPlayerEntity player){
-        return CanSync;
+        if (this.isStandUser() || CanSync) {
+            return true;
+        }
+        return false;
     };
 
     /** Turns your stand "on". This updates the HUD, and is necessary in case the stand doesn't have a body.*/
@@ -361,23 +372,24 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
     /** Retooled vanilla riding code to update the location of a stand every tick relative to the entity it
      * is the user of.
      * @see StandEntity#getAnchorPlace */
-    public void updateStandOutPosition(StandEntity passenger) {
-        this.updateStandOutPosition(passenger, Entity::setPosition);
+    public void updateStandOutPosition(StandEntity stand) {
+        this.updateStandOutPosition(stand, Entity::setPosition);
     }
 
-    public void updateStandOutPosition(StandEntity passenger, Entity.PositionUpdater positionUpdater) {
+    public void updateStandOutPosition(StandEntity stand, Entity.PositionUpdater positionUpdater) {
         if (!(this.hasStandOut())) {
             return;
         }
-        byte OT = passenger.getOffsetType();
-        if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
-            Vec3d grabPos = passenger.getStandOffsetVector(User);
-            positionUpdater.accept(passenger, grabPos.x, grabPos.y, grabPos.z);
 
-            passenger.setYaw(User.getHeadYaw()%360);
-            passenger.setPitch(User.getPitch());
-            passenger.setBodyYaw(User.getHeadYaw()%360);
-            passenger.setHeadYaw(User.getHeadYaw()%360);
+        byte OT = stand.getOffsetType();
+        if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
+            Vec3d grabPos = stand.getStandOffsetVector(User);
+            positionUpdater.accept(stand, grabPos.x, grabPos.y, grabPos.z);
+
+            stand.setYaw(User.getHeadYaw()%360);
+            stand.setPitch(User.getPitch());
+            stand.setBodyYaw(User.getHeadYaw()%360);
+            stand.setHeadYaw(User.getHeadYaw()%360);
         }
     }
 
