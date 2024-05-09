@@ -1,11 +1,8 @@
 package net.hydra.jojomod.networking.component;
 
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.entity.StandEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.networking.MyComponents;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;

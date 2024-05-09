@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.rounding.Round;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {

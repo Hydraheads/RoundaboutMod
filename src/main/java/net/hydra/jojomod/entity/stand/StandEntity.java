@@ -1,17 +1,12 @@
-package net.hydra.jojomod.entity;
+package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.networking.component.StandComponent;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -20,27 +15,15 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import software.bernie.example.entity.DynamicExampleEntity;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.constant.DefaultAnimations;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Objects;
-import java.util.UUID;
 
-public abstract class StandEntity extends MobEntity implements GeoEntity {
+public abstract class StandEntity extends MobEntity{
     private final int MaxFade = 8;
 
     protected static final TrackedData<Integer> ANCHOR_PLACE = DataTracker.registerData(StandEntity.class,
@@ -89,7 +72,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * Creates the illusion of floaty movement within the stand.
      * Relevant in stand model code:
      *
-     * @see StandModel#setCustomAnimations
      */
     public final void setMoveForward(Byte MF) {
         this.dataTracker.set(MOVE_FORWARD, MF);
@@ -170,7 +152,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * These functions tell the game if the stand's user is Swimming, Crawling, or Elytra Flying.
      * Currently used for idle animation variants.
      *
-     * @see StandModel#setCustomAnimations
      */
     @Override
     public boolean isSwimming() {
@@ -212,7 +193,7 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
      * Controls the visibility of stands, specifically their fading in or out when summoned.
      * Potentially can be used to make stand blink on the verge of death?
      *
-     * @see StandEntityRenderer#getStandOpacity
+     * @see StandRenderer#getStandOpacity
      * <p>
      * When a stand hits negative opacity, it automatically despawns
      * @see #TickDown
@@ -233,9 +214,6 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         this.dataTracker.startTracking(MOVE_FORWARD, (byte) 0);
         this.dataTracker.startTracking(OFFSET_TYPE, (byte) 0);
     }
-
-    private final AnimatableInstanceCache cache =
-            GeckoLibUtil.createInstanceCache(this);
 
 
     /**
@@ -547,21 +525,4 @@ public abstract class StandEntity extends MobEntity implements GeoEntity {
         }
     }
 
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(
-                DefaultAnimations.genericIdleController(this)
-        );
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    // Create the animation handler for the body segment
-    protected PlayState poseBody(AnimationState<DynamicExampleEntity> state) {
-        state.setAnimation(DefaultAnimations.IDLE);
-        return PlayState.CONTINUE;
-    }
 }

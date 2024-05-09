@@ -6,7 +6,7 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.entity.StandEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.networking.component.StandComponent;
 import net.hydra.jojomod.networking.component.StandData;
 import net.hydra.jojomod.networking.component.StandUserComponent;
