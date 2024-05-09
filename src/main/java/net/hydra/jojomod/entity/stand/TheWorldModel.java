@@ -93,9 +93,13 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 				.uv(40, 53).cuboid(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(0.0F, 7.0F, 0.0F));
 		return TexturedModelData.of(modelData, 128, 128);
 	}
+
 	@Override
-	public void setAngles(TheWorldEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+		super.setAngles(entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
+
 	}
+
 	@Override
 	public ModelPart getPart() {
 		return stand;

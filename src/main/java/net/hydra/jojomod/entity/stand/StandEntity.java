@@ -46,7 +46,15 @@ public abstract class StandEntity extends MobEntity{
 
     private boolean isDisplay;
 
+    private int idleAnimationTimeout = 0;
 
+    public final AnimationState idleAnimationState = new AnimationState();
+
+    private void setupAnimationStates() {
+        if (!this.idleAnimationState.isRunning()) {
+            this.idleAnimationState.start(this.age);
+        }
+    }
 
     protected SoundEvent getSummonSound() {
         return ModSounds.SUMMON_SOUND_EVENT;
@@ -370,6 +378,10 @@ public abstract class StandEntity extends MobEntity{
         this.noClip = true;
 
         super.tick();
+            if (this.getWorld().isClient()){
+                setupAnimationStates();
+            }
+
             if (this.isAlive() && !this.dead){
                 if (this.getNeedsUser() && !this.isDisplay) {
                     if (this.getSelfData().getUser() != null) {
