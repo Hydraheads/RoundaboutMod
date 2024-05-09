@@ -48,9 +48,10 @@ public class StandAbilityPacket {
                              PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         Entity targetEntity = player.getWorld().getEntityById(buf.readInt());
+        int hitNumber = buf.readInt();
         server.execute(() -> {
             StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            userData.getStandPowers().barrageImpact(targetEntity);
+            userData.getStandPowers().barrageImpact(targetEntity, hitNumber);
         });
     }
 

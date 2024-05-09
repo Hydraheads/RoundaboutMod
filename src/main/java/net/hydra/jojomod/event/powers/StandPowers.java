@@ -275,13 +275,14 @@ public class StandPowers {
                 if (isPacketPlayer()){
                     PacketByteBuf buffer = PacketByteBufs.create();
                     buffer.writeInt(getTargetEntityId());
+                    buffer.writeInt(this.attackTimeDuring);
                     ClientPlayNetworking.send(ModMessages.STAND_BARRAGE_HIT_PACKET, buffer);
                 }
             }
         } else {
             /*Caps how far out the barrage hit goes*/
             Entity targetEntity = getTargetEntity(this.self,-1);
-            barrageImpact(targetEntity);
+            barrageImpact(targetEntity, this.attackTimeDuring);
         }
     }
 
@@ -405,15 +406,15 @@ public class StandPowers {
         return entity instanceof PlayerEntity;
     }
 
-    public void barrageImpact(Entity entity){
+    public void barrageImpact(Entity entity, int hitNumber){
         if (entity != null) {
-            if (this.attackTimeDuring >= this.getBarrageWindup()) {
+            if (hitNumber >= this.getBarrageWindup()) {
                 float pow;
                 float knockbackStrength = 0;
                 /**By saving the velocity before hitting, we can let people approach barraging foes
                  * through shields.*/
                 Vec3d prevVelocity = entity.getVelocity();
-                boolean lastHit = (this.attackTimeDuring >= (this.getBarrageLength() + this.getBarrageWindup()));
+                boolean lastHit = (hitNumber >= (this.getBarrageLength() + this.getBarrageWindup()));
                 if (lastHit) {
                     pow = this.getBarrageFinisherStrength(entity);
                     knockbackStrength = 2.2F;
