@@ -156,7 +156,6 @@ public class StandPowers {
     public Identifier getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
     }
-
     private SoundEvent getLastHitSound(){
         return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
     }
@@ -436,7 +435,19 @@ public class StandPowers {
                         knockShield(entity, 200);
                     } else {
                         entity.setVelocity(prevVelocity);
+
+                        if (!this.self.getWorld().isClient()) {
+                            //if (hitNumber%2==0) {
+                                this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+                            //}
+                        }
                     }
+                }
+            }
+        } else {
+            if (!this.self.getWorld().isClient()) {
+                if (hitNumber%2==0) {
+                    this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
                 }
             }
         }

@@ -77,6 +77,18 @@
       "roundabout:stand_barrage_windup"
     ]
   },
+  "stand_barrage_miss": {
+    "subtitle": "sounds.roundabout.stand_barrage_miss",
+    "sounds": [
+      "roundabout:stand_barrage_miss"
+    ]
+  },
+  "stand_barrage_block": {
+    "subtitle": "sounds.roundabout.stand_barrage_block",
+    "sounds": [
+      "roundabout:stand_barrage_block"
+    ]
+  },
   "hit_sfx1": {
     "subtitle": "sounds.roundabout.hit_sfx1",
     "sounds": [
