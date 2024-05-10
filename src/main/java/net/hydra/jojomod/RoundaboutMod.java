@@ -1,11 +1,7 @@
 package net.hydra.jojomod;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
@@ -16,22 +12,10 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.EventInit;
 import net.hydra.jojomod.util.ModLootTableModifiers;
 import net.hydra.jojomod.util.PlayerCopyHandler;
+import net.hydra.jojomod.particles.ModParticles;
 import net.hydra.jojomod.world.gen.ModWorldGeneration;
-import net.minecraft.command.argument.ArgumentTypes;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.KillCommand;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
-
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
 
 public class RoundaboutMod implements ModInitializer {
 	/**This logger is used to write text to the console and the log file.*/
@@ -48,6 +32,7 @@ public class RoundaboutMod implements ModInitializer {
 		ModLootTableModifiers.modifyLootTables();
 		ModMessages.registerC2SPackets();
 		ModSounds.registerSoundEvents();
+		ModParticles.registerParticles();
 		ModEntities.registerModEntities();
 		ModWorldGeneration.generateWorldGen();
 		RoundaboutCommands.register();
