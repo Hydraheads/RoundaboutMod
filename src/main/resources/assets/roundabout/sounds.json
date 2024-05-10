@@ -89,6 +89,24 @@
       "roundabout:stand_barrage_block"
     ]
   },
+  "stand_barrage_hit": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit",
+    "sounds": [
+      "roundabout:stand_barrage_hit"
+    ]
+  },
+  "stand_barrage_hit2": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit2",
+    "sounds": [
+      "roundabout:stand_barrage_hit2"
+    ]
+  },
+  "stand_barrage_end": {
+    "subtitle": "sounds.roundabout.stand_barrage_end",
+    "sounds": [
+      "roundabout:stand_barrage_end"
+    ]
+  },
   "hit_sfx1": {
     "subtitle": "sounds.roundabout.hit_sfx1",
     "sounds": [

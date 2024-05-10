@@ -425,31 +425,28 @@ public class StandPowers {
                     if (entity instanceof LivingEntity) {
                         if (lastHit) {
                             setDazed((LivingEntity) entity, (byte) 0);
+                            playBarrageEndNoise(hitNumber);
                         } else {
                             setDazed((LivingEntity) entity, (byte) 3);
+                            playBarrageNoise(hitNumber);
                         }
                     }
                     barrageImpact2(entity, lastHit, knockbackStrength);
                 } else {
                     if (lastHit) {
                         knockShield(entity, 200);
+                        playBarrageEndNoise(hitNumber);
                     } else {
                         entity.setVelocity(prevVelocity);
 
                         if (!this.self.getWorld().isClient()) {
-                            //if (hitNumber%2==0) {
-                                this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-                            //}
+                            this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
                         }
                     }
                 }
             }
         } else {
-            if (!this.self.getWorld().isClient()) {
-                if (hitNumber%2==0) {
-                    this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-                }
-            }
+            playBarrageMissNoise(hitNumber);
         }
     } public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
@@ -460,6 +457,33 @@ public class StandPowers {
                         -MathHelper.cos(this.self.getYaw() * ((float) Math.PI / 180)));
             } else {
                 this.takeKnockbackUp((LivingEntity) entity,knockbackStrength);
+            }
+        }
+    }
+    public void playBarrageMissNoise(int hitNumber){
+        if (!this.self.getWorld().isClient()) {
+            if (hitNumber%2==0) {
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+            }
+        }
+    }
+    public void playBarrageNoise(int hitNumber){
+        if (!this.self.getWorld().isClient()) {
+            if (hitNumber%2==0) {
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundCategory.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+            }
+        }
+    } public void playBarrageNoise2(int hitNumber){
+        if (!this.self.getWorld().isClient()) {
+            if (hitNumber%2==0) {
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.9 + (Math.random() * 0.25)));
+            }
+        }
+    }
+    public void playBarrageEndNoise(int hitNumber){
+        if (!this.self.getWorld().isClient()) {
+            if (hitNumber%2==0) {
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_END_EVENT, SoundCategory.PLAYERS, 0.95F, 1f);
             }
         }
     }
@@ -760,15 +784,19 @@ public class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
+        playBarrageGuardSound();
+    }
 
+    public void playBarrageGuardSound(){
         if (!this.self.getWorld().isClient()) {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
                 this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageChargeSound,
-                        SoundCategory.PLAYERS, 0.96F, 1);
+                        SoundCategory.PLAYERS, 0.96F, 0.9F);
             }
         }
     }
+
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
     }
@@ -777,7 +805,7 @@ public class StandPowers {
     }
 
     public int getBarrageWindup(){
-        return 20;
+        return 22;
     }
     public int getBarrageLength(){
         return 60;

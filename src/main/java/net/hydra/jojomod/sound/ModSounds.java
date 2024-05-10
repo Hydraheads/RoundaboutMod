@@ -24,6 +24,9 @@ public class ModSounds {
     public static final Identifier STAND_BARRAGE_WINDUP_ID = new Identifier("roundabout:stand_barrage_windup");
     public static final Identifier STAND_BARRAGE_MISS_ID = new Identifier("roundabout:stand_barrage_miss");
     public static final Identifier STAND_BARRAGE_BLOCK_ID = new Identifier("roundabout:stand_barrage_block");
+    public static final Identifier STAND_BARRAGE_HIT_ID = new Identifier("roundabout:stand_barrage_hit");
+    public static final Identifier STAND_BARRAGE_HIT2_ID = new Identifier("roundabout:stand_barrage_hit2");
+    public static final Identifier STAND_BARRAGE_END_ID = new Identifier("roundabout:stand_barrage_end");
     public static final Identifier STAND_GUARD_SOUND_ID = new Identifier("roundabout:stand_guard");
     public static final Identifier MELEE_GUARD_SOUND_ID = new Identifier("roundabout:melee_guard");
     public static final Identifier HIT_1_SOUND_ID = new Identifier("roundabout:hit_sfx1");
@@ -45,6 +48,9 @@ public class ModSounds {
     public static SoundEvent STAND_BARRAGE_WINDUP_EVENT = SoundEvent.of(STAND_BARRAGE_WINDUP_ID);
     public static SoundEvent STAND_BARRAGE_BLOCK_EVENT = SoundEvent.of(STAND_BARRAGE_BLOCK_ID);
     public static SoundEvent STAND_BARRAGE_MISS_EVENT = SoundEvent.of(STAND_BARRAGE_MISS_ID);
+    public static SoundEvent STAND_BARRAGE_HIT_EVENT = SoundEvent.of(STAND_BARRAGE_HIT_ID);
+    public static SoundEvent STAND_BARRAGE_HIT2_EVENT = SoundEvent.of(STAND_BARRAGE_HIT2_ID);
+    public static SoundEvent STAND_BARRAGE_END_EVENT = SoundEvent.of(STAND_BARRAGE_END_ID);
 
     public static void registerSoundEvents(){
         Registry.register(Registries.SOUND_EVENT, SUMMON_SOUND_ID, SUMMON_SOUND_EVENT);
@@ -67,6 +73,9 @@ public class ModSounds {
         Registry.register(Registries.SOUND_EVENT, STAND_BARRAGE_WINDUP_ID, STAND_BARRAGE_WINDUP_EVENT);
         Registry.register(Registries.SOUND_EVENT, STAND_BARRAGE_MISS_ID, STAND_BARRAGE_MISS_EVENT);
         Registry.register(Registries.SOUND_EVENT, STAND_BARRAGE_BLOCK_ID, STAND_BARRAGE_BLOCK_EVENT);
+        Registry.register(Registries.SOUND_EVENT, STAND_BARRAGE_HIT_ID, STAND_BARRAGE_HIT_EVENT);
+        Registry.register(Registries.SOUND_EVENT, STAND_BARRAGE_HIT2_ID, STAND_BARRAGE_HIT2_EVENT);
+        Registry.register(Registries.SOUND_EVENT, STAND_BARRAGE_END_ID, STAND_BARRAGE_END_EVENT);
     }
 
     private static SoundEvent registerSoundEvent(String name){
