@@ -40,12 +40,12 @@ public abstract class StandEntity extends MobEntity{
             TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Integer> FOLLOWING_ID = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
-    public float bodyRotationX;
-    public float bodyRotationY;
-    public float headRotationX;
-    public float headRotationY;
-    public float standRotationX;
-    public float standRotationY;
+    public float bodyRotationX =0;
+    public float bodyRotationY =0;
+    public float headRotationX =0;
+    public float headRotationY =0;
+    public float standRotationX =0;
+    public float standRotationY =0;
 
     private boolean isDisplay;
     @Nullable
