@@ -32,7 +32,7 @@ public class ServerWorldMixin {
     }
 
     private void tickStandIn(LivingEntity entity, StandEntity passenger) {
-        if (passenger == null || passenger.isRemoved() || passenger.getMaster() != entity) {
+        if (passenger == null || passenger.isRemoved() || passenger.getUser() != entity) {
             return;
         }
         passenger.resetPosition();

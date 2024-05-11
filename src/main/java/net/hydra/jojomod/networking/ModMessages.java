@@ -6,6 +6,7 @@ import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
 import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
 import net.hydra.jojomod.networking.packet.s2c.NbtSyncPacket;
+import net.minecraft.network.PacketBundleHandler;
 import net.minecraft.util.Identifier;
 
 public class ModMessages {

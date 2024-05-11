@@ -40,10 +40,9 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
 
         MinecraftClient mc = MinecraftClient.getInstance();
         float tickDelta = mc.getLastFrameDuration();
-        if (entity.getMaster() != null) {
+        if (entity.getUser() != null) {
             rotateStand(entity, this.getPart(), tickDelta);
             if (this.getPart().hasChild("stand2")) {
-                RoundaboutMod.LOGGER.info("1");
                 if (this.getPart().getChild("stand2").hasChild("head")) {
                     rotateHead(entity, this.getPart().getChild("stand2").getChild("head"), tickDelta);
                 }
@@ -83,10 +82,10 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
                     swimRotCorrect = Math.max(swimRotCorrect, 0);
                 }
             }
-            rotX = ((mobEntity.getMaster().getPitch(tickDelta)%360) - swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE;
+            rotX = ((mobEntity.getUser().getPitch(tickDelta)%360) - swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE;
             rotY = (MathHelper.lerpAngleDegrees(tickDelta, (rotY * MathHelper.DEGREES_PER_RADIAN),
-                    ((MathHelper.lerpAngleDegrees(tickDelta, mobEntity.getMaster().prevHeadYaw, mobEntity.getMaster().headYaw)%360)
-                    - (MathHelper.lerpAngleDegrees(tickDelta, mobEntity.getMaster().prevBodyYaw, mobEntity.getMaster().bodyYaw)%360)))
+                    ((MathHelper.lerpAngleDegrees(tickDelta, mobEntity.getUser().prevHeadYaw, mobEntity.getUser().headYaw)%360)
+                    - (MathHelper.lerpAngleDegrees(tickDelta, mobEntity.getUser().prevBodyYaw, mobEntity.getUser().bodyYaw)%360)))
                     ) * MathHelper.RADIANS_PER_DEGREE;
 
         } else if (animationStyle == OffsetIndex.FIXED_STYLE){
@@ -106,7 +105,7 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         float cRX = 0;
         float cRY = 0;
         if (animationStyle == OffsetIndex.FIXED_STYLE){
-            cRX = (mobEntity.getMaster().getPitch(tickDelta)%360) * MathHelper.RADIANS_PER_DEGREE;
+            cRX = (mobEntity.getUser().getPitch(tickDelta)%360) * MathHelper.RADIANS_PER_DEGREE;
         }
         rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRX, 0.8f);
         rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, cRY, 0.8f);
@@ -124,7 +123,7 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
             float cRot = maxRotX;
 
             if (mobEntity.isSwimming() || mobEntity.isFallFlying()) {
-                cRot = ((mobEntity.getMaster().getPitch(tickDelta)%360) + 90) * MathHelper.RADIANS_PER_DEGREE;
+                cRot = ((mobEntity.getUser().getPitch(tickDelta)%360) + 90) * MathHelper.RADIANS_PER_DEGREE;
             } else if (mobEntity.isCrawling()) {
                 cRot = 90 * MathHelper.RADIANS_PER_DEGREE;
             } else {

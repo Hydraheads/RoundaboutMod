@@ -4,7 +4,6 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandComponent;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.*;
@@ -20,6 +19,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -36,7 +36,10 @@ public abstract class StandEntity extends MobEntity{
 
     protected static final TrackedData<Byte> OFFSET_TYPE = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.BYTE);
-
+    protected static final TrackedData<Integer> USER_ID = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Integer> FOLLOWING_ID = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.INTEGER);
     public float bodyRotationX;
     public float bodyRotationY;
     public float headRotationX;
@@ -45,8 +48,32 @@ public abstract class StandEntity extends MobEntity{
     public float standRotationY;
 
     private boolean isDisplay;
+    @Nullable
+    private LivingEntity User;
+    @Nullable
+    private LivingEntity Following;
 
     private int idleAnimationTimeout = 0;
+
+    public void setUser(LivingEntity StandSet){
+        this.User = StandSet;
+        int standSetId = -1;
+        if (StandSet != null){
+            standSetId = StandSet.getId();
+        }
+        this.dataTracker.set(USER_ID, standSetId);
+
+        this.setFollowing(StandSet);
+    }
+
+    public void setFollowing(LivingEntity StandSet){
+        this.Following = StandSet;
+        int standSetId = -1;
+        if (StandSet != null){
+            standSetId = StandSet.getId();
+        }
+        this.dataTracker.set(FOLLOWING_ID, standSetId);
+    }
 
     public final AnimationState idleAnimationState = new AnimationState();
 
@@ -163,8 +190,8 @@ public abstract class StandEntity extends MobEntity{
      */
     @Override
     public boolean isSwimming() {
-        if (this.getSelfData().getUser() != null) {
-            return this.getSelfData().getUser().isSwimming();
+        if (this.getUser() != null) {
+            return this.getUser().isSwimming();
         } else {
             return false;
         }
@@ -172,8 +199,8 @@ public abstract class StandEntity extends MobEntity{
 
     @Override
     public boolean isCrawling() {
-        if (this.getSelfData().getUser() != null) {
-            return this.getSelfData().getUser().isCrawling();
+        if (this.getUser() != null) {
+            return this.getUser().isCrawling();
         } else {
             return false;
         }
@@ -181,8 +208,8 @@ public abstract class StandEntity extends MobEntity{
 
     @Override
     public boolean isFallFlying() {
-        if (this.getSelfData().getUser() != null) {
-            return (this.getSelfData().getUser()).isFallFlying();
+        if (this.getUser() != null) {
+            return (this.getUser()).isFallFlying();
         } else {
             return false;
         }
@@ -221,6 +248,8 @@ public abstract class StandEntity extends MobEntity{
         this.dataTracker.startTracking(FADE_OUT, (byte) 0);
         this.dataTracker.startTracking(MOVE_FORWARD, (byte) 0);
         this.dataTracker.startTracking(OFFSET_TYPE, (byte) 0);
+        this.dataTracker.startTracking(USER_ID, -1);
+        this.dataTracker.startTracking(FOLLOWING_ID, -1);
     }
 
 
@@ -280,8 +309,8 @@ public abstract class StandEntity extends MobEntity{
     }
 
 
-    public boolean hasMaster() {
-        return this.getMaster() != null;
+    public boolean hasUser() {
+        return this.getUser() != null;
     } //returns IF stand has a master
 
 
@@ -291,20 +320,10 @@ public abstract class StandEntity extends MobEntity{
 
 
     /**
-     * Returns the Component of StandData on the entity,
-     * Use this to get the User, who the stand is following, etc
-     *
-     * @see net.hydra.jojomod.networking.component.StandData
-     */
-    public StandComponent getSelfData() {
-        return MyComponents.STAND.get(this);
-    }
-
-    /**
      * Sets stand User, the mob who "owns" the stand
      */
     public void setMaster(LivingEntity Master) {
-        this.getSelfData().setUser(Master);
+        this.setUser(Master);
     }
 
     /**
@@ -312,19 +331,24 @@ public abstract class StandEntity extends MobEntity{
      * Use case example: Killer Queen BTD following someone else
      * Code to tick on follower will be needed in client world mixin
      */
-    public void setFollowing(LivingEntity Following) {
-        this.getSelfData().setFollowing(Following);
-    }
 
     public LivingEntity getFollowing() {
-        return this.getSelfData().getFollowing();
+        if (this.getWorld().isClient){
+            return (LivingEntity) this.getWorld().getEntityById(this.dataTracker.get(FOLLOWING_ID));
+        } else {
+            return this.Following;
+        }
     }
 
     /**
      * Sets stand User, the mob who "owns" the stand
      */
-    public LivingEntity getMaster() {
-        return this.getSelfData().getUser();
+    public LivingEntity getUser() {
+        if (this.getWorld().isClient){
+            return (LivingEntity) this.getWorld().getEntityById(this.dataTracker.get(USER_ID));
+        } else {
+            return this.User;
+        }
     }
 
     /**
@@ -384,10 +408,10 @@ public abstract class StandEntity extends MobEntity{
 
             if (this.isAlive() && !this.dead){
                 if (this.getNeedsUser() && !this.isDisplay) {
-                    if (this.getSelfData().getUser() != null) {
-                        boolean userActive = this.getUserData(this.getMaster()).getActive();
-                        LivingEntity thisStand = this.getUserData(this.getMaster()).getStand();
-                        if (this.getSelfData().getUser().isAlive() && userActive && (thisStand != null && thisStand.getId() == this.getId())) {
+                    if (this.getUser() != null) {
+                        boolean userActive = this.getUserData(this.getUser()).getActive();
+                        LivingEntity thisStand = this.getUserData(this.getUser()).getStand();
+                        if (this.getUser().isAlive() && userActive && (thisStand != null && thisStand.getId() == this.getId())) {
 
                             //Make it fade in
                             if (this.getFadeOut() < MaxFade) {
@@ -525,7 +549,7 @@ public abstract class StandEntity extends MobEntity{
     }
 
     public float getLookYaw(double maxDistance){
-        Vec3d pointVec = DamageHandler.getRayPoint(this.getMaster(), maxDistance);
+        Vec3d pointVec = DamageHandler.getRayPoint(this.getUser(), maxDistance);
         if (pointVec != null) {
             double d = pointVec.x - this.getX();
             double e = pointVec.y - this.getY();

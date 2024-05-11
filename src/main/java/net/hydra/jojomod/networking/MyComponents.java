@@ -7,8 +7,6 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.networking.component.StandComponent;
-import net.hydra.jojomod.networking.component.StandData;
 import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.networking.component.StandUserData;
 import net.minecraft.entity.LivingEntity;
@@ -28,12 +26,9 @@ public class MyComponents implements EntityComponentInitializer {
 
     public static final ComponentKey<StandUserComponent> STAND_USER =
             ComponentRegistry.getOrCreate(new Identifier(RoundaboutMod.MOD_ID, "stand_user"), StandUserComponent.class);
-    public static final ComponentKey<StandComponent> STAND =
-            ComponentRegistry.getOrCreate(new Identifier(RoundaboutMod.MOD_ID, "stand"), StandComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.beginRegistration(StandEntity.class, STAND).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandData.class).end(StandData::new);
         registry.beginRegistration(LivingEntity.class, STAND_USER).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandUserData.class).end(StandUserData::new);
         registry.beginRegistration(PlayerEntity.class, STAND_USER).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).impl(StandUserData.class).end(StandUserData::new);
         //registry.registerForPlayers(STAND_USER, StandUserData::new, RespawnCopyStrategy.ALWAYS_COPY);

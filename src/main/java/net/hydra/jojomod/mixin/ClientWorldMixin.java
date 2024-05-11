@@ -47,7 +47,7 @@ public class ClientWorldMixin {
     }
 
     private void tickStandIn(LivingEntity entity, StandEntity stand) {
-        if (stand == null || stand.isRemoved() || stand.getMaster() != entity) {
+        if (stand == null || stand.isRemoved() || stand.getUser() != entity) {
             return;
         }
         stand.resetPosition();

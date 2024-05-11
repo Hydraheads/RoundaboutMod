@@ -37,7 +37,7 @@ public class StandRenderer<T extends StandEntity> extends MobEntityRenderer<T, S
 
 
         int plight = i;
-        var owner = mobEntity.getMaster();
+        var owner = mobEntity.getUser();
         if (owner != null) {
             int tlight = getTrueLight(owner,g);
             if (plight < tlight && plight < 1){
@@ -63,7 +63,7 @@ public class StandRenderer<T extends StandEntity> extends MobEntityRenderer<T, S
     }
 
     public float getStandOpacity(T entity){
-        if (!entity.hasMaster()) {
+        if (!entity.hasUser()) {
             return 1;
         } else {
             int vis = entity.getFadeOut();
