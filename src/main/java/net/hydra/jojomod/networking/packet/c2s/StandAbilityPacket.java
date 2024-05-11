@@ -31,7 +31,9 @@ public class StandAbilityPacket {
         //Everything here is server only!
         server.execute(() -> {
             StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            userData.tryPower(PowerIndex.ATTACK,true);
+            if (userData.canAttack()) {
+                userData.tryPower(PowerIndex.ATTACK, true);
+            }
         });
     }
 

@@ -168,8 +168,10 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
 
     public void tryPower(int move, boolean forced){
         this.getStandPowers().tryPower(move,forced);
-        this.sync();
+        this.getStandPowers().syncCooldowns();
     }
+
+
     public boolean canAttack(){
         return this.getStandPowers().canAttack();
     }
@@ -400,14 +402,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         buf.writeFloat(this.GuardPoints);
         buf.writeBoolean(this.GuardBroken);
         buf.writeByte(this.dazeTime);
-        StandPowers SP = this.getStandPowers();
-
-        buf.writeInt(SP.getAttackTime());
-        buf.writeInt(SP.getAttackTimeMax());
-        buf.writeInt(SP.getAttackTimeDuring());
-        buf.writeByte(SP.getActivePower());
-        buf.writeByte(SP.getActivePowerPhase());
-        buf.writeBoolean(SP.getIsAttacking());
     }
 
     /** This is where the client reads the entity ids sent by the server and puts them into code.
@@ -424,14 +418,6 @@ public class StandUserData implements StandUserComponent, CommonTickingComponent
         this.GuardPoints = buf.readFloat();
         this.GuardBroken = buf.readBoolean();
         this.dazeTime = buf.readByte();
-        StandPowers SP = this.getStandPowers();
-
-        SP.setAttackTime(buf.readInt());
-        SP.setAttackTimeMax(buf.readInt());
-        SP.setAttackTimeDuring(buf.readInt());
-        SP.setActivePower(buf.readByte());
-        SP.setActivePowerPhase(buf.readByte());
-        SP.setIsAttacking(buf.readBoolean());
     }
 
     public void stopSounds(byte soundNo){

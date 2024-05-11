@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -24,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -60,9 +62,6 @@ public class StandPowers {
 
     /**The phase of the move being used, primarily to keep track of which punch you are on in a punch string.*/
     private byte activePowerPhase = 0;
-
-    /**Once a move finishes, this turns off in order to prevent a loop of infinite attacks should the move roll over.*/
-    private boolean isAttacking = false;
 
     /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
     private final byte activePowerPhaseMax = 3;
@@ -101,14 +100,8 @@ public class StandPowers {
     public int getAttackTimeMax(){
         return this.attackTimeMax;
     }
-    public boolean getIsAttacking(){
-        return this.isAttacking;
-    }
     public float getStandReach(){
         return this.standReach;
-    }
-    public void setIsAttacking(boolean isAttacking){
-        this.isAttacking = isAttacking;
     }
     public void setMaxAttackTime(int attackTimeMax){
         this.attackTimeMax = attackTimeMax;
@@ -180,7 +173,7 @@ public class StandPowers {
                     poseStand(OffsetIndex.FOLLOW);
                 } else {
                     if (this.hasStandActive(this.self) && !this.self.isUsingItem() && !this.isDazed(this.self)) {
-                        if (this.activePower == PowerIndex.ATTACK && this.isAttacking) {
+                        if (this.activePower == PowerIndex.ATTACK && this.attackTimeDuring > -1) {
                             this.updateAttack();
                         } else if (this.isBarraging()) {
                             this.updateBarrage();
@@ -288,7 +281,6 @@ public class StandPowers {
     public void standPunch(){
         /*By setting this to -10, there is a delay between the stand retracting*/
         this.attackTimeDuring = -10;
-        this.isAttacking = false;
 
         if (this.self instanceof PlayerEntity){
             if (this.self.getWorld().isClient()) {
@@ -547,6 +539,7 @@ public class StandPowers {
 
         if (!this.self.getWorld().isClient()) {
             this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 0.95F, pitch);
+            this.syncCooldowns();
         }
     }
 
@@ -826,12 +819,24 @@ public class StandPowers {
 
                 }
                 this.attackTimeDuring = 0;
-                this.isAttacking = true;
                 this.setActivePower(PowerIndex.ATTACK);
                 this.setAttackTime(0);
 
                 poseStand(OffsetIndex.ATTACK);
             }
+        }
+    }
+
+    public void syncCooldowns(){
+        if (!this.self.getWorld().isClient && this.self instanceof ServerPlayerEntity){
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(attackTime);
+
+            buf.writeInt(attackTimeMax);
+            buf.writeInt(attackTimeDuring);
+            buf.writeByte(activePower);
+            buf.writeByte(activePowerPhase);
+            ServerPlayNetworking.send((ServerPlayerEntity) this.self, ModMessages.POWER_COOLDOWN_SYNC_ID, buf);
         }
     }
 }
