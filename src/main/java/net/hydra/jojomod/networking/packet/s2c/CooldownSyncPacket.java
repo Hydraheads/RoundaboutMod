@@ -25,6 +25,7 @@ public class CooldownSyncPacket {
             powers.setAttackTimeDuring(attackTimeDuring);
             powers.setActivePower(activePower);
             powers.setActivePowerPhase(activePowerPhase);
+            powers.kickStartClient();
         }
     }
 }

@@ -27,13 +27,11 @@ public class StandAbilityPacket {
         });
     }
     public static void attack(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
-                               PacketByteBuf buf, PacketSender responseSender){
+                               PacketByteBuf buf, PacketSender responseSender) {
         //Everything here is server only!
         server.execute(() -> {
             StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            if (userData.canAttack()) {
-                userData.tryPower(PowerIndex.ATTACK, true);
-            }
+            userData.tryPower(PowerIndex.ATTACK, true);
         });
     }
 
@@ -41,8 +39,10 @@ public class StandAbilityPacket {
                              PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         Entity targetEntity = player.getWorld().getEntityById(buf.readInt());
+        byte APP = buf.readByte();
         server.execute(() -> {
             StandUserComponent userData = MyComponents.STAND_USER.get(player);
+            userData.getStandPowers().setActivePowerPhase(APP);
             userData.getStandPowers().punchImpact(targetEntity);
         });
     }

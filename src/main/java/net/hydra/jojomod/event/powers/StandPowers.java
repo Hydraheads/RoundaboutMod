@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -37,6 +38,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
@@ -65,6 +67,11 @@ public class StandPowers {
 
     /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
     private final byte activePowerPhaseMax = 3;
+
+    /**This variable exists so that a client can begin displaying your attack hud info without ticking through it.
+     * Basically, stand attacks are clientside, but they need the server's confirmation to kickstart so you
+     * can't hit targets in frozen tps*/
+    private boolean kickStarted = true;
 
     public StandPowers(LivingEntity self) {
         this.self = self;
@@ -115,6 +122,10 @@ public class StandPowers {
 
     /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/
     private int summonCD = 0;
+
+    /**This updates when a punch is thrown, to stop the stand from throwing the same punch twice if the game lags*/
+    private byte activePowerPhaseCheck = -1;
+
     public boolean getSummonCD(){
         return this.summonCD <= 0;
     } public void setSummonCD(int summonCD){
@@ -167,6 +178,7 @@ public class StandPowers {
     }
 
     public void tickPower(){
+        if (!this.self.getWorld().isClient || kickStarted) {
             if (this.attackTimeDuring != -1) {
                 this.attackTimeDuring++;
                 if (this.attackTimeDuring == -1) {
@@ -186,12 +198,13 @@ public class StandPowers {
                 }
             }
             this.attackTime++;
-            if (this.attackTime > this.attackTimeMax){
+            if (this.attackTime > this.attackTimeMax) {
                 this.setActivePowerPhase((byte) 0);
             }
-            if (this.interruptCD > 0){
+            if (this.interruptCD > 0) {
                 this.interruptCD--;
             }
+        }
         if (this.summonCD > 0){
             this.summonCD--;
         }
@@ -251,7 +264,7 @@ public class StandPowers {
 
     float standReach = 5;
 
-    private int getTargetEntityId(){
+    public int getTargetEntityId(){
         Entity targetEntity = getTargetEntity(this.self, -1);
         int id;
         if (targetEntity != null) {
@@ -263,13 +276,11 @@ public class StandPowers {
     }
     public void standBarrageHit(){
         if (this.self instanceof PlayerEntity){
-            if (this.self.getWorld().isClient()) {
-                if (isPacketPlayer()){
+            if (isPacketPlayer()){
                     PacketByteBuf buffer = PacketByteBufs.create();
                     buffer.writeInt(getTargetEntityId());
                     buffer.writeInt(this.attackTimeDuring);
                     ClientPlayNetworking.send(ModMessages.STAND_BARRAGE_HIT_PACKET, buffer);
-                }
             }
         } else {
             /*Caps how far out the barrage hit goes*/
@@ -280,15 +291,15 @@ public class StandPowers {
 
     public void standPunch(){
         /*By setting this to -10, there is a delay between the stand retracting*/
-        this.attackTimeDuring = -10;
 
         if (this.self instanceof PlayerEntity){
-            if (this.self.getWorld().isClient()) {
-                if (isPacketPlayer()){
-                    PacketByteBuf buffer = PacketByteBufs.create();
-                    buffer.writeInt(getTargetEntityId());
-                    ClientPlayNetworking.send(ModMessages.STAND_PUNCH_PACKET, buffer);
-                }
+            if (isPacketPlayer()){
+                //RoundaboutMod.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
+                this.attackTimeDuring = -10;
+                PacketByteBuf buffer = PacketByteBufs.create();
+                buffer.writeInt(getTargetEntityId());
+                buffer.writeByte(this.activePowerPhase);
+                ClientPlayNetworking.send(ModMessages.STAND_PUNCH_PACKET, buffer);
             }
         } else {
             /*Caps how far out the punch goes*/
@@ -481,66 +492,66 @@ public class StandPowers {
     }
 
     public void punchImpact(Entity entity){
-        if (entity != null) {
-            float pow;
-            float knockbackStrength;
-            if (this.activePowerPhase >= this.activePowerPhaseMax){
-                /*The last hit in a string has more power and knockback if you commit to it*/
-                pow = getHeavyPunchStrength(entity);
-                knockbackStrength = 2F;
+        this.attackTimeDuring = -10;
+        RoundaboutMod.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
+            if (entity != null) {
+                float pow;
+                float knockbackStrength;
+                if (this.activePowerPhase >= this.activePowerPhaseMax) {
+                    /*The last hit in a string has more power and knockback if you commit to it*/
+                    pow = getHeavyPunchStrength(entity);
+                    knockbackStrength = 2F;
+                } else {
+                    pow = getPunchStrength(entity);
+                    knockbackStrength = 0.5F;
+                }
+                if (StandDamageEntityAttack(entity, pow, knockbackStrength, this.self)) {
+                } else {
+                    if (this.activePowerPhase >= this.activePowerPhaseMax) {
+                        knockShield(entity, 40);
+                    }
+                }
             } else {
-                pow = getPunchStrength(entity);
-                knockbackStrength = 0.5F;
-            }
-             if (StandDamageEntityAttack(entity, pow, knockbackStrength, this.self)){
-             } else {
-                 if (this.activePowerPhase >= this.activePowerPhaseMax){
-                     knockShield(entity, 40);
-                 }
-             }
-        } else {
-            // This is less accurate raycasting as it is server sided but it is important for particle effects
-            float distMax = this.getDistanceOut(this.self, this.standReach, false);
-            float halfReach = (float) (distMax*0.5);
-            Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
-            if (!this.self.getWorld().isClient) {
-                ((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
-                        1, 0.0, 0.0, 0.0, 1);
-            }
-        }
-
-        SoundEvent SE;
-        float pitch = 1F;
-        if (this.activePowerPhase >= this.activePowerPhaseMax){
-
-            if (!this.self.getWorld().isClient()) {
-                SoundEvent LastHitSound = this.getLastHitSound();
-                if (LastHitSound != null) {
-                    this.self.getWorld().playSound(null, this.self.getBlockPos(), LastHitSound,
-                            SoundCategory.PLAYERS, 1F, 1);
+                // This is less accurate raycasting as it is server sided but it is important for particle effects
+                float distMax = this.getDistanceOut(this.self, this.standReach, false);
+                float halfReach = (float) (distMax * 0.5);
+                Vec3d pointVec = DamageHandler.getRayPoint(self, halfReach);
+                if (!this.self.getWorld().isClient) {
+                    ((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                            1, 0.0, 0.0, 0.0, 1);
                 }
             }
 
-            if (entity != null) {
-                SE = ModSounds.PUNCH_4_SOUND_EVENT;
-                pitch = 1.2F;
-            } else {
-                SE = ModSounds.PUNCH_2_SOUND_EVENT;
-            }
-        }
-        else {
-            if (entity != null) {
-                SE = ModSounds.PUNCH_3_SOUND_EVENT;
-                pitch = 1.1F + 0.07F*activePowerPhase;
-            } else {
-                SE = ModSounds.PUNCH_1_SOUND_EVENT;
-            }
-        }
+            SoundEvent SE;
+            float pitch = 1F;
+            if (this.activePowerPhase >= this.activePowerPhaseMax) {
 
-        if (!this.self.getWorld().isClient()) {
-            this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 0.95F, pitch);
-            this.syncCooldowns();
-        }
+                if (!this.self.getWorld().isClient()) {
+                    SoundEvent LastHitSound = this.getLastHitSound();
+                    if (LastHitSound != null) {
+                        this.self.getWorld().playSound(null, this.self.getBlockPos(), LastHitSound,
+                                SoundCategory.PLAYERS, 1F, 1);
+                    }
+                }
+
+                if (entity != null) {
+                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                    pitch = 1.2F;
+                } else {
+                    SE = ModSounds.PUNCH_2_SOUND_EVENT;
+                }
+            } else {
+                if (entity != null) {
+                    SE = ModSounds.PUNCH_3_SOUND_EVENT;
+                    pitch = 1.1F + 0.07F * activePowerPhase;
+                } else {
+                    SE = ModSounds.PUNCH_1_SOUND_EVENT;
+                }
+            }
+
+            if (!this.self.getWorld().isClient()) {
+                this.self.getWorld().playSound(null, this.self.getBlockPos(), SE, SoundCategory.PLAYERS, 0.95F, pitch);
+            }
     }
 
     public void damage(Entity entity){
@@ -741,6 +752,10 @@ public class StandPowers {
     public void updateUniqueMoves(){
     }
 
+    public void kickStartClient(){
+        this.kickStarted = true;
+    }
+
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public void tryPower(int move, boolean forced){
         if ((this.activePower == PowerIndex.NONE || forced) && !this.isDazed(this.self)){
@@ -754,6 +769,9 @@ public class StandPowers {
             } else if (move == PowerIndex.BARRAGE) {
                  this.setPowerBarrage();
             }
+        }
+        if (this.self.getWorld().isClient){
+            kickStarted = false;
         }
     }
     public void setPowerNone(){
