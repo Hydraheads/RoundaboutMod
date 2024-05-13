@@ -27,14 +27,4 @@ public class EntityMixin {
     }
 
 
-    @Inject(method = "hasNoGravity", at = @At(value = "HEAD"), cancellable = true)
-    public void roundaboutHasNoGravity(CallbackInfoReturnable<Boolean> ci) {
-        if (((Entity) (Object) this) instanceof LivingEntity) {
-            StandUser standUserData = ((StandUser) this);
-            if (standUserData.isDazed()) {
-                ci.setReturnValue(true);
-            }
-        }
-    }
-
 }

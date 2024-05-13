@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -498,5 +499,14 @@ public class LivingEntityMixin implements StandUser {
             }
             this.damageGuard(amount);
         }
+    }
+
+    /**This code stops a barrage target from losing velocity, preventing lag spikes from causing them to drop.*/
+    @ModifyVariable(method = "travel(Lnet/minecraft/util/math/Vec3d;)V", at = @At("STORE"))
+    private double RoundaboutTravel(double d) {
+        if (this.isDazed()) {
+            return 0;
+        }
+        return d;
     }
 }
