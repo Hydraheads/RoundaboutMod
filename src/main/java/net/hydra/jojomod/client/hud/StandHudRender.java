@@ -4,8 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.client.KeyInputHandler;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -60,7 +59,7 @@ public class StandHudRender {
             MinecraftClient mc = MinecraftClient.getInstance();
             float tickDelta = mc.getLastFrameDuration();
 
-            boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
+            boolean standOn = ((StandUser) playerEntity).getActive();
             if (standOn || animated > 0.1){
                 if (!standOn){
                     animated = Math.max(controlledLerp(tickDelta, animated,0,0.5f),0);
@@ -130,26 +129,26 @@ public class StandHudRender {
                                        int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                        float flashAlpha, float otherFlashAlpha){
         if (playerEntity != null) {
-            StandUserComponent standUserData = MyComponents.STAND_USER.get(playerEntity);
-            boolean standOn = standUserData.getActive();
+            StandUser standUser = ((StandUser) playerEntity);
+            boolean standOn = standUser.getActive();
             int j = scaledHeight / 2 - 7 - 4;
             int k = scaledWidth / 2 - 8;
 
-            if (standOn && standUserData.isBarraging()) {
-                int finalATimeInt = getFinalATimeInt(standUserData);
+            if (standOn && standUser.isBarraging()) {
+                int finalATimeInt = getFinalATimeInt(standUser);
                 context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
                 context.drawTexture(JOJO_ICONS, k, j, 193, 30, finalATimeInt, 6);
             } else {
                 int barTexture = 0;
-                Entity TE = standUserData.getTargetEntity(playerEntity, -1);
-                float attackTimeMax = standUserData.getAttackTimeMax();
+                Entity TE = standUser.getTargetEntity(playerEntity, -1);
+                float attackTimeMax = standUser.getAttackTimeMax();
                 if (attackTimeMax > 0) {
-                    float attackTime = standUserData.getAttackTime();
+                    float attackTime = standUser.getAttackTime();
                     float finalATime = attackTime / attackTimeMax;
                     if (finalATime <= 1) {
 
 
-                        if (standUserData.getActivePowerPhase() == standUserData.getActivePowerPhaseMax()) {
+                        if (standUser.getActivePowerPhase() == standUser.getActivePowerPhaseMax()) {
                             barTexture = 24;
                         } else {
                             if (TE != null) {
@@ -178,10 +177,10 @@ public class StandHudRender {
         }
     }
 
-    private static int getFinalATimeInt(StandUserComponent standUserData) {
-        int barrageWindup = standUserData.getStandPowers().getBarrageWindup();
-        int barrageLength = standUserData.getStandPowers().getBarrageLength();
-        float attackTimeDuring = standUserData.getAttackTimeDuring();
+    private static int getFinalATimeInt(StandUser standUser) {
+        int barrageWindup = standUser.getStandPowers().getBarrageWindup();
+        int barrageLength = standUser.getStandPowers().getBarrageLength();
+        float attackTimeDuring = standUser.getAttackTimeDuring();
         int finalATimeInt;
         if (attackTimeDuring <= barrageWindup){
             finalATimeInt = Math.round((attackTimeDuring / barrageWindup)*15);
@@ -198,13 +197,13 @@ public class StandHudRender {
         int k;
         int v;
         l = scaledHeight - 32 + 3;
-        StandUserComponent standUserData = MyComponents.STAND_USER.get(playerEntity);
-        if (standUserData.getGuardBroken() || !standUserData.shieldNotDisabled()){
+        StandUser standUser = ((StandUser) playerEntity);
+        if (standUser.getGuardBroken() || !standUser.shieldNotDisabled()){
             v = 10;
         } else {
             v = 0;
         }
-        k = (int) Math.floor((182/standUserData.getMaxGuardPoints())*standUserData.getGuardPoints());
+        k = (int) Math.floor((182/standUser.getMaxGuardPoints())*standUser.getGuardPoints());
         context.drawTexture(JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
            context.drawTexture(JOJO_ICONS, x, l, 0, v+5, k, 5);

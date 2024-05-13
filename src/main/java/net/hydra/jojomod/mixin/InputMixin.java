@@ -4,19 +4,14 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModMessages;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,7 +49,7 @@ public class InputMixin {
         public void roundaboutAttack(CallbackInfoReturnable<Boolean> ci) {
             //handleInputEvents
             if (player != null) {
-                StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+                StandUser standComp = ((StandUser) player);
                 if (standComp.isDazed()) {
                     ci.setReturnValue(true);
                 } else if (standComp.getActive()){
@@ -67,7 +62,7 @@ public class InputMixin {
         @Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
         public void roundaboutBlockBreak(boolean breaking, CallbackInfo ci) {
             if (player != null) {
-                StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+                StandUser standComp = ((StandUser) player);
                 if (standComp.getActive()) {
                     if (!breaking){
                         this.attackCooldown = 0;
@@ -82,7 +77,7 @@ public class InputMixin {
         @Inject(method = "doItemUse", at = @At("TAIL"), cancellable = true)
         public void roundaboutDoItemUse(CallbackInfo ci) {
             if (player != null) {
-                StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+                StandUser standComp = ((StandUser) player);
                 if (standComp.getActive()) {
                     if (!standComp.isGuarding() && !standComp.isBarraging()) {
                         ClientPlayNetworking.send(ModMessages.STAND_GUARD_PACKET, PacketByteBufs.create());
@@ -94,7 +89,7 @@ public class InputMixin {
     @Inject(method = "doItemUse", at = @At("Head"), cancellable = true)
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
-            StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+            StandUser standComp = ((StandUser) player);
             if (standComp.isDazed()) {
                 ci.cancel();
             } else if (standComp.getActive()) {
@@ -108,7 +103,7 @@ public class InputMixin {
         @Inject(method = "handleInputEvents", at = @At("HEAD"), cancellable = true)
         public void roundaboutInput(CallbackInfo ci){
             if (player != null) {
-                StandUserComponent standComp = MyComponents.STAND_USER.get(player);
+                StandUser standComp = ((StandUser) player);
                 if (!this.options.useKey.isPressed()) {
                     if (standComp.isGuarding() || standComp.isBarraging()) {
                             /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.

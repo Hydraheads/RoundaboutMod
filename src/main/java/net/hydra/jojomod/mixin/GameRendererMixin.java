@@ -2,15 +2,10 @@ package net.hydra.jojomod.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
@@ -27,22 +22,23 @@ public class GameRendererMixin {
     @Inject(method = "tiltViewWhenHurt", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutiltViewWhenHurt(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         MinecraftClient client = ((GameRenderer) (Object) this).getClient();
-        StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
-        if (standUserData.isDazed()) {
+        if (client.player != null && ((StandUser) client.player).isDazed()) {
             assert client.world != null;
             if (client.world.getTime() % 5 != 0) {
                 LivingEntity livingEntity = (LivingEntity) client.getCameraEntity();
-                float f = (float)livingEntity.hurtTime - tickDelta;
-                if (f < 0.0f) {
-                    return;
+                if (livingEntity != null) {
+                    float f = (float) livingEntity.hurtTime - tickDelta;
+                    if (f < 0.0f) {
+                        return;
+                    }
+                    f /= ((float) livingEntity.maxHurtTime * 2);
+                    f = MathHelper.sin(f * f * f * f * (float) Math.PI);
+                    float g = livingEntity.getDamageTiltYaw();
+                    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-g));
+                    float h = (float) ((double) (-f) * 14.0 * client.options.getDamageTiltStrength().getValue());
+                    matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(h));
+                    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(g));
                 }
-                f /= ((float)livingEntity.maxHurtTime*2);
-                f = MathHelper.sin(f * f * f * f * (float)Math.PI);
-                float g = livingEntity.getDamageTiltYaw();
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-g));
-                float h = (float)((double)(-f) * 14.0 * client.options.getDamageTiltStrength().getValue());
-                matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(h));
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(g));
             }
             ci.cancel();
         }

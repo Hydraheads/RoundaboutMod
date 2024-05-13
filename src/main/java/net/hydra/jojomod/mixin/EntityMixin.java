@@ -1,8 +1,6 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,8 +19,7 @@ public class EntityMixin {
     @Inject(method = "teleportPassengers", at = @At(value = "TAIL"))
     private void teleportPassengersRoundabout(CallbackInfo ci) {
         if (((Entity) (Object) this) instanceof LivingEntity) {
-            LivingEntity living = ((LivingEntity) (Object) this);
-            StandUserComponent standUserData = MyComponents.STAND_USER.get(living);
+            StandUser standUserData = ((StandUser) this);
             if (standUserData.hasStandOut()) {
                 standUserData.updateStandOutPosition(standUserData.getStand(), Entity::refreshPositionAfterTeleport);
             }
@@ -33,7 +30,7 @@ public class EntityMixin {
     @Inject(method = "hasNoGravity", at = @At(value = "HEAD"), cancellable = true)
     public void roundaboutHasNoGravity(CallbackInfoReturnable<Boolean> ci) {
         if (((Entity) (Object) this) instanceof LivingEntity) {
-            StandUserComponent standUserData = MyComponents.STAND_USER.get(this);
+            StandUser standUserData = ((StandUser) this);
             if (standUserData.isDazed()) {
                 ci.setReturnValue(true);
             }

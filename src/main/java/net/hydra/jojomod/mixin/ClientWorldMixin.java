@@ -3,8 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -36,9 +35,8 @@ public class ClientWorldMixin {
     private void standTickCheck(Entity entity){
         if (entity.isLiving()) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            StandUserComponent standUserData = MyComponents.STAND_USER.get(livingEntity);
-            if (standUserData.getStand() != null) {
-                StandEntity stand = standUserData.getStand();
+            if (((StandUser) livingEntity).getStand() != null) {
+                StandEntity stand = ((StandUser) livingEntity).getStand();
                 if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
                     this.tickStandIn(livingEntity, stand);
                 }

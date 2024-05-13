@@ -22,6 +22,8 @@ public class ModMessages {
     public static final Identifier MOVE_SYNC_ID = new Identifier(RoundaboutMod.MOD_ID,"move_sync");
     public static final Identifier STAND_GUARD_PACKET = new Identifier(RoundaboutMod.MOD_ID,"guard_packet");
     public static final Identifier STAND_GUARD_CANCEL_PACKET = new Identifier(RoundaboutMod.MOD_ID,"guard_cancel_packet");
+    public static final Identifier STAND_GUARD_POINT_ID = new Identifier(RoundaboutMod.MOD_ID,"guard_point_packet");
+    public static final Identifier DAZE_ID = new Identifier(RoundaboutMod.MOD_ID,"daze_packet");
 
     //Client To Server
     public static void registerC2SPackets(){
@@ -38,5 +40,7 @@ public class ModMessages {
     public static void registerS2CPackets(){
         ClientPlayNetworking.registerGlobalReceiver(NBT_SYNC_ID, NbtSyncPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(POWER_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateAttackCooldowns);
+        ClientPlayNetworking.registerGlobalReceiver(STAND_GUARD_POINT_ID, CooldownSyncPacket::updateGuard);
+        ClientPlayNetworking.registerGlobalReceiver(DAZE_ID, CooldownSyncPacket::updateDaze);
     }
 }

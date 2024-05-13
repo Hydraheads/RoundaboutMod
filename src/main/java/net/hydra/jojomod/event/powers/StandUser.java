@@ -1,18 +1,12 @@
-package net.hydra.jojomod.networking.component;
+package net.hydra.jojomod.event.powers;
 
-import dev.onyxstudios.cca.api.v3.component.Component;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-/** @see StandUserData
- * the code needs an interface for other classes to call on.*/
-public interface StandUserComponent extends Component, AutoSyncedComponent {
-
+public interface StandUser {
     boolean hasStandOut();
     void onStandOutLookAround(StandEntity passenger);
 
@@ -27,6 +21,7 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     float getMaxGuardPoints();
     void setGuardPoints(float GuardPoints);
     boolean getGuardBroken();
+    void setGuardBroken(boolean guardBroken);
     void fixGuard();
     void regenGuard(float regen);
     void damageGuard(float damage);
@@ -42,7 +37,6 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     void setActive(boolean active);
 
     void summonStand(World theWorld, boolean forced, boolean sound);
-    void sync();
 
     boolean getActive();
     boolean getMainhandOverride();
@@ -51,9 +45,9 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     float getDistanceOut(Entity entity, float range, boolean offset);
     float getStandReach();
 
-   StandPowers getStandPowers();
+    StandPowers getStandPowers();
 
-   void setStandPowers(StandPowers standPowers);
+    void setStandPowers(StandPowers standPowers);
     void setAttackTimeDuring(int attackTimeDuring);
     void setInterruptCD(int interruptCD);
     boolean isGuarding();
@@ -64,17 +58,19 @@ public interface StandUserComponent extends Component, AutoSyncedComponent {
     boolean shieldNotDisabled();
     boolean isDazed();
     void setDazed(byte dazeTime);
+    void setDazeTime(byte dazeTime);
 
-   void tryPower(int move, boolean forced);
-  void stopSounds(byte soundNumber);
+    void tryPower(int move, boolean forced);
+    void stopSounds(byte soundNumber);
 
-   void setSummonCD(int summonCD);
-   boolean getSummonCD();
-  int getSummonCD2();
-  Entity getTargetEntity(Entity User, float distMax);
+    void setSummonCD(int summonCD);
+    boolean getSummonCD();
+    int getSummonCD2();
+    Entity getTargetEntity(Entity User, float distMax);
 
-   LivingEntity getPowerUser();
+    LivingEntity getPowerUser();
 
     @Nullable
     StandEntity getStand();
+
 }

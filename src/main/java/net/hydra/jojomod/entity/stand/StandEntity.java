@@ -1,10 +1,10 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -292,10 +292,9 @@ public abstract class StandEntity extends MobEntity{
        } else {
            LivingEntity follower = this.getFollowing();
            if (follower != null && !follower.isRemoved()) {
-               StandUserComponent follower2 = MyComponents.STAND_USER.get(follower);
                //this will be changed to getfollower
-               if (follower2.getStand() != null) {
-                   if (follower2.getStand() != this) {
+               if (((StandUser) follower).getStand() != null) {
+                   if (((StandUser) follower).getStand() != this) {
                        follower = null;
                    }
                } else {
@@ -314,8 +313,8 @@ public abstract class StandEntity extends MobEntity{
     } //returns IF stand has a master
 
 
-    public StandUserComponent getUserData(LivingEntity User) {
-        return MyComponents.STAND_USER.get(User);
+    public StandUser getUserData(LivingEntity User) {
+        return ((StandUser) User);
     }
 
 
@@ -355,11 +354,10 @@ public abstract class StandEntity extends MobEntity{
      * When this is called, sets the User's owned stand to this one. Both the Stand and the User store
      * each other, and this is for setting the User's storage.
      *
-     * @see net.hydra.jojomod.networking.component.StandUserData#setStand
+     * @see net.hydra.jojomod.event.powers.StandUser#setStand
      */
     public boolean startStandRiding(LivingEntity entity, boolean force) {
-        StandUserComponent UD = getUserData(entity);
-        UD.setStand(this);
+        ((StandUser) entity).setStand(this);
         return true;
         //RoundaboutMod.LOGGER.info("MF");
     }
@@ -381,10 +379,10 @@ public abstract class StandEntity extends MobEntity{
             //RoundaboutMod.LOGGER.info("MF No Master");
             return;
         }
-        StandUserComponent UD = getUserData(this.getFollowing());
         //RoundaboutMod.LOGGER.info("MF Update Pos");
-        UD.updateStandOutPosition(this);
+        ((StandUser) this.getFollowing()).updateStandOutPosition(this);
     }
+
 
     /** Stand does not take damage under normal circumstances.*/
     public boolean damage(DamageSource source, float amount) {
@@ -448,7 +446,7 @@ public abstract class StandEntity extends MobEntity{
 
     /** Math to determine the position of the stand floating away from its user.
      * Based on Jojovein donut code with great help from Urbancase.*/
-    public Vec3d getStandOffsetVector(Entity standUser){
+    public Vec3d getStandOffsetVector(LivingEntity standUser){
         byte ot = this.getOffsetType();
         if (ot == OffsetIndex.FOLLOW) {
             return getIdleOffset(standUser);
@@ -461,8 +459,7 @@ public abstract class StandEntity extends MobEntity{
     /** The offset that can potentially can be used for rushes, punches, blocking, etc.
      * Involves the stand being in an L shape away from the user,
      * with the StandModel.java handling the inward rotation*/
-    public Vec3d getAttackOffset(Entity standUser, byte ot) {
-        StandUserComponent UD = getUserData((LivingEntity) standUser);
+    public Vec3d getAttackOffset(LivingEntity standUser, byte ot) {
         float distanceFront;
         float standrotDir2 = 0;
         float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
@@ -476,7 +473,7 @@ public abstract class StandEntity extends MobEntity{
             addXZ-= 0.015F;
             distanceFront = 1.05F;
         } else {
-            distanceFront = UD.getDistanceOut(standUser,UD.getStandReach(),true);
+            distanceFront = ((StandUser) standUser).getDistanceOut(standUser,((StandUser) standUser).getStandReach(),true);
         }
 
         Vec3d frontVectors = FrontVectors(standUser, 0, distanceFront);
@@ -505,7 +502,7 @@ public abstract class StandEntity extends MobEntity{
     }
 
     /**This is the way a stand looks when it is passively floating by you*/
-    public Vec3d getIdleOffset(Entity standUser) {
+    public Vec3d getIdleOffset(LivingEntity standUser) {
         int vis = this.getFadeOut();
         double r = (((double) vis / MaxFade) * 1.37);
         if (r < 0.5) {

@@ -1,14 +1,10 @@
 package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -21,8 +17,7 @@ public class StandAbilityPacket {
         //Everything here is server only!
         ServerWorld world = (ServerWorld) player.getWorld();
         server.execute(() -> {
-            StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            userData.summonStand(world, false, true);
+            ((StandUser) player).summonStand(world, false, true);
             ((IEntityDataSaver) player).getPersistentData().putLong("guard", (player.getWorld().getTime() + 200));
         });
     }
@@ -30,8 +25,7 @@ public class StandAbilityPacket {
                                PacketByteBuf buf, PacketSender responseSender) {
         //Everything here is server only!
         server.execute(() -> {
-            StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            userData.tryPower(PowerIndex.ATTACK, true);
+            ((StandUser) player).tryPower(PowerIndex.ATTACK, true);
         });
     }
 
@@ -41,9 +35,8 @@ public class StandAbilityPacket {
         Entity targetEntity = player.getWorld().getEntityById(buf.readInt());
         byte APP = buf.readByte();
         server.execute(() -> {
-            StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            userData.getStandPowers().setActivePowerPhase(APP);
-            userData.getStandPowers().punchImpact(targetEntity);
+            ((StandUser) player).getStandPowers().setActivePowerPhase(APP);
+            ((StandUser) player).getStandPowers().punchImpact(targetEntity);
         });
     }
     public static void barrageHit(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
@@ -52,8 +45,7 @@ public class StandAbilityPacket {
         Entity targetEntity = player.getWorld().getEntityById(buf.readInt());
         int hitNumber = buf.readInt();
         server.execute(() -> {
-            StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            userData.getStandPowers().barrageImpact(targetEntity, hitNumber);
+            ((StandUser) player).getStandPowers().barrageImpact(targetEntity, hitNumber);
         });
     }
 
@@ -61,9 +53,8 @@ public class StandAbilityPacket {
                               PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         server.execute(() -> {
-            StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            if (!userData.isGuarding()){
-                userData.tryPower(PowerIndex.GUARD,true);
+            if (!((StandUser) player).isGuarding()){
+                ((StandUser) player).tryPower(PowerIndex.GUARD,true);
             }
         });
     }
@@ -72,8 +63,7 @@ public class StandAbilityPacket {
                                PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         server.execute(() -> {
-            StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            userData.tryPower(PowerIndex.BARRAGE,true);
+            ((StandUser) player).tryPower(PowerIndex.BARRAGE,true);
         });
     }
 
@@ -82,9 +72,8 @@ public class StandAbilityPacket {
                              PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         server.execute(() -> {
-            StandUserComponent userData = MyComponents.STAND_USER.get(player);
-            if (userData.isGuarding() || userData.isBarraging()){
-                userData.tryPower(PowerIndex.NONE,true);
+            if (((StandUser) player).isGuarding() || ((StandUser) player).isBarraging()){
+                ((StandUser) player).tryPower(PowerIndex.NONE,true);
             }
         });
     }

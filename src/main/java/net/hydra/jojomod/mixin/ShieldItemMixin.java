@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
@@ -18,8 +17,7 @@ public class ShieldItemMixin {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void useRoundabout(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> ci) {
-        StandUserComponent standUserData = MyComponents.STAND_USER.get(user);
-        if (standUserData.getActive() && hand == Hand.OFF_HAND){
+        if (((StandUser) user).getActive() && hand == Hand.OFF_HAND){
             ci.setReturnValue(TypedActionResult.fail(user.getStackInHand(hand)));
         } else {
             ItemStack itemStack = user.getStackInHand(hand);

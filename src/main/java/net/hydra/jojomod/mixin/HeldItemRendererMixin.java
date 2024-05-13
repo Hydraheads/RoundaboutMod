@@ -2,17 +2,12 @@ package net.hydra.jojomod.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.access.IEntityDataSaver;
-import net.hydra.jojomod.networking.MyComponents;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.ToolItem;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -48,7 +43,7 @@ public class HeldItemRendererMixin {
     public void injectHeldItems(CallbackInfo ci) {
         ClientPlayerEntity clientPlayerEntity2 = this.client.player;
         if (!this.client.player.isRiding()) {
-        if (MyComponents.STAND_USER.get(this.client.player).getActive()) {
+        if (((StandUser) this.client.player).getActive()) {
             ItemStack itemStack3 = clientPlayerEntity2.getMainHandStack();
             ItemStack itemStack4 = clientPlayerEntity2.getOffHandStack();
             if (itemStack3.getItem() instanceof ToolItem){

@@ -1,8 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -24,9 +23,8 @@ public class ServerWorldMixin {
     private void tickEntity2(Entity entity, CallbackInfo ci) {
         if (entity.isLiving()) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            StandUserComponent standUserData = (StandUserComponent) MyComponents.STAND_USER.get(entity);
-            if (standUserData.hasStandOut()) {
-                this.tickStandIn(livingEntity, Objects.requireNonNull(standUserData.getStand()));
+            if (((StandUser) entity).hasStandOut()) {
+                this.tickStandIn(livingEntity, Objects.requireNonNull(((StandUser) entity).getStand()));
             }
         }
     }

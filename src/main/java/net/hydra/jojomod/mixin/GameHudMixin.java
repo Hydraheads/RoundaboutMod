@@ -2,19 +2,14 @@ package net.hydra.jojomod.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.hydra.jojomod.RoundaboutMod;
-import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.hud.StandHudRender;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -62,8 +57,7 @@ public abstract class GameHudMixin implements IHudAccess {
     @Inject(method = "renderExperienceBar", at = @At(value = "HEAD"), cancellable = true)
     public void roundaboutRenderExperienceBar(DrawContext context, int x, CallbackInfo ci){
         assert client.player != null;
-        StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
-        if (standUserData.isGuarding() || standUserData.getGuardPoints() < standUserData.getMaxGuardPoints()) {
+        if (((StandUser) client.player).isGuarding() || ((StandUser) client.player).getGuardPoints() < ((StandUser) client.player).getMaxGuardPoints()) {
             StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
             ci.cancel();
         }

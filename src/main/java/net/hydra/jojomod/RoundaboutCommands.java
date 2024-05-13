@@ -1,17 +1,13 @@
 package net.hydra.jojomod;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.KillCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
@@ -77,8 +73,7 @@ public class RoundaboutCommands {
     private static int executeDebugSummon(ServerCommandSource source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
-                standUserData.summonStand(entity.getWorld(), true,true);
+                ((StandUser) entity).summonStand(entity.getWorld(), true,true);
             }
         }
         if (targets.size() == 1) {
@@ -92,8 +87,7 @@ public class RoundaboutCommands {
     private static int executeDebugAttack(ServerCommandSource source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
-                standUserData.tryPower(PowerIndex.ATTACK, true);
+                ((StandUser) entity).tryPower(PowerIndex.ATTACK, true);
             }
         }
         return targets.size();
@@ -102,8 +96,7 @@ public class RoundaboutCommands {
     private static int executeDebugBarrage(ServerCommandSource source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
-                standUserData.tryPower(PowerIndex.BARRAGE, true);
+                ((StandUser) entity).tryPower(PowerIndex.BARRAGE, true);
             }
         }
         return targets.size();
@@ -112,8 +105,7 @@ public class RoundaboutCommands {
     private static int executeDebugGuard(ServerCommandSource source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
-                standUserData.tryPower(PowerIndex.GUARD, true);
+                ((StandUser) entity).tryPower(PowerIndex.GUARD, true);
             }
         }
         return targets.size();
@@ -122,8 +114,7 @@ public class RoundaboutCommands {
     private static int executeDebugCancel(ServerCommandSource source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                StandUserComponent standUserData = MyComponents.STAND_USER.get(entity);
-                standUserData.tryPower(PowerIndex.NONE, true);
+                ((StandUser) entity).tryPower(PowerIndex.NONE, true);
             }
         }
         return targets.size();

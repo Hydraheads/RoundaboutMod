@@ -2,7 +2,6 @@ package net.hydra.jojomod.util;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.hydra.jojomod.access.IEntityDataSaver;
-import net.hydra.jojomod.networking.MyComponents;
 import net.hydra.jojomod.stand.NBTData;
 import net.minecraft.server.network.ServerPlayerEntity;
 

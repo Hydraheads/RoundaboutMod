@@ -9,8 +9,6 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.networking.ModMessages;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -38,7 +36,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
@@ -251,8 +248,8 @@ public class StandPowers {
         }
     }
 
-    public StandUserComponent getUserData(LivingEntity User){
-        return MyComponents.STAND_USER.get(User);
+    public StandUser getUserData(LivingEntity User){
+        return ((StandUser) User);
     }
     public StandEntity getStandEntity(LivingEntity User){
         return this.getUserData(User).getStand();
@@ -321,8 +318,7 @@ public class StandPowers {
     //        1,0.0, 0.0, 0.0,1);
 
     private boolean isDazed(LivingEntity entity){
-        StandUserComponent standUserData = this.getUserData(entity);
-        return standUserData.isDazed();
+        return this.getUserData(entity).isDazed();
     }
     private void setDazed(LivingEntity entity, byte dazeTime){
         if ((1.0 - entity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) <= 0.0) {
@@ -332,8 +328,7 @@ public class StandPowers {
             /*Bosses can't be dazed**/
             return;
         }
-        StandUserComponent standUserData = this.getUserData(entity);
-        standUserData.setDazed(dazeTime);
+        this.getUserData(entity).setDazed(dazeTime);
     }
 
     public boolean knockShield(Entity entity, int duration){
@@ -342,10 +337,10 @@ public class StandPowers {
             if (entity instanceof LivingEntity) {
                 if (((LivingEntity) entity).isBlocking()) {
 
-                    StandUserComponent standUserData = this.getUserData((LivingEntity) entity);
-                    if (standUserData.isGuarding()) {
-                        if (!standUserData.getGuardBroken()){
-                            standUserData.breakGuard();
+                    StandUser standUser= this.getUserData((LivingEntity) entity);
+                    if (standUser.isGuarding()) {
+                        if (!standUser.getGuardBroken()){
+                            standUser.breakGuard();
                         }
                     }
                     if (entity instanceof PlayerEntity){

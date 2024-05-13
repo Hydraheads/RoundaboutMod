@@ -6,12 +6,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.hydra.jojomod.client.gui.ExampleGui;
-import net.hydra.jojomod.client.gui.ExampleScreen;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModMessages;
-import net.hydra.jojomod.networking.MyComponents;
-import net.hydra.jojomod.networking.component.StandUserComponent;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.PacketByteBuf;
@@ -44,9 +42,8 @@ public class KeyInputHandler {
 
                     /*If you have a stand out, update the stand leaning attributes.
                     * Currently, strafe is reported, but unused.*/
-                    StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
-                    if (standUserData.getActive()) {
-                        StandEntity stand = standUserData.getStand();
+                    if (((StandUser) client.player).getActive()) {
+                        StandEntity stand = ((StandUser) client.player).getStand();
                         if (stand != null) {
                             var mf = stand.getMoveForward();
                             byte forward = 0;
@@ -68,12 +65,11 @@ public class KeyInputHandler {
                 }
                 while (summonKey.wasPressed()) {
                     //client.player.sendMessage(Text.of("Summon Key"));
-                    StandUserComponent standUserData = MyComponents.STAND_USER.get(client.player);
-                    if (standUserData.getSummonCD()) {
-                        if (standUserData.getActive()){
-                            standUserData.setSummonCD(8);
+                    if (((StandUser) client.player).getSummonCD()) {
+                        if (((StandUser) client.player).getActive()){
+                            ((StandUser) client.player).setSummonCD(8);
                         } else {
-                            standUserData.setSummonCD(2);
+                            ((StandUser) client.player).setSummonCD(2);
                         }
                         ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());
                     }
@@ -91,7 +87,7 @@ public class KeyInputHandler {
                     client.player.sendMessage(Text.of("Special Move"));
                 }
                 while (menuKey.wasPressed()) {
-                  client.setScreen(new ExampleScreen(new ExampleGui()));
+                  client.setScreen(new PowerInventoryScreen(client.player));
                 }
             }
         });
