@@ -63,7 +63,7 @@ public class InputMixin {
         public void roundaboutBlockBreak(boolean breaking, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
-                if (standComp.getActive()) {
+                if (standComp.getActive() || standComp.isDazed()) {
                     if (!breaking){
                         this.attackCooldown = 0;
                     }
