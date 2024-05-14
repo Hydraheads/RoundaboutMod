@@ -410,7 +410,7 @@ public class LivingEntityMixin implements StandUser {
             return;
         }
         byte OT = stand.getOffsetType();
-        if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {        RoundaboutMod.LOGGER.info("SE: "+2);
+        if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
 
             Vec3d grabPos = stand.getStandOffsetVector(User);
             positionUpdater.accept(stand, grabPos.x, grabPos.y, grabPos.z);
@@ -477,7 +477,8 @@ public class LivingEntityMixin implements StandUser {
     @Inject(method = "damage", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
         if (this.isBarraging() && this.getAttackTimeDuring()
-                < this.getStandPowers().getBarrageWindup()) {
+                < this.getStandPowers().getBarrageWindup() &&
+                source.getSource() != null) {
             this.tryPower(PowerIndex.GUARD,true);
         }
     }
