@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -176,6 +177,7 @@ public class LivingEntityMixin implements StandUser {
     } public void tickDaze(){
         if (!this.User.getWorld().isClient) {
             if (this.dazeTime > 0) {
+                ((LivingEntity)(Object)this).clearActiveItem();
                 dazeTime--;
                 if (dazeTime <= 0){
                     this.syncDaze();
@@ -491,6 +493,15 @@ public class LivingEntityMixin implements StandUser {
         }
     }
 
+    /**This Should prevent repeated crossbow charging on barrage*/
+    @Inject(method = "tickActiveItemStack", at = @At(value = "HEAD"), cancellable = true)
+    protected void RoundaboutTickActiveItemStack(CallbackInfo ci) {
+        if (this.isDazed()) {
+            ci.cancel();
+        }
+    }
+
+
     /**Part of Registering Stand Guarding as a form of Blocking*/
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V", shift = At.Shift.BEFORE))
     private void RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
@@ -502,9 +513,19 @@ public class LivingEntityMixin implements StandUser {
         }
     }
 
+    /**Entities who are caught in a barrage stop moving from their own volition in the x and z directions.*/
+    @ModifyVariable(method = "travel(Lnet/minecraft/util/math/Vec3d;)V", at = @At(value = "HEAD"))
+    private Vec3d RoundaboutTravel(Vec3d movementInput) {
+        if (this.isDazed()) {
+            return new Vec3d(0,0,0);
+        } else {
+            return movementInput;
+        }
+    }
+
     /**This code stops a barrage target from losing velocity, preventing lag spikes from causing them to drop.*/
     @ModifyVariable(method = "travel(Lnet/minecraft/util/math/Vec3d;)V", at = @At("STORE"))
-    private double RoundaboutTravel(double d) {
+    private double RoundaboutTravel2(double d) {
         if (this.isDazed()) {
             return 0;
         }

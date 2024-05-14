@@ -11,7 +11,13 @@
 		"MobEntityMixin",
 		"ServerWorldMixin",
 		"ShieldItemMixin",
-		"PlayerEntityMixin"
+		"PlayerEntityMixin",
+		"CrossbowAttackGoalMixin",
+		"BlazeEntityGoalMixin",
+		"ProjectileAttackGoalMixin",
+		"WitchEntityMixin",
+		"CreeperEntityMixin",
+		"CreeperIgniteGoalMixin"
 	],
 	"client": [
 		"InputMixin",
