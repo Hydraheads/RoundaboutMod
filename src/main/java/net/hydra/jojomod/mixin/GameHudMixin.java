@@ -57,7 +57,10 @@ public abstract class GameHudMixin implements IHudAccess {
     @Inject(method = "renderExperienceBar", at = @At(value = "HEAD"), cancellable = true)
     public void roundaboutRenderExperienceBar(DrawContext context, int x, CallbackInfo ci){
         assert client.player != null;
-        if (((StandUser) client.player).isGuarding() || ((StandUser) client.player).getGuardPoints() < ((StandUser) client.player).getMaxGuardPoints()) {
+        if (((StandUser) client.player).isClashing()) {
+            StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
+            ci.cancel();
+        } else if (((StandUser) client.player).isGuarding() || ((StandUser) client.player).getGuardPoints() < ((StandUser) client.player).getMaxGuardPoints()) {
             StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
             ci.cancel();
         }

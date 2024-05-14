@@ -7,6 +7,7 @@ import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
 import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
 import net.hydra.jojomod.networking.packet.s2c.CooldownSyncPacket;
 import net.hydra.jojomod.networking.packet.s2c.NbtSyncPacket;
+import net.hydra.jojomod.networking.packet.s2c.SoundStopPacket;
 import net.minecraft.util.Identifier;
 
 public class ModMessages {
@@ -24,6 +25,7 @@ public class ModMessages {
     public static final Identifier STAND_GUARD_CANCEL_PACKET = new Identifier(RoundaboutMod.MOD_ID,"guard_cancel_packet");
     public static final Identifier STAND_GUARD_POINT_ID = new Identifier(RoundaboutMod.MOD_ID,"guard_point_packet");
     public static final Identifier DAZE_ID = new Identifier(RoundaboutMod.MOD_ID,"daze_packet");
+    public static final Identifier SOUND_CANCEL_ID = new Identifier(RoundaboutMod.MOD_ID,"sound_cancel_packet");
 
     //Client To Server
     public static void registerC2SPackets(){
@@ -42,5 +44,6 @@ public class ModMessages {
         ClientPlayNetworking.registerGlobalReceiver(POWER_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateAttackCooldowns);
         ClientPlayNetworking.registerGlobalReceiver(STAND_GUARD_POINT_ID, CooldownSyncPacket::updateGuard);
         ClientPlayNetworking.registerGlobalReceiver(DAZE_ID, CooldownSyncPacket::updateDaze);
+        ClientPlayNetworking.registerGlobalReceiver(SOUND_CANCEL_ID, SoundStopPacket::stopSound);
     }
 }

@@ -27,12 +27,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -88,7 +92,6 @@ public class LivingEntityMixin implements StandUser {
         this.getStandPowers().tickPower();
         this.tickGuard();
         this.tickDaze();
-        this.updateBarrageNoise();
         //}
     }
 
@@ -207,10 +210,11 @@ public class LivingEntityMixin implements StandUser {
     }
 
     public void tryPower(int move, boolean forced){
-        this.getStandPowers().tryPower(move,forced);
-        this.getStandPowers().syncCooldowns();
+        if (!this.isClashing() || move == PowerIndex.NONE) {
+            this.getStandPowers().tryPower(move, forced);
+            this.getStandPowers().syncCooldowns();
+        }
     }
-
 
     public boolean canAttack(){
         return this.getStandPowers().canAttack();
@@ -257,6 +261,9 @@ public class LivingEntityMixin implements StandUser {
     }
     public boolean isBarraging(){
         return this.getStandPowers().isBarraging();
+    }
+    public boolean isClashing(){
+        return this.getStandPowers().isClashing();
     }
     public boolean isGuardingEffectively(){
         if (this.GuardBroken){return false;}
@@ -308,34 +315,6 @@ public class LivingEntityMixin implements StandUser {
         ((LivingEntity) (Object) this).getDataTracker().set(STAND_ID, StandSet.getId());
     }
 
-    public boolean barrageNoise = false;
-    public int barrageNoiseTime = 0;
-
-    public boolean hasBarrageNoise(){
-        return this.barrageNoise;
-    } public void updateBarrageNoise(){
-        if (this.User.getWorld().isClient) {
-            if (!this.isBarraging()) {
-                if (this.hasBarrageNoise()) {
-                    if (this.barrageNoiseTime >= this.getStandPowers().getBarrageWindup()-1) {
-                        this.stopSounds(SoundIndex.BARRAGE_CRY_SOUND);
-                    }
-                    this.stopSounds(SoundIndex.BARRAGE_CHARGE_SOUND);
-                    this.barrageNoise = false;
-                    this.barrageNoiseTime = 0;
-                }
-            } else {
-                if (!this.hasBarrageNoise()) {
-                    this.barrageNoise = true;
-                }
-                if (this.getAttackTimeDuring() >= (this.getStandPowers().getBarrageWindup() +
-                        this.getStandPowers().getBarrageLength())){
-                    this.barrageNoise = false;
-                }
-                this.barrageNoiseTime = this.getAttackTimeDuring();
-            }
-        }
-    }
 
     /** Code that brings out a user's stand, based on the stand's summon sounds and conditions. */
     public void summonStand(World theWorld, boolean forced, boolean sound){
@@ -427,9 +406,12 @@ public class LivingEntityMixin implements StandUser {
         /**This is where we cancel sounds like barrage and barrage wind. Must change this.StopSound server side,
          * then send a sync packet*/
         if (this.User.getWorld().isClient) {
-            MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNo), SoundCategory.PLAYERS);
+            if (this.getStandPowers().getSoundID(soundNo) != null) {
+                MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNo), SoundCategory.PLAYERS);
+            }
         }
     }
+
 
     public void onStandOutLookAround(StandEntity passenger) {
     }

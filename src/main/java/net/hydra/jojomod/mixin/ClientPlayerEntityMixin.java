@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -28,7 +29,9 @@ public class ClientPlayerEntityMixin {
             this.input.movementSideways = 0;
             this.input.movementForward = 0;
             this.ticksLeftToDoubleTapSprint = 0;
-        } else if (((StandUser) this).isGuarding() || ((StandUser) this).isBarraging()) {
+        } else if (!(((ClientPlayerEntity)(Object)this).getVehicle() != null && ((ClientPlayerEntity)(Object)this).getControllingVehicle() == null) &&
+                ((((StandUser) this).isGuarding() && ((ClientPlayerEntity)(Object)this).getVehicle() == null) ||
+                ((StandUser) this).isBarraging() || ((StandUser) this).isClashing())) {
             this.input.movementSideways *= 0.2f;
             this.input.movementForward *= 0.2f;
             this.ticksLeftToDoubleTapSprint = 0;

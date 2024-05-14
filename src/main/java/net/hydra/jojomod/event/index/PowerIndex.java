@@ -6,7 +6,8 @@ public class PowerIndex {
     public static final byte SNEAK_ATTACK = 2;
     public static final byte GUARD = 3;
     public static final byte BARRAGE = 4;
-    public static final byte MOVEMENT = 5;
-    public static final byte SNEAK_MOVEMENT = 6;
+    public static final byte BARRAGE_CLASH = 5;
+    public static final byte MOVEMENT = 6;
+    public static final byte SNEAK_MOVEMENT = 7;
 
 }

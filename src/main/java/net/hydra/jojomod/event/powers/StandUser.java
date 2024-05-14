@@ -52,6 +52,7 @@ public interface StandUser {
     void setInterruptCD(int interruptCD);
     boolean isGuarding();
     boolean isBarraging();
+    boolean isClashing();
     float getGuardCooldown();
     boolean isGuardingEffectively();
     boolean isGuardingEffectively2();

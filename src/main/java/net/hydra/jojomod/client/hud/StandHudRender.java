@@ -214,7 +214,24 @@ public class StandHudRender {
         l = scaledHeight - 31 - 5;
         context.drawTexture(JOJO_ICONS, k, l, u, v, 9, 9);
     }
+    public static void renderClashHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
+                                      int scaledWidth, int scaledHeight, int ticks, int x,
+                                      float flashAlpha, float otherFlashAlpha) {
+        int l;
+        int k;
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser) playerEntity);
+        k = (int) 10;
+        context.drawTexture(JOJO_ICONS, x, l, 0, 20, 182, 5);
+        if (k > 0) {
+            context.drawTexture(JOJO_ICONS, x, l, 0, 25, k, 5);
+        }
 
+
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+        context.drawTexture(JOJO_ICONS, k, l, 183, 20, 9, 9);
+    }
 
 /**
     public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
