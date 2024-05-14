@@ -175,35 +175,37 @@ public class StandPowers {
     }
 
     public void tickPower(){
-        if (!this.self.getWorld().isClient || kickStarted) {
-            if (this.attackTimeDuring != -1) {
-                this.attackTimeDuring++;
-                if (this.attackTimeDuring == -1) {
-                    poseStand(OffsetIndex.FOLLOW);
-                } else {
-                    if (this.hasStandActive(this.self) && !this.self.isUsingItem() && !this.isDazed(this.self)) {
-                        if (this.activePower == PowerIndex.ATTACK && this.attackTimeDuring > -1) {
-                            this.updateAttack();
-                        } else if (this.isBarraging()) {
-                            this.updateBarrage();
-                        } else {
-                            this.updateUniqueMoves();
-                        }
+        if (this.self.isAlive() && !this.self.isRemoved()) {
+            if (!this.self.getWorld().isClient || kickStarted) {
+                if (this.attackTimeDuring != -1) {
+                    this.attackTimeDuring++;
+                    if (this.attackTimeDuring == -1) {
+                        poseStand(OffsetIndex.FOLLOW);
                     } else {
-                        resetAttackState();
+                        if (this.hasStandActive(this.self) && !this.self.isUsingItem() && !this.isDazed(this.self)) {
+                            if (this.activePower == PowerIndex.ATTACK && this.attackTimeDuring > -1) {
+                                this.updateAttack();
+                            } else if (this.isBarraging()) {
+                                this.updateBarrage();
+                            } else {
+                                this.updateUniqueMoves();
+                            }
+                        } else {
+                            resetAttackState();
+                        }
                     }
                 }
+                this.attackTime++;
+                if (this.attackTime > this.attackTimeMax) {
+                    this.setActivePowerPhase((byte) 0);
+                }
+                if (this.interruptCD > 0) {
+                    this.interruptCD--;
+                }
             }
-            this.attackTime++;
-            if (this.attackTime > this.attackTimeMax) {
-                this.setActivePowerPhase((byte) 0);
+            if (this.summonCD > 0) {
+                this.summonCD--;
             }
-            if (this.interruptCD > 0) {
-                this.interruptCD--;
-            }
-        }
-        if (this.summonCD > 0){
-            this.summonCD--;
         }
     }
     public void updateBarrage(){

@@ -13,7 +13,6 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModMessages;
-import net.hydra.jojomod.networking.component.StandData;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
