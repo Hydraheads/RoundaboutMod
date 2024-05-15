@@ -258,27 +258,35 @@ public class StandPowers {
     }
 
     public void updateClashing(){
-        if (this.attackTimeDuring <= 60) {
-            if (!(this.self instanceof PlayerEntity)) {
-                this.RoundaboutEnemyClash();
-            }
-            if (!this.self.getWorld().isClient){
-                assert this.getClashOp() != null;
-                if (this.getClashDone() && this.getClashOp() != null && ((StandUser) this.getClashOp()).getStandPowers().getClashDone()){
-                    if (this.getClashProgress() == ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()) {
-                        TieClash(this.self,this.getClashOp());
-                    } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()){
-                        breakClash(this.self,this.getClashOp());
-                    } else {
-                        breakClash(this.getClashOp(),this.self);
+        if (this.getClashOp() != null) {
+            if (this.attackTimeDuring <= 60) {
+                if (!(this.self instanceof PlayerEntity)) {
+                    this.RoundaboutEnemyClash();
+                }
+                if (!this.self.getWorld().isClient) {
+                    if (this.getClashDone() && ((StandUser) this.getClashOp()).getStandPowers().getClashDone()) {
+                        this.updateClashing2();
                     }
-                    ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
-                    ((StandUser) this.getClashOp()).tryPower(PowerIndex.NONE, true);
+                }
+            } else {
+                if (!this.self.getWorld().isClient) {
+                    this.updateClashing2();
                 }
             }
         } else {
-            this.setPowerNone();
+            ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
         }
+    }
+    private void updateClashing2(){
+        if (this.getClashProgress() == ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()) {
+            TieClash(this.self, this.getClashOp());
+        } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()) {
+            breakClash(this.self, this.getClashOp());
+        } else {
+            breakClash(this.getClashOp(), this.self);
+        }
+        ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+        ((StandUser) this.getClashOp()).tryPower(PowerIndex.NONE, true);
     }
     public void updateBarrage(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
