@@ -48,6 +48,13 @@ public class PlayerEntityMixin {
             ci.cancel();
         }
     }
+    /**your shield does not take damage if the stand blocks it*/
+    @Inject(method = "jump", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundaboutJump(CallbackInfo ci) {
+        if (((StandUser) this).isClashing()) {
+            ci.cancel();
+        }
+    }
 
     /**If you are in a barrage, does not play the hurt sound*/
     @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)

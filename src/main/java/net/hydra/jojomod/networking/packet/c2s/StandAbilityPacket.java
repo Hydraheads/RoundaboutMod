@@ -82,10 +82,12 @@ public class StandAbilityPacket {
     public static void clashUpdate(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                                    PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
+        float clashProg = buf.readFloat();
+        boolean clashDone = buf.readBoolean();
         server.execute(() -> {
             if (((StandUser) player).isClashing()){
-                ((StandUser) player).getStandPowers().setClashProgress(buf.readFloat());
-                ((StandUser) player).getStandPowers().setClashDone(buf.readBoolean());
+                ((StandUser) player).getStandPowers().setClashProgress(clashProg);
+                ((StandUser) player).getStandPowers().setClashDone(clashDone);
             }
         });
     }

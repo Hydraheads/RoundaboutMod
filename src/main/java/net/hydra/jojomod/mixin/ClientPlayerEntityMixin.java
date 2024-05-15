@@ -11,6 +11,7 @@ import net.hydra.jojomod.networking.ModMessages;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -75,6 +76,13 @@ public class ClientPlayerEntityMixin {
             ((StandUser)this).getStandPowers().setClashDone(false);
         }
         bl = this.input.jumping;
+    }
+
+    @Inject(method = "startRidingJump", at = @At(value = "HEAD"), cancellable = true)
+    protected void RoundaboutStartRidingJump(CallbackInfo ci) {
+        if (((StandUser) this).isClashing()) {
+            ci.cancel();
+        }
     }
 
     private void updateClash(){
