@@ -520,7 +520,9 @@ public class StandPowers {
                             knockbackStrength = this.getBarrageFinisherKnockback();
                         } else {
                             pow = this.getBarrageHitStrength(entity);
-                            knockbackStrength = 0.016F - (0.015F/(this.getBarrageLength()-(this.getBarrageWindup()+hitNumber)));
+                            float mn = this.getBarrageLength()-(this.getBarrageWindup()+hitNumber);
+                            if (mn==0){mn=0.015F;} else {mn = ((0.015F/(mn)));}
+                            knockbackStrength = 0.016F - mn;
                         }
                         if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                             if (entity instanceof LivingEntity) {
