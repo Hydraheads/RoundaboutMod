@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.entity.JumpingMount;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.*;
@@ -56,14 +57,27 @@ public abstract class GameHudMixin implements IHudAccess {
      *  while you are blocking, efficient HUD use.*/
     @Inject(method = "renderExperienceBar", at = @At(value = "HEAD"), cancellable = true)
     public void roundaboutRenderExperienceBar(DrawContext context, int x, CallbackInfo ci){
+        if (roundaboutRenderBars(context, x)){
+            ci.cancel();
+        }
+    } @Inject(method = "renderMountJumpBar", at = @At(value = "HEAD"), cancellable = true)
+    public void roundaboutRenderMountJumpBar(JumpingMount mount, DrawContext context, int x, CallbackInfo ci){
+        if (roundaboutRenderBars(context, x)){
+            ci.cancel();
+        }
+    }
+
+    private boolean roundaboutRenderBars(DrawContext context, int x){
         assert client.player != null;
         if (((StandUser) client.player).isClashing()) {
             StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
-            ci.cancel();
+            return true;
         } else if (((StandUser) client.player).isGuarding() || ((StandUser) client.player).getGuardPoints() < ((StandUser) client.player).getMaxGuardPoints()) {
             StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
-            ci.cancel();
+            return true;
         }
+        return false;
+
     }
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))

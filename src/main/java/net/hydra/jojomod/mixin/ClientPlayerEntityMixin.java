@@ -2,10 +2,16 @@ package net.hydra.jojomod.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModMessages;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,6 +26,10 @@ public class ClientPlayerEntityMixin {
 
     @Shadow
     protected int ticksLeftToDoubleTapSprint;
+
+    private int clashIncrement;
+    private boolean bl = false;
+
 
     /**This code mirrors item usage code, and it's why you are slower while eating.
      * The purpose of this mixin is to make stand blocking slow you down.*/
@@ -36,5 +46,41 @@ public class ClientPlayerEntityMixin {
             this.input.movementForward *= 0.2f;
             this.ticksLeftToDoubleTapSprint = 0;
         }
+        RoundaboutClashJump();
     }
+    private void RoundaboutClashJump(){
+        if (((StandUser) this).isClashing()) {
+            if (!((StandUser)this).getStandPowers().getClashDone()) {
+                if (this.clashIncrement < 0) {
+                    ++this.clashIncrement;
+                    if (this.clashIncrement == 0) {
+                        ((StandUser) this).getStandPowers().setClashProgress(0.0f);
+                    }
+                }
+                if (bl && !this.input.jumping) {
+                    ((StandUser)this).getStandPowers().setClashDone(true);
+                    //this.startRidingJump();
+                } else if (!bl && this.input.jumping) {
+                    this.clashIncrement = 0;
+                    ((StandUser) this).getStandPowers().setClashProgress(0.0f);
+                } else if (bl) {
+                    ++this.clashIncrement;
+                    ((StandUser) this).getStandPowers().setClashProgress(this.clashIncrement < 10 ?
+                            (float) this.clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.clashIncrement - 9) * 0.1f);
+                }
+                updateClash();
+            }
+        } else {
+            ((StandUser)this).getStandPowers().setClashProgress(0.0f);
+            ((StandUser)this).getStandPowers().setClashDone(false);
+        }
+        bl = this.input.jumping;
+    }
+
+    private void updateClash(){
+        PacketByteBuf buffer = PacketByteBufs.create();
+        buffer.writeFloat(((StandUser) this).getStandPowers().getClashProgress());
+        buffer.writeBoolean(((StandUser) this).getStandPowers().getClashDone());
+        ClientPlayNetworking.send(ModMessages.BARRAGE_CLASH_UPDATE_PACKET, buffer);
+    };
 }

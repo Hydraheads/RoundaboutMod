@@ -25,7 +25,8 @@
 		"GameHudMixin",
 		"ClientWorldMixin",
 		"ClientPlayerEntityMixin",
-		"GameRendererMixin"
+		"GameRendererMixin",
+		"BossBarHudMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

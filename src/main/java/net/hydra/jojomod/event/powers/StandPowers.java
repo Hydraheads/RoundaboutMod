@@ -39,6 +39,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
@@ -216,14 +217,34 @@ public class StandPowers {
             }
         }
     }
+
+    private int clashIncrement =0;
+    private int clashMod =0;
+    private void RoundaboutEnemyClash(){
+        if (this.isClashing()) {
+            if (this.clashIncrement < 0) {
+                ++this.clashIncrement;
+                if (this.clashIncrement == 0) {
+                    this.setClashProgress(0.0f);
+                }
+            }
+            ++this.clashIncrement;
+            if (this.clashIncrement < (6 + this.clashMod)){
+                this.setClashProgress(this.clashIncrement < 10 ?
+                        (float) this.clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.clashIncrement - 9) * 0.1f);
+            } else {
+                this.setClashDone(true);
+            }
+
+        } else {
+            this.setClashProgress(0.0f);
+        }
+    }
+
     public void updateClashing(){
         if (this.attackTimeDuring <= 60) {
-            if (!this.self.getWorld().isClient){
-                if (isPacketPlayer()) {
-
-                } else {
-
-                }
+            if (!(this.self instanceof PlayerEntity)) {
+                this.RoundaboutEnemyClash();
             }
         } else {
             this.setPowerNone();
@@ -435,7 +456,11 @@ public class StandPowers {
     public void barrageImpact(Entity entity, int hitNumber){
         if (entity != null) {
             if (hitNumber >= this.getBarrageWindup()) {
-                if (((StandUser) entity).isBarraging()) {
+                if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()) {
+
+                    ((StandUser) entity).getStandPowers().setClashOp(this.self);
+                    ((StandUser) this.self).getStandPowers().setClashOp((LivingEntity) entity);
+
                     ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH,true);
                     ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH,true);
 
@@ -524,6 +549,42 @@ public class StandPowers {
             if (hitNumber%2==0) {
                 this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_END_EVENT, SoundCategory.PLAYERS, 0.95F, 1f);
             }
+        }
+    }
+    /**ClashDone is a value that makes you lock in your barrage when you are done barraging**/
+    private boolean clashDone = false;
+    public boolean getClashDone(){
+        return this.clashDone;
+    } public void setClashDone(boolean clashDone){
+        this.clashDone = clashDone;
+    }
+    public float clashProgress = 0.0f;
+    private float clashOpProgress = 0.0f;
+
+    /**Clash Op is the opponent you are clashing with*/
+    @Nullable
+    private LivingEntity clashOp;
+    public LivingEntity getClashOp() {
+        return this.clashOp;
+    } public void setClashOp(@Nullable LivingEntity clashOp) {
+        this.clashOp = clashOp;
+    }
+    public float getClashOpProgress(){
+        return this.clashOpProgress;
+    }
+    public void setClashOpProgress(float clashOpProgress1) {
+        this.clashOpProgress = clashOpProgress1;
+    }
+    public float getClashProgress(){
+        return this.clashProgress;
+    }
+    public void setClashProgress(float clashProgress1){
+        this.clashProgress = clashProgress1;
+        if (!this.self.getWorld().isClient && this.clashOp != null && this.clashOp instanceof ServerPlayerEntity){
+            PacketByteBuf buffer = PacketByteBufs.create();
+            buffer.writeInt(this.self.getId());
+            buffer.writeFloat(this.clashProgress);
+            ServerPlayNetworking.send((ServerPlayerEntity) this.clashOp,ModMessages.BARRAGE_CLASH_UPDATE_S2C_PACKET, buffer);
         }
     }
 
@@ -866,6 +927,7 @@ public class StandPowers {
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
         barrageNoiseStarted = SoundIndex.BARRAGE_CHARGE_SOUND;
+        this.clashDone = false;
         playBarrageGuardSound();
     }
 
@@ -873,6 +935,9 @@ public class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CLASH);
         this.poseStand(OffsetIndex.LOOSE);
+        this.setClashProgress(0f);
+        this.clashIncrement = 0;
+        this.clashMod = (int) (Math.round(Math.random()*8));
 
         if (this.self instanceof PlayerEntity && !this.self.getWorld().isClient) {
             ((ServerPlayerEntity) this.self).sendMessage(Text.translatable("text.roundabout.barrage_clash"), true);

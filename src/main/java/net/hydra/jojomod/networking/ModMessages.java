@@ -8,6 +8,7 @@ import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
 import net.hydra.jojomod.networking.packet.s2c.CooldownSyncPacket;
 import net.hydra.jojomod.networking.packet.s2c.NbtSyncPacket;
 import net.hydra.jojomod.networking.packet.s2c.SoundStopPacket;
+import net.hydra.jojomod.networking.packet.s2c.StandS2CPacket;
 import net.minecraft.util.Identifier;
 
 public class ModMessages {
@@ -26,6 +27,8 @@ public class ModMessages {
     public static final Identifier STAND_GUARD_POINT_ID = new Identifier(RoundaboutMod.MOD_ID,"guard_point_packet");
     public static final Identifier DAZE_ID = new Identifier(RoundaboutMod.MOD_ID,"daze_packet");
     public static final Identifier SOUND_CANCEL_ID = new Identifier(RoundaboutMod.MOD_ID,"sound_cancel_packet");
+    public static final Identifier BARRAGE_CLASH_UPDATE_PACKET = new Identifier(RoundaboutMod.MOD_ID,"clash_update_packet");
+    public static final Identifier BARRAGE_CLASH_UPDATE_S2C_PACKET = new Identifier(RoundaboutMod.MOD_ID,"clash_update_s2c_packet");
 
     //Client To Server
     public static void registerC2SPackets(){
@@ -37,6 +40,7 @@ public class ModMessages {
         ServerPlayNetworking.registerGlobalReceiver(MOVE_SYNC_ID, MoveSyncPacket::receive);
         ServerPlayNetworking.registerGlobalReceiver(STAND_GUARD_PACKET, StandAbilityPacket::guard);
         ServerPlayNetworking.registerGlobalReceiver(STAND_GUARD_CANCEL_PACKET, StandAbilityPacket::guardCancel);
+        ServerPlayNetworking.registerGlobalReceiver(BARRAGE_CLASH_UPDATE_PACKET, StandAbilityPacket::clashUpdate);
     }
     //Server to Client
     public static void registerS2CPackets(){
@@ -45,5 +49,6 @@ public class ModMessages {
         ClientPlayNetworking.registerGlobalReceiver(STAND_GUARD_POINT_ID, CooldownSyncPacket::updateGuard);
         ClientPlayNetworking.registerGlobalReceiver(DAZE_ID, CooldownSyncPacket::updateDaze);
         ClientPlayNetworking.registerGlobalReceiver(SOUND_CANCEL_ID, SoundStopPacket::stopSound);
+        ClientPlayNetworking.registerGlobalReceiver(BARRAGE_CLASH_UPDATE_S2C_PACKET, StandS2CPacket::clashUpdate);
     }
 }

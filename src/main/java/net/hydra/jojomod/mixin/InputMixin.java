@@ -79,7 +79,7 @@ public class InputMixin {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
                 if (standComp.getActive()) {
-                    if (!standComp.isGuarding() && !standComp.isBarraging()) {
+                    if (!standComp.isGuarding() && !standComp.isBarraging() && !standComp.isClashing()) {
                         ClientPlayNetworking.send(ModMessages.STAND_GUARD_PACKET, PacketByteBufs.create());
                         standComp.tryPower(PowerIndex.GUARD,true);
                     }
@@ -93,7 +93,7 @@ public class InputMixin {
             if (standComp.isDazed()) {
                 ci.cancel();
             } else if (standComp.getActive()) {
-                if (standComp.isGuarding() || standComp.isBarraging()) {
+                if (standComp.isGuarding() || standComp.isBarraging() || standComp.isClashing()) {
                     ci.cancel();
                 }
             }

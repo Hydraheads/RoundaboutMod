@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.hydra.jojomod.RoundaboutMod;
@@ -8,10 +9,14 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.ClientBossBar;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class StandHudRender {
@@ -134,7 +139,13 @@ public class StandHudRender {
             int j = scaledHeight / 2 - 7 - 4;
             int k = scaledWidth / 2 - 8;
 
-            if (standOn && standUser.isBarraging()) {
+            if (standOn && standUser.isClashing()) {
+                float attackTimeDuring = standUser.getAttackTimeDuring();
+                int ClashTime = 15 - Math.round((attackTimeDuring / 60)*15);
+                context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.drawTexture(JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+            } else if (standOn && standUser.isBarraging()) {
                 int finalATimeInt = getFinalATimeInt(standUser);
                 context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
                 context.drawTexture(JOJO_ICONS, k, j, 193, 30, finalATimeInt, 6);
@@ -217,20 +228,42 @@ public class StandHudRender {
     public static void renderClashHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
                                       float flashAlpha, float otherFlashAlpha) {
-        int l;
-        int k;
-        l = scaledHeight - 32 + 3;
+
+        float c = (((StandUser) client.player).getStandPowers().getClashProgress());
+        int d = (int) (c * 183.0f);
+
+
+        int e = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser) playerEntity);
-        k = (int) 10;
-        context.drawTexture(JOJO_ICONS, x, l, 0, 20, 182, 5);
-        if (k > 0) {
-            context.drawTexture(JOJO_ICONS, x, l, 0, 25, k, 5);
+        context.drawTexture(JOJO_ICONS, x, e, 0, 20, 182, 5);
+        if (d > 0) {
+            context.drawTexture(JOJO_ICONS, x, e, 0, 25, d, 5);
         }
 
+        int f = scaledWidth / 2 - 5;
+        int g = scaledHeight - 31 - 5;
+        context.drawTexture(JOJO_ICONS, f, g, 183, 20, 9, 9);
 
-        k = scaledWidth/2 - 5;
-        l = scaledHeight - 31 - 5;
-        context.drawTexture(JOJO_ICONS, k, l, 183, 20, 9, 9);
+        LivingEntity clashOp = (((StandUser) client.player).getStandPowers().getClashOp());
+        if (clashOp != null) {
+            int i = context.getScaledWindowWidth();
+            int j = 12;
+            int k = i / 2 - 91;
+            int l = j;
+
+            context.drawTexture(JOJO_ICONS, k, l, 0, 40, 182, 5);
+            float q = (((StandUser) client.player).getStandPowers().getClashOpProgress());
+            int r = (int) (q * 183.0f);
+            context.drawTexture(JOJO_ICONS, k, l, 0, 45, r, 5);
+
+            Text text = clashOp.getName();
+            int m = client.textRenderer.getWidth(text);
+            int n = i / 2 - m / 2;
+            int o = l - 9;
+            context.drawTextWithShadow(client.textRenderer, text, n, o, 0xFFFFFF);
+
+            context.drawTexture(JOJO_ICONS, f, l+5, 183, 20, 9, 9);
+        }
     }
 
 /**
