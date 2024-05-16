@@ -454,7 +454,7 @@ public class StandPowers {
         }
     }
     private float getBarrageFinisherKnockback(){
-        return 2.2F;
+        return 3.2F;
     }
 
     private float getClashBreakStrength(Entity entity){

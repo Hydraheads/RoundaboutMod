@@ -22,6 +22,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -30,6 +31,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -215,6 +217,8 @@ public class LivingEntityMixin implements StandUser {
             this.getStandPowers().syncCooldowns();
         }
     }
+
+
 
     public boolean canAttack(){
         return this.getStandPowers().canAttack();
@@ -511,5 +515,12 @@ public class LivingEntityMixin implements StandUser {
             return 0;
         }
         return d;
+    }
+
+    @Inject(method = "swimUpward", at = @At(value = "HEAD"), cancellable = true)
+    protected void swimUpward(TagKey<Fluid> fluid, CallbackInfo ci) {
+        if (this.isClashing()) {
+            ci.cancel();
+        }
     }
 }
