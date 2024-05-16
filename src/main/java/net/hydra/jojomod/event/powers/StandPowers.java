@@ -302,9 +302,15 @@ public class StandPowers {
             ((StandUser) this.self).tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getBarrageLength()) {
-                this.attackTimeDuring = -10;
+                this.attackTimeDuring = -20;
             } else {
-                standBarrageHit();
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime()-1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                    * (getBarrageRecoilTime()-1)));
+
+                    standBarrageHit();
+                }
             }
         }
     }
@@ -359,7 +365,7 @@ public class StandPowers {
     }
     public void standBarrageHit(){
         if (this.self instanceof PlayerEntity){
-            if (isPacketPlayer() && this.attackTimeDuring > 0){
+            if (isPacketPlayer()){
                     PacketByteBuf buffer = PacketByteBufs.create();
                     buffer.writeInt(getTargetEntityId());
                     buffer.writeInt(this.attackTimeDuring);
@@ -1014,6 +1020,9 @@ public class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
+        this.setAttackTimeMax(this.getBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        this.setAttackTime(19);
         barrageNoiseStarted = SoundIndex.BARRAGE_CRY_SOUND;
         playBarrageCrySound();
     }
@@ -1037,9 +1046,13 @@ public class StandPowers {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
                 this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageChargeSound,
-                        SoundCategory.PLAYERS, 0.96F, 0.8F);
+                        SoundCategory.PLAYERS, 0.96F, 0.666F);
             }
         }
+    }
+
+    public int getBarrageRecoilTime(){
+        return 35;
     }
 
     public boolean isGuarding(){
@@ -1060,7 +1073,7 @@ public class StandPowers {
     }
 
     public int getBarrageWindup(){
-        return 24;
+        return 30;
     }
     public int getBarrageLength(){
         return 60;
