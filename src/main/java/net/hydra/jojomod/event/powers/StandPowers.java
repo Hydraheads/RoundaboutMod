@@ -193,10 +193,14 @@ public class StandPowers {
                         poseStand(OffsetIndex.FOLLOW);
                     } else {
                         if (this.hasStandActive(this.self) && !this.self.isUsingItem() && !this.isDazed(this.self)) {
-                            if (this.activePower == PowerIndex.ATTACK && this.attackTimeDuring > -1) {
+                            if (this.activePower == PowerIndex.ATTACK) {
                                 this.updateAttack();
                             } else if (this.isBarraging()) {
-                                this.updateBarrage();
+                                if (this.isBarrageCharging()) {
+                                    this.updateBarrageCharge();
+                                } else {
+                                    this.updateBarrage();
+                                }
                             } else {
                                 this.updateUniqueMoves();
                             }
@@ -288,22 +292,31 @@ public class StandPowers {
         ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
         ((StandUser) this.getClashOp()).tryPower(PowerIndex.NONE, true);
     }
-    public void updateBarrage(){
+    public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
-            if (this.attackTimeDuring > this.getBarrageWindup() + this.getBarrageLength()) {
-                this.setPowerGuard();
+            ((StandUser) this.self).tryPower(PowerIndex.BARRAGE, true);
+        }
+    }
+    public void updateBarrage(){
+        if (this.attackTimeDuring == -2) {
+            ((StandUser) this.self).tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -10;
             } else {
                 standBarrageHit();
             }
         }
     }
     public void updateAttack(){
-        if (this.attackTimeDuring > this.attackTimeMax) {
-            this.attackTimeMax = 0;
-            this.setPowerNone();
-        } else {
-            if (this.attackTimeDuring == 7) {
-                this.standPunch();
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > this.attackTimeMax) {
+                this.attackTimeMax = 0;
+                this.setPowerNone();
+            } else {
+                if (this.attackTimeDuring == 7) {
+                    this.standPunch();
+                }
             }
         }
     }
@@ -346,11 +359,15 @@ public class StandPowers {
     }
     public void standBarrageHit(){
         if (this.self instanceof PlayerEntity){
-            if (isPacketPlayer()){
+            if (isPacketPlayer() && this.attackTimeDuring > 0){
                     PacketByteBuf buffer = PacketByteBufs.create();
                     buffer.writeInt(getTargetEntityId());
                     buffer.writeInt(this.attackTimeDuring);
                     ClientPlayNetworking.send(ModMessages.STAND_BARRAGE_HIT_PACKET, buffer);
+
+                if (this.attackTimeDuring == this.getBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
             }
         } else {
             /*Caps how far out the barrage hit goes*/
@@ -505,54 +522,54 @@ public class StandPowers {
 
     private byte barrageNoiseStarted = -1;
     public void barrageImpact(Entity entity, int hitNumber){
-        if (!this.isClashing()) {
+        if (this.isBarrageAttacking()) {
+            RoundaboutMod.LOGGER.info(""+hitNumber);
+            boolean lastHit = (hitNumber >= this.getBarrageLength());
             if (entity != null) {
-                if (hitNumber >= this.getBarrageWindup()) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()) {
+                if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()
+                        && ((StandUser) entity).getAttackTimeDuring() > -1) {
 
-                        ((StandUser) entity).getStandPowers().setClashOp(this.self);
-                        ((StandUser) this.self).getStandPowers().setClashOp((LivingEntity) entity);
+                    ((StandUser) entity).getStandPowers().setClashOp(this.self);
+                    ((StandUser) this.self).getStandPowers().setClashOp((LivingEntity) entity);
 
-                        ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH, true);
-                        ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH, true);
+                    ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH, true);
+                    ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH, true);
 
+                } else {
+                    float pow;
+                    float knockbackStrength = 0;
+                    /**By saving the velocity before hitting, we can let people approach barraging foes
+                     * through shields.*/
+                    Vec3d prevVelocity = entity.getVelocity();
+                    if (lastHit) {
+                        pow = this.getBarrageFinisherStrength(entity);
+                        knockbackStrength = this.getBarrageFinisherKnockback();
                     } else {
-                        float pow;
-                        float knockbackStrength = 0;
-                        /**By saving the velocity before hitting, we can let people approach barraging foes
-                         * through shields.*/
-                        Vec3d prevVelocity = entity.getVelocity();
-                        boolean lastHit = (hitNumber >= (this.getBarrageLength() + this.getBarrageWindup()));
-                        if (lastHit) {
-                            pow = this.getBarrageFinisherStrength(entity);
-                            knockbackStrength = this.getBarrageFinisherKnockback();
-                        } else {
-                            pow = this.getBarrageHitStrength(entity);
-                            float mn = this.getBarrageLength()-(this.getBarrageWindup()+hitNumber);
-                            if (mn==0){mn=0.015F;} else {mn = ((0.015F/(mn)));}
-                            knockbackStrength = 0.016F - mn;
-                        }
-                        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                            if (entity instanceof LivingEntity) {
-                                if (lastHit) {
-                                    setDazed((LivingEntity) entity, (byte) 0);
-                                    playBarrageEndNoise();
-                                } else {
-                                    setDazed((LivingEntity) entity, (byte) 3);
-                                    playBarrageNoise(hitNumber);
-                                }
-                            }
-                                barrageImpact2(entity, lastHit, knockbackStrength);
-                        } else {
+                        pow = this.getBarrageHitStrength(entity);
+                        float mn = this.getBarrageLength()-hitNumber;
+                        if (mn==0){mn=0.015F;} else {mn = ((0.015F/(mn)));}
+                        knockbackStrength = 0.014F - mn;
+                    }
+                    if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                        if (entity instanceof LivingEntity) {
                             if (lastHit) {
-                                knockShield(entity, 200);
+                                setDazed((LivingEntity) entity, (byte) 0);
                                 playBarrageEndNoise();
                             } else {
-                                entity.setVelocity(prevVelocity);
+                                setDazed((LivingEntity) entity, (byte) 3);
+                                playBarrageNoise(hitNumber);
+                            }
+                        }
+                            barrageImpact2(entity, lastHit, knockbackStrength);
+                    } else {
+                        if (lastHit) {
+                            knockShield(entity, 200);
+                            playBarrageEndNoise();
+                        } else {
+                            entity.setVelocity(prevVelocity);
 
-                                if (!this.self.getWorld().isClient()) {
-                                    this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-                                }
+                            if (!this.self.getWorld().isClient()) {
+                                this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundCategory.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
                             }
                         }
                     }
@@ -561,10 +578,9 @@ public class StandPowers {
                 playBarrageMissNoise(hitNumber);
             }
 
-            if (hitNumber == this.getBarrageWindup()) {
-                if (this.isBarraging()) {
-                    playBarrageCrySound();
-                }
+            if (lastHit){
+                this.attackTimeDuring = -10;
+                this.barrageNoiseStarted = -1;
             }
         }
     } public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
@@ -930,6 +946,8 @@ public class StandPowers {
                     this.setPowerAttack();
                 } else if (move == PowerIndex.GUARD) {
                     this.setPowerGuard();
+                } else if (move == PowerIndex.BARRAGE_CHARGE) {
+                    this.setPowerBarrageCharge();
                 } else if (move == PowerIndex.BARRAGE) {
                     this.setPowerBarrage();
                 } else if (move == PowerIndex.BARRAGE_CLASH) {
@@ -981,13 +999,23 @@ public class StandPowers {
         this.setActivePower(PowerIndex.GUARD);
         this.poseStand(OffsetIndex.GUARD);
     }
+
+
+    public void setPowerBarrageCharge() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_CHARGE);
+        this.poseStand(OffsetIndex.ATTACK);
+        barrageNoiseStarted = SoundIndex.BARRAGE_CHARGE_SOUND;
+        this.clashDone = false;
+        playBarrageChargeSound();
+    }
+
     public void setPowerBarrage() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
-        barrageNoiseStarted = SoundIndex.BARRAGE_CHARGE_SOUND;
-        this.clashDone = false;
-        playBarrageGuardSound();
+        barrageNoiseStarted = SoundIndex.BARRAGE_CRY_SOUND;
+        playBarrageCrySound();
     }
 
     public void setPowerClash() {
@@ -1004,7 +1032,7 @@ public class StandPowers {
         //playBarrageGuardSound();
     }
 
-    public void playBarrageGuardSound(){
+    public void playBarrageChargeSound(){
         if (!this.self.getWorld().isClient()) {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
@@ -1017,9 +1045,17 @@ public class StandPowers {
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
     }
+
+    public boolean isBarrageCharging(){
+        return (this.activePower == PowerIndex.BARRAGE_CHARGE);
+    }
     public boolean isBarraging(){
+        return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
+    }
+    public boolean isBarrageAttacking(){
         return this.activePower == PowerIndex.BARRAGE;
-    } public boolean isClashing(){
+    }
+    public boolean isClashing(){
         return this.activePower == PowerIndex.BARRAGE_CLASH;
     }
 

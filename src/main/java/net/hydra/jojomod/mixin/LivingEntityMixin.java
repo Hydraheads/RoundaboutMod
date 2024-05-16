@@ -463,8 +463,7 @@ public class LivingEntityMixin implements StandUser {
     /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "damage", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
-        if (this.isBarraging() && this.getAttackTimeDuring()
-                < this.getStandPowers().getBarrageWindup() &&
+        if (this.isBarraging() &&
                 source.getSource() != null) {
             this.tryPower(PowerIndex.GUARD,true);
         }
@@ -517,6 +516,7 @@ public class LivingEntityMixin implements StandUser {
         return d;
     }
 
+    /**This code prevents you from swimming upwards while barrage clashing*/
     @Inject(method = "swimUpward", at = @At(value = "HEAD"), cancellable = true)
     protected void swimUpward(TagKey<Fluid> fluid, CallbackInfo ci) {
         if (this.isClashing()) {

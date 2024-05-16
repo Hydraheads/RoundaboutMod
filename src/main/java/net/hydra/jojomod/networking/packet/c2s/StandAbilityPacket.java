@@ -63,7 +63,7 @@ public class StandAbilityPacket {
                                PacketByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         server.execute(() -> {
-            ((StandUser) player).tryPower(PowerIndex.BARRAGE,true);
+            ((StandUser) player).tryPower(PowerIndex.BARRAGE_CHARGE,true);
         });
     }
 

@@ -139,16 +139,22 @@ public class StandHudRender {
             int j = scaledHeight / 2 - 7 - 4;
             int k = scaledWidth / 2 - 8;
 
+            float attackTimeDuring = standUser.getAttackTimeDuring();
             if (standOn && standUser.isClashing()) {
-                float attackTimeDuring = standUser.getAttackTimeDuring();
                 int ClashTime = 15 - Math.round((attackTimeDuring / 60)*15);
                 context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
                 context.drawTexture(JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
-            } else if (standOn && standUser.isBarraging()) {
-                int finalATimeInt = getFinalATimeInt(standUser);
+            } else if (standOn && standUser.getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
+                int ClashTime = 15 - Math.round((attackTimeDuring / standUser.getStandPowers().getBarrageLength())*15);
                 context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
-                context.drawTexture(JOJO_ICONS, k, j, 193, 30, finalATimeInt, 6);
+                context.drawTexture(JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+            } else if (standOn && standUser.getStandPowers().isBarrageCharging()) {
+                int ClashTime = Math.round((attackTimeDuring / standUser.getStandPowers().getBarrageWindup())*15);
+                context.drawTexture(JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.drawTexture(JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
             } else {
                 int barTexture = 0;
                 Entity TE = standUser.getTargetEntity(playerEntity, -1);
