@@ -322,7 +322,8 @@ public class StandPowers {
                     this.RoundaboutEnemyClash();
                 }
                 if (!this.self.getWorld().isClient) {
-                    if (this.getClashDone() && ((StandUser) this.getClashOp()).getStandPowers().getClashDone()) {
+                    if ((this.getClashDone() && ((StandUser) this.getClashOp()).getStandPowers().getClashDone())
+                    || !((StandUser) this.self).getActive() || !((StandUser) this.getClashOp()).getActive()) {
                         this.updateClashing2();
                     }
                 }
@@ -336,15 +337,25 @@ public class StandPowers {
         }
     }
     private void updateClashing2(){
-        if (this.getClashProgress() == ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()) {
-            TieClash(this.self, this.getClashOp());
-        } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()) {
-            breakClash(this.self, this.getClashOp());
-        } else {
-            breakClash(this.getClashOp(), this.self);
+        if (this.getClashOp() != null) {
+            boolean thisActive = ((StandUser) this.self).getActive();
+            boolean opActive = ((StandUser) this.getClashOp()).getActive();
+            if (thisActive && !opActive){
+                breakClash(this.self, this.getClashOp());
+            } else if (!thisActive && opActive){
+                breakClash(this.getClashOp(), this.self);
+            } else if (thisActive && opActive){
+                if ((this.getClashProgress() == ((StandUser) this.getClashOp()).getStandPowers().getClashProgress())) {
+                    TieClash(this.self, this.getClashOp());
+                } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()) {
+                    breakClash(this.self, this.getClashOp());
+                } else {
+                    breakClash(this.getClashOp(), this.self);
+                }
+            }
+            ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.getClashOp()).tryPower(PowerIndex.NONE, true);
         }
-        ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
-        ((StandUser) this.getClashOp()).tryPower(PowerIndex.NONE, true);
     }
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
