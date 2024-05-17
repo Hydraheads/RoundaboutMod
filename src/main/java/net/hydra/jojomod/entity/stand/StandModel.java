@@ -33,12 +33,12 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         return stand;
     }
 
-    @Override
-    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        this.getPart().traverse().forEach(ModelPart::resetTransform);
+    public void defaultAnimations(T entity, float animationProgress){
         this.updateAnimation(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
-        this.updateAnimation(entity.punchState, StandAnimations.PUNCH, animationProgress, 2f);
+        this.updateAnimation(entity.punchState, StandAnimations.PUNCH, animationProgress, 2.7f);
+    }
 
+    public void defaultModifiers(T entity){
         MinecraftClient mc = MinecraftClient.getInstance();
         float tickDelta = mc.getLastFrameDuration();
         if (entity.getUser() != null) {
@@ -54,6 +54,10 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
 
             }
         }
+    }
+    @Override
+    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
     }
     @Override
     public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {

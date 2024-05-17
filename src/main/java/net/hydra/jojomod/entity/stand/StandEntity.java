@@ -41,6 +41,8 @@ public abstract class StandEntity extends MobEntity{
             TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Integer> FOLLOWING_ID = DataTracker.registerData(StandEntity.class,
             TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Byte> ANIMATION = DataTracker.registerData(StandEntity.class,
+            TrackedDataHandlerRegistry.BYTE);
     public float bodyRotationX =0;
     public float bodyRotationY =0;
     public float headRotationX =0;
@@ -81,13 +83,12 @@ public abstract class StandEntity extends MobEntity{
 
     private void setupAnimationStates() {
         if (this.getUser() != null) {
-            if (((StandUser) this.getUser()).getAttackTimeDuring() == -1) {
+            if (this.getAnimation() == 0) {
                 this.idleAnimationState.startIfNotRunning(this.age);
             } else {
                 this.idleAnimationState.stop();
             }
-            if (((StandUser) this.getUser()).getActivePower() == PowerIndex.ATTACK &&
-                    ((StandUser) this.getUser()).getActivePowerPhase() == 1) {
+            if (this.getAnimation() == 1) {
                 this.punchState.startIfNotRunning(this.age);
             } else {
                 this.punchState.stop();
@@ -112,6 +113,10 @@ public abstract class StandEntity extends MobEntity{
     } //returns leaning direction
     public final void setOffsetType(byte oft) {
         this.dataTracker.set(OFFSET_TYPE, oft);
+    }
+
+    public final void setAnimation(byte animation) {
+        this.dataTracker.set(ANIMATION, animation);
     }
 
     /**
@@ -139,6 +144,9 @@ public abstract class StandEntity extends MobEntity{
         return this.dataTracker.get(ANCHOR_PLACE);
     }
 
+    public final byte getAnimation() {
+        return this.dataTracker.get(ANIMATION);
+    }
 
     public final boolean getNeedsUser() {
         return true;
@@ -262,6 +270,7 @@ public abstract class StandEntity extends MobEntity{
         this.dataTracker.startTracking(OFFSET_TYPE, (byte) 0);
         this.dataTracker.startTracking(USER_ID, -1);
         this.dataTracker.startTracking(FOLLOWING_ID, -1);
+        this.dataTracker.startTracking(ANIMATION, (byte) 0);
     }
 
 

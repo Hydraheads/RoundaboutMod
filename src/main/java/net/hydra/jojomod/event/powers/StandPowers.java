@@ -174,7 +174,7 @@ public class StandPowers {
         return SoundIndex.BARRAGE_CRY_SOUND;
     }
     private float getBarrageChargePitch(){
-        return 0.666F;
+        return 1/((float) this.getBarrageWindup() /20);
     }
     private SoundEvent getBarrageSound(byte soundChoice){
         if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
@@ -228,6 +228,7 @@ public class StandPowers {
                 if (this.attackTimeDuring != -1) {
                     this.attackTimeDuring++;
                     if (this.attackTimeDuring == -1) {
+                        animateStand((byte) 0);
                         poseStand(OffsetIndex.FOLLOW);
                     } else {
                         if (this.hasStandActive(this.self) && !this.self.isUsingItem() && !this.isDazed(this.self)) {
@@ -390,6 +391,12 @@ public class StandPowers {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
             stand.setOffsetType(r);
+        }
+    }
+    public void animateStand(byte r){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            stand.setAnimation(r);
         }
     }
 
@@ -1130,6 +1137,7 @@ public class StandPowers {
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
+        animateStand((byte) 0);
     }
 
     public boolean canAttack(){
@@ -1199,7 +1207,7 @@ public class StandPowers {
     }
 
     public int getBarrageWindup(){
-        return 30;
+        return 29;
     }
     public int getBarrageLength(){
         return 60;
@@ -1219,10 +1227,12 @@ public class StandPowers {
                     }
 
                 }
+
                 this.attackTimeDuring = 0;
                 this.setActivePower(PowerIndex.ATTACK);
                 this.setAttackTime(0);
 
+                animateStand(this.activePowerPhase);
                 poseStand(OffsetIndex.ATTACK);
             }
         }

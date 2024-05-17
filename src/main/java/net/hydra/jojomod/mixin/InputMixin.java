@@ -126,7 +126,8 @@ public class InputMixin {
                         }
 
                         if (standComp.isGuarding() && !standComp.isBarraging()
-                                && standComp.getAttackTime() >= standComp.getAttackTimeMax()){
+                                && (standComp.getAttackTime() >= standComp.getAttackTimeMax() ||
+                                (standComp.getActivePowerPhase() != standComp.getActivePowerPhaseMax()))){
                             ClientPlayNetworking.send(ModMessages.STAND_BARRAGE_PACKET, PacketByteBufs.create());
                             standComp.tryPower(PowerIndex.BARRAGE_CHARGE, true);
                         }
