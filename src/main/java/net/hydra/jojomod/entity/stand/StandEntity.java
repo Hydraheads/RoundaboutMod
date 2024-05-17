@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -76,10 +77,21 @@ public abstract class StandEntity extends MobEntity{
     }
 
     public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState punchState = new AnimationState();
 
     private void setupAnimationStates() {
-        if (!this.idleAnimationState.isRunning()) {
-            this.idleAnimationState.start(this.age);
+        if (this.getUser() != null) {
+            if (((StandUser) this.getUser()).getAttackTimeDuring() == -1) {
+                this.idleAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.idleAnimationState.stop();
+            }
+            if (((StandUser) this.getUser()).getActivePower() == PowerIndex.ATTACK &&
+                    ((StandUser) this.getUser()).getActivePowerPhase() == 1) {
+                this.punchState.startIfNotRunning(this.age);
+            } else {
+                this.punchState.stop();
+            }
         }
     }
 

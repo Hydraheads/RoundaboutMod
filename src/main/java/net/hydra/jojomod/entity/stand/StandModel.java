@@ -37,6 +37,7 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
         this.updateAnimation(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
+        this.updateAnimation(entity.punchState, StandAnimations.PUNCH, animationProgress, 2f);
 
         MinecraftClient mc = MinecraftClient.getInstance();
         float tickDelta = mc.getLastFrameDuration();
