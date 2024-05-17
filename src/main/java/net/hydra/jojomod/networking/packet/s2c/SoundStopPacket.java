@@ -10,13 +10,21 @@ import net.minecraft.network.PacketByteBuf;
 
 public class SoundStopPacket {
 
-
+    public static void playSound(MinecraftClient client, ClientPlayNetworkHandler handler,
+                                 PacketByteBuf buf, PacketSender responseSender) {
+        if (client.player != null) {
+            Entity User = client.player.getWorld().getEntityById(buf.readInt());
+            if (User instanceof LivingEntity){
+                ((StandUser)User).getStandPowers().clientQueSound(buf.readByte());
+            }
+        }
+    }
     public static void stopSound(MinecraftClient client, ClientPlayNetworkHandler handler,
                                   PacketByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {
             Entity User = client.player.getWorld().getEntityById(buf.readInt());
             if (User instanceof LivingEntity){
-                ((StandUser)User).stopSounds(buf.readByte());
+                ((StandUser)User).getStandPowers().clientQueSoundCanceling();
             }
         }
     }

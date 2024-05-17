@@ -406,17 +406,6 @@ public class LivingEntityMixin implements StandUser {
         }
     }
 
-    public void stopSounds(byte soundNo){
-        /**This is where we cancel sounds like barrage and barrage wind. Must change this.StopSound server side,
-         * then send a sync packet*/
-        if (this.User.getWorld().isClient) {
-            if (this.getStandPowers().getSoundID(soundNo) != null) {
-                MinecraftClient.getInstance().getSoundManager().stopSounds(this.getStandPowers().getSoundID(soundNo), SoundCategory.PLAYERS);
-            }
-        }
-    }
-
-
     public void onStandOutLookAround(StandEntity passenger) {
     }
 

@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -12,7 +14,10 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.Sound;
+import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
@@ -145,12 +150,45 @@ public class StandPowers {
         this.interruptCD = interruptCD;
     }
 
-    /**
-     * Returns the sound based on the punch # in the rush.
-     * -1 signifies the last hit in the rush
-     */
-    private SoundEvent getBarrageCrySound(){
+
+    private SoundEvent getSoundFromByte(byte soundChoice){
+        if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7) {
+            return this.getBarrageSound(SoundIndex.BARRAGE_CRY_SOUND);
+        } else if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+            return this.getBarrageChargeSound();
+        } else {
+            return null;
+        }
+    }
+    private float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7) {
+            return this.getBarragePitch(SoundIndex.BARRAGE_CRY_SOUND);
+        } else if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+            return this.getBarrageChargePitch();
+        } else {
+            return 1F;
+        }
+    }
+    /**Override this function for alternate rush noises*/
+    private byte chooseBarrageSound(){
+        return SoundIndex.BARRAGE_CRY_SOUND;
+    }
+    private float getBarrageChargePitch(){
+        return 0.666F;
+    }
+    private SoundEvent getBarrageSound(byte soundChoice){
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
             return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
+        } else {
+            return null;
+        }
+    }
+    private float getBarragePitch(byte soundChoice){
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
+            return 1F;
+        } else {
+            return 1F;
+        }
     }
 
     public Identifier getBarrageCryID(){
@@ -219,6 +257,21 @@ public class StandPowers {
             }
             if (this.summonCD > 0) {
                 this.summonCD--;
+            }
+        }
+        if (this.self.getWorld().isClient) {
+            tickSounds();
+        }
+    }
+
+
+    private void tickSounds(){
+        if (this.self.getWorld().isClient) {
+            if (this.soundPlay) {
+                this.clientPlaySound();
+            }
+            if (this.soundCancel) {
+                this.clientSoundCancel();
             }
         }
     }
@@ -514,22 +567,8 @@ public class StandPowers {
 
 
 
-    public void playBarrageCrySound(){
-
-        if (!this.self.getWorld().isClient()) {
-            SoundEvent barrageCrySound = this.getBarrageCrySound();
-            if (barrageCrySound != null) {
-                this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageCrySound,
-                        SoundCategory.PLAYERS, 0.95F, 1);
-                barrageNoiseStarted = SoundIndex.BARRAGE_CRY_SOUND;
-            }
-        }
-    }
-
-    private byte barrageNoiseStarted = -1;
     public void barrageImpact(Entity entity, int hitNumber){
         if (this.isBarrageAttacking()) {
-            RoundaboutMod.LOGGER.info(""+hitNumber);
             boolean lastHit = (hitNumber >= this.getBarrageLength());
             if (entity != null) {
                 if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()
@@ -586,7 +625,6 @@ public class StandPowers {
 
             if (lastHit){
                 this.attackTimeDuring = -10;
-                this.barrageNoiseStarted = -1;
             }
         }
     } public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
@@ -670,7 +708,6 @@ public class StandPowers {
 
     public void punchImpact(Entity entity){
         this.attackTimeDuring = -10;
-        RoundaboutMod.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
             if (entity != null) {
                 float pow;
                 float knockbackStrength;
@@ -936,11 +973,8 @@ public class StandPowers {
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public void tryPower(int move, boolean forced){
-        if (this.isBarraging() && !this.self.getWorld().isClient){
-            if (barrageNoiseStarted > -1) {
-                this.stopBarrageSoundsIfNearby(barrageNoiseStarted);
-                barrageNoiseStarted = -1;
-            }
+        if (!this.self.getWorld().isClient && this.isBarraging() && move != PowerIndex.BARRAGE && this.attackTimeDuring  > -1){
+            this.stopSoundsIfNearby();
         }
 
         if (!this.isClashing() || move == PowerIndex.NONE) {
@@ -966,8 +1000,15 @@ public class StandPowers {
         }
     }
 
+    /**The Sound Event to cancel when your barrage is canceled*/
 
-    public final void stopBarrageSoundsIfNearby(byte soundNo) {
+    @Environment(EnvType.CLIENT)
+    public SoundInstance queSound;
+    boolean soundCancel = false;
+    boolean soundPlay = false;
+    boolean shouldCancel = false;
+
+    public final void playSoundsIfNearby(byte soundNo) {
         if (!this.self.getWorld().isClient) {
             ServerWorld serverWorld = ((ServerWorld) this.self.getWorld());
             Vec3d userLocation = new Vec3d(this.self.getX(),  this.self.getY(), this.self.getZ());
@@ -983,11 +1024,108 @@ public class StandPowers {
                     PacketByteBuf buffer = PacketByteBufs.create();
                     buffer.writeInt(this.self.getId());
                     buffer.writeByte(soundNo);
+                    ServerPlayNetworking.send(serverPlayerEntity,ModMessages.SOUND_PLAY_ID, buffer);
+                }
+            }
+        }
+    }
+    /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
+    public void playBarrageCrySound(){
+        if (!this.self.getWorld().isClient()) {
+            RoundaboutMod.LOGGER.info("1");
+            byte barrageCrySound = this.chooseBarrageSound();
+            if (barrageCrySound != SoundIndex.NO_SOUND) {
+                RoundaboutMod.LOGGER.info("2");
+                playSoundsIfNearby(barrageCrySound);
+            }
+        }
+    }
+    public void playBarrageChargeSound(){
+        if (!this.self.getWorld().isClient()) {
+            RoundaboutMod.LOGGER.info("3");
+            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+            if (barrageChargeSound != null) {
+                RoundaboutMod.LOGGER.info("4");
+                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND);
+            }
+        }
+    }
+
+    /**This is called second by the packets, it sets up the client to play the sound on a game tick.
+     * If you play it during the packet, it can crash the client because of HashMap problems*/
+    @Environment(EnvType.CLIENT)
+    public void clientQueSound(byte soundChoice){
+        if (this.self.getWorld().isClient()) {
+            RoundaboutMod.LOGGER.info("5");
+            SoundEvent barrageCrySound = this.getSoundFromByte(soundChoice);
+            if (barrageCrySound != null) {
+                RoundaboutMod.LOGGER.info("6");
+                this.queSound = new PositionedSoundInstance(barrageCrySound,SoundCategory.PLAYERS, 0.95F,
+                        this.getSoundPitchFromByte(soundChoice),SoundInstance.createRandom(), this.self.getBlockPos());
+                this.soundPlay = true;
+            }
+        }
+    }
+
+    /**This is called third by the client, it actually plays the sound.*/
+    @Environment(EnvType.CLIENT)
+    public void clientPlaySound(){
+        if (this.self.getWorld().isClient()) {
+            RoundaboutMod.LOGGER.info("7");
+            if (this.queSound != null) {
+                RoundaboutMod.LOGGER.info("8");
+                MinecraftClient.getInstance().getSoundManager().play(this.queSound);
+            }
+            this.soundPlay = false;
+        }
+    }
+
+    /**This is called fourth by the server, it sends a packet to cancel the sound.*/
+    public final void stopSoundsIfNearby() {
+        if (!this.self.getWorld().isClient) {
+            ServerWorld serverWorld = ((ServerWorld) this.self.getWorld());
+            Vec3d userLocation = new Vec3d(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.getPlayers().size(); ++j) {
+                ServerPlayerEntity serverPlayerEntity = ((ServerWorld) this.self.getWorld()).getPlayers().get(j);
+
+                if (((ServerWorld) serverPlayerEntity.getWorld()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.getBlockPos();
+                if (blockPos.isWithinDistance(userLocation, 32.0)) {
+                    PacketByteBuf buffer = PacketByteBufs.create();
+                    buffer.writeInt(this.self.getId());
                     ServerPlayNetworking.send(serverPlayerEntity,ModMessages.SOUND_CANCEL_ID, buffer);
                 }
             }
         }
     }
+
+    /**This is called fifth by the client, it ques the sound for canceling
+     * If you play it during the packet, it can crash the client because of HashMap problems*/
+    @Environment(EnvType.CLIENT)
+    public void clientQueSoundCanceling(){
+        if (this.self.getWorld().isClient()) {
+            RoundaboutMod.LOGGER.info("9");
+            this.soundCancel = true;
+        }
+    }
+
+    /**This is called sixth by the client, it finally cancels the sound*/
+    @Environment(EnvType.CLIENT)
+    public void clientSoundCancel(){
+        if (this.self.getWorld().isClient()) {
+            RoundaboutMod.LOGGER.info("10");
+            if (this.queSound != null) {
+                RoundaboutMod.LOGGER.info("11");
+                MinecraftClient.getInstance().getSoundManager().stop(this.queSound);
+                this.queSound = null;
+            }
+            this.soundCancel = false;
+        }
+    }
+
     public void setPowerNone(){
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
@@ -1011,7 +1149,6 @@ public class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
         this.poseStand(OffsetIndex.ATTACK);
-        barrageNoiseStarted = SoundIndex.BARRAGE_CHARGE_SOUND;
         this.clashDone = false;
         playBarrageChargeSound();
     }
@@ -1023,7 +1160,6 @@ public class StandPowers {
         this.setAttackTimeMax(this.getBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         this.setAttackTime(19);
-        barrageNoiseStarted = SoundIndex.BARRAGE_CRY_SOUND;
         playBarrageCrySound();
     }
 
@@ -1039,16 +1175,6 @@ public class StandPowers {
             ((ServerPlayerEntity) this.self).sendMessage(Text.translatable("text.roundabout.barrage_clash"), true);
         }
         //playBarrageGuardSound();
-    }
-
-    public void playBarrageChargeSound(){
-        if (!this.self.getWorld().isClient()) {
-            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
-            if (barrageChargeSound != null) {
-                this.self.getWorld().playSound(null, this.self.getBlockPos(), barrageChargeSound,
-                        SoundCategory.PLAYERS, 0.96F, 0.666F);
-            }
-        }
     }
 
     public int getBarrageRecoilTime(){

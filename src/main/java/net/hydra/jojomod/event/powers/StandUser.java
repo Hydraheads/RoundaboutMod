@@ -62,7 +62,6 @@ public interface StandUser {
     void setDazeTime(byte dazeTime);
 
     void tryPower(int move, boolean forced);
-    void stopSounds(byte soundNumber);
 
     void setSummonCD(int summonCD);
     boolean getSummonCD();

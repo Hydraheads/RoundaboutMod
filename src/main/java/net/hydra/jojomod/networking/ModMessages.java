@@ -27,6 +27,7 @@ public class ModMessages {
     public static final Identifier STAND_GUARD_POINT_ID = new Identifier(RoundaboutMod.MOD_ID,"guard_point_packet");
     public static final Identifier DAZE_ID = new Identifier(RoundaboutMod.MOD_ID,"daze_packet");
     public static final Identifier SOUND_CANCEL_ID = new Identifier(RoundaboutMod.MOD_ID,"sound_cancel_packet");
+    public static final Identifier SOUND_PLAY_ID = new Identifier(RoundaboutMod.MOD_ID,"sound_play_packet");
     public static final Identifier BARRAGE_CLASH_UPDATE_PACKET = new Identifier(RoundaboutMod.MOD_ID,"clash_update_packet");
     public static final Identifier BARRAGE_CLASH_UPDATE_S2C_PACKET = new Identifier(RoundaboutMod.MOD_ID,"clash_update_s2c_packet");
 
@@ -49,6 +50,7 @@ public class ModMessages {
         ClientPlayNetworking.registerGlobalReceiver(STAND_GUARD_POINT_ID, CooldownSyncPacket::updateGuard);
         ClientPlayNetworking.registerGlobalReceiver(DAZE_ID, CooldownSyncPacket::updateDaze);
         ClientPlayNetworking.registerGlobalReceiver(SOUND_CANCEL_ID, SoundStopPacket::stopSound);
+        ClientPlayNetworking.registerGlobalReceiver(SOUND_PLAY_ID, SoundStopPacket::playSound);
         ClientPlayNetworking.registerGlobalReceiver(BARRAGE_CLASH_UPDATE_S2C_PACKET, StandS2CPacket::clashUpdate);
     }
 }
