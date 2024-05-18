@@ -170,11 +170,14 @@ public class LivingEntityMixin implements StandUser {
     } public void tickGuard(){
         if (this.GuardPoints < this.maxGuardPoints) {
             if (this.GuardBroken){
-                float guardRegen = maxGuardPoints / 140;
+                float guardRegen = maxGuardPoints / 100;
                 this.regenGuard(guardRegen);
-            } else if (!this.isGuarding()){
+            } else if (!this.isGuarding() && this.shieldNotDisabled()){
                 float guardRegen = maxGuardPoints / 200;
                 this.regenGuard(guardRegen);
+            }
+            if (this.isGuarding() && !shieldNotDisabled()){
+                this.setAttackTimeDuring(0);
             }
         }
         if (this.GuardCooldown > 0){this.GuardCooldown--;}

@@ -301,18 +301,19 @@ public class StandPowers {
 
     public void breakClash(LivingEntity winner, LivingEntity loser){
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
-            ((StandUser)winner).getStandPowers().playBarrageEndNoise();
+            ((StandUser)winner).getStandPowers().playBarrageEndNoise(0);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){
-        ((StandUser)user1).getStandPowers().playBarrageEndNoise();
-        ((StandUser)user2).getStandPowers().playBarrageEndNoise();
+        ((StandUser)user1).getStandPowers().playBarrageEndNoise(0F);
+        ((StandUser)user2).getStandPowers().playBarrageEndNoise(-0.05F);
         user1.velocityModified = true;
         user2.velocityModified = true;
-        user1.takeKnockback(0.6f,user2.getX()-user1.getX(), user2.getZ()-user1.getZ());
-        user2.takeKnockback(0.6f,user1.getX()-user2.getX(), user1.getZ()-user2.getZ());
+        user1.takeKnockback(0.55f,user2.getX()-user1.getX(), user2.getZ()-user1.getZ());
+        user2.takeKnockback(0.55f,user1.getX()-user2.getX(), user1.getZ()-user2.getZ());
     }
+
 
     public void updateClashing(){
         if (this.getClashOp() != null) {
@@ -324,6 +325,8 @@ public class StandPowers {
                     if ((this.getClashDone() && ((StandUser) this.getClashOp()).getStandPowers().getClashDone())
                     || !((StandUser) this.self).getActive() || !((StandUser) this.getClashOp()).getActive()) {
                         this.updateClashing2();
+                    } else {
+                        playBarrageNoise(this.attackTimeDuring+ clashStarter);
                     }
                 }
             } else {
@@ -526,6 +529,29 @@ public class StandPowers {
         return false;
     }
 
+    public boolean knockShield2(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    if (entity instanceof PlayerEntity){
+                        ItemStack itemStack = ((LivingEntity) entity).getActiveItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAction(itemStack) == UseAction.BLOCK) {
+                            ((LivingEntity) entity).stopUsingItem();
+                            ((PlayerEntity) entity).clearActiveItem();
+                        }
+                        ((PlayerEntity) entity).getItemCooldownManager().set(Items.SHIELD, duration);
+                        entity.getWorld().sendEntityStatus(entity, EntityStatuses.BREAK_SHIELD);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**Override these methods to fine tune the attack strength of the stand*/
     private float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -547,7 +573,7 @@ public class StandPowers {
         }
     }
     private float getBarrageFinisherKnockback(){
-        return 3.2F;
+        return 2.8F;
     }
 
     private float getClashBreakStrength(Entity entity){
@@ -593,6 +619,8 @@ public class StandPowers {
 
                     ((StandUser) entity).getStandPowers().setClashOp(this.self);
                     ((StandUser) this.self).getStandPowers().setClashOp((LivingEntity) entity);
+                    this.clashStarter = 0;
+                    ((StandUser) entity).getStandPowers().clashStarter = 1;
 
                     ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH, true);
                     ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH, true);
@@ -616,8 +644,11 @@ public class StandPowers {
                         if (entity instanceof LivingEntity) {
                             if (lastHit) {
                                 setDazed((LivingEntity) entity, (byte) 0);
-                                playBarrageEndNoise();
+                                playBarrageEndNoise(0);
                             } else {
+                                if (((StandUser) entity).isGuarding()){
+                                    ((StandUser) entity).tryPower(PowerIndex.NONE,true);
+                                }
                                 setDazed((LivingEntity) entity, (byte) 3);
                                 playBarrageNoise(hitNumber);
                             }
@@ -625,8 +656,8 @@ public class StandPowers {
                             barrageImpact2(entity, lastHit, knockbackStrength);
                     } else {
                         if (lastHit) {
-                            knockShield(entity, 200);
-                            playBarrageEndNoise();
+                            knockShield2(entity, 200);
+                            playBarrageEndNoise(0);
                         } else {
                             entity.setVelocity(prevVelocity);
 
@@ -681,9 +712,9 @@ public class StandPowers {
             }
         }
     }
-    public void playBarrageEndNoise(){
+    public void playBarrageEndNoise(float mod){
         if (!this.self.getWorld().isClient()) {
-          this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_END_EVENT, SoundCategory.PLAYERS, 0.95F, 1f);
+          this.self.getWorld().playSound(null, this.self.getBlockPos(), ModSounds.STAND_BARRAGE_END_EVENT, SoundCategory.PLAYERS, 0.95F+mod, 1f);
         }
     }
     /**ClashDone is a value that makes you lock in your barrage when you are done barraging**/
@@ -739,7 +770,7 @@ public class StandPowers {
                 if (StandDamageEntityAttack(entity, pow, knockbackStrength, this.self)) {
                 } else {
                     if (this.activePowerPhase >= this.activePowerPhaseMax) {
-                        knockShield(entity, 40);
+                        knockShield2(entity, 40);
                     }
                 }
             } else {
@@ -1183,6 +1214,7 @@ public class StandPowers {
         playBarrageCrySound();
     }
 
+    public int clashStarter = 0;
     public void setPowerClash() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CLASH);

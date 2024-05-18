@@ -60,8 +60,11 @@ public class ClientPlayerEntityMixin implements StandUserClientPlayer {
             this.input.movementForward = 0;
             this.ticksLeftToDoubleTapSprint = 0;
         } else if (!(((ClientPlayerEntity)(Object)this).getVehicle() != null && ((ClientPlayerEntity)(Object)this).getControllingVehicle() == null) &&
-                ((((StandUser) this).isGuarding() && ((ClientPlayerEntity)(Object)this).getVehicle() == null) ||
-                ((StandUser) this).isBarraging() || ((StandUser) this).isClashing())) {
+                (((StandUser) this).isGuarding() && ((ClientPlayerEntity)(Object)this).getVehicle() == null)) {
+            this.input.movementSideways *= 0.3f;
+            this.input.movementForward *= 0.3f;
+            this.ticksLeftToDoubleTapSprint = 0;
+        } else if (((StandUser) this).isBarraging() || ((StandUser) this).isClashing()){
             this.input.movementSideways *= 0.2f;
             this.input.movementForward *= 0.2f;
             this.ticksLeftToDoubleTapSprint = 0;
