@@ -732,7 +732,8 @@ public class StandPowers {
     private LivingEntity clashOp;
     public @Nullable LivingEntity getClashOp() {
         return this.clashOp;
-    } public void setClashOp(@Nullable LivingEntity clashOp) {
+    }
+    public void setClashOp(@Nullable LivingEntity clashOp) {
         this.clashOp = clashOp;
     }
     public float getClashOpProgress(){
@@ -1026,7 +1027,8 @@ public class StandPowers {
         }
 
         if (!this.isClashing() || move == PowerIndex.NONE) {
-            if ((this.activePower == PowerIndex.NONE || forced) && !this.isDazed(this.self)) {
+            if ((this.activePower == PowerIndex.NONE || forced) &&
+                    (!this.isDazed(this.self) || move == PowerIndex.BARRAGE_CLASH)) {
 
                 if (move == PowerIndex.NONE) {
                     this.setPowerNone();
@@ -1211,6 +1213,7 @@ public class StandPowers {
         this.setAttackTimeMax(this.getBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         this.setAttackTime(19);
+        animateStand((byte) 12);
         playBarrageCrySound();
     }
 
@@ -1222,6 +1225,7 @@ public class StandPowers {
         this.setClashProgress(0f);
         this.clashIncrement = 0;
         this.clashMod = (int) (Math.round(Math.random()*8));
+        animateStand((byte) 12);
 
         if (this.self instanceof PlayerEntity && !this.self.getWorld().isClient) {
             ((ServerPlayerEntity) this.self).sendMessage(Text.translatable("text.roundabout.barrage_clash"), true);

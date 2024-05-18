@@ -40,6 +40,7 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         this.updateAnimation(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1f);
         this.updateAnimation(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.updateAnimation(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
+        this.updateAnimation(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1.6f);
     }
 
     public void defaultModifiers(T entity){
