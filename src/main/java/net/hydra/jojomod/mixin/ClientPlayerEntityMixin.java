@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.networking.ModMessages;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ClientPlayerEntity.class)
-public class ClientPlayerEntityMixin {
+public class ClientPlayerEntityMixin implements StandUserClientPlayer {
     @Shadow
     public Input input;
 
@@ -30,6 +31,24 @@ public class ClientPlayerEntityMixin {
 
     private int clashIncrement;
     private boolean bl = false;
+
+
+    private long clashDisplayExtraTimestamp = -1;
+    private float lastClashPower = -1;
+
+    public long getClashDisplayExtraTimestamp(){
+        return this.clashDisplayExtraTimestamp;
+    }
+    public float getLastClashPower(){
+        return this.lastClashPower;
+    }
+    public void setClashDisplayExtraTimestamp(long set){
+        this.clashDisplayExtraTimestamp = set;
+    }
+    public void setLastClashPower(float set){
+        this.lastClashPower = set;
+    }
+
 
 
     /**This code mirrors item usage code, and it's why you are slower while eating.

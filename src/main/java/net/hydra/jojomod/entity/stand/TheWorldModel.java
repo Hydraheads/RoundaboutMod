@@ -3,6 +3,8 @@
 // Paste this class into your mod and generate all required imports
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;
@@ -17,6 +19,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		this.head = stand.getChild("stand2").getChild("head");
 		this.body = stand.getChild("stand2").getChild("body");
 	}
+
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
@@ -76,9 +79,9 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		ModelPartData belt = lower_torso.addChild("belt", ModelPartBuilder.create().uv(24, 14).cuboid(-4.05F, -13.0F, -2.5F, 8.0F, 1.0F, 5.0F, new Dilation(0.1F))
 				.uv(0, 14).cuboid(-1.5F, -14.0F, -2.7F, 3.0F, 3.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-		ModelPartData legs = body2.addChild("legs", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
+		ModelPartData legs = body2.addChild("legs", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 12.0F, 0.0F));
 
-		ModelPartData right_leg = legs.addChild("right_leg", ModelPartBuilder.create(), ModelTransform.pivot(-2.0F, -13.0F, 0.0F));
+		ModelPartData right_leg = legs.addChild("right_leg", ModelPartBuilder.create(), ModelTransform.pivot(-2.0F, -1.0F, 0.0F));
 
 		ModelPartData upper_right_leg = right_leg.addChild("upper_right_leg", ModelPartBuilder.create().uv(44, 20).cuboid(-2.0F, 1.0F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.01F))
 				.uv(56, 49).cuboid(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new Dilation(0.2F))
@@ -87,22 +90,24 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		ModelPartData lower_right_leg = right_leg.addChild("lower_right_leg", ModelPartBuilder.create().uv(32, 37).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.0F))
 				.uv(40, 53).cuboid(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(0.0F, 7.0F, 0.0F));
 
-		ModelPartData left_leg = legs.addChild("left_leg", ModelPartBuilder.create(), ModelTransform.pivot(2.0F, -13.0F, 0.0F));
+		ModelPartData left_leg = legs.addChild("left_leg", ModelPartBuilder.create(), ModelTransform.pivot(2.0F, -1.0F, 0.0F));
 
-		ModelPartData upper_left_leg = left_leg.addChild("upper_left_leg", ModelPartBuilder.create().uv(45, 8).cuboid(0.0F, -12.0F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.01F))
-				.uv(57, 14).cuboid(0.0F, -12.0F, -1.9998F, 4.0F, 5.0F, 4.0F, new Dilation(0.201F))
-				.uv(0, 3).cuboid(0.5F, -8.0F, -2.3F, 3.0F, 3.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(-2.0F, 13.0F, 0.0F));
+		ModelPartData upper_left_leg = left_leg.addChild("upper_left_leg", ModelPartBuilder.create().uv(45, 8).cuboid(-2.0F, 1.0F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.01F))
+				.uv(57, 14).cuboid(-2.0F, 1.0F, -1.9998F, 4.0F, 5.0F, 4.0F, new Dilation(0.201F))
+				.uv(0, 3).cuboid(-1.5F, 5.0F, -2.3F, 3.0F, 3.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
 		ModelPartData lower_left_leg = left_leg.addChild("lower_left_leg", ModelPartBuilder.create().uv(44, 43).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.0F))
 				.uv(57, 0).cuboid(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new Dilation(0.201F)), ModelTransform.pivot(0.0F, 7.0F, 0.0F));
 		return TexturedModelData.of(modelData, 128, 128);
 	}
 
+	StandPowers Power = new PowersTheWorld(null);
+
 	@Override
 	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
 		super.setAngles(entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
 		defaultModifiers(entity);
-		defaultAnimations(entity, animationProgress);
+		defaultAnimations(entity, animationProgress, 1/((float) Power.getBarrageWindup() /20));
 	}
 
 	@Override

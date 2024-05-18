@@ -371,6 +371,7 @@ public class LivingEntityMixin implements StandUser {
         return (standOut != null && standOut.isAlive() && !standOut.isRemoved());
     }
 
+
     /** Set Direction input. This is part of stand rendering as leaning.
      * @see StandEntity#setMoveForward */
     public void setDI(byte forward, byte strafe){

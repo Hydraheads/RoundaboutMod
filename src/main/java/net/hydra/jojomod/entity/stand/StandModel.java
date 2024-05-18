@@ -33,9 +33,13 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         return stand;
     }
 
-    public void defaultAnimations(T entity, float animationProgress){
+    public void defaultAnimations(T entity, float animationProgress, float windupLength){
         this.updateAnimation(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
-        this.updateAnimation(entity.punchState, StandAnimations.PUNCH, animationProgress, 2.7f);
+        this.updateAnimation(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1f);
+        this.updateAnimation(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1f);
+        this.updateAnimation(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1f);
+        this.updateAnimation(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
+        this.updateAnimation(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
     }
 
     public void defaultModifiers(T entity){

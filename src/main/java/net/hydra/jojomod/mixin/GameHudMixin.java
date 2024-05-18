@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -68,18 +69,17 @@ public abstract class GameHudMixin implements IHudAccess {
     }
 
 
-    private long clashDisplayExtraTimestamp = -1;
-    private float lastClashPower = -1;
+
     private boolean roundaboutRenderBars(DrawContext context, int x){
         assert client.player != null;
         if (((StandUser) client.player).isClashing()) {
-            clashDisplayExtraTimestamp = this.client.player.getWorld().getTime();
+            ((StandUserClientPlayer)client.player).setClashDisplayExtraTimestamp(this.client.player.getWorld().getTime());
             float c = (((StandUser) client.player).getStandPowers().getClashProgress());
-            lastClashPower = c;
+            ((StandUserClientPlayer)client.player).setLastClashPower(c);
             StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha,c);
             return true;
-        } else if (clashDisplayExtraTimestamp >= this.client.player.getWorld().getTime()-20){
-            StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha, lastClashPower);
+        } else if (((StandUserClientPlayer)client.player).getClashDisplayExtraTimestamp() >= this.client.player.getWorld().getTime()-20){
+            StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha, ((StandUserClientPlayer)client.player).getLastClashPower());
             return true;
         } else if (((StandUser) client.player).isGuarding() || ((StandUser) client.player).getGuardPoints() < ((StandUser) client.player).getMaxGuardPoints()) {
             StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);

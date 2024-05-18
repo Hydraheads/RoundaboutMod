@@ -79,7 +79,11 @@ public abstract class StandEntity extends MobEntity{
     }
 
     public final AnimationState idleAnimationState = new AnimationState();
-    public final AnimationState punchState = new AnimationState();
+    public final AnimationState punchState1 = new AnimationState();
+    public final AnimationState punchState2 = new AnimationState();
+    public final AnimationState punchState3 = new AnimationState();
+    public final AnimationState blockAnimationState = new AnimationState();
+    public final AnimationState barrageChargeAnimationState = new AnimationState();
 
     private void setupAnimationStates() {
         if (this.getUser() != null) {
@@ -89,9 +93,30 @@ public abstract class StandEntity extends MobEntity{
                 this.idleAnimationState.stop();
             }
             if (this.getAnimation() == 1) {
-                this.punchState.startIfNotRunning(this.age);
+                this.punchState1.startIfNotRunning(this.age);
             } else {
-                this.punchState.stop();
+                this.punchState1.stop();
+            }
+            if (this.getAnimation() == 2) {
+                this.punchState2.startIfNotRunning(this.age);
+            } else {
+                this.punchState2.stop();
+            }
+            if (this.getAnimation() == 3) {
+                this.punchState3.startIfNotRunning(this.age);
+            } else {
+                this.punchState3.stop();
+            }
+
+            if (this.getAnimation() == 10) {
+                this.blockAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.blockAnimationState.stop();
+            }
+            if (this.getAnimation() == 11) {
+              this.barrageChargeAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.barrageChargeAnimationState.stop();
             }
         }
     }

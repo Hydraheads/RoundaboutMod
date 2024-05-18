@@ -1157,6 +1157,7 @@ public class StandPowers {
         return false;
     }
     public void setPowerGuard() {
+        animateStand((byte) 10);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.GUARD);
         this.poseStand(OffsetIndex.GUARD);
@@ -1164,6 +1165,7 @@ public class StandPowers {
 
 
     public void setPowerBarrageCharge() {
+        animateStand((byte) 11);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
         this.poseStand(OffsetIndex.ATTACK);
