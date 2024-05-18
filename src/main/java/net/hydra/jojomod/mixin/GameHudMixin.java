@@ -67,10 +67,19 @@ public abstract class GameHudMixin implements IHudAccess {
         }
     }
 
+
+    private long clashDisplayExtraTimestamp = -1;
+    private float lastClashPower = -1;
     private boolean roundaboutRenderBars(DrawContext context, int x){
         assert client.player != null;
         if (((StandUser) client.player).isClashing()) {
-            StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);
+            clashDisplayExtraTimestamp = this.client.player.getWorld().getTime();
+            float c = (((StandUser) client.player).getStandPowers().getClashProgress());
+            lastClashPower = c;
+            StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha,c);
+            return true;
+        } else if (clashDisplayExtraTimestamp >= this.client.player.getWorld().getTime()-20){
+            StandHudRender.renderClashHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha, lastClashPower);
             return true;
         } else if (((StandUser) client.player).isGuarding() || ((StandUser) client.player).getGuardPoints() < ((StandUser) client.player).getMaxGuardPoints()) {
             StandHudRender.renderGuardHud(context, client, this.getCameraPlayer(), scaledWidth, scaledHeight, ticks, x, flashAlpha, otherFlashAlpha);

@@ -38,7 +38,6 @@ public class StandHudRender {
             "textures/gui/icons/the_world/haste.png");
 
 
-
     private static final int guiSize = 174;
     private static float animated = 0;
     public static void renderStandHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
@@ -231,11 +230,12 @@ public class StandHudRender {
         l = scaledHeight - 31 - 5;
         context.drawTexture(JOJO_ICONS, k, l, u, v, 9, 9);
     }
+
+
     public static void renderClashHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
-                                      float flashAlpha, float otherFlashAlpha) {
+                                      float flashAlpha, float otherFlashAlpha, float c) {
 
-        float c = (((StandUser) client.player).getStandPowers().getClashProgress());
         int d = (int) (c * 183.0f);
 
 

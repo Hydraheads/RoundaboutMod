@@ -279,6 +279,7 @@ public class StandPowers {
 
     private int clashIncrement =0;
     private int clashMod =0;
+
     private void RoundaboutEnemyClash(){
         if (this.isClashing()) {
             if (this.clashIncrement < 0) {
@@ -295,8 +296,6 @@ public class StandPowers {
                 this.setClashDone(true);
             }
 
-        } else {
-            this.setClashProgress(0.0f);
         }
     }
 
