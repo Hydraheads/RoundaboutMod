@@ -64,9 +64,13 @@ public class ClientPlayerEntityMixin implements StandUserClientPlayer {
             this.input.movementSideways *= 0.3f;
             this.input.movementForward *= 0.3f;
             this.ticksLeftToDoubleTapSprint = 0;
-        } else if (((StandUser) this).isBarraging() || ((StandUser) this).isClashing()){
+        } else if (((StandUser) this).getStandPowers().isBarrageAttacking() || ((StandUser) this).isClashing()){
             this.input.movementSideways *= 0.2f;
             this.input.movementForward *= 0.2f;
+            this.ticksLeftToDoubleTapSprint = 0;
+        } else if (((StandUser) this).getStandPowers().isBarrageCharging()){
+            this.input.movementSideways *= 0.75f;
+            this.input.movementForward *= 0.75f;
             this.ticksLeftToDoubleTapSprint = 0;
         }
         RoundaboutClashJump();
