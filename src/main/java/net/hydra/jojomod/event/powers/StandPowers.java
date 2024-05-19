@@ -303,11 +303,13 @@ public class StandPowers {
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
             ((StandUser)winner).getStandPowers().playBarrageEndNoise(0);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
+            ((StandUser)winner).getStandPowers().animateStand((byte) 13);
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){
         ((StandUser)user1).getStandPowers().playBarrageEndNoise(0F);
         ((StandUser)user2).getStandPowers().playBarrageEndNoise(-0.05F);
+
         user1.velocityModified = true;
         user2.velocityModified = true;
         user1.takeKnockback(0.55f,user2.getX()-user1.getX(), user2.getZ()-user1.getZ());
@@ -357,8 +359,10 @@ public class StandPowers {
                     breakClash(this.getClashOp(), this.self);
                 }
             }
-            ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
-            ((StandUser) this.getClashOp()).tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.self).setAttackTimeDuring(-10);
+            ((StandUser) this.getClashOp()).setAttackTimeDuring(-10);
+            ((StandUser) this.self).getStandPowers().syncCooldowns();
+            ((StandUser) this.getClashOp()).getStandPowers().syncCooldowns();
         }
     }
     public void updateBarrageCharge(){
@@ -498,6 +502,12 @@ public class StandPowers {
         } else if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity){
             /*Bosses can't be dazed**/
             return;
+        }
+        if (dazeTime > 0){
+            ((StandUser) entity).tryPower(PowerIndex.NONE,true);
+            ((StandUser) entity).getStandPowers().animateStand((byte) 14);
+        } else {
+            ((StandUser) entity).getStandPowers().animateStand((byte) 0);
         }
         this.getUserData(entity).setDazed(dazeTime);
     }
@@ -648,9 +658,6 @@ public class StandPowers {
                                 setDazed((LivingEntity) entity, (byte) 0);
                                 playBarrageEndNoise(0);
                             } else {
-                                if (((StandUser) entity).isGuarding()){
-                                    ((StandUser) entity).tryPower(PowerIndex.NONE,true);
-                                }
                                 setDazed((LivingEntity) entity, (byte) 3);
                                 playBarrageNoise(hitNumber);
                             }
@@ -674,7 +681,7 @@ public class StandPowers {
             }
 
             if (lastHit){
-                animateStand((byte) 3);
+                animateStand((byte) 13);
                 this.attackTimeDuring = -10;
             }
         }
@@ -1254,7 +1261,7 @@ public class StandPowers {
         return this.activePower == PowerIndex.BARRAGE;
     }
     public boolean isClashing(){
-        return this.activePower == PowerIndex.BARRAGE_CLASH;
+        return this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1;
     }
 
     public int getBarrageWindup(){

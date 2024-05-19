@@ -112,7 +112,6 @@ public class LivingEntityMixin implements StandUser {
         this.dazeTime = dazeTime;
     }
     public void setDazed(byte dazeTime){
-        RoundaboutMod.LOGGER.info("Dazed Set.");
         this.dazeTime = dazeTime;
         this.syncDaze();
     }
@@ -187,6 +186,7 @@ public class LivingEntityMixin implements StandUser {
                 ((LivingEntity)(Object)this).clearActiveItem();
                 dazeTime--;
                 if (dazeTime <= 0){
+                    this.getStandPowers().animateStand((byte) 0);
                     this.syncDaze();
                 }
             }

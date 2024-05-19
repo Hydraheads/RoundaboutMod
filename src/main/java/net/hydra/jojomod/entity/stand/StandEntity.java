@@ -85,6 +85,8 @@ public abstract class StandEntity extends MobEntity{
     public final AnimationState blockAnimationState = new AnimationState();
     public final AnimationState barrageChargeAnimationState = new AnimationState();
     public final AnimationState barrageAnimationState = new AnimationState();
+    public final AnimationState barrageEndAnimationState = new AnimationState();
+    public final AnimationState barrageHurtAnimationState = new AnimationState();
 
     private void setupAnimationStates() {
         if (this.getUser() != null) {
@@ -123,6 +125,18 @@ public abstract class StandEntity extends MobEntity{
                 this.barrageAnimationState.startIfNotRunning(this.age);
             } else {
                 this.barrageAnimationState.stop();
+            }
+
+            if (this.getAnimation() == 13) {
+                this.barrageEndAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.barrageEndAnimationState.stop();
+            }
+
+            if (this.getAnimation() == 14) {
+                this.barrageHurtAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.barrageHurtAnimationState.stop();
             }
         }
     }

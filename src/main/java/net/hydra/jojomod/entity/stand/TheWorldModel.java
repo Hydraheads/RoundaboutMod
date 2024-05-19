@@ -45,12 +45,12 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 
 		ModelPartData torso = body2.addChild("torso", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-		ModelPartData upper_chest = torso.addChild("upper_chest", ModelPartBuilder.create().uv(24, 27).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 6.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+		ModelPartData upper_chest = torso.addChild("upper_chest", ModelPartBuilder.create().uv(24, 27).cuboid(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 6.0F, 0.0F));
 
 		ModelPartData upper_straps = upper_chest.addChild("upper_straps", ModelPartBuilder.create().uv(16, 37).cuboid(-3.9F, -24.001F, -3.0F, 2.0F, 6.0F, 6.0F, new Dilation(0.05F))
-				.uv(0, 37).cuboid(1.9F, -24.001F, -3.0F, 2.0F, 6.0F, 6.0F, new Dilation(0.05F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
+				.uv(0, 37).cuboid(1.9F, -24.001F, -3.0F, 2.0F, 6.0F, 6.0F, new Dilation(0.05F)), ModelTransform.pivot(0.0F, 18.0F, 0.0F));
 
-		ModelPartData right_arm = upper_chest.addChild("right_arm", ModelPartBuilder.create(), ModelTransform.pivot(-4.0F, 0.75F, 0.0F));
+		ModelPartData right_arm = upper_chest.addChild("right_arm", ModelPartBuilder.create(), ModelTransform.pivot(-4.0F, -5.25F, 0.0F));
 
 		ModelPartData upper_right_arm = right_arm.addChild("upper_right_arm", ModelPartBuilder.create().uv(16, 53).cuboid(-4.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.0F))
 				.uv(60, 23).cuboid(-4.0F, -0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
@@ -58,7 +58,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		ModelPartData lower_right_arm = right_arm.addChild("lower_right_arm", ModelPartBuilder.create().uv(0, 49).cuboid(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.0F))
 				.uv(28, 59).cuboid(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(-2.0F, 5.5F, 0.0F));
 
-		ModelPartData left_arm = upper_chest.addChild("left_arm", ModelPartBuilder.create(), ModelTransform.pivot(4.0F, 0.75F, 0.0F));
+		ModelPartData left_arm = upper_chest.addChild("left_arm", ModelPartBuilder.create(), ModelTransform.pivot(4.0F, -5.25F, 0.0F));
 
 		ModelPartData upper_left_arm = left_arm.addChild("upper_left_arm", ModelPartBuilder.create().uv(48, 30).cuboid(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new Dilation(0.01F))
 				.uv(0, 59).cuboid(0.0F, -0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
@@ -67,17 +67,17 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 				.uv(52, 58).cuboid(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(2.0F, 5.5F, 0.0F));
 
 		ModelPartData tanks = upper_chest.addChild("tanks", ModelPartBuilder.create().uv(65, 64).cuboid(-3.5F, -23.0F, 2.0F, 3.0F, 7.0F, 3.0F, new Dilation(0.0F))
-				.uv(41, 65).cuboid(0.5F, -23.0F, 2.0F, 3.0F, 7.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
+				.uv(41, 65).cuboid(0.5F, -23.0F, 2.0F, 3.0F, 7.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 18.0F, 0.0F));
 
 		ModelPartData lower_chest = torso.addChild("lower_chest", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 6.0F, 0.0F));
 
-		ModelPartData lower_torso = lower_chest.addChild("lower_torso", ModelPartBuilder.create().uv(0, 27).cuboid(-4.0F, -18.0F, -2.0F, 8.0F, 6.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 18.0F, 0.0F));
+		ModelPartData lower_torso = lower_chest.addChild("lower_torso", ModelPartBuilder.create().uv(0, 27).cuboid(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 6.0F, 0.0F));
 
 		ModelPartData lower_straps = lower_torso.addChild("lower_straps", ModelPartBuilder.create().uv(11, 63).cuboid(-3.9F, -18.0F, -2.75F, 2.0F, 5.0F, 5.0F, new Dilation(0.05F))
-				.uv(59, 35).cuboid(1.9F, -18.0F, -2.75F, 2.0F, 5.0F, 5.0F, new Dilation(0.05F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+				.uv(59, 35).cuboid(1.9F, -18.0F, -2.75F, 2.0F, 5.0F, 5.0F, new Dilation(0.05F)), ModelTransform.pivot(0.0F, 12.0F, 0.0F));
 
 		ModelPartData belt = lower_torso.addChild("belt", ModelPartBuilder.create().uv(24, 14).cuboid(-4.05F, -13.0F, -2.5F, 8.0F, 1.0F, 5.0F, new Dilation(0.1F))
-				.uv(0, 14).cuboid(-1.5F, -14.0F, -2.7F, 3.0F, 3.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+				.uv(0, 14).cuboid(-1.5F, -14.0F, -2.7F, 3.0F, 3.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 12.0F, 0.0F));
 
 		ModelPartData legs = body2.addChild("legs", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 12.0F, 0.0F));
 
