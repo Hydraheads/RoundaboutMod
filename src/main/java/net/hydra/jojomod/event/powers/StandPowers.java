@@ -335,7 +335,9 @@ public class StandPowers {
                 }
             }
         } else {
-            ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+            if (!this.self.getWorld().isClient) {
+                ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+            }
         }
     }
     private void updateClashing2(){
@@ -672,6 +674,7 @@ public class StandPowers {
             }
 
             if (lastHit){
+                animateStand((byte) 3);
                 this.attackTimeDuring = -10;
             }
         }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.RoundaboutMod;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
@@ -37,7 +38,8 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         this.updateAnimation(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
         this.updateAnimation(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1f);
         this.updateAnimation(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1f);
-        this.updateAnimation(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1f);
+        float spdM = 1f; if (entity.hasUser() && ((StandUser) entity.getUser()).isBarraging()){spdM=2.2f;}
+        this.updateAnimation(entity.punchState3, StandAnimations.COMBO3, animationProgress, spdM);
         this.updateAnimation(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.updateAnimation(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
         this.updateAnimation(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1.6f);
