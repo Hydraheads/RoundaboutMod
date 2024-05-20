@@ -51,18 +51,27 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
 
     public void defaultModifiers(T entity){
         MinecraftClient mc = MinecraftClient.getInstance();
-        float tickDelta = mc.getLastFrameDuration();
-        if (entity.getUser() != null) {
-            rotateStand(entity, this.getPart(), tickDelta);
-            if (this.getPart().hasChild("stand2")) {
-                if (this.getPart().getChild("stand2").hasChild("head")) {
-                    rotateHead(entity, this.getPart().getChild("stand2").getChild("head"), tickDelta);
-                }
+        if (!mc.isPaused()) {
+            float tickDelta = mc.getLastFrameDuration();
+            if (entity.getUser() != null) {
+                rotateStand(entity, this.getPart(), tickDelta);
+                if (this.getPart().hasChild("stand2")) {
+                    RoundaboutMod.LOGGER.info("HEAD_ROTX: " + entity.getHeadRotationX());
+                    RoundaboutMod.LOGGER.info("HEAD_ROTY: " + entity.getHeadRotationY());
+                    RoundaboutMod.LOGGER.info("BODYROTX: " + entity.getBodyRotationX());
+                    RoundaboutMod.LOGGER.info("BODYROTY: " + entity.getBodyRotationY());
+                    RoundaboutMod.LOGGER.info("StandROTX: " + entity.getStandRotationX());
+                    RoundaboutMod.LOGGER.info("StandROTY: " + entity.getStandRotationY());
 
-                if (this.getPart().getChild("stand2").hasChild("body")) {
-                    rotateBody(entity, this.getPart().getChild("stand2").getChild("body"), tickDelta);
-                }
+                    if (this.getPart().getChild("stand2").hasChild("head")) {
+                        rotateHead(entity, this.getPart().getChild("stand2").getChild("head"), tickDelta);
+                    }
 
+                    if (this.getPart().getChild("stand2").hasChild("body")) {
+                        rotateBody(entity, this.getPart().getChild("stand2").getChild("body"), tickDelta);
+                    }
+
+                }
             }
         }
     }
@@ -98,16 +107,20 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
                     swimRotCorrect = Math.max(swimRotCorrect, 0);
                 }
             }
-            rotX = ((mobEntity.getUser().getPitch(tickDelta)%360) - swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE;
-            rotY = (MathHelper.lerpAngleDegrees(tickDelta, (rotY * MathHelper.DEGREES_PER_RADIAN),
-                    ((MathHelper.lerpAngleDegrees(tickDelta, mobEntity.getUser().prevHeadYaw, mobEntity.getUser().headYaw)%360)
-                    - (MathHelper.lerpAngleDegrees(tickDelta, mobEntity.getUser().prevBodyYaw, mobEntity.getUser().bodyYaw)%360)))
+            float tickDelta2 = Math.min(tickDelta,2);
+            rotX = ((mobEntity.getUser().getPitch(tickDelta2)%360) - swimRotCorrect) * MathHelper.RADIANS_PER_DEGREE;
+            rotY = (MathHelper.lerpAngleDegrees(tickDelta2, (rotY * MathHelper.DEGREES_PER_RADIAN),
+                    ((MathHelper.lerpAngleDegrees(tickDelta2, mobEntity.getUser().prevHeadYaw, mobEntity.getUser().headYaw)%360)
+                    - (MathHelper.lerpAngleDegrees(tickDelta2, mobEntity.getUser().prevBodyYaw, mobEntity.getUser().bodyYaw)%360)))
                     ) * MathHelper.RADIANS_PER_DEGREE;
 
         } else if (animationStyle == OffsetIndex.FIXED_STYLE){
             rotX = 0;
             rotY = (float) -(mobEntity.getPunchYaw(mobEntity.getAnchorPlace(),
                     0.36) * MathHelper.RADIANS_PER_DEGREE);
+        } else if (animationStyle == OffsetIndex.LOOSE_STYLE){
+            rotX = 0;
+            rotY = 0;
         }
         mobEntity.setHeadRotationX(rotX);
         mobEntity.setHeadRotationY(rotY);
@@ -122,6 +135,8 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         float cRY = 0;
         if (animationStyle == OffsetIndex.FIXED_STYLE){
             cRX = (mobEntity.getUser().getPitch(tickDelta)%360) * MathHelper.RADIANS_PER_DEGREE;
+        } else if (animationStyle == OffsetIndex.LOOSE_STYLE){
+            cRX = (mobEntity.getPitch(tickDelta)%360) * MathHelper.RADIANS_PER_DEGREE;
         }
         rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRX, 0.8f);
         rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, cRY, 0.8f);
@@ -159,6 +174,11 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
             rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
             rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, (float) -(mobEntity.getPunchYaw(mobEntity.getAnchorPlace(),
                     0.36) * MathHelper.RADIANS_PER_DEGREE), 0.8f);
+        } else if (animationStyle == OffsetIndex.LOOSE_STYLE) {
+            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
+            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
+            RoundaboutMod.LOGGER.info("wut1");
+
         }
         mobEntity.setBodyRotationX(rotX);
         mobEntity.setBodyRotationY(rotY);

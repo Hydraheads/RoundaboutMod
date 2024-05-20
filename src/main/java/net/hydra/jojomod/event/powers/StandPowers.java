@@ -30,6 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.VehicleMoveS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -318,14 +319,32 @@ public class StandPowers {
 
 
     public void updateClashing(){
+        if (this.getStandEntity(this.self) != null) {
+            //RoundaboutMod.LOGGER.info("3 " + this.getStandEntity(this.self).getPitch() + " " + this.getStandEntity(this.self).getYaw());
+        }
         if (this.getClashOp() != null) {
             if (this.attackTimeDuring <= 60) {
+                LivingEntity entity = this.getClashOp();
+
+                /*Rotation has to be set actively by both client and server,
+                 * because serverPitch and serverYaw are inconsistent, client overwrites stand stuff sometimes*/
+                LivingEntity standEntity = ((StandUser) entity).getStand();
+                LivingEntity standSelf = ((StandUser) self).getStand();
+                if (standSelf != null && standEntity != null) {
+                    standSelf.setPitch(getLookAtEntityPitch(standSelf, standEntity));
+                    standSelf.setYaw(getLookAtEntityYaw(standSelf, standEntity));
+                    standEntity.setPitch(getLookAtEntityPitch(standEntity, standSelf));
+                    standEntity.setYaw(getLookAtEntityYaw(standEntity, standSelf));
+                }
+
+
                 if (!(this.self instanceof PlayerEntity)) {
                     this.RoundaboutEnemyClash();
                 }
                 if (!this.self.getWorld().isClient) {
-                    if ((this.getClashDone() && ((StandUser) this.getClashOp()).getStandPowers().getClashDone())
-                    || !((StandUser) this.self).getActive() || !((StandUser) this.getClashOp()).getActive()) {
+
+                    if ((this.getClashDone() && ((StandUser) entity).getStandPowers().getClashDone())
+                    || !((StandUser) this.self).getActive() || !((StandUser) entity).getActive()) {
                         this.updateClashing2();
                     } else {
                         playBarrageNoise(this.attackTimeDuring+ clashStarter);
@@ -637,6 +656,26 @@ public class StandPowers {
                     ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH, true);
                     ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH, true);
 
+                    LivingEntity standEntity = ((StandUser) entity).getStand();
+                    LivingEntity standSelf = ((StandUser) self).getStand();
+
+                    if (standEntity != null && standSelf != null){
+                        Vec3d CenterPoint = standEntity.getPos().add(standSelf.getPos()).multiply(0.5);
+
+                        Vec3d entityPoint = CenterPoint.subtract(((CenterPoint.subtract(standEntity.getPos())).normalize()).multiply(0.6));
+                        Vec3d selfPoint = CenterPoint.subtract(((CenterPoint.subtract(standSelf.getPos())).normalize()).multiply(0.6));
+
+                        standEntity.setPos(entityPoint.getX(),entityPoint.getY(),entityPoint.getZ());
+                        standEntity.setPitch(getLookAtEntityPitch(standEntity,standSelf));
+                        standEntity.setYaw(getLookAtEntityYaw(standEntity,standSelf));
+
+                        standSelf.setPos(selfPoint.getX(),selfPoint.getY(),selfPoint.getZ());
+                        standSelf.setPitch(getLookAtEntityPitch(standSelf,standEntity));
+                        standSelf.setYaw(getLookAtEntityYaw(standSelf,standEntity));
+
+                        RoundaboutMod.LOGGER.info("1 "+standEntity.getPitch() + " " + standEntity.getYaw());
+                        RoundaboutMod.LOGGER.info("2 "+standSelf.getPitch() + " " + standSelf.getYaw());
+                    }
                 } else {
                     float pow;
                     float knockbackStrength = 0;
@@ -944,12 +983,9 @@ public class StandPowers {
                     hitEntities.remove(value);
                 } else {
                     int angle = 25;
-                    /*RoundaboutMod.LOGGER.info("RD = "+String.valueOf(rayDist));*/
                     if (!(angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getHeadYaw()%360f)) <= angle && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getPitch()) <= angle)){
                         hitEntities.remove(value);
                     }
-                    //RoundaboutMod.LOGGER.info("Yaw = "+angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getHeadYaw()%360f))+" "+value.getName());
-                    //RoundaboutMod.LOGGER.info("Pitch = "+angleDistance(getLookAtEntityPitch(this.self, value), this.self.getPitch())+" "+value.getName());
                 }
             }
         return hitEntities;
@@ -1092,20 +1128,16 @@ public class StandPowers {
     /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
     public void playBarrageCrySound(){
         if (!this.self.getWorld().isClient()) {
-            RoundaboutMod.LOGGER.info("1");
             byte barrageCrySound = this.chooseBarrageSound();
             if (barrageCrySound != SoundIndex.NO_SOUND) {
-                RoundaboutMod.LOGGER.info("2");
                 playSoundsIfNearby(barrageCrySound);
             }
         }
     }
     public void playBarrageChargeSound(){
         if (!this.self.getWorld().isClient()) {
-            RoundaboutMod.LOGGER.info("3");
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
-                RoundaboutMod.LOGGER.info("4");
                 playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND);
             }
         }
@@ -1116,10 +1148,8 @@ public class StandPowers {
     @Environment(EnvType.CLIENT)
     public void clientQueSound(byte soundChoice){
         if (this.self.getWorld().isClient()) {
-            RoundaboutMod.LOGGER.info("5");
             SoundEvent barrageCrySound = this.getSoundFromByte(soundChoice);
             if (barrageCrySound != null) {
-                RoundaboutMod.LOGGER.info("6");
                 this.queSound = new PositionedSoundInstance(barrageCrySound,SoundCategory.PLAYERS, 0.95F,
                         this.getSoundPitchFromByte(soundChoice),SoundInstance.createRandom(), this.self.getBlockPos());
                 this.soundPlay = true;
@@ -1131,9 +1161,7 @@ public class StandPowers {
     @Environment(EnvType.CLIENT)
     public void clientPlaySound(){
         if (this.self.getWorld().isClient()) {
-            RoundaboutMod.LOGGER.info("7");
             if (this.queSound != null) {
-                RoundaboutMod.LOGGER.info("8");
                 MinecraftClient.getInstance().getSoundManager().play(this.queSound);
             }
             this.soundPlay = false;
@@ -1167,7 +1195,6 @@ public class StandPowers {
     @Environment(EnvType.CLIENT)
     public void clientQueSoundCanceling(){
         if (this.self.getWorld().isClient()) {
-            RoundaboutMod.LOGGER.info("9");
             this.soundCancel = true;
         }
     }
@@ -1176,9 +1203,7 @@ public class StandPowers {
     @Environment(EnvType.CLIENT)
     public void clientSoundCancel(){
         if (this.self.getWorld().isClient()) {
-            RoundaboutMod.LOGGER.info("10");
             if (this.queSound != null) {
-                RoundaboutMod.LOGGER.info("11");
                 MinecraftClient.getInstance().getSoundManager().stop(this.queSound);
                 this.queSound = null;
             }

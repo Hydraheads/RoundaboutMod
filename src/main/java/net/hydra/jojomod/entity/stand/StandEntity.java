@@ -336,40 +336,54 @@ public abstract class StandEntity extends MobEntity{
      */
     @Override
     public boolean hasVehicle() {
-       return this.getVehicle() != null;
+        byte ot = this.getOffsetType();
+        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            return this.getVehicle() != null;
+        } else {
+            return false;
+        }
     }
 
     /**This override prevents an infinite loop when an entity is riding itself*/
     @Override
     public Entity getRootVehicle() {
-        Entity entity = this;
-        while (entity.hasVehicle() && Objects.requireNonNull(entity.getVehicle()).getUuid() != entity.getUuid()) {
-            entity = entity.getVehicle();
+        byte ot = this.getOffsetType();
+        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            Entity entity = this;
+            while (entity.hasVehicle() && Objects.requireNonNull(entity.getVehicle()).getUuid() != entity.getUuid()) {
+                entity = entity.getVehicle();
+            }
+            return entity;
+        } else {
+            return null;
         }
-        return entity;
     }
 
     /**Chooses which offset animation types override stand direction rendering*/
     @Override
     public LivingEntity getVehicle() {
        byte ot = this.getOffsetType();
-       if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.FOLLOW_STYLE) {
-           return this;
-       } else {
-           LivingEntity follower = this.getFollowing();
-           if (follower != null && !follower.isRemoved()) {
-               //this will be changed to getfollower
-               if (((StandUser) follower).getStand() != null) {
-                   if (((StandUser) follower).getStand() != this) {
+       if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+           if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.FOLLOW_STYLE) {
+               return this;
+           } else {
+               LivingEntity follower = this.getFollowing();
+               if (follower != null && !follower.isRemoved()) {
+                   //this will be changed to getfollower
+                   if (((StandUser) follower).getStand() != null) {
+                       if (((StandUser) follower).getStand() != this) {
+                           follower = null;
+                       }
+                   } else {
                        follower = null;
                    }
                } else {
                    follower = null;
                }
-           } else {
-               follower = null;
+               return follower;
            }
-           return follower;
+       } else {
+           return null;
        }
     }
 
@@ -439,14 +453,15 @@ public abstract class StandEntity extends MobEntity{
      * with a follower.
      */
     public void tickStandOut() {
-        this.setVelocity(Vec3d.ZERO);
-        this.tick();
-        if (this.getFollowing() == null) {
-            //RoundaboutMod.LOGGER.info("MF No Master");
-            return;
+        byte ot = this.getOffsetType();
+        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            this.setVelocity(Vec3d.ZERO);
+            this.tick();
+            if (this.getFollowing() == null) {
+                return;
+            }
+            ((StandUser) this.getFollowing()).updateStandOutPosition(this);
         }
-        //RoundaboutMod.LOGGER.info("MF Update Pos");
-        ((StandUser) this.getFollowing()).updateStandOutPosition(this);
     }
 
 
@@ -464,10 +479,26 @@ public abstract class StandEntity extends MobEntity{
     @Override
     public void tick() {
         this.noClip = true;
+        float pitch = this.getPitch();
+        float yaw = this.getYaw();
+        byte ot = this.getOffsetType();
 
         super.tick();
+
             if (this.getWorld().isClient()){
+                if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
+                    this.setBodyYaw(yaw);
+                    this.setHeadYaw(yaw);
+                    this.prevBodyYaw = yaw;
+                    this.prevHeadYaw = yaw;
+                    this.updatePositionAndAngles(this.getX(),this.getY(),this.getZ(),yaw,pitch);
+                }
                 setupAnimationStates();
+            } else {
+                if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
+                    this.setPitch(pitch);
+                    this.setYaw(yaw);
+                }
             }
 
             if (this.isAlive() && !this.dead){

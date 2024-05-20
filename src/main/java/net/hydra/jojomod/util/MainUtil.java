@@ -14,10 +14,10 @@ public class MainUtil {
     }
 
     public static float controlledLerpAngleDegrees(float delta, float start, float end, float multiplier) {
-        delta = Math.min(delta,2);
+        delta = Math.min(delta,1);
         return start + (delta * MathHelper.wrapDegrees(end - start))*multiplier;
     }public static float controlledLerpRadianDegrees(float delta, float start, float end, float multiplier) {
-        delta = Math.min(delta,2);
+        delta = Math.min(delta,1);
         return start + (delta * wrapRadians(end - start))*multiplier;
     }
 

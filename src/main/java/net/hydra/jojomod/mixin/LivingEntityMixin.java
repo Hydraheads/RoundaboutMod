@@ -407,6 +407,9 @@ public class LivingEntityMixin implements StandUser {
             stand.setPitch(User.getPitch());
             stand.setBodyYaw(User.getHeadYaw()%360);
             stand.setHeadYaw(User.getHeadYaw()%360);
+        } else {
+            RoundaboutMod.LOGGER.info("4 "+(stand.getPos()));
+            positionUpdater.accept(stand, stand.getX(), stand.getY(), stand.getZ());
         }
     }
 
