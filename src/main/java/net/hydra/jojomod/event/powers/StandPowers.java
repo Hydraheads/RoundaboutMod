@@ -639,7 +639,54 @@ public class StandPowers {
         return entity instanceof PlayerEntity;
     }
 
+    /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
+    public void initiateClash(Entity entity){
+        ((StandUser) entity).getStandPowers().setClashOp(this.self);
+        ((StandUser) this.self).getStandPowers().setClashOp((LivingEntity) entity);
+        this.clashStarter = 0;
+        ((StandUser) entity).getStandPowers().clashStarter = 1;
 
+        ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH, true);
+        ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH, true);
+
+        LivingEntity standEntity = ((StandUser) entity).getStand();
+        LivingEntity standSelf = ((StandUser) self).getStand();
+
+        if (standEntity != null && standSelf != null){
+            Vec3d CenterPoint = entity.getPos().add(self.getPos()).multiply(0.5);
+
+            Vec3d entityPoint = offsetBarrageVector(
+                    CenterPoint.subtract(((CenterPoint.subtract(entity.getPos())).normalize()).multiply(0.4)),
+                    getLookAtEntityYaw(entity,self));
+
+
+            Vec3d selfPoint = offsetBarrageVector(
+                    CenterPoint.subtract(((CenterPoint.subtract(self.getPos())).normalize()).multiply(0.4)),
+                    getLookAtEntityYaw(self,entity));
+
+            standEntity.setPos(entityPoint.getX(),entityPoint.getY()+getYOffSet(standEntity),entityPoint.getZ());
+            standEntity.setPitch(getLookAtEntityPitch(standEntity,standSelf));
+            standEntity.setYaw(getLookAtEntityYaw(standEntity,standSelf));
+
+            standSelf.setPos(selfPoint.getX(),selfPoint.getY()+getYOffSet(standSelf),selfPoint.getZ());
+            standSelf.setPitch(getLookAtEntityPitch(standSelf,standEntity));
+            standSelf.setYaw(getLookAtEntityYaw(standSelf,standEntity));
+
+        }
+    }
+
+    private Vec3d offsetBarrageVector(Vec3d vec3d, float yaw){
+        Vec3d vec3d2 = DamageHandler.getRotationVector(0, yaw+ 90);
+        return vec3d.add(vec3d2.x*0.3, 0, vec3d2.z*0.3);
+    }
+
+    private float getYOffSet(LivingEntity stand){
+        float yy = 0.1F;
+        if (stand.isSwimming() || stand.isCrawling() || stand.isFallFlying()) {
+            yy -= 1;
+        }
+        return yy;
+    }
 
     public void barrageImpact(Entity entity, int hitNumber){
         if (this.isBarrageAttacking()) {
@@ -647,35 +694,7 @@ public class StandPowers {
             if (entity != null) {
                 if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()
                         && ((StandUser) entity).getAttackTimeDuring() > -1) {
-
-                    ((StandUser) entity).getStandPowers().setClashOp(this.self);
-                    ((StandUser) this.self).getStandPowers().setClashOp((LivingEntity) entity);
-                    this.clashStarter = 0;
-                    ((StandUser) entity).getStandPowers().clashStarter = 1;
-
-                    ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH, true);
-                    ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH, true);
-
-                    LivingEntity standEntity = ((StandUser) entity).getStand();
-                    LivingEntity standSelf = ((StandUser) self).getStand();
-
-                    if (standEntity != null && standSelf != null){
-                        Vec3d CenterPoint = standEntity.getPos().add(standSelf.getPos()).multiply(0.5);
-
-                        Vec3d entityPoint = CenterPoint.subtract(((CenterPoint.subtract(standEntity.getPos())).normalize()).multiply(0.6));
-                        Vec3d selfPoint = CenterPoint.subtract(((CenterPoint.subtract(standSelf.getPos())).normalize()).multiply(0.6));
-
-                        standEntity.setPos(entityPoint.getX(),entityPoint.getY(),entityPoint.getZ());
-                        standEntity.setPitch(getLookAtEntityPitch(standEntity,standSelf));
-                        standEntity.setYaw(getLookAtEntityYaw(standEntity,standSelf));
-
-                        standSelf.setPos(selfPoint.getX(),selfPoint.getY(),selfPoint.getZ());
-                        standSelf.setPitch(getLookAtEntityPitch(standSelf,standEntity));
-                        standSelf.setYaw(getLookAtEntityYaw(standSelf,standEntity));
-
-                        RoundaboutMod.LOGGER.info("1 "+standEntity.getPitch() + " " + standEntity.getYaw());
-                        RoundaboutMod.LOGGER.info("2 "+standSelf.getPitch() + " " + standSelf.getYaw());
-                    }
+                    initiateClash(entity);
                 } else {
                     float pow;
                     float knockbackStrength = 0;
@@ -724,7 +743,9 @@ public class StandPowers {
                 this.attackTimeDuring = -10;
             }
         }
-    } public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
+    }
+
+    public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
                 this.takeDeterminedKnockbackWithY(this.self, (LivingEntity) entity, knockbackStrength);

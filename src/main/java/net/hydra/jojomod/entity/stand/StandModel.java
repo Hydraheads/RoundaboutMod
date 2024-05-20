@@ -56,12 +56,6 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
             if (entity.getUser() != null) {
                 rotateStand(entity, this.getPart(), tickDelta);
                 if (this.getPart().hasChild("stand2")) {
-                    RoundaboutMod.LOGGER.info("HEAD_ROTX: " + entity.getHeadRotationX());
-                    RoundaboutMod.LOGGER.info("HEAD_ROTY: " + entity.getHeadRotationY());
-                    RoundaboutMod.LOGGER.info("BODYROTX: " + entity.getBodyRotationX());
-                    RoundaboutMod.LOGGER.info("BODYROTY: " + entity.getBodyRotationY());
-                    RoundaboutMod.LOGGER.info("StandROTX: " + entity.getStandRotationX());
-                    RoundaboutMod.LOGGER.info("StandROTY: " + entity.getStandRotationY());
 
                     if (this.getPart().getChild("stand2").hasChild("head")) {
                         rotateHead(entity, this.getPart().getChild("stand2").getChild("head"), tickDelta);
@@ -177,7 +171,6 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         } else if (animationStyle == OffsetIndex.LOOSE_STYLE) {
             rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
             rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
-            RoundaboutMod.LOGGER.info("wut1");
 
         }
         mobEntity.setBodyRotationX(rotX);
