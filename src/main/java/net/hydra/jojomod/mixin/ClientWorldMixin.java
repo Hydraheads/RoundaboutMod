@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -48,9 +49,12 @@ public class ClientWorldMixin {
         if (stand == null || stand.isRemoved() || stand.getUser() != entity) {
             return;
         }
-        stand.resetPosition();
-        ++stand.age;
-        stand.tickStandOut();
+        byte ot = stand.getOffsetType();
+        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            stand.resetPosition();
+            ++stand.age;
+            stand.tickStandOut();
+        }
     }
 
 }

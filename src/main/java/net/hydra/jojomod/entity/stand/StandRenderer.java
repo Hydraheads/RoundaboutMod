@@ -63,9 +63,6 @@ public class StandRenderer<T extends StandEntity> extends MobEntityRenderer<T, S
     }
 
     public float getStandOpacity(T entity){
-        if (!entity.hasUser()) {
-            return 1;
-        } else {
             int vis = entity.getFadeOut();
             int max = entity.getMaxFade();
             float tot = (float) ((((float) vis / max) * 1.3) - 0.3);
@@ -73,6 +70,5 @@ public class StandRenderer<T extends StandEntity> extends MobEntityRenderer<T, S
                 tot = 0;
             }
             return tot;
-        }
     }
 }

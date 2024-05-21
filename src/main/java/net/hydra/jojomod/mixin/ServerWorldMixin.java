@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -33,9 +34,12 @@ public class ServerWorldMixin {
         if (passenger == null || passenger.isRemoved() || passenger.getUser() != entity) {
             return;
         }
-        passenger.resetPosition();
-        ++passenger.age;
-        passenger.tickStandOut();
+        byte ot = passenger.getOffsetType();
+        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            passenger.resetPosition();
+            ++passenger.age;
+            passenger.tickStandOut();
+        }
     }
 
 }

@@ -41,9 +41,9 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         this.updateAnimation(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1f);
         this.updateAnimation(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.updateAnimation(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
-        this.updateAnimation(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1.6f);
+        this.updateAnimation(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 2.7f);
         this.updateAnimation(entity.barrageEndAnimationState, StandAnimations.COMBO3, animationProgress, 2.2f);
-        this.updateAnimation(entity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, animationProgress, 2.6f);
+        this.updateAnimation(entity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, animationProgress, 2.5f);
 
 
 
@@ -138,7 +138,8 @@ public class StandModel<T extends StandEntity> extends SinglePartEntityModel<T> 
         mobEntity.setStandRotationY(rotY);
         this.setStandRotations(rotX,rotY);
 
-    } public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
+    }
+    public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
         var animationNumber = mobEntity.getOffsetType();
         var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
 

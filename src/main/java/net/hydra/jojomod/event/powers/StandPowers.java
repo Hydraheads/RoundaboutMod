@@ -623,7 +623,7 @@ public class StandPowers {
         } else {
             power = 20/barrageLength;
         }
-        /**Barrage hits are incapable of killing their target until the last hit.*/
+        /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
             if (power >= ((LivingEntity) entity).getHealth()){
                 if (entity instanceof PlayerEntity) {
