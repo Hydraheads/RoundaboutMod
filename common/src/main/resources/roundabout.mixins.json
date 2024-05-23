@@ -29,7 +29,8 @@
     "GameHudMixin",
     "GameRendererMixin",
     "HeldItemRendererMixin",
-    "InputMixin"
+    "InputMixin",
+    "RegisterModelsMixin"
   ],
   "server": [
   ],
