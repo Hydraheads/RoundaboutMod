@@ -20,7 +20,8 @@
     "ServerPlayerEntityMixin",
     "ServerWorldMixin",
     "ShieldItemMixin",
-    "WitchEntityMixin"
+    "WitchEntityMixin",
+    "RegisterAttributes"
   ],
   "client": [
     "ClientPlayerEntityMixin",

@@ -1,7 +1,9 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.mixin.RegisterAttributes;
 import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -32,7 +34,7 @@ public class Roundabout {
             LOGGER.info("Hello to roundabout");
         }
 
-
+        ModEntities.registerModEntities();
         ModItems.registerModItems();
         ModBlocks.registerModBlocks();
         //ModEntities.registerModEntities();
