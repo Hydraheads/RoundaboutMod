@@ -1,0 +1,122 @@
+{
+  "summon_sound": {
+    "subtitle": "sounds.roundabout.summon_stand",
+    "sounds": [
+      "roundabout:summon_stand"
+    ]
+  },
+  "terrier_pass": {
+    "subtitle": "sounds.roundabout.terrier_pass",
+    "sounds": [
+      "roundabout:terrier_pass"
+    ]
+  },
+  "summon_world": {
+    "subtitle": "sounds.roundabout.summon_world",
+    "sounds": [
+      "roundabout:summon_world"
+    ]
+  },
+  "summon_star": {
+    "subtitle": "sounds.roundabout.summon_star",
+    "sounds": [
+      "roundabout:summon_star"
+    ]
+  },
+  "punch_sfx1": {
+    "subtitle": "sounds.roundabout.punch_sfx1",
+    "sounds": [
+      "roundabout:punch_sfx1"
+    ]
+  },
+  "punch_sfx2": {
+    "subtitle": "sounds.roundabout.punch_sfx2",
+    "sounds": [
+      "roundabout:punch_sfx2"
+    ]
+  },
+  "punch_sfx3": {
+    "subtitle": "sounds.roundabout.punch_sfx3",
+    "sounds": [
+      "roundabout:punch_sfx3"
+    ]
+  },
+  "punch_sfx4": {
+    "subtitle": "sounds.roundabout.punch_sfx4",
+    "sounds": [
+      "roundabout:punch_sfx4"
+    ]
+  },
+  "stand_theworld_muda1": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda1",
+    "sounds": [
+      "roundabout:stand_theworld_muda1"
+    ]
+  },
+  "stand_theworld_muda2": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda2",
+    "sounds": [
+      "roundabout:stand_theworld_muda2"
+    ]
+  },
+  "stand_theworld_muda3": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda3",
+    "sounds": [
+      "roundabout:stand_theworld_muda3"
+    ]
+  },
+  "stand_theworld_muda4": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda4",
+    "sounds": [
+      "roundabout:stand_theworld_muda4"
+    ]
+  },
+  "stand_barrage_windup": {
+    "subtitle": "sounds.roundabout.stand_barrage_windup",
+    "sounds": [
+      "roundabout:stand_barrage_windup"
+    ]
+  },
+  "stand_barrage_miss": {
+    "subtitle": "sounds.roundabout.stand_barrage_miss",
+    "sounds": [
+      "roundabout:stand_barrage_miss"
+    ]
+  },
+  "stand_barrage_block": {
+    "subtitle": "sounds.roundabout.stand_barrage_block",
+    "sounds": [
+      "roundabout:stand_barrage_block"
+    ]
+  },
+  "stand_barrage_hit": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit",
+    "sounds": [
+      "roundabout:stand_barrage_hit"
+    ]
+  },
+  "stand_barrage_hit2": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit2",
+    "sounds": [
+      "roundabout:stand_barrage_hit2"
+    ]
+  },
+  "stand_barrage_end": {
+    "subtitle": "sounds.roundabout.stand_barrage_end",
+    "sounds": [
+      "roundabout:stand_barrage_end"
+    ]
+  },
+  "hit_sfx1": {
+    "subtitle": "sounds.roundabout.hit_sfx1",
+    "sounds": [
+      "roundabout:hit_sfx1"
+    ]
+  },
+  "stand_guard": {
+    "subtitle": "sounds.roundabout.stand_guard",
+    "sounds": [
+      "roundabout:stand_guard"
+    ]
+  }
+}
