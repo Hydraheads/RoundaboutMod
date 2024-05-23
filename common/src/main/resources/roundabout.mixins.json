@@ -30,7 +30,8 @@
     "GameRendererMixin",
     "HeldItemRendererMixin",
     "InputMixin",
-    "RegisterModelsMixin"
+    "RegisterModelsMixin",
+    "RegisterEntityRenderer"
   ],
   "server": [
   ],

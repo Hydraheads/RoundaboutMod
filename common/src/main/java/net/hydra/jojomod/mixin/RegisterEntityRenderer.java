@@ -19,10 +19,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 
 @Mixin(EntityRenderers.class)
-public class RegisterEntityRenderer {
-    @Shadow
-    private static final Map<EntityType<?>, EntityRendererProvider<?>> PROVIDERS = Maps.newHashMap();
-    @Shadow
+public abstract class RegisterEntityRenderer {
+    @Shadow()
+    @Final
+    private static Map<EntityType<?>, EntityRendererProvider<?>> PROVIDERS;
+    @Shadow()
+    @Final
     private static <T extends Entity> void register(EntityType<? extends T> $$0, EntityRendererProvider<T> $$1) {
         PROVIDERS.put($$0, $$1);
     }
