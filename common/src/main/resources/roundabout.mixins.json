@@ -21,7 +21,8 @@
     "ServerWorldMixin",
     "ShieldItemMixin",
     "WitchEntityMixin",
-    "RegisterAttributes"
+    "RegisterAttributes",
+    "RegisterSpawnPlacements"
   ],
   "client": [
     "ClientPlayerEntityMixin",

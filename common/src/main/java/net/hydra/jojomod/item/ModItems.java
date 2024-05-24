@@ -10,8 +10,8 @@ import net.minecraft.world.item.SpawnEggItem;
 import static net.hydra.jojomod.entity.ModEntities.TERRIER_DOG;
 
 public class ModItems {
-    public static final Item STAND_ARROW = registerItem("stand_arrow", new Item(new Item.Properties()));
-    public static final Item STAND_DISC = registerItem("stand_disc", new Item(new Item.Properties()));
+    public static final Item STAND_ARROW = registerItem("stand_arrow", new Item(new Item.Properties().stacksTo(1)));
+    public static final Item STAND_DISC = registerItem("stand_disc", new Item(new Item.Properties().stacksTo(1)));
     public static final Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static final Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
 
