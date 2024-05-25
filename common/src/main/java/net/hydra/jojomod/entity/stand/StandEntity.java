@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -635,8 +634,7 @@ public abstract class StandEntity extends Mob{
 
     /** Builds Minecraft entity attributes like speed and health.
      * Admittedly, I think these numbers are arbitrary given how stands work.
-     * The most notable thing about a stand is its hitbox size but that's factored in
-     * @see ModEntities for now. */
+     * The most notable thing about a stand is its hitbox size but that's factored in */
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
                 0.2F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);

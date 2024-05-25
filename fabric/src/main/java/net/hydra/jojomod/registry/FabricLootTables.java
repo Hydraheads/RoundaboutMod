@@ -1,4 +1,4 @@
-package net.hydra.jojomod.util;
+package net.hydra.jojomod.registry;
 
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.hydra.jojomod.item.ModItems;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ModLootTableModifiers {
+public class FabricLootTables {
 
     /** This is where stand arrows are found via archaeology.*/
 
@@ -32,11 +32,12 @@ public class ModLootTableModifiers {
                     || TRAIL_COMMON_ID.equals(id) || TRAIL_RARE_ID.equals(id)
                     || OCEAN_COLD_ID.equals(id)) {
                 List<LootPoolEntryContainer> entries = new ArrayList<>(Arrays.asList(original.pools[0].entries));
-                entries.add(LootItem.lootTableItem(ModItems.STAND_ARROW).build());
+                entries.add(LootItem.lootTableItem(FabricItems.STAND_ARROW).build());
 
-                //Add twice if desert structure / sand
+                //Add thrice if desert structure / sand
                 if(PYRAMID_ID.equals(id) || WELL_ID.equals(id) || OCEAN_WARM_ID.equals(id)){
-                    entries.add(LootItem.lootTableItem(ModItems.STAND_ARROW).build());
+                    entries.add(LootItem.lootTableItem(FabricItems.STAND_ARROW).build());
+                    entries.add(LootItem.lootTableItem(FabricItems.STAND_ARROW).build());
                 }
 
                 LootPool.Builder pool = LootPool.lootPool().with(entries);

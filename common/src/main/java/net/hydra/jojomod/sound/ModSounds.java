@@ -53,29 +53,6 @@ public class ModSounds {
     public static SoundEvent STAND_BARRAGE_END_EVENT = SoundEvent.createVariableRangeEvent(STAND_BARRAGE_END_ID);
 
     public static void registerSoundEvents(){
-        Registry.register(BuiltInRegistries.SOUND_EVENT, SUMMON_SOUND_ID, SUMMON_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, TERRIER_SOUND_ID, TERRIER_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAR_SUMMON_SOUND_ID, STAR_SUMMON_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, WORLD_SUMMON_SOUND_ID, WORLD_SUMMON_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, PUNCH_1_SOUND_ID, PUNCH_1_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, PUNCH_2_SOUND_ID, PUNCH_2_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, PUNCH_3_SOUND_ID, PUNCH_3_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, PUNCH_4_SOUND_ID, PUNCH_4_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_GUARD_SOUND_ID, STAND_GUARD_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, MELEE_GUARD_SOUND_ID, MELEE_GUARD_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, HIT_1_SOUND_ID, HIT_1_SOUND_EVENT);
-
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_THEWORLD_MUDA1_SOUND_ID, STAND_THEWORLD_MUDA1_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_THEWORLD_MUDA2_SOUND_ID, STAND_THEWORLD_MUDA2_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_THEWORLD_MUDA3_SOUND_ID, STAND_THEWORLD_MUDA3_SOUND_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_THEWORLD_MUDA4_SOUND_ID, STAND_THEWORLD_MUDA4_SOUND_EVENT);
-
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_BARRAGE_WINDUP_ID, STAND_BARRAGE_WINDUP_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_BARRAGE_MISS_ID, STAND_BARRAGE_MISS_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_BARRAGE_BLOCK_ID, STAND_BARRAGE_BLOCK_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_BARRAGE_HIT_ID, STAND_BARRAGE_HIT_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_BARRAGE_HIT2_ID, STAND_BARRAGE_HIT2_EVENT);
-        Registry.register(BuiltInRegistries.SOUND_EVENT, STAND_BARRAGE_END_ID, STAND_BARRAGE_END_EVENT);
     }
 
     private static SoundEvent registerSoundEvent(String name){

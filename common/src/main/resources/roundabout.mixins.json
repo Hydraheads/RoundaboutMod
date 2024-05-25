@@ -20,9 +20,7 @@
     "ServerPlayerEntityMixin",
     "ServerWorldMixin",
     "ShieldItemMixin",
-    "WitchEntityMixin",
-    "RegisterAttributes",
-    "RegisterSpawnPlacements"
+    "WitchEntityMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",
@@ -31,9 +29,7 @@
     "GameHudMixin",
     "GameRendererMixin",
     "HeldItemRendererMixin",
-    "InputMixin",
-    "RegisterModelsMixin",
-    "RegisterEntityRenderer"
+    "InputMixin"
   ],
   "server": [
   ],
