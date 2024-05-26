@@ -17,6 +17,7 @@ public class RoundaboutModForge {
         ForgeItems.ITEMS.register(bus);
         ForgeBlocks.BLOCKS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
+        ForgeSounds.SOUNDS.register(bus);
 
         Roundabout.LOGGER.info("Hello Forge world!");
         Roundabout.init();
