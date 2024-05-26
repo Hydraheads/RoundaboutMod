@@ -7,5 +7,6 @@ public class ModItems {
     public static Item STAND_DISC;
     public static Item COFFEE_GUM;
     public static Item METEORITE;
+    public static Item TERRIER_SPAWN_EGG;
 
 }

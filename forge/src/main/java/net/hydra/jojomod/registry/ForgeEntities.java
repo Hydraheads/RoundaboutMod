@@ -34,7 +34,4 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "star_platinum").toString())
             );
-        public static void register() {
-            /*Common Code Bridge*/
-        }
 }

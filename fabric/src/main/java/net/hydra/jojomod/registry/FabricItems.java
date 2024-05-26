@@ -53,5 +53,6 @@ public class FabricItems {
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
+        ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
     }
 }
