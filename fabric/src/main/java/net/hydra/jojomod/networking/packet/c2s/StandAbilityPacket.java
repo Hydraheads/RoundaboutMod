@@ -21,11 +21,11 @@ public class StandAbilityPacket {
             ((IEntityDataSaver) player).getPersistentData().putLong("guard", (player.level().getGameTime() + 200));
         });
     }
-    public static void attack(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                               FriendlyByteBuf buf, PacketSender responseSender) {
-        //Everything here is server only!
+    public static void switchPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                              FriendlyByteBuf buf, PacketSender responseSender) {
+        byte power = buf.readByte();
         server.execute(() -> {
-            ((StandUser) player).tryPower(PowerIndex.ATTACK, true);
+            ((StandUser) player).tryPower(power, true);
         });
     }
 
@@ -49,23 +49,6 @@ public class StandAbilityPacket {
         });
     }
 
-    public static void guard(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                              FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        server.execute(() -> {
-            if (!((StandUser) player).isGuarding()){
-                ((StandUser) player).tryPower(PowerIndex.GUARD,true);
-            }
-        });
-    }
-
-    public static void barrage(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                               FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        server.execute(() -> {
-            ((StandUser) player).tryPower(PowerIndex.BARRAGE_CHARGE,true);
-        });
-    }
 
     /**When you release right click, stops guarding.*/
     public static void guardCancel(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,

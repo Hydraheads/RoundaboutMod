@@ -16,10 +16,8 @@ public interface IPacketAccess {
     void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
     /**Client Packets*/
-    void StandGuardClientPacket();
     void StandGuardCancelClientPacket();
-    void StandAttackPacket();
-    void StandBarragePacket();
+    void StandPowerPacket(byte power);
     void StandPunchPacket(int targetID, byte APP);
     void StandBarrageHitPacket(int targetID, int ATD);
 

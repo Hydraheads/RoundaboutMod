@@ -1,11 +1,18 @@
 package net.hydra.jojomod.networking;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ForgePackets implements IPacketAccess {
+
+
     @Override
     public void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken) {
 
@@ -41,10 +48,6 @@ public class ForgePackets implements IPacketAccess {
 
     }
 
-    @Override
-    public void StandGuardClientPacket() {
-
-    }
 
     @Override
     public void StandGuardCancelClientPacket() {
@@ -52,15 +55,9 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void StandAttackPacket() {
+    public void StandPowerPacket(byte power) {
 
     }
-
-    @Override
-    public void StandBarragePacket() {
-
-    }
-
     @Override
     public void StandPunchPacket(int targetID, byte APP) {
 

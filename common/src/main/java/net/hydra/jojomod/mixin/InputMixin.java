@@ -72,7 +72,7 @@ public class InputMixin {
                 StandUser standComp = ((StandUser) player);
                 if (standComp.getActive()) {
                     if (!standComp.isGuarding() && !standComp.isBarraging() && !standComp.isClashing()) {
-                        ModPacketHandler.PACKET_ACCESS.StandGuardClientPacket();
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
                         standComp.tryPower(PowerIndex.GUARD,true);
                     }
                 }
@@ -112,7 +112,7 @@ public class InputMixin {
 
                         if (standComp.getInterruptCD()) {
                             if (standComp.canAttack()) {
-                                ModPacketHandler.PACKET_ACCESS.StandAttackPacket();
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
                                 standComp.tryPower(PowerIndex.ATTACK, true);
                             }
                         }
@@ -120,7 +120,7 @@ public class InputMixin {
                         if (standComp.isGuarding() && !standComp.isBarraging()
                                 && (standComp.getAttackTime() >= standComp.getAttackTimeMax() ||
                                 (standComp.getActivePowerPhase() != standComp.getActivePowerPhaseMax()))){
-                            ModPacketHandler.PACKET_ACCESS.StandBarragePacket();
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
                             standComp.tryPower(PowerIndex.BARRAGE_CHARGE, true);
                         }
                     }

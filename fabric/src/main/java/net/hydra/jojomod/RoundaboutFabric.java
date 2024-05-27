@@ -1,6 +1,7 @@
 package net.hydra.jojomod;
 
 import net.fabricmc.api.ModInitializer;
+import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.networking.FabricPackets;
 import net.hydra.jojomod.particles.ModParticles;
 import net.hydra.jojomod.registry.*;
@@ -18,7 +19,7 @@ public class RoundaboutFabric implements ModInitializer {
         FabricItems.register();
         FabricBlocks.register();
         FabricSounds.register();
-        FabricPackets.registerC2SPackets();
+        FabricPacketManager.registerC2SPackets();
         ModParticles.registerParticles();
         CommandRegistryFabric.register();
         ModWorldGeneration.generateWorldGen();
