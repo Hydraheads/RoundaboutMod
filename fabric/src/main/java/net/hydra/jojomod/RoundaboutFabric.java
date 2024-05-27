@@ -5,6 +5,7 @@ import net.hydra.jojomod.networking.FabricPackets;
 import net.hydra.jojomod.particles.ModParticles;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.world.gen.ModWorldGeneration;
+import net.minecraft.data.DataGenerator;
 
 public class RoundaboutFabric implements ModInitializer {
     

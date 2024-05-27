@@ -1,0 +1,11 @@
+{
+  "entries": [
+    "roundabout:stand_arrow_from_pyramid",
+    "roundabout:stand_arrow_from_well",
+    "roundabout:stand_arrow_from_warm_ocean",
+    "roundabout:stand_arrow_from_cold_ocean",
+    "roundabout:stand_arrow_from_trail_ruins",
+    "roundabout:stand_arrow_from_trail_ruins_rare"
+  ],
+  "replace": false
+}

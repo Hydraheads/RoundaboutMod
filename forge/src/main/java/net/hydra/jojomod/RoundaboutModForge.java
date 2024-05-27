@@ -1,5 +1,6 @@
 package net.hydra.jojomod;
 
+import net.hydra.jojomod.Utils.ForgeItemModifiers;
 import net.hydra.jojomod.registry.*;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +19,7 @@ public class RoundaboutModForge {
         ForgeBlocks.BLOCKS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
         ForgeSounds.SOUNDS.register(bus);
+        ForgeLootModifiers.LOOT_MODIFIERS.register(bus);
 
         Roundabout.LOGGER.info("Hello Forge world!");
         Roundabout.init();
