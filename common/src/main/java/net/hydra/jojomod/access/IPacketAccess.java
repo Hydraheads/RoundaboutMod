@@ -4,6 +4,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
 public interface IPacketAccess {
+    /**Forge and Fabric both use this interface to use their own packet handling code.
+     * Every packet function must be written here.*/
+
     /**Server Packets*/
     void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken);
     void DazeTimePacket(ServerPlayer sp, byte dazeTime);

@@ -81,6 +81,8 @@ public class InputMixin {
                 }
             }
         }
+
+
     @Inject(method = "startUseItem", at = @At("Head"), cancellable = true)
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
@@ -122,23 +124,26 @@ public class InputMixin {
                     }
 
                         //RoundaboutMod.LOGGER.info("px");
-                        while (KeyInputRegistry.summonKey.consumeClick()) {
+                        if (KeyInputRegistry.summonKey.isDown()) {
                             KeyInputs.summonKey(player,((Minecraft) (Object) this));
                         }
-                        while (KeyInputRegistry.abilityOneKey.consumeClick()) {
+                        if (KeyInputRegistry.abilityOneKey.isDown()) {
                             //client.player.sendMessage(Text.of("Ability Key"));
                         }
-                        while (KeyInputRegistry.abilityTwoKey.consumeClick()) {
+                        if (KeyInputRegistry.abilityTwoKey.isDown()) {
                             //client.player.sendMessage(Text.of("Ability Key 2"));
                         }
-                        while (KeyInputRegistry.abilityThreeKey.consumeClick()) {
+                        if (KeyInputRegistry.abilityThreeKey.isDown()) {
                             //client.player.sendMessage(Text.of("Ability Key 3"));
                         }
-                        while (KeyInputRegistry.abilityFourKey.consumeClick()) {
+                        if (KeyInputRegistry.abilityFourKey.isDown()) {
                             KeyInputs.specialMoveKey(player,((Minecraft) (Object) this));
                         }
-                        while (KeyInputRegistry.menuKey.consumeClick()) {
+                        if (KeyInputRegistry.menuKey.isDown()) {
                             KeyInputs.menuKey(player,((Minecraft) (Object) this));
+                        }
+                        if (KeyInputs.roundaboutClickCount > 0) {
+                            KeyInputs.roundaboutClickCount--;
                         }
 
                 }

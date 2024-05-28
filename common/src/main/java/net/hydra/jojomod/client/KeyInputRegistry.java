@@ -5,6 +5,9 @@ import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyInputRegistry {
+    /**This is where all keybinds in the mod are registered.
+     * Note that forge and fabric also register the keys so they can be
+     * remapped ingame.*/
     public static final String KEY_CATEGORY_JOJO = "key.category.roundabout.jojo";
     public static final String KEY_ABILITY_1 = "key.roundabout.ability.one";
     public static final String KEY_ABILITY_2 = "key.roundabout.ability.two";
@@ -15,40 +18,36 @@ public class KeyInputRegistry {
 
     public static final KeyMapping summonKey = new KeyMapping(
             KeyInputRegistry.KEY_SUMMON_STAND,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_R,
+            InputConstants.KEY_R,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
 
     public static  KeyMapping abilityOneKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_1,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_G,
+            InputConstants.KEY_V,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
 
     public static final KeyMapping abilityTwoKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_2,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_Z,
+            InputConstants.KEY_Z,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
     public static final KeyMapping abilityThreeKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_3,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_V,
+            InputConstants.KEY_G,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
     public static KeyMapping abilityFourKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_4,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_H,
+            InputConstants.KEY_H,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
     public static KeyMapping menuKey = new KeyMapping(
             KeyInputRegistry.KEY_JOJO_MENU,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_Y,
+            InputConstants.KEY_Y,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
+    // used to use GLFW.GLFW_KEY_X instead of InputConstants.KEY_X
+    // also had InputConstants.Type.KEYSYM,
 }

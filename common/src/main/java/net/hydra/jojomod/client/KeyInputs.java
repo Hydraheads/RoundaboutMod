@@ -10,9 +10,10 @@ import net.minecraft.world.entity.player.Player;
 public class KeyInputs {
 
     //This is what the keys do, what code they run
+    public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        if (((StandUser) player).getSummonCD()) {
+        if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
             if (((StandUser) player).getActive()){
                 ((StandUser) player).setSummonCD(8);
             } else {
@@ -20,14 +21,23 @@ public class KeyInputs {
             }
             ModPacketHandler.PACKET_ACCESS.standSummonPacket();
         }
+        roundaboutClickCount = 2;
     }
 
     public static void menuKey(Player player, Minecraft client){
-        client.setScreen(new PowerInventoryScreen(player));
+        if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
+            client.setScreen(new PowerInventoryScreen(player));
+            roundaboutClickCount = 2;
+        }
     }
 
     public static void specialMoveKey(Player player, Minecraft client){
-        player.sendSystemMessage(Component.nullToEmpty("Special Move"));
+        if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
+            player.sendSystemMessage(Component.nullToEmpty("Special Move"));
+            roundaboutClickCount = 2;
+        }
     }
+
+
 
 }

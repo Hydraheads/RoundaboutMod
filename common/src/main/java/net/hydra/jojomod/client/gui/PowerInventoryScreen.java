@@ -14,6 +14,8 @@ import net.minecraft.world.inventory.InventoryMenu;
 
 public class PowerInventoryScreen
         extends EffectRenderingInventoryScreen<InventoryMenu> {
+    /**Currently unfinished, this is when you press the stand power inventory key.
+     * It should render your current stand, as well as its moves and stuff.*/
     private static final ResourceLocation RECIPE_BUTTON_TEXTURE = new ResourceLocation("textures/gui/recipe_button.png");
     private float mouseX;
     private float mouseY;

@@ -14,11 +14,8 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 
 public class ModBlocks {
-
-    //If you middle mouse click iron block, you can see vanilla block constructors
-    //FabricBlockSettings.copyOf or FabricBlockSettings.create for these
+    /**This is where blocks are listed and called upon.
+     * Forge and fabric files must define these variables so they are not empty.**/
     public static Block METEOR_BLOCK;
-    public static void registerModBlocks(){
-        Roundabout.LOGGER.info("Registering ModBlocks for "+ Roundabout.MOD_ID);
-    }
+
 }
