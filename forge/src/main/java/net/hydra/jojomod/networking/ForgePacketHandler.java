@@ -84,20 +84,20 @@ public class ForgePacketHandler {
                 .encoder(ForgeStopSoundPacket::toBytes)
                 .consumerMainThread(ForgeStopSoundPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeGuardUpdate.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeGuardUpdate::new)
-                .encoder(ForgeGuardUpdate::toBytes)
-                .consumerMainThread(ForgeGuardUpdate::handle)
+        INSTANCE.messageBuilder(ForgeGuardUpdatePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeGuardUpdatePacket::new)
+                .encoder(ForgeGuardUpdatePacket::toBytes)
+                .consumerMainThread(ForgeGuardUpdatePacket::handle)
                 .add();
         INSTANCE.messageBuilder(ForgeUpdateDazePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeUpdateDazePacket::new)
                 .encoder(ForgeUpdateDazePacket::toBytes)
                 .consumerMainThread(ForgeUpdateDazePacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeCooldownSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeCooldownSyncPacket::new)
-                .encoder(ForgeCooldownSyncPacket::toBytes)
-                .consumerMainThread(ForgeCooldownSyncPacket::handle)
+        INSTANCE.messageBuilder(ForgeCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeCDSyncPacket::new)
+                .encoder(ForgeCDSyncPacket::toBytes)
+                .consumerMainThread(ForgeCDSyncPacket::handle)
                 .add();
     }
 

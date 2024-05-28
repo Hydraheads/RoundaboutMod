@@ -1,24 +1,22 @@
 package net.hydra.jojomod.networking.s2c;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.StandUserClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ForgeGuardUpdate {
+public class ForgeGuardUpdatePacket {
     private final float guardPoints;
     private final boolean guardBroken;
 
-    public ForgeGuardUpdate(float guardPoints, boolean guardBroken){
+    public ForgeGuardUpdatePacket(float guardPoints, boolean guardBroken){
         this.guardPoints = guardPoints;
         this.guardBroken = guardBroken;
     }
-    public ForgeGuardUpdate(FriendlyByteBuf buf){
+    public ForgeGuardUpdatePacket(FriendlyByteBuf buf){
         this.guardPoints = buf.readFloat();
         this.guardBroken = buf.readBoolean();
     }
