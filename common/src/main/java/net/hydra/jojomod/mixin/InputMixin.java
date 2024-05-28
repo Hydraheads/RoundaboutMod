@@ -1,5 +1,8 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.client.KeyInputs;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -95,6 +98,51 @@ public class InputMixin {
         @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
         public void roundaboutInput(CallbackInfo ci){
             if (player != null) {
+
+                if (player.isAlive()) {
+                    //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
+
+                    /*If you have a stand out, update the stand leaning attributes.
+                     * Currently, strafe is reported, but unused.*/
+                    if (((StandUser) player).getActive()) {
+                        StandEntity stand = ((StandUser) player).getStand();
+                        if (stand != null) {
+                            var mf = stand.getMoveForward();
+                            byte forward = 0;
+                            byte strafe = 0;
+                            if (options.keyUp.isDown()) forward++;
+                            if (options.keyDown.isDown()) forward--;
+                            if (options.keyLeft.isDown()) strafe++;
+                            if (options.keyRight.isDown()) strafe--;
+
+                            if (mf != forward) {
+                                ModPacketHandler.PACKET_ACCESS.moveSyncPacket(forward,strafe);
+                            }
+                        }
+                    }
+
+                        //RoundaboutMod.LOGGER.info("px");
+                        while (KeyInputRegistry.summonKey.consumeClick()) {
+                            KeyInputs.summonKey(player,((Minecraft) (Object) this));
+                        }
+                        while (KeyInputRegistry.abilityOneKey.consumeClick()) {
+                            //client.player.sendMessage(Text.of("Ability Key"));
+                        }
+                        while (KeyInputRegistry.abilityTwoKey.consumeClick()) {
+                            //client.player.sendMessage(Text.of("Ability Key 2"));
+                        }
+                        while (KeyInputRegistry.abilityThreeKey.consumeClick()) {
+                            //client.player.sendMessage(Text.of("Ability Key 3"));
+                        }
+                        while (KeyInputRegistry.abilityFourKey.consumeClick()) {
+                            KeyInputs.specialMoveKey(player,((Minecraft) (Object) this));
+                        }
+                        while (KeyInputRegistry.menuKey.consumeClick()) {
+                            KeyInputs.menuKey(player,((Minecraft) (Object) this));
+                        }
+
+                }
+
                 StandUser standComp = ((StandUser) player);
                 if (!this.options.keyUse.isDown()) {
                     if (standComp.isGuarding() || standComp.isBarraging()) {

@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ForgePackets implements IPacketAccess {
-
-
     @Override
     public void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken) {
         ForgePacketHandler.sendToClient(new ForgeGuardUpdatePacket(guard,broken), sp);
@@ -69,5 +67,13 @@ public class ForgePackets implements IPacketAccess {
     @Override
     public void updateClashPacket(float clashProgress, boolean clashDone) {
         ForgePacketHandler.sendToServer(new ForgeClashUpdatePacketC2S(clashProgress,clashDone));
+    }
+    @Override
+    public void standSummonPacket() {
+        ForgePacketHandler.sendToServer(new ForgeSummonPacket());
+    }
+    @Override
+    public void moveSyncPacket(byte forward, byte strafe) {
+        ForgePacketHandler.sendToServer(new ForgeMoveSyncPacket(forward, strafe));
     }
 }
