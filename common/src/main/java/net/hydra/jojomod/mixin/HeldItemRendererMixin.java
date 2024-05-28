@@ -20,7 +20,7 @@ public class HeldItemRendererMixin {
     @Shadow
     private float mainHandHeight;
     @Shadow
-    private float oOffHandHeight;
+    private float offHandHeight;
     @Shadow
     private final Minecraft minecraft;
 
@@ -44,8 +44,8 @@ public class HeldItemRendererMixin {
                 this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4f, 0.6f, 1.0f);
             }}
 
-            if (this.oOffHandHeight > 0.6) {
-                this.oOffHandHeight = Mth.clamp(this.oOffHandHeight - 0.4f, 0.6f, 1.0f);
+            if (this.offHandHeight > 0.6) {
+                this.offHandHeight = Mth.clamp(this.offHandHeight - 0.4f, 0.6f, 1.0f);
             }
 
         }}

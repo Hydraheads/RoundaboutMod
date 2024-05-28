@@ -5,10 +5,11 @@
     "name": "${mod_name}",
     "description": "${description}",
     "authors": [
-        "${author}"
+        "${mod_author}"
     ],
     "contact": {
-        "homepage": "${display_url}"
+        "homepage": "https://fabricmc.net/",
+        "sources": "https://github.com/FabricMC/fabric-example-mod"
     },
     "license": "${license}",
     "icon": "${mod_id}.png",
@@ -26,8 +27,7 @@
         "${mod_id}.fabric.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=${fabric_loader_version}",
-        "fabric-api": ">=${fabric_api_version}",
+        "fabricloader": ">=0.14",
         "fabric": "*",
         "minecraft": "${minecraft_version}",
         "java": ">=17"

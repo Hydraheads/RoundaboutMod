@@ -1,11 +1,5 @@
 package net.hydra.jojomod;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.hydra.jojomod.Utils.GlobalLootModProvider;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
