@@ -1,11 +1,13 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.Utils.ForgeItemModifiers;
+import net.hydra.jojomod.networking.ForgePacketHandler;
 import net.hydra.jojomod.registry.*;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,9 +23,16 @@ public class RoundaboutModForge {
         ForgeSounds.SOUNDS.register(bus);
         ForgeLootModifiers.LOOT_MODIFIERS.register(bus);
 
+        bus.addListener(this::commonSetup);
+
         Roundabout.LOGGER.info("Hello Forge world!");
         Roundabout.init();
     }
 
+    private void commonSetup(final FMLCommonSetupEvent event){
+        event.enqueueWork(() ->
+                ForgePacketHandler.register()
+        );
+    }
 
 }
