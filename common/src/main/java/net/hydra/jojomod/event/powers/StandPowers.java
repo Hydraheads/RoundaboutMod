@@ -145,6 +145,10 @@ public class StandPowers {
         this.interruptCD = interruptCD;
     }
 
+    public boolean canBeTimeStopped(){
+        return ((TimeStop) this.self.level()).inTimeStopRange(this.self);
+    }
+
 
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7) {

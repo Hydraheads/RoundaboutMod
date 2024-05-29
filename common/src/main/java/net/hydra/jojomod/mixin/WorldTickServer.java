@@ -1,11 +1,16 @@
 package net.hydra.jojomod.mixin;
 
+import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +20,7 @@ import java.util.Objects;
 
 @Mixin(ServerLevel.class)
 public class WorldTickServer {
-
+    private ImmutableList<Entity> passengers = ImmutableList.of();
 
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
      * @see StandEntity#tickStandOut */
@@ -39,6 +44,28 @@ public class WorldTickServer {
             passenger.setOldPosAndRot();
             ++passenger.tickCount;
             passenger.tickStandOut();
+        }
+    }
+
+    /**Time stop code*/
+    @Inject(method = "tickFluid", at = @At(value = "Head"), cancellable = true)
+    private void roundaboutFluidTick(BlockPos $$0x, Fluid $$1x, CallbackInfo ci) {
+        if (((TimeStop) this).inTimeStopRange($$0x)){
+            ci.cancel();
+        }
+    }
+    @Inject(method = "tickBlock", at = @At(value = "Head"), cancellable = true)
+    private void roundaboutBlockTick(BlockPos $$0x, Block $$1x, CallbackInfo ci) {
+        if (((TimeStop) this).inTimeStopRange($$0x)){
+            ci.cancel();
+        }
+    }
+    @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
+        if (!$$0.isRemoved()) {
+            if (((TimeStop) this).CanTimeStopEntity($$0)){
+                ci.cancel();
+            }
         }
     }
 

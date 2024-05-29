@@ -4,6 +4,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +20,7 @@ public class WorldTickClient {
      * @see StandEntity#tickStandOut */
 
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"))
-    private void tickEntity2(Entity $$0, CallbackInfo ci) {
+    private void roundaboutTickEntity(Entity $$0, CallbackInfo ci) {
 
         if (!$$0.isRemoved()) {
             this.standTickCheck($$0);
@@ -55,4 +56,14 @@ public class WorldTickClient {
         }
     }
 
+    /**Time Stop Code*/
+    @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
+        if (!$$0.isRemoved()) {
+            if (((TimeStop) this).CanTimeStopEntity($$0)){
+                $$0.baseTick();
+                ci.cancel();
+            }
+        }
+    }
 }

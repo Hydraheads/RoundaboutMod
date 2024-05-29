@@ -19,7 +19,8 @@
     "PlayerEntityServer",
     "WorldTickServer",
     "ZShieldOffhandOverride",
-    "ZWitch"
+    "ZWitch",
+    "TimeStopWorld"
   ],
   "client": [
     "ZBossBar",
