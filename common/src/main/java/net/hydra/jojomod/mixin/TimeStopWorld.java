@@ -24,7 +24,7 @@ import java.util.List;
 
 @Mixin(Level.class)
 public class TimeStopWorld implements TimeStop {
-    /**Stropping time isn't as hard as it sounds, you just need a list of time stopping players.
+    /**Stropping time- uses a list of time stopping players.
      * Use that list to determine if a block or entity SHOULD be ticked.*/
     private ImmutableList<LivingEntity> timeStoppingEntities = ImmutableList.of();
 
@@ -107,10 +107,8 @@ public class TimeStopWorld implements TimeStop {
         while ($$1.hasNext()) {
             TickingBlockEntity $$2 = $$1.next();
             if ($$2.isRemoved()) {
-                Roundabout.LOGGER.info(String.valueOf(2));
                 $$1.remove();
             } else if (inTimeStopRange($$2.getPos())){
-                Roundabout.LOGGER.info(String.valueOf(3));
                 $$1.remove();
             }
         }
