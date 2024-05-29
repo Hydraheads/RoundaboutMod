@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SwellGoal.class)
-public class CreeperIgniteGoalMixin extends Goal {
-
+public class ZCreeperIgnite extends Goal {
+    /**Minor code for stopping creepers in a barrage*/
     @Shadow
     private final Creeper creeper;
 
-    public CreeperIgniteGoalMixin(Creeper creeper) {
+    public ZCreeperIgnite(Creeper creeper) {
         this.creeper = creeper;
     }
 

@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net/minecraft/world/entity/monster/Blaze$BlazeAttackGoal")
-public class BlazeEntityGoalMixin extends Goal {
-
+public class ZBlaze extends Goal {
+    /**Minor code for blazes to stop shooting in a barrage*/
     @Shadow
     private final Blaze blaze;
 
-    public BlazeEntityGoalMixin(Blaze blaze) {
+    public ZBlaze(Blaze blaze) {
         this.blaze = blaze;
     }
 

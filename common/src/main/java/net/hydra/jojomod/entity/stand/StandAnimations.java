@@ -6,6 +6,7 @@ import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
 public class StandAnimations {
+    /**This file contains common animations that most humanoid stands will use.*/
     public static final AnimationDefinition STAND_IDLE_FLOAT = net.minecraft.client.animation.AnimationDefinition.Builder.withLength(3.0f).looping()
             .addAnimation("stand2",
                     new AnimationChannel(AnimationChannel.Targets.POSITION,

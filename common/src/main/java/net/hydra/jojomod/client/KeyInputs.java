@@ -9,7 +9,8 @@ import net.minecraft.world.entity.player.Player;
 
 public class KeyInputs {
 
-    //This is what the keys do, what code they run
+    /**Code ran by keys when they are pressed. Leave this fairly generic
+     * for stand abilities so they can override requirements to use*/
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){

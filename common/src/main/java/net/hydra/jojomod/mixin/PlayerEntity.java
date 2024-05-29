@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public class PlayerEntityMixin {
+public class PlayerEntity {
 
     /**if your stand guard is broken, disable shields. Also, does not run takeshieldhit code if stand guarding.*/
     @Inject(method = "blockUsingShield", at = @At(value = "HEAD"), cancellable = true)

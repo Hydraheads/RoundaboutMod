@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 public class ModDamageTypes {
-        /*
+        /**
          * Store the RegistryKey of our DamageType into a new constant called CUSTOM_DAMAGE_TYPE
          * The Identifier in use here points to our JSON file we created earlier.
          */

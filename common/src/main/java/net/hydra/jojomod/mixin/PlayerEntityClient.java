@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LocalPlayer.class)
-public class ClientPlayerEntityMixin implements StandUserClientPlayer {
+public class PlayerEntityClient implements StandUserClientPlayer {
     @Shadow
     public Input input;
 

@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.StandUserClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -11,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityClientMixin implements StandUserClient {
+public class StandUserClient implements net.hydra.jojomod.event.powers.StandUserClient {
     public SoundInstance queSound;
     public boolean soundCancel = false;
     public boolean soundPlay = false;

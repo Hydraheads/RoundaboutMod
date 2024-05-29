@@ -13,7 +13,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ShieldItem.class)
-public class ShieldItemMixin {
+public class ZShieldOffhandOverride {
+    /**Minor code that stops offhand shielding while stand is active.*/
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void useRoundabout(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> ci) {

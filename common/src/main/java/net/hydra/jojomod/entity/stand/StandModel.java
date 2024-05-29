@@ -10,11 +10,11 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
 public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
+    /**Override this for every stand model.*/
     private float alpha;
     ModelPart stand;
     ModelPart head;
     ModelPart body;
-
 
     public void setHeadRotations(float pitch,float yaw){
         this.head.xRot = pitch;
@@ -32,6 +32,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         return stand;
     }
 
+    /**Most humanoid stands share these animations.*/
     public void defaultAnimations(T entity, float animationProgress, float windupLength){
         this.animate(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
         this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1f);
@@ -42,11 +43,11 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 2.7f);
         this.animate(entity.barrageEndAnimationState, StandAnimations.COMBO3, animationProgress, 2.2f);
         this.animate(entity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, animationProgress, 2.5f);
-
-
-
     }
 
+    /**If a stand has a head or a body, it pretty much could benefit from having
+     * defaultmodifiers, because that makes its head and body rotate along
+     * with the stand user.*/
     public void defaultModifiers(T entity){
         Minecraft mc = Minecraft.getInstance();
         if (!mc.isPaused()) {

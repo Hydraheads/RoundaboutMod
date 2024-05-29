@@ -43,6 +43,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class StandPowers {
+    /**StandPowers is a class that every stand has a variation of, override it
+     * to define and tick through stand abilities and cooldowns.
+     * Note that most generic STAND USER code is in a mixin to the livingentity class.*/
+
+    /**Note that self refers to the stand user, and not the stand itself.*/
     private final LivingEntity self;
 
     /**The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.

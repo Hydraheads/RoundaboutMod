@@ -4,6 +4,8 @@ package net.hydra.jojomod.util;
 import net.minecraft.util.Mth;
 
 public class MainUtil {
+    /**Additional math functions for the mod.*/
+
     /** This version of interpolation accommodates speed multipliers so you can control how
      * fast something moves from point A to point B.
      * Ex: the speed a stand tilts in*/

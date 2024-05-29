@@ -13,9 +13,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
+public class ZScreenShaking {
 
-    /**Barrage Dazing was too nauseating, so the amount of screen shakes had to be negligable*/
+    /**Minor code to prevent nauseating barrage shaking effect when getting barraged.*/
+
+    /**The amount of screen shakes has to be negligable for a 20 hits per sec move*/
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutiltViewWhenHurt(PoseStack $$0, float $$1, CallbackInfo ci) {
         //$$0 is matrcices, $$1 is tickdelta

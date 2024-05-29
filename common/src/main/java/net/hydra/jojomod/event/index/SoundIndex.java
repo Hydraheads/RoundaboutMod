@@ -1,6 +1,9 @@
 package net.hydra.jojomod.event.index;
 
 public class SoundIndex {
+    /**A good way to keep track of what sound a stand is playing should its barrage
+     * contain multiple noises is to assign the sounds to a byte on a per stand
+     * basis. Mostly exists to cancel barrage sounds. Packets transfer bytes easily.*/
     public static final byte NO_SOUND = -1;
     public static final byte ALL_SOUNDS = 0;
     public static final byte BARRAGE_CHARGE_SOUND = 1;

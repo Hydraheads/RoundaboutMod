@@ -11,6 +11,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.LightLayer;
 
 public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandModel<T>> {
+    /**Stand renderers should all extend this, because it is used
+     * to make sure stand lighting doesn't mess up when they clip through blocks.*/
     public StandRenderer(EntityRendererProvider.Context context, StandModel<T> entityModel, float f) {
         super(context, entityModel, f);
     }

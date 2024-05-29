@@ -3,6 +3,8 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.WorldTickClient;
+import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,24 +26,44 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public abstract class StandEntity extends Mob{
-    private final int MaxFade = 8;
+    /**The entity code for a stand. Not to be confused with StandPowers, which contain
+     * the actual ability data of stands, this code exists more for the physical
+     * entities.*/
 
+    /**MaxFade and FADE_OUT control a stand become less and less transparent as it is
+     * summoned. When a stand completely fades out, it despawns.*/
+    private final int MaxFade = 8;
+    protected static final EntityDataAccessor<Byte> FADE_OUT = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Integer> ANCHOR_PLACE = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.INT);
 
+    /**The data of stand leaning from player inputs, might go to the user itself at some point.*/
     protected static final EntityDataAccessor<Byte> MOVE_FORWARD = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
-    protected static final EntityDataAccessor<Byte> FADE_OUT = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.BYTE);
 
+    /**OFFSET_TYPE specifies if the stand is floating by your side,
+     * facing your direction, or detached on its own, for instance.*/
     protected static final EntityDataAccessor<Byte> OFFSET_TYPE = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
+
+    /**USER_ID is the mob id of the stand's user. Needs to be stored as an int,
+     * because clients do not have access to UUIDS.*/
     protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.INT);
+
+    /**FOLLOWING_ID is the mob the stand is floating by. This does not have to be
+     * the user, for instance, if a stand like killer queen is planted in someone else.*/
     protected static final EntityDataAccessor<Integer> FOLLOWING_ID = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.INT);
+
+    /**The animation number playing on the entity. The number is technically arbitrary,
+     * as this file defines what each value plays on a per stand basis and can be overridden.*/
     protected static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
+
+    /**This rotation data is for the model rotating when you look certain directions,
+     * punch, etc. As it is dynamically calculated, it has to be stored somewhere.*/
     public float bodyRotationX =0;
     public float bodyRotationY =0;
     public float headRotationX =0;
@@ -49,13 +71,16 @@ public abstract class StandEntity extends Mob{
     public float standRotationX =0;
     public float standRotationY =0;
 
+    /**isDisplay could theoretically be data set on a stand to not be
+     * faded out if it doesnt have a user. It is not
+     * worked on much yet.*/
     private boolean isDisplay;
+
+    /**Like UserID and FollowingID, but for the actual entity data.*/
     @Nullable
     private LivingEntity User;
     @Nullable
     private LivingEntity Following;
-
-    private int idleAnimationTimeout = 0;
 
     public void setUser(LivingEntity StandSet){
         this.User = StandSet;
@@ -87,6 +112,7 @@ public abstract class StandEntity extends Mob{
     public final AnimationState barrageEndAnimationState = new AnimationState();
     public final AnimationState barrageHurtAnimationState = new AnimationState();
 
+    /**Override this to define animations. Above are animation states defined.*/
     private void setupAnimationStates() {
         if (this.getUser() != null) {
             if (this.getAnimation() == 0) {
@@ -444,8 +470,8 @@ public abstract class StandEntity extends Mob{
     /**
      * Called every tick in
      *
-     * @see net.hydra.jojomod.mixin.ClientWorldMixin for the client and
-     * @see net.hydra.jojomod.mixin.ServerWorldMixin for the server.
+     * @see WorldTickClient for the client and
+     * @see WorldTickServer for the server.
      * Basically, this lets the user/followee tick the stand so that it moves exactly with them.
      * The main purpose for this is to make the smooth visual effect of being ridden.
      * Also, if a stand is perfectly still, it's possible it is just not ticking due to not being mounted properly

@@ -12,13 +12,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Creeper.class)
-public class CreeperEntityMixin extends Monster {
+public class ZCreeper extends Monster {
+    /**Minor code for stopping creepers in a barrage*/
     @Shadow
     private int oldSwell;
     @Shadow
     private int swell;
 
-    protected CreeperEntityMixin(EntityType<? extends Monster> entityType, Level world) {
+    protected ZCreeper(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 

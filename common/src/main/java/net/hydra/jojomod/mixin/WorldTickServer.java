@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(ServerLevel.class)
-public class ServerWorldMixin {
+public class WorldTickServer {
 
 
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.

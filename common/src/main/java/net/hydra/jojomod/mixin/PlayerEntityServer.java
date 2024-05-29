@@ -15,12 +15,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static net.hydra.jojomod.stand.NBTData.syncModNbt;
 
 @Mixin(ServerPlayer.class)
-    public abstract class ServerPlayerEntityMixin extends Player implements ServerPlayerAccess {
+    public abstract class PlayerEntityServer extends Player implements ServerPlayerAccess {
 
-    /** This code makes sure stand is summoned properly when switching dimensions or performing other tasks*/
+
+
+        /** This code makes sure stand is summoned properly when switching dimensions or performing other tasks*/
         public int compatSync = 2;
 
-        public ServerPlayerEntityMixin(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
+        public PlayerEntityServer(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
             super(world, pos, yaw, gameProfile);
         }
 

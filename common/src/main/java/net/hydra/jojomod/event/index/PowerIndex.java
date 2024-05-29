@@ -1,6 +1,8 @@
 package net.hydra.jojomod.event.index;
 
 public class PowerIndex {
+    /**Easy way to reference bytes as specific power types, for a stand
+     * using one of its many abilities.*/
     public static final byte NONE = 0;
     public static final byte ATTACK = 1;
     public static final byte SNEAK_ATTACK = 2;

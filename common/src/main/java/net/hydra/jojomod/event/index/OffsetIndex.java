@@ -1,6 +1,9 @@
 package net.hydra.jojomod.event.index;
 
 public class OffsetIndex {
+    /**Easy way to reference bytes as specific offset types, for a stand
+     * floating by its user (follow) vs being in front (fixed)
+     * vs moving on its own (loose), etc.*/
     public static final byte FOLLOW = 0;
     public static final byte ATTACK = 1;
     public static final byte GUARD = 2;

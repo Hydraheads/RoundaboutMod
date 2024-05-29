@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.UUID;
 
 @Mixin(Entity.class)
-public abstract class ModEntityDataSaverMixin implements IEntityDataSaver {
+public abstract class NBTSaver implements IEntityDataSaver {
 
     /** Code to store NBT on player. Undecided if this will remain.
-     * @see PlayerManagerMixin
+     * @see PlayerSpawn
      * @see net.hydra.jojomod.stand.NBTData*/
     private CompoundTag persistentData;
     private boolean standOn;

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(Gui.class)
-public abstract class GameHudMixin implements IHudAccess {
+public abstract class HudRendering implements IHudAccess {
 
     /** Code for when the client renders its huds*/
     @Shadow

@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class DamageHandler {
+    /**Generic code for stand and player abilities to use, math to deal with damaging*/
 
 
     /** Returns an offset away from a player's sight*/

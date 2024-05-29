@@ -6,10 +6,8 @@ import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.minecraft.world.entity.EntityType;
 
 public class ModEntities {
-
-    /** Registers entities.*/
-
-
+    /** Entities are referenced in these files, but forge and fabric need to update
+     * these with their registration data separately.*/
     public static EntityType<TerrierEntity> TERRIER_DOG;
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> STAR_PLATINUM;

@@ -8,7 +8,8 @@ import net.minecraft.sounds.SoundEvent;
 
 public class ModSounds {
 
-    /** Registers mod sounds... but JSON files are still needed to complete registration!*/
+    /** Defines sound files... but JSON files are still needed to complete registration!
+     * Also, forge and Fabric must register the sounds.*/
     public static final String SUMMON_SOUND = "summon_sound";
     public static final ResourceLocation SUMMON_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_SOUND);
     public static SoundEvent SUMMON_SOUND_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_SOUND_ID);

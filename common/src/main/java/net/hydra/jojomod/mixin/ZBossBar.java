@@ -11,11 +11,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BossHealthOverlay.class)
-public class BossBarHudMixin {
+public class ZBossBar {
+    /**Minor code that makes barrage clashing stop the rendering of boss bars
+     * so that they don't obstruct each other.*/
     @Shadow
     private final Minecraft minecraft;
 
-    public BossBarHudMixin(Minecraft client) {
+    public ZBossBar(Minecraft client) {
         this.minecraft = client;
     }
 

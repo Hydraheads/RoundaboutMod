@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientLevel.class)
-public class ClientWorldMixin {
+public class WorldTickClient {
 
     /** Called every tick on the Client. Checks if a mob has a stand out, and updates the position of the stand.
      * @see StandEntity#tickStandOut */

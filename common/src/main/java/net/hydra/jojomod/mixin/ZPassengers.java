@@ -7,11 +7,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(Entity.class)
-public class EntityMixin {
+public class ZPassengers {
+    /**Minor code for stand passengers*/
 
     /** Honestly, I don't know if this code actually does anything significant, but allegedly it updates
      * the position when a stand is teleported. Mount code in vanilla does this, so it is a safety

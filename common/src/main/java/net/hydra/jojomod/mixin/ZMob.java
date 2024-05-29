@@ -9,9 +9,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
-public class MobEntityMixin {
-
-    /**Mobs in a barrage should not be attacking*/
+public class ZMob {
+    /**Minor code, mobs in a barrage should not be attacking*/
     @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutTryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
         if (((StandUser) this).isDazed()) {

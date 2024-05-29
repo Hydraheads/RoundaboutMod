@@ -1,28 +1,28 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
+import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.monster.Monster;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(RangedAttackGoal.class)
-public class ProjectileAttackGoalMixin {
-    /**This Should prevent repeated crossbow charging on barrage*/
+@Mixin(RangedCrossbowAttackGoal.class)
+public class ZCrossbowAtk<T extends Monster & CrossbowAttackMob> {
+    /**Minor code preventing crossbow charging on barrage*/
     @Shadow
-    private final Mob mob;
+    private final T mob;
 
-    public ProjectileAttackGoalMixin(Mob mob) {
-        this.mob = mob;
+    public ZCrossbowAtk(T actor) {
+        this.mob = actor;
     }
-
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)mob).isDazed()) {
+        if (((StandUser)this.mob).isDazed()) {
             ci.cancel();
         }
     }

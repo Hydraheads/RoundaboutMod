@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemInHandRenderer.class)
-public class HeldItemRendererMixin {
-    /** Code for vanilla item rendering in first person.*/
+public class ZHeldItemLowering {
+    /** Minor code for vanilla item rendering in first person while stand is active.*/
 
     @Shadow
     private float mainHandHeight;
@@ -24,7 +24,7 @@ public class HeldItemRendererMixin {
     @Shadow
     private final Minecraft minecraft;
 
-    public HeldItemRendererMixin(Minecraft client) {
+    public ZHeldItemLowering(Minecraft client) {
         this.minecraft = client;
     }
 

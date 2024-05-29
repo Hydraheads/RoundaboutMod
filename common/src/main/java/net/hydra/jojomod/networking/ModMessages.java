@@ -5,7 +5,9 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ModMessages {
 
-    /** Register packets for client and server to communicate. */
+    /** Defines packets for client and server to communicate.
+     * Note that forge and Fabric handle packets quite differently.
+     * Both reference this file.*/
     public static final ResourceLocation STAND_SUMMON_PACKET = new ResourceLocation(Roundabout.MOD_ID,"summon_packet");
     public static final ResourceLocation STAND_PUNCH_PACKET = new ResourceLocation(Roundabout.MOD_ID,"punch_packet");
     public static final ResourceLocation STAND_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_packet");

@@ -38,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin implements StandUser {
+public class StandUserEntity implements StandUser {
     /**If you are stand guarding, this controls you blocking enemy atttacks.
      * For the damage against stand guard, and sfx, see PlayerEntity mixin
      * damageShield
