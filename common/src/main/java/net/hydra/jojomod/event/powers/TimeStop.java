@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -14,7 +15,8 @@ public interface TimeStop {
     boolean isTimeStoppingEntity(LivingEntity entity);
     void addTimeStoppingEntity(LivingEntity $$0);
     void removeTimeStoppingEntity(LivingEntity $$0);
-    void streamTimeStopToClients(boolean force, boolean removal);
+    void streamTimeStopToClients();
+    void streamTimeStopRemovalToClients(LivingEntity removedStoppingEntity);
     void processTSPacket(LivingEntity timeStoppingEntity, boolean removal);
     void tickTimeStoppingEntity();
 }

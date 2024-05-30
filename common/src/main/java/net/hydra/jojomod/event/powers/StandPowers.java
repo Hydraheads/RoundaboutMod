@@ -152,7 +152,13 @@ public class StandPowers {
         return ((TimeStop) this.self.level()).inTimeStopRange(this.self);
     }
 
+    /**Override this to set the special move key press conditions*/
+    public void buttonInputSpecial(){
 
+    }
+
+    /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
+     * the client level. */
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7) {
             return this.getBarrageSound(SoundIndex.BARRAGE_CRY_SOUND);
@@ -1102,6 +1108,8 @@ public class StandPowers {
                     this.setPowerBarrage();
                 } else if (move == PowerIndex.BARRAGE_CLASH) {
                     this.setPowerClash();
+                } else if (move == PowerIndex.SPECIAL) {
+                    this.setPowerSpecial(move);
                 }
             }
             if (this.self.level().isClientSide) {
@@ -1173,9 +1181,6 @@ public class StandPowers {
     }
 
 
-
-
-
     public void setPowerNone(){
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
@@ -1218,6 +1223,11 @@ public class StandPowers {
     }
 
     public int clashStarter = 0;
+
+    /**Override this to set the special move*/
+    public void setPowerSpecial(int lastMove) {
+    }
+
     public void setPowerClash() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CLASH);
@@ -1292,5 +1302,9 @@ public class StandPowers {
                     attackTime,attackTimeMax,attackTimeDuring,
                     activePower,activePowerPhase);
         }
+    }
+
+    public boolean isStoppingTime(){
+        return false;
     }
 }

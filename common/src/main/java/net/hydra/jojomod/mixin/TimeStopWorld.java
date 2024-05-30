@@ -44,7 +44,7 @@ public class TimeStopWorld implements TimeStop {
             $$1.add($$0);
             this.timeStoppingEntities = ImmutableList.copyOf($$1);
         }
-        streamTimeStopToClients(false, false);
+        streamTimeStopToClients();
     }
 
     /**Adds an entity to the list of time stopping entities*/
@@ -54,21 +54,20 @@ public class TimeStopWorld implements TimeStop {
             List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
             for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
                 if (this.timeStoppingEntities.get(i).getId() == $$0.getId()){
+                    if (!((Level) (Object) this).isClientSide) {
+                        streamTimeStopRemovalToClients(this.timeStoppingEntities.get(i));
+                    }
                     $$1.remove(i);
                 }
             }
             this.timeStoppingEntities = ImmutableList.copyOf($$1);
-
-            if (!((Level) (Object) this).isClientSide) {
-                streamTimeStopToClients(true, true);
-            }
         }
     }
 
 
     /**Sends an array of packets to the client, of every time stopping entity*/
     @Override
-    public void streamTimeStopToClients(boolean force, boolean removal) {
+    public void streamTimeStopToClients() {
         if (!((Level) (Object) this).isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) (Object) this);
             for (int j = 0; j < serverWorld.players().size(); ++j) {
@@ -78,10 +77,22 @@ public class TimeStopWorld implements TimeStop {
                     for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
                         Entity TSI = this.timeStoppingEntities.get(i);
                         /*You only need data of time stopping mobs that are relatively close by*/
-                        if (force || MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
-                            ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), removal);
+                        if (MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
+                            ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), false);
                         }
                     }
+                }
+            }
+        }
+    }
+    @Override
+    public void streamTimeStopRemovalToClients(LivingEntity removedStoppingEntity) {
+        if (!((Level) (Object) this).isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) (Object) this);
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                if (!this.timeStoppingEntities.isEmpty()) {
+                    ServerPlayer serverPlayer = serverWorld.players().get(j);
+                    ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, removedStoppingEntity.getId(), true);
                 }
             }
         }
@@ -102,7 +113,7 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public void tickTimeStoppingEntity() {
         if (!((Level) (Object) this).isClientSide) {
-            streamTimeStopToClients(false, false);
+            streamTimeStopToClients();
         }
     }
     @Override
@@ -112,10 +123,12 @@ public class TimeStopWorld implements TimeStop {
 
     @Override
     public boolean inTimeStopRange(Vec3i pos){
-        for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
-            LivingEntity it = this.timeStoppingEntities.get(i);
-            if (MainUtil.cheapDistanceTo2(pos.getX(),pos.getZ(),it.getX(),it.getZ()) <= ((StandUser) it).getStandPowers().getTimestopRange()){
-                return true;
+        if (!this.timeStoppingEntities.isEmpty()) {
+            for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
+                LivingEntity it = this.timeStoppingEntities.get(i);
+                if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).getStandPowers().getTimestopRange()) {
+                    return true;
+                }
             }
         }
         return false;

@@ -33,10 +33,7 @@ public class KeyInputs {
     }
 
     public static void specialMoveKey(Player player, Minecraft client){
-        if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
-            player.sendSystemMessage(Component.nullToEmpty("Special Move"));
-            roundaboutClickCount = 2;
-        }
+        ((StandUser) player).getStandPowers().buttonInputSpecial();
     }
 
 

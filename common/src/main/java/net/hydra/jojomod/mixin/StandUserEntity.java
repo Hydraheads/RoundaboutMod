@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -277,7 +278,7 @@ public class StandUserEntity implements StandUser {
 
     public StandPowers getStandPowers() {
         if (this.Powers == null) {
-            this.Powers = new StandPowers(User);
+            this.Powers = new PowersTheWorld(User);
         }
         return this.Powers;
     }

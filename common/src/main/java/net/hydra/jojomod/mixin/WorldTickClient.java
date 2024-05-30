@@ -61,7 +61,6 @@ public class WorldTickClient {
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if (((TimeStop) this).CanTimeStopEntity($$0)){
-                $$0.baseTick();
                 ci.cancel();
             }
         }
