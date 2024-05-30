@@ -66,4 +66,8 @@ public class WorldTickClient {
             }
         }
     }
+    @Inject(method = "tickEntities", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickEntity3(CallbackInfo ci) {
+            ((TimeStop) this).tickTimeStoppingEntity();
+    }
 }

@@ -121,6 +121,9 @@ public class StandPowers {
     public void setActivePowerPhase(byte activePowerPhase){
         this.activePowerPhase = activePowerPhase;
     }
+    public float getTimestopRange(){
+        return 100;
+    }
 
     /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/
     private int summonCD = 0;

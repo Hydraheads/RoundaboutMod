@@ -15,8 +15,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
+import java.util.function.BooleanSupplier;
 
 @Mixin(ServerLevel.class)
 public class WorldTickServer {
@@ -67,6 +69,10 @@ public class WorldTickServer {
                 ci.cancel();
             }
         }
+    }
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    private void roundaboutTickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
+        ((TimeStop) this).tickTimeStoppingEntity();
     }
 
 }

@@ -73,6 +73,13 @@ public class FabricPackets implements IPacketAccess {
         ServerPlayNetworking.send(sp,ModMessages.SOUND_PLAY_ID, buffer);
     }
 
+    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, boolean remove){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+        buffer.writeInt(entityID);
+        buffer.writeBoolean(remove);
+        ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_PACKET, buffer);
+    }
+
 
 
     @Override

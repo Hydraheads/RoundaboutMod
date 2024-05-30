@@ -14,4 +14,7 @@ public interface TimeStop {
     boolean isTimeStoppingEntity(LivingEntity entity);
     void addTimeStoppingEntity(LivingEntity $$0);
     void removeTimeStoppingEntity(LivingEntity $$0);
+    void streamTimeStopToClients(boolean force, boolean removal);
+    void processTSPacket(LivingEntity timeStoppingEntity, boolean removal);
+    void tickTimeStoppingEntity();
 }

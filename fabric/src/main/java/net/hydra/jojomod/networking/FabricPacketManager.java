@@ -4,10 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
 import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
-import net.hydra.jojomod.networking.packet.s2c.CooldownSyncPacket;
-import net.hydra.jojomod.networking.packet.s2c.NbtSyncPacket;
-import net.hydra.jojomod.networking.packet.s2c.SoundStopPacket;
-import net.hydra.jojomod.networking.packet.s2c.StandS2CPacket;
+import net.hydra.jojomod.networking.packet.s2c.*;
 
 public class FabricPacketManager {
 
@@ -31,6 +28,7 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SOUND_CANCEL_ID, SoundStopPacket::stopSound);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SOUND_PLAY_ID, SoundStopPacket::playSound);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.BARRAGE_CLASH_UPDATE_S2C_PACKET, StandS2CPacket::clashUpdate);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_PACKET, TimeEventPackets::updateTSList);
     }
 
 }

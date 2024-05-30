@@ -118,5 +118,17 @@
     "sounds": [
       "roundabout:stand_guard"
     ]
+  },
+  "timestop": {
+    "subtitle": "sounds.roundabout.timestop",
+    "sounds": [
+      "roundabout:timestop"
+    ]
+  },
+  "timeresume": {
+    "subtitle": "sounds.roundabout.timeresume",
+    "sounds": [
+      "roundabout:timeresume"
+    ]
   }
 }

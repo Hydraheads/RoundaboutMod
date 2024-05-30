@@ -22,5 +22,6 @@ public class ModMessages {
     public static final ResourceLocation SOUND_PLAY_ID = new ResourceLocation(Roundabout.MOD_ID,"sound_play_packet");
     public static final ResourceLocation BARRAGE_CLASH_UPDATE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"clash_update_packet");
     public static final ResourceLocation BARRAGE_CLASH_UPDATE_S2C_PACKET = new ResourceLocation(Roundabout.MOD_ID,"clash_update_s2c_packet");
+    public static final ResourceLocation TIME_STOP_ENTITY_PACKET = new ResourceLocation(Roundabout.MOD_ID,"clash_update_s2c_packet");
 
 }

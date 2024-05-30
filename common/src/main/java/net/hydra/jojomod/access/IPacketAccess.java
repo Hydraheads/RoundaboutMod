@@ -18,6 +18,8 @@ public interface IPacketAccess {
 
     void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
+    void timeStoppingEntityPacket(ServerPlayer sp, int entityID, boolean remove);
+
     /**Client Packets*/
     void StandGuardCancelClientPacket();
     void StandPowerPacket(byte power);

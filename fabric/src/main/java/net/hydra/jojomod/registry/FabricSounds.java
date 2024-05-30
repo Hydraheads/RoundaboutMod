@@ -37,5 +37,8 @@ public class FabricSounds {
         addSound(ModSounds.STAND_BARRAGE_HIT_ID, ModSounds.STAND_BARRAGE_HIT_EVENT);
         addSound(ModSounds.STAND_BARRAGE_HIT2_ID, ModSounds.STAND_BARRAGE_HIT2_EVENT);
         addSound(ModSounds.STAND_BARRAGE_END_ID, ModSounds.STAND_BARRAGE_END_EVENT);
+
+        addSound(ModSounds.TIME_STOP_ID, ModSounds.TIME_STOP_EVENT);
+        addSound(ModSounds.TIME_RESUME_ID, ModSounds.TIME_RESUME_EVENT);
     }
 }

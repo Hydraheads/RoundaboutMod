@@ -5,7 +5,12 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.warden.Warden;
@@ -13,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -38,6 +44,7 @@ public class TimeStopWorld implements TimeStop {
             $$1.add($$0);
             this.timeStoppingEntities = ImmutableList.copyOf($$1);
         }
+        streamTimeStopToClients(false, false);
     }
 
     /**Adds an entity to the list of time stopping entities*/
@@ -51,9 +58,53 @@ public class TimeStopWorld implements TimeStop {
                 }
             }
             this.timeStoppingEntities = ImmutableList.copyOf($$1);
+
+            if (!((Level) (Object) this).isClientSide) {
+                streamTimeStopToClients(true, true);
+            }
         }
     }
 
+
+    /**Sends an array of packets to the client, of every time stopping entity*/
+    @Override
+    public void streamTimeStopToClients(boolean force, boolean removal) {
+        if (!((Level) (Object) this).isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) (Object) this);
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                if (!this.timeStoppingEntities.isEmpty()) {
+                    ServerPlayer serverPlayer = serverWorld.players().get(j);
+                    List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+                    for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
+                        Entity TSI = this.timeStoppingEntities.get(i);
+                        /*You only need data of time stopping mobs that are relatively close by*/
+                        if (force || MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
+                            ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), removal);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**On the client side, takes streamed packets and adds/removes entities from them to the liste*/
+    @Override
+    public void processTSPacket(LivingEntity timeStoppingEntity, boolean removal){
+        if (((Level) (Object) this).isClientSide) {
+            if (removal) {
+                removeTimeStoppingEntity(timeStoppingEntity);
+            } else {
+                addTimeStoppingEntity(timeStoppingEntity);
+            }
+        }
+    }
+
+    @Override
+    public void tickTimeStoppingEntity() {
+        if (!((Level) (Object) this).isClientSide) {
+            streamTimeStopToClients(false, false);
+        }
+    }
     @Override
     public ImmutableList<LivingEntity> getTimeStoppingEntities() {
         return timeStoppingEntities;
@@ -61,6 +112,12 @@ public class TimeStopWorld implements TimeStop {
 
     @Override
     public boolean inTimeStopRange(Vec3i pos){
+        for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
+            LivingEntity it = this.timeStoppingEntities.get(i);
+            if (MainUtil.cheapDistanceTo2(pos.getX(),pos.getZ(),it.getX(),it.getZ()) <= ((StandUser) it).getStandPowers().getTimestopRange()){
+                return true;
+            }
+        }
         return false;
     }
     @Override

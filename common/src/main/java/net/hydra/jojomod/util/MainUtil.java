@@ -33,4 +33,31 @@ public class MainUtil {
         }
         return (f*Mth.DEG_TO_RAD);
     }
+
+    public static double cheapDistanceTo(double x,double y,double z,double x2,double y2,double z2){
+        double mdist = 0;
+        double cdist = Math.abs(x-x2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(y-y2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(z-z2);
+        if (cdist > mdist){mdist=cdist;}
+        return mdist;
+    }
+    public static double cheapDistanceTo2(double x,double z,double x2,double z2){
+        double mdist = 0;
+        double cdist = Math.abs(x-x2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(z-z2);
+        if (cdist > mdist){mdist=cdist;}
+        return mdist;
+    }
+    public static int cheapDistanceTo2(int x,int z,int x2,int z2){
+        int mdist = 0;
+        int cdist = Math.abs(x-x2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(z-z2);
+        if (cdist > mdist){mdist=cdist;}
+        return mdist;
+    }
 }
