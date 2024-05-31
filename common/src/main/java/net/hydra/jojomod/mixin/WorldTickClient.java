@@ -76,7 +76,14 @@ public class WorldTickClient {
                     livingEntity.oAttackAnim = livingEntity.attackAnim;
                     //livingEntity.lastLimbDistance = livingEntity.limbDistance;
 
-                    $$0.setPos($$0.getPosition(delta));
+                    int LS = ((ILivingEntityAccess) livingEntity).getLerpSteps();
+                    if (LS > 0) {
+                        double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).getLerpX() - livingEntity.getX()) / (double) LS;
+                        double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).getLerpY() - livingEntity.getY()) / (double) LS;
+                        double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
+                        ((ILivingEntityAccess) livingEntity).setLerpSteps(LS-1);
+                        $$0.setPos(LX,LY,LZ);
+                    }
                 } else {
                     $$0.walkDistO = $$0.walkDist;
                     $$0.setOldPosAndRot();

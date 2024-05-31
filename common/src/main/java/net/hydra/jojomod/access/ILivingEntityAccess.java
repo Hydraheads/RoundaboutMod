@@ -14,4 +14,8 @@ public interface ILivingEntityAccess {
     float getAnimStep();
 
     float getAnimStepO();
+
+    int getLerpSteps();
+
+    void setLerpSteps(int lerpSteps);
 }

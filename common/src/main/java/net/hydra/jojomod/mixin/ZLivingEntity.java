@@ -71,4 +71,13 @@ public class ZLivingEntity implements ILivingEntityAccess {
     public float getAnimStepO(){
         return this.animStepO;
     }
+    @Override
+    public int getLerpSteps(){
+        return this.lerpSteps;
+    }
+    @Override
+    public void setLerpSteps(int lerpSteps){
+        this.lerpSteps = lerpSteps;
+    }
+
 }
