@@ -31,7 +31,8 @@
     "HudRendering",
     "ZScreenShaking",
     "ZHeldItemLowering",
-    "InputEvents"
+    "InputEvents",
+    "ZTimeStopTextureFreeze"
   ],
   "server": [
   ],
