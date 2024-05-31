@@ -32,7 +32,8 @@
     "ZScreenShaking",
     "ZHeldItemLowering",
     "InputEvents",
-    "ZTimeStopTextureFreeze"
+    "ZTimeStopTextureFreeze",
+    "ZWorldRenderer"
   ],
   "server": [
   ],

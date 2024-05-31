@@ -20,10 +20,12 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public void buttonInputSpecial() {
-        if (KeyInputs.roundaboutClickCount == 0) {
+        if (this.getSelf().level().isClientSide()) {
+            if (KeyInputs.roundaboutClickCount == 0) {
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+            }
             KeyInputs.roundaboutClickCount = 2;
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
-            ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
         }
     }
 
