@@ -10,7 +10,7 @@ public class MainUtil {
      * fast something moves from point A to point B.
      * Ex: the speed a stand tilts in*/
     public static float controlledLerp(float delta, float start, float end, float multiplier) {
-        delta = Math.min(delta,2);
+        delta = Math.min(delta,1);
         return start + (delta * (end - start))*multiplier;
     }
 

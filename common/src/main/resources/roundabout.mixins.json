@@ -17,6 +17,7 @@
     "PlayerSpawn",
     "ZProjectileAtk",
     "PlayerEntityServer",
+    "ZLivingEntity",
     "WorldTickServer",
     "ZShieldOffhandOverride",
     "ZWitch",

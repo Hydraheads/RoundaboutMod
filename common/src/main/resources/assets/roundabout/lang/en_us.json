@@ -56,7 +56,7 @@
   "sounds.roundabout.stand_barrage_end":  "Heavy Hit",
   "sounds.roundabout.melee_guard":  "Blocked",
   "sounds.roundabout.hit_sfx1":  "Heavy Hit",
-  "sounds.roundabout.terrier_pass": "Terrier fart"
+  "sounds.roundabout.terrier_pass": "Terrier fart",
   "sounds.roundabout.timestop":  "Time was Stopped!",
   "sounds.roundabout.timersume": "Time resumes!"
 }

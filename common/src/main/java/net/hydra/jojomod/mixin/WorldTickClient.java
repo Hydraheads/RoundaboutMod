@@ -1,13 +1,17 @@
 package net.hydra.jojomod.mixin;
 
 
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -61,6 +65,22 @@ public class WorldTickClient {
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if (((TimeStop) this).CanTimeStopEntity($$0)){
+                float delta = Minecraft.getInstance().getDeltaFrameTime();
+                if ($$0 instanceof LivingEntity) {
+                    LivingEntity livingEntity = (LivingEntity) $$0;
+
+                    ((ILivingEntityAccess) livingEntity).setAnimStepO(((ILivingEntityAccess) livingEntity).getAnimStep());
+                    $$0.setOldPosAndRot();
+                    livingEntity.yBodyRotO = livingEntity.yBodyRot;
+                    livingEntity.yHeadRotO = livingEntity.yHeadRot;
+                    livingEntity.oAttackAnim = livingEntity.attackAnim;
+                    //livingEntity.lastLimbDistance = livingEntity.limbDistance;
+
+                    $$0.setPos($$0.getPosition(delta));
+                } else {
+                    $$0.walkDistO = $$0.walkDist;
+                    $$0.setOldPosAndRot();
+                }
                 ci.cancel();
             }
         }
