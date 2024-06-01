@@ -9,6 +9,8 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -95,5 +97,12 @@ public class WorldTickClient {
     @Inject(method = "tickEntities", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity3(CallbackInfo ci) {
             ((TimeStop) this).tickTimeStoppingEntity();
+    }
+
+    @Inject(method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", at = @At("HEAD"), cancellable = true)
+    private void roundaboutStopParticles(ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfo ci) {
+        if (((TimeStop) this).inTimeStopRange(new Vec3i((int) x, (int) y, (int) z))){
+            ci.cancel();
+        }
     }
 }

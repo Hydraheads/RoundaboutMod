@@ -33,7 +33,9 @@
     "ZHeldItemLowering",
     "InputEvents",
     "ZTimeStopTextureFreeze",
-    "ZWorldRenderer"
+    "ZWorldRenderer",
+    "ZParticleAccess",
+    "ZParticleEngine"
   ],
   "server": [
   ],
