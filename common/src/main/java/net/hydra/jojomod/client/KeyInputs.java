@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
@@ -17,7 +18,10 @@ public class KeyInputs {
         if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
             if (((StandUser) player).getActive()){
                 ((StandUser) player).setSummonCD(8);
+                ((StandUser) player).setActive(false);
+                ((StandUser) player).tryPower(PowerIndex.NONE,true);
             } else {
+                ((StandUser) player).setActive(true);
                 ((StandUser) player).setSummonCD(2);
             }
             ModPacketHandler.PACKET_ACCESS.standSummonPacket();
