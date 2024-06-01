@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
@@ -60,7 +61,7 @@ public class WorldTickServer {
     }
     @Inject(method = "tickBlock", at = @At(value = "Head"), cancellable = true)
     private void roundaboutBlockTick(BlockPos $$0x, Block $$1x, CallbackInfo ci) {
-        if (((TimeStop) this).inTimeStopRange($$0x)){
+        if (((TimeStop) this).inTimeStopRange($$0x) && !($$1x instanceof CommandBlock)){
             ((LevelAccessor) this).scheduleTick($$0x, $$1x, 1);
             ci.cancel();
         }
