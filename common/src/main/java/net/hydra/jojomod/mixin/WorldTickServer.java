@@ -22,7 +22,6 @@ import java.util.function.BooleanSupplier;
 
 @Mixin(ServerLevel.class)
 public class WorldTickServer {
-    private ImmutableList<Entity> passengers = ImmutableList.of();
 
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
      * @see StandEntity#tickStandOut */
@@ -59,7 +58,7 @@ public class WorldTickServer {
     @Inject(method = "tickBlock", at = @At(value = "Head"), cancellable = true)
     private void roundaboutBlockTick(BlockPos $$0x, Block $$1x, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange($$0x)){
-            //ci.cancel();
+            ci.cancel();
         }
     }
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)

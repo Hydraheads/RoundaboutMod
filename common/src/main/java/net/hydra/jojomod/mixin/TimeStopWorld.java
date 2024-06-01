@@ -184,18 +184,4 @@ public class TimeStopWorld implements TimeStop {
             ci.setReturnValue(false);
         }
     }
-
-    @ModifyVariable(method = "tickBlockEntities()V", at = @At(value = "STORE"))
-    private Iterator<TickingBlockEntity> roundaboutTickTS(
-            Iterator<TickingBlockEntity> $$1) {
-        while ($$1.hasNext()) {
-            TickingBlockEntity $$2 = $$1.next();
-            if ($$2.isRemoved()) {
-                $$1.remove();
-            } else if (inTimeStopRange($$2.getPos())){
-                $$1.remove();
-            }
-        }
-        return $$1;
-    }
 }
