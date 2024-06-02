@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,7 +26,7 @@ public class ZWorldRenderer {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"))
     private void doNotDeltaTickEntityWhenTimeIsStopped(Args args) {
         Entity entity = args.get(0);
-        if(((TimeStop) level).inTimeStopRange(entity)) {
+        if(((TimeStop) level).inTimeStopRange(entity) && !(entity instanceof FishingHook)) {
             args.set(5, 0.0F);
         }
     }
