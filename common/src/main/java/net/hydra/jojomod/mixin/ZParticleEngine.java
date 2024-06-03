@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IParticleAccess;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -63,10 +65,16 @@ public class ZParticleEngine {
     private void doNotDeltaTickParticlesWhenTimeIsStopped(Particle $$10, VertexConsumer $$9, Camera $$3, float $$4) {
         ZParticleAccess particle1 = ((ZParticleAccess) $$10);
         float tickDeltaFixed = $$4;
-        if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.getX(),
-                (int) particle1.getY(),
-                (int) particle1.getZ()))) {
-            tickDeltaFixed = 0;
+        if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated()) {
+            Vec3i range = new Vec3i((int) particle1.getX(),
+                    (int) particle1.getY(),
+                    (int) particle1.getZ());
+            if (((TimeStop) level).inTimeStopRange(range)) {
+                LivingEntity entity2 = ((TimeStop) level).inTimeStopRangeEntity(range);
+                if (entity2 != null) {
+                    tickDeltaFixed = ((StandUserClient)entity2).getPreTSTickDelta();
+                }
+            }
         }
         $$10.render($$9,$$3,tickDeltaFixed);
     }

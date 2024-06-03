@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.UUID;
 
 @Mixin(Entity.class)
-public abstract class NBTSaver implements IEntityDataSaver {
+public abstract class EntityDataSaver implements IEntityDataSaver {
 
     /** Code to store NBT on player. Undecided if this will remain.
      * @see PlayerSpawn
@@ -81,4 +82,5 @@ public abstract class NBTSaver implements IEntityDataSaver {
            syncPersistentData();
         }
     }
+
 }

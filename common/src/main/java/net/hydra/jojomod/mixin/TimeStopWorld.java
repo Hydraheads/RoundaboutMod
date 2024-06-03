@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
@@ -51,9 +52,14 @@ public class TimeStopWorld implements TimeStop {
                 List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
                 $$1.add($$0);
                 this.timeStoppingEntities = ImmutableList.copyOf($$1);
+
+                if (((Level) (Object) this).isClientSide) {
+                    ((StandUserClient) $$0).setPreTSTickDelta();
+                }
             }
         }
         streamTimeStopToClients();
+
     }
 
     /**Adds an entity to the list of time stopping entities*/
@@ -147,6 +153,26 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public boolean inTimeStopRange(Entity entity){
         return inTimeStopRange(new Vec3i((int) entity.getX(),
+                (int) entity.getY(),
+                (int) entity.getZ()));
+    }
+
+    @Override
+    public LivingEntity inTimeStopRangeEntity(Vec3i pos){
+        if (!this.timeStoppingEntities.isEmpty()) {
+            List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+            for (int i = $$1.size() - 1; i >= 0; --i) {
+                LivingEntity it = $$1.get(i);
+                if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).getStandPowers().getTimestopRange()) {
+                    return it;
+                }
+            }
+        }
+        return null;
+    }
+    @Override
+    public LivingEntity inTimeStopRangeEntity(Entity entity){
+        return inTimeStopRangeEntity(new Vec3i((int) entity.getX(),
                 (int) entity.getY(),
                 (int) entity.getZ()));
     }

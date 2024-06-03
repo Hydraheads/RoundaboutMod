@@ -12,7 +12,7 @@
     "ZPassengers",
     "StandUserEntity",
     "ZMob",
-    "NBTSaver",
+    "EntityDataSaver",
     "PlayerEntity",
     "PlayerSpawn",
     "ZProjectileAtk",

@@ -11,6 +11,8 @@ public interface TimeStop {
     ImmutableList<LivingEntity> getTimeStoppingEntities();
     boolean inTimeStopRange(Vec3i pos);
     boolean inTimeStopRange(Entity entity);
+    LivingEntity inTimeStopRangeEntity(Vec3i pos);
+    LivingEntity inTimeStopRangeEntity(Entity entity);
     boolean CanTimeStopEntity(Entity entity);
     boolean isTimeStoppingEntity(LivingEntity entity);
     void addTimeStoppingEntity(LivingEntity $$0);

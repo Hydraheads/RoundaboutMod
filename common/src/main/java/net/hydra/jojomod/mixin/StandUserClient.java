@@ -15,8 +15,7 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
     public boolean soundCancel = false;
     public boolean soundPlay = false;
     public boolean shouldCancel = false;
-    /**This is called second by the packets, it sets up the client to play the sound on a game tick.
-     * If you play it during the packet, it can crash the client because of HashMap problems*/
+    public float roundaboutPrevTickDelta = 0;
 
     @Override
     public boolean getSoundPlay(){
@@ -27,6 +26,8 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
         return this.soundCancel;
     }
 
+    /**This is called second by the packets, it sets up the client to play the sound on a game tick.
+     * If you play it during the packet, it can crash the client because of HashMap problems*/
     @Override
     public void clientQueSound(byte soundChoice){
        SoundEvent barrageCrySound = ((StandUser)((LivingEntity)(Object) this)).getStandPowers().getSoundFromByte(soundChoice);
@@ -66,5 +67,15 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
             this.queSound = null;
         }
         this.soundCancel = false;
+    }
+
+    @Override
+    public float getPreTSTickDelta() {
+        return this.roundaboutPrevTickDelta;
+    }
+
+    @Override
+    public void setPreTSTickDelta() {
+        roundaboutPrevTickDelta = Minecraft.getInstance().getDeltaFrameTime();
     }
 }
