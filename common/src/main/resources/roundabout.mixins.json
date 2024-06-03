@@ -21,7 +21,9 @@
     "WorldTickServer",
     "ZShieldOffhandOverride",
     "ZWitch",
-    "TimeStopWorld"
+    "TimeStopWorld",
+    "ZProjectile",
+    "ZAbstractArrow"
   ],
   "client": [
     "ZBossBar",

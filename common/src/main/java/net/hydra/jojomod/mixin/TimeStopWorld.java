@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
@@ -161,6 +163,12 @@ public class TimeStopWorld implements TimeStop {
                 return true;
             } else {
                 return false;
+            }
+        } else if (entity instanceof Projectile) {
+            if (((IProjectileAccess) entity).getRoundaboutIsTimeStopCreated()){
+                return false;
+            } else {
+                return inTimeStopRange(entity);
             }
         } else if (entity instanceof LivingEntity){
             if (isTimeStoppingEntity((LivingEntity) entity)){

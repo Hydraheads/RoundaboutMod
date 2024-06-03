@@ -26,7 +26,7 @@ public class ZWorldRenderer {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"))
     private void doNotDeltaTickEntityWhenTimeIsStopped(Args args) {
         Entity entity = args.get(0);
-        if(((TimeStop) level).inTimeStopRange(entity) && !(entity instanceof FishingHook)) {
+        if(((TimeStop) level).inTimeStopRange(entity) && ((TimeStop) level).CanTimeStopEntity(entity) && !(entity instanceof FishingHook)) {
             args.set(5, 0.0F);
         }
     }
