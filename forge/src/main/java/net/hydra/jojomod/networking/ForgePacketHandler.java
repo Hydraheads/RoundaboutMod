@@ -62,11 +62,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeClashUpdatePacketC2S::toBytes)
                 .consumerMainThread(ForgeClashUpdatePacketC2S::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeTimeStoppingEntityPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeTimeStoppingEntityPacket::new)
-                .encoder(ForgeTimeStoppingEntityPacket::toBytes)
-                .consumerMainThread(ForgeTimeStoppingEntityPacket::handle)
-                .add();
 
         /**Server to Client Packets*/
         INSTANCE.messageBuilder(ForgeClashUpdatePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -103,6 +98,11 @@ public class ForgePacketHandler {
                 .decoder(ForgeCDSyncPacket::new)
                 .encoder(ForgeCDSyncPacket::toBytes)
                 .consumerMainThread(ForgeCDSyncPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(ForgeTimeStoppingEntityPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeTimeStoppingEntityPacket::new)
+                .encoder(ForgeTimeStoppingEntityPacket::toBytes)
+                .consumerMainThread(ForgeTimeStoppingEntityPacket::handle)
                 .add();
     }
 
