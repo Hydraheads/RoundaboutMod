@@ -11,6 +11,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -103,6 +105,15 @@ public class WorldTickClient {
     private void roundaboutStopParticles(ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange(new Vec3i((int) x, (int) y, (int) z))){
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickEntity2(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
+        if (((TimeStop) this).inTimeStopRange(new Vec3i((int) $$0, (int) $$1, (int) $$2))){
+            if ($$4 == SoundSource.WEATHER || $$4 == SoundSource.BLOCKS) {
+                ci.cancel();
+            }
         }
     }
 }
