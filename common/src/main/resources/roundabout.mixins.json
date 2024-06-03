@@ -38,7 +38,8 @@
     "ZWorldRenderer",
     "ZParticle",
     "ZParticleAccess",
-    "ZParticleEngine"
+    "ZParticleEngine",
+    "ZBlockEntityClient"
   ],
   "server": [
   ],

@@ -23,9 +23,21 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
     private boolean standOn;
     private UUID activeStand;
 
+    private float roundaboutPrevTick;
+
     @Override
-    public boolean getStandOn() {
-        return this.standOn;
+    public float getPreTSTick() {
+        return this.roundaboutPrevTick;
+    }
+
+    @Override
+    public void setPreTSTick() {
+        Minecraft mc = Minecraft.getInstance();
+        roundaboutPrevTick = mc.getFrameTime();
+    }
+    @Override
+    public void resetPreTSTick() {
+        roundaboutPrevTick = 0;
     }
 
     @Override

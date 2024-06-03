@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin;
 
 
+import net.hydra.jojomod.access.IBlockEntityClientAccess;
+import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
@@ -35,10 +37,9 @@ public class ZWorldRenderer {
     private void doNotDeltaTickEntityWhenTimeIsStopped(Args args) {
         Entity entity = args.get(0);
         if(((TimeStop) level).inTimeStopRange(entity) && ((TimeStop) level).CanTimeStopEntity(entity) && !(entity instanceof FishingHook)) {
-            LivingEntity entity2 = ((TimeStop) level).inTimeStopRangeEntity(entity);
-            if (entity2 != null){
-                args.set(5, ((StandUserClient)entity2).getPreTSTickDelta());
-            }
+            args.set(5, ((IEntityDataSaver) entity).getPreTSTick());
+        } else {
+            ((IEntityDataSaver) entity).setPreTSTick();
         }
     }
 
@@ -48,10 +49,9 @@ public class ZWorldRenderer {
     private void doNotDeltaTickBlockWhenTimeIsStopped(Args args) {
         BlockEntity entity = args.get(0);
         if(((TimeStop) level).inTimeStopRange(entity.getBlockPos()) && !(level.getBlockState(entity.getBlockPos()).is(Blocks.MOVING_PISTON))) {
-            LivingEntity entity2 = ((TimeStop) level).inTimeStopRangeEntity(entity.getBlockPos());
-            if (entity2 != null) {
-                args.set(1, ((StandUserClient)entity2).getPreTSTickDelta());
-            }
+            args.set(1, ((IBlockEntityClientAccess)entity).getPreTSTick());
+        } else {
+            ((IBlockEntityClientAccess)entity).setPreTSTick();
         }
     }
 

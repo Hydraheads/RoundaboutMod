@@ -14,4 +14,10 @@ public interface IEntityDataSaver {
     void setActiveStand(UUID SA);
     void setStandOn(boolean SO);
 
+    float getPreTSTick();
+
+    void setPreTSTick();
+
+    void resetPreTSTick();
+
 }

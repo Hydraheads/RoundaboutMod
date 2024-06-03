@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IParticleAccess;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -70,10 +71,9 @@ public class ZParticleEngine {
                     (int) particle1.getY(),
                     (int) particle1.getZ());
             if (((TimeStop) level).inTimeStopRange(range)) {
-                LivingEntity entity2 = ((TimeStop) level).inTimeStopRangeEntity(range);
-                if (entity2 != null) {
-                    tickDeltaFixed = ((StandUserClient)entity2).getPreTSTickDelta();
-                }
+                tickDeltaFixed = ((IParticleAccess) particle1).getPreTSTick();
+            } else {
+                ((IParticleAccess) particle1).setPreTSTick();
             }
         }
         $$10.render($$9,$$3,tickDeltaFixed);
