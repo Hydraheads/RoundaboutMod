@@ -20,6 +20,7 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -197,7 +198,7 @@ public class TimeStopWorld implements TimeStop {
 
     @Inject(method="shouldTickBlocksAt(Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickBlocksAt(BlockPos $$0, CallbackInfoReturnable<Boolean> ci) {
-        if (inTimeStopRange($$0)){
+        if (inTimeStopRange($$0) && !(((Level) (Object) this).getBlockState($$0).is(Blocks.MOVING_PISTON))){
             ci.setReturnValue(false);
         }
     }

@@ -5,6 +5,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,7 +38,7 @@ public class ZWorldRenderer {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;render(Lnet/minecraft/world/level/block/entity/BlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V"))
     private void doNotDeltaTickBlockWhenTimeIsStopped(Args args) {
         BlockEntity entity = args.get(0);
-        if(((TimeStop) level).inTimeStopRange(entity.getBlockPos())) {
+        if(((TimeStop) level).inTimeStopRange(entity.getBlockPos()) && !(level.getBlockState(entity.getBlockPos()).is(Blocks.MOVING_PISTON))) {
             args.set(1, 0.0F);
         }
     }
