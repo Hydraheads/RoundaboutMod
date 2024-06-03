@@ -76,6 +76,11 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
 
     @Override
     public void setPreTSTickDelta() {
-        roundaboutPrevTickDelta = Minecraft.getInstance().getDeltaFrameTime();
+        Minecraft mc = Minecraft.getInstance();
+        roundaboutPrevTickDelta = mc.getFrameTime();
+    }
+    @Override
+    public void resetPreTSTickDelta() {
+        roundaboutPrevTickDelta = 0;
     }
 }

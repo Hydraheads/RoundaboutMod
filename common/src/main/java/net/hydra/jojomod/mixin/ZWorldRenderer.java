@@ -1,15 +1,14 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.access.IEntityDataSaver;
-import net.hydra.jojomod.event.powers.StandUser;
+
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -17,7 +16,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+import java.sql.Time;
 
 @Mixin(LevelRenderer.class)
 public class ZWorldRenderer {
@@ -51,6 +53,20 @@ public class ZWorldRenderer {
                 args.set(1, ((StandUserClient)entity2).getPreTSTickDelta());
             }
         }
+    }
+
+    @ModifyVariable(method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
+    private float RoundaboutTSRainCancel(float $$1) {
+        LivingEntity player = Minecraft.getInstance().player;
+        if (player != null){
+            if (((TimeStop)player.level()).inTimeStopRange(player)){
+                LivingEntity player2 = ((TimeStop)player.level()).inTimeStopRangeEntity(player);
+                if (player2 != null){
+                    return ((StandUserClient)player2).getPreTSTickDelta();
+                }
+            }
+        }
+        return $$1;
     }
 
 }

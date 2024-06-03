@@ -46,16 +46,19 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public void addTimeStoppingEntity(LivingEntity $$0) {
         if (this.timeStoppingEntities.isEmpty()) {
+            if (((Level) (Object) this).isClientSide) {
+                ((StandUserClient) $$0).setPreTSTickDelta();
+            }
             this.timeStoppingEntities = ImmutableList.of($$0);
         } else {
             if (!this.timeStoppingEntities.contains($$0)) {
+                if (((Level) (Object) this).isClientSide) {
+                    ((StandUserClient) $$0).setPreTSTickDelta();
+                }
                 List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
                 $$1.add($$0);
                 this.timeStoppingEntities = ImmutableList.copyOf($$1);
 
-                if (((Level) (Object) this).isClientSide) {
-                    ((StandUserClient) $$0).setPreTSTickDelta();
-                }
             }
         }
         streamTimeStopToClients();
