@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IBlockEntityClientAccess;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.powers.StandUserClient;
@@ -8,6 +9,9 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FishingHook;
@@ -18,10 +22,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.sql.Time;
 
@@ -33,29 +35,29 @@ public class ZWorldRenderer {
     @Final
     private ClientLevel level;
 
-    @ModifyArgs(
-            method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"))
-    private void doNotDeltaTickEntityWhenTimeIsStopped(Args args) {
-        Entity entity = args.get(0);
-        if(((TimeStop) level).inTimeStopRange(entity) && ((TimeStop) level).CanTimeStopEntity(entity) && !(entity instanceof FishingHook)) {
-            args.set(5, ((IEntityDataSaver) entity).getPreTSTick());
+
+    @Shadow
+    @Final
+    private EntityRenderDispatcher entityRenderDispatcher;
+    @Inject( method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
+            at = @At(value = "HEAD"), cancellable = true)
+    private void doNotDeltaTickEntityWhenTimeIsStopped1(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
+
+        if(((TimeStop) level).inTimeStopRange($$0) && ((TimeStop) level).CanTimeStopEntity($$0) && !($$0 instanceof FishingHook)) {
+            $$4 = ((IEntityDataSaver) $$0).getPreTSTick();
+            double $$7 = Mth.lerp((double)$$4, $$0.xOld, $$0.getX());
+            double $$8 = Mth.lerp((double)$$4, $$0.yOld, $$0.getY());
+            double $$9 = Mth.lerp((double)$$4, $$0.zOld, $$0.getZ());
+            float $$10 = Mth.lerp($$4, $$0.yRotO, $$0.getYRot());
+            this.entityRenderDispatcher
+                    .render($$0, $$7 - $$1, $$8 - $$2, $$9 - $$3, $$10, $$4, $$5, $$6, this.entityRenderDispatcher.getPackedLightCoords($$0, $$4));
+            ci.cancel();
         } else {
-            ((IEntityDataSaver) entity).setPreTSTick();
+            ((IEntityDataSaver) $$0).setPreTSTick();
         }
     }
 
-    @ModifyArgs(
-            method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;render(Lnet/minecraft/world/level/block/entity/BlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V"))
-    private void doNotDeltaTickBlockWhenTimeIsStopped(Args args) {
-        BlockEntity entity = args.get(0);
-        if(((TimeStop) level).inTimeStopRange(entity.getBlockPos()) && !(level.getBlockState(entity.getBlockPos()).is(Blocks.MOVING_PISTON))) {
-            args.set(1, ((IBlockEntityClientAccess)entity).getPreTSTick());
-        } else {
-            ((IBlockEntityClientAccess)entity).setPreTSTick();
-        }
-    }
+
 
     @ModifyVariable(method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
     private float RoundaboutTSRainCancel(float $$1) {

@@ -20,7 +20,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractArrow.class)
@@ -35,8 +34,10 @@ public abstract class ZAbstractArrow extends Entity {
         super($$0, $$1);
     }
 
+
     /**Negates the gravity modifier in TS, so that the function beneath can do it itself.*/
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setDeltaMovement(DDD)V"))
+    /**
+    @ Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setDeltaMovement(DDD)V"))
     private void roundaboutSetDeltaWithoutGravity(AbstractArrow arrow, double x, double y, double z) {
         if (((TimeStop) arrow.level()).inTimeStopRange(arrow) && ((IProjectileAccess) this).getRoundaboutIsTimeStopCreated()) {
             Vec3 delta = arrow.getDeltaMovement();
@@ -45,6 +46,7 @@ public abstract class ZAbstractArrow extends Entity {
             arrow.setDeltaMovement(x,y,z);
         }
     }
+    */
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setPos(DDD)V",shift = At.Shift.BEFORE), cancellable = true)
     private void roundaboutSetPosForTS(CallbackInfo ci) {
         if (((TimeStop) ((AbstractArrow)(Object)this).level()).inTimeStopRange(((AbstractArrow)(Object)this)) && ((IProjectileAccess) this).getRoundaboutIsTimeStopCreated()) {

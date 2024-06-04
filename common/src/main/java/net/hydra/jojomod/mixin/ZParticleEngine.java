@@ -1,18 +1,26 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IParticleAccess;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -62,20 +71,66 @@ public class ZParticleEngine {
         }
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;render(Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/client/Camera;F)V"))
-    private void doNotDeltaTickParticlesWhenTimeIsStopped(Particle $$10, VertexConsumer $$9, Camera $$3, float $$4) {
-        ZParticleAccess particle1 = ((ZParticleAccess) $$10);
-        float tickDeltaFixed = $$4;
-        if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated()) {
-            Vec3i range = new Vec3i((int) particle1.getX(),
-                    (int) particle1.getY(),
-                    (int) particle1.getZ());
-            if (((TimeStop) level).inTimeStopRange(range)) {
-                tickDeltaFixed = ((IParticleAccess) particle1).getPreTSTick();
-            } else {
-                ((IParticleAccess) particle1).setPreTSTick();
+    @Shadow
+    @Final
+    private static List<ParticleRenderType> RENDER_ORDER;
+    @Shadow
+    @Final
+    private TextureManager textureManager;
+    @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
+    private void doNotDeltaTickParticlesWhenTimeIsStopped(PoseStack $$0, MultiBufferSource.BufferSource $$1, LightTexture $$2, Camera $$3, float $$4, CallbackInfo ci) {
+
+        if (!((TimeStop) level).getTimeStoppingEntities().isEmpty()) {
+            $$2.turnOnLightLayer();
+            RenderSystem.enableDepthTest();
+            PoseStack $$5 = RenderSystem.getModelViewStack();
+            $$5.pushPose();
+            $$5.mulPoseMatrix($$0.last().pose());
+            RenderSystem.applyModelViewMatrix();
+
+            for (ParticleRenderType $$6 : RENDER_ORDER) {
+                Iterable<Particle> $$7 = this.particles.get($$6);
+                if ($$7 != null) {
+                    RenderSystem.setShader(GameRenderer::getParticleShader);
+                    Tesselator $$8 = Tesselator.getInstance();
+                    BufferBuilder $$9 = $$8.getBuilder();
+                    $$6.begin($$9, this.textureManager);
+
+                    for (Particle $$10 : $$7) {
+                        try {
+
+                            ZParticleAccess particle1 = ((ZParticleAccess) $$10);
+                            float tickDeltaFixed = $$4;
+                            if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated()) {
+                                Vec3i range = new Vec3i((int) particle1.getX(),
+                                        (int) particle1.getY(),
+                                        (int) particle1.getZ());
+                                if (((TimeStop) level).inTimeStopRange(range)) {
+                                    tickDeltaFixed = ((IParticleAccess) particle1).getPreTSTick();
+                                } else {
+                                    ((IParticleAccess) particle1).setPreTSTick();
+                                }
+                            }
+                            $$10.render($$9, $$3, tickDeltaFixed);
+                        } catch (Throwable var17) {
+                            CrashReport $$12 = CrashReport.forThrowable(var17, "Rendering Particle");
+                            CrashReportCategory $$13 = $$12.addCategory("Particle being rendered");
+                            $$13.setDetail("Particle", $$10::toString);
+                            $$13.setDetail("Particle Type", $$6::toString);
+                            throw new ReportedException($$12);
+                        }
+                    }
+
+                    $$6.end($$8);
+                }
             }
+
+            $$5.popPose();
+            RenderSystem.applyModelViewMatrix();
+            RenderSystem.depthMask(true);
+            RenderSystem.disableBlend();
+            $$2.turnOffLightLayer();
+            ci.cancel();
         }
-        $$10.render($$9,$$3,tickDeltaFixed);
     }
 }
