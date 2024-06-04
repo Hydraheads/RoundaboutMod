@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IEntityDataSaver;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -31,9 +30,8 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
     }
 
     @Override
-    public void setPreTSTick() {
-        Minecraft mc = Minecraft.getInstance();
-        roundaboutPrevTick = mc.getFrameTime();
+    public void setPreTSTick(float frameTime) {
+        roundaboutPrevTick = frameTime;
     }
     @Override
     public void resetPreTSTick() {

@@ -53,7 +53,8 @@ public class ZWorldRenderer {
                     .render($$0, $$7 - $$1, $$8 - $$2, $$9 - $$3, $$10, $$4, $$5, $$6, this.entityRenderDispatcher.getPackedLightCoords($$0, $$4));
             ci.cancel();
         } else {
-            ((IEntityDataSaver) $$0).setPreTSTick();
+            Minecraft mc = Minecraft.getInstance();
+            ((IEntityDataSaver) $$0).setPreTSTick(mc.getFrameTime());
         }
     }
 
