@@ -94,5 +94,4 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
            syncPersistentData();
         }
     }
-
 }

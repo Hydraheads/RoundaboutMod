@@ -71,6 +71,20 @@ public class ZWorldRenderer {
         return $$1;
     }
 
+    @ModifyVariable(method = "renderClouds(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
+    private float RoundaboutTSCloudCancel(float $$2) {
+        LivingEntity player = Minecraft.getInstance().player;
+        if (player != null){
+            if (((TimeStop)player.level()).inTimeStopRange(player)){
+                LivingEntity player2 = ((TimeStop)player.level()).inTimeStopRangeEntity(player);
+                if (player2 != null){
+                    return ((StandUserClient)player2).getPreTSTickDelta();
+                }
+            }
+        }
+        return $$2;
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutCancelRenderTicks(CallbackInfo ci){
         LivingEntity player = Minecraft.getInstance().player;
