@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.networking.c2s.*;
 import net.hydra.jojomod.networking.s2c.*;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -47,6 +48,10 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgeTimeStoppingEntityPacket(entityID, remove), sp);
     }
 
+    @Override
+    public void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i) {
+        ForgePacketHandler.sendToClient(new ForgeBlockEntityResumeTSPacket(vec3i), sp);
+    }
 
     @Override
     public void StandGuardCancelClientPacket() {
@@ -77,6 +82,8 @@ public class ForgePackets implements IPacketAccess {
     public void standSummonPacket() {
         ForgePacketHandler.sendToServer(new ForgeSummonPacket());
     }
+
+
     @Override
     public void moveSyncPacket(byte forward, byte strafe) {
         ForgePacketHandler.sendToServer(new ForgeMoveSyncPacket(forward, strafe));

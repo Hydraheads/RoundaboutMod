@@ -7,4 +7,5 @@ public interface IBlockEntityClientAccess {
     void setPreTSTick();
 
     void resetPreTSTick();
+
 }

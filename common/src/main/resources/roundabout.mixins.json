@@ -23,7 +23,9 @@
     "ZWitch",
     "TimeStopWorld",
     "ZProjectile",
-    "ZAbstractArrow"
+    "ZAbstractArrow",
+    "ZChestBlock",
+    "ZBlockEntity"
   ],
   "client": [
     "ZBossBar",

@@ -3,6 +3,8 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IBlockEntityAccess;
+import net.hydra.jojomod.access.IBlockEntityClientAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,7 +12,6 @@ import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
@@ -22,18 +23,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.CommandBlockEntity;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Mixin(Level.class)
@@ -126,6 +121,14 @@ public class TimeStopWorld implements TimeStop {
             } else {
                 addTimeStoppingEntity(timeStoppingEntity);
             }
+        }
+    }
+
+    @Override
+    public void processTSBlockEntityPacket(BlockEntity blockEntity) {
+        if (((Level) (Object) this).isClientSide) {
+            Roundabout.LOGGER.info("phase 6");
+            ((IBlockEntityAccess) blockEntity).setRoundaboutTimeInteracted(true);
         }
     }
 
@@ -225,9 +228,36 @@ public class TimeStopWorld implements TimeStop {
         return false;
     }
 
+
+
+    /**When you interact with blocks like chests in timestop, sends packets to packet to let it render opening and such*/
+    @Override
+    public void streamTileEntityTSToCLient(BlockPos blockPos) {
+        if (!((Level) (Object) this).isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) (Object) this);
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                if (!this.timeStoppingEntities.isEmpty()) {
+                    Roundabout.LOGGER.info("phase 2");
+                    ServerPlayer serverPlayer = serverWorld.players().get(j);
+                    List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+                        /*Streams updates to nearby players*/
+                        if (MainUtil.cheapDistanceTo2(blockPos.getX(), blockPos.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
+                            Roundabout.LOGGER.info("phase 3");
+                            ModPacketHandler.PACKET_ACCESS.resumeTileEntityTSPacket(serverPlayer, new Vec3i(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
+                        }
+                }
+            }
+        }
+    }
+
     @Inject(method="shouldTickBlocksAt(Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickBlocksAt(BlockPos $$0, CallbackInfoReturnable<Boolean> ci) {
+
         if (inTimeStopRange($$0) && !(((Level) (Object) this).getBlockState($$0).is(Blocks.MOVING_PISTON))){
+            BlockEntity blk = ((Level) (Object) this).getBlockEntity($$0);
+            if (blk != null && ((IBlockEntityAccess)blk).getRoundaboutTimeInteracted()) {
+                return;
+            }
             ci.setReturnValue(false);
         }
     }

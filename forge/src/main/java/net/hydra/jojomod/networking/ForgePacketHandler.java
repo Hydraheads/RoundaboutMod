@@ -104,6 +104,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeTimeStoppingEntityPacket::toBytes)
                 .consumerMainThread(ForgeTimeStoppingEntityPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeBlockEntityResumeTSPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeBlockEntityResumeTSPacket::new)
+                .encoder(ForgeBlockEntityResumeTSPacket::toBytes)
+                .consumerMainThread(ForgeBlockEntityResumeTSPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message){

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.access;
 
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -19,6 +20,7 @@ public interface IPacketAccess {
     void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
     void timeStoppingEntityPacket(ServerPlayer sp, int entityID, boolean remove);
+    void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
 
     /**Client Packets*/
     void StandGuardCancelClientPacket();
@@ -30,5 +32,4 @@ public interface IPacketAccess {
 
     void moveSyncPacket(byte forward, byte strafe);
     void standSummonPacket();
-
 }

@@ -3,15 +3,8 @@ package net.hydra.jojomod.networking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IPacketAccess;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
-import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
-import net.hydra.jojomod.networking.packet.s2c.CooldownSyncPacket;
-import net.hydra.jojomod.networking.packet.s2c.NbtSyncPacket;
-import net.hydra.jojomod.networking.packet.s2c.SoundStopPacket;
-import net.hydra.jojomod.networking.packet.s2c.StandS2CPacket;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -73,11 +66,22 @@ public class FabricPackets implements IPacketAccess {
         ServerPlayNetworking.send(sp,ModMessages.SOUND_PLAY_ID, buffer);
     }
 
+    @Override
     public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, boolean remove){
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(entityID);
         buffer.writeBoolean(remove);
         ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_PACKET, buffer);
+    }
+
+    @Override
+    public void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i) {
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeInt(vec3i.getX());
+        buffer.writeInt(vec3i.getY());
+        buffer.writeInt(vec3i.getZ());
+        ServerPlayNetworking.send(sp, ModMessages.RESUME_TILE_ENTITY_TS_PACKET, buffer);
     }
 
 
