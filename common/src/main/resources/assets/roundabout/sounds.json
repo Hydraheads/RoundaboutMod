@@ -119,10 +119,16 @@
       "roundabout:stand_guard"
     ]
   },
-  "timestop": {
-    "subtitle": "sounds.roundabout.timestop",
+  "timestop_the_world": {
+    "subtitle": "sounds.roundabout.timestop_the_world",
     "sounds": [
-      "roundabout:timestop"
+      "roundabout:timestop_the_world"
+    ]
+  },
+  "timestop_star_platinum": {
+    "subtitle": "sounds.roundabout.timestop_star_platinum",
+    "sounds": [
+      "roundabout:timestop_star_platinum"
     ]
   },
   "timeresume": {

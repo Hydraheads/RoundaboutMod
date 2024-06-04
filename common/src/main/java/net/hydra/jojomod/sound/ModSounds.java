@@ -94,9 +94,12 @@ public class ModSounds {
     public static final ResourceLocation HIT_1_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HIT_1_SOUND);
     public static SoundEvent HIT_1_SOUND_EVENT = SoundEvent.createVariableRangeEvent(HIT_1_SOUND_ID);
 
-    public static final String TIME_STOP = "timestop";
-    public static final ResourceLocation TIME_STOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_STOP);
-    public static SoundEvent TIME_STOP_EVENT = SoundEvent.createVariableRangeEvent(TIME_STOP_ID);
+    public static final String TIME_STOP_THE_WORLD = "timestop_the_world";
+    public static final ResourceLocation TIME_STOP_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_STOP_THE_WORLD);
+    public static SoundEvent TIME_STOP_THE_WORLD_EVENT = SoundEvent.createVariableRangeEvent(TIME_STOP_THE_WORLD_ID);
+    public static final String TIME_STOP_STAR_PLATINUM = "timestop_star_platinum";
+    public static final ResourceLocation TIME_STOP_STAR_PLATINUM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_STOP_STAR_PLATINUM);
+    public static SoundEvent TIME_STOP_STAR_PLATINUM_EVENT = SoundEvent.createVariableRangeEvent(TIME_STOP_STAR_PLATINUM_ID);
 
     public static final String TIME_RESUME = "timeresume";
     public static final ResourceLocation TIME_RESUME_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_RESUME);

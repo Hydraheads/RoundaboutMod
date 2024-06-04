@@ -36,7 +36,7 @@ public class PowersTheWorld extends StandPowers {
             if (!this.isStoppingTime()) {
                 /*Time Stop*/
                 this.getSelf().level().playSound(null, this.getSelf().blockPosition(),
-                        ModSounds.TIME_STOP_EVENT, SoundSource.PLAYERS, 0.95F,
+                        ModSounds.TIME_STOP_THE_WORLD_EVENT, SoundSource.PLAYERS, 0.95F,
                         1F);
                 this.timeStoppingTicks = 180;
                 ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());

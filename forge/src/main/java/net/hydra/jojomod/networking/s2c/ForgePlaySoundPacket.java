@@ -32,7 +32,7 @@ public class ForgePlaySoundPacket {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
                 Entity User = player.level().getEntity(startPlayerID);
-                ((StandUserClient)User).clientQueSound(soundQue);
+                ((StandUserClient)User).clientQueSound(soundQue, User);
             }
         });
         return true;
