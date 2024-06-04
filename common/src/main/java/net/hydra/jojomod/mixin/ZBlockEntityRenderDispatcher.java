@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(BlockEntityRenderDispatcher.class)
-public class ZBlockEntityRenderDIspatcher {
+public class ZBlockEntityRenderDispatcher {
 
     @Shadow
     public Camera camera;
