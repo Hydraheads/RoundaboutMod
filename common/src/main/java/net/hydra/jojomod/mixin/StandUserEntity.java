@@ -327,7 +327,7 @@ public class StandUserEntity implements StandUser {
                 theWorld.addFreshEntity(stand);
 
                 if (sound) {
-                    stand.playSummonSound();
+                    this.getStandPowers().playSummonSound();
                 }
 
                 this.standMount(stand);

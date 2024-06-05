@@ -12,9 +12,4 @@ public class StandStarPlatinum extends StandEntity {
         super(entityType, world);
     }
 
-    @Override
-    protected SoundEvent getSummonSound() {
-        return ModSounds.STAR_SUMMON_SOUND_EVENT;
-    }
-
 }

@@ -168,13 +168,6 @@ public abstract class StandEntity extends Mob{
         }
     }
 
-    protected SoundEvent getSummonSound() {
-        return ModSounds.SUMMON_SOUND_EVENT;
-    }
-
-    public void playSummonSound() {
-        this.level().playSound(null, this.blockPosition(), getSummonSound(), SoundSource.PLAYERS, 1F, 1F);
-    } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
     public final byte getMoveForward() {
         return this.entityData.get(MOVE_FORWARD);

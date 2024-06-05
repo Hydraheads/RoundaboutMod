@@ -22,6 +22,11 @@ public class PowersTheWorld extends StandPowers {
     }
 
     @Override
+    protected SoundEvent getSummonSound() {
+        return ModSounds.WORLD_SUMMON_SOUND_EVENT;
+    }
+
+    @Override
     public void buttonInputSpecial() {
         if (this.getSelf().level().isClientSide()) {
             if (KeyInputs.roundaboutClickCount == 0) {

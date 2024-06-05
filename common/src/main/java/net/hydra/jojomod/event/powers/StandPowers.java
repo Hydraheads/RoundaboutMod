@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -181,6 +182,18 @@ public class StandPowers {
     public float getSoundVolumeFromByte(byte soundChoice){
         return 1F;
     }
+    protected SoundEvent getSummonSound() {
+        return ModSounds.SUMMON_SOUND_EVENT;
+    }
+
+    public void playSummonSound() {
+        if (this.self.isCrouching()){
+            return;
+        }
+        this.self.level().playSound(null, this.self.blockPosition(), getSummonSound(), SoundSource.PLAYERS, 1F, 1F);
+    } //Plays the Summon sound. Happens when stand is summoned with summon key.
+
+
 
     /**Override this function for alternate rush noises*/
     private byte chooseBarrageSound(){
