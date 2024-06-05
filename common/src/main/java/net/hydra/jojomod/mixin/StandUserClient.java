@@ -33,13 +33,13 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
      * If you play it during the packet, it can crash the client because of HashMap problems*/
     @Override
     public void clientQueSound(byte soundChoice, Entity User){
-       SoundEvent barrageCrySound = ((StandUser)((LivingEntity)(Object) this)).getStandPowers().getSoundFromByte(soundChoice);
+       SoundEvent barrageCrySound = ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
        if (barrageCrySound != null) {
             this.queSound = new EntityBoundSoundInstance(
                     barrageCrySound,
                     SoundSource.PLAYERS,
-                    0.95F,
-                    ((StandUser)((LivingEntity)(Object) this)).getStandPowers().getSoundPitchFromByte(soundChoice),
+                    1F,
+                    ((StandUser) this).getStandPowers().getSoundPitchFromByte(soundChoice),
                     User,
                     User.level().random.nextLong()
             );
