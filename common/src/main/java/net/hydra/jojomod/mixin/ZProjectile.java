@@ -18,7 +18,7 @@ public class ZProjectile implements IProjectileAccess {
     /**The main goal of this mixin is to make projectiles spawned after a timestop move partially in one*/
 
     private boolean roundaboutIsTimeStopCreated = false;
-    private float roundaboutSpeedMultiplier = 1F;
+    private float roundaboutSpeedMultiplier = 0.75F;
     public float getRoundaboutSpeedMultiplier(){
         return this.roundaboutSpeedMultiplier;
     }
