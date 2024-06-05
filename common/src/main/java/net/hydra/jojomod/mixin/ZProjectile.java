@@ -1,15 +1,15 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IProjectileAccess;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 
@@ -31,6 +31,25 @@ public class ZProjectile implements IProjectileAccess {
     }
     public void setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
         this.roundaboutIsTimeStopCreated = roundaboutIsTimeStopCreated;
+    }
+
+    @Override
+    public void roundaboutOnHit(HitResult $$0){
+        onHit($$0);
+    }
+
+
+    @Shadow
+    protected void onHit(HitResult $$0){
+
+    }
+    @Shadow
+    protected boolean canHitEntity(Entity $$0){
+       return false;
+    }
+    @Override
+    public boolean roundaboutCanHitEntity(Entity $$0x) {
+        return canHitEntity($$0x);
     }
 
     @Inject(method = "setOwner", at = @At(value = "HEAD"), cancellable = true)
