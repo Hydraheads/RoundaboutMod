@@ -162,10 +162,10 @@ public class StandPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7) {
             return this.getBarrageSound(SoundIndex.BARRAGE_CRY_SOUND);
-        } else if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+        } else if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return this.getBarrageChargeSound();
         } else {
-            return null;
+            return this.getOtherSounds(soundChoice);
         }
     }
     public float getSoundPitchFromByte(byte soundChoice){
@@ -177,6 +177,11 @@ public class StandPowers {
             return 1F;
         }
     }
+
+    public float getSoundVolumeFromByte(byte soundChoice){
+        return 1F;
+    }
+
     /**Override this function for alternate rush noises*/
     private byte chooseBarrageSound(){
         return SoundIndex.BARRAGE_CRY_SOUND;
@@ -184,12 +189,13 @@ public class StandPowers {
     private float getBarrageChargePitch(){
         return 1/((float) this.getBarrageWindup() /20);
     }
-    private SoundEvent getBarrageSound(byte soundChoice){
-        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
-            return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
-        } else {
+    /**Override this if you want to use the basic barrage sound and use that implementation*/
+    public SoundEvent getBarrageSound(byte soundChoice){
             return null;
-        }
+    }
+    /**Realistically, you only need to override this if you're canceling sounds*/
+    public SoundEvent getOtherSounds(byte soundChoice){
+        return null;
     }
     private float getBarragePitch(byte soundChoice){
         if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
@@ -276,6 +282,9 @@ public class StandPowers {
 
     private void tickSounds(){
         if (this.self.level().isClientSide) {
+            if (((StandUserClient) this.self).getSoundPlay() || ((StandUserClient) this.self).getSoundCancel()) {
+                this.runExtraSoundCode(((StandUserClient) this.self).getRoundaboutSoundByte());
+            }
             if (((StandUserClient) this.self).getSoundPlay()) {
                 ((StandUserClient) this.self).clientPlaySound();
             }
@@ -1306,5 +1315,8 @@ public class StandPowers {
 
     public boolean isStoppingTime(){
         return false;
+    }
+
+    public void runExtraSoundCode(byte soundChoice) {
     }
 }

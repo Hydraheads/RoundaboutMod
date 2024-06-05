@@ -3,11 +3,9 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,8 +16,15 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
     public boolean soundCancel = false;
     public boolean soundPlay = false;
     public boolean shouldCancel = false;
+
+    public SoundEvent roundaboutSoundEvent;
+    public byte roundaboutSoundByte;
     public float roundaboutPrevTickDelta = 0;
 
+    @Override
+    public byte getRoundaboutSoundByte(){
+        return this.roundaboutSoundByte;
+    }
     @Override
     public boolean getSoundPlay(){
         return this.soundPlay;
@@ -33,28 +38,31 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
      * If you play it during the packet, it can crash the client because of HashMap problems*/
     @Override
     public void clientQueSound(byte soundChoice, Entity User){
-       SoundEvent barrageCrySound = ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
-       if (barrageCrySound != null) {
-            this.queSound = new EntityBoundSoundInstance(
-                    barrageCrySound,
-                    SoundSource.PLAYERS,
-                    1F,
-                    ((StandUser) this).getStandPowers().getSoundPitchFromByte(soundChoice),
-                    User,
-                    User.level().random.nextLong()
-            );
-                this.soundPlay = true;
-            }
+       this.roundaboutSoundEvent = ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
+       if (roundaboutSoundEvent != null) {
+            this.soundPlay = true;
+            this.roundaboutSoundByte = soundChoice;
+       }
     }
 
     /**This is called third by the client, it actually plays the sound.*/
 
     @Override
     public void clientPlaySound(){
-        if (this.queSound != null) {
-            Minecraft.getInstance().getSoundManager().play(this.queSound);
+        if (this.roundaboutSoundEvent != null) {
+            this.queSound = new EntityBoundSoundInstance(
+                    this.roundaboutSoundEvent,
+                    SoundSource.PLAYERS,
+                    ((StandUser) this).getStandPowers().getSoundVolumeFromByte(this.roundaboutSoundByte),
+                    ((StandUser) this).getStandPowers().getSoundPitchFromByte(this.roundaboutSoundByte),
+                    ((Entity)(Object)this),
+                    ((Entity)(Object)this).level().random.nextLong()
+            );
+            if (this.queSound != null) {
+                Minecraft.getInstance().getSoundManager().play(this.queSound);
+            }
+            this.soundPlay = false;
         }
-        this.soundPlay = false;
     }
 
     /**This is called fifth by the client, it ques the sound for canceling

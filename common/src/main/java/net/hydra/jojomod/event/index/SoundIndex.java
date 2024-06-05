@@ -18,5 +18,10 @@ public class SoundIndex {
     public static final byte BARRAGE_CRY_SOUND_5 = 10;
     public static final byte BARRAGE_CRY_SOUND_6 = 11;
     public static final byte BARRAGE_CRY_SOUND_7 = 12;
+    public static final byte SPECIAL_MOVE_SOUND = 13;
+    public static final byte SPECIAL_MOVE_SOUND_2 = 14;
+    public static final byte SPECIAL_MOVE_SOUND_3 = 15;
+    public static final byte SPECIAL_MOVE_SOUND_4 = 16;
+    public static final byte SPECIAL_MOVE_SOUND_5 = 17;
 
 }

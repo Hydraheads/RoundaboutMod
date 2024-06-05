@@ -8,6 +8,9 @@ public interface StandUserClient {
      * It's how we cancel out barrage sounds on a per entity basis.*/
     void clientQueSound(byte soundChoice, Entity User);
     void clientPlaySound();
+
+    byte getRoundaboutSoundByte();
+
     boolean getSoundPlay();
     boolean getSoundCancel();
     void clientQueSoundCanceling();
