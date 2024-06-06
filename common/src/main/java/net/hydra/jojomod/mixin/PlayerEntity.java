@@ -59,7 +59,7 @@ public class PlayerEntity {
     /**If you are in a barrage, does not play the hurt sound*/
     @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutGetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
-        if (((StandUser) this).isDazed() && $$0.is(ModDamageTypes.STAND)) {
+        if (((StandUser) this).isDazed()) {
             ci.setReturnValue(null);
         }
     }
