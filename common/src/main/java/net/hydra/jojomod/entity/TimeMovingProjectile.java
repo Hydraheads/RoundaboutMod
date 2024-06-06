@@ -72,12 +72,6 @@ public class TimeMovingProjectile
         Vec3 position = new Vec3(projectile.getX(),projectile.getY(),projectile.getZ());
         Vec3 reducedDelta = projectile.getDeltaMovement().multiply(speedMod,speedMod,speedMod);
 
-        double $$14 = reducedDelta.x;
-        double $$15 = reducedDelta.y;
-        double $$16 = reducedDelta.z;
-
-        double $$21 = reducedDelta.horizontalDistance();
-
 
         if (speedMod > 0.01) {
 

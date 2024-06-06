@@ -12,6 +12,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
@@ -32,9 +33,16 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
     /**Makes the arrows, knives, and tridents thrown in timestop */
 
     @Shadow
+    public boolean isNoPhysics(){
+        return false;
+    }
+    @Shadow
     protected boolean canHitEntity(Entity $$0x){
         return false;
     }
+
+    @Shadow
+    protected boolean tryPickup(Player $$0){return false;}
 
     public ZAbstractArrow(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -42,6 +50,8 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
 
     @Shadow
     protected boolean inGround;
+    @Shadow
+    public int shakeTime;
 
     @Override
     public boolean roundaboutGetInGround(){
@@ -77,6 +87,17 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
             TimeMovingProjectile.tick((AbstractArrow) (Object) this);
             this.checkInsideBlocks();
             ci.cancel();
+        }
+    }
+    @Inject(method = "playerTouch", at = @At(value = "HEAD"),cancellable = true)
+    private void roundaboutShakeTime(Player $$0, CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this))) {
+            if (!this.level().isClientSide && (this.inGround || this.isNoPhysics())) {
+                if (this.tryPickup($$0)) {
+                    $$0.take(this, 1);
+                    this.discard();
+                }
+            }
         }
     }
 }
