@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -16,6 +17,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -90,12 +92,13 @@ public class WorldTickClient {
                         $$0.setPos(LX,LY,LZ);
                     }
 
-                    if ($$0 instanceof LivingEntity) {
-                        ((ILivingEntityAccess) $$0).roundaboutPushEntities();
-                    }
+                    ((ILivingEntityAccess) $$0).roundaboutPushEntities();
                 } else {
                     $$0.walkDistO = $$0.walkDist;
                     $$0.setOldPosAndRot();
+                }
+                if ($$0 instanceof ItemEntity) {
+                    ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
                 }
                 ci.cancel();
             }
