@@ -96,9 +96,9 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
                 if (this.tryPickup($$0)) {
                     $$0.take(this, 1);
                     this.discard();
-                    ci.cancel();
                 }
             }
+            ci.cancel();
         }
     }
 }
