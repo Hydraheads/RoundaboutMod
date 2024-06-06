@@ -415,11 +415,17 @@ public class StandUserEntity implements StandUser {
     @Inject(method = "handleEntityEvent", at = @At(value = "HEAD"), cancellable = true)
     public void roundaboutHandleStatus(byte $$0, CallbackInfo ci) {
         if ($$0 == 29){
-            if (this.isGuardingEffectively2()) {
+            if (this.isGuarding()) {
                 if (!this.getGuardBroken()) {
-                    ((Entity) (Object) this).playSound(ModSounds.STAND_GUARD_SOUND_EVENT, 0.8f, 0.9f + ((Entity) (Object) this).level().random.nextFloat() * 0.3f);
+                    ((Entity) (Object) this).level().playLocalSound(((Entity) (Object) this).getX(), ((Entity) (Object) this).getY(), ((Entity) (Object) this).getZ(),
+                            ModSounds.STAND_GUARD_SOUND_EVENT, ((Entity) (Object) this).getSoundSource(),
+                            0.8F, 0.9F + ((Entity) (Object) this).level().random.nextFloat() * 0.3f, false);
+                    //((Entity) (Object) this).playSound(ModSounds.STAND_GUARD_SOUND_EVENT, 0.8f, 0.9f + ((Entity) (Object) this).level().random.nextFloat() * 0.3f);
                 } else {
-                    ((Entity) (Object) this).playSound(SoundEvents.SHIELD_BREAK, 1f, 1.5f);
+                    ((Entity) (Object) this).level().playLocalSound(((Entity) (Object) this).getX(), ((Entity) (Object) this).getY(), ((Entity) (Object) this).getZ(),
+                            SoundEvents.SHIELD_BREAK, ((Entity) (Object) this).getSoundSource(),
+                            1f, 1.5f, false);
+                    //((Entity) (Object) this).playSound(SoundEvents.SHIELD_BREAK, 1f, 1.5f);
                 }
                 ci.cancel();
             }
