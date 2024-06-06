@@ -26,7 +26,8 @@
     "ZAbstractArrow",
     "ZChestBlock",
     "ZBlockEntity",
-    "ZItemEntity"
+    "ZItemEntity",
+    "ZThrowableProjectile"
   ],
   "client": [
     "ZBossBar",
