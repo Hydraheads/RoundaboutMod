@@ -36,12 +36,12 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
             if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                 this.pickupDelay--;
             }
+            if (!this.level().isClientSide && this.age >= 6000) {
+                this.discard();
+            } else if (this.age >= 5999){
+                this.age++;
+            }
         }
 
-        if (!this.level().isClientSide && this.age >= 6000) {
-            this.discard();
-        } else if (this.age >= 5999){
-            this.age++;
-        }
     }
 }

@@ -14,6 +14,7 @@ import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ItemPickupParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -61,13 +62,15 @@ public class ZParticleEngine {
     @Inject(method = "tickParticle", at = @At("HEAD"), cancellable = true)
     void doNotTickParticleWhenTimeStopped(Particle particle, CallbackInfo ci) {
         ZParticleAccess particle1 = (ZParticleAccess) particle;
-        if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.getX(),
-                (int) particle1.getY(),
-                (int) particle1.getZ()))) {
-            particle1.setPrevX(particle1.getX());
-            particle1.setPrevY(particle1.getY());
-            particle1.setPrevZ(particle1.getZ());
-            ci.cancel();
+        if (!(particle instanceof ItemPickupParticle)) {
+            if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.getX(),
+                    (int) particle1.getY(),
+                    (int) particle1.getZ()))) {
+                particle1.setPrevX(particle1.getX());
+                particle1.setPrevY(particle1.getY());
+                particle1.setPrevZ(particle1.getZ());
+                ci.cancel();
+            }
         }
     }
 
@@ -101,7 +104,7 @@ public class ZParticleEngine {
 
                             ZParticleAccess particle1 = ((ZParticleAccess) $$10);
                             float tickDeltaFixed = $$4;
-                            if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated()) {
+                            if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
                                 Vec3i range = new Vec3i((int) particle1.getX(),
                                         (int) particle1.getY(),
                                         (int) particle1.getZ());
