@@ -9,13 +9,16 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
@@ -86,6 +89,14 @@ public class WorldTickServer {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundaboutTickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickTimeStoppingEntity();
+    }
+    @Inject(method = "tickChunk", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickChunk(LevelChunk $$0, int $$1, CallbackInfo ci) {
+        ChunkPos $$2 = $$0.getPos();
+        BlockPos BP = $$2.getWorldPosition();
+        if (((TimeStop) this).inTimeStopRange(new Vec3i(BP.getX(),BP.getY(),BP.getZ()))){
+            ci.cancel();
+        }
     }
 
 }
