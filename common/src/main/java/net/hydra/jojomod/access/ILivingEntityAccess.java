@@ -18,4 +18,6 @@ public interface ILivingEntityAccess {
     int getLerpSteps();
 
     void setLerpSteps(int lerpSteps);
+
+    void roundaboutPushEntities();
 }

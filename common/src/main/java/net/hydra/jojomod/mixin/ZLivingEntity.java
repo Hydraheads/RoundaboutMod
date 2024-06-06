@@ -80,4 +80,13 @@ public class ZLivingEntity implements ILivingEntityAccess {
         this.lerpSteps = lerpSteps;
     }
 
+    @Shadow
+    protected void pushEntities(){
+    }
+
+    @Override
+    public void roundaboutPushEntities(){
+        this.pushEntities();
+    }
+
 }

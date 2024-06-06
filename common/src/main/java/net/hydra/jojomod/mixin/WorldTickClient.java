@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 
+import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -87,6 +88,10 @@ public class WorldTickClient {
                         double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
                         ((ILivingEntityAccess) livingEntity).setLerpSteps(LS-1);
                         $$0.setPos(LX,LY,LZ);
+                    }
+
+                    if ($$0 instanceof LivingEntity) {
+                        ((ILivingEntityAccess) $$0).roundaboutPushEntities();
                     }
                 } else {
                     $$0.walkDistO = $$0.walkDist;

@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
+import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -70,6 +72,9 @@ public class WorldTickServer {
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if (((TimeStop) this).CanTimeStopEntity($$0)){
+                if ($$0 instanceof LivingEntity) {
+                    ((ILivingEntityAccess) $$0).roundaboutPushEntities();
+                }
                 ci.cancel();
             }
         }
