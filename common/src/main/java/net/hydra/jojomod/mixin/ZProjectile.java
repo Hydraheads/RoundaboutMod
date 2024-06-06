@@ -2,9 +2,14 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,11 +19,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(Projectile.class)
-public class ZProjectile implements IProjectileAccess {
+public abstract class ZProjectile extends Entity implements IProjectileAccess{
     /**The main goal of this mixin is to make projectiles spawned after a timestop move partially in one*/
 
     private boolean roundaboutIsTimeStopCreated = false;
     private float roundaboutSpeedMultiplier = 0.75F;
+
+    public ZProjectile(EntityType<?> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
     public float getRoundaboutSpeedMultiplier(){
         return this.roundaboutSpeedMultiplier;
     }
@@ -52,12 +62,34 @@ public class ZProjectile implements IProjectileAccess {
         return canHitEntity($$0x);
     }
 
+    @Override
+    public void roundaboutCheckInsideBlocks() {
+        this.checkInsideBlocks();
+    }
+
+    @Shadow
+    public void shoot(double $$0, double $$1, double $$2, float $$3, float $$4) {
+    }
+
     @Inject(method = "setOwner", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutSetOwner(@Nullable Entity $$0, CallbackInfo ci) {
         if ($$0 != null) {
             if (((TimeStop) $$0.level()).inTimeStopRange($$0) && !(((TimeStop) $$0.level()).CanTimeStopEntity($$0))) {
                 this.setRoundaboutIsTimeStopCreated(true);
             }
+        }
+    }
+
+    @Inject(method = "shootFromRotation", at = @At(value = "HEAD"), cancellable = true)
+    public void roundaboutShootFromRotation(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+        if ((((Projectile) (Object) this) instanceof ThrowableProjectile) && ((TimeStop) $$0.level()).inTimeStopRange($$0) && this.getRoundaboutIsTimeStopCreated()) {
+            float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+            float $$7 = -Mth.sin($$1 * (float) (Math.PI / 180.0));
+            float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+            this.shoot((double) $$6, (double) $$7, (double) $$8, $$4, $$5);
+            Vec3 $$9 = $$0.getDeltaMovement();
+            this.setDeltaMovement(this.getDeltaMovement().add($$9.x, $$0.onGround() ? 0.0 : $$9.y, $$9.z));
+            ci.cancel();
         }
     }
 }

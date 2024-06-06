@@ -13,5 +13,5 @@ public interface IProjectileAccess {
 
     boolean roundaboutCanHitEntity(Entity $$0x);
 
-
+    void roundaboutCheckInsideBlocks();
 }

@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,6 +51,9 @@ public class TimeMovingProjectile
                     }
                 }
             }
+        }
+        if (projectile instanceof ThrowableProjectile) {
+            ((IProjectileAccess)projectile).roundaboutCheckInsideBlocks();
         }
 
         if (projectile instanceof AbstractArrow) {
@@ -111,8 +115,6 @@ public class TimeMovingProjectile
             $$9 = $$10.getLocation();
         }
 
-        if (projectile instanceof AbstractArrow) {
-            while (!projectile.isRemoved()) {
                 EntityHitResult $$11 = findHitEntity2(projectile,$$8, $$9, projectile.getDeltaMovement());
                 if ($$11 != null) {
                     $$10 = $$11;
@@ -135,13 +137,8 @@ public class TimeMovingProjectile
                     ((IProjectileAccess)projectile).setRoundaboutIsTimeStopCreated(false);
 
                 }
-                if ($$11 == null || ((IAbstractArrowAccess)projectile).roundaboutGetPierceLevel() <= 0) {
-                    break;
-                }
 
                 $$10 = null;
-            }
-        }
 
         speedMod = ((IProjectileAccess) projectile).getRoundaboutSpeedMultiplier();
         reducedDelta = projectile.getDeltaMovement().multiply(speedMod,speedMod,speedMod);
