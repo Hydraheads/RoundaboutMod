@@ -89,4 +89,16 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
             ci.cancel();
         }
     }
+    @Inject(method = "playerTouch", at = @At(value = "HEAD"),cancellable = true)
+    private void roundaboutShakeTime(Player $$0, CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this))) {
+            if (!this.level().isClientSide && (this.inGround || this.isNoPhysics())) {
+                if (this.tryPickup($$0)) {
+                    $$0.take(this, 1);
+                    this.discard();
+                    ci.cancel();
+                }
+            }
+        }
+    }
 }
