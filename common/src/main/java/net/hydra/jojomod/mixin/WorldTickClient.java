@@ -92,7 +92,10 @@ public class WorldTickClient {
                     ((ILivingEntityAccess) $$0).roundaboutPushEntities();
                 } else {
                     $$0.walkDistO = $$0.walkDist;
-                    $$0.setOldPosAndRot();
+
+                    $$0.xOld = $$0.getX();;
+                    $$0.yOld = $$0.getY();
+                    $$0.zOld = $$0.getZ();
                 }
                 if ($$0 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();

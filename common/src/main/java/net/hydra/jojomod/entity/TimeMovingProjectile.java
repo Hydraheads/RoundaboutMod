@@ -77,11 +77,6 @@ public class TimeMovingProjectile
         double $$16 = reducedDelta.z;
 
         double $$21 = reducedDelta.horizontalDistance();
-        projectile.setYRot((float)(Mth.atan2($$14, $$16) * 180.0F / (float)Math.PI));
-
-        projectile.setXRot((float)(Mth.atan2($$15, $$21) * 180.0F / (float)Math.PI));
-        projectile.setXRot(lerpRotation(projectile.xRotO, projectile.getXRot()));
-        projectile.setYRot(lerpRotation(projectile.yRotO, projectile.getYRot()));
 
 
         if (speedMod > 0.01) {
@@ -158,7 +153,7 @@ public class TimeMovingProjectile
         reducedDelta = projectile.getDeltaMovement().multiply(speedMod,speedMod,speedMod);
         if (speedMod > 0.01) {
             ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(speedMod* 0.87F);
-            projectile.absMoveTo(position.x + reducedDelta.x, position.y + reducedDelta.y, position.z + reducedDelta.z);
+            projectile.setPos(position.x + reducedDelta.x, position.y + reducedDelta.y, position.z + reducedDelta.z);
         } else {
             ((IProjectileAccess) projectile).setRoundaboutIsTimeStopCreated(false);
         }
