@@ -15,15 +15,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -75,6 +79,14 @@ public class WorldTickServer {
             ci.cancel();
         }
     }
+
+    @Shadow
+    @Final
+    EntityTickList entityTickList;
+
+    @Shadow
+    private void tickPassenger(Entity $$0, Entity $$1){
+    }
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
@@ -85,6 +97,31 @@ public class WorldTickServer {
                     ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
                 } else if ($$0 instanceof FishingHook){
                     ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
+                }
+
+                for (Entity $$2 : $$0.getPassengers()) {
+                    this.tickPassenger($$0, $$2);
+                }
+                ci.cancel();
+            }
+        }
+    }
+    @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+        if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
+            $$1.stopRiding();
+        } else if ($$1 instanceof Player || this.entityTickList.contains($$1)) {
+            if (((TimeStop) this).CanTimeStopEntity($$1)){
+                if ($$1 instanceof LivingEntity) {
+                    ((ILivingEntityAccess) $$1).roundaboutPushEntities();
+                } else if ($$1 instanceof ItemEntity) {
+                    ((IItemEntityAccess)$$1).RoundaboutTickPickupDelay();
+                } else if ($$1 instanceof FishingHook){
+                    ((IFishingRodAccess)$$1).roundaboutUpdateRodInTS();
+                }
+
+                for (Entity $$3 : $$1.getPassengers()) {
+                    this.tickPassenger($$1, $$3);
                 }
                 ci.cancel();
             }

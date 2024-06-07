@@ -35,9 +35,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     /**Most humanoid stands share these animations.*/
     public void defaultAnimations(T entity, float animationProgress, float windupLength){
         this.animate(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
-        this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1f);
-        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1f);
-        this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1f);
+        this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
+        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f);
+        this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);
         this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.animate(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
         this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 2.7f);

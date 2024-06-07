@@ -441,7 +441,8 @@ public class StandPowers {
                 this.attackTimeMax = 0;
                 this.setPowerNone();
             } else {
-                if (this.attackTimeDuring == 7) {
+                if (this.attackTimeDuring == 5 && this.activePowerPhase == 1
+                || this.attackTimeDuring == 6) {
                     this.standPunch();
                 }
             }
@@ -785,6 +786,21 @@ public class StandPowers {
                 -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
 
     }
+    public void takeDeterminedKnockback(LivingEntity user, LivingEntity target, float knockbackStrength){
+
+        if ((knockbackStrength *= (float) (1.0 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+        target.hurtMarked = true;
+        Vec3 vec3d2 = new Vec3(Mth.sin(
+                user.getYRot() * ((float) Math.PI / 180)),
+                0,
+                -Mth.cos(user.getYRot() * ((float) Math.PI / 180))).normalize().scale(knockbackStrength);
+        target.setDeltaMovement(- vec3d2.x,
+                target.onGround() ? 0.28 : 0,
+                - vec3d2.z);
+        target.hasImpulse = true;
+    }
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
@@ -854,12 +870,13 @@ public class StandPowers {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
                     /*The last hit in a string has more power and knockback if you commit to it*/
                     pow = getHeavyPunchStrength(entity);
-                    knockbackStrength = 2F;
+                    knockbackStrength = 1F;
                 } else {
                     pow = getPunchStrength(entity);
-                    knockbackStrength = 0.5F;
+                    knockbackStrength = 0.2F;
                 }
-                if (StandDamageEntityAttack(entity, pow, knockbackStrength, this.self)) {
+                if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                    this.takeDeterminedKnockback(this.self, (LivingEntity) entity, knockbackStrength);
                 } else {
                     if (this.activePowerPhase >= this.activePowerPhaseMax) {
                         knockShield2(entity, 40);

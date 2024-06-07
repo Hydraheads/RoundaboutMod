@@ -17,8 +17,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.level.entity.EntityTickList;
+import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,6 +33,10 @@ public class WorldTickClient {
 
     /** Called every tick on the Client. Checks if a mob has a stand out, and updates the position of the stand.
      * @see StandEntity#tickStandOut */
+
+    @Shadow
+    @Final
+   EntityTickList tickingEntities;
 
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"))
     private void roundaboutTickEntity(Entity $$0, CallbackInfo ci) {
@@ -66,49 +75,80 @@ public class WorldTickClient {
         }
     }
 
+    @Shadow
+    private void tickPassenger(Entity $$0, Entity $$1) {
+    }
+
+    public void roundaboutTSTickEntity(Entity $$0){
+
+        float delta = Minecraft.getInstance().getDeltaFrameTime();
+        if ($$0 instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) $$0;
+
+            ((ILivingEntityAccess) livingEntity).setAnimStepO(((ILivingEntityAccess) livingEntity).getAnimStep());
+            $$0.setOldPosAndRot();
+            livingEntity.yBodyRotO = livingEntity.yBodyRot;
+            livingEntity.yHeadRotO = livingEntity.yHeadRot;
+            livingEntity.oAttackAnim = livingEntity.attackAnim;
+            //livingEntity.lastLimbDistance = livingEntity.limbDistance;
+
+            int LS = ((ILivingEntityAccess) livingEntity).getLerpSteps();
+            if (LS > 0) {
+                double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).getLerpX() - livingEntity.getX()) / (double) LS;
+                double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).getLerpY() - livingEntity.getY()) / (double) LS;
+                double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
+                ((ILivingEntityAccess) livingEntity).setLerpSteps(LS-1);
+                $$0.setPos(LX,LY,LZ);
+            }
+
+            ((ILivingEntityAccess) $$0).roundaboutPushEntities();
+        } else {
+            $$0.walkDistO = $$0.walkDist;
+
+            $$0.xOld = $$0.getX();;
+            $$0.yOld = $$0.getY();
+            $$0.zOld = $$0.getZ();
+
+            if ($$0 instanceof FishingHook){
+                $$0.xo = $$0.getX();
+                $$0.yo = $$0.getY();
+                $$0.zo = $$0.getZ();
+            }
+        }
+        if ($$0 instanceof ItemEntity) {
+            ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
+        } else if ($$0 instanceof FishingHook){
+            ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
+        }
+    }
+
     /**Time Stop Code*/
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if (((TimeStop) this).CanTimeStopEntity($$0)){
-                float delta = Minecraft.getInstance().getDeltaFrameTime();
-                if ($$0 instanceof LivingEntity) {
-                    LivingEntity livingEntity = (LivingEntity) $$0;
-
-                    ((ILivingEntityAccess) livingEntity).setAnimStepO(((ILivingEntityAccess) livingEntity).getAnimStep());
-                    $$0.setOldPosAndRot();
-                    livingEntity.yBodyRotO = livingEntity.yBodyRot;
-                    livingEntity.yHeadRotO = livingEntity.yHeadRot;
-                    livingEntity.oAttackAnim = livingEntity.attackAnim;
-                    //livingEntity.lastLimbDistance = livingEntity.limbDistance;
-
-                    int LS = ((ILivingEntityAccess) livingEntity).getLerpSteps();
-                    if (LS > 0) {
-                        double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).getLerpX() - livingEntity.getX()) / (double) LS;
-                        double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).getLerpY() - livingEntity.getY()) / (double) LS;
-                        double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
-                        ((ILivingEntityAccess) livingEntity).setLerpSteps(LS-1);
-                        $$0.setPos(LX,LY,LZ);
-                    }
-
-                    ((ILivingEntityAccess) $$0).roundaboutPushEntities();
-                } else {
-                    $$0.walkDistO = $$0.walkDist;
-
-                    $$0.xOld = $$0.getX();;
-                    $$0.yOld = $$0.getY();
-                    $$0.zOld = $$0.getZ();
-
-                    if ($$0 instanceof FishingHook){
-                        $$0.xo = $$0.getX();
-                        $$0.yo = $$0.getY();
-                        $$0.zo = $$0.getZ();
-                    }
+                roundaboutTSTickEntity($$0);
+                for (Entity $$1 : $$0.getPassengers()) {
+                    this.tickPassenger($$0, $$1);
                 }
-                if ($$0 instanceof ItemEntity) {
-                    ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
-                } else if ($$0 instanceof FishingHook){
-                    ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
+                ci.cancel();
+            }
+        }
+    }
+
+    @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+        if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
+            $$1.stopRiding();
+        } else if ($$1 instanceof Player || this.tickingEntities.contains($$1)) {
+            if (((TimeStop) this).CanTimeStopEntity($$1)) {
+                $$1.setDeltaMovement(Vec3.ZERO);
+                roundaboutTSTickEntity($$0);
+                if ($$1.isPassenger()) {
+                    $$1.getVehicle().positionRider($$1);
+                }
+                for (Entity $$2 : $$1.getPassengers()) {
+                    this.tickPassenger($$1, $$2);
                 }
                 ci.cancel();
             }
