@@ -63,19 +63,57 @@ public class WorldTickClient {
         }
     }
 
+    private void updateStandTS(Entity entity){
+        if (entity.showVehicleHealth()) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            if (((StandUser) livingEntity).getStand() != null) {
+                StandEntity stand = ((StandUser) livingEntity).getStand();
+                if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
+                    if (!(stand.isRemoved() || stand.getUser() != entity)) {
+                        roundaboutTickStandTS(stand);
+                    }
+                }
+            }
+        }
+    }
+
     private void tickStandIn(LivingEntity entity, StandEntity stand) {
         if (stand == null || stand.isRemoved() || stand.getUser() != entity) {
             return;
         }
         byte ot = stand.getOffsetType();
+        ++stand.tickCount;
         if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
             stand.setOldPosAndRot();
-            ++stand.tickCount;
             stand.tickStandOut();
         }
     }
 
-    @Shadow
+
+    private void roundaboutTickStandTS (StandEntity stand){
+        stand.setOldPosAndRot();
+        stand.tickStandOut2();
+    }
+    private void roundaboutTickLivingEntityTS (LivingEntity livingEntity){
+        ((ILivingEntityAccess) livingEntity).setAnimStepO(((ILivingEntityAccess) livingEntity).getAnimStep());
+        livingEntity.setOldPosAndRot();
+        livingEntity.yBodyRotO = livingEntity.yBodyRot;
+        livingEntity.yHeadRotO = livingEntity.yHeadRot;
+        livingEntity.oAttackAnim = livingEntity.attackAnim;
+        //livingEntity.lastLimbDistance = livingEntity.limbDistance;
+
+        int LS = ((ILivingEntityAccess) livingEntity).getLerpSteps();
+        if (LS > 0) {
+            double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).getLerpX() - livingEntity.getX()) / (double) LS;
+            double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).getLerpY() - livingEntity.getY()) / (double) LS;
+            double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
+            ((ILivingEntityAccess) livingEntity).setLerpSteps(LS-1);
+            livingEntity.setPos(LX,LY,LZ);
+        }
+
+        ((ILivingEntityAccess) livingEntity).roundaboutPushEntities();
+    }
+                                               @Shadow
     private void tickPassenger(Entity $$0, Entity $$1) {
     }
 
@@ -84,24 +122,8 @@ public class WorldTickClient {
         float delta = Minecraft.getInstance().getDeltaFrameTime();
         if ($$0 instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) $$0;
-
-            ((ILivingEntityAccess) livingEntity).setAnimStepO(((ILivingEntityAccess) livingEntity).getAnimStep());
-            $$0.setOldPosAndRot();
-            livingEntity.yBodyRotO = livingEntity.yBodyRot;
-            livingEntity.yHeadRotO = livingEntity.yHeadRot;
-            livingEntity.oAttackAnim = livingEntity.attackAnim;
-            //livingEntity.lastLimbDistance = livingEntity.limbDistance;
-
-            int LS = ((ILivingEntityAccess) livingEntity).getLerpSteps();
-            if (LS > 0) {
-                double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).getLerpX() - livingEntity.getX()) / (double) LS;
-                double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).getLerpY() - livingEntity.getY()) / (double) LS;
-                double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
-                ((ILivingEntityAccess) livingEntity).setLerpSteps(LS-1);
-                $$0.setPos(LX,LY,LZ);
-            }
-
-            ((ILivingEntityAccess) $$0).roundaboutPushEntities();
+            roundaboutTickLivingEntityTS(livingEntity);
+            updateStandTS(livingEntity);
         } else {
             $$0.walkDistO = $$0.walkDist;
 

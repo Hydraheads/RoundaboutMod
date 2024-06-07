@@ -1,10 +1,13 @@
 package net.hydra.jojomod;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.commands.ExperienceCommand;
 
 public class CommandRegistryFabric {
     public static void register() {
@@ -49,5 +52,22 @@ public class CommandRegistryFabric {
                         ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))).then(Commands.argument("targets",
                         EntityArgument.entities()).executes(context -> RoundaboutCommands.executeDebugCancel((CommandSourceStack)context.getSource(),
                         EntityArgument.getEntities(context, "targets")))))).createBuilder()));
+
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+                dispatcher.register(dispatcher.register((((Commands.literal("drSpecial").requires(source
+                        -> source.hasPermission(2))).executes(context -> RoundaboutCommands.executeDebugSpecial((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))).then(Commands.argument("targets",
+                        EntityArgument.entities()).executes(context -> RoundaboutCommands.executeDebugSpecial((CommandSourceStack)context.getSource(),
+                        EntityArgument.getEntities(context, "targets")))))).createBuilder()));
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+                dispatcher.register(dispatcher.register((((Commands.literal("debugRoundabout_tryPower").requires(source
+                        -> source.hasPermission(2))).executes(context -> RoundaboutCommands.executeDebugCancel((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))).then(Commands.argument("number",
+                        IntegerArgumentType.integer()).then(Commands.argument("targets",
+                        EntityArgument.entities()).executes(context -> RoundaboutCommands.executeDebugAbility((CommandSourceStack)context.getSource(),
+                        EntityArgument.getEntities(context, "targets"), IntegerArgumentType.getInteger(context, "ability")))))))
+                        .createBuilder()));
     }
 }

@@ -484,6 +484,17 @@ public abstract class StandEntity extends Mob{
         }
     }
 
+    public void tickStandOut2() {
+        byte ot = this.getOffsetType();
+        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            this.setDeltaMovement(Vec3.ZERO);
+            if (this.getFollowing() == null) {
+                return;
+            }
+            ((StandUser) this.getFollowing()).updateStandOutPosition(this);
+        }
+    }
+
 
     /** Stand does not take damage under normal circumstances.*/
     public boolean hurt(DamageSource source, float amount) {

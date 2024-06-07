@@ -45,6 +45,14 @@ public class RoundaboutCommands {
         }
         return targets.size();
     }
+    static int executeDebugSpecial(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                ((StandUser) entity).tryPower(PowerIndex.SPECIAL, true);
+            }
+        }
+        return targets.size();
+    }
 
     static int executeDebugBarrage(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
@@ -68,6 +76,18 @@ public class RoundaboutCommands {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
                 ((StandUser) entity).tryPower(PowerIndex.NONE, true);
+            }
+        }
+        return targets.size();
+    }
+
+
+    static int executeDebugAbility(CommandSourceStack source, Collection<? extends Entity> targets, int ability) {
+        if (ability < 100) {
+            for (Entity entity : targets) {
+                if (entity instanceof LivingEntity) {
+                    ((StandUser) entity).tryPower((byte) ability, true);
+                }
             }
         }
         return targets.size();
