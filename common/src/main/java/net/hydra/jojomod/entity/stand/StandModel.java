@@ -3,11 +3,13 @@ package net.hydra.jojomod.entity.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 
 public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     /**Override this for every stand model.*/
@@ -50,9 +52,10 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
      * with the stand user.*/
     public void defaultModifiers(T entity){
         Minecraft mc = Minecraft.getInstance();
-        if (!mc.isPaused()) {
-            float tickDelta = mc.getDeltaFrameTime();
-            if (entity.getUser() != null) {
+        if (entity.getUser() != null) {
+            LivingEntity User = entity.getUser();
+            if (!mc.isPaused() && !(((TimeStop) entity.level()).CanTimeStopEntity(User))) {
+                float tickDelta = mc.getDeltaFrameTime();
                 rotateStand(entity, this.root(), tickDelta);
                 if (this.root().hasChild("stand2")) {
 
@@ -65,6 +68,25 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                     }
 
                 }
+            } else {
+                    float rotX = entity.getStandRotationX();
+                    float rotY = entity.getStandRotationY();
+                    this.setStandRotations(rotX, rotY);
+                    if (this.root().hasChild("stand2")) {
+
+                        if (this.root().getChild("stand2").hasChild("head")) {
+                            rotX = entity.getHeadRotationX();
+                            rotY = entity.getHeadRotationY();
+                            this.setHeadRotations(rotX, rotY);
+                        }
+
+                        if (this.root().getChild("stand2").hasChild("body")) {
+                            rotX = entity.getBodyRotationX();
+                            rotY = entity.getBodyRotationY();
+                            this.setBodyRotations(rotX, rotY);
+                        }
+
+                    }
             }
         }
     }
