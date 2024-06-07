@@ -7,10 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,7 +71,15 @@ public class TimeMovingProjectile
 
         float speedMod = ((IProjectileAccess) projectile).getRoundaboutSpeedMultiplier();
         Vec3 position = new Vec3(projectile.getX(),projectile.getY(),projectile.getZ());
+
+
+        if (projectile instanceof FishingHook) {
+            projectile.setDeltaMovement(projectile.getDeltaMovement().add(0.0, -0.03*speedMod, 0.0));
+        }
+
         Vec3 reducedDelta = projectile.getDeltaMovement().multiply(speedMod,speedMod,speedMod);
+
+
 
 
         if (speedMod > 0.01) {

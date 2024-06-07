@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 
+import net.hydra.jojomod.access.IFishingRodAccess;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -16,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.FishingHook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -96,9 +98,17 @@ public class WorldTickClient {
                     $$0.xOld = $$0.getX();;
                     $$0.yOld = $$0.getY();
                     $$0.zOld = $$0.getZ();
+
+                    if ($$0 instanceof FishingHook){
+                        $$0.xo = $$0.getX();
+                        $$0.yo = $$0.getY();
+                        $$0.zo = $$0.getZ();
+                    }
                 }
                 if ($$0 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
+                } else if ($$0 instanceof FishingHook){
+                    ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
                 }
                 ci.cancel();
             }

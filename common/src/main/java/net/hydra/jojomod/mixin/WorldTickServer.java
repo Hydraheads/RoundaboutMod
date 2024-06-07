@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.access.IFishingRodAccess;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -81,6 +83,8 @@ public class WorldTickServer {
                     ((ILivingEntityAccess) $$0).roundaboutPushEntities();
                 } else if ($$0 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
+                } else if ($$0 instanceof FishingHook){
+                    ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
                 }
                 ci.cancel();
             }
