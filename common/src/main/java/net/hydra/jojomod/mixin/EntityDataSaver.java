@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +28,14 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
     private double roundaboutPrevX = 0;
     private double roundaboutPrevY = 0;
     private double roundaboutPrevZ = 0;
+
+
+    @Inject(method = "turn", at = @At("Head"), cancellable = true)
+    public void roundaboutTurn(double $$0, double $$1, CallbackInfo ci){
+        if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
+            ci.cancel();
+        }
+    }
 
     @Override
     public float getPreTSTick() {
