@@ -16,7 +16,19 @@ public interface IEntityDataSaver {
 
     float getPreTSTick();
 
+    double getPreTSX();
+
+    double getPreTSY();
+
+    double getPreTSZ();
+
     void setPreTSTick(float frameTime);
+
+    void setPreTSX(double x);
+
+    void setPreTSY(double y);
+
+    void setPreTSZ(double z);
 
     void resetPreTSTick();
 

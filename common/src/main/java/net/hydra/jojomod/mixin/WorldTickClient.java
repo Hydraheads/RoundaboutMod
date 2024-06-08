@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 
+import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IFishingRodAccess;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.ILivingEntityAccess;
@@ -118,7 +119,6 @@ public class WorldTickClient {
     }
 
     public void roundaboutTSTickEntity(Entity $$0){
-
         float delta = Minecraft.getInstance().getDeltaFrameTime();
         if ($$0 instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) $$0;
@@ -154,6 +154,10 @@ public class WorldTickClient {
                     this.tickPassenger($$0, $$1);
                 }
                 ci.cancel();
+            } else {
+                ((IEntityDataSaver) $$0).setPreTSX($$0.getX());
+                ((IEntityDataSaver) $$0).setPreTSY($$0.getY());
+                ((IEntityDataSaver) $$0).setPreTSZ($$0.getZ());
             }
         }
     }
@@ -173,6 +177,10 @@ public class WorldTickClient {
                     this.tickPassenger($$1, $$2);
                 }
                 ci.cancel();
+            } else {
+                ((IEntityDataSaver) $$0).setPreTSX($$0.getX());
+                ((IEntityDataSaver) $$0).setPreTSY($$0.getY());
+                ((IEntityDataSaver) $$0).setPreTSZ($$0.getZ());
             }
         }
     }
