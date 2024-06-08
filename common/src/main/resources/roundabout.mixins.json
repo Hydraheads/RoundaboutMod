@@ -45,8 +45,7 @@
     "ZParticleAccess",
     "ZParticleEngine",
     "ZBlockEntityClient",
-    "ZBlockEntityRenderDispatcher",
-    "ZEntityRenderDispatcher"
+    "ZBlockEntityRenderDispatcher"
   ],
   "server": [
   ],
