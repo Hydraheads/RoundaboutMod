@@ -154,10 +154,6 @@ public class WorldTickClient {
                     this.tickPassenger($$0, $$1);
                 }
                 ci.cancel();
-            } else {
-                ((IEntityDataSaver) $$0).setPreTSX($$0.getX());
-                ((IEntityDataSaver) $$0).setPreTSY($$0.getY());
-                ((IEntityDataSaver) $$0).setPreTSZ($$0.getZ());
             }
         }
     }
@@ -177,10 +173,6 @@ public class WorldTickClient {
                     this.tickPassenger($$1, $$2);
                 }
                 ci.cancel();
-            } else {
-                ((IEntityDataSaver) $$0).setPreTSX($$0.getX());
-                ((IEntityDataSaver) $$0).setPreTSY($$0.getY());
-                ((IEntityDataSaver) $$0).setPreTSZ($$0.getZ());
             }
         }
     }

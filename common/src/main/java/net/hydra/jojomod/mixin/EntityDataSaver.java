@@ -41,37 +41,10 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
     public float getPreTSTick() {
         return this.roundaboutPrevTick;
     }
-    @Override
-    public double getPreTSX() {
-        return this.roundaboutPrevX;
-    }
-    @Override
-    public double getPreTSY() {
-        return this.roundaboutPrevY;
-    }
-    @Override
-    public double getPreTSZ() {
-        return this.roundaboutPrevZ;
-    }
 
     @Override
     public void setPreTSTick(float frameTime) {
         roundaboutPrevTick = frameTime;
-    }
-
-    @Override
-    public void setPreTSX(double x) {
-        roundaboutPrevX = x;
-    }
-
-    @Override
-    public void setPreTSY(double y) {
-        roundaboutPrevY = y;
-    }
-
-    @Override
-    public void setPreTSZ(double z) {
-        roundaboutPrevZ = z;
     }
     @Override
     public void resetPreTSTick() {
