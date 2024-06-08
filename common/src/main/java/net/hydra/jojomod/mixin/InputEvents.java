@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -44,7 +45,7 @@ public class InputEvents {
             //handleInputEvents
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
-                if (standComp.isDazed()) {
+                if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     ci.setReturnValue(true);
                 } else if (standComp.getActive()){
                     ci.setReturnValue(true);
@@ -57,7 +58,7 @@ public class InputEvents {
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
-                if (standComp.getActive() || standComp.isDazed()) {
+                if (standComp.getActive() || standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     if (!$$0){
                         this.missTime = 0;
                     }
@@ -86,7 +87,7 @@ public class InputEvents {
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
-            if (standComp.isDazed()) {
+            if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 ci.cancel();
             } else if (standComp.getActive()) {
                 if (standComp.isGuarding() || standComp.isBarraging() || standComp.isClashing()) {
@@ -159,7 +160,7 @@ public class InputEvents {
                        standComp.tryPower(PowerIndex.NONE,true);
                     }
                 }
-                if (standComp.getActive()) {
+                if (standComp.getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     if (this.options.keyAttack.isDown() && !player.isUsingItem()) {
 
                         if (standComp.getInterruptCD()) {
