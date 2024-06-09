@@ -1,6 +1,5 @@
 package net.hydra.jojomod.networking.c2s;
 
-import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;

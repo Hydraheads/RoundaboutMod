@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 
-import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IFishingRodAccess;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.ILivingEntityAccess;

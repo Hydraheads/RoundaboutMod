@@ -1,11 +1,13 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -14,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.UUID;
 
 @Mixin(Entity.class)
-public abstract class EntityDataSaver implements IEntityDataSaver {
+public abstract class EntityAndData implements IEntityAndData {
 
     /** Code to store NBT on player. Undecided if this will remain.
      * @see PlayerSpawn
@@ -28,6 +30,9 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
     private double roundaboutPrevX = 0;
     private double roundaboutPrevY = 0;
     private double roundaboutPrevZ = 0;
+
+    @Shadow
+    private int remainingFireTicks;
 
 
     @Inject(method = "turn", at = @At("Head"), cancellable = true)
@@ -85,9 +90,28 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
         }
         return persistentData;
     }
+
+    /**In a timestop, fire doesn't tick*/
+    @Inject(method = "setRemainingFireTicks", at = @At("Head"), cancellable = true)
+    protected void roundaboutSetFireTicks(int $$0, CallbackInfo ci){
+        Entity entity = ((Entity)(Object) this);
+        if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
+                && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity)){
+            ci.cancel();
+        }
+    }
+    @Inject(method = "clearFire", at = @At("Head"), cancellable = true)
+    protected void roundaboutClearFire(CallbackInfo ci){
+        Entity entity = ((Entity)(Object) this);
+        if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
+                && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity)){
+            this.remainingFireTicks = 0;
+        }
+    }
+
 //why is activestand nulling a problem?
     @Inject(method = "save", at = @At("Head"))
-    protected void injectWriteMethod(CompoundTag $$0, CallbackInfoReturnable info){
+    protected void roundaboutWrite(CompoundTag $$0, CallbackInfoReturnable info){
         if (persistentData != null){
               persistentData.putBoolean("stand_on", standOn);
             if (getActiveStand() != null){
@@ -98,8 +122,9 @@ public abstract class EntityDataSaver implements IEntityDataSaver {
         }
     }
 
+
     @Inject(method = "load", at = @At("Head"))
-    protected void injectReadMethod(CompoundTag $$0, CallbackInfo info){
+    protected void roundaboutRead(CompoundTag $$0, CallbackInfo info){
         if ($$0.contains("roundabout.stand_data",10)){
            persistentData = $$0.getCompound("roundabout.stand_data");
            syncPersistentData();

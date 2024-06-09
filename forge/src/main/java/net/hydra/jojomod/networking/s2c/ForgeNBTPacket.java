@@ -1,6 +1,6 @@
 package net.hydra.jojomod.networking.s2c;
 
-import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
@@ -27,8 +27,8 @@ public class ForgeNBTPacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                ((IEntityDataSaver) player).getPersistentData().merge(NBT);
-                ((IEntityDataSaver) player).syncPersistentData();
+                ((IEntityAndData) player).getPersistentData().merge(NBT);
+                ((IEntityAndData) player).syncPersistentData();
             }
         });
         return true;

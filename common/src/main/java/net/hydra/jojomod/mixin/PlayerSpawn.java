@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class PlayerSpawn {
     /** Makes absolutely certain NBT is saved and loaded from players...
      * only relevant so long as
-     * @see EntityDataSaver is.*/
+     * @see EntityAndData is.*/
     @Inject(method = "placeNewPlayer", at = @At(value = "TAIL"))
     private void onPlayerConnectMixin(Connection $$0, ServerPlayer $$1, CallbackInfo info) {
         NBTData.syncModNbt($$1);

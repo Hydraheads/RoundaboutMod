@@ -1,7 +1,7 @@
 package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,7 +18,7 @@ public class StandAbilityPacket {
         ServerLevel world = (ServerLevel) player.level();
         server.execute(() -> {
             ((StandUser) player).summonStand(world, false, true);
-            ((IEntityDataSaver) player).getPersistentData().putLong("guard", (player.level().getGameTime() + 200));
+            ((IEntityAndData) player).getPersistentData().putLong("guard", (player.level().getGameTime() + 200));
         });
     }
     public static void switchPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,

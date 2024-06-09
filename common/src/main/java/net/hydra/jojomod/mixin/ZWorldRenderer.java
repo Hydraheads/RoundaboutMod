@@ -2,8 +2,7 @@ package net.hydra.jojomod.mixin;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.access.IBlockEntityClientAccess;
-import net.hydra.jojomod.access.IEntityDataSaver;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
@@ -15,8 +14,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.sql.Time;
 
 @Mixin(LevelRenderer.class)
 public class ZWorldRenderer {
@@ -48,13 +43,13 @@ public class ZWorldRenderer {
             double $$8 = Mth.lerp((double)$$4, $$0.yOld, $$0.getY());
             double $$9 = Mth.lerp((double)$$4, $$0.zOld, $$0.getZ());
             float $$10 = Mth.lerp($$4, $$0.yRotO, $$0.getYRot());
-            $$4 = ((IEntityDataSaver) $$0).getPreTSTick();
+            $$4 = ((IEntityAndData) $$0).getPreTSTick();
             this.entityRenderDispatcher
                     .render($$0, $$7 - $$1, $$8 - $$2, $$9 - $$3, $$10, $$4, $$5, $$6, this.entityRenderDispatcher.getPackedLightCoords($$0, $$4));
             ci.cancel();
         } else {
             Minecraft mc = Minecraft.getInstance();
-            ((IEntityDataSaver) $$0).setPreTSTick(mc.getFrameTime());
+            ((IEntityAndData) $$0).setPreTSTick(mc.getFrameTime());
         }
     }
 

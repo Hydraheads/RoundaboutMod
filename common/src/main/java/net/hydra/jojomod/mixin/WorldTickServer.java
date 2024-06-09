@@ -1,7 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import com.google.common.collect.ImmutableList;
-import net.hydra.jojomod.access.IEntityDataSaver;
 import net.hydra.jojomod.access.IFishingRodAccess;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.ILivingEntityAccess;
@@ -24,14 +22,12 @@ import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 import java.util.function.BooleanSupplier;

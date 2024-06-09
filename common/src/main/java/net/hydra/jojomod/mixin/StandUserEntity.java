@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -20,6 +21,8 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -509,4 +512,13 @@ public class StandUserEntity implements StandUser {
         }
     }
 
+    @Inject(method = "hurt", at = @At("Head"), cancellable = true)
+    protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
+        LivingEntity entity = ((LivingEntity)(Object) this);
+        if (!((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
+                && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity) &&
+                ($$0.is(DamageTypes.ON_FIRE) || $$0.is(DamageTypes.IN_FIRE))){
+            ci.setReturnValue(false);
+        }
+    }
 }
