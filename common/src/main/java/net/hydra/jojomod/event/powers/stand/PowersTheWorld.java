@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -89,6 +90,19 @@ public class PowersTheWorld extends StandPowers {
                 this.timeStoppingTicks = 0;
                 playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2);
             }
+        }
+    }
+
+    @Override
+    public void timeTick(){
+        if (this.getSelf().level().isClientSide) {
+            this.getOKToTickSound();
+        }
+    }
+
+    protected void getOKToTickSound(){
+        if (((StandUserClient) this.getSelf()).getRoundaboutSoundByte() == SoundIndex.SPECIAL_MOVE_SOUND_2){
+            this.tickSounds();
         }
     }
 

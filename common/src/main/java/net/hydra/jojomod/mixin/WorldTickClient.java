@@ -123,6 +123,7 @@ public class WorldTickClient {
         if ($$0 instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) $$0;
             roundaboutTickLivingEntityTS(livingEntity);
+            ((StandUser)livingEntity).getStandPowers().timeTick();
             updateStandTS(livingEntity);
         } else {
             $$0.walkDistO = $$0.walkDist;
@@ -197,7 +198,7 @@ public class WorldTickClient {
     }
 
     @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutTickEntity2(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
+    private void roundaboutPlayLocalSoundCanceler(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange(new Vec3i((int) $$0, (int) $$1, (int) $$2))){
             if (($$4 == SoundSource.WEATHER || $$4 == SoundSource.BLOCKS) && !$$3.getLocation().getPath().contains("break")) {
                 ci.cancel();

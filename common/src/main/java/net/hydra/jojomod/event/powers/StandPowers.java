@@ -292,8 +292,13 @@ public class StandPowers {
         }
     }
 
+    /**The manner in which your powers tick when you are being timestopped. Override this if the stand acts differently.
+     * By technicality, you should still tick sounds.*/
+    public void timeTick(){
+    }
 
-    private void tickSounds(){
+
+    protected void tickSounds(){
         if (this.self.level().isClientSide) {
             if (((StandUserClient) this.self).getSoundPlay() || ((StandUserClient) this.self).getSoundCancel()) {
                 this.runExtraSoundCode(((StandUserClient) this.self).getRoundaboutSoundByte());

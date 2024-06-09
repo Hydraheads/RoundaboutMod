@@ -88,6 +88,7 @@ public class WorldTickServer {
         if (!$$0.isRemoved()) {
             if (((TimeStop) this).CanTimeStopEntity($$0)){
                 if ($$0 instanceof LivingEntity) {
+                    ((StandUser)$$0).getStandPowers().timeTick();
                     ((ILivingEntityAccess) $$0).roundaboutPushEntities();
                 } else if ($$0 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
