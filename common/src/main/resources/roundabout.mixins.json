@@ -46,7 +46,8 @@
     "ZParticleEngine",
     "ZBlockEntityClient",
     "ZBlockEntityRenderDispatcher",
-    "ZEntityRenderDispatcher"
+    "ZEntityRenderDispatcher",
+    "ZCamera"
   ],
   "server": [
   ],

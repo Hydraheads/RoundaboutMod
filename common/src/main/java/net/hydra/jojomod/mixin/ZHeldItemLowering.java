@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -21,6 +22,12 @@ public class ZHeldItemLowering {
     private float mainHandHeight;
     @Shadow
     private float offHandHeight;
+
+    @Shadow
+    private float oMainHandHeight;
+    @Shadow
+    private float oOffHandHeight;
+
     @Shadow
     private final Minecraft minecraft;
 
@@ -33,7 +40,7 @@ public class ZHeldItemLowering {
      * The reason for that design decision is mostly to prevent sword swings overriding stand attacks
      * to mobs in a close range, and accidentally breaking blocks when attacking.*/
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    public void injectHeldItems(CallbackInfo ci) {
+    public void roundaboutHeldItems(CallbackInfo ci) {
         LocalPlayer clientPlayerEntity2 = this.minecraft.player;
         if (!this.minecraft.player.isHandsBusy()) {
         if (((StandUser) this.minecraft.player).getActive()) {
@@ -49,5 +56,15 @@ public class ZHeldItemLowering {
             }
 
         }}
+    }
+
+    @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
+    public void roundaboutHeldItems2(CallbackInfo ci) {
+        LocalPlayer clientPlayerEntity2 = this.minecraft.player;
+        if (clientPlayerEntity2 != null && ((TimeStop)clientPlayerEntity2.level()).CanTimeStopEntity(clientPlayerEntity2)){
+            mainHandHeight = oMainHandHeight;
+            offHandHeight = oOffHandHeight;
+            ci.cancel();
+        }
     }
 }

@@ -5,9 +5,11 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
@@ -23,6 +25,28 @@ public class ZScreenShaking {
     @Shadow
     @Final
     Minecraft minecraft;
+
+
+    @Shadow
+    public void renderItemInHand(PoseStack $$0, Camera $$1, float $$2) {}
+
+
+    @Inject(method = "renderItemInHand", at = @At(value = "HEAD"), cancellable = true)
+    private void RoundaboutRenderHandsWithItems(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci){
+        //$$0 is matrcices, $$1 is tickdelta
+        if (!cleared) {
+            if (minecraft.player != null && ((TimeStop) minecraft.player.level()).CanTimeStopEntity(minecraft.player)) {
+                if (this.minecraft.getCameraEntity() != null) {
+                    Entity Ent = this.minecraft.getCameraEntity();
+                    $$2 = ((IEntityAndData) Ent).getPreTSTick();
+                    cleared = true;
+                    this.renderItemInHand($$0, $$1, $$2);
+                    cleared = false;
+                }
+                ci.cancel();
+            }
+        }
+    }
 
     public boolean cleared = false;
     /**Minor code to prevent nauseating barrage shaking effect when getting barraged.*/
