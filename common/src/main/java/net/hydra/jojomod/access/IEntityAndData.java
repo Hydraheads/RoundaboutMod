@@ -16,19 +16,18 @@ public interface IEntityAndData {
 
     float getPreTSTick();
 
-    double getPreTSX();
+    double getRoundaboutPrevX();
 
-    double getPreTSY();
+    double getRoundaboutPrevY();
 
-    double getPreTSZ();
+    double getRoundaboutPrevZ();
 
     void setPreTSTick(float frameTime);
 
-    void setPreTSX(double x);
+    void setRoundaboutPrevX(double roundaboutPrevX);
 
-    void setPreTSY(double y);
-
-    void setPreTSZ(double z);
+    void setRoundaboutPrevY(double roundaboutPrevY);
+    void setRoundaboutPrevZ(double roundaboutPrevZ);
 
     void resetPreTSTick();
 

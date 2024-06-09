@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFishingRodAccess;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.ILivingEntityAccess;
@@ -147,6 +148,7 @@ public class WorldTickClient {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
+            roundaboutStoreOldPositionsForTS($$0);
             if (((TimeStop) this).CanTimeStopEntity($$0)){
                 roundaboutTSTickEntity($$0);
                 for (Entity $$1 : $$0.getPassengers()) {
@@ -157,8 +159,15 @@ public class WorldTickClient {
         }
     }
 
+    public void roundaboutStoreOldPositionsForTS(Entity entity){
+        ((IEntityAndData) entity).setRoundaboutPrevX(entity.getX());
+        ((IEntityAndData) entity).setRoundaboutPrevY(entity.getY());
+        ((IEntityAndData) entity).setRoundaboutPrevZ(entity.getZ());
+    }
+
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+        roundaboutStoreOldPositionsForTS($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
             $$1.stopRiding();
         } else if ($$1 instanceof Player || this.tickingEntities.contains($$1)) {

@@ -31,6 +31,25 @@ public abstract class EntityAndData implements IEntityAndData {
     private double roundaboutPrevY = 0;
     private double roundaboutPrevZ = 0;
 
+    public void setRoundaboutPrevX(double roundaboutPrevX){
+        this.roundaboutPrevX = roundaboutPrevX;
+    }
+    public void setRoundaboutPrevY(double roundaboutPrevY){
+        this.roundaboutPrevY = roundaboutPrevY;
+    }
+    public void setRoundaboutPrevZ(double roundaboutPrevZ){
+        this.roundaboutPrevZ = roundaboutPrevZ;
+    }
+    public double getRoundaboutPrevX(){
+        return this.roundaboutPrevX;
+    }
+    public double getRoundaboutPrevY(){
+        return this.roundaboutPrevY;
+    }
+    public double getRoundaboutPrevZ(){
+        return this.roundaboutPrevZ;
+    }
+
     @Shadow
     private int remainingFireTicks;
 
