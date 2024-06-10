@@ -1,8 +1,10 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityEvent;
@@ -72,6 +74,14 @@ public class PlayerEntity implements IPlayerEntity {
     protected void RoundaboutGetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
         if (((StandUser) this).isDazed()) {
             ci.setReturnValue(null);
+        }
+    }
+    @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
+    protected void RoundaboutTick(CallbackInfo ci) {
+        if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty()) {
+            if (((TimeStop) ((Player) (Object) this).level()).CanTimeStopEntity(((Player) (Object) this))) {
+                ci.cancel();
+            }
         }
     }
 }
