@@ -1,16 +1,14 @@
 package net.hydra.jojomod.mixin;
 
 
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IFishingRodAccess;
-import net.hydra.jojomod.access.IItemEntityAccess;
-import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvent;
@@ -18,8 +16,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -96,6 +96,23 @@ public class WorldTickClient {
         stand.tickStandOut2();
     }
     private void roundaboutTickLivingEntityTS (LivingEntity livingEntity){
+        if (livingEntity instanceof Player){
+            Inventory inv = ((IPlayerEntity) livingEntity).roundaboutGetInventory();
+            int idx = 0;
+            for(NonNullList<ItemStack> nonnulllist : ((ZInventoryAccess)inv).roundaboutGetCompartments()) {
+                for(int i = 0; i < nonnulllist.size(); ++i) {
+
+                    if (!nonnulllist.get(i).isEmpty()) {
+                        if (nonnulllist.get(i).getPopTime() > 0) {
+                            nonnulllist.get(i).setPopTime(nonnulllist.get(i).getPopTime()-1);
+                        }
+                    }
+                    idx++;
+                }
+            }
+        }
+
+
         ((ILivingEntityAccess) livingEntity).setAnimStepO(((ILivingEntityAccess) livingEntity).getAnimStep());
         livingEntity.setOldPosAndRot();
         livingEntity.yBodyRotO = livingEntity.yBodyRot;

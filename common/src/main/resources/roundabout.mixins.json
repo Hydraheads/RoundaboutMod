@@ -28,7 +28,8 @@
     "ZBlockEntity",
     "ZItemEntity",
     "ZThrowableProjectile",
-    "ZFishingHook"
+    "ZFishingHook",
+    "ZInventoryAccess"
   ],
   "client": [
     "ZBossBar",
