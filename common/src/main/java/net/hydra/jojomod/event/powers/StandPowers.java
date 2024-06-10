@@ -777,23 +777,23 @@ public class StandPowers {
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
-                this.takeDeterminedKnockbackWithY(this.self, (LivingEntity) entity, knockbackStrength);
+                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                this.takeKnockbackUp((LivingEntity) entity,knockbackStrength);
+                this.takeKnockbackUp(entity,knockbackStrength);
             }
         }
     }
 
-    public void takeDeterminedKnockbackWithY(LivingEntity user, LivingEntity target, float knockbackStrength){
+    public void takeDeterminedKnockbackWithY(LivingEntity user, Entity target, float knockbackStrength){
         this.takeKnockbackWithY(target, knockbackStrength,
                 Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
                 Mth.sin(user.getXRot() * ((float) Math.PI / 180)),
                 -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
 
     }
-    public void takeDeterminedKnockback(LivingEntity user, LivingEntity target, float knockbackStrength){
+    public void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
 
-        if ((knockbackStrength *= (float) (1.0 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         target.hurtMarked = true;
@@ -881,7 +881,7 @@ public class StandPowers {
                     knockbackStrength = 0.2F;
                 }
                 if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                    this.takeDeterminedKnockback(this.self, (LivingEntity) entity, knockbackStrength);
+                    this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 } else {
                     if (this.activePowerPhase >= this.activePowerPhaseMax) {
                         knockShield2(entity, 40);
@@ -1078,9 +1078,9 @@ public class StandPowers {
         return false;
     }
 
-    public void takeKnockbackWithY(LivingEntity entity, double strength, double x, double y, double z) {
+    public void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
-        if ((strength *= 1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         entity.hurtMarked = true;
@@ -1092,8 +1092,8 @@ public class StandPowers {
     }
 
 
-    public void takeKnockbackUp(LivingEntity entity, double strength) {
-        if ((strength *= 1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+    public void takeKnockbackUp(Entity entity, double strength) {
+        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         entity.hasImpulse = true;
