@@ -47,7 +47,10 @@
     "ZBlockEntityClient",
     "ZBlockEntityRenderDispatcher",
     "ZEntityRenderDispatcher",
-    "ZCamera"
+    "ZCamera",
+    "ZHumanoidArmorLayer",
+    "ZItemInHandLayer",
+    "ZPLayerRenderer"
   ],
   "server": [
   ],

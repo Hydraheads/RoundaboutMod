@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,6 +31,51 @@ public abstract class EntityAndData implements IEntityAndData {
     private double roundaboutPrevX = 0;
     private double roundaboutPrevY = 0;
     private double roundaboutPrevZ = 0;
+
+    public @Nullable ItemStack roundaboutRenderChest;
+    public @Nullable ItemStack roundaboutRenderLegs;
+    public @Nullable ItemStack roundaboutRenderBoots;
+    public @Nullable ItemStack roundaboutRenderHead;
+    public @Nullable ItemStack roundaboutRenderMainHand;
+    public @Nullable ItemStack roundaboutRenderOffHand;
+
+    public void setRoundaboutRenderChest(@Nullable ItemStack chest){
+        this.roundaboutRenderChest = chest;
+    }
+    public void setRoundaboutRenderLegs(@Nullable ItemStack legs){
+        this.roundaboutRenderLegs = legs;
+    }
+    public void setRoundaboutRenderBoots(@Nullable ItemStack boots){
+        this.roundaboutRenderBoots = boots;
+    }
+    public void setRoundaboutRenderHead(@Nullable ItemStack head){
+        this.roundaboutRenderHead = head;
+    }
+    public void setRoundaboutRenderMainHand(@Nullable ItemStack mainhand){
+        this.roundaboutRenderMainHand = mainhand;
+    }
+    public void setRoundaboutRenderOffHand(@Nullable ItemStack offhand){
+        this.roundaboutRenderOffHand = offhand;
+    }
+
+    public @Nullable ItemStack getRoundaboutRenderChest(){
+        return this.roundaboutRenderChest;
+    }
+    public @Nullable ItemStack getRoundaboutRenderLegs(){
+        return this.roundaboutRenderLegs;
+    }
+    public @Nullable ItemStack getRoundaboutRenderBoots(){
+        return this.roundaboutRenderBoots;
+    }
+    public @Nullable ItemStack getRoundaboutRenderHead(){
+        return this.roundaboutRenderHead;
+    }
+    public @Nullable ItemStack getRoundaboutRenderMainHand(){
+        return this.roundaboutRenderMainHand;
+    }
+    public @Nullable ItemStack getRoundaboutRenderOffHand(){
+        return this.roundaboutRenderOffHand;
+    }
 
     public void setRoundaboutPrevX(double roundaboutPrevX){
         this.roundaboutPrevX = roundaboutPrevX;
