@@ -13,19 +13,31 @@ import java.util.function.Supplier;
 
 public class ForgeTimeStoppingEntityPacket {
     private final int entityID;
-    private final boolean removal;
+    private final double x;
+    private final double y;
+    private final double z;
+    private final double range;
 
-    public ForgeTimeStoppingEntityPacket(int entityID, boolean removal){
+    public ForgeTimeStoppingEntityPacket(int entityID, double x, double y, double z, double range){
         this.entityID = entityID;
-        this.removal = removal;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.range = range;
     }
     public ForgeTimeStoppingEntityPacket(FriendlyByteBuf buf){
         this.entityID = buf.readInt();
-        this.removal = buf.readBoolean();
+        this.x = buf.readDouble();
+        this.y = buf.readDouble();
+        this.z = buf.readDouble();
+        this.range = buf.readDouble();
     }
     public void toBytes(FriendlyByteBuf buf){
         buf.writeInt(entityID);
-        buf.writeBoolean(removal);
+        buf.writeDouble(x);
+        buf.writeDouble(y);
+        buf.writeDouble(z);
+        buf.writeDouble(range);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
@@ -33,10 +45,7 @@ public class ForgeTimeStoppingEntityPacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                Entity timeStoppingEntity = player.level().getEntity(entityID);
-                if (timeStoppingEntity instanceof LivingEntity) {
-                    ((TimeStop) player.level()).processTSPacket((LivingEntity) timeStoppingEntity, removal);
-                }
+                ((TimeStop) player.level()).processTSPacket(entityID,x,y,z,range);
             }
         });
         return true;

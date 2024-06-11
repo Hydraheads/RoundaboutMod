@@ -55,12 +55,6 @@ public class WorldTickClient {
         }
     }
 
-
-    @Inject(method = "tickEntities", at = @At(value = "HEAD"))
-    private void tickTimeStopList(CallbackInfo ci) {
-        ((TimeStop) this).tickAllTimeStops();
-    }
-
     private void standTickCheck(Entity entity){
         if (entity.showVehicleHealth()) {
             LivingEntity livingEntity = (LivingEntity) entity;

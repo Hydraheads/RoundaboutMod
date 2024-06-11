@@ -19,7 +19,6 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
 
     public SoundEvent roundaboutSoundEvent;
     public byte roundaboutSoundByte;
-    public float roundaboutPrevTickDelta = 0;
 
     @Override
     public byte getRoundaboutSoundByte(){
@@ -84,18 +83,4 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
         this.soundCancel = false;
     }
 
-    @Override
-    public float getPreTSTickDelta() {
-        return this.roundaboutPrevTickDelta;
-    }
-
-    @Override
-    public void setPreTSTickDelta() {
-        Minecraft mc = Minecraft.getInstance();
-        roundaboutPrevTickDelta = mc.getFrameTime();
-    }
-    @Override
-    public void resetPreTSTickDelta() {
-        roundaboutPrevTickDelta = 0;
-    }
 }

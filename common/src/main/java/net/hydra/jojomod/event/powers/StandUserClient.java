@@ -16,7 +16,4 @@ public interface StandUserClient {
     void clientQueSoundCanceling();
 
     void clientSoundCancel();
-    float getPreTSTickDelta();
-    void setPreTSTickDelta();
-    void resetPreTSTickDelta();
 }

@@ -19,7 +19,8 @@ public interface IPacketAccess {
 
     void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
-    void timeStoppingEntityPacket(ServerPlayer sp, int entityID, boolean remove);
+    void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range);
+    void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
 
     /**Client Packets*/

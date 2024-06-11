@@ -62,7 +62,7 @@ public class ZWorldRenderer {
             if (((TimeStop)player.level()).inTimeStopRange(player)){
                 LivingEntity player2 = ((TimeStop)player.level()).inTimeStopRangeEntity(player);
                 if (player2 != null){
-                    return ((StandUserClient)player2).getPreTSTickDelta();
+                    return ((IEntityAndData)player2).getPreTSTick();
                 }
             }
         }
@@ -76,7 +76,7 @@ public class ZWorldRenderer {
             if (((TimeStop)player.level()).inTimeStopRange(player)){
                 LivingEntity player2 = ((TimeStop)player.level()).inTimeStopRangeEntity(player);
                 if (player2 != null){
-                    return ((StandUserClient)player2).getPreTSTickDelta();
+                    return ((IEntityAndData)player2).getPreTSTick();
                 }
             }
         }

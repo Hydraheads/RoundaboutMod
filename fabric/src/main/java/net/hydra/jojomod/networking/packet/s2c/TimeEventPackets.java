@@ -19,11 +19,13 @@ public class TimeEventPackets {
     public static void updateTSList(Minecraft client, ClientPacketListener handler,
                                  FriendlyByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {
-            Entity timeStoppingEntity = client.player.level().getEntity(buf.readInt());
-            boolean removal = buf.readBoolean();
-            if (timeStoppingEntity instanceof LivingEntity){
-                ((TimeStop)client.player.level()).processTSPacket((LivingEntity) timeStoppingEntity,removal);
-            }
+            ((TimeStop)client.player.level()).processTSPacket(buf.readInt(),buf.readDouble(),buf.readDouble(),buf.readDouble(),buf.readDouble());
+        }
+    }
+    public static void updateTSRemovalList(Minecraft client, ClientPacketListener handler,
+                                    FriendlyByteBuf buf, PacketSender responseSender) {
+        if (client.player != null) {
+            ((TimeStop)client.player.level()).processTSRemovePacket(buf.readInt());
         }
     }
 

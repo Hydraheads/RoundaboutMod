@@ -104,6 +104,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeTimeStoppingEntityPacket::toBytes)
                 .consumerMainThread(ForgeTimeStoppingEntityPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeTimeStoppingEntityRemovalPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeTimeStoppingEntityRemovalPacket::new)
+                .encoder(ForgeTimeStoppingEntityRemovalPacket::toBytes)
+                .consumerMainThread(ForgeTimeStoppingEntityRemovalPacket::handle)
+                .add();
         INSTANCE.messageBuilder(ForgeBlockEntityResumeTSPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeBlockEntityResumeTSPacket::new)
                 .encoder(ForgeBlockEntityResumeTSPacket::toBytes)

@@ -67,12 +67,24 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, boolean remove){
+    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(entityID);
-        buffer.writeBoolean(remove);
+        buffer.writeDouble(x);
+        buffer.writeDouble(y);
+        buffer.writeDouble(z);
+        buffer.writeDouble(range);
         ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_PACKET, buffer);
+
     }
+
+    @Override
+    public void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID) {
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+        buffer.writeInt(entityID);
+        ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_REMOVAL_PACKET, buffer);
+    }
+
 
     @Override
     public void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i) {
