@@ -30,6 +30,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.function.BooleanSupplier;
+
 @Mixin(ClientLevel.class)
 public class WorldTickClient {
 
@@ -51,6 +53,12 @@ public class WorldTickClient {
                 }
             }
         }
+    }
+
+
+    @Inject(method = "tickEntities", at = @At(value = "HEAD"))
+    private void tickTimeStopList(CallbackInfo ci) {
+        ((TimeStop) this).tickAllTimeStops();
     }
 
     private void standTickCheck(Entity entity){
