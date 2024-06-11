@@ -41,11 +41,11 @@ public interface IEntityAndData {
     void setRoundaboutRenderMainHand(@Nullable ItemStack main);
     void setRoundaboutRenderOffHand(@Nullable ItemStack main);
 
-    ItemStack getRoundaboutRenderChest();
-    ItemStack getRoundaboutRenderLegs();
-    ItemStack getRoundaboutRenderBoots();
-    ItemStack getRoundaboutRenderHead();
-    ItemStack getRoundaboutRenderMainHand();
-    ItemStack getRoundaboutRenderOffHand();
+    @Nullable ItemStack getRoundaboutRenderChest();
+    @Nullable ItemStack getRoundaboutRenderLegs();
+    @Nullable ItemStack getRoundaboutRenderBoots();
+    @Nullable ItemStack getRoundaboutRenderHead();
+    @Nullable ItemStack getRoundaboutRenderMainHand();
+    @Nullable ItemStack getRoundaboutRenderOffHand();
 
 }

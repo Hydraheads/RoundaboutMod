@@ -24,6 +24,7 @@ public interface TimeStop {
     void processTSPacket(LivingEntity timeStoppingEntity, boolean removal);
     void processTSBlockEntityPacket(BlockEntity blockEntity);
     void tickTimeStoppingEntity();
+    void tickAllTimeStops();
 
     void streamTileEntityTSToCLient(BlockPos blockEntity);
 }

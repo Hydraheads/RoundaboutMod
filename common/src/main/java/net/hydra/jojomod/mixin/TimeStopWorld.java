@@ -88,8 +88,8 @@ public class TimeStopWorld implements TimeStop {
                 if (!this.timeStoppingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
                     List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
-                    for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
-                        Entity TSI = this.timeStoppingEntities.get(i);
+                    for (int i = $$1.size() - 1; i >= 0; --i) {
+                        Entity TSI = $$1.get(i);
                         /*You only need data of time stopping mobs that are relatively close by*/
                         if (MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
                             ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), false);
@@ -137,6 +137,22 @@ public class TimeStopWorld implements TimeStop {
         if (!((Level) (Object) this).isClientSide) {
             streamTimeStopToClients();
         }
+    }
+
+    /**Ticks through time stop entities list, and then removes them from the list if they are dead or gone*/
+    @Override
+    public void tickAllTimeStops() {
+        if (!this.timeStoppingEntities.isEmpty()) {
+            List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+            for (int i = $$1.size() - 1; i >= 0; --i) {
+                if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive()){
+                    removeTimeStoppingEntity($$1.get(i));
+                } else if (!((Level) (Object) this).isClientSide) {
+                    ((StandUser)$$1.get(i)).getStandPowers().timeTickStopPower();
+                }
+            }
+        }
+
     }
     @Override
     public ImmutableList<LivingEntity> getTimeStoppingEntities() {

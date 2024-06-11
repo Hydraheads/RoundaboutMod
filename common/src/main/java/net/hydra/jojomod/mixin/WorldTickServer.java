@@ -49,6 +49,13 @@ public class WorldTickServer {
         }
     }
 
+
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    private void tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
+        ((TimeStop) this).tickAllTimeStops();
+    }
+
+
     private void tickStandIn(LivingEntity entity, StandEntity passenger) {
         if (passenger == null || passenger.isRemoved() || passenger.getUser() != entity) {
             return;

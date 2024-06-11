@@ -297,6 +297,10 @@ public class StandPowers {
     public void timeTick(){
     }
 
+    /**Ticks through your own timestop. This value exists in the general stand powers in case you switch stands.*/
+    public void timeTickStopPower(){
+    }
+
 
     protected void tickSounds(){
         if (this.self.level().isClientSide) {
