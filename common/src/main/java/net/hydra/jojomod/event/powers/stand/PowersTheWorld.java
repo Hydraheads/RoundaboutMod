@@ -107,6 +107,32 @@ public class PowersTheWorld extends StandPowers {
     }
 
 
+    public boolean timeStopStartedBarrage = false;
+    @Override
+    public boolean bonusBarrageConditions(){
+        if (this.getSelf() != null){
+            boolean TSEntity = ((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf());
+            if (TSEntity && !this.timeStopStartedBarrage){
+                this.timeStopStartedBarrage = true;
+                return true;
+            } else if (!TSEntity && this.timeStopStartedBarrage){
+                this.timeStopStartedBarrage = false;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void setPowerBarrageCharge(){
+        if (this.getSelf() != null && ((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())){
+            timeStopStartedBarrage = true;
+        } else {
+            timeStopStartedBarrage = false;
+        }
+        super.setPowerBarrageCharge();
+    }
+
     /**20 ticks in a second*/
     private int timeStoppingTicks = 0;
     @Override

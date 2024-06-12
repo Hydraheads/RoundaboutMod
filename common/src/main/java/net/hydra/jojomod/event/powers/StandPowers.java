@@ -262,10 +262,15 @@ public class StandPowers {
                             if (this.activePower == PowerIndex.ATTACK) {
                                 this.updateAttack();
                             } else if (this.isBarraging()) {
-                                if (this.isBarrageCharging()) {
-                                    this.updateBarrageCharge();
+
+                                if (bonusBarrageConditions()) {
+                                    if (this.isBarrageCharging()) {
+                                        this.updateBarrageCharge();
+                                    } else {
+                                        this.updateBarrage();
+                                    }
                                 } else {
-                                    this.updateBarrage();
+                                    ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
                                 }
                             } else {
                                 this.updateUniqueMoves();
@@ -435,9 +440,9 @@ public class StandPowers {
                 this.attackTimeDuring = -20;
             } else {
                 if (this.attackTimeDuring > 0) {
-                    this.setAttackTime((getBarrageRecoilTime()-1) -
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
                             Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
-                                    * (getBarrageRecoilTime()-1)));
+                                    * (getBarrageRecoilTime() - 1)));
 
                     standBarrageHit();
                 }
@@ -723,58 +728,68 @@ public class StandPowers {
 
     public void barrageImpact(Entity entity, int hitNumber){
         if (this.isBarrageAttacking()) {
-            boolean lastHit = (hitNumber >= this.getBarrageLength());
-            if (entity != null) {
-                if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()
-                        && ((StandUser) entity).getAttackTimeDuring() > -1) {
-                    initiateClash(entity);
-                } else {
-                    float pow;
-                    float knockbackStrength = 0;
-                    /**By saving the velocity before hitting, we can let people approach barraging foes
-                     * through shields.*/
-                    Vec3 prevVelocity = entity.getDeltaMovement();
-                    if (lastHit) {
-                        pow = this.getBarrageFinisherStrength(entity);
-                        knockbackStrength = this.getBarrageFinisherKnockback();
+            if (bonusBarrageConditions()) {
+                boolean lastHit = (hitNumber >= this.getBarrageLength());
+                if (entity != null) {
+                    if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()
+                            && ((StandUser) entity).getAttackTimeDuring() > -1) {
+                        initiateClash(entity);
                     } else {
-                        pow = this.getBarrageHitStrength(entity);
-                        float mn = this.getBarrageLength()-hitNumber;
-                        if (mn==0){mn=0.015F;} else {mn = ((0.015F/(mn)));}
-                        knockbackStrength = 0.014F - mn;
-                    }
-                    if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                        if (entity instanceof LivingEntity) {
+                        float pow;
+                        float knockbackStrength = 0;
+                        /**By saving the velocity before hitting, we can let people approach barraging foes
+                         * through shields.*/
+                        Vec3 prevVelocity = entity.getDeltaMovement();
+                        if (lastHit) {
+                            pow = this.getBarrageFinisherStrength(entity);
+                            knockbackStrength = this.getBarrageFinisherKnockback();
+                        } else {
+                            pow = this.getBarrageHitStrength(entity);
+                            float mn = this.getBarrageLength() - hitNumber;
+                            if (mn == 0) {
+                                mn = 0.015F;
+                            } else {
+                                mn = ((0.015F / (mn)));
+                            }
+                            knockbackStrength = 0.014F - mn;
+                        }
+                        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                            if (entity instanceof LivingEntity) {
+                                if (lastHit) {
+                                    setDazed((LivingEntity) entity, (byte) 0);
+                                    playBarrageEndNoise(0);
+                                } else {
+                                    setDazed((LivingEntity) entity, (byte) 3);
+                                    playBarrageNoise(hitNumber);
+                                }
+                            }
+                            barrageImpact2(entity, lastHit, knockbackStrength);
+                        } else {
                             if (lastHit) {
-                                setDazed((LivingEntity) entity, (byte) 0);
+                                knockShield2(entity, 200);
                                 playBarrageEndNoise(0);
                             } else {
-                                setDazed((LivingEntity) entity, (byte) 3);
-                                playBarrageNoise(hitNumber);
-                            }
-                        }
-                            barrageImpact2(entity, lastHit, knockbackStrength);
-                    } else {
-                        if (lastHit) {
-                            knockShield2(entity, 200);
-                            playBarrageEndNoise(0);
-                        } else {
-                            entity.setDeltaMovement(prevVelocity);
+                                entity.setDeltaMovement(prevVelocity);
 
-                            if (!this.self.level().isClientSide()) {
-                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+                                if (!this.self.level().isClientSide()) {
+                                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+                                }
                             }
                         }
                     }
+                } else {
+                    playBarrageMissNoise(hitNumber);
+                }
+
+                if (lastHit) {
+                    animateStand((byte) 13);
+                    this.attackTimeDuring = -10;
                 }
             } else {
-                playBarrageMissNoise(hitNumber);
+                ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
             }
-
-            if (lastHit){
-                animateStand((byte) 13);
-                this.attackTimeDuring = -10;
-            }
+        } else {
+            ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
         }
     }
 
@@ -786,6 +801,11 @@ public class StandPowers {
                 this.takeKnockbackUp(entity,knockbackStrength);
             }
         }
+    }
+
+
+    public boolean bonusBarrageConditions(){
+        return true;
     }
 
     public void takeDeterminedKnockbackWithY(LivingEntity user, Entity target, float knockbackStrength){
