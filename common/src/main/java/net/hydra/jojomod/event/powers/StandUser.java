@@ -72,6 +72,10 @@ public interface StandUser {
 
     LivingEntity getPowerUser();
 
+    void roundaboutSetTSJump(boolean roundaboutTSJump);
+
+    boolean roundaboutGetTSJump();
+
     @Nullable
     StandEntity getStand();
 

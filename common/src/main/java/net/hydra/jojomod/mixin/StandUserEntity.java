@@ -35,6 +35,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -48,23 +49,33 @@ public class StandUserEntity implements StandUser {
      * damageShield
      */
 
+    @Unique
     private final LivingEntity User = ((LivingEntity)(Object) this);
     @Nullable
+    @Unique
     private StandEntity Stand;
 
     /** StandID is used clientside only*/
 
+    @Unique
     private static final EntityDataAccessor<Integer> STAND_ID = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
+    @Unique
     private static final EntityDataAccessor<Boolean> STAND_ACTIVE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
+    @Unique
     private boolean CanSync;
+    @Unique
     private StandPowers Powers;
 
     /** Guard variables for stand blocking**/
+    @Unique
     public final float maxGuardPoints = 15F;
+    @Unique
     private float GuardPoints = maxGuardPoints;
+    @Unique
     private boolean GuardBroken = false;
+    @Unique
     private int GuardCooldown = 0;
 
 
@@ -76,6 +87,7 @@ public class StandUserEntity implements StandUser {
      * your movement, item usage, and stand ability usage. You also
      * have no gravity while dazed**/
 
+    @Unique
     private byte dazeTime = 0;
 
 
@@ -89,6 +101,16 @@ public class StandUserEntity implements StandUser {
     }
 
 
+    @Unique
+    boolean roundaboutTSJump = false;
+    @Unique
+    public boolean roundaboutGetTSJump(){
+        return this.roundaboutTSJump;
+    }
+    @Unique
+    public void roundaboutSetTSJump(boolean roundaboutTSJump){
+        this.roundaboutTSJump = roundaboutTSJump;
+    }
 
     /**returns if the mob has a stand. For now, returns if stand is active, but in the future will be more
      * complicated**/
@@ -500,6 +522,22 @@ public class StandUserEntity implements StandUser {
     private double RoundaboutTravel2(double $$1) {
         if (this.isDazed()) {
             return 0;
+        }
+        return $$1;
+    }
+
+    @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"),ordinal = 0)
+    private double RoundaboutTravel3(double $$1) {
+        if (((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
+            boolean $$2 = ((LivingEntity)(Object)this).getDeltaMovement().y <= 0.0;
+            ((LivingEntity) (Object) this).resetFallDistance();
+            if ($$2) {
+                    if (this.roundaboutGetTSJump()){
+                        return 0;
+                    } else {
+                        return $$1;
+                    }
+            }
         }
         return $$1;
     }

@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +37,7 @@ public class InputEvents {
     public MultiPlayerGameMode gameMode;
     @Shadow
     public int missTime;
+
 
     /** This class is in part for detecting and canceling mouse inputs during stand attacks.
      * Please note this should
@@ -83,7 +85,7 @@ public class InputEvents {
         }
 
 
-    @Inject(method = "startUseItem", at = @At("Head"), cancellable = true)
+    @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
@@ -104,6 +106,46 @@ public class InputEvents {
                 if (player.isAlive()) {
                     //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
 
+                    /*Time Stop Levitation*/
+                    boolean TSJumping = ((StandUser)player).roundaboutGetTSJump();
+                    if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
+                        if (TSJumping && player.onGround()) {
+                            ((StandUser)player).roundaboutSetTSJump(false);
+                        }
+                        if (options.keyJump.isDown()) {
+                            if (player.getDeltaMovement().y <= 0 && !player.onGround()) {
+                                TSJumping = true;
+                                ((StandUser) player).roundaboutSetTSJump(TSJumping);
+                            }
+                        } else {
+                            TSJumping = false;
+                            ((StandUser) player).roundaboutSetTSJump(TSJumping);
+                        }
+
+                            if (TSJumping) {
+                                if (options.keyJump.isDown()) {
+                                    float cooking = (float) (player.getDeltaMovement().y + 0.2);
+                                    if (options.keyShift.isDown()) {
+                                        if (cooking >= 0.0001) {
+                                            cooking = 0.0001F;
+                                        }
+                                    } else {
+                                        if (cooking >= 0.1) {
+                                            cooking = 0.1F;
+                                        }
+                                    }
+                                    player.setDeltaMovement(
+                                            player.getDeltaMovement().x,
+                                            cooking,
+                                            player.getDeltaMovement().z
+                                    );
+                                }
+                            }
+                    } else {
+                        if (TSJumping) {
+                            ((StandUser)player).roundaboutSetTSJump(false);
+                        }
+                    }
                     /*If you have a stand out, update the stand leaning attributes.
                      * Currently, strafe is reported, but unused.*/
                     if (((StandUser) player).getActive()) {

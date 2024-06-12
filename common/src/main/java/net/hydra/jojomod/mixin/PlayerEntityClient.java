@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -62,6 +63,11 @@ public class PlayerEntityClient implements StandUserClientPlayer {
         } else if (((StandUser) this).getStandPowers().isBarrageCharging()){
             this.input.leftImpulse *= 0.66f;
             this.input.forwardImpulse *= 0.66f;
+            this.sprintTriggerTime = 0;
+        }
+        if (((StandUser)this).roundaboutGetTSJump()){
+            this.input.leftImpulse *= 0.85f;
+            this.input.forwardImpulse *= 0.85f;
             this.sprintTriggerTime = 0;
         }
         RoundaboutClashJump();
