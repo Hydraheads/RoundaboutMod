@@ -99,6 +99,12 @@ public class InputEvents {
         }
     }
 
+
+    public void roundaboutSetTSJump(boolean roundaboutTSJump){
+        ((StandUser)player).roundaboutSetTSJump(roundaboutTSJump);
+        ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
+    }
+
         @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
         public void roundaboutInput(CallbackInfo ci){
             if (player != null) {
@@ -106,20 +112,21 @@ public class InputEvents {
                 if (player.isAlive()) {
                     //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
 
-                    /*Time Stop Levitation*/
+                    /**Time Stop Levitation*/
                     boolean TSJumping = ((StandUser)player).roundaboutGetTSJump();
                     if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
                         if (TSJumping && player.onGround()) {
-                            ((StandUser)player).roundaboutSetTSJump(false);
+                            TSJumping = false;
+                            this.roundaboutSetTSJump(false);
                         }
                         if (options.keyJump.isDown()) {
                             if (player.getDeltaMovement().y <= 0 && !player.onGround()) {
                                 TSJumping = true;
-                                ((StandUser) player).roundaboutSetTSJump(TSJumping);
+                                this.roundaboutSetTSJump(true);
                             }
                         } else {
                             TSJumping = false;
-                            ((StandUser) player).roundaboutSetTSJump(TSJumping);
+                            this.roundaboutSetTSJump(false);
                         }
 
                             if (TSJumping) {
@@ -143,9 +150,10 @@ public class InputEvents {
                             }
                     } else {
                         if (TSJumping) {
-                            ((StandUser)player).roundaboutSetTSJump(false);
+                            this.roundaboutSetTSJump(false);
                         }
                     }
+
                     /*If you have a stand out, update the stand leaning attributes.
                      * Currently, strafe is reported, but unused.*/
                     if (((StandUser) player).getActive()) {

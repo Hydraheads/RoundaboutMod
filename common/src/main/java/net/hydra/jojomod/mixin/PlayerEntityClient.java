@@ -3,9 +3,11 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -47,6 +49,7 @@ public class PlayerEntityClient implements StandUserClientPlayer {
      * The purpose of this mixin is to make stand blocking slow you down.*/
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/Tutorial;onInput(Lnet/minecraft/client/player/Input;)V", shift = At.Shift.AFTER))
     private void RoundaboutTickMovement(CallbackInfo ci) {
+        /*Time Stop Levitation*/
         if (((StandUser) this).isDazed()) {
             this.input.leftImpulse = 0;
             this.input.forwardImpulse = 0;

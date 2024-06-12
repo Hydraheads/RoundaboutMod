@@ -140,6 +140,15 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeByte(strafe);
         ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
     }
+
+    @Override
+    public void timeStopFloat(boolean TSJump) {
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeBoolean(TSJump);
+        ClientPlayNetworking.send(ModMessages.TIME_STOP_JUMP_ID, buffer);
+    }
+
     @Override
     public void standSummonPacket(){
         ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());

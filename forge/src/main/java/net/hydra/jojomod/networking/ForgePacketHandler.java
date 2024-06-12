@@ -32,6 +32,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeMoveSyncPacket::toBytes)
                 .consumerMainThread(ForgeMoveSyncPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeTSJumpPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ForgeTSJumpPacket::new)
+                .encoder(ForgeTSJumpPacket::toBytes)
+                .consumerMainThread(ForgeTSJumpPacket::handle)
+                .add();
         INSTANCE.messageBuilder(ForgeSummonPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeSummonPacket::new)
                 .encoder(ForgeSummonPacket::toBytes)

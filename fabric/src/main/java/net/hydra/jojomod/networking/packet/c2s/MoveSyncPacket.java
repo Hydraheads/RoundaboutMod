@@ -24,4 +24,19 @@ public class MoveSyncPacket {
 
 
     }
+
+    public static void updateTSJump(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                               FriendlyByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        ServerLevel world = (ServerLevel) player.level();
+        //public MoveSyncPacket() {
+        //}
+        boolean TSJump = buf.readBoolean();
+
+        server.execute(() -> {
+            ((StandUser) player).roundaboutSetTSJump(TSJump);
+        });
+
+
+    }
 }

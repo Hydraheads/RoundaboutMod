@@ -35,6 +35,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,7 +44,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public class StandUserEntity implements StandUser {
+public abstract class StandUserEntity implements StandUser {
+    @Shadow protected boolean jumping;
+
+    @Shadow protected abstract int increaseAirSupply(int $$0);
+
     /**If you are stand guarding, this controls you blocking enemy atttacks.
      * For the damage against stand guard, and sfx, see PlayerEntity mixin
      * damageShield
@@ -528,15 +533,36 @@ public class StandUserEntity implements StandUser {
 
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"),ordinal = 0)
     private double RoundaboutTravel3(double $$1) {
+        float cooking = 0.2F;
         if (((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
+            boolean TSJumping = ((StandUser)this).roundaboutGetTSJump();
+            if (TSJumping) {
+                    float cooking2 = (float) (((LivingEntity)(Object)this).getDeltaMovement().y + 0.2);
+                    if (((LivingEntity)(Object)this) instanceof Player && ((Player)(Object)this).isCrouching()) {
+
+                        if (cooking2 >= 0.0001) {
+                            cooking = 0.0001F;
+                        }
+                    } else {
+                        if (cooking2 >= 0.1) {
+                            cooking = 0.1F;
+                        }
+                    }
+                    ((LivingEntity)(Object)this).setDeltaMovement(
+                            ((LivingEntity)(Object)this).getDeltaMovement().x,
+                            cooking,
+                            ((LivingEntity)(Object)this).getDeltaMovement().z
+                    );
+            }
+
             boolean $$2 = ((LivingEntity)(Object)this).getDeltaMovement().y <= 0.0;
             ((LivingEntity) (Object) this).resetFallDistance();
             if ($$2) {
-                    if (this.roundaboutGetTSJump()){
-                        return 0;
-                    } else {
-                        return $$1;
-                    }
+                if (this.roundaboutGetTSJump()){
+                    return 0;
+                } else {
+                    return $$1;
+                }
             }
         }
         return $$1;
@@ -550,7 +576,7 @@ public class StandUserEntity implements StandUser {
         }
     }
 
-    @Inject(method = "hurt", at = @At("Head"), cancellable = true)
+    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
         LivingEntity entity = ((LivingEntity)(Object) this);
         if (!((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()

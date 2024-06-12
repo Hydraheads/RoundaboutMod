@@ -92,4 +92,10 @@ public class ForgePackets implements IPacketAccess {
     public void moveSyncPacket(byte forward, byte strafe) {
         ForgePacketHandler.sendToServer(new ForgeMoveSyncPacket(forward, strafe));
     }
+
+    @Override
+    public void timeStopFloat(boolean TSJump) {
+        ForgePacketHandler.sendToServer(new ForgeTSJumpPacket(TSJump));
+    }
+
 }

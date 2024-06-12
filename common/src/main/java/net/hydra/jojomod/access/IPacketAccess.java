@@ -32,5 +32,6 @@ public interface IPacketAccess {
     void updateClashPacket(float clashProgress, boolean clashDone);
 
     void moveSyncPacket(byte forward, byte strafe);
+    void timeStopFloat(boolean TSJump);
     void standSummonPacket();
 }
