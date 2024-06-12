@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -30,6 +31,9 @@ public class ZWorldRenderer {
     @Final
     private ClientLevel level;
 
+    @Shadow
+    @Final
+    private Minecraft minecraft;
 
     @Shadow
     @Final
@@ -60,10 +64,8 @@ public class ZWorldRenderer {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null){
             if (((TimeStop)player.level()).inTimeStopRange(player)){
-                LivingEntity player2 = ((TimeStop)player.level()).inTimeStopRangeEntity(player);
-                if (player2 != null){
-                    return ((IEntityAndData)player2).getPreTSTick();
-                }
+                //Roundabout.LOGGER.info(String.valueOf(player.level().getGameTime()));
+               return this.minecraft.level.getRainLevel(((IEntityAndData)player).getPreTSTick());
             }
         }
         return $$1;
@@ -74,10 +76,7 @@ public class ZWorldRenderer {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null){
             if (((TimeStop)player.level()).inTimeStopRange(player)){
-                LivingEntity player2 = ((TimeStop)player.level()).inTimeStopRangeEntity(player);
-                if (player2 != null){
-                    return ((IEntityAndData)player2).getPreTSTick();
-                }
+               return ((IEntityAndData)player).getPreTSTick();
             }
         }
         return $$2;

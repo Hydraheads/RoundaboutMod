@@ -26,7 +26,7 @@ public abstract class EntityAndData implements IEntityAndData {
     private boolean standOn;
     private UUID activeStand;
 
-    private float roundaboutPrevTick;
+    private float roundaboutPrevTick = 0;
 
     private double roundaboutPrevX = 0;
     private double roundaboutPrevY = 0;
