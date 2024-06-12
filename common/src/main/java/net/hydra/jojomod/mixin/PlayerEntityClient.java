@@ -69,9 +69,15 @@ public class PlayerEntityClient implements StandUserClientPlayer {
             this.sprintTriggerTime = 0;
         }
         if (((StandUser)this).roundaboutGetTSJump()){
-            this.input.leftImpulse *= 0.85f;
-            this.input.forwardImpulse *= 0.85f;
-            this.sprintTriggerTime = 0;
+            if (((LocalPlayer)(Object) this).isCrouching()) {
+                this.input.leftImpulse *= 1.0f;
+                this.input.forwardImpulse *= 1.1f;
+                this.sprintTriggerTime = 0;
+            } else {
+                this.input.leftImpulse *= 0.85f;
+                this.input.forwardImpulse *= 0.85f;
+                this.sprintTriggerTime = 0;
+            }
         }
         RoundaboutClashJump();
     }
