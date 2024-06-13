@@ -12,7 +12,9 @@ import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -106,6 +108,9 @@ public abstract class InputEvents {
     @Nullable
     public ClientLevel level;
 
+    @Shadow
+    @Final
+    public GameRenderer gameRenderer;
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
@@ -136,10 +141,21 @@ public abstract class InputEvents {
                                     case ENTITY:
                                         EntityHitResult $$2 = (EntityHitResult) this.hitResult;
                                         Entity $$3 = $$2.getEntity();
-                                        if ($$3 instanceof LivingEntity &&
-                                                !($$3 instanceof ArmorStand)){
+                                        if ($$3 instanceof LivingEntity){
                                             roundaboutTryGuard();
                                             ci.cancel();
+
+                                            if (!$$1.isEmpty()) {
+                                                InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);
+                                                if ($$8.consumesAction()) {
+                                                    if ($$8.shouldSwing()) {
+                                                        this.player.swing($$0);
+                                                    }
+
+                                                    this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                                    return;
+                                                }
+                                            }
                                         }
                                 }
                             }
@@ -166,18 +182,22 @@ public abstract class InputEvents {
                 /**Time Stop Levitation*/
                 boolean TSJumping = ((StandUser)player).roundaboutGetTSJump();
                 if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
-                    if (TSJumping && player.onGround()) {
-                        TSJumping = false;
+                    if (player.getAbilities().flying && TSJumping) {
                         this.roundaboutSetTSJump(false);
-                    }
-                    if (options.keyJump.isDown()) {
-                        if (player.getDeltaMovement().y <= 0 && !player.onGround() && !player.getAbilities().flying) {
-                            TSJumping = true;
-                            this.roundaboutSetTSJump(true);
-                        }
                     } else {
-                        TSJumping = false;
-                        this.roundaboutSetTSJump(false);
+                        if (TSJumping && player.onGround()) {
+                            TSJumping = false;
+                            this.roundaboutSetTSJump(false);
+                        }
+                        if (options.keyJump.isDown()) {
+                            if (player.getDeltaMovement().y <= 0 && !player.onGround()) {
+                                TSJumping = true;
+                                this.roundaboutSetTSJump(true);
+                            }
+                        } else {
+                            TSJumping = false;
+                            this.roundaboutSetTSJump(false);
+                        }
                     }
                 } else {
                     if (TSJumping) {
