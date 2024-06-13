@@ -1,9 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IFishingRodAccess;
-import net.hydra.jojomod.access.IItemEntityAccess;
-import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,9 +11,11 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -69,14 +69,14 @@ public class WorldTickServer {
     }
 
     /**Time stop code*/
-    @Inject(method = "tickFluid", at = @At(value = "Head"), cancellable = true)
+    @Inject(method = "tickFluid", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutFluidTick(BlockPos $$0x, Fluid $$1x, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange($$0x)){
                 ((LevelAccessor) this).scheduleTick($$0x, $$1x, $$1x.getTickDelay(((LevelAccessor) this)));
             ci.cancel();
         }
     }
-    @Inject(method = "tickBlock", at = @At(value = "Head"), cancellable = true)
+    @Inject(method = "tickBlock", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutBlockTick(BlockPos $$0x, Block $$1x, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange($$0x) && !($$1x instanceof CommandBlock)){
             ((LevelAccessor) this).scheduleTick($$0x, $$1x, 1);
@@ -102,6 +102,12 @@ public class WorldTickServer {
                     ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
                 } else if ($$0 instanceof FishingHook){
                     ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
+                } else if ($$0 instanceof Boat){
+                    ((IBoatAccess)$$0).roundaboutTickLerp();
+                    $$0.lerpTo($$0.getX(),$$0.getY(),$$0.getZ(),$$0.getYRot(),$$0.getXRot(),3,false);
+                    $$0.walkDistO = $$0.walkDist;
+                    $$0.xRotO = $$0.getXRot();
+                    $$0.yRotO = $$0.getYRot();
                 }
 
                 for (Entity $$2 : $$0.getPassengers()) {

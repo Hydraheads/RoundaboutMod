@@ -16,10 +16,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.phys.Vec3;
@@ -156,6 +158,15 @@ public class WorldTickClient {
                 $$0.xo = $$0.getX();
                 $$0.yo = $$0.getY();
                 $$0.zo = $$0.getZ();
+            } else if ($$0 instanceof Boat){
+                $$0.xo = $$0.getX();
+                $$0.yo = $$0.getY();
+                $$0.zo = $$0.getZ();
+                ((IBoatAccess)$$0).roundaboutTickLerp();
+                $$0.lerpTo($$0.getX(),$$0.getY(),$$0.getZ(),$$0.getYRot(),$$0.getXRot(),3,false);
+                $$0.walkDistO = $$0.walkDist;
+                $$0.xRotO = $$0.getXRot();
+                $$0.yRotO = $$0.getYRot();
             }
         }
         if ($$0 instanceof ItemEntity) {
