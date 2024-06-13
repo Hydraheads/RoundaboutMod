@@ -2,9 +2,14 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityEvent;
@@ -18,6 +23,7 @@ import net.minecraft.world.item.UseAnim;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,11 +32,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Player.class)
 public class PlayerEntity implements IPlayerEntity {
 
+
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT_POS = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
     @Shadow
     @Final
     private Inventory inventory;
     public Inventory roundaboutGetInventory(){
         return inventory;
+    }
+
+    /**Keep track of unique player animations like floating*/
+    public void roundaboutSetPos(byte Pos){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT_POS, Pos);
+    }
+    public byte roundaboutGetPos(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT_POS);
     }
 
     /**if your stand guard is broken, disable shields. Also, does not run takeshieldhit code if stand guarding.*/
@@ -83,5 +101,11 @@ public class PlayerEntity implements IPlayerEntity {
                 ci.cancel();
             }
         }
+    }
+
+
+    @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
+    private void initDataTrackerRoundabout(CallbackInfo ci) {
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_POS, PlayerPosIndex.NONE);
     }
 }

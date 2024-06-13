@@ -1,9 +1,11 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -115,6 +117,13 @@ public abstract class StandUserEntity implements StandUser {
     @Unique
     public void roundaboutSetTSJump(boolean roundaboutTSJump){
         this.roundaboutTSJump = roundaboutTSJump;
+        if (((LivingEntity)(Object)this) instanceof Player){
+            if (roundaboutTSJump && ((IPlayerEntity) this).roundaboutGetPos() == PlayerPosIndex.NONE) {
+                ((IPlayerEntity) this).roundaboutSetPos(PlayerPosIndex.TS_FLOAT);
+            } else if (!roundaboutTSJump && ((IPlayerEntity) this).roundaboutGetPos() == PlayerPosIndex.TS_FLOAT){
+                ((IPlayerEntity) this).roundaboutSetPos(PlayerPosIndex.NONE);
+            }
+        }
     }
 
     /**returns if the mob has a stand. For now, returns if stand is active, but in the future will be more
@@ -579,6 +588,11 @@ public abstract class StandUserEntity implements StandUser {
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
         LivingEntity entity = ((LivingEntity)(Object) this);
+        if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
+
+            ci.setReturnValue(false);
+        }
+
         if (!((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity) &&
                 ($$0.is(DamageTypes.ON_FIRE) || $$0.is(DamageTypes.IN_FIRE))){

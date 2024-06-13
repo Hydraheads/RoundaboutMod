@@ -171,7 +171,7 @@ public abstract class InputEvents {
                         this.roundaboutSetTSJump(false);
                     }
                     if (options.keyJump.isDown()) {
-                        if (player.getDeltaMovement().y <= 0 && !player.onGround()) {
+                        if (player.getDeltaMovement().y <= 0 && !player.onGround() && !player.getAbilities().flying) {
                             TSJumping = true;
                             this.roundaboutSetTSJump(true);
                         }
@@ -179,26 +179,6 @@ public abstract class InputEvents {
                         TSJumping = false;
                         this.roundaboutSetTSJump(false);
                     }
-
-                        if (TSJumping) {
-                            if (options.keyJump.isDown()) {
-                                float cooking = (float) (player.getDeltaMovement().y + 0.2);
-                                if (options.keyShift.isDown()) {
-                                    if (cooking >= 0.0001) {
-                                        cooking = 0.0001F;
-                                    }
-                                } else {
-                                    if (cooking >= 0.1) {
-                                        cooking = 0.1F;
-                                    }
-                                }
-                                player.setDeltaMovement(
-                                        player.getDeltaMovement().x,
-                                        cooking,
-                                        player.getDeltaMovement().z
-                                );
-                            }
-                        }
                 } else {
                     if (TSJumping) {
                         this.roundaboutSetTSJump(false);

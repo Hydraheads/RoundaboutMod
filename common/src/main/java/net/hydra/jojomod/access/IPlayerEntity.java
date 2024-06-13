@@ -4,5 +4,9 @@ import net.minecraft.world.entity.player.Inventory;
 import org.spongepowered.asm.mixin.Shadow;
 
 public interface IPlayerEntity {
-    public Inventory roundaboutGetInventory();
+    Inventory roundaboutGetInventory();
+
+    void roundaboutSetPos(byte Pos);
+
+    byte roundaboutGetPos();
 }
