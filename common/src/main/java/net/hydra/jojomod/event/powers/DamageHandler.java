@@ -48,4 +48,16 @@ public class DamageHandler {
     public static boolean StandDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND, attacker), power);
     }
+
+
+    public static boolean TimeDamageEntity(Entity entity, float power, Entity attacker){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.TIME, attacker), power);
+    }
+
+    public static boolean TimeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (DamageHandler.TimeDamageEntity(target,pow, attacker)){
+            return true;
+        }
+        return false;
+    }
 }

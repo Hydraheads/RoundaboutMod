@@ -27,6 +27,9 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -71,6 +74,9 @@ public abstract class StandUserEntity implements StandUser {
     private static final EntityDataAccessor<Boolean> STAND_ACTIVE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
     @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT_TS_DAMAGE = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BYTE);
+    @Unique
     private boolean CanSync;
     @Unique
     private StandPowers Powers;
@@ -97,6 +103,8 @@ public abstract class StandUserEntity implements StandUser {
     @Unique
     private byte dazeTime = 0;
 
+    @Unique
+    private int roundaboutTSHurtTime = 0;
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void tickRoundabout(CallbackInfo ci) {
@@ -107,7 +115,7 @@ public abstract class StandUserEntity implements StandUser {
         //}
     }
 
-
+    /**TS Floating Code*/
     @Unique
     boolean roundaboutTSJump = false;
     @Unique
@@ -125,6 +133,56 @@ public abstract class StandUserEntity implements StandUser {
             }
         }
     }
+
+    /**TS Stored Damage Code*/
+    @Unique
+    float roundaboutStoredDamage = 0;
+    @Unique
+    Entity roundaboutStoredAttacker;
+    @Unique
+    public float roundaboutGetStoredDamage(){
+        return this.roundaboutStoredDamage;
+    }
+    @Unique
+    public byte roundaboutGetStoredDamageByte(){
+        return ((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT_TS_DAMAGE);
+    }
+    @Unique
+    public void roundaboutSetStoredDamage(float roundaboutStoredDamage){
+        if (!((LivingEntity) (Object) this).level().isClientSide) {
+            this.roundaboutStoredDamage = roundaboutStoredDamage;
+            if (roundaboutStoredDamage <= 0) {
+                ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT_TS_DAMAGE, (byte) 0);
+            } else {
+                ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT_TS_DAMAGE, (byte) (2 + Math.round(Math.min(
+                        (roundaboutStoredDamage / (this.roundaboutGetMaxStoredDamage())) * 6,
+                        6))));
+            }
+        }
+    }
+
+    @Unique
+    public Entity roundaboutGetStoredAttacker(){
+        return this.roundaboutStoredAttacker;
+    }
+    @Unique
+    public void roundaboutSetStoredAttacker(Entity roundaboutStoredAttacker){
+        this.roundaboutStoredAttacker = roundaboutStoredAttacker;
+    }
+
+    @Unique
+    public float roundaboutGetMaxStoredDamage(){
+        LivingEntity living = ((LivingEntity)(Object)this);
+        if (living instanceof Player) {
+            return (float) (living.getMaxHealth() * 0.25);
+        } else if (living instanceof Illusioner) {
+            return (float) (living.getMaxHealth() * 0.25);
+        } else {
+            return living.getMaxHealth();
+        }
+
+    }
+
 
     /**returns if the mob has a stand. For now, returns if stand is active, but in the future will be more
      * complicated**/
@@ -448,6 +506,7 @@ public abstract class StandUserEntity implements StandUser {
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(STAND_ID, -1);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_TS_DAMAGE, (byte) 0);
         ((LivingEntity)(Object)this).getEntityData().define(STAND_ACTIVE, false);
     }
 
@@ -543,8 +602,9 @@ public abstract class StandUserEntity implements StandUser {
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"),ordinal = 0)
     private double RoundaboutTravel3(double $$1) {
         float cooking = 0.2F;
-        if (((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
-            boolean TSJumping = ((StandUser)this).roundaboutGetTSJump();
+        if (((LivingEntity)(Object)this) instanceof Player && ((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
+
+            boolean TSJumping = ((IPlayerEntity)this).roundaboutGetPos() == PlayerPosIndex.TS_FLOAT;
             if (TSJumping) {
                     float cooking2 = (float) (((LivingEntity)(Object)this).getDeltaMovement().y + 0.2);
                     if (((LivingEntity)(Object)this) instanceof Player && ((Player)(Object)this).isCrouching()) {
@@ -589,8 +649,27 @@ public abstract class StandUserEntity implements StandUser {
     protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
         LivingEntity entity = ((LivingEntity)(Object) this);
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
-
+            if (this.roundaboutTSHurtTime <= 0 || $$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+                float dmg = roundaboutGetStoredDamage();
+                float max = roundaboutGetMaxStoredDamage();
+                if ((dmg + $$1) > max) {
+                    roundaboutSetStoredDamage(max);
+                } else {
+                    roundaboutSetStoredDamage((dmg + $$1));
+                }
+                if ($$0 != null && $$0.getEntity() != null) {
+                    roundaboutSetStoredAttacker($$0.getEntity());
+                } else {
+                    roundaboutSetStoredAttacker(null);
+                }
+                this.roundaboutTSHurtTime = 7;
+            }
             ci.setReturnValue(false);
+        } else {
+            /*This extra check ensures that extra damage will not be dealt if a projectile ticks before the TS damage catch-up*/
+            if (roundaboutGetStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
+                ci.setReturnValue(false);
+            }
         }
 
         if (!((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
@@ -598,5 +677,10 @@ public abstract class StandUserEntity implements StandUser {
                 ($$0.is(DamageTypes.ON_FIRE) || $$0.is(DamageTypes.IN_FIRE))){
             ci.setReturnValue(false);
         }
+    }
+
+    @Unique
+    public void roundaboutUniversalTick(){
+        if (this.roundaboutTSHurtTime > 0){this.roundaboutTSHurtTime--;}
     }
 }

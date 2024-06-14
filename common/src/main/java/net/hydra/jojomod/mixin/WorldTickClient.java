@@ -141,12 +141,13 @@ public class WorldTickClient {
     }
 
     public void roundaboutTSTickEntity(Entity $$0){
-        float delta = Minecraft.getInstance().getDeltaFrameTime();
         if ($$0 instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) $$0;
             roundaboutTickLivingEntityTS(livingEntity);
             ((StandUser)livingEntity).getStandPowers().timeTick();
             updateStandTS(livingEntity);
+            $$0.invulnerableTime = 0;
+            ((LivingEntity) $$0).hurtTime = 0;
         } else {
             $$0.walkDistO = $$0.walkDist;
 

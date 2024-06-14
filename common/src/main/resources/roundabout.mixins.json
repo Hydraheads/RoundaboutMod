@@ -47,6 +47,7 @@
     "ZHumanoidArmorLayer",
     "ZHumanoidModel",
     "ZItemInHandLayer",
+    "ZLivingEntityRenderer",
     "ZParticle",
     "ZParticleAccess",
     "ZParticleEngine",

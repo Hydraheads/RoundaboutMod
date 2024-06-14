@@ -79,4 +79,15 @@ public interface StandUser {
     @Nullable
     StandEntity getStand();
 
+    float roundaboutGetStoredDamage();
+    Entity roundaboutGetStoredAttacker();
+    void roundaboutSetStoredAttacker(Entity attacker);
+    void roundaboutSetStoredDamage(float roundaboutStoredDamage);
+
+    float roundaboutGetMaxStoredDamage();
+
+    byte roundaboutGetStoredDamageByte();
+
+    void roundaboutUniversalTick();
+
 }

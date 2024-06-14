@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.core.BlockPos;
@@ -94,8 +95,11 @@ public class WorldTickServer {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
+            roundaboutTickTSDamage($$0);
             if (((TimeStop) this).CanTimeStopEntity($$0)){
                 if ($$0 instanceof LivingEntity) {
+                    ((LivingEntity) $$0).hurtTime = 0;
+                    $$0.invulnerableTime = 0;
                     ((StandUser)$$0).getStandPowers().timeTick();
                     ((ILivingEntityAccess) $$0).roundaboutPushEntities();
                 } else if ($$0 instanceof ItemEntity) {
@@ -117,13 +121,17 @@ public class WorldTickServer {
             }
         }
     }
+
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+        roundaboutTickTSDamage($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
             $$1.stopRiding();
         } else if ($$1 instanceof Player || this.entityTickList.contains($$1)) {
             if (((TimeStop) this).CanTimeStopEntity($$1)){
                 if ($$1 instanceof LivingEntity) {
+                    $$1.invulnerableTime = 0;
+                    ((LivingEntity) $$1).hurtTime = 0;
                     ((ILivingEntityAccess) $$1).roundaboutPushEntities();
                 } else if ($$1 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$1).RoundaboutTickPickupDelay();
@@ -148,6 +156,18 @@ public class WorldTickServer {
         BlockPos BP = $$2.getWorldPosition();
         if (((TimeStop) this).inTimeStopRange(new Vec3i(BP.getX(),BP.getY(),BP.getZ()))){
             ci.cancel();
+        }
+    }
+
+    private void roundaboutTickTSDamage(Entity entity){
+        if (entity instanceof LivingEntity){
+            ((StandUser)entity).roundaboutUniversalTick();
+            if (!(((TimeStop) this).CanTimeStopEntity(entity)) && ((StandUser)entity).roundaboutGetStoredDamage() > 0){
+                DamageHandler.TimeDamageEntityAttack(entity,
+                        ((StandUser)entity).roundaboutGetStoredDamage(), 0, ((StandUser)entity).roundaboutGetStoredAttacker());
+                ((StandUser)entity).roundaboutSetStoredDamage(0);
+                ((StandUser)entity).roundaboutSetStoredAttacker(null);
+            }
         }
     }
 
