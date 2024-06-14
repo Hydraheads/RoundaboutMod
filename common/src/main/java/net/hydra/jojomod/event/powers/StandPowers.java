@@ -760,7 +760,11 @@ public class StandPowers {
                                     playBarrageEndNoise(0);
                                 } else {
                                     setDazed((LivingEntity) entity, (byte) 3);
-                                    playBarrageNoise(hitNumber);
+                                    if (!this.self.level().isClientSide() && (((TimeStop)this.self.level()).CanTimeStopEntity(entity))) {
+                                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+                                    } else {
+                                        playBarrageNoise(hitNumber);
+                                    }
                                 }
                             }
                             barrageImpact2(entity, lastHit, knockbackStrength);

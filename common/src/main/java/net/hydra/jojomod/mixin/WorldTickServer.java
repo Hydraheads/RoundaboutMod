@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -163,10 +164,16 @@ public class WorldTickServer {
         if (entity instanceof LivingEntity){
             ((StandUser)entity).roundaboutUniversalTick();
             if (!(((TimeStop) this).CanTimeStopEntity(entity)) && ((StandUser)entity).roundaboutGetStoredDamage() > 0){
-                DamageHandler.TimeDamageEntityAttack(entity,
-                        ((StandUser)entity).roundaboutGetStoredDamage(), 0, ((StandUser)entity).roundaboutGetStoredAttacker());
+
+                if (DamageHandler.TimeDamageEntityAttack(entity,
+                        ((StandUser)entity).roundaboutGetStoredDamage(), 0, ((StandUser)entity).roundaboutGetStoredAttacker())){
+                    entity.hurtMarked = true;
+                    entity.setDeltaMovement(Objects.requireNonNull(((IEntityAndData) entity).getRoundaboutDeltaBuildupTS()));
+                    entity.hasImpulse = true;
+                }
                 ((StandUser)entity).roundaboutSetStoredDamage(0);
                 ((StandUser)entity).roundaboutSetStoredAttacker(null);
+                ((IEntityAndData)entity).setRoundaboutDeltaBuildupTS(new Vec3(0,0,0));
             }
         }
     }

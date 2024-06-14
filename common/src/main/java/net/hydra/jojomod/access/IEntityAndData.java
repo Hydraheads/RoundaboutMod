@@ -3,6 +3,7 @@ package net.hydra.jojomod.access;
 import java.util.UUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public interface IEntityAndData {
@@ -47,5 +48,8 @@ public interface IEntityAndData {
     @Nullable ItemStack getRoundaboutRenderHead();
     @Nullable ItemStack getRoundaboutRenderMainHand();
     @Nullable ItemStack getRoundaboutRenderOffHand();
+    @Nullable Vec3 getRoundaboutDeltaBuildupTS();
+
+    void setRoundaboutDeltaBuildupTS(Vec3 vec3);
 
 }

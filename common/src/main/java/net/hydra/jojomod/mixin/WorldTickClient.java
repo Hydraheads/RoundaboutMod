@@ -48,6 +48,9 @@ public class WorldTickClient {
     private void roundaboutTickEntity(Entity $$0, CallbackInfo ci) {
 
         if (!$$0.isRemoved()) {
+            if ($$0 instanceof LivingEntity) {
+                ((StandUser) $$0).roundaboutUniversalTick();
+            }
             this.standTickCheck($$0);
             for (Entity entity2 : $$0.getPassengers()) {
                 if (!entity2.isRemoved()) {
@@ -200,6 +203,9 @@ public class WorldTickClient {
 
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+        if ($$1 instanceof LivingEntity) {
+            ((StandUser) $$1).roundaboutUniversalTick();
+        }
         roundaboutStoreOldPositionsForTS($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
             $$1.stopRiding();

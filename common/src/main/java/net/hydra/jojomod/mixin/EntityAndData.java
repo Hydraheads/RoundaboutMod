@@ -6,9 +6,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -100,7 +102,7 @@ public abstract class EntityAndData implements IEntityAndData {
     private int remainingFireTicks;
 
 
-    @Inject(method = "turn", at = @At("Head"), cancellable = true)
+    @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
     public void roundaboutTurn(double $$0, double $$1, CallbackInfo ci){
         if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
             ci.cancel();
@@ -157,7 +159,7 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
     /**In a timestop, fire doesn't tick*/
-    @Inject(method = "setRemainingFireTicks", at = @At("Head"), cancellable = true)
+    @Inject(method = "setRemainingFireTicks", at = @At("HEAD"), cancellable = true)
     protected void roundaboutSetFireTicks(int $$0, CallbackInfo ci){
         Entity entity = ((Entity)(Object) this);
         if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
@@ -165,7 +167,7 @@ public abstract class EntityAndData implements IEntityAndData {
             ci.cancel();
         }
     }
-    @Inject(method = "clearFire", at = @At("Head"), cancellable = true)
+    @Inject(method = "clearFire", at = @At("HEAD"), cancellable = true)
     protected void roundaboutClearFire(CallbackInfo ci){
         Entity entity = ((Entity)(Object) this);
         if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
@@ -175,7 +177,7 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
 //why is activestand nulling a problem?
-    @Inject(method = "save", at = @At("Head"))
+    @Inject(method = "save", at = @At("HEAD"))
     protected void roundaboutWrite(CompoundTag $$0, CallbackInfoReturnable info){
         if (persistentData != null){
               persistentData.putBoolean("stand_on", standOn);
@@ -188,11 +190,39 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
 
-    @Inject(method = "load", at = @At("Head"))
+    @Inject(method = "load", at = @At("HEAD"))
     protected void roundaboutRead(CompoundTag $$0, CallbackInfo info){
         if ($$0.contains("roundabout.stand_data",10)){
            persistentData = $$0.getCompound("roundabout.stand_data");
            syncPersistentData();
         }
     }
+
+    @Shadow
+    private Vec3 deltaMovement;
+
+    @Unique
+    private Vec3 roundaboutDeltaBuildupTS = new Vec3(0,0,0);
+
+    @Unique
+    public Vec3 getRoundaboutDeltaBuildupTS(){
+        return this.roundaboutDeltaBuildupTS;
+    }
+
+    @Unique
+    public void setRoundaboutDeltaBuildupTS(Vec3 vec3){
+        if (vec3 != null) {
+            this.roundaboutDeltaBuildupTS = vec3;
+        }
+    }
+    @Inject(method = "setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), cancellable = true)
+    protected void roundaboutSetDeltaMovement(Vec3 vec3, CallbackInfo ci){
+        if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
+            if (vec3.distanceTo(new Vec3(0,0,0)) > (roundaboutDeltaBuildupTS.distanceTo(new Vec3(0,0,0)) - 0.5)) {
+                this.roundaboutDeltaBuildupTS = vec3;
+            }
+            ci.cancel();
+        }
+    }
+
 }

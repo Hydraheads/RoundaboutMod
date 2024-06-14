@@ -648,6 +648,10 @@ public abstract class StandUserEntity implements StandUser {
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
         LivingEntity entity = ((LivingEntity)(Object) this);
+        if (entity.level().isClientSide){
+            ci.setReturnValue(false);
+            return;
+        }
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
             if (this.roundaboutTSHurtTime <= 0 || $$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
                 float dmg = roundaboutGetStoredDamage();
@@ -663,12 +667,26 @@ public abstract class StandUserEntity implements StandUser {
                     roundaboutSetStoredAttacker(null);
                 }
                 this.roundaboutTSHurtTime = 7;
+                Entity $$8 = $$0.getEntity();
+                if ($$8 != null && !$$0.is(DamageTypeTags.IS_EXPLOSION)) {
+                    double $$13 = $$8.getX() - entity.getX();
+                    double $$14;
+                    for ($$14 = $$8.getZ() - entity.getZ(); $$13 * $$13 + $$14 * $$14 < 1.0E-4; $$14 = (Math.random() - Math.random()) * 0.01) {
+                        $$13 = (Math.random() - Math.random()) * 0.01;
+                    }
+                    entity.knockback(0.4F, $$13, $$14);
+                }
+                ci.setReturnValue(true);
+
+                return;
             }
             ci.setReturnValue(false);
+            return;
         } else {
             /*This extra check ensures that extra damage will not be dealt if a projectile ticks before the TS damage catch-up*/
             if (roundaboutGetStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
                 ci.setReturnValue(false);
+                return;
             }
         }
 
