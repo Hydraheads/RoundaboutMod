@@ -854,7 +854,7 @@ public class StandPowers {
     }
     public void playBarrageBlockEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.97F+mod, 1f);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
         }
     }
     public void playBarrageBlockNoise(){
@@ -987,6 +987,19 @@ public class StandPowers {
         float distanceFront = this.getRayDistance(entity, range);
         if (offset) {
             Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
+            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+                distanceFront = targetEntity.distanceTo(entity);
+            }
+            distanceFront -= 1;
+            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
+        }
+        return distanceFront;
+    }
+
+    public float getDistanceOutAccurate(Entity entity, float range, boolean offset){
+        float distanceFront = this.getRayDistance(entity, range);
+        if (offset) {
+            Entity targetEntity = this.getTargetEntity(this.self,this.standReach);
             if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
                 distanceFront = targetEntity.distanceTo(entity);
             }

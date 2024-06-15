@@ -601,7 +601,7 @@ public abstract class StandEntity extends Mob{
             addXZ-= 0.015F;
             distanceFront = 1.05F;
         } else {
-            distanceFront = ((StandUser) standUser).getDistanceOut(standUser,((StandUser) standUser).getStandReach(),true);
+            distanceFront = ((StandUser) standUser).getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).getStandReach(),true);
         }
 
         Vec3 frontVectors = FrontVectors(standUser, 0, distanceFront);
