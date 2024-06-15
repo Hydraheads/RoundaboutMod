@@ -45,6 +45,8 @@ public class ForgeSounds {
             register(ModSounds.STAND_BARRAGE_BLOCK, ModSounds.STAND_BARRAGE_BLOCK_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_HIT_EVENT =
             register(ModSounds.STAND_BARRAGE_HIT, ModSounds.STAND_BARRAGE_HIT_ID);
+    public static final RegistryObject<SoundEvent> STAND_BARRAGE_END_BLOCK_EVENT =
+            register(ModSounds.STAND_BARRAGE_END_BLOCK, ModSounds.STAND_BARRAGE_END_BLOCK_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_HIT2_EVENT =
             register(ModSounds.STAND_BARRAGE_HIT2, ModSounds.STAND_BARRAGE_HIT2_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_END_EVENT =

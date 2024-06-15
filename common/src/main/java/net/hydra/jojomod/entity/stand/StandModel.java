@@ -38,7 +38,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     public void defaultAnimations(T entity, float animationProgress, float windupLength){
         this.animate(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
         this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
-        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f);
+        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f); /*1.1666 for 6 ticks, 1.4 for 5*/
         this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);
         this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.animate(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);

@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PowersTheWorld extends StandPowers {
@@ -131,6 +132,42 @@ public class PowersTheWorld extends StandPowers {
             timeStopStartedBarrage = false;
         }
         super.setPowerBarrageCharge();
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity){
+        if (!this.getSelf().level().isClientSide()) {
+            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                playBarrageBlockNoise();
+            } else {
+                if (hitNumber % 2 == 0) {
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void playBarrageNoise2(int hitNumber, Entity entity){
+        if (!this.getSelf().level().isClientSide()) {
+            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                playBarrageBlockNoise();
+            } else {
+                if (hitNumber%2==0) {
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.9 + (Math.random() * 0.25)));
+                }
+            }
+        }
+    }
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity){
+        if (!this.getSelf().level().isClientSide()) {
+            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                playBarrageBlockEndNoise(0,entity);
+            } else {
+                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+            }
+        }
     }
 
     /**20 ticks in a second*/

@@ -345,14 +345,14 @@ public class StandPowers {
 
     public void breakClash(LivingEntity winner, LivingEntity loser){
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
-            ((StandUser)winner).getStandPowers().playBarrageEndNoise(0);
+            ((StandUser)winner).getStandPowers().playBarrageEndNoise(0, loser);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
             ((StandUser)winner).getStandPowers().animateStand((byte) 13);
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){
-        ((StandUser)user1).getStandPowers().playBarrageEndNoise(0F);
-        ((StandUser)user2).getStandPowers().playBarrageEndNoise(-0.05F);
+        ((StandUser)user1).getStandPowers().playBarrageEndNoise(0F,user2);
+        ((StandUser)user2).getStandPowers().playBarrageEndNoise(-0.05F,user1);
 
         user1.hurtMarked = true;
         user2.hurtMarked = true;
@@ -390,7 +390,7 @@ public class StandPowers {
                     || !((StandUser) this.self).getActive() || !((StandUser) entity).getActive()) {
                         this.updateClashing2();
                     } else {
-                        playBarrageNoise(this.attackTimeDuring+ clashStarter);
+                        playBarrageNoise(this.attackTimeDuring+ clashStarter, entity);
                     }
                 }
             } else {
@@ -757,27 +757,19 @@ public class StandPowers {
                             if (entity instanceof LivingEntity) {
                                 if (lastHit) {
                                     setDazed((LivingEntity) entity, (byte) 0);
-                                    playBarrageEndNoise(0);
+                                    playBarrageEndNoise(0, entity);
                                 } else {
                                     setDazed((LivingEntity) entity, (byte) 3);
-                                    if (!this.self.level().isClientSide() && (((TimeStop)this.self.level()).CanTimeStopEntity(entity))) {
-                                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-                                    } else {
-                                        playBarrageNoise(hitNumber);
-                                    }
+                                        playBarrageNoise(hitNumber, entity);
                                 }
                             }
                             barrageImpact2(entity, lastHit, knockbackStrength);
                         } else {
                             if (lastHit) {
                                 knockShield2(entity, 200);
-                                playBarrageEndNoise(0);
+                                playBarrageBlockEndNoise(0, entity);
                             } else {
                                 entity.setDeltaMovement(prevVelocity);
-
-                                if (!this.self.level().isClientSide()) {
-                                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-                                }
                             }
                         }
                     }
@@ -813,9 +805,10 @@ public class StandPowers {
     }
 
     public void takeDeterminedKnockbackWithY(LivingEntity user, Entity target, float knockbackStrength){
+        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
         this.takeKnockbackWithY(target, knockbackStrength,
                 Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
-                Mth.sin(user.getXRot() * ((float) Math.PI / 180)),
+                Mth.sin(xRot * ((float) Math.PI / 180)),
                 -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
 
     }
@@ -841,24 +834,35 @@ public class StandPowers {
             }
         }
     }
-    public void playBarrageNoise(int hitNumber){
+    public void playBarrageNoise(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
-            if (hitNumber%2==0) {
+            if (hitNumber % 2 == 0) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
             }
         }
-    } public void playBarrageNoise2(int hitNumber){
+    } public void playBarrageNoise2(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.9 + (Math.random() * 0.25)));
             }
         }
     }
-    public void playBarrageEndNoise(float mod){
+    public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
           this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
         }
     }
+    public void playBarrageBlockEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.97F+mod, 1f);
+        }
+    }
+    public void playBarrageBlockNoise(){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+        }
+    }
+
     /**ClashDone is a value that makes you lock in your barrage when you are done barraging**/
     private boolean clashDone = false;
     public boolean getClashDone(){
