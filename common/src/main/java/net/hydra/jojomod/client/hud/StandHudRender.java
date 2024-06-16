@@ -24,6 +24,8 @@ public class StandHudRender {
 
     private static final ResourceLocation SPECIAL_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stop_time.png");
+    private static final ResourceLocation SPECIAL_ICON2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/stop_time_impulse.png");
 
     private static final ResourceLocation SKILL2_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/assault.png");
@@ -76,7 +78,11 @@ public class StandHudRender {
                 context.blit(SQUARE_ICON,x+97,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
 
                 context.blit(SKILL2_ICON,x+50,y-1,0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
-                context.blit(SPECIAL_ICON,x+100,y-1,0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+                if (playerEntity.isCrouching()){
+                    context.blit(SPECIAL_ICON2, x + 100, y - 1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+                } else {
+                    context.blit(SPECIAL_ICON, x + 100, y - 1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+                }
 
 
 

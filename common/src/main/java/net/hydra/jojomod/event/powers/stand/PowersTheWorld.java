@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class PowersTheWorld extends StandPowers {
 
@@ -28,15 +29,116 @@ public class PowersTheWorld extends StandPowers {
         return ModSounds.WORLD_SUMMON_SOUND_EVENT;
     }
 
+    public boolean crouchBuffer = false;
+
+    /**Begin Charging Time Stop, also detects activation via release**/
     @Override
-    public void buttonInputSpecial() {
-        if (this.getSelf().level().isClientSide()) {
+    public void buttonInputSpecial(boolean keyIsDown) {
+        if (this.getSelf().level().isClientSide) {
+            boolean sendPacket = false;
             if (KeyInputs.roundaboutClickCount == 0) {
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
+                if (keyIsDown) {
+                    Roundabout.LOGGER.info(String.valueOf(3));
+                    if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE || this.isStoppingTime() || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
+                        Roundabout.LOGGER.info(String.valueOf(4));
+                        sendPacket = true;
+                    } else {
+                        Roundabout.LOGGER.info(String.valueOf(5));
+                        KeyInputs.roundaboutClickCount = 2;
+                        if (this.getSelf().isCrouching() ) {
+                            Roundabout.LOGGER.info(String.valueOf(6));
+                            sendPacket = true;
+                        } else {
+                            Roundabout.LOGGER.info(String.valueOf(7));
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_CHARGE);
+                            ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGE, true);
+                        }
+                    }
+                } else {
+                    if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE) {
+                        if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
+                            Roundabout.LOGGER.info(String.valueOf(8));
+                            sendPacket = true;
+                        }
+                    }
+                }
+
+            } else {
+                if (keyIsDown) {
+                    KeyInputs.roundaboutClickCount = 2;
+                }
+                if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE) {
+                    Roundabout.LOGGER.info(String.valueOf(9));
+                    if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
+                        sendPacket = true;
+                    }
+                }
+            }
+
+            if (sendPacket) {
+                KeyInputs.roundaboutClickCount = 2;
+                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL, this.getChargedTSSeconds());
                 ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
             }
-            KeyInputs.roundaboutClickCount = 2;
         }
+    }
+    /*Activate Time Stop**/
+    @Override
+    public void setPowerSpecial(int lastMove) {
+            if (!this.isStoppingTime()) {
+                /*Time Stop*/
+                this.timeStoppingTicks = 180;
+                if (!this.getSelf().level().isClientSide()) {
+                    ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
+                    playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND);
+                }
+            } else {
+                /*Time Resume*/
+                this.timeStoppingTicks = 0;
+                if (!this.getSelf().level().isClientSide()) {
+                    ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
+                    playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2);
+                }
+            }
+        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+    }
+
+    @Override
+    public void setPowerSpecialCharge(int lastMove) {
+        this.setAttackTimeDuring(0);
+        this.setChargedTSSeconds(0);
+        this.setActivePower(PowerIndex.SPECIAL_CHARGE);
+    }
+
+    @Override
+    public void updateUniqueMoves(){
+        /*Tick through TIme Stop Charge*/
+        if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE){
+            float TSChargeSeconds = this.getChargedTSSeconds();
+            TSChargeSeconds += (this.getMaxChargeTSTime()/60);
+            if (TSChargeSeconds >= this.getMaxChargeTSTime() || this.crouchBuffer) {
+                if (this.getSelf().level().isClientSide){
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL, this.getChargedTSSeconds());
+                    ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                }
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+            }
+        }
+    }
+
+    /**Charge up Time Stop*/
+    @Override
+    public void tryChargedPower(int move, boolean forced, float chargeTime){
+        super.tryChargedPower(move, forced, chargeTime);
+    }
+
+    @Override
+    public float getMaxTSTime (){
+        return 9;
+    }
+    @Override
+    public float getMaxChargeTSTime(){
+        return 5;
     }
 
     @Override
@@ -73,23 +175,6 @@ public class PowersTheWorld extends StandPowers {
             if (this.getSelf().level().isClientSide) {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
-            }
-        }
-    }
-    /***/
-    @Override
-    public void setPowerSpecial(int lastMove) {
-        if (!this.getSelf().level().isClientSide()) {
-            if (!this.isStoppingTime()) {
-                /*Time Stop*/
-                playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND);
-                this.timeStoppingTicks = 180;
-                ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
-            } else {
-                /*Time Resume*/
-                ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
-                this.timeStoppingTicks = 0;
-                playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2);
             }
         }
     }

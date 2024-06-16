@@ -68,6 +68,11 @@ public class ForgePackets implements IPacketAccess {
 
     }
     @Override
+    public void StandChargedPowerPacket(byte power, float chargeTime) {
+        ForgePacketHandler.sendToServer(new ForgeChargedPowerPacket(power,chargeTime));
+
+    }
+    @Override
     public void StandPunchPacket(int targetID, byte APP) {
         ForgePacketHandler.sendToServer(new ForgePunchPacket(targetID,APP));
 

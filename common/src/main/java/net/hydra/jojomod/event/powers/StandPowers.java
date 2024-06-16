@@ -132,6 +132,20 @@ public class StandPowers {
     /**This updates when a punch is thrown, to stop the stand from throwing the same punch twice if the game lags*/
     private byte activePowerPhaseCheck = -1;
 
+    private float chargedTSSeconds = 0;
+
+    public float getChargedTSSeconds (){
+        return this.chargedTSSeconds;
+    }
+    public void setChargedTSSeconds (float chargedTSSeconds){
+        this.chargedTSSeconds = chargedTSSeconds;
+    }
+    public float getMaxTSTime (){
+        return 0;
+    }
+    public float getMaxChargeTSTime(){
+        return 0;
+    }
     public boolean getSummonCD(){
         return this.summonCD <= 0;
     } public void setSummonCD(int summonCD){
@@ -154,7 +168,7 @@ public class StandPowers {
     }
 
     /**Override this to set the special move key press conditions*/
-    public void buttonInputSpecial(){
+    public void buttonInputSpecial(boolean keyIsDown){
 
     }
 
@@ -1199,6 +1213,8 @@ public class StandPowers {
                     this.setPowerClash();
                 } else if (move == PowerIndex.SPECIAL) {
                     this.setPowerSpecial(move);
+                } else if (move == PowerIndex.SPECIAL_CHARGE) {
+                    this.setPowerSpecialCharge(move);
                 }
             }
             if (this.self.level().isClientSide) {
@@ -1207,9 +1223,11 @@ public class StandPowers {
         }
     }
 
+    public void tryChargedPower(int move, boolean forced, float chargeTime){
+        tryPower(move, forced);
+    }
+
     /**The Sound Event to cancel when your barrage is canceled*/
-
-
 
     public final void playSoundsIfNearby(byte soundNo) {
         if (!this.self.level().isClientSide) {
@@ -1315,6 +1333,8 @@ public class StandPowers {
 
     /**Override this to set the special move*/
     public void setPowerSpecial(int lastMove) {
+    }
+    public void setPowerSpecialCharge(int lastMove) {
     }
 
     public void setPowerClash() {

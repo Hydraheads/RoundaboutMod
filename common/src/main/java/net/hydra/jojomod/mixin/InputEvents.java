@@ -237,9 +237,9 @@ public abstract class InputEvents {
                     if (KeyInputRegistry.abilityThreeKey.isDown()) {
                         //client.player.sendMessage(Text.of("Ability Key 3"));
                     }
-                    if (KeyInputRegistry.abilityFourKey.isDown()) {
-                        KeyInputs.specialMoveKey(player,((Minecraft) (Object) this));
-                    }
+
+                    KeyInputs.specialMoveKey(player,((Minecraft) (Object) this),KeyInputRegistry.abilityFourKey.isDown());
+
                     if (KeyInputRegistry.menuKey.isDown()) {
                         KeyInputs.menuKey(player,((Minecraft) (Object) this));
                     }

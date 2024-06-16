@@ -36,8 +36,8 @@ public class KeyInputs {
         }
     }
 
-    public static void specialMoveKey(Player player, Minecraft client){
-        ((StandUser) player).getStandPowers().buttonInputSpecial();
+    public static void specialMoveKey(Player player, Minecraft client, boolean keyIsDown){
+        ((StandUser) player).getStandPowers().buttonInputSpecial(keyIsDown);
     }
 
 

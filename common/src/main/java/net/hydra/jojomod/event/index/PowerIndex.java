@@ -11,7 +11,8 @@ public class PowerIndex {
     public static final byte BARRAGE = 5;
     public static final byte BARRAGE_CLASH = 6;
     public static final byte SPECIAL = 7;
-    public static final byte MOVEMENT = 8;
-    public static final byte SNEAK_MOVEMENT = 9;
+    public static final byte SPECIAL_CHARGE = 8;
+    public static final byte MOVEMENT = 11;
+    public static final byte SNEAK_MOVEMENT = 12;
 
 }

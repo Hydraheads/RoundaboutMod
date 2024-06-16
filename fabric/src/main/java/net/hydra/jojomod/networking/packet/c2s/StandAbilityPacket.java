@@ -28,6 +28,14 @@ public class StandAbilityPacket {
             ((StandUser) player).tryPower(power, true);
         });
     }
+    public static void switchChargedPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                   FriendlyByteBuf buf, PacketSender responseSender) {
+        byte power = buf.readByte();
+        float charge = buf.readFloat();
+        server.execute(() -> {
+            ((StandUser) player).tryChargedPower(power, true, charge);
+        });
+    }
 
     public static void punch(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                              FriendlyByteBuf buf, PacketSender responseSender){

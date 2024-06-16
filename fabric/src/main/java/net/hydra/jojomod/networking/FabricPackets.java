@@ -108,6 +108,13 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeByte(power);
         ClientPlayNetworking.send(ModMessages.STAND_POWER_PACKET, buffer);
     }
+    @Override
+    public void StandChargedPowerPacket(byte power, float chargeTime){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+        buffer.writeByte(power);
+        buffer.writeFloat(chargeTime);
+        ClientPlayNetworking.send(ModMessages.STAND_CHARGED_POWER_PACKET, buffer);
+    }
 
     @Override
     public void StandPunchPacket(int targetID, byte APP){

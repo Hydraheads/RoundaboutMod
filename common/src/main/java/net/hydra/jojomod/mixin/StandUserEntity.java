@@ -300,6 +300,12 @@ public abstract class StandUserEntity implements StandUser {
             this.getStandPowers().syncCooldowns();
         }
     }
+    public void tryChargedPower(int move, boolean forced, float chargeTime){
+        if (!this.isClashing() || move == PowerIndex.NONE) {
+            this.getStandPowers().tryChargedPower(move, forced, chargeTime);
+            this.getStandPowers().syncCooldowns();
+        }
+    }
 
 
 
