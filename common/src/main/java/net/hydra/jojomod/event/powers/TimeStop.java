@@ -21,10 +21,10 @@ public interface TimeStop {
     void removeTimeStoppingEntity(LivingEntity $$0);
     void streamTimeStopToClients();
     void streamTimeStopRemovalToClients(LivingEntity removedStoppingEntity);
-    void processTSPacket(int timeStoppingEntity, double x, double y, double z, double range);
+    void processTSPacket(int timeStoppingEntity, double x, double y, double z, double range, float duration, float maxDuration);
     void processTSRemovePacket(int timeStoppingEntity);
     void removeTimeStoppingEntityClient(int w);
-    void addTimeStoppingEntityClient(int timeStoppingEntity, double x, double y, double z, double range);
+    void addTimeStoppingEntityClient(int timeStoppingEntity, double x, double y, double z, double range, float duration, float maxDuration);
     void processTSBlockEntityPacket(BlockEntity blockEntity);
     void tickTimeStoppingEntity();
     void tickAllTimeStops();

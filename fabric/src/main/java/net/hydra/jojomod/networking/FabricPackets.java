@@ -67,13 +67,15 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range) {
+    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, float chargeTime, float maxChargeTime) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(entityID);
         buffer.writeDouble(x);
         buffer.writeDouble(y);
         buffer.writeDouble(z);
         buffer.writeDouble(range);
+        buffer.writeFloat(chargeTime);
+        buffer.writeFloat(maxChargeTime);
         ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_PACKET, buffer);
 
     }

@@ -61,10 +61,10 @@ public class TimeStopWorld implements TimeStop {
     }
 
     @Override
-    public void addTimeStoppingEntityClient(int id, double x, double y, double z, double range) {
+    public void addTimeStoppingEntityClient(int id, double x, double y, double z, double range, float duration, float maxDuration) {
         if (((Level) (Object) this).isClientSide) {
             if (this.timeStoppingEntitiesClient.isEmpty()) {
-                this.timeStoppingEntitiesClient = ImmutableList.of(new TimeStopInstance(id,x,y,z,range));
+                this.timeStoppingEntitiesClient = ImmutableList.of(new TimeStopInstance(id,x,y,z,range, duration, maxDuration));
             } else {
                 List<TimeStopInstance> $$0 = Lists.newArrayList(this.timeStoppingEntitiesClient);
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
@@ -73,7 +73,7 @@ public class TimeStopWorld implements TimeStop {
                         $$1.remove($$0.get(i));
                     }
                 }
-                $$1.add(new TimeStopInstance(id, x, y, z, range));
+                $$1.add(new TimeStopInstance(id, x, y, z, range, duration, maxDuration));
                 this.timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
             }
         }
@@ -125,7 +125,10 @@ public class TimeStopWorld implements TimeStop {
                         Entity TSI = $$1.get(i);
                         /*You only need data of time stopping mobs that are relatively close by*/
                         if (MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
-                            ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), TSI.getX(),TSI.getY(),TSI.getZ(),((StandUser) TSI).getStandPowers().getTimestopRange());
+                            ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), TSI.getX(),
+                                    TSI.getY(),TSI.getZ(),((StandUser) TSI).getStandPowers().getTimestopRange(),
+                                    ((StandUser) TSI).getStandPowers().getChargedTSSeconds(),
+                                    ((StandUser) TSI).getStandPowers().getMaxChargeTSTime());
                         }
                     }
                 }
@@ -147,9 +150,9 @@ public class TimeStopWorld implements TimeStop {
 
     /**On the client side, takes streamed packets and adds/removes entities from them to the liste*/
     @Override
-    public void processTSPacket(int timeStoppingEntity, double x, double y, double z, double range){
+    public void processTSPacket(int timeStoppingEntity, double x, double y, double z, double range, float duration, float maxDuration){
         if (((Level) (Object) this).isClientSide) {
-            addTimeStoppingEntityClient(timeStoppingEntity, x,y,z, range);
+            addTimeStoppingEntityClient(timeStoppingEntity, x,y,z, range, duration, maxDuration);
         }
     }
     @Override

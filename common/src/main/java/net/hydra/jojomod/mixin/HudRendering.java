@@ -2,8 +2,10 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -64,22 +66,31 @@ public abstract class HudRendering implements IHudAccess {
 
 
     private boolean roundaboutRenderBars(GuiGraphics context, int x){
-        assert minecraft.player != null;
-        if (((StandUser) minecraft.player).isClashing()) {
-            ((StandUserClientPlayer)minecraft.player).setClashDisplayExtraTimestamp(this.minecraft.player.level().getGameTime());
-            float c = (((StandUser) minecraft.player).getStandPowers().getClashProgress());
-            ((StandUserClientPlayer)minecraft.player).setLastClashPower(c);
-            StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha,c);
-            return true;
-        } else if (((StandUserClientPlayer)minecraft.player).getClashDisplayExtraTimestamp() >= this.minecraft.player.level().getGameTime()-20){
-            StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, ((StandUserClientPlayer)minecraft.player).getLastClashPower());
-            return true;
-        } else if (((StandUser) minecraft.player).isGuarding() || ((StandUser) minecraft.player).getGuardPoints() < ((StandUser) minecraft.player).getMaxGuardPoints()) {
-            StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha);
-            return true;
+        if (minecraft.player != null && minecraft.level != null) {
+            boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
+            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
+
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, false);
+                return true;
+            } else if (((StandUser) minecraft.player).isClashing()) {
+                ((StandUserClientPlayer) minecraft.player).setClashDisplayExtraTimestamp(this.minecraft.player.level().getGameTime());
+                float c = (((StandUser) minecraft.player).getStandPowers().getClashProgress());
+                ((StandUserClientPlayer) minecraft.player).setLastClashPower(c);
+                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, c);
+                return true;
+            } else if (((StandUserClientPlayer) minecraft.player).getClashDisplayExtraTimestamp() >= this.minecraft.player.level().getGameTime() - 20) {
+                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).getLastClashPower());
+                return true;
+            } else if (((StandUser) minecraft.player).isGuarding() || (((StandUser) minecraft.player).getGuardPoints() < ((StandUser) minecraft.player).getMaxGuardPoints()
+            && !isTSEntity)) {
+                StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha);
+                return true;
+            } else if (isTSEntity || (((StandUser) minecraft.player).getStandPowers().getMaxTSTime() > 0 && ((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.SPECIAL)) {
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true);
+                return true;
+            }
         }
         return false;
-
     }
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))

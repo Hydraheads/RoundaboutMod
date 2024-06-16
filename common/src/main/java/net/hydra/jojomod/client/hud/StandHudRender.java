@@ -231,6 +231,32 @@ public class StandHudRender {
         context.blit(JOJO_ICONS, k, l, u, v, 9, 9);
     }
 
+    public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                      int scaledWidth, int scaledHeight, int ticks, int x,
+                                      float flashAlpha, float otherFlashAlpha, boolean isTSEntity) {
+        int l;
+        int k;
+        int v;
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser) playerEntity);
+        if (isTSEntity){
+            v = 50;
+            k = (int) Math.floor((182/standUser.getStandPowers().getMaxChargeTSTime())*standUser.getStandPowers().getChargedTSSeconds());
+        } else {
+            v = 60;
+            k = 182;
+        }
+        context.blit(JOJO_ICONS, x, l, 0, v, 182, 5);
+        if (k > 0) {
+            context.blit(JOJO_ICONS, x, l, 0, v+5, k, 5);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+        context.blit(JOJO_ICONS, k, l, u, v, 9, 9);
+    }
+
 
     public static void renderClashHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,

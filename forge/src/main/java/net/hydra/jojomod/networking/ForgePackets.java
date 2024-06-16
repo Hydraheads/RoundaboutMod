@@ -44,8 +44,8 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range) {
-        ForgePacketHandler.sendToClient(new ForgeTimeStoppingEntityPacket(entityID, x,y,z, range), sp);
+    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, float duration, float maxDuration) {
+        ForgePacketHandler.sendToClient(new ForgeTimeStoppingEntityPacket(entityID, x,y,z, range, duration, maxDuration), sp);
     }
     @Override
     public void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID) {

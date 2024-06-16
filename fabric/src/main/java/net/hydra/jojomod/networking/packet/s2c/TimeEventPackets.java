@@ -19,7 +19,8 @@ public class TimeEventPackets {
     public static void updateTSList(Minecraft client, ClientPacketListener handler,
                                  FriendlyByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {
-            ((TimeStop)client.player.level()).processTSPacket(buf.readInt(),buf.readDouble(),buf.readDouble(),buf.readDouble(),buf.readDouble());
+            ((TimeStop)client.player.level()).processTSPacket(buf.readInt(),buf.readDouble(),buf.readDouble(),buf.readDouble(),buf.readDouble(),
+                    buf.readFloat(), buf.readFloat());
         }
     }
     public static void updateTSRemovalList(Minecraft client, ClientPacketListener handler,

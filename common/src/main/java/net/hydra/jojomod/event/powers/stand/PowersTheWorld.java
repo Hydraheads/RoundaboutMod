@@ -29,7 +29,6 @@ public class PowersTheWorld extends StandPowers {
         return ModSounds.WORLD_SUMMON_SOUND_EVENT;
     }
 
-    public boolean crouchBuffer = false;
 
     /**Begin Charging Time Stop, also detects activation via release**/
     @Override
@@ -38,19 +37,24 @@ public class PowersTheWorld extends StandPowers {
             boolean sendPacket = false;
             if (KeyInputs.roundaboutClickCount == 0) {
                 if (keyIsDown) {
-                    if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE || this.isStoppingTime() || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
+                    if (this.isStoppingTime()) {
+                        KeyInputs.roundaboutClickCount = 2;
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_FINISH);
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
+                    } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                         sendPacket = true;
                     } else {
                         KeyInputs.roundaboutClickCount = 2;
                         if (this.getSelf().isCrouching() ) {
                             sendPacket = true;
                         } else {
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_CHARGE);
-                            ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGE, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
+                            ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                            this.updateUniqueMoves();
                         }
                     }
                 } else {
-                    if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE) {
+                    if (this.getActivePower() == PowerIndex.SPECIAL) {
                         if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
                             sendPacket = true;
                         }
@@ -61,7 +65,7 @@ public class PowersTheWorld extends StandPowers {
                 if (keyIsDown) {
                     KeyInputs.roundaboutClickCount = 2;
                 }
-                if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE) {
+                if (this.getActivePower() == PowerIndex.SPECIAL) {
                     if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
                         sendPacket = true;
                     }
@@ -70,51 +74,62 @@ public class PowersTheWorld extends StandPowers {
 
             if (sendPacket) {
                 KeyInputs.roundaboutClickCount = 2;
-                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL, this.getChargedTSSeconds());
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSSeconds());
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
             }
         }
     }
     /*Activate Time Stop**/
-    @Override
-    public void setPowerSpecial(int lastMove) {
-            if (!this.isStoppingTime()) {
+
+    public void stopTime() {
                 /*Time Stop*/
-                this.timeStoppingTicks = 180;
-                if (!this.getSelf().level().isClientSide()) {
-                    ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
-                    playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND);
-                }
-            } else {
-                /*Time Resume*/
-                this.timeStoppingTicks = 0;
-                if (!this.getSelf().level().isClientSide()) {
-                    ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
-                    playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2);
-                }
-            }
+          if (!this.getSelf().level().isClientSide()) {
+                ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
+                playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND);
+          }
+          ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+    }
+    public void resumeTime() {
+        /*Time Resume*/
+        if (!this.getSelf().level().isClientSide()) {
+            ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
+            playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2);
+        }
         ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
     }
+    @Override
+    public void setPowerSpecial(int lastMove) {
+        this.setAttackTimeDuring(0);
+        this.setChargedTSSeconds(1F);
+        this.setActivePower(PowerIndex.SPECIAL);
+    }
+
+
 
     @Override
-    public void setPowerSpecialCharge(int lastMove) {
-        this.setAttackTimeDuring(0);
-        this.setChargedTSSeconds(0);
-        this.setActivePower(PowerIndex.SPECIAL_CHARGE);
+    public void setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.SPECIAL_FINISH){
+            this.resumeTime();
+        } else if (move == PowerIndex.SPECIAL_CHARGED){
+            this.stopTime();
+        }
     }
 
     @Override
-    public void updateUniqueMoves(){
-        /*Tick through TIme Stop Charge*/
-        if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE){
+    public void updateUniqueMoves() {
+        /*Tick through Time Stop Charge*/
+        if (this.getActivePower() == PowerIndex.SPECIAL) {
             float TSChargeSeconds = this.getChargedTSSeconds();
-            TSChargeSeconds += (this.getMaxChargeTSTime()/60);
-            if (TSChargeSeconds >= this.getMaxChargeTSTime() || this.crouchBuffer) {
-                if (this.getSelf().level().isClientSide){
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL, this.getChargedTSSeconds());
-                    ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+            TSChargeSeconds += (this.getMaxChargeTSTime() / 40);
+            if (TSChargeSeconds >= this.getMaxChargeTSTime()) {
+                TSChargeSeconds = this.getMaxChargeTSTime();
+                this.setChargedTSSeconds(TSChargeSeconds);
+                if (this.getSelf().level().isClientSide) {
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
                 }
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
+            } else {
+                this.setChargedTSSeconds(TSChargeSeconds);
             }
         }
     }
@@ -122,16 +137,23 @@ public class PowersTheWorld extends StandPowers {
     /**Charge up Time Stop*/
     @Override
     public void tryChargedPower(int move, boolean forced, float chargeTime){
-        super.tryChargedPower(move, forced, chargeTime);
+        if (move == PowerIndex.SPECIAL_CHARGED){
+            this.setChargedTSSeconds(chargeTime);
+        } else {
+            super.tryChargedPower(move, forced, chargeTime);
+        }
     }
 
     @Override
     public float getMaxTSTime (){
         return 9;
     }
+
+    /*Change this value actively to manipulate how long a ts charge can be*/
+    private float maxChargeTSTime = 5;
     @Override
     public float getMaxChargeTSTime(){
-        return 5;
+        return maxChargeTSTime;
     }
 
     @Override
@@ -249,9 +271,8 @@ public class PowersTheWorld extends StandPowers {
     }
 
     /**20 ticks in a second*/
-    private int timeStoppingTicks = 0;
     @Override
     public boolean isStoppingTime(){
-        return timeStoppingTicks > 0;
+       return (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf()));
     }
 }

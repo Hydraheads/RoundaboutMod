@@ -272,7 +272,7 @@ public class StandPowers {
                         animateStand((byte) 0);
                         poseStand(OffsetIndex.FOLLOW);
                     } else {
-                        if (this.hasStandActive(this.self) && !this.self.isUsingItem() && !this.isDazed(this.self)) {
+                        if (!this.self.isUsingItem() && !this.isDazed(this.self)) {
                             if (this.activePower == PowerIndex.ATTACK) {
                                 this.updateAttack();
                             } else if (this.isBarraging()) {
@@ -1213,8 +1213,8 @@ public class StandPowers {
                     this.setPowerClash();
                 } else if (move == PowerIndex.SPECIAL) {
                     this.setPowerSpecial(move);
-                } else if (move == PowerIndex.SPECIAL_CHARGE) {
-                    this.setPowerSpecialCharge(move);
+                } else {
+                    this.setPowerOther(move, this.getActivePower());
                 }
             }
             if (this.self.level().isClientSide) {
@@ -1334,7 +1334,7 @@ public class StandPowers {
     /**Override this to set the special move*/
     public void setPowerSpecial(int lastMove) {
     }
-    public void setPowerSpecialCharge(int lastMove) {
+    public void setPowerOther(int move, int lastMove) {
     }
 
     public void setPowerClash() {
