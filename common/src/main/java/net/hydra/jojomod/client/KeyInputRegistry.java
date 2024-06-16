@@ -24,23 +24,23 @@ public class KeyInputRegistry {
 
     public static  KeyMapping abilityOneKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_1,
-            InputConstants.KEY_V,
+            InputConstants.KEY_Z,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
 
     public static final KeyMapping abilityTwoKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_2,
-            InputConstants.KEY_Z,
+            InputConstants.KEY_X,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
     public static final KeyMapping abilityThreeKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_3,
-            InputConstants.KEY_G,
+            InputConstants.KEY_C,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
     public static KeyMapping abilityFourKey = new KeyMapping(
             KeyInputRegistry.KEY_ABILITY_4,
-            InputConstants.KEY_H,
+            InputConstants.KEY_V,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
     public static KeyMapping menuKey = new KeyMapping(

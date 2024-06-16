@@ -38,18 +38,13 @@ public class PowersTheWorld extends StandPowers {
             boolean sendPacket = false;
             if (KeyInputs.roundaboutClickCount == 0) {
                 if (keyIsDown) {
-                    Roundabout.LOGGER.info(String.valueOf(3));
                     if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE || this.isStoppingTime() || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
-                        Roundabout.LOGGER.info(String.valueOf(4));
                         sendPacket = true;
                     } else {
-                        Roundabout.LOGGER.info(String.valueOf(5));
                         KeyInputs.roundaboutClickCount = 2;
                         if (this.getSelf().isCrouching() ) {
-                            Roundabout.LOGGER.info(String.valueOf(6));
                             sendPacket = true;
                         } else {
-                            Roundabout.LOGGER.info(String.valueOf(7));
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_CHARGE);
                             ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGE, true);
                         }
@@ -57,7 +52,6 @@ public class PowersTheWorld extends StandPowers {
                 } else {
                     if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE) {
                         if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
-                            Roundabout.LOGGER.info(String.valueOf(8));
                             sendPacket = true;
                         }
                     }
@@ -68,7 +62,6 @@ public class PowersTheWorld extends StandPowers {
                     KeyInputs.roundaboutClickCount = 2;
                 }
                 if (this.getActivePower() == PowerIndex.SPECIAL_CHARGE) {
-                    Roundabout.LOGGER.info(String.valueOf(9));
                     if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
                         sendPacket = true;
                     }

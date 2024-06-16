@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,7 +18,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -225,20 +225,20 @@ public abstract class InputEvents {
                 }
 
                     //RoundaboutMod.LOGGER.info("px");
-                    if (KeyInputRegistry.summonKey.isDown()) {
+                    if (sameKeyOne(KeyInputRegistry.summonKey)) {
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
-                    if (KeyInputRegistry.abilityOneKey.isDown()) {
+                    if (sameKeyOne(KeyInputRegistry.abilityOneKey)) {
                         //client.player.sendMessage(Text.of("Ability Key"));
                     }
-                    if (KeyInputRegistry.abilityTwoKey.isDown()) {
+                    if (sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
                         //client.player.sendMessage(Text.of("Ability Key 2"));
                     }
-                    if (KeyInputRegistry.abilityThreeKey.isDown()) {
+                    if (sameKeyOne(KeyInputRegistry.abilityThreeKey)) {
                         //client.player.sendMessage(Text.of("Ability Key 3"));
                     }
 
-                    KeyInputs.specialMoveKey(player,((Minecraft) (Object) this),KeyInputRegistry.abilityFourKey.isDown());
+                    KeyInputs.specialMoveKey(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityFourKey));
 
                     if (KeyInputRegistry.menuKey.isDown()) {
                         KeyInputs.menuKey(player,((Minecraft) (Object) this));
@@ -282,4 +282,10 @@ public abstract class InputEvents {
                 //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
         }
     }
+
+    public boolean sameKeyOne(KeyMapping key1){
+        return (key1.isDown() || (key1.same(this.options.keyLoadHotbarActivator) && this.options.keyLoadHotbarActivator.isDown())
+                || (key1.same(this.options.keySaveHotbarActivator) && this.options.keySaveHotbarActivator.isDown()));
+    }
+
 }

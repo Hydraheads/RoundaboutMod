@@ -87,18 +87,18 @@ public class StandHudRender {
 
 
                 Font renderer = mc.font;
-                Component dashKey = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
-                Component special1Key = KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage();
-                Component special2Key = KeyInputRegistry.abilityThreeKey.getTranslatedKeyMessage();
-                Component ultimateKey = KeyInputRegistry.abilityFourKey.getTranslatedKeyMessage();
-                dashKey = fixKey(dashKey);
+                Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
+                Component special2Key = KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage();
+                Component special3Key = KeyInputRegistry.abilityThreeKey.getTranslatedKeyMessage();
+                Component special4Key = KeyInputRegistry.abilityFourKey.getTranslatedKeyMessage();
                 special1Key = fixKey(special1Key);
                 special2Key = fixKey(special2Key);
-                ultimateKey = fixKey(ultimateKey);
+                special3Key = fixKey(special3Key);
+                special4Key = fixKey(special4Key);
                 context.drawString(renderer, special1Key,x+24,y+11,0xffffff,true);
                 context.drawString(renderer, special2Key,x+49,y+11,0xffffff,true);
-                context.drawString(renderer, dashKey,x+74,y+11,0xffffff,true);
-                context.drawString(renderer, ultimateKey,x+99,y+11,0xffffff,true);
+                context.drawString(renderer, special3Key,x+74,y+11,0xffffff,true);
+                context.drawString(renderer, special4Key,x+99,y+11,0xffffff,true);
 
                 context.setColor(1.0f, 1.0f, 1.0f, 1f);
             }
