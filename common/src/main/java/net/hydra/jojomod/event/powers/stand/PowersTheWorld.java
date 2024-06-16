@@ -45,7 +45,8 @@ public class PowersTheWorld extends StandPowers {
                         sendPacket = true;
                     } else {
                         KeyInputs.roundaboutClickCount = 2;
-                        if (this.getSelf().isCrouching() ) {
+                        if (this.getSelf().isCrouching()) {
+                            this.setChargedTSSeconds(1F);
                             sendPacket = true;
                         } else {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
@@ -104,6 +105,13 @@ public class PowersTheWorld extends StandPowers {
         this.setActivePower(PowerIndex.SPECIAL);
     }
 
+    @Override
+    public boolean isAttackInept(byte activeP){
+        if (activeP == PowerIndex.SPECIAL){
+            return false;
+        }
+        return super.isAttackInept(activeP);
+    }
 
 
     @Override

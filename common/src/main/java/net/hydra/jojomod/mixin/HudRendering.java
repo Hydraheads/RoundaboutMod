@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.LivingEntity;
@@ -70,7 +71,7 @@ public abstract class HudRendering implements IHudAccess {
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, false);
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, false, this.getFont(),0.999F);
                 return true;
             } else if (((StandUser) minecraft.player).isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).setClashDisplayExtraTimestamp(this.minecraft.player.level().getGameTime());
@@ -86,7 +87,9 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha);
                 return true;
             } else if (isTSEntity || (((StandUser) minecraft.player).getStandPowers().getMaxTSTime() > 0 && ((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.SPECIAL)) {
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true);
+                float mod = 0.4F;
+                if (isTSEntity){mod=0.999F;}
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true, this.getFont(), mod);
                 return true;
             }
         }
@@ -112,6 +115,8 @@ public abstract class HudRendering implements IHudAccess {
     private int getVehicleMaxHearts(LivingEntity $$0) {
         return 0;
     }
+
+    @Shadow public abstract Font getFont();
 
     @Override
     public void setFlashAlpha(float flashAlpha) {

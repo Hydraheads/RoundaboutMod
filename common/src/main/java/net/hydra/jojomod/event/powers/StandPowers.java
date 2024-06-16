@@ -258,6 +258,10 @@ public class StandPowers {
         return null;
     }
 
+    public boolean isAttackInept(byte activeP){
+        return this.self.isUsingItem() || this.isDazed(this.self);
+    }
+
     public void tickPower(){
         if (this.self.isAlive() && !this.self.isRemoved()) {
             if (this.isClashing()) {
@@ -272,7 +276,7 @@ public class StandPowers {
                         animateStand((byte) 0);
                         poseStand(OffsetIndex.FOLLOW);
                     } else {
-                        if (!this.self.isUsingItem() && !this.isDazed(this.self)) {
+                        if (!this.isAttackInept(this.activePower)) {
                             if (this.activePower == PowerIndex.ATTACK) {
                                 this.updateAttack();
                             } else if (this.isBarraging()) {

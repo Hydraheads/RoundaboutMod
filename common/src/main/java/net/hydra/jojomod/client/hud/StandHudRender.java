@@ -233,28 +233,45 @@ public class StandHudRender {
 
     public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
-                                      float flashAlpha, float otherFlashAlpha, boolean isTSEntity) {
+                                      float flashAlpha, float otherFlashAlpha, boolean isTSEntity, Font font, float mod) {
         int l;
         int k;
         int v;
         l = scaledHeight - 32 + 3;
+        int z;
+        int y;
         StandUser standUser = ((StandUser) playerEntity);
         if (isTSEntity){
             v = 50;
             k = (int) Math.floor((182/standUser.getStandPowers().getMaxChargeTSTime())*standUser.getStandPowers().getChargedTSSeconds());
+            z =  (int) Math.min(Math.floor(standUser.getStandPowers().getChargedTSSeconds()+mod),standUser.getStandPowers().getMaxChargeTSTime());
+            y = 7654088;
         } else {
             v = 60;
             k = 182;
+            z = 5;
+            y = 7836819;
         }
         context.blit(JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
             context.blit(JOJO_ICONS, x, l, 0, v+5, k, 5);
         }
 
+
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
         context.blit(JOJO_ICONS, k, l, u, v, 9, 9);
+
+
+        String $$6 = z + "";
+        int $$7 = (scaledWidth - font.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(font, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(font, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(font, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(font, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(font, $$6, $$7, $$8, y, false);
     }
 
 
