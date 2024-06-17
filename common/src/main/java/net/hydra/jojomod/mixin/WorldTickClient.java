@@ -91,8 +91,8 @@ public class WorldTickClient {
             return;
         }
         byte ot = stand.getOffsetType();
-        ++stand.tickCount;
         if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            ++stand.tickCount;
             stand.setOldPosAndRot();
             stand.tickStandOut();
         }
