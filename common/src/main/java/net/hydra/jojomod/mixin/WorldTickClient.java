@@ -92,6 +92,7 @@ public class WorldTickClient {
         }
         byte ot = stand.getOffsetType();
         if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+            /*The age of a stand only progresses when not in loose style, because it ticks elsewhere independently*/
             ++stand.tickCount;
             stand.setOldPosAndRot();
             stand.tickStandOut();
