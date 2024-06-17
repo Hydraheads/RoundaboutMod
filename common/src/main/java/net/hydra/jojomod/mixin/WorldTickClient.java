@@ -140,7 +140,7 @@ public class WorldTickClient {
 
         ((ILivingEntityAccess) livingEntity).roundaboutPushEntities();
     }
-                                               @Shadow
+    @Shadow
     private void tickPassenger(Entity $$0, Entity $$1) {
     }
 

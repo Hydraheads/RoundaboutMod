@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -116,6 +117,16 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
             }
             this.roundaboutSoundsToCancel = ImmutableList.of();
             this.roundaboutSoundsPlaying = ImmutableList.copyOf($$2);
+        }
+
+        if (!this.roundaboutSoundsPlaying.isEmpty()) {
+            List<PlayedSoundInstance> SIL = Lists.newArrayList(this.roundaboutSoundsPlaying);
+            for (int i = SIL.size() - 1; i >= 0; --i) {
+                if (!Minecraft.getInstance().getSoundManager().isActive(SIL.get(i).roundaboutSoundInstance)){
+                    SIL.remove(i);
+                }
+            }
+            this.roundaboutSoundsPlaying = ImmutableList.copyOf(SIL);
         }
 
     }
