@@ -247,6 +247,14 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    @Override
+    public int getBarrageWindup(){
+        if (timeStopStartedBarrage) {
+            return 12;
+        } else {
+            return 29;
+        }
+    }
 
     public boolean timeStopStartedBarrage = false;
     @Override
@@ -264,6 +272,7 @@ public class PowersTheWorld extends StandPowers {
         return true;
     }
 
+    /**Barrage During a time stop, and it will cancel when time resumes, but it will also skip the charge*/
     @Override
     public void setPowerBarrageCharge(){
         if (this.getSelf() != null && ((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())){
@@ -272,6 +281,13 @@ public class PowersTheWorld extends StandPowers {
             timeStopStartedBarrage = false;
         }
         super.setPowerBarrageCharge();
+    }
+
+    @Override
+    public void playBarrageChargeSound(){
+        if (!timeStopStartedBarrage){
+            super.playBarrageChargeSound();
+        }
     }
 
     @Override
