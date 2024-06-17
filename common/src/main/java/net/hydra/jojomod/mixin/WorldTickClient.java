@@ -143,6 +143,8 @@ public class WorldTickClient {
     private void tickPassenger(Entity $$0, Entity $$1) {
     }
 
+    @Shadow @Final private Minecraft minecraft;
+
     public void roundaboutTSTickEntity(Entity $$0){
         if ($$0 instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) $$0;
@@ -225,7 +227,11 @@ public class WorldTickClient {
     }
     @Inject(method = "tickEntities", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity3(CallbackInfo ci) {
-            ((TimeStop) this).tickTimeStoppingEntity();
+        if (minecraft.player != null){
+            if (((TimeStop) this).isTimeStoppingEntity(minecraft.player)) {
+                ((StandUser) minecraft.player).getStandPowers().timeTickStopPower();
+            }
+        }
     }
 
     @Inject(method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", at = @At("HEAD"), cancellable = true)

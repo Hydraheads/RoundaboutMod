@@ -86,8 +86,9 @@ public abstract class HudRendering implements IHudAccess {
             && !isTSEntity)) {
                 StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha);
                 return true;
-            } else if (isTSEntity || (((StandUser) minecraft.player).getStandPowers().getMaxTSTime() > 0 && ((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.SPECIAL)) {
-                float mod = 0.4F;
+            } else if (isTSEntity || (((StandUser) minecraft.player).getStandPowers().getMaxTSTime() > 0
+                    && (((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  ((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
+                float mod = 0.999F;
                 if (isTSEntity){mod=0.999F;}
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true, this.getFont(), mod);
                 return true;

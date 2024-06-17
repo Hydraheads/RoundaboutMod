@@ -13,7 +13,7 @@ public class FabricPacketManager {
     public static void registerC2SPackets(){
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_SUMMON_PACKET, StandAbilityPacket::summon);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_POWER_PACKET, StandAbilityPacket::switchPower);
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_CHARGED_POWER_PACKET, StandAbilityPacket::switchPower);
+        ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_CHARGED_POWER_PACKET, StandAbilityPacket::switchChargedPower);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_PUNCH_PACKET, StandAbilityPacket::punch);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_BARRAGE_HIT_PACKET, StandAbilityPacket::barrageHit);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.MOVE_SYNC_ID, MoveSyncPacket::receive);
@@ -33,6 +33,7 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_PACKET, TimeEventPackets::updateTSList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_REMOVAL_PACKET, TimeEventPackets::updateTSRemovalList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.RESUME_TILE_ENTITY_TS_PACKET, TimeEventPackets::updateTileEntityTS);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_FLOAT_POWER_DATA_PACKET, CooldownSyncPacket::sendFloatPower);
     }
 
 }

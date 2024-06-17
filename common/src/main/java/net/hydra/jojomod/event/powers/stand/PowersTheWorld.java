@@ -11,7 +11,9 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -32,7 +34,7 @@ public class PowersTheWorld extends StandPowers {
 
     /**Begin Charging Time Stop, also detects activation via release**/
     @Override
-    public void buttonInputSpecial(boolean keyIsDown) {
+    public void buttonInputSpecial(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
             boolean sendPacket = false;
             if (KeyInputs.roundaboutClickCount == 0) {
@@ -45,7 +47,7 @@ public class PowersTheWorld extends StandPowers {
                         sendPacket = true;
                     } else {
                         KeyInputs.roundaboutClickCount = 2;
-                        if (this.getSelf().isCrouching()) {
+                        if (options.keyShift.isDown()) {
                             this.setChargedTSSeconds(1F);
                             sendPacket = true;
                         } else {
@@ -54,22 +56,11 @@ public class PowersTheWorld extends StandPowers {
                             this.updateUniqueMoves();
                         }
                     }
-                } else {
-                    if (this.getActivePower() == PowerIndex.SPECIAL) {
-                        if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
-                            sendPacket = true;
-                        }
-                    }
                 }
 
             } else {
                 if (keyIsDown) {
                     KeyInputs.roundaboutClickCount = 2;
-                }
-                if (this.getActivePower() == PowerIndex.SPECIAL) {
-                    if (this.getChargedTSSeconds() > getMaxChargeTSTime()) {
-                        sendPacket = true;
-                    }
                 }
             }
 
@@ -87,16 +78,22 @@ public class PowersTheWorld extends StandPowers {
           if (!this.getSelf().level().isClientSide()) {
                 ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
                 playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND);
+              ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+          } else {
+              ((StandUser) this.getSelf()).tryPower(PowerIndex.LEAD_IN, true);
           }
-          ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
     }
     public void resumeTime() {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
             playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2);
+            ModPacketHandler.PACKET_ACCESS.sendFloatPowerPacket(((ServerPlayer)this.getSelf()),PowerIndex.SPECIAL_FINISH, 0);
         }
-        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+        this.setChargedTSSeconds(0F);
+        if (this.isBarraging()) {
+            ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+        }
     }
     @Override
     public void setPowerSpecial(int lastMove) {
@@ -134,10 +131,45 @@ public class PowersTheWorld extends StandPowers {
                 this.setChargedTSSeconds(TSChargeSeconds);
                 if (this.getSelf().level().isClientSide) {
                     ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
+                } else {
+                    if (this.getSelf() instanceof ServerPlayer) {
+                        ModPacketHandler.PACKET_ACCESS.sendFloatPowerPacket(((ServerPlayer)this.getSelf()),PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
+                    }
                 }
                 ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
             } else {
                 this.setChargedTSSeconds(TSChargeSeconds);
+            }
+        }
+    }
+
+    @Override
+    public void timeTickStopPower(){
+        if (!(this.getSelf() instanceof Player && ((Player)this.getSelf()).isCreative())) {
+            float TSChargeSeconds = this.getChargedTSSeconds();
+            TSChargeSeconds -= 0.05F;
+            if (TSChargeSeconds < 0) {
+                TSChargeSeconds = 0;
+                this.setChargedTSSeconds(TSChargeSeconds);
+                if (this.getSelf().level().isClientSide) {
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_FINISH);
+                }
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
+            } else {
+                this.setChargedTSSeconds(TSChargeSeconds);
+            }
+        }
+    }
+
+    /**If a client is behind a server on TS charging somehow, and the server finishes charging, this packet rounds
+     * things out*/
+    @Override
+    public void updatePowerFloat(byte activePower, float data){
+        if (activePower == PowerIndex.SPECIAL_CHARGED){
+            this.setChargedTSSeconds(data);
+        } else if (activePower == PowerIndex.SPECIAL_FINISH){
+            if (this.isBarraging()) {
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
             }
         }
     }
@@ -147,9 +179,9 @@ public class PowersTheWorld extends StandPowers {
     public void tryChargedPower(int move, boolean forced, float chargeTime){
         if (move == PowerIndex.SPECIAL_CHARGED){
             this.setChargedTSSeconds(chargeTime);
-        } else {
             super.tryChargedPower(move, forced, chargeTime);
         }
+        super.tryChargedPower(move, forced, chargeTime);
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
@@ -36,8 +37,8 @@ public class KeyInputs {
         }
     }
 
-    public static void specialMoveKey(Player player, Minecraft client, boolean keyIsDown){
-        ((StandUser) player).getStandPowers().buttonInputSpecial(keyIsDown);
+    public static void specialMoveKey(Player player, Minecraft client, boolean keyIsDown, Options option){
+        ((StandUser) player).getStandPowers().buttonInputSpecial(keyIsDown, option);
     }
 
 

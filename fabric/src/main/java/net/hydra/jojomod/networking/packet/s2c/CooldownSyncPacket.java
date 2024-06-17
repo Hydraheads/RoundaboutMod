@@ -43,4 +43,13 @@ public class CooldownSyncPacket {
             ((StandUser) client.player).setDazeTime(dazeTime);
         }
     }
+
+    public static void sendFloatPower(Minecraft client, ClientPacketListener handler,
+                                  FriendlyByteBuf buf, PacketSender responseSender) {
+        if (client.player != null) {
+            byte activePower = buf.readByte();
+            float data = buf.readFloat();
+            ((StandUser) client.player).getStandPowers().updatePowerFloat(activePower,data);
+        }
+    }
 }

@@ -58,6 +58,11 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
+    public void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data) {
+        ForgePacketHandler.sendToClient(new ForgePowerFloatPacket(activePower,data), sp);
+    }
+
+    @Override
     public void StandGuardCancelClientPacket() {
         ForgePacketHandler.sendToServer(new ForgeGuardCancelPacket());
     }

@@ -124,6 +124,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeBlockEntityResumeTSPacket::toBytes)
                 .consumerMainThread(ForgeBlockEntityResumeTSPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgePowerFloatPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgePowerFloatPacket::new)
+                .encoder(ForgePowerFloatPacket::toBytes)
+                .consumerMainThread(ForgePowerFloatPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message){

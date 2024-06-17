@@ -8,6 +8,7 @@ import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
@@ -168,7 +169,7 @@ public class StandPowers {
     }
 
     /**Override this to set the special move key press conditions*/
-    public void buttonInputSpecial(boolean keyIsDown){
+    public void buttonInputSpecial(boolean keyIsDown, Options options){
 
     }
 
@@ -322,6 +323,12 @@ public class StandPowers {
 
     /**Ticks through your own timestop. This value exists in the general stand powers in case you switch stands.*/
     public void timeTickStopPower(){
+    }
+
+    /**A generic function which sends a float corresponding with an active power via packets to the client from the
+     *  server or vice versa. An example of its usage is sending the time left on TS in the world stand via
+     *  overriding this method and sending a packet*/
+    public void updatePowerFloat(byte activePower, float data){
     }
 
 
