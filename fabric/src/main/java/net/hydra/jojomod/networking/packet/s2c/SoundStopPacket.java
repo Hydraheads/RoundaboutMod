@@ -16,7 +16,7 @@ public class SoundStopPacket {
         if (client.player != null) {
             Entity User = client.player.level().getEntity(buf.readInt());
             if (User instanceof LivingEntity){
-                ((StandUserClient)User).clientQueSound(buf.readByte(), User);
+                ((StandUserClient)User).clientQueSound(buf.readByte());
             }
         }
     }
@@ -25,7 +25,7 @@ public class SoundStopPacket {
         if (client.player != null) {
             Entity User = client.player.level().getEntity(buf.readInt());
             if (User instanceof LivingEntity){
-                ((StandUserClient)User).clientQueSoundCanceling();
+                ((StandUserClient)User).clientQueSoundCanceling(buf.readByte());
             }
         }
     }

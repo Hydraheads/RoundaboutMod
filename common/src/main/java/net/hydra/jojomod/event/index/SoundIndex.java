@@ -24,4 +24,9 @@ public class SoundIndex {
     public static final byte SPECIAL_MOVE_SOUND_4 = 16;
     public static final byte SPECIAL_MOVE_SOUND_5 = 17;
 
+    /**Sound group cancel ids, used to cancel sound events like barrages uniformly*/
+    public static final byte BARRAGE_SOUND_GROUP = 100;
+    public static final byte TIME_SOUND_GROUP = 101;
+
+
 }

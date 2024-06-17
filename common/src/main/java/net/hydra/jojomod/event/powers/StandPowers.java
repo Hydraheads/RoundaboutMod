@@ -347,15 +347,8 @@ public class StandPowers {
 
     protected void tickSounds(){
         if (this.self.level().isClientSide) {
-            if (((StandUserClient) this.self).getSoundPlay() || ((StandUserClient) this.self).getSoundCancel()) {
-                this.runExtraSoundCode(((StandUserClient) this.self).getRoundaboutSoundByte());
-            }
-            if (((StandUserClient) this.self).getSoundPlay()) {
-                ((StandUserClient) this.self).clientPlaySound();
-            }
-            if (((StandUserClient) this.self).getSoundCancel()) {
-                ((StandUserClient) this.self).clientSoundCancel();
-            }
+            ((StandUserClient) this.self).clientPlaySound();
+             ((StandUserClient) this.self).clientSoundCancel();
         }
     }
 
@@ -1216,7 +1209,7 @@ public class StandPowers {
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public void tryPower(int move, boolean forced){
         if (!this.self.level().isClientSide && this.isBarraging() && move != PowerIndex.BARRAGE && this.attackTimeDuring  > -1){
-            this.stopSoundsIfNearby();
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
         }
 
         if (!this.isClashing() || move == PowerIndex.NONE) {
@@ -1292,7 +1285,7 @@ public class StandPowers {
 
 
     /**This is called fourth by the server, it sends a packet to cancel the sound.*/
-    public final void stopSoundsIfNearby() {
+    public final void stopSoundsIfNearby(byte soundNumber, double range) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
             Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
@@ -1304,8 +1297,8 @@ public class StandPowers {
                 }
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, 32.0)) {
-                    ModPacketHandler.PACKET_ACCESS.stopSoundPacket(serverPlayerEntity,this.self.getId());
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    ModPacketHandler.PACKET_ACCESS.stopSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
                 }
             }
         }
@@ -1442,5 +1435,14 @@ public class StandPowers {
     }
 
     public void runExtraSoundCode(byte soundChoice) {
+    }
+
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7
+        || soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else {
+            return soundChoice;
+        }
     }
 }

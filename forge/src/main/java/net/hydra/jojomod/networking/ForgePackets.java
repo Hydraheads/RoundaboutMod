@@ -34,8 +34,8 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void stopSoundPacket(ServerPlayer sp, int id) {
-        ForgePacketHandler.sendToClient(new ForgeStopSoundPacket(id), sp);
+    public void stopSoundPacket(ServerPlayer sp, int id, byte soundId) {
+        ForgePacketHandler.sendToClient(new ForgeStopSoundPacket(id,soundId), sp);
     }
 
     @Override

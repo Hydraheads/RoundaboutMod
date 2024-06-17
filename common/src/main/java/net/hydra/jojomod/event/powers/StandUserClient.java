@@ -6,14 +6,12 @@ import net.minecraft.world.entity.Entity;
 public interface StandUserClient {
     /**This is for EVERY client to individually save sounds and other client variables on entities clientside.
      * It's how we cancel out barrage sounds on a per entity basis.*/
-    void clientQueSound(byte soundChoice, Entity User);
+    void clientQueSound(byte soundChoice);
     void clientPlaySound();
 
     byte getRoundaboutSoundByte();
 
-    boolean getSoundPlay();
-    boolean getSoundCancel();
-    void clientQueSoundCanceling();
+    void clientQueSoundCanceling(byte soundChoice);
 
     void clientSoundCancel();
 }

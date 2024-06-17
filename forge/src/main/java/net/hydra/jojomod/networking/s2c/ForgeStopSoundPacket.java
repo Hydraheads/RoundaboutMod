@@ -13,15 +13,19 @@ import java.util.function.Supplier;
 
 public class ForgeStopSoundPacket {
     private final int cancelPlayerID;
+    private final byte soundID;
 
-    public ForgeStopSoundPacket(int cancelPlayerID){
+    public ForgeStopSoundPacket(int cancelPlayerID, byte soundID){
         this.cancelPlayerID = cancelPlayerID;
+        this.soundID = soundID;
     }
     public ForgeStopSoundPacket(FriendlyByteBuf buf){
         this.cancelPlayerID = buf.readInt();
+        this.soundID = buf.readByte();
     }
     public void toBytes(FriendlyByteBuf buf){
         buf.writeInt(cancelPlayerID);
+        buf.writeByte(soundID);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
@@ -30,7 +34,7 @@ public class ForgeStopSoundPacket {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
                 Entity User = player.level().getEntity(cancelPlayerID);
-                ((StandUserClient)User).clientQueSoundCanceling();
+                ((StandUserClient)User).clientQueSoundCanceling(soundID);
             }
         });
         return true;

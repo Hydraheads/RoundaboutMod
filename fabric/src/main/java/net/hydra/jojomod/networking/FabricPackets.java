@@ -52,9 +52,10 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void stopSoundPacket(ServerPlayer sp, int id){
+    public void stopSoundPacket(ServerPlayer sp, int id, byte soundNo){
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(id);
+        buffer.writeByte(soundNo);
         ServerPlayNetworking.send(sp,ModMessages.SOUND_CANCEL_ID, buffer);
     }
 
