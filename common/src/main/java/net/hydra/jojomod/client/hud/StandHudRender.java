@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.hud;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -16,22 +17,6 @@ import net.minecraft.world.entity.player.Player;
 public class StandHudRender {
     /** Renders the HUD for stand attacks/abilities.
      * Keep in mind it has to slide in so some of the code may look awkward.*/
-    private static final ResourceLocation JOJO_ICONS = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/jojo_icons.png");
-
-    private static final ResourceLocation SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/move_square2.png");
-
-    private static final ResourceLocation SPECIAL_ICON = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_world/stop_time.png");
-    private static final ResourceLocation SPECIAL_ICON2 = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_world/stop_time_impulse.png");
-
-    private static final ResourceLocation SKILL2_ICON = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_world/assault.png");
-
-    private static final ResourceLocation HASTE_ICON = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_world/haste.png");
 
 
     private static final int guiSize = 174;
@@ -72,17 +57,15 @@ public class StandHudRender {
                 context.setColor(1.0f, 1.0f, 1.0f, 0.9f);
                 //Draws the empty bar
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
-                context.blit(SQUARE_ICON,x+21,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.blit(SQUARE_ICON,x+47,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.blit(SQUARE_ICON,x+72,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.blit(SQUARE_ICON,x+97,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.blit(StandIcons.SQUARE_ICON,x+21,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.blit(StandIcons.SQUARE_ICON,x+47,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.blit(StandIcons.SQUARE_ICON,x+72,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+                context.blit(StandIcons.SQUARE_ICON,x+97,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
 
-                context.blit(SKILL2_ICON,x+50,y-1,0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
-                if (playerEntity.isCrouching()){
-                    context.blit(SPECIAL_ICON2, x + 100, y - 1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
-                } else {
-                    context.blit(SPECIAL_ICON, x + 100, y - 1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
-                }
+                context.blit(StandIcons.SKILL2_ICON,x+50,y-1,0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+
+                context.blit(((StandUser) playerEntity).getStandPowers().getSkillIcon4(), x + 100, y - 1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+
 
 
 
@@ -141,18 +124,18 @@ public class StandHudRender {
             float attackTimeDuring = standUser.getAttackTimeDuring();
             if (standOn && standUser.isClashing()) {
                 int ClashTime = 15 - Math.round((attackTimeDuring / 60)*15);
-                context.blit(JOJO_ICONS, k, j, 193, 6, 15, 6);
-                context.blit(JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
             } else if (standOn && standUser.getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
                 int ClashTime = 15 - Math.round((attackTimeDuring / standUser.getStandPowers().getBarrageLength())*15);
-                context.blit(JOJO_ICONS, k, j, 193, 6, 15, 6);
-                context.blit(JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
             } else if (standOn && standUser.getStandPowers().isBarrageCharging()) {
                 int ClashTime = Math.round((attackTimeDuring / standUser.getStandPowers().getBarrageWindup())*15);
-                context.blit(JOJO_ICONS, k, j, 193, 6, 15, 6);
-                context.blit(JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
             } else {
                 int barTexture = 0;
@@ -175,9 +158,9 @@ public class StandHudRender {
                         }
 
 
-                        context.blit(JOJO_ICONS, k, j, 193, 6, 15, 6);
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                         int finalATimeInt = Math.round(finalATime * 15);
-                        context.blit(JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
 
 
                     }
@@ -185,7 +168,7 @@ public class StandHudRender {
                 if (standOn) {
                     if (TE != null) {
                         if (barTexture == 0) {
-                            context.blit(JOJO_ICONS, k, j, 193, 0, 15, 6);
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
                         }
                     }
                 }
@@ -220,15 +203,15 @@ public class StandHudRender {
             v = 0;
         }
         k = (int) Math.floor((182/standUser.getMaxGuardPoints())*standUser.getGuardPoints());
-        context.blit(JOJO_ICONS, x, l, 0, v, 182, 5);
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
-           context.blit(JOJO_ICONS, x, l, 0, v+5, k, 5);
+           context.blit(StandIcons.JOJO_ICONS, x, l, 0, v+5, k, 5);
         }
 
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        context.blit(JOJO_ICONS, k, l, u, v, 9, 9);
+        context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
     }
 
     public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,
@@ -252,16 +235,16 @@ public class StandHudRender {
             z = 5;
             y = 7836819;
         }
-        context.blit(JOJO_ICONS, x, l, 0, v, 182, 5);
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
-            context.blit(JOJO_ICONS, x, l, 0, v+5, k, 5);
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, v+5, k, 5);
         }
 
 
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        context.blit(JOJO_ICONS, k, l, u, v, 9, 9);
+        context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
 
 
         String $$6 = z + "";
@@ -284,14 +267,14 @@ public class StandHudRender {
 
         int e = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser) playerEntity);
-        context.blit(JOJO_ICONS, x, e, 0, 20, 182, 5);
+        context.blit(StandIcons.JOJO_ICONS, x, e, 0, 20, 182, 5);
         if (d > 0) {
-            context.blit(JOJO_ICONS, x, e, 0, 25, d, 5);
+            context.blit(StandIcons.JOJO_ICONS, x, e, 0, 25, d, 5);
         }
 
         int f = scaledWidth / 2 - 5;
         int g = scaledHeight - 31 - 5;
-        context.blit(JOJO_ICONS, f, g, 183, 20, 9, 9);
+        context.blit(StandIcons.JOJO_ICONS, f, g, 183, 20, 9, 9);
 
         LivingEntity clashOp = (((StandUser) client.player).getStandPowers().getClashOp());
         if (clashOp != null) {
@@ -300,10 +283,10 @@ public class StandHudRender {
             int k = i / 2 - 91;
             int l = j;
 
-            context.blit(JOJO_ICONS, k, l, 0, 40, 182, 5);
+            context.blit(StandIcons.JOJO_ICONS, k, l, 0, 40, 182, 5);
             float q = (((StandUser) client.player).getStandPowers().getClashOpProgress());
             int r = (int) (q * 183.0f);
-            context.blit(JOJO_ICONS, k, l, 0, 45, r, 5);
+            context.blit(StandIcons.JOJO_ICONS, k, l, 0, 45, r, 5);
 
             Component text = clashOp.getName();
             int m = client.font.width(text);
@@ -311,7 +294,7 @@ public class StandHudRender {
             int o = l - 9;
             context.drawString(client.font, text, n, o, 0xFFFFFF);
 
-            context.blit(JOJO_ICONS, f, l+5, 183, 20, 9, 9);
+            context.blit(StandIcons.JOJO_ICONS, f, l+5, 183, 20, 9, 9);
         }
     }
 

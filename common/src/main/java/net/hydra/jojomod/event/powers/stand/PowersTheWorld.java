@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyInputs;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -250,9 +252,31 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public int getBarrageWindup(){
         if (timeStopStartedBarrage) {
-            return 12;
+            return 13;
         } else {
             return 29;
+        }
+    }
+    @Override
+    public ResourceLocation getSkillIcon1(){
+        return null;
+    }
+    @Override
+    public ResourceLocation getSkillIcon2(){
+        return null;
+    }
+    @Override
+    public ResourceLocation getSkillIcon3(){
+        return null;
+    }
+    @Override
+    public ResourceLocation getSkillIcon4(){
+        if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+            return StandIcons.THE_WORLD_TIME_STOP_RESUME;
+        } else if (this.getSelf().isCrouching()){
+            return StandIcons.THE_WORLD_TIME_STOP_IMPULSE;
+        } else {
+            return StandIcons.THE_WORLD_TIME_STOP;
         }
     }
 

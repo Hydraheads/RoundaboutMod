@@ -173,6 +173,19 @@ public class StandPowers {
 
     }
 
+    public ResourceLocation getSkillIcon1(){
+        return null;
+    }
+    public ResourceLocation getSkillIcon2(){
+        return null;
+    }
+    public ResourceLocation getSkillIcon3(){
+        return null;
+    }
+    public ResourceLocation getSkillIcon4(){
+        return null;
+    }
+
     /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
      * the client level. */
     public SoundEvent getSoundFromByte(byte soundChoice){
