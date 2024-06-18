@@ -59,6 +59,10 @@ public class ForgeSounds {
             register(ModSounds.HIT_1_SOUND, ModSounds.HIT_1_SOUND_ID);
     public static final RegistryObject<SoundEvent> TIME_STOP_THE_WORLD_EVENT =
             register(ModSounds.TIME_STOP_THE_WORLD, ModSounds.TIME_STOP_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> TIME_STOP_VOICE_THE_WORLD_EVENT =
+            register(ModSounds.TIME_STOP_VOICE_THE_WORLD, ModSounds.TIME_STOP_VOICE_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> TIME_STOP_CHARGE_THE_WORLD_EVENT =
+            register(ModSounds.TIME_STOP_CHARGE_THE_WORLD, ModSounds.TIME_STOP_CHARGE_THE_WORLD_ID);
     public static final RegistryObject<SoundEvent> TIME_STOP_STAR_PLATINUM_EVENT =
             register(ModSounds.TIME_STOP_STAR_PLATINUM, ModSounds.TIME_STOP_STAR_PLATINUM_ID);
     public static final RegistryObject<SoundEvent> TIME_RESUME_EVENT =

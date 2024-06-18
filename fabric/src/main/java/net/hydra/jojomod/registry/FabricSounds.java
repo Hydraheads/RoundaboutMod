@@ -40,6 +40,8 @@ public class FabricSounds {
         addSound(ModSounds.STAND_BARRAGE_END_ID, ModSounds.STAND_BARRAGE_END_EVENT);
 
         addSound(ModSounds.TIME_STOP_THE_WORLD_ID, ModSounds.TIME_STOP_THE_WORLD_EVENT);
+        addSound(ModSounds.TIME_STOP_VOICE_THE_WORLD_ID, ModSounds.TIME_STOP_VOICE_THE_WORLD_EVENT);
+        addSound(ModSounds.TIME_STOP_CHARGE_THE_WORLD_ID, ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT);
         addSound(ModSounds.TIME_STOP_STAR_PLATINUM_ID, ModSounds.TIME_STOP_STAR_PLATINUM_EVENT);
         addSound(ModSounds.TIME_RESUME_ID, ModSounds.TIME_RESUME_EVENT);
     }

@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,8 +53,10 @@ public class PowersTheWorld extends StandPowers {
                         KeyInputs.roundaboutClickCount = 2;
                         if (options.keyShift.isDown()) {
                             this.setChargedTSSeconds(1F);
+                            this.setMaxChargeTSTime(1F);
                             sendPacket = true;
                         } else {
+                            this.setMaxChargeTSTime(this.getMaxTSTime());
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
                             ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
                             this.updateUniqueMoves();
@@ -73,14 +77,23 @@ public class PowersTheWorld extends StandPowers {
             }
         }
     }
+
+
+    public void setMaxChargeTSTime(float chargedTSSeconds){
+        this.maxChargeTSTime = chargedTSSeconds;
+    }
+
+
     /*Activate Time Stop**/
 
     public void stopTime() {
                 /*Time Stop*/
           if (!this.getSelf().level().isClientSide()) {
-                ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
-                playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND);
-              ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+              if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+                  ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
+                  playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND, 100);
+                  ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+              }
           } else {
               ((StandUser) this.getSelf()).tryPower(PowerIndex.LEAD_IN, true);
           }
@@ -88,9 +101,12 @@ public class PowersTheWorld extends StandPowers {
     public void resumeTime() {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
-            ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
-            playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2);
-            ModPacketHandler.PACKET_ACCESS.sendFloatPowerPacket(((ServerPlayer)this.getSelf()),PowerIndex.SPECIAL_FINISH, 0);
+            if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+                ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
+                playSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND_2, 100);
+                stopSoundsIfNearby(SoundIndex.SPECIAL_MOVE_SOUND, 200);
+                ModPacketHandler.PACKET_ACCESS.sendFloatPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
+            }
         }
         this.setChargedTSSeconds(0F);
         if (this.isBarraging()) {
@@ -102,6 +118,10 @@ public class PowersTheWorld extends StandPowers {
         this.setAttackTimeDuring(0);
         this.setChargedTSSeconds(1F);
         this.setActivePower(PowerIndex.SPECIAL);
+        poseStand(OffsetIndex.FOLLOW);
+        animateStand((byte) 0);
+        playSoundsIfNearby(TIME_STOP_VOICE, 100);
+        playSoundsIfNearby(TIME_STOP_CHARGE, 100);
     }
 
     @Override
@@ -127,7 +147,7 @@ public class PowersTheWorld extends StandPowers {
         /*Tick through Time Stop Charge*/
         if (this.getActivePower() == PowerIndex.SPECIAL) {
             float TSChargeSeconds = this.getChargedTSSeconds();
-            TSChargeSeconds += (this.getMaxChargeTSTime() / 40);
+            TSChargeSeconds += ((this.getMaxChargeTSTime()-1) / 40);
             if (TSChargeSeconds >= this.getMaxChargeTSTime()) {
                 TSChargeSeconds = this.getMaxChargeTSTime();
                 this.setChargedTSSeconds(TSChargeSeconds);
@@ -186,9 +206,10 @@ public class PowersTheWorld extends StandPowers {
         super.tryChargedPower(move, forced, chargeTime);
     }
 
+    /**Indicates the standard max TS Time, for setting up bar length*/
     @Override
     public float getMaxTSTime (){
-        return 9;
+        return 5;
     }
 
     /*Change this value actively to manipulate how long a ts charge can be*/
@@ -223,12 +244,16 @@ public class PowersTheWorld extends StandPowers {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
         } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
             return ModSounds.TIME_RESUME_EVENT;
+        } else if (soundChoice == TIME_STOP_CHARGE){
+            return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
+        } else if (soundChoice == TIME_STOP_VOICE){
+            return ModSounds.TIME_STOP_VOICE_THE_WORLD_EVENT;
         }
         return null;
     }
     @Override
     public void runExtraSoundCode(byte soundChoice) {
-        if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND || soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
+        if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND) {
             if (this.getSelf().level().isClientSide) {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
@@ -355,4 +380,21 @@ public class PowersTheWorld extends StandPowers {
     public boolean isStoppingTime(){
        return (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf()));
     }
+
+
+
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice >= TIME_STOP_CHARGE && soundChoice <= TIME_STOP_VOICE_2){
+            return SoundIndex.TIME_CHARGE_SOUND_GROUP;
+        } else {
+            return super.getSoundCancelingGroupByte(soundChoice);
+        }
+    }
+
+
+
+    public static final byte TIME_STOP_CHARGE = 30;
+    public static final byte TIME_STOP_VOICE = TIME_STOP_CHARGE+1;
+    public static final byte TIME_STOP_VOICE_2 = TIME_STOP_CHARGE+2;
 }

@@ -131,6 +131,18 @@
       "roundabout:timestop_the_world"
     ]
   },
+  "timestop_charge_theworld": {
+    "subtitle": "sounds.roundabout.timestop_charge_theworld",
+    "sounds": [
+      "roundabout:timestop_charge_theworld"
+    ]
+  },
+  "timestop_voice_theworld": {
+    "subtitle": "sounds.roundabout.timestop_voice_theworld",
+    "sounds": [
+      "roundabout:timestop_voice_theworld"
+    ]
+  },
   "timestop_star_platinum": {
     "subtitle": "sounds.roundabout.timestop_star_platinum",
     "sounds": [

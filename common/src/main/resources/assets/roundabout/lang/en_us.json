@@ -61,5 +61,7 @@
   "sounds.roundabout.terrier_pass": "Terrier fart",
   "sounds.roundabout.timestop_the_world":  "Time was Stopped!",
   "sounds.roundabout.timestop_star_platinum":  "Time was Stopped!",
+  "sounds.roundabout.timestop_charge_theworld":  "Preparing Time Stop",
+  "sounds.roundabout.timestop_voice_theworld":  "Stop, Time!",
   "sounds.roundabout.timeresume": "Time resumes!"
 }
