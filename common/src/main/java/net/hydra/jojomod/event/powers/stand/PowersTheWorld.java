@@ -54,10 +54,12 @@ public class PowersTheWorld extends StandPowers {
                             this.setMaxChargeTSTime(1F);
                             sendPacket = true;
                         } else {
-                            this.setMaxChargeTSTime(this.getMaxTSTime());
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
-                            ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
-                            this.updateUniqueMoves();
+                            if (this.getAttackTimeDuring() < 0) {
+                                this.setMaxChargeTSTime(this.getMaxTSTime());
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                                this.updateUniqueMoves();
+                            }
                         }
                     }
                 }
@@ -76,6 +78,13 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    @Override
+    public void tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
+            this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100);
+        }
+        super.tryPower(move,forced);
+    }
 
     public void setMaxChargeTSTime(float chargedTSSeconds){
         this.maxChargeTSTime = chargedTSSeconds;
