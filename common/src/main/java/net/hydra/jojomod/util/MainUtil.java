@@ -1,7 +1,15 @@
 package net.hydra.jojomod.util;
 
 
+import net.hydra.jojomod.networking.ModPacketHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+
+import javax.swing.text.html.parser.Entity;
 
 public class MainUtil {
     /**Additional math functions for the mod.*/
@@ -59,5 +67,24 @@ public class MainUtil {
         cdist = Math.abs(z-z2);
         if (cdist > mdist){mdist=cdist;}
         return mdist;
+    }
+
+    public static boolean isPlayerNearby(Vec3 pos, Level level, double range, int exemptID) {
+        if (level instanceof ServerLevel) {
+            ServerLevel serverWorld = ((ServerLevel) level);
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = serverWorld.players().get(j);
+
+                if (serverPlayerEntity.level() != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (serverPlayerEntity.getId() != exemptID && blockPos.closerToCenterThan(pos, range)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

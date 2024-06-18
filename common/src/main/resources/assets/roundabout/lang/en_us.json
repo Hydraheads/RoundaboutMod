@@ -49,6 +49,7 @@
   "sounds.roundabout.stand_theworld_muda2":  "MUDA",
   "sounds.roundabout.stand_theworld_muda3":  "MUDA",
   "sounds.roundabout.stand_theworld_muda4":  "MUDA",
+  "sounds.roundabout.stand_theworld_muda5":  "MUDA",
   "sounds.roundabout.stand_barrage_windup":  "Preparing Barrage",
   "sounds.roundabout.stand_barrage_miss":  "Barrage",
   "sounds.roundabout.stand_barrage_block":  "Barrage",
@@ -63,5 +64,7 @@
   "sounds.roundabout.timestop_star_platinum":  "Time was Stopped!",
   "sounds.roundabout.timestop_charge_theworld":  "Preparing Time Stop",
   "sounds.roundabout.timestop_voice_theworld":  "Stop, Time!",
+  "sounds.roundabout.timestop_voice_theworld2":  "The World!",
+  "sounds.roundabout.timestop_voice_theworld3":  "The World!",
   "sounds.roundabout.timeresume": "Time resumes!"
 }

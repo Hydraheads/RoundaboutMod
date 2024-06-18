@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class StandPowers {
+public abstract class StandPowers {
     /**StandPowers is a class that every stand has a variation of, override it
      * to define and tick through stand abilities and cooldowns.
      * Note that most generic STAND USER code is in a mixin to the livingentity class.*/
@@ -186,21 +186,17 @@ public class StandPowers {
         return null;
     }
 
+
     /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
      * the client level. */
     public SoundEvent getSoundFromByte(byte soundChoice){
-        if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7) {
-            return this.getBarrageSound(SoundIndex.BARRAGE_CRY_SOUND);
-        } else if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return this.getBarrageChargeSound();
-        } else {
-            return this.getOtherSounds(soundChoice);
         }
+        return null;
     }
     public float getSoundPitchFromByte(byte soundChoice){
-        if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7) {
-            return this.getBarragePitch(SoundIndex.BARRAGE_CRY_SOUND);
-        } else if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
             return this.getBarrageChargePitch();
         } else {
             return 1F;
@@ -224,27 +220,13 @@ public class StandPowers {
 
 
     /**Override this function for alternate rush noises*/
-    private byte chooseBarrageSound(){
-        return SoundIndex.BARRAGE_CRY_SOUND;
+    public byte chooseBarrageSound(){
+        return 0;
     }
     private float getBarrageChargePitch(){
         return 1/((float) this.getBarrageWindup() /20);
     }
-    /**Override this if you want to use the basic barrage sound and use that implementation*/
-    public SoundEvent getBarrageSound(byte soundChoice){
-            return null;
-    }
     /**Realistically, you only need to override this if you're canceling sounds*/
-    public SoundEvent getOtherSounds(byte soundChoice){
-        return null;
-    }
-    private float getBarragePitch(byte soundChoice){
-        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
-            return 1F;
-        } else {
-            return 1F;
-        }
-    }
 
     public ResourceLocation getBarrageCryID(){
         return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
@@ -1438,11 +1420,9 @@ public class StandPowers {
     }
 
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice >= SoundIndex.BARRAGE_CRY_SOUND && soundChoice <= SoundIndex.BARRAGE_CRY_SOUND_7
-        || soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
             return SoundIndex.BARRAGE_SOUND_GROUP;
-        } else {
-            return soundChoice;
         }
+        return soundChoice;
     }
 }

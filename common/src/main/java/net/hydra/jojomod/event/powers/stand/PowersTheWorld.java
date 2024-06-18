@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -12,10 +11,9 @@ import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.resources.sounds.Sound;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -120,8 +118,17 @@ public class PowersTheWorld extends StandPowers {
         this.setActivePower(PowerIndex.SPECIAL);
         poseStand(OffsetIndex.FOLLOW);
         animateStand((byte) 0);
-        playSoundsIfNearby(TIME_STOP_VOICE, 100);
+        playSoundsIfNearby(getTSVoice(), 100);
         playSoundsIfNearby(TIME_STOP_CHARGE, 100);
+    }
+
+    public byte getTSVoice(){
+        double rand = Math.random();
+        if (rand > 0.6){
+            return TIME_STOP_VOICE;
+        } else {
+            return TIME_STOP_VOICE_2;
+        }
     }
 
     @Override
@@ -220,15 +227,6 @@ public class PowersTheWorld extends StandPowers {
     }
 
     @Override
-    public SoundEvent getBarrageSound(byte soundChoice){
-        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
-            return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND) {
             return 0.6f;
@@ -239,8 +237,22 @@ public class PowersTheWorld extends StandPowers {
     }
 
     @Override
-    public SoundEvent getOtherSounds(byte soundChoice){
-        if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND) {
+    public byte chooseBarrageSound(){
+        double rand = Math.random();
+        if (rand > 0.6) {
+            return BARRAGE_NOISE;
+        } else {
+            return BARRAGE_NOISE_2;
+        }
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        if (soundChoice == BARRAGE_NOISE) {
+            return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_2){
+            return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
+        } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND) {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
         } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
             return ModSounds.TIME_RESUME_EVENT;
@@ -248,8 +260,12 @@ public class PowersTheWorld extends StandPowers {
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
             return ModSounds.TIME_STOP_VOICE_THE_WORLD_EVENT;
+        } else if (soundChoice == TIME_STOP_VOICE_2){
+            return ModSounds.TIME_STOP_VOICE_THE_WORLD2_EVENT;
+        } else if (soundChoice == TIME_STOP_VOICE_3){
+            return ModSounds.TIME_STOP_VOICE_THE_WORLD3_EVENT;
         }
-        return null;
+        return super.getSoundFromByte(soundChoice);
     }
     @Override
     public void runExtraSoundCode(byte soundChoice) {
@@ -385,8 +401,10 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice >= TIME_STOP_CHARGE && soundChoice <= TIME_STOP_VOICE_2){
+        if (soundChoice >= TIME_STOP_CHARGE && soundChoice <= TIME_STOP_VOICE_3) {
             return SoundIndex.TIME_CHARGE_SOUND_GROUP;
+        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_2){
+                return SoundIndex.BARRAGE_SOUND_GROUP;
         } else {
             return super.getSoundCancelingGroupByte(soundChoice);
         }
@@ -394,7 +412,10 @@ public class PowersTheWorld extends StandPowers {
 
 
 
+    public static final byte BARRAGE_NOISE = 20;
+    public static final byte BARRAGE_NOISE_2 = 21;
     public static final byte TIME_STOP_CHARGE = 30;
     public static final byte TIME_STOP_VOICE = TIME_STOP_CHARGE+1;
     public static final byte TIME_STOP_VOICE_2 = TIME_STOP_CHARGE+2;
+    public static final byte TIME_STOP_VOICE_3 = TIME_STOP_CHARGE+3;
 }

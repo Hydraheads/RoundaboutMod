@@ -37,6 +37,8 @@ public class ForgeSounds {
             register(ModSounds.STAND_THEWORLD_MUDA3_SOUND, ModSounds.STAND_THEWORLD_MUDA3_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA4_SOUND_EVENT =
             register(ModSounds.STAND_THEWORLD_MUDA4_SOUND, ModSounds.STAND_THEWORLD_MUDA4_SOUND_ID);
+    public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA5_SOUND_EVENT =
+            register(ModSounds.STAND_THEWORLD_MUDA5_SOUND, ModSounds.STAND_THEWORLD_MUDA5_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_WINDUP_EVENT =
             register(ModSounds.STAND_BARRAGE_WINDUP, ModSounds.STAND_BARRAGE_WINDUP_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_MISS_EVENT =
@@ -61,6 +63,10 @@ public class ForgeSounds {
             register(ModSounds.TIME_STOP_THE_WORLD, ModSounds.TIME_STOP_THE_WORLD_ID);
     public static final RegistryObject<SoundEvent> TIME_STOP_VOICE_THE_WORLD_EVENT =
             register(ModSounds.TIME_STOP_VOICE_THE_WORLD, ModSounds.TIME_STOP_VOICE_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> TIME_STOP_VOICE_THE_WORLD2_EVENT =
+            register(ModSounds.TIME_STOP_VOICE_THE_WORLD2, ModSounds.TIME_STOP_VOICE_THE_WORLD2_ID);
+    public static final RegistryObject<SoundEvent> TIME_STOP_VOICE_THE_WORLD3_EVENT =
+            register(ModSounds.TIME_STOP_VOICE_THE_WORLD2, ModSounds.TIME_STOP_VOICE_THE_WORLD3_ID);
     public static final RegistryObject<SoundEvent> TIME_STOP_CHARGE_THE_WORLD_EVENT =
             register(ModSounds.TIME_STOP_CHARGE_THE_WORLD, ModSounds.TIME_STOP_CHARGE_THE_WORLD_ID);
     public static final RegistryObject<SoundEvent> TIME_STOP_STAR_PLATINUM_EVENT =

@@ -71,6 +71,12 @@
       "roundabout:stand_theworld_muda4"
     ]
   },
+  "stand_theworld_muda5": {
+    "subtitle": "sounds.roundabout.stand_theworld_muda5",
+    "sounds": [
+      "roundabout:stand_theworld_muda5"
+    ]
+  },
   "stand_barrage_windup": {
     "subtitle": "sounds.roundabout.stand_barrage_windup",
     "sounds": [
@@ -141,6 +147,18 @@
     "subtitle": "sounds.roundabout.timestop_voice_theworld",
     "sounds": [
       "roundabout:timestop_voice_theworld"
+    ]
+  },
+  "timestop_voice_theworld2": {
+    "subtitle": "sounds.roundabout.timestop_voice_theworld2",
+    "sounds": [
+      "roundabout:timestop_voice_theworld2"
+    ]
+  },
+  "timestop_voice_theworld3": {
+    "subtitle": "sounds.roundabout.timestop_voice_theworld3",
+    "sounds": [
+      "roundabout:timestop_voice_theworld3"
     ]
   },
   "timestop_star_platinum": {
