@@ -64,7 +64,7 @@ public interface StandUser {
     void setDazeTime(byte dazeTime);
 
     void tryPower(int move, boolean forced);
-    void tryChargedPower(int move, boolean forced, float chargeTime);
+    void tryChargedPower(int move, boolean forced, int chargeTime);
 
     void setSummonCD(int summonCD);
     boolean getSummonCD();

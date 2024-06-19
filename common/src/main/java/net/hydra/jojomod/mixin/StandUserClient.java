@@ -27,12 +27,7 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
     public ImmutableList<PlayedSoundInstance> roundaboutSoundsPlaying = ImmutableList.of();
     public ImmutableList<Byte> roundaboutSoundsToCancel = ImmutableList.of();
     public SoundEvent roundaboutSoundEvent;
-    public byte roundaboutSoundByte;
 
-    @Override
-    public byte getRoundaboutSoundByte(){
-        return this.roundaboutSoundByte;
-    }
 
 
     /**This is called second by the packets, it sets up the client to play the sound on a game tick.

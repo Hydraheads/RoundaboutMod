@@ -25,11 +25,11 @@ public class TimeStopInstance {
      */
     public double range;
 
-    public float duration;
-    public float maxDuration;
+    public int duration;
+    public int maxDuration;
 
 
-    public TimeStopInstance(int id, double x, double y, double z, double range, float duration, float maxDuration){
+    public TimeStopInstance(int id, double x, double y, double z, double range, int duration, int maxDuration){
         this.id = id;
         this.x = x;
         this.y = y;

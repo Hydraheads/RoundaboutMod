@@ -68,15 +68,15 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, float chargeTime, float maxChargeTime) {
+    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int chargeTime, int maxChargeTime) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(entityID);
         buffer.writeDouble(x);
         buffer.writeDouble(y);
         buffer.writeDouble(z);
         buffer.writeDouble(range);
-        buffer.writeFloat(chargeTime);
-        buffer.writeFloat(maxChargeTime);
+        buffer.writeInt(chargeTime);
+        buffer.writeInt(maxChargeTime);
         ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_PACKET, buffer);
 
     }
@@ -107,6 +107,14 @@ public class FabricPackets implements IPacketAccess {
         ServerPlayNetworking.send(sp, ModMessages.SEND_FLOAT_POWER_DATA_PACKET, buffer);
     }
 
+    @Override
+    public void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data) {
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeByte(activePower);
+        buffer.writeInt(data);
+        ServerPlayNetworking.send(sp, ModMessages.SEND_INT_POWER_DATA_PACKET, buffer);
+    }
 
     @Override
     public void StandGuardCancelClientPacket(){
@@ -119,10 +127,10 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.STAND_POWER_PACKET, buffer);
     }
     @Override
-    public void StandChargedPowerPacket(byte power, float chargeTime){
+    public void StandChargedPowerPacket(byte power, int chargeTime){
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeByte(power);
-        buffer.writeFloat(chargeTime);
+        buffer.writeInt(chargeTime);
         ClientPlayNetworking.send(ModMessages.STAND_CHARGED_POWER_PACKET, buffer);
     }
 
@@ -169,6 +177,16 @@ public class FabricPackets implements IPacketAccess {
     @Override
     public void standSummonPacket(){
         ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());
+    }
+
+
+    @Override
+    public void byteToServerPacket(byte value, byte context){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeByte(value);
+        buffer.writeByte(context);
+        ClientPlayNetworking.send(ModMessages.BYTE_C2S_PACKET, buffer);
     }
 
 }

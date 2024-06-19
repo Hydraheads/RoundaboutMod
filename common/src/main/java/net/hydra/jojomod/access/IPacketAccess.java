@@ -8,7 +8,7 @@ public interface IPacketAccess {
     /**Forge and Fabric both use this interface to use their own packet handling code.
      * Every packet function must be written here.*/
 
-    /**Server Packets*/
+    /**Server To Client Packets*/
     void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken);
     void DazeTimePacket(ServerPlayer sp, byte dazeTime);
     void NBTSyncPacket(ServerPlayer sp, CompoundTag NBT);
@@ -19,15 +19,16 @@ public interface IPacketAccess {
 
     void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
-    void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, float duration, float maxDuration);
+    void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration);
     void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
+    void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
 
-    /**Client Packets*/
+    /**Client To Server Packets*/
     void StandGuardCancelClientPacket();
     void StandPowerPacket(byte power);
-    void StandChargedPowerPacket(byte power, float chargeTime);
+    void StandChargedPowerPacket(byte power, int chargeTime);
     void StandPunchPacket(int targetID, byte APP);
     void StandBarrageHitPacket(int targetID, int ATD);
 
@@ -36,4 +37,5 @@ public interface IPacketAccess {
     void moveSyncPacket(byte forward, byte strafe);
     void timeStopFloat(boolean TSJump);
     void standSummonPacket();
+    void byteToServerPacket(byte value, byte context);
 }

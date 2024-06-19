@@ -61,10 +61,14 @@
   "sounds.roundabout.hit_sfx1":  "Heavy Hit",
   "sounds.roundabout.terrier_pass": "Terrier fart",
   "sounds.roundabout.timestop_the_world":  "Time was Stopped!",
+  "sounds.roundabout.timestop_the_world2":  "Time was Stopped!",
+  "sounds.roundabout.timestop_the_world3":  "Time was Stopped!",
   "sounds.roundabout.timestop_star_platinum":  "Time was Stopped!",
   "sounds.roundabout.timestop_charge_theworld":  "Preparing Time Stop",
+  "sounds.roundabout.timestop_resume_theworld":  "Time is resuming!",
+  "sounds.roundabout.timestop_resume_theworld2":  "Time is resuming!",
   "sounds.roundabout.timestop_voice_theworld":  "Stop, Time!",
   "sounds.roundabout.timestop_voice_theworld2":  "The World!",
   "sounds.roundabout.timestop_voice_theworld3":  "The World!",
-  "sounds.roundabout.timeresume": "Time resumes!"
+  "sounds.roundabout.timeresume": "Time is resumed!"
 }

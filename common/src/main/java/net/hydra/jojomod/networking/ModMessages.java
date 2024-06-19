@@ -9,6 +9,7 @@ public class ModMessages {
      * Note that forge and Fabric handle packets quite differently.
      * Both reference this file.*/
     public static final ResourceLocation STAND_SUMMON_PACKET = new ResourceLocation(Roundabout.MOD_ID,"summon_packet");
+    public static final ResourceLocation BYTE_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"byte_packet");
     public static final ResourceLocation STAND_PUNCH_PACKET = new ResourceLocation(Roundabout.MOD_ID,"punch_packet");
     public static final ResourceLocation STAND_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_packet");
     public static final ResourceLocation STAND_CHARGED_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"charged_power_packet");
@@ -27,6 +28,7 @@ public class ModMessages {
     public static final ResourceLocation TIME_STOP_ENTITY_PACKET = new ResourceLocation(Roundabout.MOD_ID,"time_stop_entity_s2c_packet");
     public static final ResourceLocation TIME_STOP_ENTITY_REMOVAL_PACKET = new ResourceLocation(Roundabout.MOD_ID,"time_stop_entity_removal_s2c_packet");
     public static final ResourceLocation RESUME_TILE_ENTITY_TS_PACKET = new ResourceLocation(Roundabout.MOD_ID,"tile_entity_resume_s2c_packet");
-    public static final ResourceLocation SEND_FLOAT_POWER_DATA_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_float_resume_s2c_packet");
+    public static final ResourceLocation SEND_FLOAT_POWER_DATA_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_float_s2c_packet");
+    public static final ResourceLocation SEND_INT_POWER_DATA_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_int_s2c_packet");
 
 }

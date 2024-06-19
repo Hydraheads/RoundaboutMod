@@ -44,7 +44,7 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, float duration, float maxDuration) {
+    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration) {
         ForgePacketHandler.sendToClient(new ForgeTimeStoppingEntityPacket(entityID, x,y,z, range, duration, maxDuration), sp);
     }
     @Override
@@ -61,6 +61,10 @@ public class ForgePackets implements IPacketAccess {
     public void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data) {
         ForgePacketHandler.sendToClient(new ForgePowerFloatPacket(activePower,data), sp);
     }
+    @Override
+    public void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data) {
+        ForgePacketHandler.sendToClient(new ForgePowerIntPacket(activePower,data), sp);
+    }
 
     @Override
     public void StandGuardCancelClientPacket() {
@@ -73,7 +77,7 @@ public class ForgePackets implements IPacketAccess {
 
     }
     @Override
-    public void StandChargedPowerPacket(byte power, float chargeTime) {
+    public void StandChargedPowerPacket(byte power, int chargeTime) {
         ForgePacketHandler.sendToServer(new ForgeChargedPowerPacket(power,chargeTime));
 
     }
@@ -95,6 +99,11 @@ public class ForgePackets implements IPacketAccess {
     @Override
     public void standSummonPacket() {
         ForgePacketHandler.sendToServer(new ForgeSummonPacket());
+    }
+
+    @Override
+    public void byteToServerPacket(byte value, byte context) {
+        ForgePacketHandler.sendToServer(new ForgeByteC2SPacket(value, context));
     }
 
 

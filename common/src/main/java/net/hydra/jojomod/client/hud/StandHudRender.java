@@ -1,7 +1,6 @@
 package net.hydra.jojomod.client.hud;
 
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -9,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -216,7 +214,7 @@ public class StandHudRender {
 
     public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
-                                      float flashAlpha, float otherFlashAlpha, boolean isTSEntity, Font font, float mod) {
+                                      float flashAlpha, float otherFlashAlpha, boolean isTSEntity, Font font) {
         int l;
         int k;
         int v;
@@ -226,8 +224,8 @@ public class StandHudRender {
         StandUser standUser = ((StandUser) playerEntity);
         if (isTSEntity){
             v = 50;
-            k = (int) Math.floor((182/standUser.getStandPowers().getMaxChargeTSTime())*standUser.getStandPowers().getChargedTSSeconds());
-            z =  (int) Math.min(Math.floor(standUser.getStandPowers().getChargedTSSeconds()+mod),standUser.getStandPowers().getMaxChargeTSTime());
+            k = (int) Math.floor((182 /((double) standUser.getStandPowers().getMaxChargeTSTime() /20))*((double) standUser.getStandPowers().getChargedTSTicks() /20));
+            z =  (int) Math.min((Math.floor(((double) standUser.getStandPowers().getChargedTSTicks()+19)/20)),((double) standUser.getStandPowers().getMaxChargeTSTime() /20));
             y = 7654088;
         } else {
             v = 60;

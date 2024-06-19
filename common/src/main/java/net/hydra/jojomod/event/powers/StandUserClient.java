@@ -9,8 +9,6 @@ public interface StandUserClient {
     void clientQueSound(byte soundChoice);
     void clientPlaySound();
 
-    byte getRoundaboutSoundByte();
-
     void clientQueSoundCanceling(byte soundChoice);
 
     void clientSoundCancel();

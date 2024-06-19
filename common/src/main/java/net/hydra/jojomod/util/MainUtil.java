@@ -1,11 +1,14 @@
 package net.hydra.jojomod.util;
 
 
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -86,5 +89,13 @@ public class MainUtil {
             }
         }
         return false;
+    }
+
+
+    /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
+    public static void handleBytePacketC2S(Player player, byte data, byte context){
+        if (context == PacketDataIndex.PLAY_SOUND_C2S_CONTEXT) {
+            ((StandUser) player).getStandPowers().playSoundsIfNearby(data, 100);
+        }
     }
 }

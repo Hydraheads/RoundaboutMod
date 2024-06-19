@@ -28,6 +28,7 @@ public class SoundIndex {
     public static final byte BARRAGE_SOUND_GROUP = 100;
     public static final byte TIME_CHARGE_SOUND_GROUP = 101;
     public static final byte TIME_SOUND_GROUP = 102;
+    public static final byte TIME_END_GROUP = 103;
 
 
 }

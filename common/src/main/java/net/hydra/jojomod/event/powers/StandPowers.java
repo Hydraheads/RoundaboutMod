@@ -4,13 +4,10 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -133,18 +130,18 @@ public abstract class StandPowers {
     /**This updates when a punch is thrown, to stop the stand from throwing the same punch twice if the game lags*/
     private byte activePowerPhaseCheck = -1;
 
-    private float chargedTSSeconds = 0;
+    private int chargedTSTicks = 0;
 
-    public float getChargedTSSeconds (){
-        return this.chargedTSSeconds;
+    public int getChargedTSTicks(){
+        return this.chargedTSTicks;
     }
-    public void setChargedTSSeconds (float chargedTSSeconds){
-        this.chargedTSSeconds = chargedTSSeconds;
+    public void setChargedTSTicks(int chargedTSSeconds){
+        this.chargedTSTicks = chargedTSSeconds;
     }
-    public float getMaxTSTime (){
+    public int getMaxTSTime (){
         return 0;
     }
-    public float getMaxChargeTSTime(){
+    public int getMaxChargeTSTime(){
         return 0;
     }
     public boolean getSummonCD(){
@@ -324,6 +321,12 @@ public abstract class StandPowers {
      *  server or vice versa. An example of its usage is sending the time left on TS in the world stand via
      *  overriding this method and sending a packet*/
     public void updatePowerFloat(byte activePower, float data){
+    }
+
+    /**A generic function which sends an int corresponding with an active power via packets to the client from the
+     *  server or vice versa. An example of its usage is sending the time left on TS in the world stand via
+     *  overriding this method and sending a packet*/
+    public void updatePowerInt(byte activePower, int data){
     }
 
 
@@ -1222,8 +1225,10 @@ public abstract class StandPowers {
         }
     }
 
-    public void tryChargedPower(int move, boolean forced, float chargeTime){
+    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
         tryPower(move, forced);
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+        return true;
     }
 
     /**The Sound Event to cancel when your barrage is canceled*/

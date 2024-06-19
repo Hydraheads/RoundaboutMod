@@ -1,6 +1,7 @@
 package net.hydra.jojomod.networking.c2s;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,21 +9,21 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ForgeChargedPowerPacket {
-    private final byte power;
-    private final int chargedTime;
+public class ForgeByteC2SPacket {
+    private final byte data;
+    private final byte dataContext;
 
-    public ForgeChargedPowerPacket(byte power, int chargedTime){
-        this.power = power;
-        this.chargedTime = chargedTime;
+    public ForgeByteC2SPacket(byte data, byte dataContext){
+        this.data = data;
+        this.dataContext = dataContext;
     }
-    public ForgeChargedPowerPacket(FriendlyByteBuf buf){
-        this.power = buf.readByte();
-        this.chargedTime = buf.readInt();
+    public ForgeByteC2SPacket(FriendlyByteBuf buf){
+        this.data = buf.readByte();
+        this.dataContext = buf.readByte();;
     }
     public void toBytes(FriendlyByteBuf buf){
-        buf.writeByte(power);
-        buf.writeInt(chargedTime);
+        buf.writeByte(data);
+        buf.writeByte(dataContext);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
@@ -31,7 +32,7 @@ public class ForgeChargedPowerPacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
-                ((StandUser) player).tryChargedPower(power, true, chargedTime);
+                MainUtil.handleBytePacketC2S(player, data, dataContext);
             }
         });
         return true;

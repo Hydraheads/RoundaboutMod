@@ -72,6 +72,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeClashUpdatePacketC2S::toBytes)
                 .consumerMainThread(ForgeClashUpdatePacketC2S::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeByteC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ForgeByteC2SPacket::new)
+                .encoder(ForgeByteC2SPacket::toBytes)
+                .consumerMainThread(ForgeByteC2SPacket::handle)
+                .add();
 
         /**Server to Client Packets*/
         INSTANCE.messageBuilder(ForgeClashUpdatePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -128,6 +133,11 @@ public class ForgePacketHandler {
                 .decoder(ForgePowerFloatPacket::new)
                 .encoder(ForgePowerFloatPacket::toBytes)
                 .consumerMainThread(ForgePowerFloatPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(ForgePowerIntPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgePowerIntPacket::new)
+                .encoder(ForgePowerIntPacket::toBytes)
+                .consumerMainThread(ForgePowerIntPacket::handle)
                 .add();
     }
 

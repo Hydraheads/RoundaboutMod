@@ -4,16 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBlockEntityAccess;
-import net.hydra.jojomod.access.IBlockEntityClientAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
@@ -26,14 +23,12 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.joml.Vector4d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mixin(Level.class)
 public class TimeStopWorld implements TimeStop {
@@ -61,7 +56,7 @@ public class TimeStopWorld implements TimeStop {
     }
 
     @Override
-    public void addTimeStoppingEntityClient(int id, double x, double y, double z, double range, float duration, float maxDuration) {
+    public void addTimeStoppingEntityClient(int id, double x, double y, double z, double range, int duration, int maxDuration) {
         if (((Level) (Object) this).isClientSide) {
             if (this.timeStoppingEntitiesClient.isEmpty()) {
                 this.timeStoppingEntitiesClient = ImmutableList.of(new TimeStopInstance(id,x,y,z,range, duration, maxDuration));
@@ -127,7 +122,7 @@ public class TimeStopWorld implements TimeStop {
                         if (MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
                             ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), TSI.getX(),
                                     TSI.getY(),TSI.getZ(),((StandUser) TSI).getStandPowers().getTimestopRange(),
-                                    ((StandUser) TSI).getStandPowers().getChargedTSSeconds(),
+                                    ((StandUser) TSI).getStandPowers().getChargedTSTicks(),
                                     ((StandUser) TSI).getStandPowers().getMaxChargeTSTime());
                         }
                     }
@@ -150,7 +145,7 @@ public class TimeStopWorld implements TimeStop {
 
     /**On the client side, takes streamed packets and adds/removes entities from them to the liste*/
     @Override
-    public void processTSPacket(int timeStoppingEntity, double x, double y, double z, double range, float duration, float maxDuration){
+    public void processTSPacket(int timeStoppingEntity, double x, double y, double z, double range, int duration, int maxDuration){
         if (((Level) (Object) this).isClientSide) {
             addTimeStoppingEntityClient(timeStoppingEntity, x,y,z, range, duration, maxDuration);
         }

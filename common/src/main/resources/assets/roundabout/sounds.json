@@ -137,10 +137,34 @@
       "roundabout:timestop_the_world"
     ]
   },
+  "timestop_the_world3": {
+    "subtitle": "sounds.roundabout.timestop_the_world3",
+    "sounds": [
+      "roundabout:timestop_the_world3"
+    ]
+  },
+  "timestop_the_world2": {
+    "subtitle": "sounds.roundabout.timestop_the_world2",
+    "sounds": [
+      "roundabout:timestop_the_world2"
+    ]
+  },
   "timestop_charge_theworld": {
     "subtitle": "sounds.roundabout.timestop_charge_theworld",
     "sounds": [
       "roundabout:timestop_charge_theworld"
+    ]
+  },
+  "timestop_resume_theworld": {
+    "subtitle": "sounds.roundabout.timestop_resume_theworld",
+    "sounds": [
+      "roundabout:timestop_resume_theworld"
+    ]
+  },
+  "timestop_resume2_theworld": {
+    "subtitle": "sounds.roundabout.timestop_resume2_theworld",
+    "sounds": [
+      "roundabout:timestop_resume2_theworld"
     ]
   },
   "timestop_voice_theworld": {

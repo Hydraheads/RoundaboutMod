@@ -31,7 +31,7 @@ public class StandAbilityPacket {
     public static void switchChargedPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                                    FriendlyByteBuf buf, PacketSender responseSender) {
         byte power = buf.readByte();
-        float charge = buf.readFloat();
+        int charge = buf.readInt();
         server.execute(() -> {
             ((StandUser) player).tryChargedPower(power, true, charge);
         });

@@ -17,10 +17,10 @@ public class ForgeTimeStoppingEntityPacket {
     private final double y;
     private final double z;
     private final double range;
-    private final float duration;
-    private final float maxDuration;
+    private final int duration;
+    private final int maxDuration;
 
-    public ForgeTimeStoppingEntityPacket(int entityID, double x, double y, double z, double range, float duration, float maxDuration){
+    public ForgeTimeStoppingEntityPacket(int entityID, double x, double y, double z, double range, int duration, int maxDuration){
         this.entityID = entityID;
         this.x = x;
         this.y = y;
@@ -35,8 +35,8 @@ public class ForgeTimeStoppingEntityPacket {
         this.y = buf.readDouble();
         this.z = buf.readDouble();
         this.range = buf.readDouble();
-        this.duration = buf.readFloat();
-        this.maxDuration = buf.readFloat();
+        this.duration = buf.readInt();
+        this.maxDuration = buf.readInt();
     }
     public void toBytes(FriendlyByteBuf buf){
         buf.writeInt(entityID);
@@ -44,8 +44,8 @@ public class ForgeTimeStoppingEntityPacket {
         buf.writeDouble(y);
         buf.writeDouble(z);
         buf.writeDouble(range);
-        buf.writeFloat(duration);
-        buf.writeFloat(maxDuration);
+        buf.writeInt(duration);
+        buf.writeInt(maxDuration);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier){

@@ -71,7 +71,7 @@ public abstract class HudRendering implements IHudAccess {
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, false, this.getFont(),0.999F);
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, false, this.getFont());
                 return true;
             } else if (((StandUser) minecraft.player).isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).setClashDisplayExtraTimestamp(this.minecraft.player.level().getGameTime());
@@ -88,9 +88,8 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } else if (isTSEntity || (((StandUser) minecraft.player).getStandPowers().getMaxTSTime() > 0
                     && (((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  ((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
-                float mod = 0.999F;
-                if (isTSEntity){mod=0.999F;}
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true, this.getFont(), mod);
+
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true, this.getFont());
                 return true;
             }
         }

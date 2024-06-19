@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
 import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
+import net.hydra.jojomod.networking.packet.c2s.UtilC2S;
 import net.hydra.jojomod.networking.packet.s2c.*;
 
 public class FabricPacketManager {
@@ -20,6 +21,7 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_JUMP_ID, MoveSyncPacket::updateTSJump);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_GUARD_CANCEL_PACKET, StandAbilityPacket::guardCancel);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.BARRAGE_CLASH_UPDATE_PACKET, StandAbilityPacket::clashUpdate);
+        ServerPlayNetworking.registerGlobalReceiver(ModMessages.BYTE_C2S_PACKET, UtilC2S::UpdateByte);
     }
     //Server to Client
     public static void registerS2CPackets(){
@@ -34,6 +36,7 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_REMOVAL_PACKET, TimeEventPackets::updateTSRemovalList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.RESUME_TILE_ENTITY_TS_PACKET, TimeEventPackets::updateTileEntityTS);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_FLOAT_POWER_DATA_PACKET, CooldownSyncPacket::sendFloatPower);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_INT_POWER_DATA_PACKET, CooldownSyncPacket::sendIntPower);
     }
 
 }
