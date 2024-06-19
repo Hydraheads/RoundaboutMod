@@ -14,19 +14,26 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Illusioner;
@@ -573,6 +580,15 @@ public abstract class StandUserEntity implements StandUser {
         }
     }
 
+    @Shadow
+    protected float getDamageAfterArmorAbsorb(DamageSource $$0, float $$1){
+        return 0;
+    }
+
+    @Shadow
+    protected float getDamageAfterMagicAbsorb(DamageSource $$0, float $$1) {
+        return 0;
+    }
 
     /**Part of Registering Stand Guarding as a form of Blocking*/
     @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurtCurrentlyUsedShield(F)V", shift = At.Shift.BEFORE))
@@ -581,6 +597,7 @@ public abstract class StandUserEntity implements StandUser {
             if (!source.is(DamageTypeTags.BYPASSES_COOLDOWN) && this.getGuardCooldown() > 0) {
                 return;
             }
+
             this.damageGuard(amount);
         }
     }
@@ -661,6 +678,19 @@ public abstract class StandUserEntity implements StandUser {
             if (this.roundaboutTSHurtTime <= 0 || $$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
                 float dmg = roundaboutGetStoredDamage();
                 float max = roundaboutGetMaxStoredDamage();
+
+
+
+                if (((LivingEntity)(Object) this).isInvulnerableTo($$0)) {
+                    ci.setReturnValue(false);
+                } else if (((LivingEntity)(Object) this).isDeadOrDying()) {
+                    ci.setReturnValue(false);
+                } else if ($$0.is(DamageTypeTags.IS_FIRE) && ((LivingEntity)(Object) this).hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                    ci.setReturnValue(false);
+                }
+                $$1 = getDamageAfterArmorAbsorb($$0, $$1);
+                $$1 = getDamageAfterMagicAbsorb($$0, $$1);
+
                 if ((dmg + $$1) > max) {
                     roundaboutSetStoredDamage(max);
                 } else {
