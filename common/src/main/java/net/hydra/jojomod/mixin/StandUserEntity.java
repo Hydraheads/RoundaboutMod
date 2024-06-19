@@ -561,6 +561,9 @@ public abstract class StandUserEntity implements StandUser {
         if (this.isBarraging() &&
                 $$0.getDirectEntity() != null) {
             this.tryPower(PowerIndex.GUARD,true);
+        } else if (this.getStandPowers().canInterruptPower() &&
+                $$0.getDirectEntity() != null){
+            this.tryPower(PowerIndex.NONE,true);
         }
     }
 

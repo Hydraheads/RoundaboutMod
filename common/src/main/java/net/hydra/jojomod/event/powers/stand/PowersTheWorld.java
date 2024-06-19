@@ -14,6 +14,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -126,11 +127,43 @@ public class PowersTheWorld extends StandPowers {
           }
     }
 
+    @Override
+    public boolean canInterruptPower(){
+        if (this.getActivePower() == PowerIndex.SPECIAL){
+            return true;
+        } else {
+            return super.canInterruptPower();
+        }
+    }
+
+    /**Stand related things that slow you down or speed you up*/
+    public int inputSpeedModifiers(int sprintTrigger){
+        if (this.getSelf().level().isClientSide) {
+            LocalPlayer local = ((LocalPlayer) this.getSelf());
+            StandUser standUser = ((StandUser) this.getSelf());
+            if (standUser.roundaboutGetTSJump()) {
+                if (local.isCrouching()) {
+                    local.input.leftImpulse *= 1.0f;
+                    local.input.forwardImpulse *= 1.1f;
+                    sprintTrigger = 0;
+                } else {
+                    local.input.leftImpulse *= 0.85f;
+                    local.input.forwardImpulse *= 0.85f;
+                    sprintTrigger = 0;
+                }
+            } else if (this.getActivePower() == PowerIndex.SPECIAL) {
+                local.input.leftImpulse *= 0.47f;
+                local.input.forwardImpulse *= 0.47f;
+                sprintTrigger = 0;
+            }
+        }
+        return super.inputSpeedModifiers(sprintTrigger);
+    }
+
     public void resumeTime() {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                Roundabout.LOGGER.info(String.valueOf(this.getChargedTSTicks()));
                 if (this.getMaxChargeTSTime() > 20 || playedResumeSound){
                     this.playSoundsIfNearby(TIME_RESUME_NOISE, 100);
                 }

@@ -50,35 +50,7 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/Tutorial;onInput(Lnet/minecraft/client/player/Input;)V", shift = At.Shift.AFTER))
     private void RoundaboutTickMovement(CallbackInfo ci) {
         /*Time Stop Levitation*/
-        if (((StandUser) this).isDazed()) {
-            this.input.leftImpulse = 0;
-            this.input.forwardImpulse = 0;
-            this.sprintTriggerTime = 0;
-        } else if (!(((LocalPlayer)(Object)this).getVehicle() != null && ((LocalPlayer)(Object)this).getControlledVehicle() == null) &&
-                (((StandUser) this).isGuarding() && ((LocalPlayer)(Object)this).getVehicle() == null)) {
-            this.input.leftImpulse *= 0.3f;
-            this.input.forwardImpulse *= 0.3f;
-            this.sprintTriggerTime = 0;
-        } else if (((StandUser) this).getStandPowers().isBarrageAttacking() || ((StandUser) this).isClashing()){
-            this.input.leftImpulse *= 0.2f;
-            this.input.forwardImpulse *= 0.2f;
-            this.sprintTriggerTime = 0;
-        } else if (((StandUser) this).getStandPowers().isBarrageCharging()){
-            this.input.leftImpulse *= 0.66f;
-            this.input.forwardImpulse *= 0.66f;
-            this.sprintTriggerTime = 0;
-        }
-        if (((StandUser)this).roundaboutGetTSJump()){
-            if (((LocalPlayer)(Object) this).isCrouching()) {
-                this.input.leftImpulse *= 1.0f;
-                this.input.forwardImpulse *= 1.1f;
-                this.sprintTriggerTime = 0;
-            } else {
-                this.input.leftImpulse *= 0.85f;
-                this.input.forwardImpulse *= 0.85f;
-                this.sprintTriggerTime = 0;
-            }
-        }
+        this.sprintTriggerTime = ((StandUser)this).getStandPowers().inputSpeedModifiers(this.sprintTriggerTime);
         RoundaboutClashJump();
     }
     private void RoundaboutClashJump(){

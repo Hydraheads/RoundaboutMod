@@ -8,6 +8,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -36,6 +37,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.injection.modify.LocalVariableDiscriminator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -376,6 +378,36 @@ public abstract class StandPowers {
         user2.knockback(0.55f,user1.getX()-user2.getX(), user1.getZ()-user2.getZ());
     }
 
+    public boolean canInterruptPower(){
+        return false;
+    }
+
+    /**Stand related things that slow you down or speed you up*/
+    public int inputSpeedModifiers(int sprintTrigger){
+        if (this.getSelf().level().isClientSide) {
+            LocalPlayer local = ((LocalPlayer) this.getSelf());
+            StandUser standUser = ((StandUser) this.getSelf());
+            if (standUser.isDazed()) {
+                local.input.leftImpulse = 0;
+                local.input.forwardImpulse = 0;
+                sprintTrigger = 0;
+            } else if (!(local.getVehicle() != null && local.getControlledVehicle() == null) &&
+                    (standUser.isGuarding() && local.getVehicle() == null)) {
+                local.input.leftImpulse *= 0.3f;
+                local.input.forwardImpulse *= 0.3f;
+                sprintTrigger = 0;
+            } else if (standUser.getStandPowers().isBarrageAttacking() || standUser.isClashing()) {
+                local.input.leftImpulse *= 0.2f;
+                local.input.forwardImpulse *= 0.2f;
+                sprintTrigger = 0;
+            } else if (standUser.getStandPowers().isBarrageCharging()) {
+                local.input.leftImpulse *= 0.5f;
+                local.input.forwardImpulse *= 0.5f;
+                sprintTrigger = 0;
+            }
+        }
+        return sprintTrigger;
+    }
 
     public void updateClashing(){
         if (this.getStandEntity(this.self) != null) {
