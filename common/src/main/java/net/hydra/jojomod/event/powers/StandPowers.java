@@ -482,6 +482,7 @@ public abstract class StandPowers {
     public void resetAttackState(){
         this.interruptCD = 3;
         this.setAttackTimeDuring(-1);
+        animateStand((byte) 0);
         poseStand(OffsetIndex.FOLLOW);
     }
 

@@ -130,7 +130,8 @@ public class PowersTheWorld extends StandPowers {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                if (this.getMaxChargeTSTime() > 20){
+                Roundabout.LOGGER.info(String.valueOf(this.getChargedTSTicks()));
+                if (this.getMaxChargeTSTime() > 20 || playedResumeSound){
                     this.playSoundsIfNearby(TIME_RESUME_NOISE, 100);
                 }
                 ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
@@ -180,6 +181,7 @@ public class PowersTheWorld extends StandPowers {
         if (move == PowerIndex.SPECIAL_FINISH) {
             this.resumeTime();
         } else if (move == PowerIndex.SPECIAL_CANCEL){
+            playedResumeSound = true;
             this.resumeTime();
         } else if (move == PowerIndex.SPECIAL_CHARGED){
             this.stopTime();
@@ -267,7 +269,10 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public boolean tryChargedPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.SPECIAL_CHARGED){
-            this.setChargedTSTicks(chargeTime);
+            if (this.getSelf().level().isClientSide() ||
+                    !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+                this.setChargedTSTicks(chargeTime);
+            }
             super.tryChargedPower(move, forced, chargeTime);
         } else if (move == PowerIndex.SPECIAL_TRACKER){
             /*If the server is behind on the client TS time, update it to lower*/
