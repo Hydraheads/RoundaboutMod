@@ -20,6 +20,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -275,7 +277,10 @@ public class TimeStopWorld implements TimeStop {
     public boolean CanTimeStopEntity(Entity entity){
         if (entity instanceof Player && ((Player) entity).isCreative() || entity.isSpectator()) {
             return false;
-        } else if (entity instanceof Warden){
+        } else if (entity instanceof Warden) {
+            return false;
+        } else if  (!(entity instanceof LivingEntity) && entity.getFirstPassenger() != null &&
+                entity.getFirstPassenger() instanceof LivingEntity && this.isTimeStoppingEntity((LivingEntity) entity.getFirstPassenger())){
             return false;
         } else if (entity instanceof StandEntity) {
             LivingEntity Following = ((StandEntity) entity).getFollowing();
