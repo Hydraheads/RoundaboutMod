@@ -382,6 +382,7 @@ public abstract class StandPowers {
         return false;
     }
 
+
     /**Stand related things that slow you down or speed you up*/
     public int inputSpeedModifiers(int sprintTrigger){
         if (this.getSelf().level().isClientSide) {
@@ -396,11 +397,11 @@ public abstract class StandPowers {
                 local.input.leftImpulse *= 0.3f;
                 local.input.forwardImpulse *= 0.3f;
                 sprintTrigger = 0;
-            } else if (standUser.getStandPowers().isBarrageAttacking() || standUser.isClashing()) {
+            } else if (this.isBarrageAttacking() || standUser.isClashing()) {
                 local.input.leftImpulse *= 0.2f;
                 local.input.forwardImpulse *= 0.2f;
                 sprintTrigger = 0;
-            } else if (standUser.getStandPowers().isBarrageCharging()) {
+            } else if (this.isBarrageCharging()) {
                 local.input.leftImpulse *= 0.5f;
                 local.input.forwardImpulse *= 0.5f;
                 sprintTrigger = 0;
@@ -889,7 +890,8 @@ public abstract class StandPowers {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
             }
         }
-    } public void playBarrageNoise2(int hitNumber, Entity entity){
+    }
+    public void playBarrageNoise2(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.9 + (Math.random() * 0.25)));

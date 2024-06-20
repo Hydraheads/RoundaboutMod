@@ -218,7 +218,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), cancellable = true)
     protected void roundaboutSetDeltaMovement(Vec3 vec3, CallbackInfo ci){
         if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
-            if (vec3.distanceTo(new Vec3(0,0,0)) > (roundaboutDeltaBuildupTS.distanceTo(new Vec3(0,0,0)) - 0.5)) {
+            if (vec3.distanceTo(new Vec3(0,0,0)) > (roundaboutDeltaBuildupTS.distanceTo(new Vec3(0,0,0)) - 0.35)) {
                 this.roundaboutDeltaBuildupTS = vec3;
             }
             ci.cancel();

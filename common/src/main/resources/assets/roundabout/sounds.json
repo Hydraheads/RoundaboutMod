@@ -47,6 +47,18 @@
       "roundabout:punch_sfx4"
     ]
   },
+  "timestop_impact": {
+    "subtitle": "sounds.roundabout.timestop_impact",
+    "sounds": [
+      "roundabout:timestop_impact"
+    ]
+  },
+  "timestop_impact2": {
+    "subtitle": "sounds.roundabout.timestop_impact2",
+    "sounds": [
+      "roundabout:timestop_impact2"
+    ]
+  },
   "stand_theworld_muda1": {
     "subtitle": "sounds.roundabout.stand_theworld_muda1",
     "sounds": [

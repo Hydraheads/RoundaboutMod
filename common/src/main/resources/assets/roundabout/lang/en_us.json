@@ -70,5 +70,7 @@
   "sounds.roundabout.timestop_voice_theworld":  "Stop, Time!",
   "sounds.roundabout.timestop_voice_theworld2":  "The World!",
   "sounds.roundabout.timestop_voice_theworld3":  "The World!",
-  "sounds.roundabout.timeresume": "Time is resumed!"
+  "sounds.roundabout.timeresume": "Time is resumed!",
+  "sounds.roundabout.timestop_impact":  "Time Impact",
+  "sounds.roundabout.timestop_impact2":  "Time Impact"
 }

@@ -152,8 +152,8 @@ public class PowersTheWorld extends StandPowers {
                     sprintTrigger = 0;
                 }
             } else if (this.getActivePower() == PowerIndex.SPECIAL) {
-                local.input.leftImpulse *= 0.47f;
-                local.input.forwardImpulse *= 0.47f;
+                local.input.leftImpulse *= 0.48f;
+                local.input.forwardImpulse *= 0.48f;
                 sprintTrigger = 0;
             }
         }
@@ -505,6 +505,9 @@ public class PowersTheWorld extends StandPowers {
     public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.getSelf().level().isClientSide()) {
             if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                if (entity instanceof  LivingEntity){
+                    ((StandUser)entity).roundaboutSetTSHurtSound(3);
+                }
                 playBarrageBlockEndNoise(0,entity);
             } else {
                 this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);

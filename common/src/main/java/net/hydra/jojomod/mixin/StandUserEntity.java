@@ -27,6 +27,7 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -167,6 +168,17 @@ public abstract class StandUserEntity implements StandUser {
             }
         }
     }
+
+    @Unique
+    private int roundaboutTSHurtSound = 0;
+
+    public int roundaboutGetTSHurtSound(){
+        return this.roundaboutTSHurtSound;
+    }
+    public void roundaboutSetTSHurtSound(int roundaboutTSHurtSound){
+        this.roundaboutTSHurtSound = roundaboutTSHurtSound;
+    }
+
 
     @Unique
     public Entity roundaboutGetStoredAttacker(){
@@ -693,6 +705,12 @@ public abstract class StandUserEntity implements StandUser {
                 }
                 $$1 = getDamageAfterArmorAbsorb($$0, $$1);
                 $$1 = getDamageAfterMagicAbsorb($$0, $$1);
+
+                if (roundaboutTSHurtSound < 1){
+                    roundaboutTSHurtSound = 1;
+                } if (roundaboutTSHurtSound < 2 && $$0.is(ModDamageTypes.STAND)){
+                    roundaboutTSHurtSound = 2;
+                }
 
                 if ((dmg + $$1) > max) {
                     roundaboutSetStoredDamage(max);

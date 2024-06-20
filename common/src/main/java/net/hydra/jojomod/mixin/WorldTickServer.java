@@ -7,9 +7,11 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -169,6 +171,17 @@ public class WorldTickServer {
                         ((StandUser)entity).roundaboutGetStoredDamage(), 0, ((StandUser)entity).roundaboutGetStoredAttacker())){
                     entity.hurtMarked = true;
                     entity.setDeltaMovement(Objects.requireNonNull(((IEntityAndData) entity).getRoundaboutDeltaBuildupTS()));
+                    int TSHurt = ((StandUser)entity).roundaboutGetTSHurtSound();
+                    if (TSHurt != 0){
+                        if (TSHurt == 1){
+                            ((ServerLevel)(Object) this).playSound(null, entity, ModSounds.TIME_STOP_IMPACT2_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.01) - 0.005));
+                        } else if (TSHurt == 2){
+                            ((ServerLevel)(Object) this).playSound(null, entity, ModSounds.TIME_STOP_IMPACT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2 + (Math.random() * 0.01) - 0.005));
+                        } else if (TSHurt == 3){
+                            ((ServerLevel)(Object) this).playSound(null, entity, ModSounds.TIME_STOP_IMPACT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.95 + (Math.random() * 0.01) - 0.005));
+                        }
+                    }
+                    ((StandUser)entity).roundaboutSetTSHurtSound(0);
                     entity.hasImpulse = true;
                 }
                 ((StandUser)entity).roundaboutSetStoredDamage(0);

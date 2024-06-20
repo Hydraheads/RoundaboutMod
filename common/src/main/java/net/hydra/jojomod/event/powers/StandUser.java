@@ -66,6 +66,10 @@ public interface StandUser {
     void tryPower(int move, boolean forced);
     void tryChargedPower(int move, boolean forced, int chargeTime);
 
+    int roundaboutGetTSHurtSound();
+
+    void roundaboutSetTSHurtSound(int roundaboutTSHurtSound);
+
     void setSummonCD(int summonCD);
     boolean getSummonCD();
     int getSummonCD2();
