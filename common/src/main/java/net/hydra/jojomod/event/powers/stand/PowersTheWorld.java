@@ -112,8 +112,8 @@ public class PowersTheWorld extends StandPowers {
                   playedResumeSound = false;
                   this.setCurrentMaxTSTime(this.getChargedTSTicks());
                   ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
-                  if (this.getChargedTSTicks() > 20) {
-                      /*High Charged Sound*/
+                  if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
+                      /*Charged Sound*/
                       playSoundsIfNearby(TIME_STOP_NOISE, 100);
                   } else {
                       /*No Charged Sound*/

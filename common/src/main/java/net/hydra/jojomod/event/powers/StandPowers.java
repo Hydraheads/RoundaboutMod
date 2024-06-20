@@ -1280,7 +1280,7 @@ public abstract class StandPowers {
                 }
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, 32.0)) {
+                if (blockPos.closerToCenterThan(userLocation, range)) {
                     ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity,this.self.getId(),soundNo);
                 }
             }
