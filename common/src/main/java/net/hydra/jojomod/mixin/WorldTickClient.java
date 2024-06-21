@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceKey;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelTimeAccess;
 import net.minecraft.world.level.biome.Biome;
@@ -52,7 +54,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Mixin(ClientLevel.class)
-public abstract class WorldTickClient {
+public abstract class WorldTickClient extends Level {
 
     /** Called every tick on the Client. Checks if a mob has a stand out, and updates the position of the stand.
      * @see StandEntity#tickStandOut */
@@ -60,6 +62,10 @@ public abstract class WorldTickClient {
     @Shadow
     @Final
    EntityTickList tickingEntities;
+
+    protected WorldTickClient(WritableLevelData $$0, ResourceKey<Level> $$1, RegistryAccess $$2, Holder<DimensionType> $$3, Supplier<ProfilerFiller> $$4, boolean $$5, boolean $$6, long $$7, int $$8) {
+        super($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8);
+    }
 
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"))
     private void roundaboutTickEntity(Entity $$0, CallbackInfo ci) {
@@ -239,6 +245,30 @@ public abstract class WorldTickClient {
                 for (Entity $$2 : $$1.getPassengers()) {
                     this.tickPassenger($$1, $$2);
                 }
+                ci.cancel();
+            }
+        }
+    }
+
+    @Shadow
+    @Final
+    private ClientLevel.ClientLevelData clientLevelData;
+
+    @Shadow
+    public void setGameTime(long L){}
+
+    @Shadow
+    public void setDayTime(long L) {}
+
+    /**When time ticks amidst a time change, use the actual time rater
+     * than the custom time to tick the proper time*/
+    @Inject(method = "tickTime", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutTickTime(CallbackInfo ci) {
+        LocalPlayer LP = Minecraft.getInstance().player;
+        if (LP != null && ((TimeStop) this).inTimeStopRange(LP)) {
+            this.setGameTime(this.levelData.getGameTime() + 1L);
+            if (this.levelData.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+                this.setDayTime(((IClientLevelData)this.levelData).getRoundaboutDayTimeMinecraft() + 1L);
                 ci.cancel();
             }
         }

@@ -6,15 +6,19 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FishingHook;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -80,6 +84,12 @@ public class ZWorldRenderer {
             }
         }
         return $$2;
+    }
+
+    @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
+    private void roundaboutRenderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
+                                       GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
+
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
