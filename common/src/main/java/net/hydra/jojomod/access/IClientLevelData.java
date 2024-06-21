@@ -5,9 +5,11 @@ public interface IClientLevelData {
     long getRoundaboutDayTimeTarget();
     void setRoundaboutDayTimeActual(long roundaboutDayTimeActual);
     void setRoundaboutDayTimeTarget(long roundaboutDayTimeTarget);
+    boolean getRoundaboutInterpolatingDaytime();
+    void setRoundaboutInterpolatingDaytime(boolean roundaboutTimeStopInitialized);
     long getRoundaboutDayTimeMinecraft();
-    void setRgundaboutTimeStopInitialized(boolean roundaboutTimeStopInitialized);
-    boolean getRgundaboutTimeStopInitialized();
+    void setRoundaboutTimeStopInitialized(boolean roundaboutTimeStopInitialized);
+    boolean getRoundaboutTimeStopInitialized();
 
     void roundaboutInitializeTS();
 

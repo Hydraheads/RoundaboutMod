@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IClientLevelData;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -86,10 +87,23 @@ public class ZWorldRenderer {
         return $$2;
     }
 
+    /**Interpolate Time during/after timestop or made in heaven*/
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutRenderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
                                        GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
-
+        IClientLevelData levelTimeData = ((IClientLevelData)this.level.getLevelData());
+        if (levelTimeData.getRoundaboutInterpolatingDaytime()){
+            /*If a timestop is active, don't tick through a MIH or instead interpolate back*/
+            if (!levelTimeData.getRoundaboutTimeStopInitialized()){
+                long dayTime =levelTimeData.getRoundaboutDayTimeMinecraft();
+                long dayTimeOld = levelTimeData.getRoundaboutDayTimeActual();
+                if (Math.abs(dayTimeOld - dayTime) > 1L){
+                    levelTimeData.setRoundaboutDayTimeActual((long) Mth.lerp((double)$$1, dayTimeOld, dayTime));
+                } else {
+                    levelTimeData.setRoundaboutInterpolatingDaytime(false);
+                }
+            }
+        }
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)

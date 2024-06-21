@@ -21,36 +21,20 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelTimeAccess;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.entity.EntityTickList;
-import net.minecraft.world.level.entity.LevelEntityGetter;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.WritableLevelData;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.scores.Scoreboard;
-import net.minecraft.world.ticks.LevelTickAccess;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 @Mixin(ClientLevel.class)
@@ -264,8 +248,7 @@ public abstract class WorldTickClient extends Level {
      * than the custom time to tick the proper time*/
     @Inject(method = "tickTime", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickTime(CallbackInfo ci) {
-        LocalPlayer LP = Minecraft.getInstance().player;
-        if (LP != null && ((TimeStop) this).inTimeStopRange(LP)) {
+        if (((IClientLevelData) this.levelData).getRoundaboutInterpolatingDaytime()) {
             this.setGameTime(this.levelData.getGameTime() + 1L);
             if (this.levelData.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
                 this.setDayTime(((IClientLevelData)this.levelData).getRoundaboutDayTimeMinecraft() + 1L);
