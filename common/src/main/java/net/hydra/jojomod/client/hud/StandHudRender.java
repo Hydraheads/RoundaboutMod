@@ -3,10 +3,13 @@ package net.hydra.jojomod.client.hud;
 
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -229,9 +232,16 @@ public class StandHudRender {
             y = 7654088;
         } else {
             v = 60;
-            k = 182;
-            z = 5;
             y = 7836819;
+            TimeStopInstance tsi = ((TimeStop)playerEntity.level()).getTimeStopperInstanceClient(playerEntity.position());
+            if (tsi != null) {
+                k = (int) Math.floor((182 /((double) tsi.maxDuration /20))*((double) tsi.duration /20));
+                z =  (int) Math.min((Math.floor(((double) tsi.duration+19)/20)),((double) tsi.maxDuration /20));
+
+            } else {
+                k = 0;
+                z = 0;
+            }
         }
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {

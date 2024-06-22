@@ -23,6 +23,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -233,6 +234,21 @@ public class TimeStopWorld implements TimeStop {
         return inTimeStopRange(new Vec3i((int) entity.getX(),
                 (int) entity.getY(),
                 (int) entity.getZ()));
+    }
+
+    /**This is how the HUD finds who is time stopping you clientside*/
+    @Override
+    public TimeStopInstance getTimeStopperInstanceClient(Vec3 pos){
+        if (!this.timeStoppingEntitiesClient.isEmpty()) {
+            List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
+            for (int i = $$1.size() - 1; i >= 0; --i) {
+                TimeStopInstance it = $$1.get(i);
+                if (MainUtil.cheapDistanceTo2(pos.x(), pos.z(), it.x, it.z) <= it.range) {
+                    return it;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

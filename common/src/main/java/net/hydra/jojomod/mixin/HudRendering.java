@@ -79,7 +79,7 @@ public abstract class HudRendering implements IHudAccess {
     @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
     public void roundaboutRenderExperienceBar(GuiGraphics $$0, CallbackInfo ci){
         if (minecraft.player != null && minecraft.level != null) {
-            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player) && roundaboutRedo == false) {
+            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player) && !roundaboutRedo) {
                 roundaboutRedo = true;
                 $$0.setColor(0.7F, 0.7F, 0.7F, 1.0F);
                 renderPlayerHealth($$0);

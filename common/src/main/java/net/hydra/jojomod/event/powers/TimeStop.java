@@ -1,11 +1,13 @@
 package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.ImmutableList;
+import net.hydra.jojomod.event.TimeStopInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 
 public interface TimeStop {
     ImmutableList<LivingEntity> getTimeStoppingEntities();
@@ -28,4 +30,5 @@ public interface TimeStop {
     void tickAllTimeStops();
 
     void streamTileEntityTSToCLient(BlockPos blockEntity);
+    TimeStopInstance getTimeStopperInstanceClient(Vec3 pos);
 }
