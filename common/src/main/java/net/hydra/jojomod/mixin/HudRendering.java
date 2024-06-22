@@ -72,14 +72,17 @@ public abstract class HudRendering implements IHudAccess {
     @Shadow
     private void renderHearts(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10) {}
 
+    @Shadow
+    private void renderPlayerHealth(GuiGraphics $$0) {}
+
     /**desaturate hearts when time is stopped*/
-    @Inject(method = "renderHearts", at = @At(value = "HEAD"), cancellable = true)
-    public void roundaboutRenderExperienceBar(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10, CallbackInfo ci){
-        if (minecraft.level != null) {
-            if (((TimeStop) minecraft.level).CanTimeStopEntity($$1) && roundaboutRedo == false) {
+    @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
+    public void roundaboutRenderExperienceBar(GuiGraphics $$0, CallbackInfo ci){
+        if (minecraft.player != null && minecraft.level != null) {
+            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player) && roundaboutRedo == false) {
                 roundaboutRedo = true;
-                $$0.setColor(0.5F, 1.0F, 1.0F, 1.0F);
-                renderHearts($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8, $$9, $$10);
+                $$0.setColor(0.7F, 0.7F, 0.7F, 1.0F);
+                renderPlayerHealth($$0);
                 $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
                 roundaboutRedo = false;
                 ci.cancel();
