@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PlayerRideableJumping;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -38,6 +39,9 @@ public abstract class HudRendering implements IHudAccess {
     private float flashAlpha = 0f;
     @Unique
     private float otherFlashAlpha = 0f;
+
+    @Unique
+    private boolean roundaboutRedo = false;
 
     //private void renderHotbar(float tickDelta, DrawContext context) {
 
@@ -65,6 +69,23 @@ public abstract class HudRendering implements IHudAccess {
     }
 
 
+    @Shadow
+    private void renderHearts(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10) {}
+
+    /**desaturate hearts when time is stopped*/
+    @Inject(method = "renderHearts", at = @At(value = "HEAD"), cancellable = true)
+    public void roundaboutRenderExperienceBar(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10, CallbackInfo ci){
+        if (minecraft.level != null) {
+            if (((TimeStop) minecraft.level).CanTimeStopEntity($$1) && roundaboutRedo == false) {
+                roundaboutRedo = true;
+                $$0.setColor(0.5F, 1.0F, 1.0F, 1.0F);
+                renderHearts($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8, $$9, $$10);
+                $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                roundaboutRedo = false;
+                ci.cancel();
+            }
+        }
+    }
 
     private boolean roundaboutRenderBars(GuiGraphics context, int x){
         if (minecraft.player != null && minecraft.level != null) {
