@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -15,6 +16,7 @@ import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -32,6 +34,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
@@ -43,6 +46,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
@@ -57,8 +61,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class StandUserEntity implements StandUser {
+public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected boolean jumping;
+
+    public StandUserEntity(EntityType<?> $$0, Level $$1) {
+        super($$0, $$1);
+    }
 
     @Shadow protected abstract int increaseAirSupply(int $$0);
 
@@ -750,6 +758,35 @@ public abstract class StandUserEntity implements StandUser {
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity) &&
                 ($$0.is(DamageTypes.ON_FIRE) || $$0.is(DamageTypes.IN_FIRE))){
             ci.setReturnValue(false);
+        }
+    }
+
+    @Shadow
+    protected int decreaseAirSupply(int $$0) {
+        return 0;
+    }
+
+    @Inject(method = "baseTick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;setAirSupply(I)V",shift = At.Shift.BEFORE), cancellable = true)
+    protected void roundaboutBreathingCancel(CallbackInfo ci){
+        if (!Roundabout.canBreathInTS) {
+            if (!((TimeStop) this.level()).getTimeStoppingEntities().isEmpty()
+                    && ((TimeStop) this.level()).getTimeStoppingEntities().contains(((LivingEntity) (Object) this))) {
+                ((IEntityAndData) this).setRoundaboutJamBreath(true);
+            }
+        }
+    }
+
+    @Inject(method = "baseTick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;setAirSupply(I)V",shift = At.Shift.AFTER), cancellable = true)
+    protected void roundaboutBreathingCancel2(CallbackInfo ci){
+        if (!Roundabout.canBreathInTS) {
+            if (((IEntityAndData) this).getRoundaboutJamBreath()) {
+                ((IEntityAndData) this).setRoundaboutJamBreath(false);
+                this.setAirSupply(this.decreaseAirSupply(this.getAirSupply()));
+                if (this.getAirSupply() == -20) {
+                    this.setAirSupply(0);
+                    this.hurt(this.damageSources().drown(), 2.0F);
+                }
+            }
         }
     }
 

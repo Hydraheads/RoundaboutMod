@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin (LivingEntity.class)
-public class ZLivingEntity implements ILivingEntityAccess {
+public abstract class ZLivingEntity implements ILivingEntityAccess {
     /**We're using this to access protected server variables in the
      * LivingEntity class, primarily to get more up to date location tracking
      * for TS and whatnot
@@ -84,9 +84,16 @@ public class ZLivingEntity implements ILivingEntityAccess {
     protected void pushEntities(){
     }
 
+    @Shadow
+    protected abstract int decreaseAirSupply(int $$0);
+
     @Override
     public void roundaboutPushEntities(){
         this.pushEntities();
+    }
+    @Override
+    public int roundaboutDecreaseAirSupply(int amt){
+        return this.decreaseAirSupply(amt);
     }
 
 }

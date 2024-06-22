@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -13,13 +15,16 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
 
 public class PowersTheWorld extends StandPowers {
 
@@ -252,7 +257,15 @@ public class PowersTheWorld extends StandPowers {
         if (!(this.getSelf() instanceof Player && ((Player)this.getSelf()).isCreative())) {
             int TSChargeTicks = this.getChargedTSTicks();
             TSChargeTicks -= 1;
-            if (TSChargeTicks < 0) {
+
+            if (!Roundabout.canBreathInTS){
+                this.getSelf().setAirSupply(((ILivingEntityAccess) this.getSelf()).roundaboutDecreaseAirSupply(this.getSelf().getAirSupply()));
+            }
+
+            if (TSChargeTicks < 0 || (!Roundabout.canBreathInTS && this.getSelf().getAirSupply() == -20)) {
+                if (this.getSelf().getAirSupply() == -20) {
+                    this.getSelf().setAirSupply(0);
+                }
                 TSChargeTicks = 0;
                 this.setChargedTSTicks(TSChargeTicks);
                 if (this.getSelf().level().isClientSide) {

@@ -19,6 +19,8 @@ public class Roundabout {
     public static final Random RANDOM = new Random();
 
 
+    public static boolean canBreathInTS = true;
+
     public static void init() {
         LOGGER.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
         LOGGER.info("The ID for diamonds is {}", BuiltInRegistries.ITEM.getKey(Items.DIAMOND));

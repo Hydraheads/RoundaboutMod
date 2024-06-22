@@ -225,4 +225,22 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+    @Unique
+    public boolean roundaboutJamBreath = false;
+    @Unique
+    public void setRoundaboutJamBreath(boolean roundaboutJamBreath){
+        this.roundaboutJamBreath = roundaboutJamBreath;
+    }
+    @Unique
+    public boolean getRoundaboutJamBreath(){
+        return this.roundaboutJamBreath;
+    }
+
+    @Inject(method = "setAirSupply", at = @At("HEAD"), cancellable = true)
+    public void roundaboutSetAirSupply(int $$0, CallbackInfo ci) {
+        if (roundaboutJamBreath){
+            ci.cancel();
+        }
+    }
+
 }

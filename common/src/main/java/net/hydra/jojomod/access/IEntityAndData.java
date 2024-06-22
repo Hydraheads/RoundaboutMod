@@ -23,6 +23,9 @@ public interface IEntityAndData {
 
     double getRoundaboutPrevY();
 
+    void setRoundaboutJamBreath(boolean roundaboutJamBreath);
+    boolean getRoundaboutJamBreath();
+
     double getRoundaboutPrevZ();
 
     void setPreTSTick(float frameTime);

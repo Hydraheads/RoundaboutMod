@@ -20,4 +20,6 @@ public interface ILivingEntityAccess {
     void setLerpSteps(int lerpSteps);
 
     void roundaboutPushEntities();
+
+    int roundaboutDecreaseAirSupply(int amt);
 }
