@@ -208,5 +208,11 @@
     "sounds": [
       "roundabout:timeresume"
     ]
+  },
+  "timestop_ticking": {
+    "subtitle": "sounds.roundabout.timestop_ticking",
+    "sounds": [
+      "roundabout:timestop_ticking"
+    ]
   }
 }

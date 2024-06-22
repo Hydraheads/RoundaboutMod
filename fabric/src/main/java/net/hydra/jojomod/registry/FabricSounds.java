@@ -53,5 +53,7 @@ public class FabricSounds {
         addSound(ModSounds.TIME_RESUME_ID, ModSounds.TIME_RESUME_EVENT);
         addSound(ModSounds.TIME_STOP_IMPACT_ID, ModSounds.TIME_STOP_IMPACT_EVENT);
         addSound(ModSounds.TIME_STOP_IMPACT2_ID, ModSounds.TIME_STOP_IMPACT2_EVENT);
+
+        addSound(ModSounds.TIME_STOP_TICKING_ID, ModSounds.TIME_STOP_TICKING_EVENT);
     }
 }

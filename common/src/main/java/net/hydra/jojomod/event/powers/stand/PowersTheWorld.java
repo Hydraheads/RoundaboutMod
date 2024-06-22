@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -405,15 +406,20 @@ public class PowersTheWorld extends StandPowers {
             return ModSounds.TIME_STOP_RESUME_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_RESUME_NOISE){
             return ModSounds.TIME_RESUME_EVENT;
+        } else if (soundChoice == TIME_STOP_TICKING){
+            return ModSounds.TIME_STOP_TICKING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
     @Override
     public void runExtraSoundCode(byte soundChoice) {
-        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_4) {
+        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_5) {
             if (this.getSelf().level().isClientSide) {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
+                if (mc.player != null && mc.player.getId() != this.getSelf().getId()){
+                    ((StandUserClient)this.getSelf()).clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
+                }
             }
         }
     }
@@ -563,7 +569,9 @@ public class PowersTheWorld extends StandPowers {
     public static final byte TIME_STOP_NOISE_2 = TIME_STOP_NOISE+1;
     public static final byte TIME_STOP_NOISE_3 = TIME_STOP_NOISE+2;
     public static final byte TIME_STOP_NOISE_4 = TIME_STOP_NOISE+3;
-    public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+4;
-    public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+5;
+    public static final byte TIME_STOP_NOISE_5 = TIME_STOP_NOISE+4;
+    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+9;
+    public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+10;
+    public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+11;
     public static final byte TIME_RESUME_NOISE = 60;
 }

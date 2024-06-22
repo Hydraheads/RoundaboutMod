@@ -76,6 +76,34 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
         }
     }
 
+    @Override
+    public void clientPlaySoundIfNoneActive(byte soundChoice) {
+
+        if (!this.roundaboutSounds.isEmpty()) {
+            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
+            for (int i = $$2.size() - 1; i >= 0; --i) {
+                PlayedSoundInstance soundI = $$2.get(i);
+                if (soundI.roundaboutSoundByte == soundChoice){
+                    return;
+                }
+            }
+            SoundEvent SE =  ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
+            SoundInstance qSound = new EntityBoundSoundInstance(
+                    SE,
+                    SoundSource.PLAYERS,
+                    ((StandUser) this).getStandPowers().getSoundVolumeFromByte(soundChoice),
+                    ((StandUser) this).getStandPowers().getSoundPitchFromByte(soundChoice),
+                    ((Entity) (Object) this),
+                    ((Entity) (Object) this).level().random.nextLong()
+            );
+            Minecraft.getInstance().getSoundManager().play(qSound);
+            $$2.add(new PlayedSoundInstance(SE,soundChoice,qSound));
+            this.roundaboutSounds = ImmutableList.of();
+            this.roundaboutSoundsPlaying = ImmutableList.copyOf($$2);
+        }
+    }
+
+
     /**This is called fifth by the client, it ques the sound for canceling
      * If you play it during the packet, it can crash the client because of HashMap problems*/
 
