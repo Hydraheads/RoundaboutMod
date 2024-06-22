@@ -5,4 +5,5 @@ public interface StandUserClientPlayer {
     float getLastClashPower();
     void setClashDisplayExtraTimestamp(long set);
     void setLastClashPower(float set);
+    int getRoundaboutNoPlaceTSTicks();
 }

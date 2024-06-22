@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.KeyMapping;
@@ -18,7 +19,14 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
+import net.minecraft.world.item.BedItem;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.EndCrystalItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
@@ -111,6 +119,8 @@ public abstract class InputEvents {
     @Shadow
     @Final
     public GameRenderer gameRenderer;
+
+
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
@@ -124,6 +134,35 @@ public abstract class InputEvents {
                 }
             }
 
+
+            if (level != null && ((StandUserClientPlayer) player).getRoundaboutNoPlaceTSTicks() > -1) {
+                if (!this.player.isHandsBusy()) {
+                    if (this.hitResult != null) {
+
+                        for (InteractionHand $$0 : InteractionHand.values()) {
+                            ItemStack $$1 = this.player.getItemInHand($$0);
+                            if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
+                                return;
+                            }
+
+                            if (this.hitResult != null) {
+                                switch (this.hitResult.getType()) {
+                                    case BLOCK:
+                                        if ($$1.getItem() instanceof BlockItem) {
+                                            Block block = ((BlockItem) $$1.getItem()).getBlock();
+                                            if (block instanceof BedBlock || block instanceof RespawnAnchorBlock
+                                                    || block.defaultDestroyTime() > 20){
+                                                ci.cancel();
+                                            }
+                                        } else if ($$1.getItem() instanceof EndCrystalItem){
+                                            ci.cancel();
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
 
             if (level != null && ((TimeStop) level).isTimeStoppingEntity(player)) {

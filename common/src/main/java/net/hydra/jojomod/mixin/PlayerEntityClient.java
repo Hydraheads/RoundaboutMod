@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,9 +27,17 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     private int clashIncrement;
     private boolean bl = false;
 
+    /**When time is stopped, it would be OP if you could place some blocks down*/
+    @Unique
+    private int roundaboutNoPlaceTSTicks = -1;
 
     private long clashDisplayExtraTimestamp = -1;
     private float lastClashPower = -1;
+
+    @Unique
+    public int getRoundaboutNoPlaceTSTicks(){
+        return this.roundaboutNoPlaceTSTicks;
+    }
 
     public long getClashDisplayExtraTimestamp(){
         return this.clashDisplayExtraTimestamp;
@@ -86,6 +95,20 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     protected void RoundaboutStartRidingJump(CallbackInfo ci) {
         if (((StandUser) this).isClashing()) {
             ci.cancel();
+        }
+    }
+
+    /**If you are stopping time, make it so that you gain a block placement cooldown for blocks with
+     * a certain level of hardness or danger*/
+    @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
+    protected void RoundaboutTick(CallbackInfo ci) {
+        if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty() &&
+                ((TimeStop) ((Player) (Object) this).level()).isTimeStoppingEntity(((Player) (Object) this))) {
+            this.roundaboutNoPlaceTSTicks = 6;
+        } else {
+            if (this.roundaboutNoPlaceTSTicks > -1){
+                this.roundaboutNoPlaceTSTicks--;
+            }
         }
     }
 
