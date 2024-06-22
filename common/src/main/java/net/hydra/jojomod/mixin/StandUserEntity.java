@@ -766,7 +766,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 0;
     }
 
-    @Inject(method = "baseTick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;setAirSupply(I)V",shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "baseTick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundaboutBreathingCancel(CallbackInfo ci){
         if (!Roundabout.canBreathInTS) {
             if (!((TimeStop) this.level()).getTimeStoppingEntities().isEmpty()
@@ -776,16 +776,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    @Inject(method = "baseTick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;setAirSupply(I)V",shift = At.Shift.AFTER), cancellable = true)
+    @Inject(method = "baseTick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundaboutBreathingCancel2(CallbackInfo ci){
         if (!Roundabout.canBreathInTS) {
             if (((IEntityAndData) this).getRoundaboutJamBreath()) {
                 ((IEntityAndData) this).setRoundaboutJamBreath(false);
-                this.setAirSupply(this.decreaseAirSupply(this.getAirSupply()));
-                if (this.getAirSupply() == -20) {
-                    this.setAirSupply(0);
-                    this.hurt(this.damageSources().drown(), 2.0F);
-                }
             }
         }
     }
