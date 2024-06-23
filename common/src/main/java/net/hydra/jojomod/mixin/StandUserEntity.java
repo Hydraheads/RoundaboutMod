@@ -322,7 +322,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     public void tryPower(int move, boolean forced){
-        if (!this.isClashing() || move == PowerIndex.NONE) {
+        if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
             this.getStandPowers().tryPower(move, forced);
             this.getStandPowers().syncCooldowns();
         }

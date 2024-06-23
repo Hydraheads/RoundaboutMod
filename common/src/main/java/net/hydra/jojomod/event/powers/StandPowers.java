@@ -449,7 +449,7 @@ public abstract class StandPowers {
             }
         } else {
             if (!this.self.level().isClientSide) {
-                ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.self).tryPower(PowerIndex.CLASH_CANCEL, true);
             }
         }
     }
@@ -502,7 +502,7 @@ public abstract class StandPowers {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring > this.attackTimeMax) {
                 this.attackTimeMax = 0;
-                this.setPowerNone();
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE,true);
             } else {
                 if (this.attackTimeDuring == 5 && this.activePowerPhase == 1
                 || this.attackTimeDuring == 6) {
@@ -1232,11 +1232,11 @@ public abstract class StandPowers {
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
         }
 
-        if (!this.isClashing() || move == PowerIndex.NONE) {
+        if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
             if ((this.activePower == PowerIndex.NONE || forced) &&
                     (!this.isDazed(this.self) || move == PowerIndex.BARRAGE_CLASH)) {
 
-                if (move == PowerIndex.NONE) {
+                if (move == PowerIndex.NONE || move == PowerIndex.CLASH_CANCEL) {
                     this.setPowerNone();
                 } else if (move == PowerIndex.ATTACK) {
                     this.setPowerAttack();

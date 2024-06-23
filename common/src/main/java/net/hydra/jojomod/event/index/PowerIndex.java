@@ -17,6 +17,7 @@ public class PowerIndex {
     public static final byte SPECIAL_TRACKER = 11;
     public static final byte MOVEMENT = 12;
     public static final byte SNEAK_MOVEMENT = 13;
+    public static final byte CLASH_CANCEL = 14;
     public static final byte LEAD_IN = 30;
 
 }
