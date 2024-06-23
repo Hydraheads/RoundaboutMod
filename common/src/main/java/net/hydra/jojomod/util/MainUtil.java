@@ -95,7 +95,7 @@ public class MainUtil {
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleBytePacketC2S(Player player, byte data, byte context){
         if (context == PacketDataIndex.PLAY_SOUND_C2S_CONTEXT) {
-            ((StandUser) player).getStandPowers().playSoundsIfNearby(data, 100);
+            ((StandUser) player).getStandPowers().playSoundsIfNearby(data, 100, true);
         }
     }
 }

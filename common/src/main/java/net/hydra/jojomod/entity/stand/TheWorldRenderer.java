@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
 
-    private static final ResourceLocation SKIN_1 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_s.png");
+    private static final ResourceLocation SKIN_1 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world.png");
     public TheWorldRenderer(EntityRendererProvider.Context context) {
         super(context, new TheWorldModel<>(context.bakeLayer(ModEntityRendererClient.THE_WORLD_LAYER)),0f);
     }

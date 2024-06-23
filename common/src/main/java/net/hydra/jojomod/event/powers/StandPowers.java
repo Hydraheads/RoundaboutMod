@@ -1268,7 +1268,7 @@ public abstract class StandPowers {
 
     /**The Sound Event to cancel when your barrage is canceled*/
 
-    public final void playSoundsIfNearby(byte soundNo, double range) {
+    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
             Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
@@ -1281,7 +1281,11 @@ public abstract class StandPowers {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
-                    ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity,this.self.getId(),soundNo);
+                    if (onSelf) {
+                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else {
+                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                    }
                 }
             }
         }
@@ -1291,7 +1295,7 @@ public abstract class StandPowers {
         if (!this.self.level().isClientSide()) {
             byte barrageCrySound = this.chooseBarrageSound();
             if (barrageCrySound != SoundIndex.NO_SOUND) {
-                playSoundsIfNearby(barrageCrySound, 32);
+                playSoundsIfNearby(barrageCrySound, 32, false);
             }
         }
     }
@@ -1299,7 +1303,7 @@ public abstract class StandPowers {
         if (!this.self.level().isClientSide()) {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
-                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 32);
+                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 32, false);
             }
         }
     }

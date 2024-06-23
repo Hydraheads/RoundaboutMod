@@ -48,7 +48,7 @@ public class PowersTheWorld extends StandPowers {
                 if (keyIsDown) {
                     if (this.isStoppingTime()) {
                         KeyInputs.roundaboutClickCount = 2;
-                        this.playSoundsIfNearby(TIME_RESUME_NOISE, 100);
+                        this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_CANCEL);
                         ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
                     } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
@@ -118,10 +118,10 @@ public class PowersTheWorld extends StandPowers {
                   ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
                   if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                       /*Charged Sound*/
-                      playSoundsIfNearby(TIME_STOP_NOISE, 100);
+                      playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
                   } else {
                       /*No Charged Sound*/
-                      playSoundsIfNearby(TIME_STOP_NOISE_2, 100);
+                      playSoundsIfNearby(TIME_STOP_NOISE_2, 100, true);
                   }
                   if (this.getSelf() instanceof Player) {
                       ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
@@ -171,7 +171,7 @@ public class PowersTheWorld extends StandPowers {
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                 if (this.getMaxChargeTSTime() > 20 || playedResumeSound){
-                    this.playSoundsIfNearby(TIME_RESUME_NOISE, 100);
+                    this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
                 }
                 ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200);
@@ -195,8 +195,8 @@ public class PowersTheWorld extends StandPowers {
         this.setActivePower(PowerIndex.SPECIAL);
         poseStand(OffsetIndex.FOLLOW);
         animateStand((byte) 0);
-        playSoundsIfNearby(getTSVoice(), 100);
-        playSoundsIfNearby(TIME_STOP_CHARGE, 100);
+        playSoundsIfNearby(getTSVoice(), 100, false);
+        playSoundsIfNearby(TIME_STOP_CHARGE, 100, true);
     }
 
     public byte getTSVoice(){
@@ -417,7 +417,7 @@ public class PowersTheWorld extends StandPowers {
             if (this.getSelf().level().isClientSide) {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
-                if (mc.player != null && mc.player.getId() != this.getSelf().getId()){
+                if (!((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())){
                     ((StandUserClient)this.getSelf()).clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
                 }
             }
