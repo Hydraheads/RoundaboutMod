@@ -31,10 +31,9 @@ public class CooldownSyncPacket {
         if (client.player != null) {
             byte standMove = buf.readByte();
             int cooldown = buf.readInt();
-            int maxCooldown = buf.readInt();
 
             StandPowers powers = ((StandUser) client.player).getStandPowers();
-            powers.setCooldown(standMove,cooldown,maxCooldown);
+            powers.setCooldown(standMove,cooldown);
         }
     }
 

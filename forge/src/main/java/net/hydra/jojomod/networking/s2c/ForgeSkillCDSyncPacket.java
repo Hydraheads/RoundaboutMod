@@ -12,22 +12,18 @@ import java.util.function.Supplier;
 public class ForgeSkillCDSyncPacket {
     private final byte power;
     private final int cooldown;
-    private final int maxCooldown;
 
-    public ForgeSkillCDSyncPacket(byte power, int cooldown, int maxCooldown){
+    public ForgeSkillCDSyncPacket(byte power, int cooldown){
         this.power = power;
         this.cooldown = cooldown;
-        this.maxCooldown = maxCooldown;
     }
     public ForgeSkillCDSyncPacket(FriendlyByteBuf buf){
         this.power = buf.readByte();
         this.cooldown = buf.readInt();
-        this.maxCooldown = buf.readInt();
     }
     public void toBytes(FriendlyByteBuf buf){
         buf.writeByte(power);
         buf.writeInt(cooldown);
-        buf.writeInt(maxCooldown);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
@@ -36,7 +32,7 @@ public class ForgeSkillCDSyncPacket {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
                 StandPowers powers = ((StandUser) player).getStandPowers();
-                powers.setCooldown(power,cooldown,maxCooldown);
+                powers.setCooldown(power,cooldown);
             }
         });
         return true;

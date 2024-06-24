@@ -45,13 +45,11 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxCooldown) {
+    public void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown) {
         FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeByte(moveOnCooldown);
         buf.writeInt(cooldown);
-        buf.writeInt(maxCooldown);
         ServerPlayNetworking.send(sp, ModMessages.SKILL_COOLDOWN_SYNC_ID, buf);
-
     }
 
     @Override

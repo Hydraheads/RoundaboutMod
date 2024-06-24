@@ -184,25 +184,15 @@ public abstract class StandPowers {
     }
 
 
-    public void setCooldown(byte power, int cooldown, int maxCooldown){
+    public void setCooldown(byte power, int cooldown){
         if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
             StandCooldowns.get(power).time = cooldown;
-            StandCooldowns.get(power).maxTime = maxCooldown;
-            StandCooldowns.get(power).dirty = false;
+            StandCooldowns.get(power).maxTime = cooldown;
         }
     }
 
     /**Override this to render stand icons*/
     public void renderIcons(GuiGraphics context, int x, int y){
-    }
-    public void setSkillIcon1(GuiGraphics context, int x, int y){
-
-    }
-    public void setSkillIcon2(GuiGraphics context, int x, int y){
-
-    }
-    public void setSkillIcon3(GuiGraphics context, int x, int y){
-
     }
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
         CooldownInstance cd = null;
@@ -210,10 +200,10 @@ public abstract class StandPowers {
             cd = StandCooldowns.get(CDI);
         }
         if (slot==4){x+=100;y-=1;}
-        if ((cd != null && (cd.dirty || cd.time >= 0)) || isAttackIneptVisually()){
-            context.setColor(0.7f, 0.7f, 0.7f, 0.9f);
+        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually()){
+            context.setColor(0.65f, 0.65f, 0.65f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
-            context.setColor(1f, 1f, 1f, 1f);
+            context.setColor(1f, 1f, 1f, 0.9f);
         } else {
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
         }
@@ -341,9 +331,19 @@ public abstract class StandPowers {
             if (this.summonCD > 0) {
                 this.summonCD--;
             }
+            this.tickCooldowns();
         }
         if (this.self.level().isClientSide) {
             tickSounds();
+        }
+    }
+
+    public void tickCooldowns(){
+        for (byte i = 0; i < StandCooldowns.size(); i++){
+            CooldownInstance ci = StandCooldowns.get(i);
+            if (ci.time >= 0){
+                ci.time--;
+            }
         }
     }
 

@@ -77,8 +77,8 @@ public class PowersTheWorld extends StandPowers {
 
             if (sendPacket) {
                 KeyInputs.roundaboutClickCount = 2;
-                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSTicks());
                 ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
+                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSTicks());
             }
         }
     }
@@ -171,6 +171,9 @@ public class PowersTheWorld extends StandPowers {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                 if (this.getMaxChargeTSTime() > 20 || playedResumeSound){
                     this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
+                }
+                if (this.getSelf() instanceof Player) {
+                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, 100);
                 }
                 ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200);
