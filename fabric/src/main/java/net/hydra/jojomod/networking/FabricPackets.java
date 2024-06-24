@@ -43,6 +43,17 @@ public class FabricPackets implements IPacketAccess {
         ServerPlayNetworking.send(sp, ModMessages.POWER_COOLDOWN_SYNC_ID, buf);
 
     }
+
+    @Override
+    public void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxCooldown) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        buf.writeByte(moveOnCooldown);
+        buf.writeInt(cooldown);
+        buf.writeInt(maxCooldown);
+        ServerPlayNetworking.send(sp, ModMessages.SKILL_COOLDOWN_SYNC_ID, buf);
+
+    }
+
     @Override
     public void updateClashPacket(ServerPlayer sp, int id, float clashProgress){
         FriendlyByteBuf buffer = PacketByteBufs.create();

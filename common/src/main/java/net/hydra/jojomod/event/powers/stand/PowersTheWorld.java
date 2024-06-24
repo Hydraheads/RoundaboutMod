@@ -7,14 +7,12 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.StandUserClient;
-import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +24,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Nullable;
 
 public class PowersTheWorld extends StandPowers {
 
@@ -440,26 +439,16 @@ public class PowersTheWorld extends StandPowers {
             return 29;
         }
     }
+    //public void setSkillIcon(GuiGraphics context, int x, int y, ResourceLocation rl, boolean dull, @Nullable CooldownInstance cooldownInstance){
     @Override
-    public ResourceLocation getSkillIcon1(){
-        return null;
-    }
-    @Override
-    public ResourceLocation getSkillIcon2(){
-        return null;
-    }
-    @Override
-    public ResourceLocation getSkillIcon3(){
-        return null;
-    }
-    @Override
-    public ResourceLocation getSkillIcon4(){
+    public void renderIcons(GuiGraphics context, int x, int y){
+
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-            return StandIcons.THE_WORLD_TIME_STOP_RESUME;
+            setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_RESUME, PowerIndex.NO_CD);
         } else if (this.getSelf().isCrouching()){
-            return StandIcons.THE_WORLD_TIME_STOP_IMPULSE;
+            setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
         } else {
-            return StandIcons.THE_WORLD_TIME_STOP;
+            setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4);
         }
     }
 

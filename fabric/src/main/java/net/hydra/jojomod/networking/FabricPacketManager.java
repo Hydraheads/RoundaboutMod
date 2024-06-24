@@ -27,6 +27,7 @@ public class FabricPacketManager {
     public static void registerS2CPackets(){
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.NBT_SYNC_ID, NbtSyncPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.POWER_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateAttackCooldowns);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SKILL_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateSkillCooldowns);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.STAND_GUARD_POINT_ID, CooldownSyncPacket::updateGuard);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.DAZE_ID, CooldownSyncPacket::updateDaze);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SOUND_CANCEL_ID, SoundStopPacket::stopSound);

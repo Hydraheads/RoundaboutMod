@@ -8,6 +8,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -172,17 +173,50 @@ public abstract class StandPowers {
 
     }
 
-    public ResourceLocation getSkillIcon1(){
-        return null;
+    public List<CooldownInstance> StandCooldowns = initStandCooldowns();
+
+    public List<CooldownInstance> initStandCooldowns(){
+        List<CooldownInstance> Cooldowns = new ArrayList<>();
+        for (byte i = 0; i < 9; i++) {
+            Cooldowns.add(new CooldownInstance(-1, -1));
+        }
+        return Cooldowns;
     }
-    public ResourceLocation getSkillIcon2(){
-        return null;
+
+
+    public void setCooldown(byte power, int cooldown, int maxCooldown){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            StandCooldowns.get(power).time = cooldown;
+            StandCooldowns.get(power).maxTime = maxCooldown;
+            StandCooldowns.get(power).dirty = false;
+        }
     }
-    public ResourceLocation getSkillIcon3(){
-        return null;
+
+    /**Override this to render stand icons*/
+    public void renderIcons(GuiGraphics context, int x, int y){
     }
-    public ResourceLocation getSkillIcon4(){
-        return null;
+    public void setSkillIcon1(GuiGraphics context, int x, int y){
+
+    }
+    public void setSkillIcon2(GuiGraphics context, int x, int y){
+
+    }
+    public void setSkillIcon3(GuiGraphics context, int x, int y){
+
+    }
+    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
+        CooldownInstance cd = null;
+        if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
+            cd = StandCooldowns.get(CDI);
+        }
+        if (slot==4){x+=100;y-=1;}
+        if ((cd != null && (cd.dirty || cd.time >= 0)) || isAttackIneptVisually()){
+            context.setColor(0.7f, 0.7f, 0.7f, 0.9f);
+            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
+            context.setColor(1f, 1f, 1f, 1f);
+        } else {
+            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
+        }
     }
 
 
@@ -254,7 +288,10 @@ public abstract class StandPowers {
     }
 
     public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self);
+        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+    }
+    public boolean isAttackIneptVisually(){
+        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
 
     public void tickPower(){
@@ -1337,6 +1374,8 @@ public abstract class StandPowers {
         poseStand(OffsetIndex.FOLLOW);
         animateStand((byte) 0);
     }
+
+
 
     public boolean canAttack(){
         if (this.attackTimeDuring <= -1) {

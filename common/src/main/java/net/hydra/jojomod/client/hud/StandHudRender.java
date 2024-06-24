@@ -65,7 +65,8 @@ public class StandHudRender {
 
                 context.blit(StandIcons.SKILL2_ICON,x+50,y-1,0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
 
-                context.blit(((StandUser) playerEntity).getStandPowers().getSkillIcon4(), x + 100, y - 1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+
+                ((StandUser) playerEntity).getStandPowers().renderIcons(context, x, y);
 
 
 

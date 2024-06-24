@@ -29,6 +29,11 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
+    public void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxCooldown) {
+        ForgePacketHandler.sendToClient(new ForgeSkillCDSyncPacket(moveOnCooldown,cooldown,maxCooldown), sp);
+    }
+
+    @Override
     public void updateClashPacket(ServerPlayer sp, int id, float clashProgress) {
         ForgePacketHandler.sendToClient(new ForgeClashUpdatePacket(id, clashProgress), sp);
     }

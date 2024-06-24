@@ -7,9 +7,10 @@ public class StandIcons {
 
     public static final ResourceLocation JOJO_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons.png");
-
     public static final ResourceLocation SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square2.png");
+    public static final ResourceLocation COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_cooldown.png");
 
     public static final ResourceLocation THE_WORLD_TIME_STOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stop_time.png");
