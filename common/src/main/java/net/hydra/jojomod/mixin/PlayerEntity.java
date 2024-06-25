@@ -12,14 +12,15 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityEvent;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public class PlayerEntity implements IPlayerEntity {
+public class PlayerEntity extends LivingEntity implements IPlayerEntity{
 
 
     @Unique
@@ -39,6 +40,11 @@ public class PlayerEntity implements IPlayerEntity {
     @Shadow
     @Final
     private Inventory inventory;
+
+    protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
     public Inventory roundaboutGetInventory(){
         return inventory;
     }
@@ -94,18 +100,48 @@ public class PlayerEntity implements IPlayerEntity {
             ci.setReturnValue(null);
         }
     }
-    @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
         if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty()) {
             if (((TimeStop) ((Player) (Object) this).level()).CanTimeStopEntity(((Player) (Object) this))) {
                 ci.cancel();
+            } else if ((((TimeStop) ((Player) (Object) this).level()).isTimeStoppingEntity(((Player) (Object) this)))) {
+                ((StandUser) this).setRoundaboutIdleTime(-1);
             }
         }
+            if (((StandUser)this).getAttackTimeDuring() > -1 || this.isUsingItem()) {
+                ((StandUser) this).setRoundaboutIdleTime(-1);
+            } else if (!new Vec3(this.getX(), this.getY(), this.getZ()).equals(new Vec3(this.xOld, this.yOld, this.zOld))) {
+                ((StandUser) this).setRoundaboutIdleTime(-1);
+            } else {
+                 ((StandUser) this).setRoundaboutIdleTime(((StandUser) this).getRoundaboutIdleTime() + 1);
+            }
+
     }
 
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_POS, PlayerPosIndex.NONE);
+    }
+
+    @Shadow
+    public Iterable<ItemStack> getArmorSlots() {
+        return null;
+    }
+
+    @Shadow
+    public ItemStack getItemBySlot(EquipmentSlot var1) {
+        return null;
+    }
+
+    @Shadow
+    public void setItemSlot(EquipmentSlot var1, ItemStack var2) {
+
+    }
+
+    @Shadow
+    public HumanoidArm getMainArm() {
+        return null;
     }
 }

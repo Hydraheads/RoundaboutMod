@@ -108,6 +108,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int GuardCooldown = 0;
 
+    /**Idle time is how long you are standing still without using skills, eating, or */
+    @Unique
+    private int roundaboutIdleTime = -1;
+    @Unique
+    @Override
+    public int getRoundaboutIdleTime(){
+        return this.roundaboutIdleTime;
+    }
+    @Unique
+    @Override
+    public void setRoundaboutIdleTime(int roundaboutIdleTime){
+        this.roundaboutIdleTime = roundaboutIdleTime;
+    }
 
 
     /** These variables control if someone is dazed, stunned, frozen, or controlled.**/
@@ -579,12 +592,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
-        if (this.isBarraging() &&
-                $$0.getDirectEntity() != null) {
-            this.tryPower(PowerIndex.GUARD,true);
-        } else if (this.getStandPowers().canInterruptPower() &&
-                $$0.getDirectEntity() != null){
-            this.tryPower(PowerIndex.NONE,true);
+        if ($$0.getDirectEntity() != null) {
+            if (this.isBarraging()) {
+                this.tryPower(PowerIndex.GUARD, true);
+            } else if (this.getStandPowers().canInterruptPower()) {
+                this.tryPower(PowerIndex.NONE, true);
+            }
+            this.setRoundaboutIdleTime(-1);
         }
     }
 
@@ -798,6 +812,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.getStandPowers().hasActedInTS = true;
             }
         }
+    }
+
+    /**While using item, leave idle state*/
+    @Inject(method = "updateUsingItem", at = @At(value = "HEAD"))
+    protected void roundaboutUpdateUsingItem(ItemStack $$0, CallbackInfo ci){
+        this.roundaboutIdleTime = -1;
     }
 
 

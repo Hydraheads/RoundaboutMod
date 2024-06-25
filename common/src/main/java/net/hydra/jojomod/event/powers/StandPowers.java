@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -366,10 +367,24 @@ public abstract class StandPowers {
     }
 
     public void tickCooldowns(){
+        int amt = 1;
+        if (this.self instanceof Player) {
+            int idle = ((StandUser) this.getSelf()).getRoundaboutIdleTime();
+            if (idle > 300) {
+                amt *= 4;
+            } else if (idle > 200) {
+                amt *= 3;
+            } else if (idle > 40) {
+                amt *= 2;
+            }
+        }
         for (byte i = 0; i < StandCooldowns.size(); i++){
             CooldownInstance ci = StandCooldowns.get(i);
             if (ci.time >= 0){
-                ci.time--;
+                ci.time-=amt;
+                if (ci.time < -1){
+                    ci.time=-1;
+                }
             }
         }
     }

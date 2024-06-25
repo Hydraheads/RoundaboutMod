@@ -24,6 +24,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RespawnAnchorBlock;
+import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
@@ -147,11 +148,14 @@ public abstract class InputEvents {
                                     case BLOCK:
                                         if ($$1.getItem() instanceof BlockItem) {
                                             Block block = ((BlockItem) $$1.getItem()).getBlock();
-                                            if (block instanceof BedBlock || block instanceof RespawnAnchorBlock
+                                            if (block instanceof BedBlock || block instanceof WebBlock || block instanceof RespawnAnchorBlock
                                                     || block.defaultDestroyTime() > 20){
+                                                roundaboutTryGuard();
                                                 ci.cancel();
                                             }
-                                        } else if ($$1.getItem() instanceof EndCrystalItem || $$1.getItem() instanceof MinecartItem){
+                                        } else if ($$1.getItem() instanceof EndCrystalItem || $$1.getItem() instanceof MinecartItem
+                                                || $$1.getItem() instanceof BucketItem){
+                                            roundaboutTryGuard();
                                             ci.cancel();
                                         }
                                 }
