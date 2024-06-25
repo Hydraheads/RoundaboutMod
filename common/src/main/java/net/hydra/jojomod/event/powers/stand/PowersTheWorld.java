@@ -42,7 +42,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void buttonInputSpecial(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
-            if (!this.onCooldown(PowerIndex.SKILL_4)) {
+            if (!this.onCooldown(PowerIndex.SKILL_4) || ((Player)this.getSelf()).isCreative()) {
                 boolean sendPacket = false;
                 if (KeyInputs.roundaboutClickCount == 0) {
                     if (keyIsDown) {
@@ -176,9 +176,12 @@ public class PowersTheWorld extends StandPowers {
                 }
 
                 float tsTimeRemaining = (200+((this.getMaxChargeTSTime()-this.getChargedTSTicks())*5));
-                if (hasActedInTS){
+                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.SNEAK_ATTACK) && this.getAttackTimeDuring() > -1){
+                    this.hasActedInTS = true;
+                }
+                if (this.hasActedInTS){
                     tsTimeRemaining+=300;
-                    hasActedInTS = false;
+                    this.hasActedInTS = false;
                 }
 
                 int sendTSCooldown = Math.round(tsTimeRemaining);
