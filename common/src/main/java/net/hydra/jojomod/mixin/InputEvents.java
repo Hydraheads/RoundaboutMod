@@ -98,8 +98,8 @@ public abstract class InputEvents {
             StandUser standComp = ((StandUser) player);
             if (standComp.getActive()) {
                 if (!standComp.isGuarding() && !standComp.isBarraging() && !standComp.isClashing()) {
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
                     standComp.tryPower(PowerIndex.GUARD,true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
                 }
             }
         }
@@ -294,8 +294,8 @@ public abstract class InputEvents {
                    if (standComp.getActivePowerPhase() > 0 ) {
                        standComp.setInterruptCD(3);
                    }
+                    standComp.tryPower(PowerIndex.NONE,true);
                    ModPacketHandler.PACKET_ACCESS.StandGuardCancelClientPacket();
-                   standComp.tryPower(PowerIndex.NONE,true);
                 }
             }
             if (standComp.getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
@@ -303,16 +303,16 @@ public abstract class InputEvents {
 
                     if (standComp.getInterruptCD()) {
                         if (standComp.canAttack()) {
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
                             standComp.tryPower(PowerIndex.ATTACK, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
                         }
                     }
 
                     if (standComp.isGuarding() && !standComp.isBarraging()
                             && (standComp.getAttackTime() >= standComp.getAttackTimeMax() ||
                             (standComp.getActivePowerPhase() != standComp.getActivePowerPhaseMax()))){
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
                         standComp.tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
                     }
                 }
             }

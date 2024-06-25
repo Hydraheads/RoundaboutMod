@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -201,8 +203,16 @@ public abstract class StandPowers {
         }
         if (slot==4){x+=100;y-=1;}
         if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually()){
-            context.setColor(0.65f, 0.65f, 0.65f, 0.8f);
+            context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
+            if ((cd != null && (cd.time >= 0))) {
+                float blit = (24*(1-((float) (1+cd.time) /(1+cd.maxTime))));
+                int b = (int) Math.round(blit);
+                RenderSystem.enableBlend();
+                context.setColor(1f, 1f, 1f, 1f);
+                context.blit(StandIcons.COOLDOWN_ICON, x - 3, y - 3 + b, 0, b, 24, 24-b, 24, 24);
+                RenderSystem.disableBlend();
+            }
             context.setColor(1f, 1f, 1f, 0.9f);
         } else {
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
