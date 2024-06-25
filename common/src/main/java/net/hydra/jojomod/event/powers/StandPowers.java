@@ -79,6 +79,8 @@ public abstract class StandPowers {
      * can't hit targets in frozen tps*/
     private boolean kickStarted = true;
 
+
+
     public StandPowers(LivingEntity self) {
         this.self = self;
     }
@@ -136,6 +138,7 @@ public abstract class StandPowers {
     private byte activePowerPhaseCheck = -1;
 
     private int chargedTSTicks = 0;
+    public boolean hasActedInTS = false;
 
     public int getChargedTSTicks(){
         return this.chargedTSTicks;
@@ -193,6 +196,20 @@ public abstract class StandPowers {
         }
     }
 
+    public CooldownInstance getCooldown(byte power){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            return StandCooldowns.get(power);
+        }
+        return null;
+    }
+
+    public boolean onCooldown(byte power){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            return (StandCooldowns.get(power).time >= 0);
+        }
+        return false;
+    }
+
     /**Override this to render stand icons*/
     public void renderIcons(GuiGraphics context, int x, int y){
     }
@@ -206,11 +223,11 @@ public abstract class StandPowers {
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
             if ((cd != null && (cd.time >= 0))) {
-                float blit = (24*(1-((float) (1+cd.time) /(1+cd.maxTime))));
+                float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
                 int b = (int) Math.round(blit);
                 RenderSystem.enableBlend();
                 context.setColor(1f, 1f, 1f, 1f);
-                context.blit(StandIcons.COOLDOWN_ICON, x - 3, y - 3 + b, 0, b, 24, 24-b, 24, 24);
+                context.blit(StandIcons.COOLDOWN_ICON, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
                 RenderSystem.disableBlend();
             }
             context.setColor(1f, 1f, 1f, 0.9f);

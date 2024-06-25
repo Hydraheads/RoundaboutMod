@@ -42,6 +42,7 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -699,9 +700,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
             if (this.roundaboutTSHurtTime <= 0 || $$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+
                 float dmg = roundaboutGetStoredDamage();
                 float max = roundaboutGetMaxStoredDamage();
-
 
 
                 if (((LivingEntity)(Object) this).isInvulnerableTo($$0)) {
@@ -726,6 +727,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     roundaboutSetStoredDamage((dmg + $$1));
                 }
                 if ($$0 != null && $$0.getEntity() != null) {
+                    if ($$0.getEntity() instanceof LivingEntity){
+                        ((StandUser)$$0.getEntity()).getStandPowers().hasActedInTS = true;
+                    }
                     roundaboutSetStoredAttacker($$0.getEntity());
                 } else {
                     roundaboutSetStoredAttacker(null);
@@ -784,6 +788,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+
+    /**When time is stopped by the user, incurs an action penalty if food is eaten*/
+    @Inject(method = "completeUsingItem", at = @At(value = "TAIL"), cancellable = true)
+    protected void roundaboutCompleteUsingItem(CallbackInfo ci){
+        if (!level().isClientSide) {
+            LivingEntity entity = ((LivingEntity)(Object) this);
+            if (((TimeStop) entity.level()).isTimeStoppingEntity(entity)) {
+                this.getStandPowers().hasActedInTS = true;
+            }
+        }
+    }
+
 
     @Unique
     public void roundaboutUniversalTick(){
