@@ -100,7 +100,7 @@ public class PlayerEntity extends LivingEntity implements IPlayerEntity{
             ci.setReturnValue(null);
         }
     }
-    @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
+    @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
         if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty()) {
             if (((TimeStop) ((Player) (Object) this).level()).CanTimeStopEntity(((Player) (Object) this))) {
@@ -109,16 +109,19 @@ public class PlayerEntity extends LivingEntity implements IPlayerEntity{
                 ((StandUser) this).setRoundaboutIdleTime(-1);
             }
         }
-            if (((StandUser)this).getAttackTimeDuring() > -1 || this.isUsingItem()) {
-                ((StandUser) this).setRoundaboutIdleTime(-1);
-            } else if (!new Vec3(this.getX(), this.getY(), this.getZ()).equals(new Vec3(this.xOld, this.yOld, this.zOld))) {
-                ((StandUser) this).setRoundaboutIdleTime(-1);
-            } else {
-                 ((StandUser) this).setRoundaboutIdleTime(((StandUser) this).getRoundaboutIdleTime() + 1);
-            }
 
     }
 
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    protected void RoundaboutTick2(CallbackInfo ci) {
+        if (((StandUser)this).getAttackTimeDuring() > -1 || this.isUsingItem()) {
+            ((StandUser) this).setRoundaboutIdleTime(-1);
+        } else if (!new Vec3(this.getX(), this.getY(), this.getZ()).equals(new Vec3(this.xOld, this.yOld, this.zOld))) {
+            ((StandUser) this).setRoundaboutIdleTime(-1);
+        } else {
+            ((StandUser) this).setRoundaboutIdleTime(((StandUser) this).getRoundaboutIdleTime() + 1);
+        }
+    }
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
