@@ -216,9 +216,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public float roundaboutGetMaxStoredDamage(){
         LivingEntity living = ((LivingEntity)(Object)this);
         if (living instanceof Player) {
-            return (float) (living.getMaxHealth() * 0.25);
+            return (float) (living.getMaxHealth() * 0.3);
         } else if (living instanceof Illusioner) {
-            return (float) (living.getMaxHealth() * 0.25);
+            return (float) (living.getMaxHealth() * 0.3);
         } else {
             return living.getMaxHealth();
         }
@@ -674,7 +674,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (TSJumping) {
                     float cooking2 = (float) (((LivingEntity)(Object)this).getDeltaMovement().y + 0.2);
                     if (((LivingEntity)(Object)this) instanceof Player && ((Player)(Object)this).isCrouching()) {
-
                         if (cooking2 >= 0.0001) {
                             cooking = 0.0001F;
                         }
@@ -740,7 +739,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 } if (roundaboutTSHurtSound < 2 && $$0.is(ModDamageTypes.STAND)){
                     roundaboutTSHurtSound = 2;
                 }
-
+                $$1*=0.66F;
                 if ((dmg + $$1) > max) {
                     roundaboutSetStoredDamage(max);
                 } else {
