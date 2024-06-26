@@ -97,7 +97,9 @@ public class WorldTickServer {
             if ($$0 instanceof StandEntity){
                 StandEntity stand = ((StandEntity)$$0);
                 if (stand.hasUser() && !stand.getUser().isRemoved()){
-                    ci.cancel();
+                    if ((((StandUser)stand.getUser()).getStand() != null && ((StandUser)stand.getUser()).getStand().getId() == stand.getId())) {
+                        ci.cancel();
+                    }
                 }
             }
             roundaboutTickTSDamage($$0);
