@@ -86,7 +86,7 @@ public abstract class WorldTickClient extends Level {
                 StandEntity stand = ((StandUser) livingEntity).getStand();
                 if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
                     if (!(stand.isRemoved() || stand.getUser() != entity)) {
-                        roundaboutTickStandTS(stand);
+                        roundaboutTickLivingEntityTS(stand);
                     }
                 }
             }
@@ -133,16 +133,21 @@ public abstract class WorldTickClient extends Level {
         livingEntity.oAttackAnim = livingEntity.attackAnim;
         //livingEntity.lastLimbDistance = livingEntity.limbDistance;
 
-        int LS = ((ILivingEntityAccess) livingEntity).getLerpSteps();
-        if (LS > 0) {
-            double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).getLerpX() - livingEntity.getX()) / (double) LS;
-            double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).getLerpY() - livingEntity.getY()) / (double) LS;
-            double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
-            ((ILivingEntityAccess) livingEntity).setLerpSteps(LS-1);
-            livingEntity.setPos(LX,LY,LZ);
-        }
+        if (livingEntity instanceof StandEntity){
+            livingEntity.setPos(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
 
-        ((ILivingEntityAccess) livingEntity).roundaboutPushEntities();
+        } else {
+            int LS = ((ILivingEntityAccess) livingEntity).getLerpSteps();
+            if (LS > 0) {
+                double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).getLerpX() - livingEntity.getX()) / (double) LS;
+                double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).getLerpY() - livingEntity.getY()) / (double) LS;
+                double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).getLerpZ() - livingEntity.getZ()) / (double) LS;
+                ((ILivingEntityAccess) livingEntity).setLerpSteps(LS - 1);
+                livingEntity.setPos(LX, LY, LZ);
+            }
+
+            ((ILivingEntityAccess) livingEntity).roundaboutPushEntities();
+        }
     }
     @Shadow
     private void tickPassenger(Entity $$0, Entity $$1) {
@@ -192,7 +197,12 @@ public abstract class WorldTickClient extends Level {
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof StandEntity){
-                ci.cancel();
+                StandEntity stand = ((StandEntity)$$0);
+                if (stand.hasUser() && !stand.getUser().isRemoved()) {
+                    if ((((StandUser) stand.getUser()).getStand() != null && ((StandUser) stand.getUser()).getStand().getId() == stand.getId())) {
+                        ci.cancel();
+                    }
+                }
             }
 
             roundaboutStoreOldPositionsForTS($$0);
