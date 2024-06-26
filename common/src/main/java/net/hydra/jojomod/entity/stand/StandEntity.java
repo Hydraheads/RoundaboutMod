@@ -416,11 +416,7 @@ public abstract class StandEntity extends Mob{
      */
     public void tickStandOut() {
         byte ot = this.getOffsetType();
-            if (this.getFollowing() != null) {
-                this.setDeltaMovement(this.getFollowing().getDeltaMovement());
-            } else {
                 this.setDeltaMovement(Vec3.ZERO);
-            }
             this.tick();
             if (this.getFollowing() == null) {
                 return;
