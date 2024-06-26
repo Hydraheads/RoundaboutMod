@@ -55,11 +55,17 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
     @Override
     public void clientPlaySound(){
         if (!this.roundaboutSounds.isEmpty()) {
+            List<QueueSoundInstance> $$0 = Lists.newArrayList(this.roundaboutSounds);
+            for (int i = $$0.size() - 1; i >= 0; --i) {
+                QueueSoundInstance soundI = $$0.get(i);
+                ((StandUser) this).getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
+            }
+
             List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundaboutSounds);
             List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
+
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 QueueSoundInstance soundI = $$1.get(i);
-                ((StandUser) this).getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
                 SoundInstance qSound = new EntityBoundSoundInstance(
                         soundI.roundaboutSoundEvent,
                         SoundSource.PLAYERS,
@@ -79,14 +85,15 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
     @Override
     public void clientPlaySoundIfNoneActive(byte soundChoice) {
 
-        if (!this.roundaboutSounds.isEmpty()) {
             List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
+        if (!this.roundaboutSounds.isEmpty()) {
             for (int i = $$2.size() - 1; i >= 0; --i) {
                 PlayedSoundInstance soundI = $$2.get(i);
-                if (soundI.roundaboutSoundByte == soundChoice){
+                if (soundI.roundaboutSoundByte == soundChoice) {
                     return;
                 }
             }
+        }
             SoundEvent SE =  ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
             SoundInstance qSound = new EntityBoundSoundInstance(
                     SE,
@@ -98,9 +105,7 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
             );
             Minecraft.getInstance().getSoundManager().play(qSound);
             $$2.add(new PlayedSoundInstance(SE,soundChoice,qSound));
-            this.roundaboutSounds = ImmutableList.of();
             this.roundaboutSoundsPlaying = ImmutableList.copyOf($$2);
-        }
     }
 
 
