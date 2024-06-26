@@ -348,64 +348,6 @@ public abstract class StandEntity extends Mob{
     }
 
 
-    /**
-     * Tricks Minecraft's rendering to make stands look like they are attached to mobs.
-     * In vanilla, this is how mounts are handled in general, but we have a custom mount system.
-     *
-     * @see #startStandRiding
-     */
-    @Override
-    public boolean isPassenger() {
-        byte ot = this.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
-            return this.getVehicle() != null;
-        } else {
-            return false;
-        }
-    }
-
-    /**This override prevents an infinite loop when an entity is riding itself*/
-    @Override
-    public Entity getRootVehicle() {
-        byte ot = this.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
-            Entity entity = this;
-            while (entity.isPassenger() && Objects.requireNonNull(entity.getVehicle()).getUUID() != entity.getUUID()) {
-                entity = entity.getVehicle();
-            }
-            return entity;
-        } else {
-            return null;
-        }
-    }
-
-    /**Chooses which offset animation types override stand direction rendering*/
-    @Override
-    public LivingEntity getVehicle() {
-       byte ot = this.getOffsetType();
-       if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
-           if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.FOLLOW_STYLE) {
-               return this;
-           } else {
-               LivingEntity follower = this.getFollowing();
-               if (follower != null && !follower.isRemoved()) {
-                   //this will be changed to getfollower
-                   if (((StandUser) follower).getStand() != null) {
-                       if (((StandUser) follower).getStand() != this) {
-                           follower = null;
-                       }
-                   } else {
-                       follower = null;
-                   }
-               } else {
-                   follower = null;
-               }
-               return follower;
-           }
-       } else {
-           return null;
-       }
-    }
 
 
     public boolean hasUser() {
@@ -474,25 +416,21 @@ public abstract class StandEntity extends Mob{
      */
     public void tickStandOut() {
         byte ot = this.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
             this.setDeltaMovement(Vec3.ZERO);
             this.tick();
             if (this.getFollowing() == null) {
                 return;
             }
             ((StandUser) this.getFollowing()).updateStandOutPosition(this);
-        }
     }
 
     public void tickStandOut2() {
         byte ot = this.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
             this.setDeltaMovement(Vec3.ZERO);
             if (this.getFollowing() == null) {
                 return;
             }
             ((StandUser) this.getFollowing()).updateStandOutPosition(this);
-        }
     }
 
 

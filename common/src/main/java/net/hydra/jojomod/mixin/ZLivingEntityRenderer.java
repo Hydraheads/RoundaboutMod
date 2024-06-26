@@ -1,18 +1,32 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
-public class ZLivingEntityRenderer {
+public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements RenderLayerParent<T, M> {
 
+
+    protected ZLivingEntityRenderer(EntityRendererProvider.Context $$0) {
+        super($$0);
+    }
 
     @Unique
     private static int roundaboutPackRed(int $$0, int $$1) {
@@ -33,6 +47,12 @@ public class ZLivingEntityRenderer {
                         ((StandUser)$$0).roundaboutGetStoredDamageByte(),
                         10));
         }
+    }
+
+
+    @Shadow
+    public M getModel() {
+        return null;
     }
 
 }

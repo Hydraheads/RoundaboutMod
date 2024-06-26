@@ -27,6 +27,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
@@ -529,12 +530,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             Vec3 grabPos = stand.getStandOffsetVector(User);
             positionUpdater.accept(stand, grabPos.x, grabPos.y, grabPos.z);
 
-            stand.setYRot(User.getYHeadRot()%360);
-            stand.setXRot(User.getXRot());
-            stand.setYBodyRot(User.getYHeadRot()%360);
-            stand.setYHeadRot(User.getYHeadRot()%360);
+                stand.setYRot(User.getYHeadRot() % 360);
+                stand.setXRot(User.getXRot());
+                stand.setYBodyRot(User.getYHeadRot() % 360);
+                stand.setYHeadRot(User.getYHeadRot() % 360);
+                if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
+                    stand.setYRot((float) (User.getYHeadRot() -(stand.getPunchYaw(stand.getAnchorPlace(),
+                                                0.36))) % 360);
+                    stand.setYBodyRot((float) (User.getYHeadRot() -(stand.getPunchYaw(stand.getAnchorPlace(),
+                            0.36))) % 360);
+                }
         } else {
-            Roundabout.LOGGER.info("4 "+(stand.position()));
             positionUpdater.accept(stand, stand.getX(), stand.getY(), stand.getZ());
         }
     }

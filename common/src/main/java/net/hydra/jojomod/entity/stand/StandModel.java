@@ -124,15 +124,11 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             }
             float tickDelta2 = Math.min(tickDelta,2);
             rotX = ((mobEntity.getUser().getViewXRot(tickDelta2)%360) - swimRotCorrect) * Mth.DEG_TO_RAD;
-            rotY = (Mth.rotLerp(tickDelta2, (rotY * Mth.RAD_TO_DEG),
-                    ((Mth.rotLerp(tickDelta2, mobEntity.getUser().yHeadRotO, mobEntity.getUser().yHeadRot)%360)
-                    - (Mth.rotLerp(tickDelta2, mobEntity.getUser().yBodyRotO, mobEntity.getUser().yBodyRot)%360)))
-                    ) * Mth.DEG_TO_RAD;
+            rotY = 0;
 
         } else if (animationStyle == OffsetIndex.FIXED_STYLE){
             rotX = 0;
-            rotY = (float) -(mobEntity.getPunchYaw(mobEntity.getAnchorPlace(),
-                    0.36) * Mth.DEG_TO_RAD);
+            rotY = 0;
         } else if (animationStyle == OffsetIndex.LOOSE_STYLE){
             rotX = 0;
             rotY = 0;
@@ -188,8 +184,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
         } else if (animationStyle == OffsetIndex.FIXED_STYLE) {
             rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
-            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, (float) -(mobEntity.getPunchYaw(mobEntity.getAnchorPlace(),
-                    0.36) * Mth.DEG_TO_RAD), 0.8f);
+            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
         } else if (animationStyle == OffsetIndex.LOOSE_STYLE) {
             rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
             rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);

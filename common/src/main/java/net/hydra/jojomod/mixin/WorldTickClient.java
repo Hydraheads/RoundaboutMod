@@ -98,12 +98,9 @@ public abstract class WorldTickClient extends Level {
             return;
         }
         byte ot = stand.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
-            /*The age of a stand only progresses when not in loose style, because it ticks elsewhere independently*/
-            ++stand.tickCount;
-            stand.setOldPosAndRot();
-            stand.tickStandOut();
-        }
+        ++stand.tickCount;
+        stand.setOldPosAndRot();
+        stand.tickStandOut();
     }
 
 
@@ -194,6 +191,10 @@ public abstract class WorldTickClient extends Level {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
+            if ($$0 instanceof StandEntity){
+                ci.cancel();
+            }
+
             roundaboutStoreOldPositionsForTS($$0);
             if (((TimeStop) this).CanTimeStopEntity($$0)){
                 roundaboutTSTickEntity($$0);

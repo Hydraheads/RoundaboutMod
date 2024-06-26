@@ -63,11 +63,9 @@ public class WorldTickServer {
             return;
         }
         byte ot = passenger.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
             passenger.setOldPosAndRot();
             ++passenger.tickCount;
             passenger.tickStandOut();
-        }
     }
 
     /**Time stop code*/
@@ -96,6 +94,12 @@ public class WorldTickServer {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
+            if ($$0 instanceof StandEntity){
+                StandEntity stand = ((StandEntity)$$0);
+                if (stand.hasUser() && !stand.getUser().isRemoved()){
+                    ci.cancel();
+                }
+            }
             roundaboutTickTSDamage($$0);
             if (((TimeStop) this).CanTimeStopEntity($$0)){
                 if ($$0 instanceof LivingEntity) {
