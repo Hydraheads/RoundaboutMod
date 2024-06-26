@@ -226,7 +226,7 @@ public class StandHudRender {
         int z;
         int y;
         StandUser standUser = ((StandUser) playerEntity);
-        if (isTSEntity){
+        if (isTSEntity || standUser.getStandPowers().getIsTsCharging()){
             v = 50;
             k = (int) Math.floor((182 /((double) standUser.getStandPowers().getMaxChargeTSTime() /20))*((double) standUser.getStandPowers().getChargedTSTicks() /20));
             z =  (int) Math.min((Math.floor(((double) standUser.getStandPowers().getChargedTSTicks()+19)/20)),((double) standUser.getStandPowers().getMaxChargeTSTime() /20));

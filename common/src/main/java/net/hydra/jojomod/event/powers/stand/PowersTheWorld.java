@@ -43,43 +43,45 @@ public class PowersTheWorld extends StandPowers {
     public void buttonInputSpecial(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
             if (!this.onCooldown(PowerIndex.SKILL_4) || ((Player)this.getSelf()).isCreative()) {
-                boolean sendPacket = false;
-                if (KeyInputs.roundaboutClickCount == 0) {
-                    if (keyIsDown) {
-                        if (this.isStoppingTime()) {
-                            KeyInputs.roundaboutClickCount = 2;
-                            this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
-                            ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
-                        } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
-                            sendPacket = true;
-                        } else {
-                            KeyInputs.roundaboutClickCount = 2;
-                            if (options.keyShift.isDown()) {
-                                this.setChargedTSTicks(20);
-                                this.setMaxChargeTSTime(20);
+                if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
+                    boolean sendPacket = false;
+                    if (KeyInputs.roundaboutClickCount == 0) {
+                        if (keyIsDown) {
+                            if (this.isStoppingTime()) {
+                                KeyInputs.roundaboutClickCount = 2;
+                                this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
+                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
+                            } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                                 sendPacket = true;
                             } else {
-                                if (this.getAttackTimeDuring() < 0) {
-                                    this.setMaxChargeTSTime(this.getMaxTSTime());
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
-                                    ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
-                                    this.updateUniqueMoves();
+                                KeyInputs.roundaboutClickCount = 2;
+                                if (options.keyShift.isDown()) {
+                                    this.setChargedTSTicks(20);
+                                    this.setMaxChargeTSTime(20);
+                                    sendPacket = true;
+                                } else {
+                                    if (this.getAttackTimeDuring() < 0) {
+                                        this.setMaxChargeTSTime(this.getMaxTSTime());
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
+                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                                        this.updateUniqueMoves();
+                                    }
                                 }
                             }
                         }
+
+                    } else {
+                        if (keyIsDown) {
+                            KeyInputs.roundaboutClickCount = 2;
+                        }
                     }
 
-                } else {
-                    if (keyIsDown) {
+                    if (sendPacket) {
                         KeyInputs.roundaboutClickCount = 2;
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSTicks());
                     }
-                }
-
-                if (sendPacket) {
-                    KeyInputs.roundaboutClickCount = 2;
-                    ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSTicks());
                 }
             }
         }
@@ -116,14 +118,16 @@ public class PowersTheWorld extends StandPowers {
               if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                   hasActedInTS = false;
                   this.setCurrentMaxTSTime(this.getChargedTSTicks());
-                  ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
-                  if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
-                      /*Charged Sound*/
-                      playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
-                  } else {
-                      /*No Charged Sound*/
-                      playSoundsIfNearby(TIME_STOP_NOISE_2, 100, true);
+                  if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                      if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
+                          /*Charged Sound*/
+                          playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
+                      } else {
+                          /*No Charged Sound*/
+                          playSoundsIfNearby(TIME_STOP_NOISE_2, 100, true);
+                      }
                   }
+                  ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
                   if (this.getSelf() instanceof Player) {
                       ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
                   }
@@ -166,15 +170,18 @@ public class PowersTheWorld extends StandPowers {
         }
         return super.inputSpeedModifiers(sprintTrigger);
     }
+    @Override
+    public boolean getIsTsCharging(){
+        if (this.getActivePower() == PowerIndex.SPECIAL) {
+            return true;
+        }
+        return false;
+    }
 
     public void resumeTime() {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                if (this.getMaxChargeTSTime() > 20){
-                    this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
-                }
-
                 float tsTimeRemaining = (200+((this.getMaxChargeTSTime()-this.getChargedTSTicks())*5));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.SNEAK_ATTACK) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;
@@ -197,6 +204,12 @@ public class PowersTheWorld extends StandPowers {
                 if (this.getSelf() instanceof Player) {
                     ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
                 }
+
+                if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                    if (this.getMaxChargeTSTime() > 20) {
+                        this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
+                    }
+                }
             }
         }
         this.setChargedTSTicks(0);
@@ -214,7 +227,10 @@ public class PowersTheWorld extends StandPowers {
         this.setActivePower(PowerIndex.SPECIAL);
         poseStand(OffsetIndex.GUARD);
         animateStand((byte) 0);
-        playSoundsIfNearby(getTSVoice(), 100, false);
+
+        if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+            playSoundsIfNearby(getTSVoice(), 100, false);
+        }
         playSoundsIfNearby(TIME_STOP_CHARGE, 100, true);
     }
 
@@ -446,9 +462,10 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public void timeTick(){
-        if (this.getSelf().level().isClientSide) {
-            this.tickSounds();
+        if (this.getActivePower() == PowerIndex.SPECIAL){
+            this.updateUniqueMoves();
         }
+        super.timeTick();
     }
 
 
@@ -461,6 +478,11 @@ public class PowersTheWorld extends StandPowers {
         }
     }
     //public void setSkillIcon(GuiGraphics context, int x, int y, ResourceLocation rl, boolean dull, @Nullable CooldownInstance cooldownInstance){
+    @Override
+    public boolean isAttackIneptVisually(byte activeP){
+        return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
 

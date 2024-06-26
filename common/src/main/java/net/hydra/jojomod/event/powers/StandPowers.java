@@ -153,6 +153,9 @@ public abstract class StandPowers {
     public int getMaxChargeTSTime(){
         return 0;
     }
+    public boolean getIsTsCharging(){
+        return false;
+    }
     public boolean getSummonCD(){
         return this.summonCD <= 0;
     } public void setSummonCD(int summonCD){
@@ -220,7 +223,7 @@ public abstract class StandPowers {
             cd = StandCooldowns.get(CDI);
         }
         if (slot==4){x+=100;y-=1;}
-        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually()){
+        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI)){
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
             if ((cd != null && (cd.time >= 0))) {
@@ -308,7 +311,7 @@ public abstract class StandPowers {
     public boolean isAttackInept(byte activeP){
         return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
-    public boolean isAttackIneptVisually(){
+    public boolean isAttackIneptVisually(byte activeP){
         return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
 
@@ -397,6 +400,9 @@ public abstract class StandPowers {
     /**The manner in which your powers tick when you are being timestopped. Override this if the stand acts differently.
      * By technicality, you should still tick sounds.*/
     public void timeTick(){
+        if (this.getSelf().level().isClientSide) {
+            this.tickSounds();
+        }
     }
 
     /**Ticks through your own timestop. This value exists in the general stand powers in case you switch stands.*/
@@ -685,7 +691,7 @@ public abstract class StandPowers {
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
 
-    private boolean isDazed(LivingEntity entity){
+    public boolean isDazed(LivingEntity entity){
         return this.getUserData(entity).isDazed();
     }
     private void setDazed(LivingEntity entity, byte dazeTime){
