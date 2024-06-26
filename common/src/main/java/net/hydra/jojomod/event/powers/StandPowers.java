@@ -502,10 +502,12 @@ public abstract class StandPowers {
                 LivingEntity standEntity = ((StandUser) entity).getStand();
                 LivingEntity standSelf = ((StandUser) self).getStand();
                 if (standSelf != null && standEntity != null) {
-                    standSelf.setXRot(getLookAtEntityPitch(standSelf, standEntity));
-                    standSelf.setYRot(getLookAtEntityYaw(standSelf, standEntity));
-                    standEntity.setXRot(getLookAtEntityPitch(standEntity, standSelf));
-                    standEntity.setYRot(getLookAtEntityYaw(standEntity, standSelf));
+                    if (!this.self.level().isClientSide) {
+                        standSelf.setXRot(getLookAtEntityPitch(standSelf, standEntity));
+                        standSelf.setYRot(getLookAtEntityYaw(standSelf, standEntity));
+                        standEntity.setXRot(getLookAtEntityPitch(standEntity, standSelf));
+                        standEntity.setYRot(getLookAtEntityYaw(standEntity, standSelf));
+                    }
                 }
 
 

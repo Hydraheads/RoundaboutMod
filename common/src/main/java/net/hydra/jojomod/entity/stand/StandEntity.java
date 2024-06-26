@@ -455,18 +455,14 @@ public abstract class StandEntity extends Mob{
         super.tick();
 
             if (this.level().isClientSide()){
-                if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
-                    this.setYBodyRot(yaw);
-                    this.setYHeadRot(yaw);
-                    this.yBodyRotO = yaw;
-                    this.yHeadRotO = yaw;
-                    this.absMoveTo(this.getX(),this.getY(),this.getZ(),yaw,pitch);
-                }
                 setupAnimationStates();
             } else {
                 if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
                     this.setXRot(pitch);
                     this.setYRot(yaw);
+                    this.setYBodyRot(yaw);
+                    this.xRotO = pitch;
+                    this.yRotO = yaw;
                 }
             }
 
