@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.ModFoodComponents;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Registry;
@@ -15,8 +16,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 
 public class FabricItems {
-
     public static Item STAND_ARROW = registerItem("stand_arrow", new Item(new Item.Properties().stacksTo(1)));
+
+    public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
+
+    public static Item KNIFE_BUNDLE = registerItem("knife_bundle", new KnifeItem(new Item.Properties().stacksTo(16)));
     public static Item STAND_DISC = registerItem("stand_disc", new Item(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
@@ -38,6 +42,8 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
 
                         entries.accept(STAND_ARROW);
+                        entries.accept(KNIFE);
+                        entries.accept(KNIFE_BUNDLE);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(STAND_DISC);
                         entries.accept(COFFEE_GUM);
@@ -50,6 +56,8 @@ public class FabricItems {
     public static void register(){
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = STAND_ARROW;
+        ModItems.KNIFE = KNIFE;
+        ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;

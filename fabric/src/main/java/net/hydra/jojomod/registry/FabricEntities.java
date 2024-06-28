@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.item.ModItems;
@@ -44,12 +45,20 @@ public class FabricEntities {
                         EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).
                                 sized(0.001F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":star_platinum")
                 );
+        public static final EntityType<KnifeEntity> THROWN_KNIFE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "knife"),
+                        EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":knife")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
+                ModEntities.THROWN_KNIFE = THROWN_KNIFE;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());

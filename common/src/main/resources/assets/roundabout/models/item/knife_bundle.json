@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "roundabout:item/stand_arrow"
+    "layer0": "roundabout:item/knife_bundle"
   }
 }

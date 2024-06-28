@@ -8,5 +8,7 @@ public class ModItems {
     public static Item COFFEE_GUM;
     public static Item METEORITE;
     public static Item TERRIER_SPAWN_EGG;
+    public static Item KNIFE;
+    public static Item KNIFE_BUNDLE;
 
 }

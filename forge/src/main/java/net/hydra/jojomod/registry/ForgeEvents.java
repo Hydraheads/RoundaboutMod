@@ -41,6 +41,8 @@ public class ForgeEvents {
     public static void registerRoundaboutBridge(FMLCommonSetupEvent event){
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
+        ModItems.KNIFE = ForgeItems.KNIFE.get();
+        ModItems.KNIFE_BUNDLE = ForgeItems.KNIFE_BUNDLE.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
@@ -50,6 +52,7 @@ public class ForgeEvents {
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
+        ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
     }
 
     /**
