@@ -20,6 +20,8 @@ public class FabricItems {
 
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
 
+    public static Item MATCH = registerItem("match", new Item(new Item.Properties().stacksTo(64)));
+
     public static Item KNIFE_BUNDLE = registerItem("knife_bundle", new KnifeItem(new Item.Properties().stacksTo(16)));
     public static Item STAND_DISC = registerItem("stand_disc", new Item(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
@@ -44,6 +46,7 @@ public class FabricItems {
                         entries.accept(STAND_ARROW);
                         entries.accept(KNIFE);
                         entries.accept(KNIFE_BUNDLE);
+                        entries.accept(MATCH);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(STAND_DISC);
                         entries.accept(COFFEE_GUM);
@@ -58,6 +61,7 @@ public class FabricItems {
         ModItems.STAND_ARROW = STAND_ARROW;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;
+        ModItems.MATCH = MATCH;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;

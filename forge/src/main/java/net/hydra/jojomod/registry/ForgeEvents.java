@@ -42,6 +42,7 @@ public class ForgeEvents {
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
         ModItems.KNIFE = ForgeItems.KNIFE.get();
+        ModItems.MATCH = ForgeItems.MATCH.get();
         ModItems.KNIFE_BUNDLE = ForgeItems.KNIFE_BUNDLE.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();

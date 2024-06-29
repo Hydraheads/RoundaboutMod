@@ -10,5 +10,7 @@ public class ModItems {
     public static Item TERRIER_SPAWN_EGG;
     public static Item KNIFE;
     public static Item KNIFE_BUNDLE;
+    public static Item MATCH;
+    public static Item MATCH_BUNDLE;
 
 }
