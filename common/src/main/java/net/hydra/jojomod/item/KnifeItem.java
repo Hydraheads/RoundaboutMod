@@ -48,6 +48,7 @@ public class KnifeItem extends Item implements Vanishable {
         return UseAnim.SPEAR;
     }
 
+    /**Default 72000*/
     @Override
     public int getUseDuration(ItemStack $$0) {
         return 72000;
@@ -57,7 +58,9 @@ public class KnifeItem extends Item implements Vanishable {
     public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
         if ($$2 instanceof Player $$4) {
             int $$5 = this.getUseDuration($$0) - $$3;
-            if ($$5 >= 10) {
+            int itemTime = 10;
+            if ($$0.is(ModItems.KNIFE)){itemTime=5;}
+            if ($$5 >= itemTime) {
                 int $$6 = EnchantmentHelper.getRiptide($$0);
                 if ($$6 <= 0 || $$4.isInWaterOrRain()) {
                     if (!$$1.isClientSide) {
