@@ -11,6 +11,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
@@ -61,56 +62,34 @@ public class KnifeItem extends Item implements Vanishable {
             int itemTime = 10;
             if ($$0.is(ModItems.KNIFE)){itemTime=5;}
             if ($$5 >= itemTime) {
-                int $$6 = EnchantmentHelper.getRiptide($$0);
-                if ($$6 <= 0 || $$4.isInWaterOrRain()) {
-                    if (!$$1.isClientSide) {
-                        $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
-                        if ($$6 == 0) {
-                            KnifeEntity $$7 = new KnifeEntity($$1, $$4, $$0);
-                            $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, 1.5F + (float)$$6 * 0.5F, 1.0F);
-                            if ($$4.getAbilities().instabuild) {
-                                $$7.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                            }
+                if (!$$1.isClientSide) {
+                    $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
+                    int knifeCount = 1;
+                    boolean bundle = $$0.is(ModItems.KNIFE_BUNDLE);
+                    if (bundle){knifeCount=4;}
+                    for (int i = 0; i< knifeCount; i++) {
 
-                            $$1.addFreshEntity($$7);
+                        KnifeEntity $$7 = new KnifeEntity($$1, $$4, $$0);
+                        if (bundle){
+                            $$7.shootFromRotationWithVariance($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, 1.5F, 1.0F);
+                        } else {
+                            $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, 1.5F, 1.0F);
+                        }
+                        if ($$4.getAbilities().instabuild) {
+                            $$7.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                        }
+
+                        $$1.addFreshEntity($$7);
+                        if (i == 0){
                             $$1.playSound(null, $$7, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
-                            if (!$$4.getAbilities().instabuild) {
-                                $$4.getInventory().removeItem($$0);
-                            }
                         }
                     }
-
-                    $$4.awardStat(Stats.ITEM_USED.get(this));
-                    if ($$6 > 0) {
-                        float $$8 = $$4.getYRot();
-                        float $$9 = $$4.getXRot();
-                        float $$10 = -Mth.sin($$8 * (float) (Math.PI / 180.0)) * Mth.cos($$9 * (float) (Math.PI / 180.0));
-                        float $$11 = -Mth.sin($$9 * (float) (Math.PI / 180.0));
-                        float $$12 = Mth.cos($$8 * (float) (Math.PI / 180.0)) * Mth.cos($$9 * (float) (Math.PI / 180.0));
-                        float $$13 = Mth.sqrt($$10 * $$10 + $$11 * $$11 + $$12 * $$12);
-                        float $$14 = 3.0F * ((1.0F + (float)$$6) / 4.0F);
-                        $$10 *= $$14 / $$13;
-                        $$11 *= $$14 / $$13;
-                        $$12 *= $$14 / $$13;
-                        $$4.push((double)$$10, (double)$$11, (double)$$12);
-                        $$4.startAutoSpinAttack(20);
-                        if ($$4.onGround()) {
-                            float $$15 = 1.1999999F;
-                            $$4.move(MoverType.SELF, new Vec3(0.0, 1.1999999F, 0.0));
-                        }
-
-                        SoundEvent $$16;
-                        if ($$6 >= 3) {
-                            $$16 = SoundEvents.TRIDENT_RIPTIDE_3;
-                        } else if ($$6 == 2) {
-                            $$16 = SoundEvents.TRIDENT_RIPTIDE_2;
-                        } else {
-                            $$16 = SoundEvents.TRIDENT_RIPTIDE_1;
-                        }
-
-                        $$1.playSound(null, $$4, $$16, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    if (!$$4.getAbilities().instabuild) {
+                        $$4.getInventory().removeItem($$0);
                     }
                 }
+
+                $$4.awardStat(Stats.ITEM_USED.get(this));
             }
         }
     }
@@ -127,4 +106,5 @@ public class KnifeItem extends Item implements Vanishable {
         return
                 1;
     }
+
 }
