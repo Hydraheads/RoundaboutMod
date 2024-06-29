@@ -74,6 +74,9 @@ public class ZItemInHandRenderer {
                         float o = m * n;
                         poseStack.translate(o * 0.0f, o * 0.004f, o * 0.0f);
                     }
+                    if (itemStack.is(ModItems.KNIFE_BUNDLE)){
+                        l/=2;
+                    }
                     poseStack.translate(0.0f, 0.0f, l * 0.2f);
                     poseStack.scale(1.0f, 1.0f, 1.0f + l * 0.2f);
                     poseStack.mulPose(Axis.YN.rotationDegrees((float)q * 45.0f));
