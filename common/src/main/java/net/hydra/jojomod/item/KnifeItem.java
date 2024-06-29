@@ -67,7 +67,7 @@ public class KnifeItem extends Item implements Vanishable {
                         $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
                         if ($$6 == 0) {
                             KnifeEntity $$7 = new KnifeEntity($$1, $$4, $$0);
-                            $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, 2.5F + (float)$$6 * 0.5F, 1.0F);
+                            $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, 1.5F + (float)$$6 * 0.5F, 1.0F);
                             if ($$4.getAbilities().instabuild) {
                                 $$7.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                             }
