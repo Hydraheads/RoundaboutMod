@@ -136,6 +136,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     private int roundaboutTSHurtTime = 0;
+    @Unique
+    private int roundabout$postTSHurtTime = 0;
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void tickRoundabout(CallbackInfo ci) {
@@ -156,6 +158,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     ((IPlayerEntity)this).roundabout$setKnife((byte)0);
                 }
             }
+        } if (roundabout$postTSHurtTime > 0){
+            roundabout$postTSHurtTime--;
         }
         //}
     }
@@ -799,21 +803,29 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (roundaboutGetStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
                 ci.setReturnValue(false);
                 return;
-            }
-            /*Knife and match code*/
-            if ($$0.is(ModDamageTypes.KNIFE) || $$0.is(ModDamageTypes.MATCH)){
-                if (roundabout$stackedKnivesAndMatches < 12){
-                    if (roundabout$stackedKnivesAndMatches <= 0){
-                        roundabout$knifeIFrameTicks = 9;
-                        roundabout$knifeDespawnTicks = 300;
-                    }
-                    roundabout$stackedKnivesAndMatches++;
-                    if ($$0.is(ModDamageTypes.KNIFE) && entity instanceof Player){
-                        ((IPlayerEntity)entity).roundabout$addKnife();
-                    }
+            } if ($$0.is(ModDamageTypes.TIME)){
+                roundabout$postTSHurtTime = 8;
+            } else {
+                /*Knife and match code*/
+                if (roundabout$postTSHurtTime > 0) {
+                    ci.setReturnValue(false);
+                    return;
                 } else {
-                   ci.setReturnValue(false);
-                   return;
+                    if ($$0.is(ModDamageTypes.KNIFE) || $$0.is(ModDamageTypes.MATCH)) {
+                        if (roundabout$stackedKnivesAndMatches < 12) {
+                            if (roundabout$stackedKnivesAndMatches <= 0) {
+                                roundabout$knifeIFrameTicks = 9;
+                                roundabout$knifeDespawnTicks = 300;
+                            }
+                            roundabout$stackedKnivesAndMatches++;
+                            if ($$0.is(ModDamageTypes.KNIFE) && entity instanceof Player) {
+                                ((IPlayerEntity) entity).roundabout$addKnife();
+                            }
+                        } else {
+                            ci.setReturnValue(false);
+                            return;
+                        }
+                    }
                 }
             }
         }
