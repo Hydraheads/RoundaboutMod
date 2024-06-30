@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "roundabout:match"
+    },
+    {
+      "item": "roundabout:match"
+    },
+    {
+      "item": "roundabout:match"
+    },
+    {
+      "item": "roundabout:match"
+    }
+  ],
+  "result": {
+    "item": "roundabout:match_bundle"
+  }
+}
