@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -114,7 +115,7 @@ public class KnifeEntity extends AbstractArrow {
 
         Entity $$4 = this.getOwner();
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
-        SoundEvent $$6 = SoundEvents.TRIDENT_HIT;
+        SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
         Vec3 DM = $$1.getDeltaMovement();
         if ($$1.hurt($$5, $$2)) {
             if ($$1.getType() == EntityType.ENDERMAN) {
@@ -130,6 +131,7 @@ public class KnifeEntity extends AbstractArrow {
 
                 this.doPostHurtEffects($$7);
             }
+            this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
             this.discard();
         }
 

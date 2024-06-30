@@ -47,6 +47,24 @@
       "roundabout:punch_sfx4"
     ]
   },
+  "knife_throw": {
+    "subtitle": "sounds.roundabout.knife_throw",
+    "sounds": [
+      "roundabout:knife_throw"
+    ]
+  },
+  "knife_bundle_throw": {
+    "subtitle": "sounds.roundabout.knife_bundle_throw",
+    "sounds": [
+      "roundabout:knife_bundle_throw"
+    ]
+  },
+  "knife_impact": {
+    "subtitle": "sounds.roundabout.knife_impact",
+    "sounds": [
+      "roundabout:knife_impact"
+    ]
+  },
   "timestop_impact": {
     "subtitle": "sounds.roundabout.timestop_impact",
     "sounds": [

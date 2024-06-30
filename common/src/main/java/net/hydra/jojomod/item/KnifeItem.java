@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -80,7 +81,12 @@ public class KnifeItem extends Item implements Vanishable {
 
                         $$1.addFreshEntity($$7);
                         if (i == 0){
-                            $$1.playSound(null, $$7, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            if (bundle) {
+                                $$1.playSound(null, $$7, ModSounds.KNIFE_BUNDLE_THROW_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            } else {
+                                $$1.playSound(null, $$7, ModSounds.KNIFE_THROW_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+                            }
                         }
                     }
                     if (!$$4.getAbilities().instabuild) {

@@ -21,6 +21,12 @@ public class ForgeSounds {
             register(ModSounds.WORLD_SUMMON_SOUND, ModSounds.WORLD_SUMMON_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAR_SUMMON_SOUND_EVENT =
             register(ModSounds.STAR_SUMMON_SOUND, ModSounds.STAR_SUMMON_SOUND_ID);
+    public static final RegistryObject<SoundEvent> KNIFE_THROW_SOUND_EVENT =
+            register(ModSounds.KNIFE_THROW_SOUND, ModSounds.KNIFE_THROW_SOUND_ID);
+    public static final RegistryObject<SoundEvent> KNIFE_BUNDLE_THROW_SOUND_EVENT =
+            register(ModSounds.KNIFE_BUNDLE_THROW_SOUND, ModSounds.KNIFE_BUNDLE_THROW_SOUND_ID);
+    public static final RegistryObject<SoundEvent> KNIFE_IMPACT_EVENT =
+            register(ModSounds.KNIFE_IMPACT, ModSounds.KNIFE_IMPACT_ID);
     public static final RegistryObject<SoundEvent> PUNCH_1_SOUND_EVENT =
             register(ModSounds.PUNCH_1_SOUND, ModSounds.PUNCH_1_SOUND_ID);
     public static final RegistryObject<SoundEvent> PUNCH_2_SOUND_EVENT =
