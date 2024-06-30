@@ -37,6 +37,10 @@ public class PlayerEntity extends LivingEntity implements IPlayerEntity{
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT_POS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
+
+    @Unique
+    private static final EntityDataAccessor<Byte> DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
     @Shadow
     @Final
     private Inventory inventory;
@@ -93,6 +97,7 @@ public class PlayerEntity extends LivingEntity implements IPlayerEntity{
         }
     }
 
+
     /**If you are in a barrage, does not play the hurt sound*/
     @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutGetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
@@ -123,9 +128,31 @@ public class PlayerEntity extends LivingEntity implements IPlayerEntity{
         }
     }
 
+    @Override
+    @Unique
+    public final int roundabout$getKnifeCount() {
+        return this.entityData.get(DATA_KNIFE_COUNT_ID);
+    }
+    @Override
+    @Unique
+    public void roundabout$addKnife() {
+        byte knifeCount = this.entityData.get(DATA_KNIFE_COUNT_ID);
+
+        knifeCount++;
+        if (knifeCount <= 12){
+            ((LivingEntity) (Object) this).getEntityData().set(DATA_KNIFE_COUNT_ID, knifeCount);
+        }
+    }
+    @Override
+    @Unique
+    public void roundabout$setKnife(byte knives) {
+        ((LivingEntity) (Object) this).getEntityData().set(DATA_KNIFE_COUNT_ID, knives);
+    }
+
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_POS, PlayerPosIndex.NONE);
+        ((LivingEntity)(Object)this).getEntityData().define(DATA_KNIFE_COUNT_ID, (byte)0);
     }
 
     @Shadow

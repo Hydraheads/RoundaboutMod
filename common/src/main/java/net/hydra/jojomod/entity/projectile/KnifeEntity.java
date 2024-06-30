@@ -115,12 +115,14 @@ public class KnifeEntity extends AbstractArrow {
         Entity $$4 = this.getOwner();
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
         SoundEvent $$6 = SoundEvents.TRIDENT_HIT;
+        Vec3 DM = $$1.getDeltaMovement();
         if ($$1.hurt($$5, $$2)) {
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
 
             if ($$1 instanceof LivingEntity $$7) {
+                $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
                 if ($$4 instanceof LivingEntity) {
                     EnchantmentHelper.doPostHurtEffects($$7, $$4);
                     EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
@@ -128,7 +130,9 @@ public class KnifeEntity extends AbstractArrow {
 
                 this.doPostHurtEffects($$7);
             }
+            this.discard();
         }
+
     }
 
 }

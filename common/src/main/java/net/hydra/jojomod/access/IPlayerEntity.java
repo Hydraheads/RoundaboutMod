@@ -9,4 +9,7 @@ public interface IPlayerEntity {
     void roundaboutSetPos(byte Pos);
 
     byte roundaboutGetPos();
+    void roundabout$addKnife();
+    void roundabout$setKnife(byte knives);
+    int roundabout$getKnifeCount();
 }

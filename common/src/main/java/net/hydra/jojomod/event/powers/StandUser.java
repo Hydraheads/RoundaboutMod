@@ -97,5 +97,7 @@ public interface StandUser {
 
     int getRoundaboutIdleTime();
 
+
+
     void setRoundaboutIdleTime(int roundaboutIdleTime);
 }
