@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,7 +11,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -24,7 +28,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
@@ -95,6 +101,34 @@ public class KnifeEntity extends AbstractArrow {
         this.shootWithVariance((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
         Vec3 $$9 = $$0.getDeltaMovement();
         this.setDeltaMovement(this.getDeltaMovement().add($$9.x, $$0.onGround() ? 0.0 : $$9.y, $$9.z));
+    }
+
+
+    @Override
+    protected void onHitEntity(EntityHitResult $$0) {
+        Entity $$1 = $$0.getEntity();
+        float $$2 = 3.0F;
+        if ($$1 instanceof LivingEntity $$3) {
+            $$2 += EnchantmentHelper.getDamageBonus(this.knifeItem, $$3.getMobType());
+        }
+
+        Entity $$4 = this.getOwner();
+        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
+        SoundEvent $$6 = SoundEvents.TRIDENT_HIT;
+        if ($$1.hurt($$5, $$2)) {
+            if ($$1.getType() == EntityType.ENDERMAN) {
+                return;
+            }
+
+            if ($$1 instanceof LivingEntity $$7) {
+                if ($$4 instanceof LivingEntity) {
+                    EnchantmentHelper.doPostHurtEffects($$7, $$4);
+                    EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
+                }
+
+                this.doPostHurtEffects($$7);
+            }
+        }
     }
 
 }

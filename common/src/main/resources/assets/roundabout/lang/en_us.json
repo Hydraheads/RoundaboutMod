@@ -34,6 +34,8 @@
 
   "death.attack.stand": "%1$s died to a mysterious power!",
   "death.attack.time": "Time caught up with %1$s!",
+  "death.attack.knife": "%1$s was knifed to death!",
+  "death.attack.match": "%1$s met their match!",
 
   "commands.roundabout.force_summon.multiple": "Summoned stands from %s entities",
   "commands.roundabout.force_summon.single": "Summoned stand from %s",

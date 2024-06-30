@@ -11,10 +11,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -26,6 +24,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class KnifeItem extends Item implements Vanishable {
@@ -85,7 +84,7 @@ public class KnifeItem extends Item implements Vanishable {
                         }
                     }
                     if (!$$4.getAbilities().instabuild) {
-                        $$4.getInventory().removeItem($$0);
+                        $$0.shrink(1);
                     }
                 }
 
@@ -106,5 +105,7 @@ public class KnifeItem extends Item implements Vanishable {
         return
                 1;
     }
+
+
 
 }

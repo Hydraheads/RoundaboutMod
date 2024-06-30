@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "roundabout:stand",
-    "roundabout:time"
+    "roundabout:time",
+    "roundabout:knife",
+    "roundabout:match"
   ]
 }
