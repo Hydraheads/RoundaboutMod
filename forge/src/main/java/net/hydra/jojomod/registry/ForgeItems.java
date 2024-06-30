@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.item.KnifeItem;
+import net.hydra.jojomod.item.MatchItem;
 import net.hydra.jojomod.item.ModFoodComponents;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Registry;
@@ -35,9 +36,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> KNIFE_BUNDLE = addToTab(ITEMS.register("knife_bundle",
             () -> new KnifeItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> MATCH = addToTab(ITEMS.register("match",
-            () -> new Item(new Item.Properties().stacksTo(64))));
+            () -> new MatchItem(new Item.Properties().stacksTo(64))));
     public static final RegistryObject<Item> MATCH_BUNDLE = addToTab(ITEMS.register("match",
-            () -> new Item(new Item.Properties().stacksTo(16))));
+            () -> new MatchItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToTab(ITEMS.register("meteor_block",
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
