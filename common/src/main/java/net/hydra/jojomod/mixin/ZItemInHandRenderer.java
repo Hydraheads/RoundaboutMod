@@ -62,8 +62,12 @@ public class ZItemInHandRenderer {
 
                     this.applyItemArmTransform(poseStack, humanoidArm, i);
                     poseStack.translate((float)q * -0.3f, 0.25, 0.15731531f);
+                    if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.KNIFE_BUNDLE)) {
                     poseStack.mulPose(Axis.XP.rotationDegrees(-55.0f));
-                    poseStack.mulPose(Axis.YP.rotationDegrees((float)q * 35.3f));
+                    } else {
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-10.0f));
+                    }
+                        poseStack.mulPose(Axis.YP.rotationDegrees((float) q * 35.3f));
                     poseStack.mulPose(Axis.ZP.rotationDegrees((float)q * -9.785f));
                     float r = (float)itemStack.getUseDuration() - ((float)this.minecraft.player.getUseItemRemainingTicks() - f + kT2);
                     float l = r / knifeTime;
