@@ -4,6 +4,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.entity.projectile.GasolineCanModel;
+import net.hydra.jojomod.entity.projectile.GasolineCanRenderer;
 import net.hydra.jojomod.entity.projectile.KnifeModel;
 import net.hydra.jojomod.entity.projectile.KnifeRenderer;
 import net.hydra.jojomod.entity.stand.TheWorldModel;
@@ -23,6 +25,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_MATCH.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
     }
 
     @SubscribeEvent
@@ -30,5 +33,6 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
     }
 }

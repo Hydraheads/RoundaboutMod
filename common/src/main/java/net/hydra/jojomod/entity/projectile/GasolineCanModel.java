@@ -17,19 +17,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 public class GasolineCanModel extends Model {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "gasolinecanentity"), "main");
-	private final ModelPart can;
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can"), "main");
+	public final ModelPart can;
 
 	public GasolineCanModel(ModelPart root) {
 		super(RenderType::entitySolid);
-		this.can = root.getChild("can");
+		this.can = root;
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition can = partdefinition.addOrReplaceChild("can", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -6.0F, -3.5F, 7.0F, 12.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 18.0F, 0.0F));
+		PartDefinition can = partdefinition.addOrReplaceChild("can", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -16.0F, -3.5F, 7.0F, 12.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 18.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 32, 32);
 	}

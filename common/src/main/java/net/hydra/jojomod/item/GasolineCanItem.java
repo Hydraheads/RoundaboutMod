@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -48,7 +49,7 @@ public class GasolineCanItem extends Item implements Vanishable {
                 if (!$$1.isClientSide) {
                     $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
                     int knifeCount = 1;
-                    MatchEntity $$7 = new MatchEntity($$4, $$1);
+                    GasolineCanEntity $$7 = new GasolineCanEntity($$4, $$1);
                     $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), -3F, SHOOT_POWER, 1.0F);
 
                     $$1.addFreshEntity($$7);

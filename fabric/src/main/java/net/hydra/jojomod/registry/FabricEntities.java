@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -60,6 +61,13 @@ public class FabricEntities {
                         EntityType.Builder.<MatchEntity>of(MatchEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":match")
                 );
+        public static final EntityType<GasolineCanEntity> GASOLINE_CAN =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "gasoline_can"),
+                        EntityType.Builder.<GasolineCanEntity>of(GasolineCanEntity::new, MobCategory.MISC).
+                                sized(0.8f, 0.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":gasoline_can")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -68,6 +76,7 @@ public class FabricEntities {
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
+                ModEntities.GASOLINE_CAN = GASOLINE_CAN;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());

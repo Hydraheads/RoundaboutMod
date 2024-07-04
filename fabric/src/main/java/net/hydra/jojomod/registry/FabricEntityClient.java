@@ -6,6 +6,8 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.entity.projectile.GasolineCanModel;
+import net.hydra.jojomod.entity.projectile.GasolineCanRenderer;
 import net.hydra.jojomod.entity.projectile.KnifeModel;
 import net.hydra.jojomod.entity.projectile.KnifeRenderer;
 import net.hydra.jojomod.entity.stand.TheWorldModel;
@@ -32,9 +34,11 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.THE_WORLD, TheWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_MATCH, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GASOLINE_CAN, GasolineCanRenderer::new);
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
     }
 }

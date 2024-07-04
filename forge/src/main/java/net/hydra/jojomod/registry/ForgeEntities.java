@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -45,6 +46,12 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<MatchEntity>> THROWN_MATCH =
             ENTITY_TYPES.register("match", () ->
                     EntityType.Builder.<MatchEntity>of(MatchEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "match").toString())
+            );
+    public static final RegistryObject<EntityType<GasolineCanEntity>> GASOLINE_CAN =
+            ENTITY_TYPES.register("gasoline_can", () ->
+                    EntityType.Builder.<GasolineCanEntity>of(GasolineCanEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "match").toString())
             );

@@ -59,6 +59,7 @@ public class ForgeEvents {
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.THROWN_MATCH = ForgeEntities.THROWN_MATCH.get();
+        ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
     }
 
     /**

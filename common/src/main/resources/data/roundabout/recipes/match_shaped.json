@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X":
+      {
+        "item": "minecraft:gunpowder"
+      }
+  },
+  "pattern": [
+    "X",
+    "#"
+  ],
+  "result": {
+    "count": 4,
+    "item": "roundabout:match"
+  },
+  "show_notification": true
+}
