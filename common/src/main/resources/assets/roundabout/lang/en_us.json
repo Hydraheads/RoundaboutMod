@@ -2,6 +2,8 @@
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
 
   "item.roundabout.stand_arrow": "Stand Arrow",
+  "item.roundabout.luck_sword": "Luck Sword",
+  "item.roundabout.luck_upgrade": "Smithing Template",
   "item.roundabout.stand_disc": "Stand Disc",
   "item.roundabout.coffee_gum": "Coffee Gum",
   "item.roundabout.meteorite": "Meteorite",
@@ -9,6 +11,7 @@
   "item.roundabout.knife_bundle": "Knives",
   "item.roundabout.match": "Match",
   "item.roundabout.match_bundle": "Match Bundle",
+  "item.roundabout.gasoline_can": "Gasoline Can",
 
   "text.roundabout.meteorite": "Meteorite",
 
@@ -28,6 +31,15 @@
   "key.roundabout.ability.three": "Skill 3",
   "key.roundabout.ability.four": "Skill 4",
   "key.roundabout.menu": "Power Inventory",
+
+  "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Iron Sword",
+  "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Add to iron sword",
+  "roundabout:item.roundabout.smithing_template.luck_upgrade.additions_slot_description": "Add Gold Ingot",
+  "roundabout:item.roundabout.smithing_template.luck_upgrade.ingredients": "Gold Ingot",
+
+
+  "roundabout:upgrade.roundabout.luck_upgrade": "Luck Upgrade",
+
 
   "key.category.roundabout.jojo": "Roundabout Controls",
   "hud.roundabout.standout": "Stand Summoned",

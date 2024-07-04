@@ -12,5 +12,8 @@ public class ModItems {
     public static Item KNIFE_BUNDLE;
     public static Item MATCH;
     public static Item MATCH_BUNDLE;
+    public static Item GASOLINE_CAN;
+    public static Item LUCK_SWORD;
+    public static Item LUCK_UPGRADE;
 
 }

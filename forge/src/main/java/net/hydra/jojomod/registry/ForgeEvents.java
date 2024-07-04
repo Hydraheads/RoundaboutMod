@@ -41,10 +41,13 @@ public class ForgeEvents {
     public static void registerRoundaboutBridge(FMLCommonSetupEvent event){
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
+        ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
+        ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.KNIFE = ForgeItems.KNIFE.get();
         ModItems.KNIFE_BUNDLE = ForgeItems.KNIFE_BUNDLE.get();
         ModItems.MATCH = ForgeItems.MATCH.get();
         ModItems.MATCH_BUNDLE = ForgeItems.MATCH_BUNDLE.get();
+        ModItems.GASOLINE_CAN = ForgeItems.GASOLINE_CAN.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();

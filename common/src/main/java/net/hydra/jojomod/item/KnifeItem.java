@@ -39,10 +39,6 @@ public class KnifeItem extends Item implements Vanishable {
         super($$0);
     }
 
-    @Override
-    public boolean canAttackBlock(BlockState $$0, Level $$1, BlockPos $$2, Player $$3) {
-        return !$$3.isCreative();
-    }
 
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {

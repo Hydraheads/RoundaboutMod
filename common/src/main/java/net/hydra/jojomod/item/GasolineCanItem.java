@@ -1,6 +1,5 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -10,7 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
@@ -18,14 +16,14 @@ import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class MatchItem extends Item implements Vanishable {
+public class GasolineCanItem extends Item implements Vanishable {
 
 
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 2.0F;
     public static final float SHOOT_POWER = 0.7F;
 
-    public MatchItem(Properties $$0) {
+    public GasolineCanItem(Properties $$0) {
         super($$0);
     }
 
@@ -50,22 +48,11 @@ public class MatchItem extends Item implements Vanishable {
                 if (!$$1.isClientSide) {
                     $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
                     int knifeCount = 1;
-                    boolean bundle = $$0.is(ModItems.MATCH_BUNDLE);
-                    if (bundle){knifeCount=4;}
-                    for (int i = 0; i< knifeCount; i++) {
+                    MatchEntity $$7 = new MatchEntity($$4, $$1);
+                    $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), -3F, SHOOT_POWER, 1.0F);
 
-                        MatchEntity $$7 = new MatchEntity($$4, $$1);
-                        if (bundle){
-                            $$7.shootFromRotationWithVariance($$4, $$4.getXRot(), $$4.getYRot(), -3F, SHOOT_POWER, 1.0F);
-                        } else {
-                            $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), -3F, SHOOT_POWER, 1.0F);
-                        }
-
-                        $$1.addFreshEntity($$7);
-                        if (i == 0){
-                            $$1.playSound(null, $$7, SoundEvents.EGG_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
-                        }
-                    }
+                    $$1.addFreshEntity($$7);
+                    $$1.playSound(null, $$7, SoundEvents.EGG_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
                     if (!$$4.getAbilities().instabuild) {
                         $$0.shrink(1);
                     }
@@ -92,3 +79,4 @@ public class MatchItem extends Item implements Vanishable {
 
 
 }
+

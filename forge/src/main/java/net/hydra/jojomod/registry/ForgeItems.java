@@ -3,10 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.item.KnifeItem;
-import net.hydra.jojomod.item.MatchItem;
-import net.hydra.jojomod.item.ModFoodComponents;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -39,10 +36,20 @@ public class ForgeItems {
             () -> new MatchItem(new Item.Properties().stacksTo(64))));
     public static final RegistryObject<Item> MATCH_BUNDLE = addToTab(ITEMS.register("match_bundle",
             () -> new MatchItem(new Item.Properties().stacksTo(16))));
+    public static final RegistryObject<Item> GASOLINE_CAN = addToTab(ITEMS.register("gasoline_can",
+            () -> new GasolineCanItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToTab(ITEMS.register("meteor_block",
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
+            () -> new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties())
+            ));
+
+
+    public static final RegistryObject<Item> LUCK_UPGRADE = addToTab(ITEMS.register("luck_sword",
+            () -> new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
+    ));
 
     public static final RegistryObject<Item> STAND_DISC = addToTab(ITEMS.register("stand_disc",
             () -> new Item(new Item.Properties().stacksTo(1))));

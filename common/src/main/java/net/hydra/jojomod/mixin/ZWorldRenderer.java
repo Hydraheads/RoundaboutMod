@@ -5,21 +5,26 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientLevelData;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.entity.stand.SethanRenderer;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
+import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LevelRenderer.class)
 public class ZWorldRenderer {
@@ -43,6 +49,31 @@ public class ZWorldRenderer {
     @Shadow
     @Final
     private EntityRenderDispatcher entityRenderDispatcher;
+
+    @Shadow
+    private Frustum capturedFrustum;
+
+    @Shadow
+    private Frustum cullingFrustum;
+
+    @Shadow
+    @Final
+    private Vector3d frustumPos = null;
+
+    @Shadow
+    @Final
+    private RenderBuffers renderBuffers;
+
+    @Shadow
+    public boolean shouldShowEntityOutlines() {
+        return false;
+    }
+
+    @Shadow
+    public boolean isChunkCompiled(BlockPos p_202431_) {
+        return false;
+    }
+
     @Inject( method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "HEAD"), cancellable = true)
     private void doNotDeltaTickEntityWhenTimeIsStopped1(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
@@ -104,6 +135,42 @@ public class ZWorldRenderer {
                 }
             }
         }
+    }
+
+    @Inject(method = "renderLevel", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 0, shift = At.Shift.BEFORE),
+            locals = LocalCapture.CAPTURE_FAILHARD)
+    private void roundabout$RenderLevelEntities(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
+                                                GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
+    /*
+        Vec3 vec3 = $$4.getPosition();
+        double d0 = vec3.x();
+        double d1 = vec3.y();
+        double d2 = vec3.z();
+        boolean flag = this.capturedFrustum != null;
+        Frustum frustum;
+        if (flag) {
+            frustum = this.capturedFrustum;
+            frustum.prepare(this.frustumPos.x, this.frustumPos.y, this.frustumPos.z);
+        } else {
+            frustum = this.cullingFrustum;
+        }
+        for(Entity entity : this.level.entitiesForRendering()) {
+            if (this.entityRenderDispatcher.shouldRender(entity, frustum, d0, d1, d2) || entity.hasIndirectPassenger(this.minecraft.player)) {
+                MultiBufferSource multibuffersource;
+                if (this.shouldShowEntityOutlines() && this.minecraft.shouldEntityAppearGlowing(entity)) {
+                    multibuffersource = this.renderBuffers.outlineBufferSource();
+                } else {
+                    multibuffersource = this.renderBuffers.bufferSource();
+                }
+
+                BlockPos blockpos = entity.blockPosition();
+                if ((this.level.isOutsideBuildHeight(blockpos.getY()) || this.isChunkCompiled(blockpos)) && (entity != $$4.getEntity() || $$4.isDetached() || $$4.getEntity() instanceof LivingEntity && ((LivingEntity)$$4.getEntity()).isSleeping()) && (!(entity instanceof LocalPlayer) || $$4.getEntity() == entity || (entity == minecraft.player && !minecraft.player.isSpectator()))) {
+                    SethanRenderer.renderEntity(this.entityRenderDispatcher, entity, d0, d1, d2, $$1, $$0, multibuffersource);
+                }
+            }
+        }
+     */
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
