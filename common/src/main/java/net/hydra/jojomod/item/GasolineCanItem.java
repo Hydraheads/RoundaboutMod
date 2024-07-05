@@ -22,7 +22,7 @@ public class GasolineCanItem extends Item implements Vanishable {
 
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 2.0F;
-    public static final float SHOOT_POWER = 0.5F;
+    public static final float SHOOT_POWER = 0.48F;
 
     public GasolineCanItem(Properties $$0) {
         super($$0);
@@ -53,7 +53,7 @@ public class GasolineCanItem extends Item implements Vanishable {
                         hand.shrink(1);
                     }
                 }
-
+        $$2.getCooldowns().addCooldown(this, 20);
                 $$2.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResultHolder.consume(hand);
     }

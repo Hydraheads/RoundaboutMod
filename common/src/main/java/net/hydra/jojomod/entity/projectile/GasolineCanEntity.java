@@ -64,7 +64,9 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     @Override
     public void tick(){
-        spinningCanX = Mth.wrapDegrees(spinningCanX-15);
+        int spincount = 0;
+        if (bounces <= 3){spincount = -15;}
+        spinningCanX = Mth.wrapDegrees(spinningCanX+=spincount);
         super.tick();
     }
     @Override
@@ -111,7 +113,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                 }
             }
             this.playSound($$6, volume, pitch);
-            this.setDeltaMovement(this.getDeltaMovement().x, 0.18+(0.04*bounces), this.getDeltaMovement().z);
+            this.setDeltaMovement(this.getDeltaMovement().x*0.9, 0.18+(0.04*bounces), this.getDeltaMovement().z*0.9);
 
         }
     }
@@ -172,6 +174,11 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         this.shootWithVariance((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
         Vec3 $$9 = $$0.getDeltaMovement();
         this.setDeltaMovement(this.getDeltaMovement().add($$9.x, $$0.onGround() ? 0.0 : $$9.y, $$9.z));
+    }
+
+
+    protected float getGravity() {
+        return 0.04F;
     }
 
 }
