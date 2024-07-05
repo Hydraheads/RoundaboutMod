@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -23,6 +24,14 @@ public class FabricBlocks {
                             .sound(SoundType.METAL)
             )
     );
+    public static final Block GASOLINE_SPLATTER = registerBlock("gasoline_splatter",new GasolineBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.NONE)
+                            .instrument(NoteBlockInstrument.BANJO)
+                            .strength(0.5F, 1.0F)
+                            .sound(SoundType.SLIME_BLOCK)
+            )
+    );
 
 
     private static Block registerBlock(String name, Block block) {
@@ -37,5 +46,6 @@ public class FabricBlocks {
 
     public static void register(){
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
+        ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
     }
 }

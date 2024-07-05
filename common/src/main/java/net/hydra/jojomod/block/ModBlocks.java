@@ -17,5 +17,6 @@ public class ModBlocks {
     /**This is where blocks are listed and called upon.
      * Forge and fabric files must define these variables so they are not empty.**/
     public static Block METEOR_BLOCK;
+    public static Block GASOLINE_SPLATTER;
 
 }
