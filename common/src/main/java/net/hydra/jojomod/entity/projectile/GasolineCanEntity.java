@@ -48,12 +48,22 @@ import java.util.Collection;
 import java.util.Set;
 
 public class GasolineCanEntity extends ThrowableItemProjectile {
+
+    public float spinningCanX = 0;
+    public float spinningCanXo = 0;
+    public float bounces = 3;
     public GasolineCanEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
 
     public GasolineCanEntity(LivingEntity living, Level $$1) {
         super(ModEntities.GASOLINE_CAN, living, $$1);
+    }
+
+    @Override
+    public void tick(){
+        spinningCanX = Mth.wrapDegrees(spinningCanX-15);
+        super.tick();
     }
     @Override
     protected Item getDefaultItem() {
@@ -62,22 +72,28 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        super.onHitBlock($$0);
+        bounces--;
+        if (bounces < 0) {
+            super.onHitBlock($$0);
 
-        BlockState state = this.level().getBlockState($$0.getBlockPos());
-        Block block = state.getBlock();
+            BlockState state = this.level().getBlockState($$0.getBlockPos());
+            Block block = state.getBlock();
 
 
-        if(((IFireBlock) Blocks.FIRE).roundabout$canBurn(state)){
-            if (block instanceof TntBlock) {
-                this.level().removeBlock($$0.getBlockPos(), false);
-                TntBlock.explode(this.level(), $$0.getBlockPos());
+            if (((IFireBlock) Blocks.FIRE).roundabout$canBurn(state)) {
+                if (block instanceof TntBlock) {
+                    this.level().removeBlock($$0.getBlockPos(), false);
+                    TntBlock.explode(this.level(), $$0.getBlockPos());
+                }
+            } else {
+                SoundEvent $$6 = SoundEvents.WOOD_STEP;
+                this.playSound($$6, 0.5F, 2F);
             }
+            this.discard();
         } else {
-            SoundEvent $$6 = SoundEvents.WOOD_STEP;
-            this.playSound($$6, 0.5F, 2F);
+            this.setDeltaMovement(this.getDeltaMovement().x, 0.15+(0.07*bounces), this.getDeltaMovement().z);
+
         }
-        this.discard();
     }
 
 

@@ -45,6 +45,7 @@ public class MainUtil {
         return (f*Mth.DEG_TO_RAD);
     }
 
+
     public static double cheapDistanceTo(double x,double y,double z,double x2,double y2,double z2){
         double mdist = 0;
         double cdist = Math.abs(x-x2);
