@@ -65,6 +65,18 @@
       "roundabout:knife_impact"
     ]
   },
+  "can_bounce": {
+    "subtitle": "sounds.roundabout.can_bounce",
+    "sounds": [
+      "roundabout:can_bounce"
+    ]
+  },
+  "can_bounce_end": {
+    "subtitle": "sounds.roundabout.can_bounce_end",
+    "sounds": [
+      "roundabout:can_bounce_end"
+    ]
+  },
   "timestop_impact": {
     "subtitle": "sounds.roundabout.timestop_impact",
     "sounds": [

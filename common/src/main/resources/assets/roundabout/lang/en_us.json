@@ -94,5 +94,9 @@
   "sounds.roundabout.timeresume": "Time is resumed!",
   "sounds.roundabout.timestop_ticking":  "Clock Ticks",
   "sounds.roundabout.timestop_impact":  "Time Impact",
-  "sounds.roundabout.timestop_impact2":  "Time Impact"
+  "sounds.roundabout.timestop_impact2":  "Time Impact",
+
+
+  "sounds.roundabout.can_bounce": "Gasoline Can hits ground",
+  "sounds.roundabout.can_bounce_end": "Gasoline Can hits ground"
 }

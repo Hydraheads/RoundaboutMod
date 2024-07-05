@@ -93,6 +93,8 @@ public class ForgeSounds {
             register(ModSounds.TIME_STOP_IMPACT2, ModSounds.TIME_STOP_IMPACT2_ID);
     public static final RegistryObject<SoundEvent> TIME_STOP_TICKING =
             register(ModSounds.TIME_STOP_TICKING, ModSounds.TIME_STOP_TICKING_ID);
+    public static final RegistryObject<SoundEvent> CAN_BOUNCE =
+            register(ModSounds.CAN_BOUNCE, ModSounds.CAN_BOUNCE_ID);
 
     public static RegistryObject<SoundEvent> register(String id, ResourceLocation id2){
         return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(id2));

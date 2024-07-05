@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -51,6 +52,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     public float spinningCanX = 0;
     public float spinningCanXo = 0;
+    public boolean done;
     public float bounces = 3;
     public GasolineCanEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
@@ -73,9 +75,14 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         bounces--;
-        if (bounces < 0) {
+        if (bounces < 0 || !$$0.getDirection().equals(Direction.UP)) {
             super.onHitBlock($$0);
 
+            if (!done){
+                SoundEvent $$6 = ModSounds.CAN_BOUNCE_END_EVENT;
+                this.playSound($$6, 1F, 1F);
+
+            }
             BlockState state = this.level().getBlockState($$0.getBlockPos());
             Block block = state.getBlock();
 
@@ -91,7 +98,20 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             }
             this.discard();
         } else {
-            this.setDeltaMovement(this.getDeltaMovement().x, 0.15+(0.07*bounces), this.getDeltaMovement().z);
+            SoundEvent $$6 = ModSounds.CAN_BOUNCE_EVENT;
+            float volume = 1F;
+            float pitch = 1F;
+            if (bounces < 1){
+                done=true;
+                $$6 = ModSounds.CAN_BOUNCE_END_EVENT;
+            } else {
+                if (bounces == 1){
+                    volume = 0.9F;
+                    pitch = 0.9F;
+                }
+            }
+            this.playSound($$6, volume, pitch);
+            this.setDeltaMovement(this.getDeltaMovement().x, 0.18+(0.04*bounces), this.getDeltaMovement().z);
 
         }
     }
