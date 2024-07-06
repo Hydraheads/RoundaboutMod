@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "roundabout:block/gasoline_splatter"
+    "level=0": {
+      "model": "roundabout:block/gasoline_splatter_large"
+    },
+    "level=1": {
+      "model": "roundabout:block/gasoline_splatter_medium"
+    },
+    "level=2": {
+      "model": "roundabout:block/gasoline_splatter_small"
     }
   }
 }

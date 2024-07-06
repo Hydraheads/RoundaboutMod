@@ -1,7 +1,7 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "all": "roundabout:block/gasoline_splatter"
+    "all": "roundabout:block/gasoline_splatter_small"
   },
   "elements": [
     {   "from": [ 0, 0, 0 ],
