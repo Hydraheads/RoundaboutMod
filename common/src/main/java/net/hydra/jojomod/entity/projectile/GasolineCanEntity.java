@@ -4,10 +4,12 @@ package net.hydra.jojomod.entity.projectile;
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -147,6 +149,30 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             this.discard();
         }
 
+    }
+
+
+    public void scatterGoo(BlockPos pos){
+        setGoo(pos, 0, 0, 0);
+
+        setGoo(pos, 1, 0, 1);
+        setGoo(pos, -1, 0, 1);
+        setGoo(pos, 0, 1, 1);
+        setGoo(pos, 0, -1, 1);
+
+        setGoo(pos, 2, 0, 2);
+        setGoo(pos, -2, 0, 2);
+        setGoo(pos, 0, 2, 2);
+        setGoo(pos, 0, -2, 2);
+
+        setGoo(pos, 1, 1, 2);
+        setGoo(pos, -1, 1, 2);
+        setGoo(pos, 1, -1, 2);
+        setGoo(pos, -1, -1, 2);
+    }
+
+    public void setGoo(BlockPos pos, int offsetX, int offsetZ, int level){
+        this.level().setBlock(new BlockPos(pos.getX()+offsetX, pos.getY(), pos.getZ() + offsetZ), ModBlocks.GASOLINE_SPLATTER.defaultBlockState(), 1);
     }
 
 

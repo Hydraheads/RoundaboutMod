@@ -1,6 +1,7 @@
 {
   "ambientocclusion": false,
   "textures": {
+    "particle": "#all",
     "all": "roundabout:block/gasoline_splatter_large"
   },
   "elements": [

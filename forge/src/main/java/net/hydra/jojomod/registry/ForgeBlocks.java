@@ -27,7 +27,7 @@ public class ForgeBlocks {
                     BlockBehaviour.Properties.of()
                             .mapColor(MapColor.NONE)
                             .instrument(NoteBlockInstrument.BANJO)
-                            .strength(0.5F, 1.0F)
+                            .strength(0.25F, 1.0F)
                             .sound(SoundType.SLIME_BLOCK)
             ));
 }

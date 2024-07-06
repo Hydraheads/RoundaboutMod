@@ -29,10 +29,24 @@ public class GasolineBlock extends Block {
             this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(stage)));
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
             return SHAPE;
         }
+
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
+        return !$$0.canSurvive($$3, $$4) ? Blocks.AIR.defaultBlockState() : super.updateShape($$0, $$1, $$2, $$3, $$4, $$5);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        return !$$1.isEmptyBlock($$2.below());
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
