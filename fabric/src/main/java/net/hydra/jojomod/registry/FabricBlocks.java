@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 public class FabricBlocks {
     public static final Block METEOR_BLOCK = registerBlock("meteor_block",new Block(
@@ -28,8 +29,11 @@ public class FabricBlocks {
                     BlockBehaviour.Properties.of()
                             .mapColor(MapColor.NONE)
                             .instrument(NoteBlockInstrument.BANJO)
-                            .strength(0.25F, 1.0F)
+                            .strength(0.1F, 1.0F)
                             .sound(SoundType.SLIME_BLOCK)
+                            .replaceable()
+                            .pushReaction(PushReaction.DESTROY)
+                            .ignitedByLava()
             )
     );
 

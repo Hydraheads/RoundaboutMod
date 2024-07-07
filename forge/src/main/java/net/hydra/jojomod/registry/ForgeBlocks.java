@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -27,7 +28,10 @@ public class ForgeBlocks {
                     BlockBehaviour.Properties.of()
                             .mapColor(MapColor.NONE)
                             .instrument(NoteBlockInstrument.BANJO)
-                            .strength(0.25F, 1.0F)
+                            .strength(0.1F, 1.0F)
                             .sound(SoundType.SLIME_BLOCK)
+                            .replaceable()
+                            .pushReaction(PushReaction.DESTROY)
+                            .ignitedByLava()
             ));
 }
