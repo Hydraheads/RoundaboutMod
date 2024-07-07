@@ -49,6 +49,7 @@ public class ForgeEvents {
         ModItems.MATCH = ForgeItems.MATCH.get();
         ModItems.MATCH_BUNDLE = ForgeItems.MATCH_BUNDLE.get();
         ModItems.GASOLINE_CAN = ForgeItems.GASOLINE_CAN.get();
+        ModItems.GASOLINE_BUCKET = ForgeItems.GASOLINE_BUCKET.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();

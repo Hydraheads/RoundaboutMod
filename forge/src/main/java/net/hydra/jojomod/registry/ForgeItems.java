@@ -38,6 +38,8 @@ public class ForgeItems {
             () -> new MatchItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> GASOLINE_CAN = addToTab(ITEMS.register("gasoline_can",
             () -> new GasolineCanItem(new Item.Properties().stacksTo(16))));
+    public static final RegistryObject<Item> GASOLINE_BUCKET = addToTab(ITEMS.register("gasoline_bucket",
+            () -> new Item(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToTab(ITEMS.register("meteor_block",
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()

@@ -23,6 +23,7 @@ public class FabricItems {
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_CAN = registerItem("gasoline_can", new GasolineCanItem(new Item.Properties().stacksTo(16)));
+    public static Item GASOLINE_BUCKET = registerItem("gasoline_bucket", new GasolineCanItem(new Item.Properties().stacksTo(1)));
 
     public static Item STAND_DISC = registerItem("stand_disc", new Item(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
@@ -52,6 +53,7 @@ public class FabricItems {
                         entries.accept(MATCH);
                         entries.accept(MATCH_BUNDLE);
                         entries.accept(GASOLINE_CAN);
+                        entries.accept(GASOLINE_BUCKET);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(STAND_DISC);
                         entries.accept(COFFEE_GUM);
@@ -71,6 +73,7 @@ public class FabricItems {
         ModItems.MATCH = MATCH;
         ModItems.MATCH_BUNDLE = MATCH_BUNDLE;
         ModItems.GASOLINE_CAN = GASOLINE_CAN;
+        ModItems.GASOLINE_BUCKET = GASOLINE_BUCKET;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;

@@ -2,8 +2,10 @@ package net.hydra.jojomod.entity.projectile;
 
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
+import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -43,6 +45,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -100,6 +103,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                 SoundEvent $$6 = SoundEvents.WOOD_STEP;
                 this.playSound($$6, 0.5F, 2F);
             }
+            scatterGoo($$0.getBlockPos());
             this.discard();
         } else {
             SoundEvent $$6 = ModSounds.CAN_BOUNCE_EVENT;
@@ -114,6 +118,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                     pitch = 0.9F;
                 }
             }
+            scatterGoo($$0.getBlockPos());
             this.playSound($$6, volume, pitch);
             this.setDeltaMovement(this.getDeltaMovement().x*0.9, 0.18+(0.04*bounces), this.getDeltaMovement().z*0.9);
 
@@ -146,6 +151,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                 $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
             }
             this.playSound($$6, 0.8F, 1.6F);
+            scatterGoo($$0.getEntity().getOnPos());
             this.discard();
         }
 
@@ -172,7 +178,38 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     }
 
     public void setGoo(BlockPos pos, int offsetX, int offsetZ, int level){
-        this.level().setBlock(new BlockPos(pos.getX()+offsetX, pos.getY(), pos.getZ() + offsetZ), ModBlocks.GASOLINE_SPLATTER.defaultBlockState(), 1);
+        BlockPos blockPos = null;
+
+        if (canPlaceGoo(pos, offsetX, 0, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY(),pos.getZ()+offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, +1, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()+1,pos.getZ()+offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, +-1, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()+-1,pos.getZ()+offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, -2, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()+-2,pos.getZ()+offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, +2, offsetZ)) {
+            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() + 2, pos.getZ() + offsetZ);
+        }
+        //if (this.level().getBlockState(pos).getBlock())
+        if (blockPos != null) {
+            this.level().setBlock(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), ModBlocks.GASOLINE_SPLATTER.defaultBlockState().setValue(BlockStateProperties.LEVEL, Integer.valueOf(level)), 1);
+            Block blk = this.level().getBlockState(pos).getBlock();
+        }
+    }
+    //this.level().setBlock(new BlockPos(pos.getX() + offsetX, pos.getY(), pos.getZ() + offsetZ), ModBlocks.GASOLINE_SPLATTER.defaultBlockState(), 1);
+
+    public boolean canPlaceGoo(BlockPos pos, int offsetX, int offsetY, int offsetZ){
+        BlockPos blk =  new BlockPos(pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ);
+
+        if (this.level().isEmptyBlock(blk)) {
+            BlockPos $$8 = blk.below();
+            if (this.level().getBlockState($$8).isFaceSturdy(this.level(), $$8, Direction.UP)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
