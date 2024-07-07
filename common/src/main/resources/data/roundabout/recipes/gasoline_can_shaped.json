@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "C":
+    {
+      "item": "minecraft:coal"
+    }
+  },
+  "pattern": [
+    " N",
+    "CC",
+    "II"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:gasoline_can"
+  },
+  "show_notification": true
+}

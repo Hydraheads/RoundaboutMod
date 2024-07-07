@@ -89,21 +89,9 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                 SoundEvent $$6 = ModSounds.CAN_BOUNCE_END_EVENT;
                 this.playSound($$6, 1F, 1F);
 
+                scatterGoo($$0.getBlockPos());
             }
-            BlockState state = this.level().getBlockState($$0.getBlockPos());
-            Block block = state.getBlock();
 
-
-            if (((IFireBlock) Blocks.FIRE).roundabout$canBurn(state)) {
-                if (block instanceof TntBlock) {
-                    this.level().removeBlock($$0.getBlockPos(), false);
-                    TntBlock.explode(this.level(), $$0.getBlockPos());
-                }
-            } else {
-                SoundEvent $$6 = SoundEvents.WOOD_STEP;
-                this.playSound($$6, 0.5F, 2F);
-            }
-            scatterGoo($$0.getBlockPos());
             this.discard();
         } else {
             SoundEvent $$6 = ModSounds.CAN_BOUNCE_EVENT;
@@ -159,42 +147,49 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
 
     public void scatterGoo(BlockPos pos){
-        setGoo(pos, 0, 0, 0);
+        if (!this.level().isClientSide) {
+            if (bounces == 2 || bounces == 1) {
+                setGoo(pos, 0, 0, 0);
 
-        setGoo(pos, 1, 0, 1);
-        setGoo(pos, -1, 0, 1);
-        setGoo(pos, 0, 1, 1);
-        setGoo(pos, 0, -1, 1);
+                setGoo(pos, 1, 0, 1);
+                setGoo(pos, -1, 0, 1);
+                setGoo(pos, 0, 1, 1);
+                setGoo(pos, 0, -1, 1);
 
-        setGoo(pos, 2, 0, 2);
-        setGoo(pos, -2, 0, 2);
-        setGoo(pos, 0, 2, 2);
-        setGoo(pos, 0, -2, 2);
+                setGoo(pos, 2, 0, 2);
+                setGoo(pos, -2, 0, 2);
+                setGoo(pos, 0, 2, 2);
+                setGoo(pos, 0, -2, 2);
 
-        setGoo(pos, 1, 1, 2);
-        setGoo(pos, -1, 1, 2);
-        setGoo(pos, 1, -1, 2);
-        setGoo(pos, -1, -1, 2);
+                setGoo(pos, 1, 1, 2);
+                setGoo(pos, -1, 1, 2);
+                setGoo(pos, 1, -1, 2);
+                setGoo(pos, -1, -1, 2);
+            } else if (bounces == 0) {
+                setGoo(pos, 0, 0, 1);
+
+                setGoo(pos, 1, 0, 2);
+                setGoo(pos, -1, 0, 2);
+                setGoo(pos, 0, 1, 2);
+                setGoo(pos, 0, -1, 2);
+            }
+        }
     }
 
     public void setGoo(BlockPos pos, int offsetX, int offsetZ, int level){
         BlockPos blockPos = null;
-
-        if (canPlaceGoo(pos, offsetX, 0, offsetZ)){
+        if (canPlaceGoo(pos, offsetX, +1, offsetZ)) {
+            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() + 1, pos.getZ() + offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, +2, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY() + 2,pos.getZ()+offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, 0, offsetZ)){
             blockPos = new BlockPos(pos.getX()+offsetX,pos.getY(),pos.getZ()+offsetZ);
-        } else if (canPlaceGoo(pos, offsetX, +1, offsetZ)){
-            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()+1,pos.getZ()+offsetZ);
-        } else if (canPlaceGoo(pos, offsetX, +-1, offsetZ)){
-            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()+-1,pos.getZ()+offsetZ);
-        } else if (canPlaceGoo(pos, offsetX, -2, offsetZ)){
-            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()+-2,pos.getZ()+offsetZ);
-        } else if (canPlaceGoo(pos, offsetX, +2, offsetZ)) {
-            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() + 2, pos.getZ() + offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, -1, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()-1,pos.getZ()+offsetZ);
         }
         //if (this.level().getBlockState(pos).getBlock())
         if (blockPos != null) {
-            this.level().setBlock(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), ModBlocks.GASOLINE_SPLATTER.defaultBlockState().setValue(BlockStateProperties.LEVEL, Integer.valueOf(level)), 1);
-            Block blk = this.level().getBlockState(pos).getBlock();
+            this.level().setBlockAndUpdate(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), ModBlocks.GASOLINE_SPLATTER.defaultBlockState().setValue(ModBlocks.GAS_CAN_LEVEL, Integer.valueOf(level)));
         }
     }
     //this.level().setBlock(new BlockPos(pos.getX() + offsetX, pos.getY(), pos.getZ() + offsetZ), ModBlocks.GASOLINE_SPLATTER.defaultBlockState(), 1);

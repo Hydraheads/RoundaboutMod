@@ -53,7 +53,7 @@ public class GasolineCanItem extends Item implements Vanishable {
                         hand.shrink(1);
                     }
                 }
-        $$2.getCooldowns().addCooldown(this, 20);
+        $$2.getCooldowns().addCooldown(this, 40);
                 $$2.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResultHolder.consume(hand);
     }

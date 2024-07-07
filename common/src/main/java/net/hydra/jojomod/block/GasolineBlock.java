@@ -24,7 +24,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class GasolineBlock extends Block {
-        public static final IntegerProperty LEVEL = BlockStateProperties.LEVEL;
+        public static final IntegerProperty LEVEL = ModBlocks.GAS_CAN_LEVEL;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
         public static final int MAX_AGE = 15;
         protected static final VoxelShape SHAPE = Block.box(0.0, 0.001, 0.0, 16.0, 1.0, 16.0);
