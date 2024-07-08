@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -21,5 +22,6 @@ public class ModBlocks {
     public static Block GASOLINE_SPLATTER;
 
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
+    public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
 
 }

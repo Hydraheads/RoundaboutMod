@@ -34,6 +34,7 @@ public class FabricBlocks {
                             .replaceable()
                             .pushReaction(PushReaction.DESTROY)
                             .ignitedByLava()
+                            .speedFactor(0.4F)
             )
     );
 

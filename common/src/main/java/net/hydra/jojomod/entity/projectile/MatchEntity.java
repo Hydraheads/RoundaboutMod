@@ -4,11 +4,13 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
+import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.mixin.ZFireBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
@@ -57,8 +59,11 @@ public class MatchEntity extends ThrowableItemProjectile {
         BlockState state = this.level().getBlockState($$0.getBlockPos());
         Block block = state.getBlock();
 
-
-        if(((IFireBlock)Blocks.FIRE).roundabout$canBurn(state)){
+        if (block instanceof GasolineBlock) {
+            if (!this.level().isClientSide) {
+                ((GasolineBlock) block).prime(state, (ServerLevel) this.level(), $$0.getBlockPos(), 0);
+            }
+        } else if(((IFireBlock)Blocks.FIRE).roundabout$canBurn(state)){
             if (block instanceof TntBlock) {
                 this.level().removeBlock($$0.getBlockPos(), false);
                 TntBlock.explode(this.level(), $$0.getBlockPos());
