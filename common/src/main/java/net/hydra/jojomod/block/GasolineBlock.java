@@ -2,7 +2,9 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,6 +13,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -100,7 +103,18 @@ public class GasolineBlock extends Block {
                         2, 0.0, 0.0, 0.0, 0.4);
             if (iteration == 0){
                 SoundEvent $$6 = ModSounds.GASOLINE_EXPLOSION_EVENT;
-                level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 1F, 1F);
+                level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 10F, 1F);
+            }
+
+            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
+                    blkPos.getZ(), 1, 2, 1));
+            if (!entities.isEmpty()) {
+                for (Entity value : entities) {
+                    if (!value.fireImmune()) {
+                        value.setSecondsOnFire(10);
+                        value.hurt(level.damageSources().onFire(),15);
+                    }
+                }
             }
         }
 
@@ -134,6 +148,8 @@ public class GasolineBlock extends Block {
                 }
             }
         }
+
+
     }
 
     private static int getGooTickDelay(RandomSource $$0) {

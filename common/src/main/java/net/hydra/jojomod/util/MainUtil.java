@@ -8,11 +8,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainUtil {
     /**Additional math functions for the mod.*/
@@ -31,6 +35,29 @@ public class MainUtil {
     }public static float controlledLerpRadianDegrees(float delta, float start, float end, float multiplier) {
         delta = Math.min(delta,1);
         return start + (delta * wrapRadians(end - start))*multiplier;
+    }
+
+
+    public static List<Entity> genHitbox(Level level, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {
+        double k = Mth.floor(startX - radiusX);
+        double l = Mth.floor(startX + radiusX);
+        double r = (startY - radiusY);
+        double s = (startY + radiusY);
+        double t = (startZ - radiusZ);
+        double u = (startZ + radiusZ);
+        return level.getEntities(null, new AABB(k, r, t, l, s, u));
+    }
+
+    public static List<net.minecraft.world.entity.Entity> hitbox(List<net.minecraft.world.entity.Entity> entities){
+
+        List<net.minecraft.world.entity.Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive()){
+                hitEntities.remove(value);
+            }
+        }
+        return hitEntities;
     }
 
     public static float wrapRadians(float radians) {
