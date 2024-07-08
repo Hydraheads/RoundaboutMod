@@ -1,13 +1,21 @@
 package net.hydra.jojomod.block;
 
+import com.google.common.collect.Sets;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -20,34 +28,41 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 public class GasolineBlock extends Block {
-        public static final IntegerProperty LEVEL = ModBlocks.GAS_CAN_LEVEL;
-        public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
-        public static final BooleanProperty IGNITED = ModBlocks.IGNITED;
-        public static final int MAX_AGE = 15;
-        protected static final VoxelShape SHAPE = Block.box(0.0, 0.001, 0.0, 16.0, 1.0, 16.0);
+    public static final IntegerProperty LEVEL = ModBlocks.GAS_CAN_LEVEL;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
+    public static final BooleanProperty IGNITED = ModBlocks.IGNITED;
+    public static final int MAX_AGE = 15;
+    protected static final VoxelShape SHAPE = Block.box(0.0, 0.001, 0.0, 16.0, 1.0, 16.0);
     protected static final VoxelShape SHAPE_SMALL = Block.box(0.0, 0.001, 0.0, 16.0, 0.002, 16.0);
 
-        public GasolineBlock(BlockBehaviour.Properties $$0) {
-            super($$0);
-            this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0))
-                    .setValue(AGE, Integer.valueOf(0))
-                    .setValue(IGNITED, Boolean.valueOf(false))
-            );
-        }
-        public GasolineBlock(BlockBehaviour.Properties $$0, int stage) {
-            super($$0);
-            this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(stage))
-                    .setValue(AGE, Integer.valueOf(0))
-                    .setValue(IGNITED, Boolean.valueOf(false))
-            );
-        }
+    public GasolineBlock(BlockBehaviour.Properties $$0) {
+        super($$0);
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0))
+                .setValue(AGE, Integer.valueOf(0))
+                .setValue(IGNITED, Boolean.valueOf(false))
+        );
+    }
+    public GasolineBlock(BlockBehaviour.Properties $$0, int stage) {
+        super($$0);
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(stage))
+                .setValue(AGE, Integer.valueOf(0))
+                .setValue(IGNITED, Boolean.valueOf(false))
+        );
+    }
 
     @SuppressWarnings("deprecation")
     @Override
@@ -79,21 +94,53 @@ public class GasolineBlock extends Block {
         }
         return SHAPE;
     }
-    public void gasExplode(BlockState $$0, ServerLevel $$1, BlockPos $$2){
-            if (!$$1.isClientSide){
-        $$1.sendParticles(ParticleTypes.FLAME, $$2.getX(), $$2.getY(), $$2.getZ(),
-                10, 0.0, 0.0, 0.0, 0.2);
+    public void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration){
+        if (!level.isClientSide){
+            level.sendParticles(ParticleTypes.LAVA, blkPos.getX() + 0.5, blkPos.getY(), blkPos.getZ() + 0.5,
+                        2, 0.0, 0.0, 0.0, 0.4);
+            if (iteration == 0){
+                SoundEvent $$6 = ModSounds.GASOLINE_EXPLOSION_EVENT;
+                level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 1F, 1F);
             }
-        $$1.removeBlock($$2, false);
+        }
+
+        level.removeBlock(blkPos, false);
+
+        Set<BlockPos> gasList = Sets.newHashSet();
+        if (!level.isClientSide && iteration < 8) {
+            for (int x = -4; x < 4; x++) {
+                for (int y = -4; y < 4; y++) {
+                    for (int z = -4; z < 4; z++) {
+                        BlockPos blkPo2 = new BlockPos(blkPos.getX() + x, blkPos.getY()+y, blkPos.getZ() + z);
+                        BlockState state = level.getBlockState(blkPo2);
+                        Block block = state.getBlock();
+
+                        if (block instanceof GasolineBlock) {
+                            boolean ignited = state.getValue(IGNITED);
+                            if (!ignited){
+                                state = state.setValue(IGNITED, Boolean.valueOf(true));
+                                level.setBlock(blkPo2, state, 1);
+                                gasList.add(blkPo2);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!gasList.isEmpty()) {
+                for (BlockPos gasPuddle : gasList) {
+                    BlockState state = level.getBlockState(gasPuddle);
+                    Block block = state.getBlock();
+                    ((GasolineBlock) block).prime(state, level, gasPuddle, iteration + 1);
+                }
+            }
+        }
     }
 
     private static int getGooTickDelay(RandomSource $$0) {
         return 15 + $$0.nextInt(10);
     }
     public void prime(BlockState $$0, ServerLevel $$1, BlockPos $$2, int iteration){
-        $$0 = $$0.setValue(IGNITED, Boolean.valueOf(true));
-        $$1.setBlock($$2, $$0, 4);
-        gasExplode($$0, $$1, $$2);
+        gasExplode($$0, $$1, $$2,iteration);
     }
 
 
@@ -102,13 +149,10 @@ public class GasolineBlock extends Block {
     public void onPlace(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
         super.onPlace($$0, $$1, $$2, $$3, $$4);
         if (!$$1.isClientSide) {
-           if (!$$0.getValue(IGNITED)) {
-               $$1.scheduleTick($$2, this, 1);
-           } else {
-               Roundabout.LOGGER.info("Ignition");
-           }
+            $$1.scheduleTick($$2, this, 1);
         }
     }
+
     @SuppressWarnings("deprecation")
     @Override
     public void tick(BlockState $$0, ServerLevel $$1, BlockPos $$2, RandomSource $$3) {

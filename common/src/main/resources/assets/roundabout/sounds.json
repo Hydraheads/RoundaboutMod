@@ -65,6 +65,12 @@
       "roundabout:knife_impact"
     ]
   },
+  "gasoline_explosion": {
+    "subtitle": "sounds.roundabout.gasoline_explosion",
+    "sounds": [
+      "roundabout:gasoline_explosion"
+    ]
+  },
   "can_bounce": {
     "subtitle": "sounds.roundabout.can_bounce",
     "sounds": [

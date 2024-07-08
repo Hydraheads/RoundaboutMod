@@ -33,6 +33,6 @@ public class ForgeBlocks {
                             .replaceable()
                             .pushReaction(PushReaction.DESTROY)
                             .ignitedByLava()
-                            .speedFactor(0.4F)
+                            .speedFactor(0.6F)
             ));
 }

@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.mixin.ZFireBlock;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -61,6 +62,7 @@ public class MatchEntity extends ThrowableItemProjectile {
 
         if (block instanceof GasolineBlock) {
             if (!this.level().isClientSide) {
+
                 ((GasolineBlock) block).prime(state, (ServerLevel) this.level(), $$0.getBlockPos(), 0);
             }
         } else if(((IFireBlock)Blocks.FIRE).roundabout$canBurn(state)){
