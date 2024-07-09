@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -34,6 +36,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -111,8 +114,8 @@ public class GasolineBlock extends Block {
             if (!entities.isEmpty()) {
                 for (Entity value : entities) {
                     if (!value.fireImmune()) {
-                        value.setSecondsOnFire(10);
-                        value.hurt(level.damageSources().onFire(),15);
+                        value.setSecondsOnFire(15);
+                        value.hurt(level.damageSources().onFire(),16);
                     }
                 }
             }
@@ -144,7 +147,7 @@ public class GasolineBlock extends Block {
                 for (BlockPos gasPuddle : gasList) {
                     BlockState state = level.getBlockState(gasPuddle);
                     Block block = state.getBlock();
-                    ((GasolineBlock) block).prime(state, level, gasPuddle, iteration + 1);
+                    ((GasolineBlock) block).gasExplode(state, level, gasPuddle, iteration + 1);
                 }
             }
         }
@@ -154,9 +157,6 @@ public class GasolineBlock extends Block {
 
     private static int getGooTickDelay(RandomSource $$0) {
         return 15 + $$0.nextInt(10);
-    }
-    public void prime(BlockState $$0, ServerLevel $$1, BlockPos $$2, int iteration){
-        gasExplode($$0, $$1, $$2,iteration);
     }
 
 
@@ -188,6 +188,18 @@ public class GasolineBlock extends Block {
             if ($$6 == 15 && $$3.nextInt(4) == 0) {
                 $$1.removeBlock($$2, false);
             }
+    }
+
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onProjectileHit(Level $$0, BlockState $$1, BlockHitResult $$2, Projectile $$3) {
+        if (!$$0.isClientSide) {
+            BlockPos $$4 = $$2.getBlockPos();
+            if (($$3.isOnFire() || $$3 instanceof MatchEntity) && $$3.mayInteract($$0, $$4)) {
+                this.gasExplode($$1, (ServerLevel) $$0, $$4, 0);
+            }
+        }
     }
 
     @Override

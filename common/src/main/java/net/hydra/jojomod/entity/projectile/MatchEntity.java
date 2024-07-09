@@ -61,10 +61,7 @@ public class MatchEntity extends ThrowableItemProjectile {
         Block block = state.getBlock();
 
         if (block instanceof GasolineBlock) {
-            if (!this.level().isClientSide) {
-
-                ((GasolineBlock) block).prime(state, (ServerLevel) this.level(), $$0.getBlockPos(), 0);
-            }
+            this.discard();
         } else if(((IFireBlock)Blocks.FIRE).roundabout$canBurn(state)){
             if (block instanceof TntBlock) {
                 this.level().removeBlock($$0.getBlockPos(), false);
