@@ -4,6 +4,7 @@ package net.hydra.jojomod.util;
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -64,6 +65,17 @@ public class MainUtil {
         };
         for (Entity value : entities) {
             if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive()){
+                hitEntities.remove(value);
+            }
+        }
+        return hitEntities;
+    }
+    public static List<net.minecraft.world.entity.Entity> hitboxGas(List<net.minecraft.world.entity.Entity> entities){
+
+        List<net.minecraft.world.entity.Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if ((!value.showVehicleHealth() && !(value instanceof GasolineCanEntity)) || value.isInvulnerable() || !value.isAlive()){
                 hitEntities.remove(value);
             }
         }
@@ -138,10 +150,15 @@ public class MainUtil {
                 level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 10F, 1F);
             }
 
-            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
+            List<Entity> entities = MainUtil.hitboxGas(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
                     blkPos.getZ(), hitRadius, hitRadius+1, hitRadius));
             if (!entities.isEmpty()) {
                 for (Entity value : entities) {
+                    if (value instanceof GasolineCanEntity){
+                        value.remove(Entity.RemovalReason.DISCARDED);
+                        gasExplode(null, level, value.getOnPos(), iteration + 1, 1, blockRadius, 16);
+                        break;
+                    }
                     if (!value.fireImmune()) {
                         value.setSecondsOnFire(15);
                         value.hurt(level.damageSources().onFire(),power);
