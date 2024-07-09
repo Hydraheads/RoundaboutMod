@@ -1,9 +1,16 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
+import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -47,8 +54,18 @@ public class ZFireBlock implements IFireBlock {
     }
 
 
+    @Inject(method = "checkBurnOut", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;", ordinal = 1, shift = At.Shift.AFTER), cancellable = true)
+    public void roundabout$checkBurnOut(Level $$0, BlockPos $$1, int $$2, RandomSource $$3, int $$4, CallbackInfo ci) {
+        BlockState blkSt = $$0.getBlockState($$1);
+        Block blk = blkSt.getBlock();
+        if (blk instanceof GasolineBlock){
+            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 1, 4, 10);
+            ci.cancel();
+        }
+    }
+
     /**Register Flammable blocks here*/
     public void roundabout$bootstrap() {
-        //this.roundabout$setFlammableBlock(ModBlocks.GASOLINE_SPLATTER, 15, 100);
+        this.roundabout$setFlammableBlock(ModBlocks.GASOLINE_SPLATTER, 15, 100);
     }
 }
