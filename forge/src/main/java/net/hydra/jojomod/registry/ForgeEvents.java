@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
@@ -8,6 +9,8 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
@@ -57,6 +60,9 @@ public class ForgeEvents {
 
         ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
         ModBlocks.GASOLINE_SPLATTER = ForgeBlocks.GASOLINE_SPLATTER.get();
+
+        FireBlock fire = (FireBlock) Blocks.FIRE;
+        ((IFireBlock) fire).roundabout$bootstrap();
 
 
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();

@@ -1,26 +1,21 @@
 package net.hydra.jojomod.block;
 
-import com.google.common.collect.Sets;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.enchantment.ProtectionEnchantment;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -33,19 +28,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public class GasolineBlock extends Block {
     public static final IntegerProperty LEVEL = ModBlocks.GAS_CAN_LEVEL;
@@ -53,7 +39,7 @@ public class GasolineBlock extends Block {
     public static final BooleanProperty IGNITED = ModBlocks.IGNITED;
     public static final int MAX_AGE = 15;
     protected static final VoxelShape SHAPE = Block.box(0.0, 0.001, 0.0, 16.0, 1.0, 16.0);
-    protected static final VoxelShape SHAPE_SMALL = Block.box(0.0, 0.001, 0.0, 16.0, 0.002, 16.0);
+    protected static final VoxelShape SHAPE_SMALL = Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
     public GasolineBlock(BlockBehaviour.Properties $$0) {
         super($$0);
@@ -143,9 +129,19 @@ public class GasolineBlock extends Block {
         if (!$$0.isClientSide) {
             BlockPos $$4 = $$2.getBlockPos();
             if (($$3.isOnFire() || $$3 instanceof MatchEntity) && $$3.mayInteract($$0, $$4)) {
-                MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 1, 4, 16);
+                float power = 16F;
+                if ($$3 instanceof MatchEntity && ((MatchEntity)$$3).isBundle){
+                    power = 18F;
+                }
+                MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 1, 4, power);
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean isCollisionShapeFullBlock(BlockState p_262062_, BlockGetter p_261848_, BlockPos p_261466_) {
+        return false;
     }
 
     @Override
@@ -154,4 +150,30 @@ public class GasolineBlock extends Block {
         $$0.add(AGE);
         $$0.add(IGNITED);
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
+        ItemStack $$6 = $$3.getItemInHand($$4);
+        if (!$$6.is(Items.FLINT_AND_STEEL) && !$$6.is(Items.FIRE_CHARGE)) {
+            return super.use($$0, $$1, $$2, $$3, $$4, $$5);
+        } else {
+            if (!$$1.isClientSide) {
+                MainUtil.gasExplode($$0, (ServerLevel) $$1, $$2, 0, 1, 4, 13);
+            }
+            $$1.setBlock($$2, Blocks.AIR.defaultBlockState(), 11);
+            Item $$7 = $$6.getItem();
+            if (!$$3.isCreative()) {
+                if ($$6.is(Items.FLINT_AND_STEEL)) {
+                    $$6.hurtAndBreak(1, $$3, $$1x -> $$1x.broadcastBreakEvent($$4));
+                } else {
+                    $$6.shrink(1);
+                }
+            }
+
+            $$3.awardStat(Stats.ITEM_USED.get($$7));
+            return InteractionResult.sidedSuccess($$1.isClientSide);
+        }
+    }
+
 }

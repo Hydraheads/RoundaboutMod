@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.core.Registry;
@@ -9,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -52,5 +55,7 @@ public class FabricBlocks {
     public static void register(){
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
+        FireBlock fire = (FireBlock) Blocks.FIRE;
+        ((IFireBlock) fire).roundabout$bootstrap();
     }
 }

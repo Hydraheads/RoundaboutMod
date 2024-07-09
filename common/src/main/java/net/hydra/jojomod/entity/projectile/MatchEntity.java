@@ -53,6 +53,8 @@ public class MatchEntity extends ThrowableItemProjectile {
         return ModItems.MATCH;
     }
 
+    public boolean isBundle = false;
+
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);

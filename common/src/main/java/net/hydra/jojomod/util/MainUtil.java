@@ -156,7 +156,7 @@ public class MainUtil {
                 for (Entity value : entities) {
                     if (value instanceof GasolineCanEntity){
                         value.remove(Entity.RemovalReason.DISCARDED);
-                        gasExplode(null, level, value.getOnPos(), iteration + 1, 1, blockRadius, 16);
+                        gasExplode(null, level, value.getOnPos(), iteration + 1, 1, blockRadius, power);
                         break;
                     }
                     if (!value.fireImmune()) {
@@ -194,7 +194,7 @@ public class MainUtil {
             if (!gasList.isEmpty()) {
                 for (BlockPos gasPuddle : gasList) {
                     BlockState state = level.getBlockState(gasPuddle);
-                    gasExplode(state, level, gasPuddle, iteration + 1, hitRadius, blockRadius, 16);
+                    gasExplode(state, level, gasPuddle, iteration + 1, hitRadius, blockRadius, power);
                 }
             }
         }

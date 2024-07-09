@@ -1,14 +1,20 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IFireBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
@@ -23,6 +29,14 @@ public class ZFireBlock implements IFireBlock {
         return true;
     }
 
+    @Shadow
+    private void setFlammable(Block $$0, int $$1, int $$2) {
+    }
+    @Override
+    public void roundabout$setFlammableBlock(Block $$0, int $$1, int $$2) {
+        this.setFlammable($$0, $$1, $$2);
+    }
+
     @Override
     public int roundabout$getBurnOdds(BlockState $$0){
         return getBurnOdds($$0);
@@ -32,4 +46,9 @@ public class ZFireBlock implements IFireBlock {
         return canBurn($$0);
     }
 
+
+    /**Register Flammable blocks here*/
+    public void roundabout$bootstrap() {
+        //this.roundabout$setFlammableBlock(ModBlocks.GASOLINE_SPLATTER, 15, 100);
+    }
 }

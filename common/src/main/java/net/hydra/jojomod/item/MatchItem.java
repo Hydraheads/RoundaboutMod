@@ -24,7 +24,7 @@ public class MatchItem extends Item implements Vanishable {
 
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 2.0F;
-    public static final float SHOOT_POWER = 0.7F;
+    public static final float SHOOT_POWER = 0.8F;
 
     public MatchItem(Properties $$0) {
         super($$0);
@@ -57,6 +57,7 @@ public class MatchItem extends Item implements Vanishable {
 
                         MatchEntity $$7 = new MatchEntity($$4, $$1);
                         if (bundle){
+                            $$7.isBundle = true;
                             $$7.shootFromRotationWithVariance($$4, $$4.getXRot(), $$4.getYRot(), -3F, SHOOT_POWER, 1.0F);
                         } else {
                             $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), -3F, SHOOT_POWER, 1.0F);
