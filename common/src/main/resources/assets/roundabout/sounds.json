@@ -71,6 +71,12 @@
       "roundabout:gasoline_explosion"
     ]
   },
+  "gas_can_throw": {
+    "subtitle": "sounds.roundabout.gas_can_throw",
+    "sounds": [
+      "roundabout:gas_can_throw"
+    ]
+  },
   "can_bounce": {
     "subtitle": "sounds.roundabout.can_bounce",
     "sounds": [

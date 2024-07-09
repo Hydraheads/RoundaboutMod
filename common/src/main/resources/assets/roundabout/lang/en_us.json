@@ -12,7 +12,7 @@
   "item.roundabout.match": "Match",
   "item.roundabout.match_bundle": "Match Bundle",
   "item.roundabout.gasoline_can": "Gasoline Can",
-  "item.roundabout.gasoline_bucket": "Bucket of Gasoline",
+  "item.roundabout.gasoline_bucket": "Bucket of Gasoline Splatter",
 
   "text.roundabout.meteorite": "Meteorite",
 
@@ -100,6 +100,7 @@
 
 
   "sounds.roundabout.can_bounce": "Thunk",
-  "sounds.roundabout.can_bounce_end": "Gasoline Can thunk",
-  "sounds.roundabout.gasoline_explosion": "Gasoline combusts"
+  "sounds.roundabout.can_bounce_end": "Gasoline can thunk",
+  "sounds.roundabout.gasoline_explosion": "Gasoline combusts",
+  "sounds.roundabout.gas_can_throw": "Gasoline can thrown"
 }

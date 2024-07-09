@@ -178,6 +178,10 @@ public class ModSounds {
     public static final String GASOLINE_EXPLOSION = "gasoline_explosion";
     public static final ResourceLocation GASOLINE_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GASOLINE_EXPLOSION);
     public static SoundEvent GASOLINE_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(GASOLINE_EXPLOSION_ID);
+    public static final String GAS_CAN_THROW = "gas_can_throw";
+    public static final ResourceLocation GAS_CAN_THROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GAS_CAN_THROW);
+    public static SoundEvent GAS_CAN_THROW_EVENT = SoundEvent.createVariableRangeEvent(GAS_CAN_THROW_ID);
+
 
     public static void registerSoundEvents(){
     }

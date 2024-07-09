@@ -2,7 +2,9 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -48,7 +50,7 @@ public class GasolineCanItem extends Item implements Vanishable {
                     $$7.shootFromRotation($$2, $$2.getXRot(), $$2.getYRot(), -25F, SHOOT_POWER, 1.0F);
 
                     $$1.addFreshEntity($$7);
-                    $$1.playSound(null, $$7, SoundEvents.EGG_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    $$1.playSound(null, $$7, ModSounds.GAS_CAN_THROW_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
                     if (!$$2.getAbilities().instabuild) {
                         hand.shrink(1);
                     }
