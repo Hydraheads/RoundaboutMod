@@ -181,6 +181,9 @@ public class ModSounds {
     public static final String GAS_CAN_THROW = "gas_can_throw";
     public static final ResourceLocation GAS_CAN_THROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GAS_CAN_THROW);
     public static SoundEvent GAS_CAN_THROW_EVENT = SoundEvent.createVariableRangeEvent(GAS_CAN_THROW_ID);
+    public static final String MATCH_THROW = "match_throw";
+    public static final ResourceLocation MATCH_THROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MATCH_THROW);
+    public static SoundEvent MATCH_THROW_EVENT = SoundEvent.createVariableRangeEvent(MATCH_THROW_ID);
 
 
     public static void registerSoundEvents(){

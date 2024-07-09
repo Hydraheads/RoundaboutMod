@@ -102,5 +102,6 @@
   "sounds.roundabout.can_bounce": "Thunk",
   "sounds.roundabout.can_bounce_end": "Gasoline can thunk",
   "sounds.roundabout.gasoline_explosion": "Gasoline combusts",
-  "sounds.roundabout.gas_can_throw": "Gasoline can thrown"
+  "sounds.roundabout.gas_can_throw": "Gasoline can thrown",
+  "sounds.roundabout.match_throw": "Match thrown"
 }

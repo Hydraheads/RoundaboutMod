@@ -2,6 +2,7 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -63,7 +64,7 @@ public class MatchItem extends Item implements Vanishable {
 
                         $$1.addFreshEntity($$7);
                         if (i == 0){
-                            $$1.playSound(null, $$7, SoundEvents.EGG_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            $$1.playSound(null, $$7, ModSounds.MATCH_THROW_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
                         }
                     }
                     if (!$$4.getAbilities().instabuild) {

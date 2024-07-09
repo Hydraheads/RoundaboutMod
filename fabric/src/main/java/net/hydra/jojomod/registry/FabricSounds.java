@@ -63,5 +63,6 @@ public class FabricSounds {
         addSound(ModSounds.CAN_BOUNCE_END_ID, ModSounds.CAN_BOUNCE_END_EVENT);
         addSound(ModSounds.GASOLINE_EXPLOSION_ID, ModSounds.GASOLINE_EXPLOSION_EVENT);
         addSound(ModSounds.GAS_CAN_THROW_ID, ModSounds.GAS_CAN_THROW_EVENT);
+        addSound(ModSounds.MATCH_THROW_ID, ModSounds.MATCH_THROW_EVENT);
     }
 }

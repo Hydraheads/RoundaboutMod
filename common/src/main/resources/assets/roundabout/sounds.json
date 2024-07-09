@@ -77,6 +77,12 @@
       "roundabout:gas_can_throw"
     ]
   },
+  "match_throw": {
+    "subtitle": "sounds.roundabout.match_throw",
+    "sounds": [
+      "roundabout:match_throw"
+    ]
+  },
   "can_bounce": {
     "subtitle": "sounds.roundabout.can_bounce",
     "sounds": [

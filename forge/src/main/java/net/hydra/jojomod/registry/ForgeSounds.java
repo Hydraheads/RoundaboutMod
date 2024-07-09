@@ -101,6 +101,8 @@ public class ForgeSounds {
             register(ModSounds.GASOLINE_EXPLOSION, ModSounds.GASOLINE_EXPLOSION_ID);
     public static final RegistryObject<SoundEvent> GAS_CAN_THROW =
             register(ModSounds.GAS_CAN_THROW, ModSounds.GAS_CAN_THROW_ID);
+    public static final RegistryObject<SoundEvent> MATCH_THROW =
+            register(ModSounds.MATCH_THROW, ModSounds.MATCH_THROW_ID);
 
     public static RegistryObject<SoundEvent> register(String id, ResourceLocation id2){
         return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(id2));
