@@ -6,8 +6,11 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -44,6 +47,13 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         int spincount = 0;
         if (bounces <= 3){spincount = -15;}
         spinningCanX = Mth.wrapDegrees(spinningCanX+=spincount);
+        if (this.isOnFire() && !this.level().isClientSide){
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
+                    20, 0.0, 0.2, 0.0, 0.2);
+            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, 10);
+            this.discard();
+            return;
+        }
         super.tick();
     }
     @Override

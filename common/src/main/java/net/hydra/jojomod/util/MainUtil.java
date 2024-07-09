@@ -1,22 +1,32 @@
 package net.hydra.jojomod.util;
 
 
+import com.google.common.collect.Sets;
+import net.hydra.jojomod.block.GasolineBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MainUtil {
     /**Additional math functions for the mod.*/
@@ -119,6 +129,61 @@ public class MainUtil {
         return false;
     }
 
+    public static void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration, int hitRadius, int blockRadius, float power){
+        if (!level.isClientSide){
+            level.sendParticles(ParticleTypes.LAVA, blkPos.getX() + 0.5, blkPos.getY(), blkPos.getZ() + 0.5,
+                    2, 0.0, 0.0, 0.0, 0.4);
+            if (iteration == 0){
+                SoundEvent $$6 = ModSounds.GASOLINE_EXPLOSION_EVENT;
+                level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 10F, 1F);
+            }
+
+            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
+                    blkPos.getZ(), hitRadius, hitRadius+1, hitRadius));
+            if (!entities.isEmpty()) {
+                for (Entity value : entities) {
+                    if (!value.fireImmune()) {
+                        value.setSecondsOnFire(15);
+                        value.hurt(level.damageSources().onFire(),power);
+                    }
+                }
+            }
+        }
+
+        if (blk != null) {
+            level.removeBlock(blkPos, false);
+        }
+
+        Set<BlockPos> gasList = Sets.newHashSet();
+        if (!level.isClientSide && iteration < 8) {
+            for (int x = -blockRadius; x < blockRadius; x++) {
+                for (int y = -blockRadius; y < blockRadius; y++) {
+                    for (int z = -blockRadius; z < blockRadius; z++) {
+                        BlockPos blkPo2 = new BlockPos(blkPos.getX() + x, blkPos.getY()+y, blkPos.getZ() + z);
+                        BlockState state = level.getBlockState(blkPo2);
+                        Block block = state.getBlock();
+
+                        if (block instanceof GasolineBlock) {
+                            boolean ignited = state.getValue(GasolineBlock.IGNITED);
+                            if (!ignited){
+                                state = state.setValue(GasolineBlock.IGNITED, Boolean.valueOf(true));
+                                level.setBlock(blkPo2, state, 1);
+                                gasList.add(blkPo2);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!gasList.isEmpty()) {
+                for (BlockPos gasPuddle : gasList) {
+                    BlockState state = level.getBlockState(gasPuddle);
+                    gasExplode(state, level, gasPuddle, iteration + 1, hitRadius, blockRadius, 16);
+                }
+            }
+        }
+
+
+    }
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleBytePacketC2S(Player player, byte data, byte context){

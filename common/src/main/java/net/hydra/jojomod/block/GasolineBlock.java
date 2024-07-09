@@ -100,60 +100,6 @@ public class GasolineBlock extends Block {
         }
         return SHAPE;
     }
-    public void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration){
-        if (!level.isClientSide){
-            level.sendParticles(ParticleTypes.LAVA, blkPos.getX() + 0.5, blkPos.getY(), blkPos.getZ() + 0.5,
-                        2, 0.0, 0.0, 0.0, 0.4);
-            if (iteration == 0){
-                SoundEvent $$6 = ModSounds.GASOLINE_EXPLOSION_EVENT;
-                level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 10F, 1F);
-            }
-
-            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
-                    blkPos.getZ(), 1, 2, 1));
-            if (!entities.isEmpty()) {
-                for (Entity value : entities) {
-                    if (!value.fireImmune()) {
-                        value.setSecondsOnFire(15);
-                        value.hurt(level.damageSources().onFire(),16);
-                    }
-                }
-            }
-        }
-
-        level.removeBlock(blkPos, false);
-
-        Set<BlockPos> gasList = Sets.newHashSet();
-        if (!level.isClientSide && iteration < 8) {
-            for (int x = -4; x < 4; x++) {
-                for (int y = -4; y < 4; y++) {
-                    for (int z = -4; z < 4; z++) {
-                        BlockPos blkPo2 = new BlockPos(blkPos.getX() + x, blkPos.getY()+y, blkPos.getZ() + z);
-                        BlockState state = level.getBlockState(blkPo2);
-                        Block block = state.getBlock();
-
-                        if (block instanceof GasolineBlock) {
-                            boolean ignited = state.getValue(IGNITED);
-                            if (!ignited){
-                                state = state.setValue(IGNITED, Boolean.valueOf(true));
-                                level.setBlock(blkPo2, state, 1);
-                                gasList.add(blkPo2);
-                            }
-                        }
-                    }
-                }
-            }
-            if (!gasList.isEmpty()) {
-                for (BlockPos gasPuddle : gasList) {
-                    BlockState state = level.getBlockState(gasPuddle);
-                    Block block = state.getBlock();
-                    ((GasolineBlock) block).gasExplode(state, level, gasPuddle, iteration + 1);
-                }
-            }
-        }
-
-
-    }
 
     private static int getGooTickDelay(RandomSource $$0) {
         return 15 + $$0.nextInt(10);
@@ -197,7 +143,7 @@ public class GasolineBlock extends Block {
         if (!$$0.isClientSide) {
             BlockPos $$4 = $$2.getBlockPos();
             if (($$3.isOnFire() || $$3 instanceof MatchEntity) && $$3.mayInteract($$0, $$4)) {
-                this.gasExplode($$1, (ServerLevel) $$0, $$4, 0);
+                MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 1, 4, 16);
             }
         }
     }
