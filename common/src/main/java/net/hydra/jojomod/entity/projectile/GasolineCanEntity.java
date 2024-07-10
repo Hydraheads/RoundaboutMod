@@ -117,8 +117,8 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             if (!this.level().isClientSide) {
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
                         20, 0.0, 0.2, 0.0, 0.4);
+                MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 3, 4, 14);
             }
-            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 3, 4, 14);
             this.discard();
             return true;
         }
@@ -197,7 +197,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             }
 
 
-            List<Entity> entities = MainUtil.hitboxGas(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
+            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
                     pos.getZ(), splashRadius, splashRadius, splashRadius));
             if (!entities.isEmpty()) {
                 for (Entity value : entities) {

@@ -31,5 +31,6 @@ public class ModMessages {
     public static final ResourceLocation RESUME_TILE_ENTITY_TS_PACKET = new ResourceLocation(Roundabout.MOD_ID,"tile_entity_resume_s2c_packet");
     public static final ResourceLocation SEND_FLOAT_POWER_DATA_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_float_s2c_packet");
     public static final ResourceLocation SEND_INT_POWER_DATA_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_int_s2c_packet");
+    public static final ResourceLocation SEND_INT_DATA_PACKET = new ResourceLocation(Roundabout.MOD_ID,"int_s2c_packet");
 
 }

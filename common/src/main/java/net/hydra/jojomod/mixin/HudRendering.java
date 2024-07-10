@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
@@ -61,7 +62,7 @@ public abstract class HudRendering implements IHudAccess {
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
         if (this.minecraft.player != null) {
             int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
-
+            Roundabout.LOGGER.info(""+overlay);
             if (overlay > 0) {
                 int maxOverlay = ((StandUser) this.minecraft.player).roundabout$getMaxGasolineTime();
                 float overlay2 = 0;

@@ -25,6 +25,7 @@ public interface IPacketAccess {
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
+    void sendIntPacket(ServerPlayer sp, byte activePower, int data);
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();

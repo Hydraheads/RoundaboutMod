@@ -166,7 +166,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } if (roundabout$postTSHurtTime > 0){
             roundabout$postTSHurtTime--;
         } if (roundabout$gasTicks > -1){
-            roundabout$gasTicks--;
+            roundabout$setGasolineTime(roundabout$gasTicks-1);
         }
         //}
     }
@@ -183,6 +183,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$setGasolineTime(int gasTicks){
         this.roundabout$gasTicks = gasTicks;
+        if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
+            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) (Object) this),(byte) 1, gasTicks);
+        }
     }
 
     /**TS Floating Code*/

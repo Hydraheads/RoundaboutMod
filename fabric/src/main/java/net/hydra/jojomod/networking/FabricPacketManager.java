@@ -37,7 +37,8 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_REMOVAL_PACKET, TimeEventPackets::updateTSRemovalList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.RESUME_TILE_ENTITY_TS_PACKET, TimeEventPackets::updateTileEntityTS);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_FLOAT_POWER_DATA_PACKET, CooldownSyncPacket::sendFloatPower);
-        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_INT_POWER_DATA_PACKET, CooldownSyncPacket::sendIntPower);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_INT_POWER_DATA_PACKET, GenericS2CPacket::sendInt);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_INT_DATA_PACKET, CooldownSyncPacket::sendIntPower);
     }
 
 }
