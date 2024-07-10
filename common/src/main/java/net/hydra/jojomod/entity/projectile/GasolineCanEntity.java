@@ -170,7 +170,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             if (bounces == 2 || bounces == 1) {
 
                 ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                        40, 1, 1, 1, 0.4);
+                        20, 0.8, 0.6, 0.8, 0.4);
                 setGoo(pos, 0, 0, 0);
 
                 setGoo(pos, 1, 0, 1);
@@ -190,7 +190,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             } else if (bounces == 0) {
 
                 ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                        20, 0.5, 0.5, 0.5, 0.4);
+                        10, 0.4, 0.3, 0.4, 0.4);
                 setGoo(pos, 0, 0, 1);
 
                 setGoo(pos, 1, 0, 2);

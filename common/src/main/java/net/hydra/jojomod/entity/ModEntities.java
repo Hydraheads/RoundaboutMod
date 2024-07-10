@@ -4,6 +4,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.GasolineSplatterEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -19,6 +20,7 @@ public class ModEntities {
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
+    public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
 
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");

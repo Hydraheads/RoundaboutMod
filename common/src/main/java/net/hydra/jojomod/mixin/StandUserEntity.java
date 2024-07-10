@@ -117,6 +117,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$gasRenderTicks = -1;
     private int roundabout$maxGasTicks = 200;
+    private int roundabout$maxBucketGasTicks = 600;
 
     /**Idle time is how long you are standing still without using skills, eating, or */
     @Unique
@@ -195,6 +196,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public int roundabout$getMaxGasolineTime(){
         return this.roundabout$maxGasTicks;
+    }
+    @Unique
+    public int roundabout$getMaxBucketGasolineTime(){
+        return this.roundabout$maxBucketGasTicks;
     }
 
     @Unique

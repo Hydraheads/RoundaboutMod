@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.GasolineSplatterEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -53,6 +54,12 @@ public class ForgeEntities {
             ENTITY_TYPES.register("gasoline_can", () ->
                     EntityType.Builder.<GasolineCanEntity>of(GasolineCanEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
                             clientTrackingRange(10).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "match").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can").toString())
+            );
+    public static final RegistryObject<EntityType<GasolineSplatterEntity>> GASOLINE_SPLATTER =
+            ENTITY_TYPES.register("gasoline_splatter", () ->
+                    EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_splatter").toString())
             );
 }
