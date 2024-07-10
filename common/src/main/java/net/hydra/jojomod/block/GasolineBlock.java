@@ -133,7 +133,7 @@ public class GasolineBlock extends Block {
                 if ($$3 instanceof MatchEntity && ((MatchEntity)$$3).isBundle){
                     power = 18F;
                 }
-                MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 1, 4, power);
+                MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 2, 4, power);
             }
         }
     }
@@ -159,7 +159,7 @@ public class GasolineBlock extends Block {
             return super.use($$0, $$1, $$2, $$3, $$4, $$5);
         } else {
             if (!$$1.isClientSide) {
-                MainUtil.gasExplode($$0, (ServerLevel) $$1, $$2, 0, 1, 4, 13);
+                MainUtil.gasExplode($$0, (ServerLevel) $$1, $$2, 0, 2, 4, 13);
             }
             $$1.setBlock($$2, Blocks.AIR.defaultBlockState(), 11);
             Item $$7 = $$6.getItem();

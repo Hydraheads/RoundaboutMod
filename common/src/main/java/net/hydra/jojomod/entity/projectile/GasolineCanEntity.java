@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
@@ -18,6 +19,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -49,12 +52,17 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         spinningCanX = Mth.wrapDegrees(spinningCanX+=spincount);
         if (this.isOnFire() && !this.level().isClientSide){
             ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
-                    20, 0.0, 0.2, 0.0, 0.2);
+                    20, 0.0, 0.2, 0.0, 0.3);
             MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, 10);
             this.discard();
             return;
         }
         super.tick();
+    }
+
+    @Override
+    public boolean canBeHitByProjectile() {
+        return this.isAlive();
     }
     @Override
     protected Item getDefaultItem() {
@@ -92,6 +100,27 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             this.playSound($$6, volume, pitch);
             this.setDeltaMovement(this.getDeltaMovement().x*0.9, 0.18+(0.04*bounces), this.getDeltaMovement().z*0.9);
 
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource $$0, float $$1) {
+
+
+        Entity hurter = $$0.getDirectEntity();
+        if (hurter instanceof AbstractArrow && hurter.isOnFire()){
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
+                    20, 0.0, 0.2, 0.0, 0.4);
+            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 3, 4, 14);
+            this.discard();
+            return true;
+        }
+
+        if (this.isInvulnerableTo($$0)) {
+            return false;
+        } else {
+            this.markHurt();
+            return false;
         }
     }
 

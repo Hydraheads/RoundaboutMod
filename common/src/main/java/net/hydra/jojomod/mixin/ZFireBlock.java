@@ -59,7 +59,7 @@ public class ZFireBlock implements IFireBlock {
         BlockState blkSt = $$0.getBlockState($$1);
         Block blk = blkSt.getBlock();
         if (blk instanceof GasolineBlock){
-            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 1, 4, 10);
+            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 2, 4, 10);
             ci.cancel();
         }
     }
