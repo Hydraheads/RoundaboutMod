@@ -5,17 +5,21 @@ import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,6 +33,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public class GasolineCanEntity extends ThrowableItemProjectile {
@@ -109,8 +114,10 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
         Entity hurter = $$0.getDirectEntity();
         if (hurter instanceof AbstractArrow && hurter.isOnFire()){
-            ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
-                    20, 0.0, 0.2, 0.0, 0.4);
+            if (!this.level().isClientSide) {
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
+                        20, 0.0, 0.2, 0.0, 0.4);
+            }
             MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 3, 4, 14);
             this.discard();
             return true;
@@ -132,16 +139,13 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
         Entity $$4 = this.getOwner();
 
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MATCH, $$4);
+        DamageSource $$5 = ModDamageTypes.of($$1.level(), DamageTypes.MOB_PROJECTILE, $$4);
 
-        SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
-        Vec3 DM = $$1.getDeltaMovement();
 
-        if ($$1.getType() == EntityType.TNT_MINECART) {
-            DamageSource DS = $$1.damageSources().explosion($$1, $$0.getEntity());
-            ((IMinecartTNT)$$1).roundabout$explode(DS, this.getDeltaMovement().lengthSqr());
-            this.discard();
-        } else if ($$1.hurt($$5, $$2)) {
+        this.playSound(ModSounds.CAN_BOUNCE_END_EVENT, 0.8F, 1.6F);
+        scatterGoo($$0.getEntity().getOnPos());
+
+         if ($$1.hurt($$5, $$2)) {
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
@@ -149,9 +153,8 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             if ($$1 instanceof LivingEntity $$7) {
                 $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
             }
-            this.playSound($$6, 0.8F, 1.6F);
-            scatterGoo($$0.getEntity().getOnPos());
-            this.discard();
+
+             this.discard();
         }
 
     }
@@ -159,7 +162,11 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     public void scatterGoo(BlockPos pos){
         if (!this.level().isClientSide) {
+            int splashRadius = 3;
             if (bounces == 2 || bounces == 1) {
+
+                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                        50, 1, 1, 1, 0.4);
                 setGoo(pos, 0, 0, 0);
 
                 setGoo(pos, 1, 0, 1);
@@ -177,12 +184,27 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                 setGoo(pos, 1, -1, 2);
                 setGoo(pos, -1, -1, 2);
             } else if (bounces == 0) {
+
+                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                        25, 0.5, 0.5, 0.5, 0.4);
                 setGoo(pos, 0, 0, 1);
 
                 setGoo(pos, 1, 0, 2);
                 setGoo(pos, -1, 0, 2);
                 setGoo(pos, 0, 1, 2);
                 setGoo(pos, 0, -1, 2);
+                splashRadius = 2;
+            }
+
+
+            List<Entity> entities = MainUtil.hitboxGas(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
+                    pos.getZ(), splashRadius, splashRadius, splashRadius));
+            if (!entities.isEmpty()) {
+                for (Entity value : entities) {
+                    if (value instanceof LivingEntity){
+                        ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                    }
+                }
             }
         }
     }

@@ -109,6 +109,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int GuardCooldown = 0;
 
+
+    @Unique
+    private int roundabout$gasTicks = -1;
+    private int roundabout$maxGasTicks = 300;
+
     /**Idle time is how long you are standing still without using skills, eating, or */
     @Unique
     private int roundaboutIdleTime = -1;
@@ -160,11 +165,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         } if (roundabout$postTSHurtTime > 0){
             roundabout$postTSHurtTime--;
+        } if (roundabout$gasTicks > -1){
+            roundabout$gasTicks--;
         }
         //}
     }
 
+    @Unique
+    public int roundabout$getGasolineTime(){
+        return this.roundabout$gasTicks;
+    }
+    @Unique
+    public int roundabout$getMaxGasolineTime(){
+        return this.roundabout$maxGasTicks;
+    }
 
+    @Unique
+    public void roundabout$setGasolineTime(int gasTicks){
+        this.roundabout$gasTicks = gasTicks;
+    }
 
     /**TS Floating Code*/
     @Unique

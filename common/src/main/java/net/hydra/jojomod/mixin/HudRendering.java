@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IHudAccess;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PlayerRideableJumping;
 import net.minecraft.world.entity.player.Player;
@@ -43,6 +45,10 @@ public abstract class HudRendering implements IHudAccess {
     @Unique
     private boolean roundaboutRedo = false;
 
+    @Shadow
+    protected void renderTextureOverlay(GuiGraphics p_282304_, ResourceLocation p_281622_, float p_281504_) {
+    }
+
     //private void renderHotbar(float tickDelta, DrawContext context) {
 
 
@@ -50,6 +56,26 @@ public abstract class HudRendering implements IHudAccess {
     @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
     private void renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), flashAlpha, otherFlashAlpha);
+    }
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"))
+    private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
+        if (this.minecraft.player != null) {
+            int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
+
+            if (overlay > 0) {
+                int maxOverlay = ((StandUser) this.minecraft.player).roundabout$getMaxGasolineTime();
+                float overlay2 = 0;
+                if (overlay <= 40){
+                    overlay2 = 0.9F - ((float) 40/overlay)*0.9F;
+                } else if (overlay >= maxOverlay-40){
+                    int maxOverlay2 = maxOverlay-40;
+                    overlay2 = 0.9F - ((float) (overlay - maxOverlay2) /40)*0.9F;
+                } else {
+                    overlay2 = 0.9F;
+                }
+                this.renderTextureOverlay($$0, StandIcons.GASOLINE_OVERLAY, overlay2);
+            }
+        }
     }
 
 
