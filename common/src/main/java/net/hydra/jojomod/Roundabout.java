@@ -20,6 +20,7 @@ public class Roundabout {
 
 
     public static boolean canBreathInTS = true;
+    public static boolean renderGasOverlay = false;
 
     public static void init() {
         LOGGER.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());

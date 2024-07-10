@@ -3,7 +3,9 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -15,11 +17,14 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -34,10 +39,7 @@ import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -114,7 +116,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$gasTicks = -1;
     @Unique
     private int roundabout$gasRenderTicks = -1;
-    private int roundabout$maxGasTicks = 300;
+    private int roundabout$maxGasTicks = 200;
 
     /**Idle time is how long you are standing still without using skills, eating, or */
     @Unique
@@ -168,7 +170,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } if (roundabout$postTSHurtTime > 0){
             roundabout$postTSHurtTime--;
         } if (roundabout$gasTicks > -1){
-            roundabout$setGasolineTime(roundabout$gasTicks-1);
+            if (!this.level().isClientSide){
+                roundabout$setGasolineTime(roundabout$gasTicks-1);
+                if (this.tickCount%2 == 0) {
+                    float width = this.getBbWidth() / 2;
+                    float height = this.getBbHeight() / 4;
+                    float height2 = this.getBbHeight()/2;
+                    ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getX(), this.getY() + height2, this.getZ(),
+                            1, width, height, width, 0.1);
+                }
+            }
         }
         //}
     }
@@ -660,6 +671,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+        if (this.roundabout$gasTicks > -1) {
+            if ($$0.is(DamageTypeTags.IS_FIRE) || ($$0.getDirectEntity() instanceof Projectile && $$0.getDirectEntity().isOnFire())) {
+                float power = 16;
+                if ($$0.is(DamageTypeTags.IS_FIRE)) {
+                    if ($$0.getDirectEntity() instanceof Projectile) {
+                        if ($$0.getDirectEntity() instanceof MatchEntity){
+                            if (((MatchEntity) $$0.getDirectEntity()).isBundle){
+                                power = 18;
+                            }
+                        }
+                    } else {
+                        power = 10;
+                    }
+                }
+                this.roundabout$setGasolineTime(-1);
+                if (!this.level().isClientSide) {
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                            40, 0.0, 0.2, 0.0, 0.2);
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                            1, 0.5, 0.5, 0.5, 0.2);
+                    MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, power);
+                }
+
+                ci.setReturnValue(true);
+            }
+        }
         if ($$0.getDirectEntity() != null) {
             if (this.isBarraging()) {
                 this.tryPower(PowerIndex.GUARD, true);
@@ -874,6 +911,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected int decreaseAirSupply(int $$0) {
         return 0;
     }
+
+    @Shadow protected abstract float getEyeHeight(Pose $$0, EntityDimensions $$1);
 
     @Inject(method = "baseTick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundaboutBreathingCancel(CallbackInfo ci){

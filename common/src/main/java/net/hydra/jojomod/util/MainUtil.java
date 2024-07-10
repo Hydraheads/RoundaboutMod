@@ -148,6 +148,8 @@ public class MainUtil {
             if (iteration == 0){
                 SoundEvent $$6 = ModSounds.GASOLINE_EXPLOSION_EVENT;
                 level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 10F, 1F);
+                level.sendParticles(ParticleTypes.EXPLOSION, blkPos.getX()+0.5F, blkPos.getY()+0.5F, blkPos.getZ()+0.5F,
+                        1, 0.1, 0.1, 0.1, 0.2);
             }
 
             List<Entity> entities = MainUtil.hitboxGas(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
@@ -160,6 +162,9 @@ public class MainUtil {
                         break;
                     }
                     if (!value.fireImmune()) {
+                        if (value instanceof LivingEntity){
+                            ((StandUser)value).roundabout$setGasolineTime(-1);
+                        }
                         value.setSecondsOnFire(15);
                         value.hurt(level.damageSources().onFire(),power);
                     }

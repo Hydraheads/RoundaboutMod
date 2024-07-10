@@ -60,18 +60,19 @@ public abstract class HudRendering implements IHudAccess {
     }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"))
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
-        if (this.minecraft.player != null) {
-            int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
-            Roundabout.LOGGER.info(""+overlay);
-            if (overlay > 0) {
-                int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
-                float overlay2 = 0;
-                if (overlay <= 40){
-                    overlay2 = 0.5F - ((float) (40-overlay)/40)*0.5F;
-                } else {
-                    overlay2 = 0.5F - ((float) (40-Math.min(overlayR,40))/40)*0.5F;
+        if (Roundabout.renderGasOverlay) {
+            if (this.minecraft.player != null) {
+                int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
+                if (overlay > 0) {
+                    int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
+                    float overlay2 = 0;
+                    if (overlay <= 40) {
+                        overlay2 = 0.5F - ((float) (40 - overlay) / 40) * 0.5F;
+                    } else {
+                        overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
+                    }
+                    this.renderTextureOverlay($$0, StandIcons.GASOLINE_OVERLAY, overlay2);
                 }
-                this.renderTextureOverlay($$0, StandIcons.GASOLINE_OVERLAY, overlay2);
             }
         }
     }

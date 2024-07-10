@@ -56,8 +56,10 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         if (bounces <= 3){spincount = -15;}
         spinningCanX = Mth.wrapDegrees(spinningCanX+=spincount);
         if (this.isOnFire() && !this.level().isClientSide){
-            ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
-                    20, 0.0, 0.2, 0.0, 0.3);
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                    40, 0.0, 0.2, 0.0, 0.2);
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                    1, 0.5, 0.5, 0.5, 0.2);
             MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, 10);
             this.discard();
             return;
@@ -115,8 +117,10 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         Entity hurter = $$0.getDirectEntity();
         if (hurter instanceof AbstractArrow && hurter.isOnFire()){
             if (!this.level().isClientSide) {
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getOnPos().getX() + 0.5, this.getOnPos().getY(), this.getOnPos().getZ() + 0.5,
-                        20, 0.0, 0.2, 0.0, 0.4);
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                        40, 0.0, 0.2, 0.0, 0.2);
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                        1, 0.5, 0.5, 0.5, 0.2);
                 MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 3, 4, 14);
             }
             this.discard();
@@ -166,7 +170,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             if (bounces == 2 || bounces == 1) {
 
                 ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                        50, 1, 1, 1, 0.4);
+                        40, 1, 1, 1, 0.4);
                 setGoo(pos, 0, 0, 0);
 
                 setGoo(pos, 1, 0, 1);
@@ -186,7 +190,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             } else if (bounces == 0) {
 
                 ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                        25, 0.5, 0.5, 0.5, 0.4);
+                        20, 0.5, 0.5, 0.5, 0.4);
                 setGoo(pos, 0, 0, 1);
 
                 setGoo(pos, 1, 0, 2);
