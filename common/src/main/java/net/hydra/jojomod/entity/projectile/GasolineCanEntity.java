@@ -162,7 +162,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     public void scatterGoo(BlockPos pos){
         if (!this.level().isClientSide) {
-            int splashRadius = 3;
+            int splashRadius = 2;
             if (bounces == 2 || bounces == 1) {
 
                 ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
@@ -193,7 +193,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                 setGoo(pos, -1, 0, 2);
                 setGoo(pos, 0, 1, 2);
                 setGoo(pos, 0, -1, 2);
-                splashRadius = 2;
+                splashRadius = 1;
             }
 
 
@@ -202,7 +202,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             if (!entities.isEmpty()) {
                 for (Entity value : entities) {
                     if (value instanceof LivingEntity){
-                        ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                       ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
                     }
                 }
             }

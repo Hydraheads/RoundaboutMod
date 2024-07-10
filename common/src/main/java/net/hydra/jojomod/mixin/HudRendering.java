@@ -64,15 +64,12 @@ public abstract class HudRendering implements IHudAccess {
             int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
             Roundabout.LOGGER.info(""+overlay);
             if (overlay > 0) {
-                int maxOverlay = ((StandUser) this.minecraft.player).roundabout$getMaxGasolineTime();
+                int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
                 float overlay2 = 0;
                 if (overlay <= 40){
-                    overlay2 = 0.9F - ((float) 40/overlay)*0.9F;
-                } else if (overlay >= maxOverlay-40){
-                    int maxOverlay2 = maxOverlay-40;
-                    overlay2 = 0.9F - ((float) (overlay - maxOverlay2) /40)*0.9F;
+                    overlay2 = 0.5F - ((float) (40-overlay)/40)*0.5F;
                 } else {
-                    overlay2 = 0.9F;
+                    overlay2 = 0.5F - ((float) (40-Math.min(overlayR,40))/40)*0.5F;
                 }
                 this.renderTextureOverlay($$0, StandIcons.GASOLINE_OVERLAY, overlay2);
             }

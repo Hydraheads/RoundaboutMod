@@ -112,6 +112,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     private int roundabout$gasTicks = -1;
+    @Unique
+    private int roundabout$gasRenderTicks = -1;
     private int roundabout$maxGasTicks = 300;
 
     /**Idle time is how long you are standing still without using skills, eating, or */
@@ -176,6 +178,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$gasTicks;
     }
     @Unique
+    public int roundabout$getGasolineRenderTime(){
+        return this.roundabout$gasRenderTicks;
+    }
+    @Unique
     public int roundabout$getMaxGasolineTime(){
         return this.roundabout$maxGasTicks;
     }
@@ -183,6 +189,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$setGasolineTime(int gasTicks){
         this.roundabout$gasTicks = gasTicks;
+        if (gasTicks == -1){
+            roundabout$gasRenderTicks = -1;
+        } else {
+            roundabout$gasRenderTicks++;
+        }
         if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
             ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) (Object) this),(byte) 1, gasTicks);
         }
