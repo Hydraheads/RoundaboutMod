@@ -43,5 +43,6 @@ public class ForgeBlocks {
                             .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                             .strength(0.7F, 1.0F)
                             .sound(SoundType.METAL)
+                            .forceSolidOn().noCollission().requiresCorrectToolForDrops()
             ));
 }
