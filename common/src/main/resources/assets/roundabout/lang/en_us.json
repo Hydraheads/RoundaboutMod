@@ -21,9 +21,14 @@
   "entity.roundabout.terrier": "Terrier",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
+  "entity.roundabout.match": "Match",
+  "entity.roundabout.knife": "Knife",
+  "entity.roundabout.gasoline_can": "Gasoline Can",
+  "entity.roundabout.gasoline_splatter": "Gasoline Splatter",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.gasoline_splatter": "Gasoline Splatter",
+  "block.roundabout.barbed_wire": "Barbed Wire",
 
   "itemgroup.jojo": "Roundabout",
 

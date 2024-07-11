@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "roundabout:block/barbed_wire",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "roundabout:block/barbed_wire"
+    },
+    "axis=z": {
+      "model": "roundabout:block/barbed_wire",
+      "x": 90
+    }
+  }
+}

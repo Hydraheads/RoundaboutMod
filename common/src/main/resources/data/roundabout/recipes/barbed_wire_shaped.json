@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:chain"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "ICI"
+  ],
+  "result": {
+    "count": 4,
+    "item": "roundabout:barbed_wire"
+  },
+  "show_notification": true
+}

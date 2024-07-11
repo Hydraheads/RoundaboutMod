@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.BarbedWireBlock;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -34,5 +35,13 @@ public class ForgeBlocks {
                             .pushReaction(PushReaction.DESTROY)
                             .ignitedByLava()
                             .speedFactor(0.6F)
+            ));
+    public static final RegistryObject<Block> BARBED_WIRE = BLOCKS.register("barbed_wire",
+            () -> new BarbedWireBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.METAL)
+                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                            .strength(0.7F, 1.0F)
+                            .sound(SoundType.METAL)
             ));
 }

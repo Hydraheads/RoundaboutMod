@@ -60,6 +60,7 @@ public class ForgeEvents {
 
         ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
         ModBlocks.GASOLINE_SPLATTER = ForgeBlocks.GASOLINE_SPLATTER.get();
+        ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

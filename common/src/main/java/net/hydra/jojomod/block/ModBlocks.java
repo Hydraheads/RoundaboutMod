@@ -20,7 +20,7 @@ public class ModBlocks {
      * Forge and fabric files must define these variables so they are not empty.**/
     public static Block METEOR_BLOCK;
     public static Block GASOLINE_SPLATTER;
-
+    public static Block BARBED_WIRE;
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
 

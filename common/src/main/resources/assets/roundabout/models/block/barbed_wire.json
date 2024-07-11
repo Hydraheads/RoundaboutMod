@@ -1,0 +1,30 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "roundabout:block/barbed_wire_block",
+    "all": "roundabout:block/barbed_wire_block"
+  },
+  "elements": [
+    {
+      "from": [ 6.5, 0, 8 ],
+      "to": [ 9.5, 16, 8 ],
+      "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45},
+      "shade": false,
+      "faces": {
+        "north": { "uv": [ 5, 0, 0, 16 ], "texture": "#all" },
+        "south": { "uv": [ 0, 0, 5, 16 ], "texture": "#all" }
+      }
+    },
+    {
+      "from": [ 8, 0, 6.5 ],
+      "to": [ 8, 16, 9.5 ],
+      "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45},
+      "shade": false,
+      "faces": {
+        "west": { "uv": [ 10, 0, 5, 16 ], "texture": "#all" },
+        "east": { "uv": [ 5, 0, 10, 16 ], "texture": "#all" }
+      }
+    }
+  ],
+  "render_type": "cutout"
+}
