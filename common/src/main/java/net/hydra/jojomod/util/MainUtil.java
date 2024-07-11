@@ -16,6 +16,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -162,11 +164,18 @@ public class MainUtil {
                         break;
                     }
                     if (!value.fireImmune()) {
+                        value.setSecondsOnFire(15);
                         if (value instanceof LivingEntity){
                             ((StandUser)value).roundabout$setGasolineTime(-1);
                         }
-                        value.setSecondsOnFire(15);
-                        value.hurt(level.damageSources().onFire(),power);
+                        if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
+                            MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
+                            ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
+                            value.hurt(level.damageSources().onFire(),power);
+                            ((LivingEntity)value).addEffect(instance);
+                        } else {
+                            value.hurt(level.damageSources().onFire(),power);
+                        }
                     }
                 }
             }
