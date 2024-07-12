@@ -234,7 +234,11 @@ public class MainUtil {
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
-            player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data);
+            if (player.getVehicle() != null){
+                player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data);
+            } else {
+                player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data);
+            }
         }
     }
 }

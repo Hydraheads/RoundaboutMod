@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -49,19 +50,20 @@ public class BarbedWireBundleBlock extends Block {
                     Vec3 dm = entity.getDeltaMovement();
                     float power = 1 + 10*((float) (Math.abs(dm.x) + Math.abs(dm.y) + Math.abs(dm.z)));
                     if (power > 0) {
-                        if (!entity.getPassengers().isEmpty()){
-                            entity.getPassengers().remove(0);
-                        }
                         /**Velocity for players is clientside so it requires additional packet*/
-                        if (!level.isClientSide && !(entity instanceof Player)) {
+                        if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
                             entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power);
-                        } else if (level.isClientSide && entity instanceof Player){
+                        } else if (level.isClientSide && (entity instanceof Player || (entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player))){
                             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(power, PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE);
+                        }
+
+                        if (!level.isClientSide && !entity.getPassengers().isEmpty()){
+                            entity.ejectPassengers();
                         }
                     }
                 }
 
-            if (entity instanceof LivingEntity) {
+            if (entity instanceof LivingEntity && !(entity instanceof AbstractHorse)) {
                 entity.makeStuckInBlock($$0, new Vec3(0.8F, 0.75, 0.8F));
             }
         }

@@ -1,21 +1,22 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "ingredients": [
-    {
+  "key": {
+    "C": {
       "item": "roundabout:barbed_wire"
     },
+    "I":
     {
-      "item": "roundabout:barbed_wire"
-    },
-    {
-      "item": "roundabout:barbed_wire"
-    },
-    {
-      "item": "roundabout:barbed_wire"
+      "item": "minecraft:iron_ingot"
     }
+  },
+  "pattern": [
+    "CCC",
+    "III"
   ],
   "result": {
+    "count": 4,
     "item": "roundabout:barbed_wire_bundle"
-  }
+  },
+  "show_notification": true
 }

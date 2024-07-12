@@ -23,6 +23,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.Item;
@@ -88,8 +89,9 @@ public class MatchEntity extends ThrowableItemProjectile {
 
         SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
         Vec3 DM = $$1.getDeltaMovement();
-
-        if ($$1.getType() == EntityType.TNT_MINECART) {
+        if ($$1 instanceof Creeper) {
+            ((Creeper)$$1).ignite();
+        } if ($$1.getType() == EntityType.TNT_MINECART) {
             DamageSource DS = $$1.damageSources().explosion($$1, $$0.getEntity());
             ((IMinecartTNT)$$1).roundabout$explode(DS, this.getDeltaMovement().lengthSqr());
             this.discard();

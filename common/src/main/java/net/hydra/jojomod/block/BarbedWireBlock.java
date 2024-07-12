@@ -75,16 +75,17 @@ public class BarbedWireBlock extends RotatedPillarBlock
                     if (power > 0) {
                         power*= 10;
                         power*= this.wirePower;
-                        if (!entity.getPassengers().isEmpty()){
-                            entity.getPassengers().remove(0);
-                        }
                         /**Velocity for players is clientside so it requires additional packet*/
-                        if (!level.isClientSide && !(entity instanceof Player)) {
+                        if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
                             entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power);
-                        } else if (level.isClientSide && entity instanceof Player){
+                        } else if (level.isClientSide && (entity instanceof Player || (entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player))){
                             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(power, PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE);
                         }
                         entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.7F,0.7F,0.7F));
+                    }
+
+                    if (!level.isClientSide && !entity.getPassengers().isEmpty()){
+                        entity.ejectPassengers();
                     }
                 }
             }
