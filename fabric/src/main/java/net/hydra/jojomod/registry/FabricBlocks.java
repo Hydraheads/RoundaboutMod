@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.BarbedWireBlock;
+import net.hydra.jojomod.block.BarbedWireBundleBlock;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.core.Registry;
@@ -61,6 +62,15 @@ public class FabricBlocks {
                 1.2F
             )
     );
+    public static final Block BARBED_WIRE_BUNDLE = registerBlock("barbed_wire_bundle",new BarbedWireBundleBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.METAL)
+                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                            .strength(1.5F, 1.0F)
+                            .sound(SoundType.METAL)
+                            .forceSolidOn().noCollission().requiresCorrectToolForDrops()
+            )
+    );
 
 
     private static Block registerBlock(String name, Block block) {
@@ -77,6 +87,7 @@ public class FabricBlocks {
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
         ModBlocks.BARBED_WIRE = BARBED_WIRE;
+        ModBlocks.BARBED_WIRE_BUNDLE = BARBED_WIRE_BUNDLE;
         ModBlocks.WIRE_TRAP = WIRE_TRAP;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

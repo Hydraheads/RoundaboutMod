@@ -22,6 +22,7 @@ public class ModBlocks {
     public static Block GASOLINE_SPLATTER;
     public static Block WIRE_TRAP;
     public static Block BARBED_WIRE;
+    public static Block BARBED_WIRE_BUNDLE;
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
 

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "roundabout:barbed_wire"
+    },
+    {
+      "item": "roundabout:barbed_wire"
+    },
+    {
+      "item": "roundabout:barbed_wire"
+    },
+    {
+      "item": "roundabout:barbed_wire"
+    }
+  ],
+  "result": {
+    "item": "roundabout:barbed_wire_bundle"
+  }
+}

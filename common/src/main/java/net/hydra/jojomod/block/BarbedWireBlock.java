@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -63,7 +64,7 @@ public class BarbedWireBlock extends RotatedPillarBlock
     @SuppressWarnings("deprecation")
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-        if (!entity.isCrouching()) {
+        if (!entity.isCrouching() && entity instanceof LivingEntity) {
             net.minecraft.world.phys.AABB AB = entity.getBoundingBox();
             VoxelShape vs =  getTrueShape(blockState);
             if (AB.intersects(blockPos.getX()+vs.min(Direction.Axis.X),blockPos.getY()+vs.min(Direction.Axis.Y),vs.min(Direction.Axis.Z),
@@ -74,7 +75,9 @@ public class BarbedWireBlock extends RotatedPillarBlock
                     if (power > 0) {
                         power*= 10;
                         power*= this.wirePower;
-                        //Roundabout.LOGGER.info(""+power);
+                        if (!entity.getPassengers().isEmpty()){
+                            entity.getPassengers().remove(0);
+                        }
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player)) {
                             entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power);

@@ -56,6 +56,7 @@ public class FabricItems {
                         entries.accept(GASOLINE_BUCKET);
                         entries.accept(ModBlocks.WIRE_TRAP);
                         entries.accept(ModBlocks.BARBED_WIRE);
+                        entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(STAND_DISC);
                         entries.accept(COFFEE_GUM);

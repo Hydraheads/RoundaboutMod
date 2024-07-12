@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "roundabout:block/barbed_wire_bundle"
+  }
+}
