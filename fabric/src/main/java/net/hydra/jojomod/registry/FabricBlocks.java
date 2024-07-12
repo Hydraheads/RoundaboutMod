@@ -21,55 +21,15 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
 public class FabricBlocks {
-    public static final Block METEOR_BLOCK = registerBlock("meteor_block",new Block(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .requiresCorrectToolForDrops()
-                            .strength(5.0F, 6.0F)
-                            .sound(SoundType.METAL)
-            )
+    public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
-    public static final Block GASOLINE_SPLATTER = registerBlock("gasoline_splatter",new GasolineBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.NONE)
-                            .instrument(NoteBlockInstrument.BANJO)
-                            .strength(0.1F, 1.0F)
-                            .sound(SoundType.SLIME_BLOCK)
-                            .replaceable()
-                            .pushReaction(PushReaction.DESTROY)
-                            .ignitedByLava()
-                            .speedFactor(0.6F)
-            )
+    public static final Block GASOLINE_SPLATTER = registerBlock("gasoline_splatter", ModBlocks.GASOLINE_SPLATTER_PROPERTIES
     );
-    public static final Block WIRE_TRAP = registerBlock("wire_trap",new BarbedWireBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.WOOL)
-                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(0.1F, 1.0F)
-                            .sound(SoundType.VINE)
-                            .forceSolidOn().noCollission().pushReaction(PushReaction.DESTROY),
-                    1F
-            )
+    public static final Block WIRE_TRAP = registerBlock("wire_trap", ModBlocks.WIRE_TRAP_PROPERTIES
     );
-    public static final Block BARBED_WIRE = registerBlock("barbed_wire",new BarbedWireBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(0.5F, 1.0F)
-                            .sound(SoundType.METAL)
-                            .forceSolidOn().noCollission().requiresCorrectToolForDrops(),
-                1.2F
-            )
+    public static final Block BARBED_WIRE = registerBlock("barbed_wire",ModBlocks.BARBED_WIRE_BLOCK_PROPERTIES
     );
-    public static final Block BARBED_WIRE_BUNDLE = registerBlock("barbed_wire_bundle",new BarbedWireBundleBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(1.5F, 1.0F)
-                            .sound(SoundType.METAL)
-                            .forceSolidOn().noCollission().requiresCorrectToolForDrops()
-            )
+    public static final Block BARBED_WIRE_BUNDLE = registerBlock("barbed_wire_bundle",ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES
     );
 
 

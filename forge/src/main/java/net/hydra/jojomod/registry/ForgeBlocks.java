@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.BarbedWireBlock;
 import net.hydra.jojomod.block.BarbedWireBundleBlock;
 import net.hydra.jojomod.block.GasolineBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -18,52 +19,14 @@ public class ForgeBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Roundabout.MOD_ID);
 
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.METAL)
-                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                    .requiresCorrectToolForDrops()
-                    .strength(5.0F, 6.0F)
-                    .sound(SoundType.METAL)
-            ));
+            () -> ModBlocks.METEOR_BLOCK_PROPERTIES
+            );
     public static final RegistryObject<Block> GASOLINE_SPLATTER = BLOCKS.register("gasoline_splatter",
-            () -> new GasolineBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.NONE)
-                            .instrument(NoteBlockInstrument.BANJO)
-                            .strength(0.1F, 1.0F)
-                            .sound(SoundType.SLIME_BLOCK)
-                            .replaceable()
-                            .pushReaction(PushReaction.DESTROY)
-                            .ignitedByLava()
-                            .speedFactor(0.6F)
-            ));
+            () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> WIRE_TRAP = BLOCKS.register("wire_trap",
-            () -> new BarbedWireBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.WOOL)
-                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(0.1F, 1.0F)
-                            .sound(SoundType.VINE)
-                            .forceSolidOn().noCollission().pushReaction(PushReaction.DESTROY),
-                    1.0F
-            ));
+            () -> ModBlocks.WIRE_TRAP_PROPERTIES);
     public static final RegistryObject<Block> BARBED_WIRE = BLOCKS.register("barbed_wire",
-            () -> new BarbedWireBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(0.5F, 1.0F)
-                            .sound(SoundType.METAL)
-                            .forceSolidOn().noCollission().requiresCorrectToolForDrops(),
-                    1.2F
-            ));
+            () -> ModBlocks.BARBED_WIRE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> BARBED_WIRE_BUNDLE = BLOCKS.register("barbed_wire_bundle",
-            () -> new BarbedWireBundleBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(1.5F, 1.0F)
-                            .sound(SoundType.METAL)
-                            .forceSolidOn().noCollission().requiresCorrectToolForDrops()
-            ));
+            () -> ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES);
 }
