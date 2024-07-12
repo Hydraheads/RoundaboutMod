@@ -36,13 +36,24 @@ public class ForgeBlocks {
                             .ignitedByLava()
                             .speedFactor(0.6F)
             ));
+    public static final RegistryObject<Block> WIRE_TRAP = BLOCKS.register("wire_trap",
+            () -> new BarbedWireBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.WOOL)
+                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                            .strength(0.1F, 1.0F)
+                            .sound(SoundType.VINE)
+                            .forceSolidOn().noCollission().pushReaction(PushReaction.DESTROY),
+                    1.0F
+            ));
     public static final RegistryObject<Block> BARBED_WIRE = BLOCKS.register("barbed_wire",
             () -> new BarbedWireBlock(
                     BlockBehaviour.Properties.of()
                             .mapColor(MapColor.METAL)
                             .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(0.7F, 1.0F)
+                            .strength(0.5F, 1.0F)
                             .sound(SoundType.METAL)
-                            .forceSolidOn().noCollission().requiresCorrectToolForDrops()
+                            .forceSolidOn().noCollission().requiresCorrectToolForDrops(),
+                    1.2F
             ));
 }

@@ -1,0 +1,30 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "roundabout:block/wire_trap_block",
+    "all": "roundabout:block/wire_trap_block"
+  },
+  "elements": [
+    {
+      "from": [ 7.5, 0, 8 ],
+      "to": [ 8.5, 16, 8 ],
+      "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45},
+      "shade": false,
+      "faces": {
+        "north": { "uv": [ 5, 0, 0, 16 ], "texture": "#all" },
+        "south": { "uv": [ 0, 0, 5, 16 ], "texture": "#all" }
+      }
+    },
+    {
+      "from": [ 8, 0, 7.5 ],
+      "to": [ 8, 16, 8.5 ],
+      "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45},
+      "shade": false,
+      "faces": {
+        "west": { "uv": [ 10, 0, 5, 16 ], "texture": "#all" },
+        "east": { "uv": [ 5, 0, 10, 16 ], "texture": "#all" }
+      }
+    }
+  ],
+  "render_type": "cutout"
+}

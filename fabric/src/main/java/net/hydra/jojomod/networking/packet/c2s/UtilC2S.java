@@ -13,7 +13,7 @@ public class UtilC2S {
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void UpdateByte(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                               FriendlyByteBuf buf, PacketSender responseSender){
+                                  FriendlyByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         ServerLevel world = (ServerLevel) player.level();
         byte data = buf.readByte();
@@ -21,6 +21,21 @@ public class UtilC2S {
 
         server.execute(() -> {
             MainUtil.handleBytePacketC2S(player, data, context);
+        });
+
+
+    }
+
+    /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
+    public static void UpdateFloat(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                  FriendlyByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        ServerLevel world = (ServerLevel) player.level();
+        float data = buf.readFloat();
+        byte context = buf.readByte();
+
+        server.execute(() -> {
+            MainUtil.handleFloatPacketC2S(player, data, context);
         });
 
 

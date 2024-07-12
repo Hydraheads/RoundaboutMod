@@ -6,6 +6,7 @@ import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -227,6 +228,13 @@ public class MainUtil {
     public static void handleBytePacketC2S(Player player, byte data, byte context){
         if (context == PacketDataIndex.PLAY_SOUND_C2S_CONTEXT) {
             ((StandUser) player).getStandPowers().playSoundsIfNearby(data, 100, true);
+        }
+    }
+
+    /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
+    public static void handleFloatPacketC2S(Player player, float data, byte context){
+        if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
+            player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data);
         }
     }
 }

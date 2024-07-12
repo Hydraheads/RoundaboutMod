@@ -40,4 +40,5 @@ public interface IPacketAccess {
     void timeStopFloat(boolean TSJump);
     void standSummonPacket();
     void byteToServerPacket(byte value, byte context);
+    void floatToServerPacket(float value, byte context);
 }

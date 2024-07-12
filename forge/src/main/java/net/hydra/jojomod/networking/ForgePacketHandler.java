@@ -77,6 +77,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeByteC2SPacket::toBytes)
                 .consumerMainThread(ForgeByteC2SPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeFloatC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ForgeFloatC2SPacket::new)
+                .encoder(ForgeFloatC2SPacket::toBytes)
+                .consumerMainThread(ForgeFloatC2SPacket::handle)
+                .add();
 
         /**Server to Client Packets*/
         INSTANCE.messageBuilder(ForgeClashUpdatePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)

@@ -41,13 +41,24 @@ public class FabricBlocks {
                             .speedFactor(0.6F)
             )
     );
+    public static final Block WIRE_TRAP = registerBlock("wire_trap",new BarbedWireBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.WOOL)
+                            .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                            .strength(0.1F, 1.0F)
+                            .sound(SoundType.VINE)
+                            .forceSolidOn().noCollission().pushReaction(PushReaction.DESTROY),
+                    1F
+            )
+    );
     public static final Block BARBED_WIRE = registerBlock("barbed_wire",new BarbedWireBlock(
                     BlockBehaviour.Properties.of()
                             .mapColor(MapColor.METAL)
                             .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                            .strength(0.7F, 1.0F)
+                            .strength(0.5F, 1.0F)
                             .sound(SoundType.METAL)
-                            .forceSolidOn().noCollission().requiresCorrectToolForDrops()
+                            .forceSolidOn().noCollission().requiresCorrectToolForDrops(),
+                1.2F
             )
     );
 
@@ -66,6 +77,7 @@ public class FabricBlocks {
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
         ModBlocks.BARBED_WIRE = BARBED_WIRE;
+        ModBlocks.WIRE_TRAP = WIRE_TRAP;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
     }

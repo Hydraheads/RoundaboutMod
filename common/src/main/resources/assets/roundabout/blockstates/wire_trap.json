@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "roundabout:block/wire_trap",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "roundabout:block/wire_trap"
+    },
+    "axis=z": {
+      "model": "roundabout:block/wire_trap",
+      "x": 90
+    }
+  }
+}

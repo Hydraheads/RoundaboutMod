@@ -1,9 +1,13 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -31,6 +35,7 @@ public class BarbedWireBlock extends RotatedPillarBlock
         implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public final float wirePower;
     protected static final VoxelShape AABB = Block.box(0.1, 0.1, 0.1, 15.9, 15.9, 15.9);
 
 
@@ -38,26 +43,47 @@ public class BarbedWireBlock extends RotatedPillarBlock
     protected static final VoxelShape Z_AXIS_AABB = Block.box(6.5, 6.5, 0.0, 9.5, 9.5, 16.0);
     protected static final VoxelShape X_AXIS_AABB = Block.box(0.0, 6.5, 6.5, 16.0, 9.5, 9.5);
 
-    public BarbedWireBlock(BlockBehaviour.Properties properties) {
+    public BarbedWireBlock(BlockBehaviour.Properties properties, float wP) {
         super(properties);
+        this.wirePower = wP;
         this.registerDefaultState((BlockState)((BlockState)((BlockState)this.stateDefinition.any()).setValue(WATERLOGGED, false)).setValue(AXIS, Direction.Axis.X));
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return AABB;
+        if (collisionContext.isHoldingItem(this.asItem())) {
+            return AABB;
+        } else {
+            return getTrueShape(blockState);
+
+        }
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void entityInside(BlockState blockState, Level $$1, BlockPos $$2, Entity $$3) {
-        if (!$$3.isCrouching()) {
-            net.minecraft.world.phys.AABB AB = $$3.getBoundingBox();
+    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+        if (!entity.isCrouching()) {
+            net.minecraft.world.phys.AABB AB = entity.getBoundingBox();
             VoxelShape vs =  getTrueShape(blockState);
-            if (AB.intersects($$2.getX()+vs.min(Direction.Axis.X),$$2.getY()+vs.min(Direction.Axis.Y),vs.min(Direction.Axis.Z),
-                    $$2.getX()+vs.max(Direction.Axis.X),$$2.getY()+vs.max(Direction.Axis.Y),$$2.getZ()+vs.max(Direction.Axis.Z))){
-                $$3.setDeltaMovement(0,10,0);
+            if (AB.intersects(blockPos.getX()+vs.min(Direction.Axis.X),blockPos.getY()+vs.min(Direction.Axis.Y),vs.min(Direction.Axis.Z),
+                    blockPos.getX()+vs.max(Direction.Axis.X),blockPos.getY()+vs.max(Direction.Axis.Y),blockPos.getZ()+vs.max(Direction.Axis.Z))){
+                if (!entity.isInvulnerable() && entity.isAlive()){
+                    Vec3 dm = entity.getDeltaMovement();
+                    float power = (float) (Math.abs(dm.x) + Math.abs(dm.y) + Math.abs(dm.z));
+                    if (power > 0) {
+                        power*= 10;
+                        power*= this.wirePower;
+                        //Roundabout.LOGGER.info(""+power);
+                        /**Velocity for players is clientside so it requires additional packet*/
+                        if (!level.isClientSide && !(entity instanceof Player)) {
+                            entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power);
+                        } else if (level.isClientSide && entity instanceof Player){
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(power, PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE);
+                        }
+                        entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.7F,0.7F,0.7F));
+                    }
+                }
             }
 
         }

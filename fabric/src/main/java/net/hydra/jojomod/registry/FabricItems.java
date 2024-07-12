@@ -54,6 +54,7 @@ public class FabricItems {
                         entries.accept(MATCH_BUNDLE);
                         entries.accept(GASOLINE_CAN);
                         entries.accept(GASOLINE_BUCKET);
+                        entries.accept(ModBlocks.WIRE_TRAP);
                         entries.accept(ModBlocks.BARBED_WIRE);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(STAND_DISC);
