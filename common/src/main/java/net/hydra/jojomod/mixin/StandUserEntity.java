@@ -18,7 +18,6 @@ import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,23 +25,14 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -50,7 +40,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
@@ -97,9 +86,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Byte> ROUNDABOUT_TS_DAMAGE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private boolean CanSync;
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$LOCACACA_CURSE = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BYTE);
     @Unique
-    private StandPowers Powers;
+    private StandPowers roundabout$Powers;
 
     /** Guard variables for stand blocking**/
     @Unique
@@ -122,6 +112,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Idle time is how long you are standing still without using skills, eating, or */
     @Unique
     private int roundaboutIdleTime = -1;
+
     @Unique
     @Override
     public int getRoundaboutIdleTime(){
@@ -245,7 +236,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public byte roundaboutGetStoredDamageByte(){
-        return ((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT_TS_DAMAGE);
+        return this.getEntityData().get(ROUNDABOUT_TS_DAMAGE);
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setLocacacaCurse(byte locacacaCurse) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$LOCACACA_CURSE, locacacaCurse);
+        }
+    }
+
+    @Unique
+    @Override
+    public byte roundabout$getLocacacaCurse() {
+        return this.getEntityData().get(ROUNDABOUT$LOCACACA_CURSE);
     }
     @Unique
     public void roundaboutSetStoredDamage(float roundaboutStoredDamage){
@@ -497,14 +502,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     public StandPowers getStandPowers() {
-        if (this.Powers == null) {
-            this.Powers = new PowersTheWorld(User);
+        if (this.roundabout$Powers == null) {
+            this.roundabout$Powers = new PowersTheWorld(User);
         }
-        return this.Powers;
+        return this.roundabout$Powers;
     }
 
     public void setStandPowers(StandPowers standPowers){
-        this.Powers = standPowers;
+        this.roundabout$Powers = standPowers;
     }
 
 
@@ -630,13 +635,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         //this.emitGameEvent(GameEvent.ENTITY_DISMOUNT, passenger);
     }
 
-
-
-
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(STAND_ID, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_TS_DAMAGE, (byte) 0);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
         ((LivingEntity)(Object)this).getEntityData().define(STAND_ACTIVE, false);
     }
 

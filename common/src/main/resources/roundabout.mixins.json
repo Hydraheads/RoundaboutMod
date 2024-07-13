@@ -50,6 +50,7 @@
     "ZEntityRenderDispatcher",
     "ZHeldItemLowering",
     "ZHumanoidArmorLayer",
+    "ZHumanoidMobRenderer",
     "ZHumanoidModel",
     "ZItemInHandLayer",
     "ZItemInHandRenderer",

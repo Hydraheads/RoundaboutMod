@@ -14,6 +14,20 @@ public class StandIcons {
     public static final ResourceLocation GASOLINE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/gasoline_splatter.png");
 
+    public static final ResourceLocation STONE_HEAD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/head.png");
+    public static final ResourceLocation STONE_CHEST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/chest.png");
+    public static final ResourceLocation STONE_HEART = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/heart.png");
+    public static final ResourceLocation STONE_RIGHT_ARM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/right_arm.png");
+    public static final ResourceLocation STONE_LEFT_ARM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/left_arm.png");
+    public static final ResourceLocation STONE_RIGHT_LEG = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/right_leg.png");
+    public static final ResourceLocation STONE_LEFT_LEG = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/left_leg.png");
 
     public static final ResourceLocation THE_WORLD_TIME_STOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stop_time.png");

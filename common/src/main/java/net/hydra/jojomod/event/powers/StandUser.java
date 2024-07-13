@@ -105,4 +105,6 @@ public interface StandUser {
     int roundabout$getMaxBucketGasolineTime();
 
     void setRoundaboutIdleTime(int roundaboutIdleTime);
+    void roundabout$setLocacacaCurse(byte locacacaCurse);
+    byte roundabout$getLocacacaCurse();
 }

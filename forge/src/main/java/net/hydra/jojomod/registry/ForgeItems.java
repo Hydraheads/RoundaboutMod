@@ -60,7 +60,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
             () -> new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA = addToTab(ITEMS.register("locacaca",
-            () -> new Item(new Item.Properties())));
+            () -> new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA))));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));
