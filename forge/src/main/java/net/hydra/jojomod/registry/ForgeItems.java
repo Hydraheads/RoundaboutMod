@@ -57,6 +57,10 @@ public class ForgeItems {
             () -> new Item(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> METEORITE = addToTab(ITEMS.register("meteorite",
             () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
+            () -> new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties())));
+    public static final RegistryObject<Item> LOCACACA = addToTab(ITEMS.register("locacaca",
+            () -> new Item(new Item.Properties())));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));

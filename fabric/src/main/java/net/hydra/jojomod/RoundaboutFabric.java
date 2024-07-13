@@ -16,8 +16,8 @@ public class RoundaboutFabric implements ModInitializer {
         FabricLootTables.modifyLootTables();
 
         FabricEntities.register();
-        FabricItems.register();
         FabricBlocks.register();
+        FabricItems.register();
         FabricSounds.register();
         FabricPacketManager.registerC2SPackets();
         ModParticles.registerParticles();

@@ -44,6 +44,14 @@ public class ForgeEvents {
     @SubscribeEvent
     public static void registerRoundaboutBridge(FMLCommonSetupEvent event){
         /*Common Code Bridge*/
+
+        ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
+        ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
+        ModBlocks.GASOLINE_SPLATTER = ForgeBlocks.GASOLINE_SPLATTER.get();
+        ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
+        ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
+        ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
+
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
@@ -56,13 +64,9 @@ public class ForgeEvents {
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
+        ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
+        ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
-
-        ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
-        ModBlocks.GASOLINE_SPLATTER = ForgeBlocks.GASOLINE_SPLATTER.get();
-        ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
-        ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
-        ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

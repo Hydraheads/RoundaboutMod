@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Blocks;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new Item(new Item.Properties().stacksTo(1)));
@@ -28,6 +29,8 @@ public class FabricItems {
     public static Item STAND_DISC = registerItem("stand_disc", new Item(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+    public static Item LOCACACA_PIT = registerItem("locacaca_pit", (Item) new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties()));
+    public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties()));
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
@@ -60,6 +63,8 @@ public class FabricItems {
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(STAND_DISC);
                         entries.accept(COFFEE_GUM);
+                        entries.accept(LOCACACA_PIT.asItem());
+                        entries.accept(LOCACACA);
                         entries.accept(METEORITE);
 
                         entries.accept(ModBlocks.METEOR_BLOCK);
@@ -80,6 +85,8 @@ public class FabricItems {
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
+        ModItems.LOCACACA_PIT = LOCACACA_PIT;
+        ModItems.LOCACACA = LOCACACA;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
     }
 }

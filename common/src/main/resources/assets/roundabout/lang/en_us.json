@@ -13,6 +13,8 @@
   "item.roundabout.match_bundle": "Match Bundle",
   "item.roundabout.gasoline_can": "Gasoline Can",
   "item.roundabout.gasoline_bucket": "Bucket of Gasoline Splatter",
+  "item.roundabout.locacaca": "Locacaca",
+  "item.roundabout.locacaca_pit": "Locacaca Pit",
 
   "text.roundabout.meteorite": "Meteorite",
 
@@ -27,6 +29,7 @@
   "entity.roundabout.gasoline_splatter": "Gasoline Splatter",
 
   "block.roundabout.meteor_block": "Meteorite Block",
+  "block.roundabout.locacaca_plant": "Locacaca Plant",
   "block.roundabout.gasoline_splatter": "Gasoline Splatter",
   "block.roundabout.wire_trap": "Wire Trap",
   "block.roundabout.barbed_wire": "Barbed Wire Trap",

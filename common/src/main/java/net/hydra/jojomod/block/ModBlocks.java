@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.BeetrootBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -22,6 +23,9 @@ public class ModBlocks {
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static Block METEOR_BLOCK;
+
+    public static Block LOCACACA_BLOCK;
+
     public static Block GASOLINE_SPLATTER;
     public static Block WIRE_TRAP;
     public static Block BARBED_WIRE;
@@ -34,6 +38,16 @@ public class ModBlocks {
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL)
     );
+
+    public static Block LOCACACA_BLOCK_PROPERTIES = new LocacacaBlock(
+            BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.PLANT)
+                            .noCollission()
+                            .randomTicks()
+                            .instabreak()
+                            .sound(SoundType.CROP)
+                            .pushReaction(PushReaction.DESTROY)
+            );
 
     public static GasolineBlock GASOLINE_SPLATTER_PROPERTIES = new GasolineBlock(
             BlockBehaviour.Properties.of()

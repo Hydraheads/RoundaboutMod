@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross":"roundabout:block/locacaca_stage0"
+  }
+}
