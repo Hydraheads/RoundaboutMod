@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.client;
 
+import com.ibm.icu.text.Normalizer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
@@ -73,8 +74,10 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
     ) {
         VertexConsumer $$10 = multiBufferSource.getBuffer(RenderType.armorCutoutNoCull(RL));
 
-        //((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale*= 1.001F);
-        //((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale*= 1.001F);
+        ((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale+= 0.04F);
+        ((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale+= 0.04F);
         $$4.renderToBuffer(poseStack, $$10, integ, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
+        ((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale-= 0.04F);
+        ((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale-= 0.04F);
     }
 }
