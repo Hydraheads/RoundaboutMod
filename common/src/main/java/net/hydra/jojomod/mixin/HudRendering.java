@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
@@ -60,8 +61,8 @@ public abstract class HudRendering implements IHudAccess {
     }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"))
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
-        if (Roundabout.renderGasOverlay) {
-            if (this.minecraft.player != null) {
+        if (this.minecraft.player != null) {
+            if (Roundabout.renderGasOverlay) {
                 int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
                 if (overlay > 0) {
                     int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
@@ -72,6 +73,11 @@ public abstract class HudRendering implements IHudAccess {
                         overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
                     }
                     this.renderTextureOverlay($$0, StandIcons.GASOLINE_OVERLAY, overlay2);
+                }
+            }
+            if (this.minecraft.options.getCameraType().isFirstPerson()) {
+                if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
+                        this.renderTextureOverlay($$0, StandIcons.STONE_HEAD_OVERLAY, 1F);
                 }
             }
         }

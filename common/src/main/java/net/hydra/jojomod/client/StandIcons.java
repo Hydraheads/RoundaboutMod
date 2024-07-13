@@ -14,6 +14,8 @@ public class StandIcons {
     public static final ResourceLocation GASOLINE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/gasoline_splatter.png");
 
+    public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/stone_face.png");
     public static final ResourceLocation STONE_HEAD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/locacaca_layers/head.png");
     public static final ResourceLocation STONE_CHEST = new ResourceLocation(Roundabout.MOD_ID,

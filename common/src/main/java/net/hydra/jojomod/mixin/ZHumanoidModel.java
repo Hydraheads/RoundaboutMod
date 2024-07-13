@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -16,12 +17,13 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidModel.class)
-public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> implements ArmedModel, HeadedModel {
+public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> implements ArmedModel, HeadedModel, IHumanoidModelAccess {
 
     /**Add player animations, such as TS floating*/
 
@@ -50,6 +52,10 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
             this.leftLeg.zRot = -0.07853982F;
         }
     }
+
+    @Unique
+    @Override
+    public Iterable<ModelPart> roundabout$getBodyParts(){return bodyParts();}
 
     @Shadow
     protected Iterable<ModelPart> headParts() {

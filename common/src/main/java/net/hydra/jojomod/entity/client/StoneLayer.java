@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -32,10 +33,13 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
 
     private final LivingEntityRenderer<T, M> livingEntityRenderer;
 
+    private M transformedModel;
+
     public StoneLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, M> livingEntityRenderer) {
         super(livingEntityRenderer);
         this.dispatcher = context.getEntityRenderDispatcher();
         this.livingEntityRenderer = livingEntityRenderer;
+        this.transformedModel = livingEntityRenderer.getModel();
     }
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
@@ -58,7 +62,7 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
             } else if (curse == LocacacaCurseIndex.HEART){
                 rl = StandIcons.STONE_HEART;
             }
-            renderPart(poseStack,multiBufferSource,integ,livingEntityRenderer.getModel(),1,1,1,null,
+            renderPart(poseStack,multiBufferSource,integ,this.transformedModel,1,1,1,null,
                     rl);
         }
     }
@@ -68,6 +72,9 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
            ResourceLocation RL
     ) {
         VertexConsumer $$10 = multiBufferSource.getBuffer(RenderType.armorCutoutNoCull(RL));
+
+        //((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale*= 1.001F);
+        //((IHumanoidModelAccess)$$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale*= 1.001F);
         $$4.renderToBuffer(poseStack, $$10, integ, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
     }
 }
