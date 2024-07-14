@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,8 +34,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public class PlayerEntity extends LivingEntity implements IPlayerEntity{
+public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity{
 
+
+    @Shadow public abstract float getDestroySpeed(BlockState $$0);
 
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT_POS = SynchedEntityData.defineId(Player.class,
@@ -64,6 +67,32 @@ public class PlayerEntity extends LivingEntity implements IPlayerEntity{
     }
 
 
+    /**Attack Speed Decreases when your hand is stone*/
+    @Inject(method = "getCurrentItemAttackStrengthDelay", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$getCurrentItemAttackStrengthDelay(CallbackInfoReturnable<Float> cir) {
+        byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
+        if (curse > -1) {
+            if ((curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
+            || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
+                cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*0.6) * 20.0D));
+            }
+        }
+    }
+    /**Block Breaking Speed Decreases when your hand is stone*/
+    private boolean roundabout$destroySpeedRecursion = false;
+    @Inject(method = "getDestroySpeed", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$getDestroySpeed(BlockState $$0, CallbackInfoReturnable<Float> cir) {
+        byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
+        if (curse > -1 && !roundabout$destroySpeedRecursion) {
+            if ((curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
+                    || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
+                roundabout$destroySpeedRecursion = true;
+                float dSpeed = this.getDestroySpeed($$0);
+                roundabout$destroySpeedRecursion = false;
+                cir.setReturnValue((float)(dSpeed*0.6));
+            }
+        }
+    }
 
     @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {

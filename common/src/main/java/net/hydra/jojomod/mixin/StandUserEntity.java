@@ -946,6 +946,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
         byte curse = this.roundabout$getLocacacaCurse();
