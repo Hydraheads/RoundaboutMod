@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,6 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -59,6 +61,20 @@ public class PlayerEntity extends LivingEntity implements IPlayerEntity{
     }
     public byte roundaboutGetPos(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT_POS);
+    }
+
+
+
+    @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
+        byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
+        if (curse > -1) {
+            if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
+                cir.setReturnValue((float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.82));
+            } else if (curse == LocacacaCurseIndex.CHEST) {
+                cir.setReturnValue((float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.85));
+            }
+        }
     }
 
     /**if your stand guard is broken, disable shields. Also, does not run takeshieldhit code if stand guarding.*/

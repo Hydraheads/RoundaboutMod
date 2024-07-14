@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -28,6 +29,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -56,6 +58,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected boolean jumping;
+
+    @Shadow private float speed;
 
     public StandUserEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -962,5 +966,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundaboutUniversalTick(){
         if (this.roundaboutTSHurtTime > 0){this.roundaboutTSHurtTime--;}
+    }
+
+    /**Use this code to eliminate the sprint jump during certain actions*/
+    @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$jumpFromGround(CallbackInfo ci) {
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (this.getStandPowers().isBarraging() || (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))) {
+            Vec3 $$0 = this.getDeltaMovement();
+            this.setDeltaMovement($$0.x, (double) this.getJumpPower(), $$0.z);
+            this.hasImpulse = true;
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (curse > -1) {
+            if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
+                cir.setReturnValue((float) (this.speed * 0.82));
+            } else if (curse == LocacacaCurseIndex.CHEST) {
+                cir.setReturnValue((float) (this.speed * 0.85));
+            }
+        }
+    }
+
+    @Shadow
+    protected float getJumpPower() {
+        return 0;
     }
 }
