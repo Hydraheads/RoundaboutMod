@@ -42,6 +42,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
@@ -941,6 +942,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!Roundabout.canBreathInTS) {
             if (((IEntityAndData) this).getRoundaboutJamBreath()) {
                 ((IEntityAndData) this).setRoundaboutJamBreath(false);
+            }
+        }
+    }
+
+    @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (curse > -1) {
+            if (curse == LocacacaCurseIndex.CHEST) {
+                int $$1 = EnchantmentHelper.getRespiration(((LivingEntity) (Object) this));
+                $$1 = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? $$0 : $$0 - 4;
+                if ($$1 < -20) {
+                    $$1 = -20;
+                }
+                cir.setReturnValue($$1);
             }
         }
     }
