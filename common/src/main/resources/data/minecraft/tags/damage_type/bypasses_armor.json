@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "roundabout:time"
+    "roundabout:time",
+    "roundabout:heart"
   ]
 }

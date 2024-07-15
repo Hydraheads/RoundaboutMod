@@ -108,9 +108,10 @@ public abstract class HudRendering implements IHudAccess {
 
     /**desaturate hearts when time is stopped*/
     @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
-    public void roundaboutRenderExperienceBar(GuiGraphics $$0, CallbackInfo ci){
-        if (minecraft.player != null && minecraft.level != null) {
-            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player) && !roundaboutRedo) {
+    public void roundabout$renderHealth(GuiGraphics $$0, CallbackInfo ci){
+        if (minecraft.player != null && minecraft.level != null && !roundaboutRedo) {
+            byte curse = ((StandUser)minecraft.player).roundabout$getLocacacaCurse();
+            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
                 roundaboutRedo = true;
                 $$0.setColor(0.7F, 0.7F, 0.7F, 1.0F);
                 renderPlayerHealth($$0);

@@ -947,6 +947,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     /**If you have a chest turned to stone, decreases breath faster*/
+    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
+    protected void roundabout$baseTick(CallbackInfo ci) {
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (curse > -1) {
+            if (curse == LocacacaCurseIndex.HEART) {
+                if (this.tickCount % 20 == 0) {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HEART), 1.0F);
+                }
+            }
+        }
+    }
+
+    /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
         byte curse = this.roundabout$getLocacacaCurse();

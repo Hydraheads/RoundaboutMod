@@ -57,10 +57,17 @@
   "hud.roundabout.standout": "Stand Summoned",
 
   "death.attack.stand": "%1$s died to a mysterious power!",
+  "death.attack.stand.player": "%1$s died to a mysterious power whilst fighting %2$s!",
   "death.attack.time": "Time caught up with %1$s!",
+  "death.attack.time.player": "Time caught up with %1$s whilst fighting %2$s!",
   "death.attack.knife": "%1$s was knifed to death!",
+  "death.attack.knife.player": "%1$s was knifed to death by %2$s!",
   "death.attack.match": "%1$s met their match!",
+  "death.attack.match.player": "%1$s met their match in battle with %2$s!",
   "death.attack.barbed_wire": "%1$s ran into a wire!",
+  "death.attack.barbed_wire.player": "%1$s an into a wire whilst fighting %2$s!",
+  "death.attack.heart": "%1$s had a change of heart!",
+  "death.attack.heart.player": "%1$s had a change of heart in battle with %2$s!",
 
   "commands.roundabout.force_summon.multiple": "Summoned stands from %s entities",
   "commands.roundabout.force_summon.single": "Summoned stand from %s",
