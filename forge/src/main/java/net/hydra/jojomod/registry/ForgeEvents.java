@@ -46,7 +46,9 @@ public class ForgeEvents {
         /*Common Code Bridge*/
 
         ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
+        ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
+        ModBlocks.NEW_LOCACACA_BLOCK = ForgeBlocks.NEW_LOCACACA_BLOCK.get();
         ModBlocks.GASOLINE_SPLATTER = ForgeBlocks.GASOLINE_SPLATTER.get();
         ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
@@ -66,6 +68,8 @@ public class ForgeEvents {
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
+        ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
+        ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;

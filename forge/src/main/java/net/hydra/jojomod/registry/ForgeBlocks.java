@@ -21,8 +21,13 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
+    public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",
+            () -> ModBlocks.LOCACACA_CACTUS
+    );
     public static final RegistryObject<Block> LOCACACA_BLOCK = BLOCKS.register("locacaca_plant",
             () -> ModBlocks.LOCACACA_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> NEW_LOCACACA_BLOCK = BLOCKS.register("new_locacaca_plant",
+            () -> ModBlocks.NEW_LOCACACA_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> GASOLINE_SPLATTER = BLOCKS.register("gasoline_splatter",
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> WIRE_TRAP = BLOCKS.register("wire_trap",

@@ -6,10 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.BeetrootBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -23,8 +20,10 @@ public class ModBlocks {
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static Block METEOR_BLOCK;
+    public static Block LOCACACA_CACTUS;
 
     public static Block LOCACACA_BLOCK;
+    public static Block NEW_LOCACACA_BLOCK;
 
     public static Block GASOLINE_SPLATTER;
     public static Block WIRE_TRAP;
@@ -39,6 +38,13 @@ public class ModBlocks {
                     .sound(SoundType.METAL)
     );
 
+    public static Block LOCACACA_CACTUS_PROPERTIES = new LocacacaCactusBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .randomTicks().strength(0.4F)
+                    .sound(SoundType.WOOL)
+                    .pushReaction(PushReaction.DESTROY));
+
     public static Block LOCACACA_BLOCK_PROPERTIES = new LocacacaBlock(
             BlockBehaviour.Properties.of()
                             .mapColor(MapColor.PLANT)
@@ -48,6 +54,15 @@ public class ModBlocks {
                             .sound(SoundType.CROP)
                             .pushReaction(PushReaction.DESTROY)
             );
+    public static Block NEW_LOCACACA_BLOCK_PROPERTIES = new NewLocacacaBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .noCollission()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(PushReaction.DESTROY)
+    );
 
     public static GasolineBlock GASOLINE_SPLATTER_PROPERTIES = new GasolineBlock(
             BlockBehaviour.Properties.of()

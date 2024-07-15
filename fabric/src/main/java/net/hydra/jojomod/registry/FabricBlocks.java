@@ -23,7 +23,11 @@ import net.minecraft.world.level.material.PushReaction;
 public class FabricBlocks {
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
+    public static final Block LOCACACA_CACTUS = registerBlock("locacaca_cactus", ModBlocks.LOCACACA_CACTUS_PROPERTIES
+    );
     public static final Block LOCACACA_BLOCK = registerBlock("locacaca_plant", ModBlocks.LOCACACA_BLOCK_PROPERTIES
+    );
+    public static final Block NEW_LOCACACA_BLOCK = registerBlock("new_locacaca_plant", ModBlocks.NEW_LOCACACA_BLOCK_PROPERTIES
     );
     public static final Block GASOLINE_SPLATTER = registerBlock("gasoline_splatter", ModBlocks.GASOLINE_SPLATTER_PROPERTIES
     );
@@ -47,7 +51,9 @@ public class FabricBlocks {
 
     public static void register(){
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
+        ModBlocks.LOCACACA_CACTUS = LOCACACA_CACTUS;
         ModBlocks.LOCACACA_BLOCK = LOCACACA_BLOCK;
+        ModBlocks.NEW_LOCACACA_BLOCK = NEW_LOCACACA_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
         ModBlocks.BARBED_WIRE = BARBED_WIRE;
         ModBlocks.BARBED_WIRE_BUNDLE = BARBED_WIRE_BUNDLE;

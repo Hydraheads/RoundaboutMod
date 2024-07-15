@@ -15,6 +15,8 @@
   "item.roundabout.gasoline_bucket": "Bucket of Gasoline Splatter",
   "item.roundabout.locacaca": "Locacaca",
   "item.roundabout.locacaca_pit": "Locacaca Pit",
+  "item.roundabout.locacaca_branch": "Locacaca Branch",
+  "item.roundabout.new_locacaca": "New Locacaca",
 
   "text.roundabout.meteorite": "Meteorite",
 
@@ -29,7 +31,9 @@
   "entity.roundabout.gasoline_splatter": "Gasoline Splatter",
 
   "block.roundabout.meteor_block": "Meteorite Block",
+  "block.roundabout.locacaca_cactus": "Locacaca Cactus",
   "block.roundabout.locacaca_plant": "Locacaca Plant",
+  "block.roundabout.new_locacaca_plant": "New Locacaca Plant",
   "block.roundabout.gasoline_splatter": "Gasoline Splatter",
   "block.roundabout.wire_trap": "Wire Trap",
   "block.roundabout.barbed_wire": "Barbed Wire Trap",

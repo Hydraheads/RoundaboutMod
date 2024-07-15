@@ -46,7 +46,7 @@ public class LocacacaBlock extends BushBlock
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
-        return new ItemStack(Items.SWEET_BERRIES);
+        return new ItemStack(getFruitType());
     }
 
     @SuppressWarnings("deprecation")
@@ -77,6 +77,10 @@ public class LocacacaBlock extends BushBlock
         }
     }
 
+    public ItemLike getFruitType(){
+        return ModItems.LOCACACA;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
@@ -88,7 +92,7 @@ public class LocacacaBlock extends BushBlock
         }
         if (i > 3) {
             int j = 3 + level.random.nextInt(1);
-            SweetBerryBushBlock.popResource(level, blockPos, new ItemStack(ModItems.LOCACACA, j + (bl ? 1 : 0)));
+            SweetBerryBushBlock.popResource(level, blockPos, new ItemStack(this.getFruitType(), j + (bl ? 1 : 0)));
             level.playSound(null, blockPos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4f);
             BlockState blockState2 = (BlockState)blockState.setValue(AGE, 3);
             level.setBlock(blockPos, blockState2, 2);

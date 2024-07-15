@@ -1,69 +1,69 @@
 {
   "type": "minecraft:block",
-  "functions": [
-    {
-      "function": "minecraft:explosion_decay"
-    }
-  ],
   "pools": [
     {
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "block": "roundabout:locacaca_plant",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
-                    "age": "3"
-                  }
-                }
-              ],
-              "name": "roundabout:locacaca"
-            },
-            {
-              "type": "minecraft:item",
-              "name": "roundabout:locacaca_pit"
-            }
-          ]
-        }
-      ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "block": "roundabout:locacaca_plant",
-          "condition": "minecraft:block_state_property",
-          "properties": {
-            "age": "3"
-          }
-        }
-      ],
+      "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:binomial_with_bonus_count",
-              "function": "minecraft:apply_bonus",
-              "parameters": {
-                "extra": 3,
-                "probability": 0.5714286
-              }
-            }
-          ],
           "name": "roundabout:locacaca_pit"
         }
-      ],
-      "rolls": 1.0
+      ]
+    },
+    {
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "roundabout:locacaca",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.8
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "roundabout:locacaca_branch",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "roundabout:locacaca_branch",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": 4
+              }
+            }
+          ]
+        }
+      ]
     }
-  ],
-  "random_sequence": "roundabout:blocks/locacaca_plant"
+  ]
 }

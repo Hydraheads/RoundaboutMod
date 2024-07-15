@@ -7,6 +7,8 @@ public class ModItems {
     public static Item STAND_DISC;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;
+    public static Item LOCACACA_BRANCH;
+    public static Item NEW_LOCACACA;
     public static Item COFFEE_GUM;
     public static Item METEORITE;
     public static Item TERRIER_SPAWN_EGG;

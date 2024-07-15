@@ -30,7 +30,9 @@ public class FabricItems {
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item LOCACACA_PIT = registerItem("locacaca_pit", (Item) new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties()));
+    public static Item LOCACACA_BRANCH = registerItem("locacaca_branch", (Item) new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
+    public static Item NEW_LOCACACA = registerItem("new_locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
@@ -45,7 +47,6 @@ public class FabricItems {
             new ResourceLocation(Roundabout.MOD_ID, "jojo"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo"))
                     .icon(() -> new ItemStack(STAND_ARROW)).displayItems((displayContext, entries) -> {
-
                         //Add all items from the Jojo mod tab here
 
                         entries.accept(STAND_ARROW);
@@ -65,9 +66,12 @@ public class FabricItems {
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
+                        entries.accept(LOCACACA_BRANCH.asItem());
+                        entries.accept(NEW_LOCACACA);
                         entries.accept(METEORITE);
 
                         entries.accept(ModBlocks.METEOR_BLOCK);
+                        entries.accept(ModBlocks.LOCACACA_CACTUS);
 
                     }).build());
 
@@ -87,6 +91,8 @@ public class FabricItems {
         ModItems.METEORITE = METEORITE;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
         ModItems.LOCACACA = LOCACACA;
+        ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;
+        ModItems.NEW_LOCACACA = NEW_LOCACACA;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
     }
 }

@@ -18,7 +18,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         FabricKeyInputs.register();
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.GASOLINE_SPLATTER,
                 ModBlocks.BARBED_WIRE, ModBlocks.WIRE_TRAP, ModBlocks.BARBED_WIRE_BUNDLE,
-                ModBlocks.LOCACACA_BLOCK);
+                ModBlocks.LOCACACA_BLOCK, ModBlocks.NEW_LOCACACA_BLOCK, ModBlocks.LOCACACA_CACTUS);
         FabricPacketManager.registerS2CPackets();
         ModParticlesClient.registerClientParticles();
         FabricEntityClient.register();

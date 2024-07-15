@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross":"roundabout:block/locacaca_stage2"
+    "cross":"roundabout:block/new_locacaca_stage2"
   },
   "render_type": "cutout"
 }
