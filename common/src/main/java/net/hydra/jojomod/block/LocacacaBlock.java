@@ -73,6 +73,7 @@ public class LocacacaBlock extends BushBlock
         if (i < 4 && randomSource.nextInt(15) == 0 && serverLevel.getRawBrightness(blockPos.above(), 0) >= 9) {
             BlockState blockState2 = (BlockState)blockState.setValue(AGE, i + 1);
             serverLevel.setBlock(blockPos, blockState2, 2);
+            convertCacti(serverLevel,blockPos,blockState2);
             serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
         }
     }
@@ -122,5 +123,19 @@ public class LocacacaBlock extends BushBlock
     public void performBonemeal(ServerLevel serverLevel, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
         int i = Math.min(4, blockState.getValue(AGE) + 1);
         serverLevel.setBlock(blockPos, (BlockState)blockState.setValue(AGE, i), 2);
+        convertCacti(serverLevel,blockPos,serverLevel.getBlockState(blockPos));
+    }
+
+    @SuppressWarnings("deprecation")
+    public void convertCacti(ServerLevel level, BlockPos blockPos, BlockState blockState){
+        if (blockState.getValue(AGE) == 3){
+            BlockPos pos = blockPos.below();
+            BlockState state = level.getBlockState(pos);
+            while (state.getBlock() instanceof CactusBlock){
+                level.setBlock(pos, ModBlocks.LOCACACA_CACTUS.defaultBlockState(), 2);
+                pos = pos.below();
+                state = level.getBlockState(pos);
+            }
+        }
     }
 }
