@@ -1,16 +1,25 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.projectile.KnifeLayer;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.ArrowLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +45,38 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     private static AbstractClientPlayer ACP;
     private static InteractionHand IH;
+
+
+    /**Stone Arms with locacaca first person*/
+    @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
+    public void renderRightHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+        byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
+        if (curse == LocacacaCurseIndex.MAIN_HAND) {
+            this.model.rightSleeve.xScale += 0.04F;
+            this.model.rightSleeve.zScale += 0.04F;
+            this.model.rightSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+            this.model.rightSleeve.xScale -= 0.04F;
+            this.model.rightSleeve.zScale -= 0.04F;
+        }
+    }
+
+    @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
+    public void renderLeftHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+        byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
+        if (curse == LocacacaCurseIndex.OFF_HAND) {
+            this.model.leftSleeve.xScale += 0.04F;
+            this.model.leftSleeve.zScale += 0.04F;
+            this.model.leftSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+            this.model.leftSleeve.xScale -= 0.04F;
+            this.model.leftSleeve.zScale -= 0.04F;
+        }
+    }
+
+
+    @Shadow
+    private void setModelProperties(AbstractClientPlayer $$0) {
+    }
+
 
     @Inject(method = "getArmPose", at = @At(value = "HEAD"))
     private static void roundaboutGetArmPose(AbstractClientPlayer $$0, InteractionHand $$1, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
