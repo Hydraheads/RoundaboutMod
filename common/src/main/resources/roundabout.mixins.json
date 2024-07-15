@@ -55,6 +55,7 @@
     "ZItemInHandLayer",
     "ZItemInHandRenderer",
     "ZLivingEntityRenderer",
+    "ZMultiPlayerGameMode",
     "ZParticle",
     "ZParticleAccess",
     "ZParticleEngine",

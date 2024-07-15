@@ -67,7 +67,7 @@ public class BarbedWireBlock extends RotatedPillarBlock
         if (!entity.isCrouching() && entity instanceof LivingEntity) {
             net.minecraft.world.phys.AABB AB = entity.getBoundingBox();
             VoxelShape vs =  getTrueShape(blockState);
-            if (AB.intersects(blockPos.getX()+vs.min(Direction.Axis.X),blockPos.getY()+vs.min(Direction.Axis.Y),vs.min(Direction.Axis.Z),
+            if (AB.intersects(blockPos.getX()+vs.min(Direction.Axis.X),blockPos.getY()+vs.min(Direction.Axis.Y),blockPos.getZ()+vs.min(Direction.Axis.Z),
                     blockPos.getX()+vs.max(Direction.Axis.X),blockPos.getY()+vs.max(Direction.Axis.Y),blockPos.getZ()+vs.max(Direction.Axis.Z))){
                 if (!entity.isInvulnerable() && entity.isAlive()){
                     Vec3 dm = entity.getDeltaMovement();

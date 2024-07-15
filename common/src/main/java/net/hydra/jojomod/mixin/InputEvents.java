@@ -88,14 +88,14 @@ public abstract class InputEvents {
             }
         }
         @Inject(method = "startUseItem", at = @At("TAIL"), cancellable = true)
-        public void roundaboutDoItemUse(CallbackInfo ci) {
+        public void roundabout$DoItemUse(CallbackInfo ci) {
             if (player != null) {
-                roundaboutTryGuard();
+                roundabout$TryGuard();
             }
         }
 
         @Unique
-        public void roundaboutTryGuard(){
+        public void roundabout$TryGuard(){
             StandUser standComp = ((StandUser) player);
             if (standComp.getActive()) {
                 if (!standComp.isGuarding() && !standComp.isBarraging() && !standComp.isClashing()) {
@@ -150,12 +150,12 @@ public abstract class InputEvents {
                                             Block block = ((BlockItem) $$1.getItem()).getBlock();
                                             if (block instanceof BedBlock || block instanceof WebBlock || block instanceof RespawnAnchorBlock
                                                     || block.defaultDestroyTime() > 20){
-                                                roundaboutTryGuard();
+                                                roundabout$TryGuard();
                                                 ci.cancel();
                                             }
                                         } else if ($$1.getItem() instanceof EndCrystalItem || $$1.getItem() instanceof MinecartItem
                                                 || $$1.getItem() instanceof BucketItem){
-                                            roundaboutTryGuard();
+                                            roundabout$TryGuard();
                                             ci.cancel();
                                         }
                                 }
@@ -182,7 +182,7 @@ public abstract class InputEvents {
                                         EntityHitResult $$2 = (EntityHitResult) this.hitResult;
                                         Entity $$3 = $$2.getEntity();
                                         if ($$3 instanceof LivingEntity){
-                                            roundaboutTryGuard();
+                                            roundabout$TryGuard();
                                             ci.cancel();
 
                                             if (!$$1.isEmpty()) {
