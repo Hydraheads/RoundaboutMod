@@ -116,7 +116,7 @@ public abstract class StandEntity extends Mob{
     public final AnimationState brokenBlockAnimationState = new AnimationState();
 
     /**Override this to define animations. Above are animation states defined.*/
-    private void setupAnimationStates() {
+    protected void setupAnimationStates() {
         if (this.getUser() != null) {
             if (this.getAnimation() == 0) {
                 this.idleAnimationState.startIfStopped(this.tickCount);

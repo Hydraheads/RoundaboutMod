@@ -116,11 +116,13 @@ public class PowersTheWorld extends StandPowers {
                 /*Time Stop*/
           if (!this.getSelf().level().isClientSide()) {
               if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+                  boolean animate = false;
                   hasActedInTS = false;
                   this.setCurrentMaxTSTime(this.getChargedTSTicks());
                   if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
                       if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                           /*Charged Sound*/
+                          animate = true;
                           playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
                       } else {
                           /*No Charged Sound*/
@@ -132,6 +134,11 @@ public class PowersTheWorld extends StandPowers {
                       ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
                   }
                   ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                  /**
+                  if (animate){
+                      animateStand((byte) 31);
+                  }
+                   */
               }
           } else {
               ((StandUser) this.getSelf()).tryPower(PowerIndex.LEAD_IN, true);
@@ -226,7 +233,7 @@ public class PowersTheWorld extends StandPowers {
 
         this.setActivePower(PowerIndex.SPECIAL);
         poseStand(OffsetIndex.GUARD);
-        animateStand((byte) 0);
+        animateStand((byte) 30);
 
         if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
             playSoundsIfNearby(getTSVoice(), 100, false);
