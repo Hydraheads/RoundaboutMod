@@ -352,9 +352,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     public void breakGuard() {
         this.GuardBroken = true;
+        if (!this.level().isClientSide && this.getStandPowers().isGuarding()) {
+            this.getStandPowers().animateStand((byte) 15);
+        }
         this.syncGuard();
-    } public void setGuardBroken(boolean guardBroken){
+    }
+    public void setGuardBroken(boolean guardBroken){
         this.GuardBroken = guardBroken;
+        if (!this.level().isClientSide) {
+            if (guardBroken && this.getStandPowers().isGuarding()){
+                this.getStandPowers().animateStand((byte) 15);
+            } else if (!guardBroken && this.getStandPowers().isGuarding()){
+                this.getStandPowers().animateStand((byte) 10);
+            }
+        }
     }
     public void damageGuard(float damage){
         float finalGuard = this.GuardPoints - damage;
@@ -370,6 +381,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     } public void fixGuard() {
         this.GuardPoints = this.maxGuardPoints;
         this.GuardBroken = false;
+        if (!this.level().isClientSide && this.getStandPowers().isGuarding()) {
+            this.getStandPowers().animateStand((byte) 10);
+        }
         this.syncGuard();
     } public void regenGuard(float regen){
         float finalGuard = this.GuardPoints + regen;

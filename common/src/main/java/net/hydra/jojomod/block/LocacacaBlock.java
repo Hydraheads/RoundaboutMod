@@ -70,7 +70,7 @@ public class LocacacaBlock extends BushBlock
     @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
         int i = blockState.getValue(AGE);
-        if (i < 4 && randomSource.nextInt(15) == 0 && serverLevel.getRawBrightness(blockPos.above(), 0) >= 9) {
+        if (i < 4 && randomSource.nextInt(20) == 0 && serverLevel.getRawBrightness(blockPos.above(), 0) >= 9) {
             BlockState blockState2 = (BlockState)blockState.setValue(AGE, i + 1);
             serverLevel.setBlock(blockPos, blockState2, 2);
             convertCacti(serverLevel,blockPos,blockState2);

@@ -113,6 +113,7 @@ public abstract class StandEntity extends Mob{
     public final AnimationState barrageAnimationState = new AnimationState();
     public final AnimationState barrageEndAnimationState = new AnimationState();
     public final AnimationState barrageHurtAnimationState = new AnimationState();
+    public final AnimationState brokenBlockAnimationState = new AnimationState();
 
     /**Override this to define animations. Above are animation states defined.*/
     private void setupAnimationStates() {
@@ -164,6 +165,12 @@ public abstract class StandEntity extends Mob{
                 this.barrageHurtAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.barrageHurtAnimationState.stop();
+            }
+
+            if (this.getAnimation() == 15) {
+                this.brokenBlockAnimationState.startIfStopped(this.tickCount);
+            } else {
+                this.brokenBlockAnimationState.stop();
             }
         }
     }

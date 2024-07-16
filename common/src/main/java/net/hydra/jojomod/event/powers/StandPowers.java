@@ -1439,7 +1439,11 @@ public abstract class StandPowers {
         return false;
     }
     public void setPowerGuard() {
-        animateStand((byte) 10);
+        if (((StandUser)this.self).getGuardBroken()) {
+            animateStand((byte) 15);
+        } else {
+            animateStand((byte) 10);
+        }
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.GUARD);
         this.poseStand(OffsetIndex.GUARD);

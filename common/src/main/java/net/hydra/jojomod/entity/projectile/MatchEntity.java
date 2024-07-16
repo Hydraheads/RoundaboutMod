@@ -11,6 +11,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.mixin.ZFireBlock;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -71,6 +72,10 @@ public class MatchEntity extends ThrowableItemProjectile {
                 TntBlock.explode(this.level(), $$0.getBlockPos());
             }
         } else {
+            if (!this.level().isClientSide) {
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(),
+                        0, 0.0, 0, 0.0, 0.4);
+            }
             SoundEvent $$6 = SoundEvents.WOOD_STEP;
             this.playSound($$6, 0.5F, 2F);
         }

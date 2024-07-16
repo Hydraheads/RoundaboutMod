@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -215,6 +216,28 @@ public class MainUtil {
         }
 
 
+    }
+
+
+    /**For new Locacaca mechanics and rendering*/
+    public static LivingEntity getStoneTarget(Level $$0, LivingEntity $$1){
+        List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox($$0, $$1.getX(), $$1.getY(),
+                $$1.getZ(), 5, 5, 5));
+        double maxDistance = 5;
+        LivingEntity target = null;
+        if (!entities.isEmpty()) {
+            for (Entity value : entities) {
+                if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)) {
+                    double distance = value.position().distanceTo($$1.position());
+                    if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
+                        target = (LivingEntity) value;
+                        maxDistance = distance;
+                    }
+                }
+            }
+        }
+
+        return target;
     }
 
     /**A generalized packet for sending ints to the client. Context is what to do with the data int*/

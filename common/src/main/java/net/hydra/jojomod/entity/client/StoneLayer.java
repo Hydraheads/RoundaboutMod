@@ -30,6 +30,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import javax.annotation.Nullable;
 
 public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
+    /**Code for humanoid models turned to stone*/
     private final EntityRenderDispatcher dispatcher;
 
     private final LivingEntityRenderer<T, M> livingEntityRenderer;

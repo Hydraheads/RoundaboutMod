@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.client.LocacacaBeamLayer;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.projectile.KnifeLayer;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -40,6 +41,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
     private void roundaboutRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
         this.addLayer(new KnifeLayer<>($$0, this));
+        this.addLayer(new LocacacaBeamLayer<>($$0, this));
         this.addLayer(new StoneLayer<>($$0, this));
     }
 

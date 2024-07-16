@@ -3,11 +3,14 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.entity.client.LocacacaBeamLayer;
+import net.hydra.jojomod.entity.client.ModFirstPersonLayers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -100,6 +103,17 @@ public class ZScreenShaking {
 
     @Shadow
     private void bobView(PoseStack $$0, float $$1){}
+    @Shadow
+    @Final
+    private RenderBuffers renderBuffers;
+    @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$renderLevel(float $$0, long $$1, PoseStack $$2, CallbackInfo ci) {
+        if (this.minecraft.options.getCameraType().isFirstPerson() && this.minecraft.player != null){
+            $$2.pushPose();
+            ModFirstPersonLayers.render($$2,this.renderBuffers.bufferSource(),this.minecraft.getEntityRenderDispatcher().getPackedLightCoords(this.minecraft.player, $$0),this.minecraft.player,$$0);
+            $$2.popPose();
+        }
+    }
 
 
     @Inject(method = "bobView", at = @At(value = "HEAD"), cancellable = true)
