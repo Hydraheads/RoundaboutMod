@@ -22,9 +22,10 @@
               "chance": 0.8
             },
             {
+              "block": "roundabout:locacaca_plant",
               "condition": "minecraft:block_state_property",
               "properties": {
-                "age": 4
+                "age": "4"
               }
             }
           ]
@@ -39,9 +40,10 @@
           "name": "roundabout:locacaca_branch",
           "conditions": [
             {
+              "block": "roundabout:locacaca_plant",
               "condition": "minecraft:block_state_property",
               "properties": {
-                "age": 3
+                "age": "3"
               }
             }
           ]
@@ -56,9 +58,10 @@
           "name": "roundabout:locacaca_branch",
           "conditions": [
             {
+              "block": "roundabout:locacaca_plant",
               "condition": "minecraft:block_state_property",
               "properties": {
-                "age": 4
+                "age": "4"
               }
             }
           ]
