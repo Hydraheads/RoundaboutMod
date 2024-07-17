@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -47,6 +48,10 @@ public class NewLocacacaItem extends Item {
 
     @Override
     public void onUseTick(Level $$0, LivingEntity $$1, ItemStack $$2, int $$3) {
+        if ($$1 instanceof Player && !((TimeStop) $$1.level()).getTimeStoppingEntities().isEmpty() &&
+                ((TimeStop) $$1.level()).isTimeStoppingEntity($$1)) {
+            $$1.stopUsingItem();
+        } else {
             LivingEntity ent = MainUtil.getStoneTarget($$0, $$1);
             if (ent != null) {
                 float scale = ($$2.getUseDuration() - $$1.getUseItemRemainingTicks());
@@ -62,11 +67,12 @@ public class NewLocacacaItem extends Item {
                             0.08);
                 }
                 ent.setDeltaMovement(ent.getDeltaMovement().add(
-                        ($$1.getX() - ent.getX())*0.018,
+                        ($$1.getX() - ent.getX()) * 0.018,
                         0,
-                        ($$1.getZ() - ent.getZ())*0.018
+                        ($$1.getZ() - ent.getZ()) * 0.018
                 ));
             }
+        }
     }
 
     public float getFusionDamage(LivingEntity target, float basePower){
