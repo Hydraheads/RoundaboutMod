@@ -104,6 +104,10 @@ public class KnifeEntity extends AbstractArrow {
         this.setDeltaMovement(this.getDeltaMovement().add($$9.x, $$0.onGround() ? 0.0 : $$9.y, $$9.z));
     }
 
+    @Override
+    protected SoundEvent getDefaultHitGroundSoundEvent() {
+        return ModSounds.KNIFE_IMPACT_GROUND_EVENT;
+    }
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {

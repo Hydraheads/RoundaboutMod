@@ -2,6 +2,9 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -57,6 +60,8 @@ public class LocacacaItem extends Item {
         ItemStack $$3 = super.finishUsingItem(itemStack, level, entity);
         if (!level.isClientSide && entity.isAlive()) {
             randomizeStone(entity);
+            SoundEvent $$6 = ModSounds.LOCACACA_PETRIFY_EVENT;
+            level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
         }
 
         return $$3;

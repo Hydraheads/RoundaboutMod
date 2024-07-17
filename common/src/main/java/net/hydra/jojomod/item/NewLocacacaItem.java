@@ -8,11 +8,14 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -114,10 +117,15 @@ public class NewLocacacaItem extends Item {
                         }
                         ((StandUser) entity).roundabout$setLocacacaCurse((byte) -1);
                     }
+
+                    SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
+                    level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
                 } else {
                     if (entCurse > -1){
                         ((StandUser) entity).roundabout$setLocacacaCurse(entCurse);
                         ((StandUser) ent).roundabout$setLocacacaCurse((byte) -1);
+                        SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
+                        level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
                     } else {
                         float health = entity.getHealth();
                         float maxHealth = entity.getMaxHealth();
@@ -127,6 +135,8 @@ public class NewLocacacaItem extends Item {
                             health = maxHealth;
                         }
                         if (ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), exchangeDamage)){
+                            SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
+                            level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
                             entity.setHealth(health);
                             Iterator<MobEffectInstance> collection = entity.getActiveEffectsMap().values().iterator();
 

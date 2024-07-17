@@ -65,6 +65,24 @@
       "roundabout:knife_impact"
     ]
   },
+  "knife_impact_ground": {
+    "subtitle": "sounds.roundabout.knife_impact_ground",
+    "sounds": [
+      "roundabout:knife_impact_ground"
+    ]
+  },
+  "locacaca_petrify": {
+    "subtitle": "sounds.roundabout.locacaca_petrify",
+    "sounds": [
+      "roundabout:locacaca_petrify"
+    ]
+  },
+  "locacaca_fusion": {
+    "subtitle": "sounds.roundabout.locacaca_fusion",
+    "sounds": [
+      "roundabout:locacaca_fusion"
+    ]
+  },
   "gasoline_explosion": {
     "subtitle": "sounds.roundabout.gasoline_explosion",
     "sounds": [

@@ -27,6 +27,12 @@ public class ForgeSounds {
             register(ModSounds.KNIFE_BUNDLE_THROW_SOUND, ModSounds.KNIFE_BUNDLE_THROW_SOUND_ID);
     public static final RegistryObject<SoundEvent> KNIFE_IMPACT_EVENT =
             register(ModSounds.KNIFE_IMPACT, ModSounds.KNIFE_IMPACT_ID);
+    public static final RegistryObject<SoundEvent> KNIFE_IMPACT_GROUND_EVENT =
+            register(ModSounds.KNIFE_IMPACT_GROUND, ModSounds.KNIFE_IMPACT_GROUND_ID);
+    public static final RegistryObject<SoundEvent> LOCACACA_PETRIFY_EVENT =
+            register(ModSounds.LOCACACA_PETRIFY, ModSounds.LOCACACA_PETRIFY_ID);
+    public static final RegistryObject<SoundEvent> LOCACACA_FUSION_EVENT =
+            register(ModSounds.LOCACACA_FUSION, ModSounds.LOCACACA_FUSION_ID);
     public static final RegistryObject<SoundEvent> PUNCH_1_SOUND_EVENT =
             register(ModSounds.PUNCH_1_SOUND, ModSounds.PUNCH_1_SOUND_ID);
     public static final RegistryObject<SoundEvent> PUNCH_2_SOUND_EVENT =
