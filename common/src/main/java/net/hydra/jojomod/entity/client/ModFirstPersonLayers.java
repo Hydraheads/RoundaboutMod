@@ -49,8 +49,7 @@ public class ModFirstPersonLayers {
         return ((float)( ent.getUseItem().getUseDuration() - ent.getUseItemRemainingTicks()) + $$0) / (float)item.getUseDuration();
     }
 
-    public static void render(PoseStack ps, MultiBufferSource mb, int packedLight, LivingEntity player, float deltaTime){
-        /**
+    public static void render(PoseStack pss, MultiBufferSource mb, int packedLight, LivingEntity player, float deltaTime){
         if (player.isUsingItem() && player.getUseItem().is(ModItems.NEW_LOCACACA)) {
             LivingEntity ent = MainUtil.getStoneTarget(player.level(), player);
             if (ent != null) {
@@ -58,7 +57,7 @@ public class ModFirstPersonLayers {
                 float $$8 = ( player.getUseItem().getUseDuration() - player.getUseItemRemainingTicks()) + deltaTime;
                 float f2 = $$8 * 0.5F % 1.0F;
                 float f3 = (float) (player.getBbHeight() * 0.5D);
-                ps.pushPose();
+                PoseStack ps = new PoseStack();
                 ps.translate(0.0F, f3, 0.0F);
                 Vec3 vec3 = getPosition(ent, (double)ent.getBbHeight() * 0.5D, deltaTime);
                 Vec3 vec31 = getPosition(player, (double)f3, deltaTime);
@@ -67,8 +66,10 @@ public class ModFirstPersonLayers {
                 vec32 = vec32.normalize();
                 float f5 = (float)Math.acos(vec32.y);
                 float f6 = (float)Math.atan2(vec32.z, vec32.x);
-                ps.mulPose(Axis.YP.rotationDegrees((((float)Math.PI / 2F) - f6) * (180F / (float)Math.PI)));
-                ps.mulPose(Axis.XP.rotationDegrees(f5 * (180F / (float)Math.PI)));
+
+                ps.mulPose(Axis.YN.rotationDegrees(0));
+                ps.mulPose(Axis.YP.rotationDegrees(((1.5707964F - f6) * 57.295776F)));
+                ps.mulPose(Axis.XP.rotationDegrees(f5  * 57.295776F));
                 int i = 1;
                 float f7 = $$8 * 0.05F * -1.5F;
                 float f8 = $$7 * $$7;
@@ -123,7 +124,6 @@ public class ModFirstPersonLayers {
                 ps.popPose();
             }
         }
-         */
     }
 
 }

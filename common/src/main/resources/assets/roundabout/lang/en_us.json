@@ -72,6 +72,8 @@
   "death.attack.barbed_wire.player": "%1$s an into a wire whilst fighting %2$s!",
   "death.attack.heart": "%1$s had a change of heart!",
   "death.attack.heart.player": "%1$s had a change of heart in battle with %2$s!",
+  "death.attack.fusion": "%1$s was exchanged!",
+  "death.attack.fusion.player": "%1$s was fused into %2$s!",
 
   "commands.roundabout.force_summon.multiple": "Summoned stands from %s entities",
   "commands.roundabout.force_summon.single": "Summoned stand from %s",

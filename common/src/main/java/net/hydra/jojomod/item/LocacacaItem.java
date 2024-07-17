@@ -55,7 +55,7 @@ public class LocacacaItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
         ItemStack $$3 = super.finishUsingItem(itemStack, level, entity);
-        if (!level.isClientSide) {
+        if (!level.isClientSide && entity.isAlive()) {
             randomizeStone(entity);
         }
 

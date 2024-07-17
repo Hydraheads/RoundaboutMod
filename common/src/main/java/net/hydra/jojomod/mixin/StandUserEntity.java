@@ -363,7 +363,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (guardBroken && this.getStandPowers().isGuarding()){
                 this.getStandPowers().animateStand((byte) 15);
             } else if (!guardBroken && this.getStandPowers().isGuarding()){
-                this.getStandPowers().animateStand((byte) 10);
+                this.getStandPowers().animateStand((byte) 15);
             }
         }
     }

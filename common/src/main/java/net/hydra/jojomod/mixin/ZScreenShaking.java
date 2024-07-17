@@ -108,11 +108,13 @@ public class ZScreenShaking {
     private RenderBuffers renderBuffers;
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderLevel(float $$0, long $$1, PoseStack $$2, CallbackInfo ci) {
+        /*
         if (this.minecraft.options.getCameraType().isFirstPerson() && this.minecraft.player != null){
             $$2.pushPose();
             ModFirstPersonLayers.render($$2,this.renderBuffers.bufferSource(),this.minecraft.getEntityRenderDispatcher().getPackedLightCoords(this.minecraft.player, $$0),this.minecraft.player,$$0);
             $$2.popPose();
         }
+         */
     }
 
 
