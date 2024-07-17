@@ -2,8 +2,10 @@ package net.hydra.jojomod.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -31,5 +33,9 @@ public class LocacacaCactusBlock extends CactusBlock {
 
         BlockState $$5 = $$1.getBlockState($$2.below());
         return ($$5.is(ModBlocks.LOCACACA_CACTUS) || $$5.is(BlockTags.SAND)) && !$$1.getBlockState($$2.above()).liquid();
+    }
+    /**Locacaca Cactus doesnt grow*/
+    @Override
+    public void randomTick(BlockState $$0, ServerLevel $$1, BlockPos $$2, RandomSource $$3) {
     }
 }

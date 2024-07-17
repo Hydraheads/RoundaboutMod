@@ -1,5 +1,7 @@
 package net.hydra.jojomod.item;
 
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -10,10 +12,14 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +28,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class NewLocacacaItem extends Item {
 
@@ -74,32 +83,57 @@ public class NewLocacacaItem extends Item {
         byte curse = ((StandUser)entity).roundabout$getLocacacaCurse();
         LivingEntity ent = MainUtil.getStoneTarget(level, entity);
         if (ent != null) {
+            byte entCurse = ((StandUser)ent).roundabout$getLocacacaCurse();
             if (!level.isClientSide && entity.isAlive()) {
-                if (curse > -1){
-                    float damage = 20;
-                    if (curse == LocacacaCurseIndex.HEART || curse == LocacacaCurseIndex.CHEST){
-                        damage = 40;
+                if (curse > -1 && curse != entCurse){
+                    if (entCurse > -1){
+                        ((StandUser) ent).roundabout$setLocacacaCurse(curse);
+                        ((StandUser) entity).roundabout$setLocacacaCurse(entCurse);
+                    } else if (ent instanceof Player){
+                        ((StandUser) ent).roundabout$setLocacacaCurse(curse);
+                        ((StandUser) entity).roundabout$setLocacacaCurse((byte) -1);
+                    } else {
+                        float damage = 20;
+                        if (curse == LocacacaCurseIndex.HEART || curse == LocacacaCurseIndex.CHEST) {
+                            damage = 40;
+                        }
+                        if (ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), damage)) {
+                            if (curse == LocacacaCurseIndex.MAIN_HAND || curse == LocacacaCurseIndex.OFF_HAND) {
+                                ent.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 1200, 1), entity);
+                            } else if (curse == LocacacaCurseIndex.LEFT_LEG || curse == LocacacaCurseIndex.RIGHT_LEG) {
+                                ent.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1200, 1), entity);
+                            } else if (curse == LocacacaCurseIndex.HEAD) {
+                                ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 1200, 0), entity);
+                            }
+                        }
+                        ((StandUser) entity).roundabout$setLocacacaCurse((byte) -1);
                     }
-                    if (ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), damage)){
-                        if (curse == LocacacaCurseIndex.MAIN_HAND || curse == LocacacaCurseIndex.OFF_HAND){
-                            ent.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 1200, 1), entity);
-                        } else if (curse == LocacacaCurseIndex.LEFT_LEG || curse == LocacacaCurseIndex.RIGHT_LEG){
-                            ent.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1200, 1), entity);
-                        } else if (curse == LocacacaCurseIndex.HEAD){
-                            ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 1200, 0), entity);
+                } else {
+                    if (entCurse > -1){
+                        ((StandUser) entity).roundabout$setLocacacaCurse(entCurse);
+                        ((StandUser) ent).roundabout$setLocacacaCurse((byte) -1);
+                    } else {
+                        float health = entity.getHealth();
+                        float maxHealth = entity.getMaxHealth();
+                        float exchangeDamage = maxHealth - health;
+                        health += (maxHealth * 1F);
+                        if (health > maxHealth) {
+                            health = maxHealth;
+                        }
+                        if (ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), exchangeDamage)){
+                            entity.setHealth(health);
+                            Iterator<MobEffectInstance> collection = entity.getActiveEffectsMap().values().iterator();
+
+                            boolean bool;
+                            for (bool = false; collection.hasNext(); bool = true) {
+                                MobEffectInstance effectInstance = collection.next();
+                                if (!effectInstance.getEffect().isBeneficial()){
+                                    ent.addEffect(effectInstance);
+                                    entity.removeEffect(effectInstance.getEffect());
+                                }
+                            }
                         }
                     }
-                    ((StandUser)entity).roundabout$setLocacacaCurse((byte) -1);
-                } else {
-                    float health = entity.getHealth();
-                    float maxHealth = entity.getMaxHealth();
-                    float exchangeDamage = maxHealth - health;
-                    health += (maxHealth*1F);
-                    if (health > maxHealth){
-                        health=maxHealth;
-                    }
-                    entity.setHealth(health);
-                    ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), exchangeDamage);
                 }
             }
         }
