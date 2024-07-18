@@ -59,28 +59,9 @@ public abstract class HudRendering implements IHudAccess {
     private void renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), flashAlpha, otherFlashAlpha);
     }
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
-        if (this.minecraft.player != null) {
-            if (Roundabout.renderGasOverlay) {
-                int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
-                if (overlay > 0) {
-                    int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
-                    float overlay2 = 0;
-                    if (overlay <= 40) {
-                        overlay2 = 0.5F - ((float) (40 - overlay) / 40) * 0.5F;
-                    } else {
-                        overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
-                    }
-                    this.renderTextureOverlay($$0, StandIcons.GASOLINE_OVERLAY, overlay2);
-                }
-            }
-            if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
-                        this.renderTextureOverlay($$0, StandIcons.STONE_HEAD_OVERLAY, 1F);
-                }
-            }
-        }
+        /*This does not work on forge becasue the forcefully overwrite this function*/
     }
 
 
@@ -106,6 +87,7 @@ public abstract class HudRendering implements IHudAccess {
     @Shadow
     private void renderPlayerHealth(GuiGraphics $$0) {}
 
+
     /**desaturate hearts when time is stopped*/
     @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderHealth(GuiGraphics $$0, CallbackInfo ci){
@@ -123,6 +105,36 @@ public abstract class HudRendering implements IHudAccess {
 
     private boolean roundaboutRenderBars(GuiGraphics context, int x){
         if (minecraft.player != null && minecraft.level != null) {
+
+
+            Roundabout.LOGGER.info("1");
+            if (this.minecraft.player != null) {
+                Roundabout.LOGGER.info("2");
+                if (Roundabout.renderGasOverlay) {
+                    int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
+                    if (overlay > 0) {
+                        int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
+                        float overlay2 = 0;
+                        if (overlay <= 40) {
+                            overlay2 = 0.5F - ((float) (40 - overlay) / 40) * 0.5F;
+                        } else {
+                            overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
+                        }
+                        this.renderTextureOverlay(context, StandIcons.GASOLINE_OVERLAY, overlay2);
+                    }
+                }
+                if (this.minecraft.options.getCameraType().isFirstPerson()) {
+                    Roundabout.LOGGER.info("3");
+                    if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
+                        Roundabout.LOGGER.info("4");
+                        this.renderTextureOverlay(context, StandIcons.STONE_HEAD_OVERLAY, 1F);
+                    }
+                }
+            }
+
+
+
+
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 

@@ -54,15 +54,6 @@ public class ZFireBlock implements IFireBlock {
     }
 
 
-    @Inject(method = "checkBurnOut", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;", ordinal = 1, shift = At.Shift.AFTER), cancellable = true)
-    public void roundabout$checkBurnOut(Level $$0, BlockPos $$1, int $$2, RandomSource $$3, int $$4, CallbackInfo ci) {
-        BlockState blkSt = $$0.getBlockState($$1);
-        Block blk = blkSt.getBlock();
-        if (blk instanceof GasolineBlock){
-            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 2, 4, 10);
-            ci.cancel();
-        }
-    }
 
     /**Register Flammable blocks here*/
     public void roundabout$bootstrap() {

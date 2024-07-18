@@ -40,8 +40,24 @@ public class ForgeItems {
             () -> new GasolineCanItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> GASOLINE_BUCKET = addToTab(ITEMS.register("gasoline_bucket",
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<BlockItem> WIRE_TRAP = addToTab(ITEMS.register("wire_trap",
+            () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> BARBED_WIRE = addToTab(ITEMS.register("barbed_wire",
+            () -> new BlockItem(ForgeBlocks.BARBED_WIRE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WIRE_BUNDLE = addToTab(ITEMS.register("barbed_wire_bundle",
+            () -> new BlockItem(ForgeBlocks.BARBED_WIRE_BUNDLE.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToTab(ITEMS.register("meteor_block",
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToTab(ITEMS.register("locacaca_cactus",
+            () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
             )));
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
@@ -58,15 +74,19 @@ public class ForgeItems {
     public static final RegistryObject<Item> METEORITE = addToTab(ITEMS.register("meteorite",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
-            () -> new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties())));
+            () -> new ItemNameBlockItem(ForgeBlocks.LOCACACA_BLOCK.get(), new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA = addToTab(ITEMS.register("locacaca",
             () -> new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA))));
     public static final RegistryObject<Item> LOCACACA_BRANCH = addToTab(ITEMS.register("locacaca_branch",
-            () -> new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties())));
+            () -> new ItemNameBlockItem(ForgeBlocks.NEW_LOCACACA_BLOCK.get(), new Item.Properties())));
     public static final RegistryObject<Item> NEW_LOCACACA = addToTab(ITEMS.register("new_locacaca",
             () -> new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA))));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));
+
+    public static void assignStupidForge(){
+
+    }
 
 }

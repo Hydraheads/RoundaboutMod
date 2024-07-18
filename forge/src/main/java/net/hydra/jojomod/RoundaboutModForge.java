@@ -17,8 +17,9 @@ public class RoundaboutModForge {
     public RoundaboutModForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         ForgeEntities.ENTITY_TYPES.register(bus);
-        ForgeItems.ITEMS.register(bus);
         ForgeBlocks.BLOCKS.register(bus);
+        ForgeItems.assignStupidForge();
+        ForgeItems.ITEMS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
         ForgeSounds.SOUNDS.register(bus);
         ForgeLootModifiers.LOOT_MODIFIERS.register(bus);

@@ -22,7 +22,7 @@ public class ForgeBlocks {
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
     public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",
-            () -> ModBlocks.LOCACACA_CACTUS
+            () -> ModBlocks.LOCACACA_CACTUS_PROPERTIES
     );
     public static final RegistryObject<Block> LOCACACA_BLOCK = BLOCKS.register("locacaca_plant",
             () -> ModBlocks.LOCACACA_BLOCK_PROPERTIES);
