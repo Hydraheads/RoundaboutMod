@@ -20,9 +20,11 @@ public abstract class ZHumanoidMobRenderer<T extends Mob, M extends HumanoidMode
         super($$0, $$1, $$2);
     }
 
+    /**
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/HumanoidModel;FFFF)V", at = @At(value = "RETURN"))
     private void roundabout$renderLocacacaCurse(EntityRendererProvider.Context $$0, HumanoidModel $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         this.addLayer(new StoneLayer<>($$0, this));
     }
+    */
 
 }
