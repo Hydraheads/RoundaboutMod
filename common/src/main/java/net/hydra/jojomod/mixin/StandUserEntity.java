@@ -315,12 +315,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
-        $$0.putByte("roundabout.LocacacaCurse", this.roundabout$getLocacacaCurse());
         return $$0;
     }
-    @Inject(method = "Lnet/minecraft/world/entity/LivingEntity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
-        this.roundabout$setLocacacaCurse($$0.getByte("roundabout.LocacacaCurse"));
     }
 
     /**returns if the mob has a stand. For now, returns if stand is active, but in the future will be more
