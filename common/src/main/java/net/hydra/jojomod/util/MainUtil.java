@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -241,7 +242,7 @@ public class MainUtil {
     }
 
     /**A generalized packet for sending ints to the client. Context is what to do with the data int*/
-    public static void handleIntPacketS2C(Player player, int data, byte context){
+    public static void handleIntPacketS2C(LocalPlayer player, int data, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(data);
         }
