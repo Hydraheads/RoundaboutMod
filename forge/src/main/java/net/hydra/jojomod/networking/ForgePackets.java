@@ -72,7 +72,7 @@ public class ForgePackets implements IPacketAccess {
     }
     @Override
     public void sendIntPacket(ServerPlayer sp, byte activePower, int data) {
-        ForgePacketHandler.sendToClient(new ForgePowerIntPacket(activePower,data), sp);
+        ForgePacketHandler.sendToClient(new ForgeGenericIntPacket(activePower,data), sp);
     }
 
     @Override
