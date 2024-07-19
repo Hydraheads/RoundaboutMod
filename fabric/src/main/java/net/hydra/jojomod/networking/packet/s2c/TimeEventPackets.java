@@ -33,10 +33,8 @@ public class TimeEventPackets {
     public static void updateTileEntityTS(Minecraft client, ClientPacketListener handler,
                                           FriendlyByteBuf buf, PacketSender responseSender){
         if (client.player != null) {
-            Roundabout.LOGGER.info("phase 4");
             BlockEntity openedBlock = client.player.level().getBlockEntity(new BlockPos(buf.readInt(),buf.readInt(),buf.readInt()) );
             if (openedBlock != null){
-                Roundabout.LOGGER.info("phase 5");
                 ((TimeStop)client.player.level()).processTSBlockEntityPacket(openedBlock);
             }
         }

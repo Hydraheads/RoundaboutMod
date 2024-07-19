@@ -38,7 +38,6 @@ public class ZChestBlock  {
     protected void RoundaboutOpenChest(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> ci) {
         if (!$$1.isClientSide) {
             if (((TimeStop)$$1).inTimeStopRange($$2)) {
-                Roundabout.LOGGER.info("phase 1");
                 ((TimeStop) $$1).streamTileEntityTSToCLient($$2);
                 BlockEntity blk = $$1.getBlockEntity($$2);
                 if (blk != null) {

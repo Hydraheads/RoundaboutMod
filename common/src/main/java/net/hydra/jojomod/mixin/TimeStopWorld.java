@@ -355,12 +355,10 @@ public class TimeStopWorld implements TimeStop {
             ServerLevel serverWorld = ((ServerLevel) (Object) this);
             for (int j = 0; j < serverWorld.players().size(); ++j) {
                 if (!this.timeStoppingEntities.isEmpty()) {
-                    Roundabout.LOGGER.info("phase 2");
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
                     List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
                         /*Streams updates to nearby players*/
                         if (MainUtil.cheapDistanceTo2(blockPos.getX(), blockPos.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
-                            Roundabout.LOGGER.info("phase 3");
                             ModPacketHandler.PACKET_ACCESS.resumeTileEntityTSPacket(serverPlayer, new Vec3i(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
                         }
                 }

@@ -107,9 +107,7 @@ public abstract class HudRendering implements IHudAccess {
         if (minecraft.player != null && minecraft.level != null) {
 
 
-            Roundabout.LOGGER.info("1");
             if (this.minecraft.player != null) {
-                Roundabout.LOGGER.info("2");
                 if (Roundabout.renderGasOverlay) {
                     int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
                     if (overlay > 0) {
@@ -124,9 +122,7 @@ public abstract class HudRendering implements IHudAccess {
                     }
                 }
                 if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                    Roundabout.LOGGER.info("3");
                     if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
-                        Roundabout.LOGGER.info("4");
                         this.renderTextureOverlay(context, StandIcons.STONE_HEAD_OVERLAY, 1F);
                     }
                 }
