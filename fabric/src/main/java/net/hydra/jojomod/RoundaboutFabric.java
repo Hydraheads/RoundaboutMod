@@ -1,6 +1,7 @@
 package net.hydra.jojomod;
 
 import net.fabricmc.api.ModInitializer;
+import net.hydra.jojomod.block.ModFeatures;
 import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.networking.FabricPackets;
 import net.hydra.jojomod.particles.ModParticles;

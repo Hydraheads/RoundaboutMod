@@ -1,6 +1,7 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.Utils.ForgeItemModifiers;
+import net.hydra.jojomod.biome_modifiers.BiomeCodec;
 import net.hydra.jojomod.networking.ForgePacketHandler;
 import net.hydra.jojomod.registry.*;
 import net.minecraft.world.item.CreativeModeTab;
@@ -22,6 +23,7 @@ public class RoundaboutModForge {
         ForgeItems.ITEMS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
         ForgeSounds.SOUNDS.register(bus);
+        BiomeCodec.BIOME_MODIFIER_SERIALIZERS.register(bus);
         ForgeLootModifiers.LOOT_MODIFIERS.register(bus);
 
         bus.addListener(this::commonSetup);

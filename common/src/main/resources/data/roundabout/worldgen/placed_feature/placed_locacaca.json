@@ -24,7 +24,7 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "many_flowers:hydrangea_flower"
+          "Name": "roundabout:locacaca_plant"
         }
       }
     }
