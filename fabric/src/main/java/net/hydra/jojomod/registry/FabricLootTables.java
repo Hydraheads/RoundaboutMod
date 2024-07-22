@@ -1,12 +1,20 @@
 package net.hydra.jojomod.registry;
 
+import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +33,24 @@ public class FabricLootTables {
     public static final ResourceLocation TRAIL_COMMON_ID = new ResourceLocation("minecraft", "archaeology/trail_ruins_common");
     public static final ResourceLocation TRAIL_RARE_ID = new ResourceLocation("minecraft", "archaeology/trail_ruins_rare");
 
+
+    public static final ResourceLocation SHIPWRECK_ID
+            = new ResourceLocation("minecraft", "chests/shipwreck_treasure");
+
     public static void modifyLootTables(){
+
+        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
+                    if (SHIPWRECK_ID.equals(id)) {
+                        LootPool.Builder poolBuilder = LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .when(LootItemRandomChanceCondition.randomChance(0.1F))
+                                .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
+                        tableBuilder.pool(poolBuilder.build());
+                    }
+                });
+
+
 
         LootTableEvents.REPLACE.register((resourceManager, lootManager, id, original, source) -> {
             if(PYRAMID_ID.equals(id) || WELL_ID.equals(id) || OCEAN_WARM_ID.equals(id)
