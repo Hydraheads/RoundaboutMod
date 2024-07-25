@@ -1,0 +1,17 @@
+{
+  "type": "roundabout:add_items",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:chests/shipwreck_treasure"
+        }
+      ]
+    }
+  ],
+  "item": "roundabout:locacaca_pit",
+  "probability": 0.15,
+  "maxCount": 1
+}

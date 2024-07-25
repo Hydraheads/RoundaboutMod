@@ -36,6 +36,10 @@ public class FabricLootTables {
 
     public static final ResourceLocation SHIPWRECK_ID
             = new ResourceLocation("minecraft", "chests/shipwreck_treasure");
+    public static final ResourceLocation DESERT_HOUSE_ID
+            = new ResourceLocation("minecraft", "chests/village/village_desert_house");
+    public static final ResourceLocation TAIGA_HOUSE_ID
+            = new ResourceLocation("minecraft", "chests/village/village_taiga_house");
 
     public static void modifyLootTables(){
 
@@ -43,11 +47,19 @@ public class FabricLootTables {
                     if (SHIPWRECK_ID.equals(id)) {
                         LootPool.Builder poolBuilder = LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1.0F))
-                                .when(LootItemRandomChanceCondition.randomChance(0.1F))
+                                .when(LootItemRandomChanceCondition.randomChance(0.15F))
                                 .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
                         tableBuilder.pool(poolBuilder.build());
                     }
+            if (DESERT_HOUSE_ID.equals(id) || TAIGA_HOUSE_ID.equals(id)) {
+                LootPool.Builder poolBuilder = LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(3.0F))
+                        .when(LootItemRandomChanceCondition.randomChance(0.5F))
+                        .add(LootItem.lootTableItem(ModItems.COFFEE_GUM))
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 30.0f)).build());
+                tableBuilder.pool(poolBuilder.build());
+            }
                 });
 
 

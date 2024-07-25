@@ -5,7 +5,9 @@
     "roundabout:stand_arrow_from_warm_ocean",
     "roundabout:stand_arrow_from_cold_ocean",
     "roundabout:stand_arrow_from_trail_ruins",
-    "roundabout:stand_arrow_from_trail_ruins_rare"
+    "roundabout:stand_arrow_from_trail_ruins_rare",
+    "roundabout:shipwreck_locacaca_pit",
+    "roundabout:coffee_gum"
   ],
   "replace": false
 }

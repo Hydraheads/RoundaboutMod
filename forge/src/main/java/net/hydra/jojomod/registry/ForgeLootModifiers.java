@@ -18,4 +18,6 @@ public class ForgeLootModifiers {
             LOOT_MODIFIERS.register("add_sus_sand_item", ForgeSusSandItemModifier.CODEC);
     public static final RegistryObject<Codec<? extends IGlobalLootModifier>> ADD_SUS_GRAVEL_ITEM =
             LOOT_MODIFIERS.register("add_sus_gravel_item", ForgeSusGravelItemModifier.CODEC);
+    public static final RegistryObject<Codec<? extends IGlobalLootModifier>> ADD_ITEMS =
+            LOOT_MODIFIERS.register("add_items", ForgeItemModifiers.CODEC);
 }

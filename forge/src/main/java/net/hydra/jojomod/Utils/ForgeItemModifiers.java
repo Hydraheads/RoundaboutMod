@@ -33,7 +33,8 @@ public class ForgeItemModifiers extends LootModifier {
                 return generatedLoot;
             }
         }
-        generatedLoot.add(new ItemStack(this.item));
+        ItemStack stack = new ItemStack(this.item);
+        generatedLoot.add(stack);
 
         return generatedLoot;
     }
