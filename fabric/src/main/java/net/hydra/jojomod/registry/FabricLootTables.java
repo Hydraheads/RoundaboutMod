@@ -40,6 +40,8 @@ public class FabricLootTables {
             = new ResourceLocation("minecraft", "chests/village/village_desert_house");
     public static final ResourceLocation TAIGA_HOUSE_ID
             = new ResourceLocation("minecraft", "chests/village/village_taiga_house");
+    public static final ResourceLocation BLACKSMITH_ID
+            = new ResourceLocation("minecraft", "chests/village/village_blacksmith");
 
     public static void modifyLootTables(){
 
@@ -58,6 +60,14 @@ public class FabricLootTables {
                         .when(LootItemRandomChanceCondition.randomChance(0.5F))
                         .add(LootItem.lootTableItem(ModItems.COFFEE_GUM))
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 30.0f)).build());
+                tableBuilder.pool(poolBuilder.build());
+            }
+            if (BLACKSMITH_ID.equals(id)) {
+                LootPool.Builder poolBuilder = LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(LootItemRandomChanceCondition.randomChance(0.2F))
+                        .add(LootItem.lootTableItem(ModItems.LUCK_UPGRADE))
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0F)).build());
                 tableBuilder.pool(poolBuilder.build());
             }
                 });
@@ -84,5 +94,6 @@ public class FabricLootTables {
             return null;
         } );
         }
+
 
 }

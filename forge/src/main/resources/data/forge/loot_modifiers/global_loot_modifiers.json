@@ -7,7 +7,8 @@
     "roundabout:stand_arrow_from_trail_ruins",
     "roundabout:stand_arrow_from_trail_ruins_rare",
     "roundabout:shipwreck_locacaca_pit",
-    "roundabout:coffee_gum"
+    "roundabout:coffee_gum",
+    "roundabout:luck_template_loot"
   ],
   "replace": false
 }

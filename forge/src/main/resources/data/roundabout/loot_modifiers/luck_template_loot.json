@@ -1,0 +1,17 @@
+{
+  "type": "roundabout:add_items",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:chests/village/village_blacksmith"
+        }
+      ]
+    }
+  ],
+  "item": "roundabout:luck_upgrade",
+  "probability": 0.2,
+  "maxCount": 1
+}
