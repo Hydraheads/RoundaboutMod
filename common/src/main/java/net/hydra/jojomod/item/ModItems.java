@@ -1,5 +1,7 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.Roundabout;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.item.Item;
 
 public class ModItems {
@@ -21,5 +23,7 @@ public class ModItems {
     public static Item LUCK_SWORD;
     public static Item LUCK_UPGRADE;
     public static Item HARPOON;
+
+    public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "harpoon_in_hand", "inventory");
 
 }

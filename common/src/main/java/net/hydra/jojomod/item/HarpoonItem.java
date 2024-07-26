@@ -31,15 +31,14 @@ import net.minecraft.world.phys.Vec3;
 
 public class HarpoonItem extends Item implements Vanishable {
     public static final int THROW_THRESHOLD_TIME = 10;
-    public static final float BASE_DAMAGE = 8.0F;
     public static final float SHOOT_POWER = 2.5F;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     public HarpoonItem(Item.Properties $$0) {
         super($$0);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> $$1 = ImmutableMultimap.builder();
-        $$1.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 8.0, AttributeModifier.Operation.ADDITION));
-        $$1.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -2.9F, AttributeModifier.Operation.ADDITION));
+        $$1.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 7.0, AttributeModifier.Operation.ADDITION));
+        $$1.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -3.0F, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = $$1.build();
     }
 
