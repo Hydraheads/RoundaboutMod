@@ -3,10 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
-import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
-import net.hydra.jojomod.entity.projectile.GasolineSplatterEntity;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
-import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -43,6 +40,12 @@ public class ForgeEntities {
                     EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "knife").toString())
+            );
+    public static final RegistryObject<EntityType<HarpoonEntity>> THROWN_HARPOON =
+            ENTITY_TYPES.register("harpoon", () ->
+                    EntityType.Builder.<HarpoonEntity>of(HarpoonEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "harpoon").toString())
             );
     public static final RegistryObject<EntityType<MatchEntity>> THROWN_MATCH =
             ENTITY_TYPES.register("match", () ->

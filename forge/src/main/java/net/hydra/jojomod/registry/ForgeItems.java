@@ -63,6 +63,10 @@ public class ForgeItems {
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
             () -> new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties())
             ));
+    public static final RegistryObject<Item> HARPOON = addToTab(ITEMS.register("harpoon",
+            () -> new HarpoonItem((new Item.Properties()).durability(250))
+    ));
+
 
 
     public static final RegistryObject<Item> LUCK_UPGRADE = addToTab(ITEMS.register("luck_upgrade",
