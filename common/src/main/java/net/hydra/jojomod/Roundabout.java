@@ -1,6 +1,7 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.sound.ModSounds;
@@ -45,6 +46,7 @@ public class Roundabout {
             LOGGER.info("Hello to roundabout");
         }
         ModSounds.registerSoundEvents();
+        DispenserRegistry.init();
     }
 
     public static ResourceLocation location(String path) {

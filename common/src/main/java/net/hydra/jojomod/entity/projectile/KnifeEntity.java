@@ -60,6 +60,7 @@ public class KnifeEntity extends AbstractArrow {
         super(ModEntities.THROWN_KNIFE, entity, world);
     }
 
+
     public void tick() {
         super.tick();
     }
