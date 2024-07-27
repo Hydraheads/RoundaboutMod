@@ -42,6 +42,10 @@ public class FabricLootTables {
             = new ResourceLocation("minecraft", "chests/village/village_taiga_house");
     public static final ResourceLocation BLACKSMITH_ID
             = new ResourceLocation("minecraft", "chests/village/village_blacksmith");
+    public static final ResourceLocation NETHER_FORT
+            = new ResourceLocation("minecraft", "chests/nether_bridge");
+    public static final ResourceLocation BASTION_BRIDGE
+            = new ResourceLocation("minecraft", "chests/bastion_bridge");
 
     public static void modifyLootTables(){
 
@@ -67,6 +71,14 @@ public class FabricLootTables {
                         .setRolls(ConstantValue.exactly(1.0F))
                         .when(LootItemRandomChanceCondition.randomChance(0.2F))
                         .add(LootItem.lootTableItem(ModItems.LUCK_UPGRADE))
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0F)).build());
+                tableBuilder.pool(poolBuilder.build());
+            }
+            if (NETHER_FORT.equals(id) || BASTION_BRIDGE.equals(id)) {
+                LootPool.Builder poolBuilder = LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(LootItemRandomChanceCondition.randomChance(0.6F))
+                        .add(LootItem.lootTableItem(ModItems.HARPOON))
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0F)).build());
                 tableBuilder.pool(poolBuilder.build());
             }

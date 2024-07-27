@@ -1,0 +1,21 @@
+{
+  "type": "roundabout:add_items",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:chests/nether_bridge"
+        },
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:chests/bastion_bridge"
+        }
+      ]
+    }
+  ],
+  "item": "roundabout:harpoon",
+  "probability": 0.6,
+  "maxCount": 1
+}

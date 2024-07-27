@@ -51,6 +51,12 @@ public class HarpoonEntity extends AbstractArrow {
             this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty($$2));
             this.entityData.set(ID_FOIL, $$2.hasFoil());
         }
+    public HarpoonEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
+        super(ModEntities.THROWN_HARPOON, p_36862_, p_36863_, p_36864_, $$0);
+        this.harpoonItem = $$2.copy();
+        this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty($$2));
+        this.entityData.set(ID_FOIL, $$2.hasFoil());
+    }
 
         @Override
         protected void defineSynchedData() {
