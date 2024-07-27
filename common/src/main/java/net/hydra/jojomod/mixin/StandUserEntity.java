@@ -30,7 +30,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -223,10 +222,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundaboutSetTSJump(boolean roundaboutTSJump){
         this.roundaboutTSJump = roundaboutTSJump;
         if (((LivingEntity)(Object)this) instanceof Player){
-            if (roundaboutTSJump && ((IPlayerEntity) this).roundaboutGetPos() == PlayerPosIndex.NONE) {
-                ((IPlayerEntity) this).roundaboutSetPos(PlayerPosIndex.TS_FLOAT);
-            } else if (!roundaboutTSJump && ((IPlayerEntity) this).roundaboutGetPos() == PlayerPosIndex.TS_FLOAT){
-                ((IPlayerEntity) this).roundaboutSetPos(PlayerPosIndex.NONE);
+            if (roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.NONE) {
+                ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.TS_FLOAT);
+            } else if (!roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT){
+                ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.NONE);
             }
         }
     }
@@ -805,7 +804,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         float cooking = 0.2F;
         if (((LivingEntity)(Object)this) instanceof Player && ((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
 
-            boolean TSJumping = ((IPlayerEntity)this).roundaboutGetPos() == PlayerPosIndex.TS_FLOAT;
+            boolean TSJumping = ((IPlayerEntity)this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
             if (TSJumping) {
                     float cooking2 = (float) (((LivingEntity)(Object)this).getDeltaMovement().y + 0.2);
                     if (((LivingEntity)(Object)this) instanceof Player && ((Player)(Object)this).isCrouching()) {

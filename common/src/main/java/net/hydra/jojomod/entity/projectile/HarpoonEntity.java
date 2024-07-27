@@ -1,6 +1,8 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,10 +14,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -59,7 +66,8 @@ public class HarpoonEntity extends AbstractArrow {
             }
 
             Entity $$0 = this.getOwner();
-            int $$1 = this.entityData.get(ID_LOYALTY);
+            //int $$1 = this.entityData.get(ID_LOYALTY);
+            int $$1 = 1;
             if ($$1 > 0 && (this.dealtDamage || this.isNoPhysics()) && $$0 != null) {
                 if (!this.isAcceptibleReturnOwner()) {
                     if (!this.level().isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
@@ -111,15 +119,18 @@ public class HarpoonEntity extends AbstractArrow {
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
-            float $$2 = 8.0F;
+            float $$2 = 6.0F;
             if ($$1 instanceof LivingEntity $$3) {
                 $$2 += EnchantmentHelper.getDamageBonus(this.harpoonItem, $$3.getMobType());
             }
 
             Entity $$4 = this.getOwner();
-            DamageSource $$5 = this.damageSources().trident(this, (Entity)($$4 == null ? this : $$4));
+            DamageSource $$5 = ModDamageTypes.of(this.level(),ModDamageTypes.HARPOON,this, (Entity)($$4 == null ? this : $$4));
             this.dealtDamage = true;
             SoundEvent $$6 = SoundEvents.TRIDENT_HIT;
+
+            $$2 = addSkyDamage($$1,$$2);
+
             if ($$1.hurt($$5, $$2)) {
                 if ($$1.getType() == EntityType.ENDERMAN) {
                     return;
@@ -137,21 +148,31 @@ public class HarpoonEntity extends AbstractArrow {
 
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
             float $$8 = 1.0F;
-            if (this.level() instanceof ServerLevel && this.level().isThundering() && this.isChanneling()) {
-                BlockPos $$9 = $$1.blockPosition();
-                if (this.level().canSeeSky($$9)) {
-                    LightningBolt $$10 = EntityType.LIGHTNING_BOLT.create(this.level());
-                    if ($$10 != null) {
-                        $$10.moveTo(Vec3.atBottomCenterOf($$9));
-                        $$10.setCause($$4 instanceof ServerPlayer ? (ServerPlayer)$$4 : null);
-                        this.level().addFreshEntity($$10);
-                        $$6 = SoundEvents.TRIDENT_THUNDER;
-                        $$8 = 5.0F;
-                    }
-                }
-            }
 
             this.playSound($$6, $$8, 1.0F);
+        }
+
+        public float addSkyDamage(Entity target, float damage){
+            if (target instanceof Player){
+                if (((Player)target).isFallFlying()){
+                    damage += 10;
+                }
+                int airTime = ((IPlayerEntity)target).roundabout$getAirTime();
+                if (airTime > 0){
+                    /**the longer a player is in the air without levitation, the more damage the harpoon will do*/
+                    damage+= Math.min(12F,((float) airTime /10));
+                }
+
+            } else if (target instanceof Phantom
+                    || target instanceof Bat){
+                damage += 10;
+            }
+
+            if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
+                damage += 4;
+            }
+
+            return damage;
         }
 
         public boolean isChanneling() {
@@ -195,7 +216,8 @@ public class HarpoonEntity extends AbstractArrow {
 
         @Override
         public void tickDespawn() {
-            int $$0 = this.entityData.get(ID_LOYALTY);
+            //int $$0 = this.entityData.get(ID_LOYALTY);
+            int $$0 = 1;
             if (this.pickup != AbstractArrow.Pickup.ALLOWED || $$0 <= 0) {
                 super.tickDespawn();
             }

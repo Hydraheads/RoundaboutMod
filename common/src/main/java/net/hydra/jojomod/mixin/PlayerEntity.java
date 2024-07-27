@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
@@ -39,6 +40,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity{
 
 
+    @Shadow public abstract boolean isSwimming();
+
     @Shadow public abstract float getDestroySpeed(BlockState $$0);
 
     @Unique
@@ -52,6 +55,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Final
     private Inventory inventory;
 
+    @Unique
+    private int roundabout$airTime = 0;
+
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -61,11 +67,17 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
 
     /**Keep track of unique player animations like floating*/
-    public void roundaboutSetPos(byte Pos){
+    public void roundabout$SetPos(byte Pos){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT_POS, Pos);
     }
-    public byte roundaboutGetPos(){
+    public byte roundabout$GetPos(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT_POS);
+    }
+
+    @Unique
+    @Override
+    public int roundabout$getAirTime(){
+        return this.roundabout$airTime;
     }
 
 
@@ -169,6 +181,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ci.cancel();
             } else if ((((TimeStop) ((Player) (Object) this).level()).isTimeStoppingEntity(((Player) (Object) this)))) {
                 ((StandUser) this).setRoundaboutIdleTime(-1);
+                roundabout$airTime = 0;
+            } else {
+                if (this.onGround() || this.isInWater() || this.isSwimming()|| this.onClimbable() || this.isPassenger()
+                || this.hasEffect(MobEffects.LEVITATION)){
+                    roundabout$airTime = 0;
+                } else {
+                    roundabout$airTime += 1;
+                }
             }
         }
 
