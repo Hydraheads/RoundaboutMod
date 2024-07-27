@@ -46,6 +46,11 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         super($$0, $$1);
     }
 
+
+    public GasolineCanEntity(Level world, double p_36862_, double p_36863_, double p_36864_) {
+        super(ModEntities.GASOLINE_CAN, p_36862_, p_36863_, p_36864_, world);
+    }
+
     public GasolineCanEntity(LivingEntity living, Level $$1) {
         super(ModEntities.GASOLINE_CAN, living, $$1);
     }

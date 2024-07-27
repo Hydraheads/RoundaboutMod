@@ -50,6 +50,11 @@ public class MatchEntity extends ThrowableItemProjectile {
     public MatchEntity(LivingEntity living, Level $$1) {
         super(ModEntities.THROWN_MATCH, living, $$1);
     }
+
+
+    public MatchEntity(Level world, double p_36862_, double p_36863_, double p_36864_) {
+        super(ModEntities.THROWN_MATCH, p_36862_, p_36863_, p_36864_, world);
+    }
     @Override
     protected Item getDefaultItem() {
         return ModItems.MATCH;
