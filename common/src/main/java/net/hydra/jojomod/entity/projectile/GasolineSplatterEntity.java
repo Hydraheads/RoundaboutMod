@@ -43,6 +43,11 @@ public class GasolineSplatterEntity extends ThrowableItemProjectile {
     public GasolineSplatterEntity(LivingEntity living, Level $$1) {
         super(ModEntities.GASOLINE_SPLATTER, living, $$1);
     }
+
+    public GasolineSplatterEntity(Level level, double d0, double d1, double d2) {
+        super(ModEntities.GASOLINE_SPLATTER, d0, d1,d2,level);
+    }
+
     @Override
     protected Item getDefaultItem() {
         return ModBlocks.GASOLINE_SPLATTER.asItem();

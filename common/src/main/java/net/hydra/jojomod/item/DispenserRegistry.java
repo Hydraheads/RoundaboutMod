@@ -1,21 +1,24 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
-import net.hydra.jojomod.entity.projectile.HarpoonEntity;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
-import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class DispenserRegistry {
 
@@ -135,6 +138,31 @@ public class DispenserRegistry {
         });
 
 
+        DispenserBlock.registerBehavior(ModItems.GASOLINE_BUCKET, new DefaultDispenseItemBehavior() {
+            private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
+
+            public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
+                Level level = p_123556_.getLevel();
+                Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
+                Position position = DispenserBlock.getDispensePosition(p_123556_);
+                double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
+                double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
+                double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
+                RandomSource randomsource = level.random;
+                double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*0.9);
+                double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*0.9;
+                double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*0.9;
+                GasolineSplatterEntity gas = new GasolineSplatterEntity(level, d0, d1, d2);
+                level.addFreshEntity(Util.make(gas, (p_123552_) -> {
+                    p_123552_.setDeltaMovement(d3,d4,d5);
+                }));
+                return new ItemStack(Items.BUCKET);
+            }
+            protected void playSound(BlockSource p_123554_) {
+                p_123554_.getLevel().playSound(null, p_123554_.getPos(), SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
+        });
+
         DispenserBlock.registerBehavior(ModItems.GASOLINE_CAN, new DefaultDispenseItemBehavior() {
             public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
                 Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
@@ -173,11 +201,13 @@ public class DispenserRegistry {
                 double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D))*1.6;
                 double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*1.6;
                 double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*1.6;
-                HarpoonEntity harpoon = new HarpoonEntity(level, null, p_123557_, d0, d1, d2);
-                level.addFreshEntity(Util.make(harpoon, (p_123552_) -> {
-                    p_123552_.setDeltaMovement(d3,d4,d5);
-                    p_123552_.pickup = AbstractArrow.Pickup.ALLOWED;
-                }));
+                if (!p_123557_.hurt(1,level.getRandom(),null)){
+                    HarpoonEntity harpoon = new HarpoonEntity(level, null, p_123557_, d0, d1, d2);
+                    level.addFreshEntity(Util.make(harpoon, (p_123552_) -> {
+                        p_123552_.setDeltaMovement(d3,d4,d5);
+                        p_123552_.pickup = AbstractArrow.Pickup.ALLOWED;
+                    }));
+                }
                 p_123557_.shrink(1);
                 return p_123557_;
             }
