@@ -92,10 +92,54 @@ public class GoddessStatueBlock extends HorizontalDirectionalBlock {
                     $$0.setBlock(above, Blocks.AIR.defaultBlockState(), 35);
                     $$0.levelEvent($$3, 2001, $$5, Block.getId(above2));
                 }
+            } else if ($$4 == GoddessStatuePart.MIDDLE) {
+                BlockPos $$5 = $$1.above();
+                BlockState $$6 = $$0.getBlockState($$5);
+                if ($$6.is(this) && $$6.getValue(PART) == GoddessStatuePart.TOP) {
+                    $$0.setBlock($$5, Blocks.AIR.defaultBlockState(), 35);
+                    $$0.levelEvent($$3, 2001, $$5, Block.getId($$6));
+                }
+
+                BlockPos above = $$1.below();
+                BlockState above2 = $$0.getBlockState(above);
+                if (above2.is(this) && above2.getValue(PART) == GoddessStatuePart.BOTTOM) {
+                    $$0.setBlock(above, Blocks.AIR.defaultBlockState(), 35);
+                    $$0.levelEvent($$3, 2001, $$5, Block.getId(above2));
+                }
+            } else if ($$4 == GoddessStatuePart.TOP) {
+                BlockPos $$5 = $$1.below();
+                BlockState $$6 = $$0.getBlockState($$5);
+                if ($$6.is(this) && $$6.getValue(PART) == GoddessStatuePart.MIDDLE) {
+                    $$0.setBlock($$5, Blocks.AIR.defaultBlockState(), 35);
+                    $$0.levelEvent($$3, 2001, $$5, Block.getId($$6));
+                }
+
+                BlockPos above = $$5.below();
+                BlockState above2 = $$0.getBlockState(above);
+                if (above2.is(this) && above2.getValue(PART) == GoddessStatuePart.BOTTOM) {
+                    $$0.setBlock(above, Blocks.AIR.defaultBlockState(), 35);
+                    $$0.levelEvent($$3, 2001, $$5, Block.getId(above2));
+                }
             }
         }
 
         super.playerWillDestroy($$0, $$1, $$2, $$3);
+    }
+
+
+    @Override
+    public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
+        if (!$$2.is(this) && $$0.getValue(PART) == GoddessStatuePart.BOTTOM && $$1.equals(Direction.UP)) {
+            return Blocks.AIR.defaultBlockState();
+        } else if (!$$2.is(this) && $$0.getValue(PART) == GoddessStatuePart.MIDDLE && $$1.equals(Direction.UP)) {
+            return Blocks.AIR.defaultBlockState();
+        } else if (!$$2.is(this) && $$0.getValue(PART) == GoddessStatuePart.MIDDLE && $$1.equals(Direction.DOWN)) {
+                return Blocks.AIR.defaultBlockState();
+        } else if (!$$2.is(this) && $$0.getValue(PART) == GoddessStatuePart.TOP && $$1.equals(Direction.DOWN)) {
+            return Blocks.AIR.defaultBlockState();
+        } else {
+            return super.updateShape($$0, $$1, $$2, $$3, $$4, $$5);
+        }
     }
 
 
