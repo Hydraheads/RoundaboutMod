@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.hydra.jojomod.entity.projectile.HarpoonEntity;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -77,42 +78,11 @@ public class HarpoonItem extends Item implements Vanishable {
                             }
 
                             $$1.addFreshEntity($$7);
-                            $$1.playSound(null, $$7, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            $$1.playSound(null, $$7, ModSounds.HARPOON_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                             if (!$$4.getAbilities().instabuild) {
                                 $$4.getInventory().removeItem($$0);
                             }
                         }
-                    }
-
-                    $$4.awardStat(Stats.ITEM_USED.get(this));
-                    if ($$6 > 0) {
-                        float $$8 = $$4.getYRot();
-                        float $$9 = $$4.getXRot();
-                        float $$10 = -Mth.sin($$8 * (float) (Math.PI / 180.0)) * Mth.cos($$9 * (float) (Math.PI / 180.0));
-                        float $$11 = -Mth.sin($$9 * (float) (Math.PI / 180.0));
-                        float $$12 = Mth.cos($$8 * (float) (Math.PI / 180.0)) * Mth.cos($$9 * (float) (Math.PI / 180.0));
-                        float $$13 = Mth.sqrt($$10 * $$10 + $$11 * $$11 + $$12 * $$12);
-                        float $$14 = 3.0F * ((1.0F + (float)$$6) / 4.0F);
-                        $$10 *= $$14 / $$13;
-                        $$11 *= $$14 / $$13;
-                        $$12 *= $$14 / $$13;
-                        $$4.push((double)$$10, (double)$$11, (double)$$12);
-                        $$4.startAutoSpinAttack(20);
-                        if ($$4.onGround()) {
-                            float $$15 = 1.1999999F;
-                            $$4.move(MoverType.SELF, new Vec3(0.0, 1.1999999F, 0.0));
-                        }
-
-                        SoundEvent $$16;
-                        if ($$6 >= 3) {
-                            $$16 = SoundEvents.TRIDENT_RIPTIDE_3;
-                        } else if ($$6 == 2) {
-                            $$16 = SoundEvents.TRIDENT_RIPTIDE_2;
-                        } else {
-                            $$16 = SoundEvents.TRIDENT_RIPTIDE_1;
-                        }
-
-                        $$1.playSound(null, $$4, $$16, SoundSource.PLAYERS, 1.0F, 1.0F);
                     }
                 }
             }

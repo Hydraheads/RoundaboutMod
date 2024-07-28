@@ -280,5 +280,29 @@
     "sounds": [
       "roundabout:timestop_ticking"
     ]
+  },
+  "harpoon_hit": {
+    "subtitle": "sounds.roundabout.harpoon_hit",
+    "sounds": [
+      "roundabout:harpoon_hit"
+    ]
+  },
+  "harpoon_ground": {
+    "subtitle": "sounds.roundabout.harpoon_ground",
+    "sounds": [
+      "roundabout:harpoon_ground"
+    ]
+  },
+  "harpoon_throw": {
+    "subtitle": "sounds.roundabout.harpoon_throw",
+    "sounds": [
+      "roundabout:harpoon_throw"
+    ]
+  },
+  "harpoon_return": {
+    "subtitle": "sounds.roundabout.harpoon_return",
+    "sounds": [
+      "roundabout:harpoon_return"
+    ]
   }
 }

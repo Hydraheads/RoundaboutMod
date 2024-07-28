@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -92,7 +93,7 @@ public class HarpoonEntity extends AbstractArrow {
                     double $$3 = 0.05 * (double)$$1;
                     this.setDeltaMovement(this.getDeltaMovement().scale(0.95).add($$2.normalize().scale($$3)));
                     if (this.clientSideReturnTridentTickCount == 0) {
-                        this.playSound(SoundEvents.TRIDENT_RETURN, 10.0F, 1.0F);
+                        this.playSound(ModSounds.HARPOON_RETURN_EVENT, 10.0F, 1.0F);
                     }
 
                     this.clientSideReturnTridentTickCount++;
@@ -133,7 +134,7 @@ public class HarpoonEntity extends AbstractArrow {
             Entity $$4 = this.getOwner();
             DamageSource $$5 = ModDamageTypes.of(this.level(),ModDamageTypes.HARPOON,this, (Entity)($$4 == null ? this : $$4));
             this.dealtDamage = true;
-            SoundEvent $$6 = SoundEvents.TRIDENT_HIT;
+            SoundEvent $$6 = ModSounds.HARPOON_HIT_EVENT;
 
             $$2 = addSkyDamage($$1,$$2);
 
@@ -192,7 +193,7 @@ public class HarpoonEntity extends AbstractArrow {
 
         @Override
         protected SoundEvent getDefaultHitGroundSoundEvent() {
-            return SoundEvents.TRIDENT_HIT_GROUND;
+            return ModSounds.HARPOON_GROUND_EVENT;
         }
 
         @Override
