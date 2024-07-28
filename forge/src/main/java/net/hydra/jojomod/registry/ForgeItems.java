@@ -60,6 +60,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> GODDESS_STATUE_ITEM = addToTab(ITEMS.register("goddess_statue",
+            () -> new BlockItem(ForgeBlocks.GODDESS_STATUE_BLOCK.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
             () -> new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties())
             ));

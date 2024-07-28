@@ -213,7 +213,7 @@ public class DispenserRegistry {
             }
 
             protected void playSound(BlockSource p_123554_) {
-                p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.GAS_CAN_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.HARPOON_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         });
 

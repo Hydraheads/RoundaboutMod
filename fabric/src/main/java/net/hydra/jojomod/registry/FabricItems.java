@@ -74,6 +74,7 @@ public class FabricItems {
 
                         entries.accept(ModBlocks.METEOR_BLOCK);
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
+                        entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
 
                     }).build());
 

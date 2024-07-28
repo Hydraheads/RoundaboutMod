@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,part=bottom": {
+      "model": "minecraft:block/iron_door_bottom_left"
+    },
+    "facing=east,part=middle": {
+      "model": "minecraft:block/iron_door_top_left"
+    },
+    "facing=east,part=top": {
+      "model": "minecraft:block/iron_door_top_left"
+    },
+    "facing=north,part=bottom": {
+      "model": "minecraft:block/iron_door_bottom_left",
+      "y": 270
+    },
+    "facing=north,part=middle": {
+      "model": "minecraft:block/iron_door_top_left",
+      "y": 270
+    },
+    "facing=north,part=top": {
+      "model": "minecraft:block/iron_door_top_left",
+      "y": 270
+    },
+    "facing=south,part=bottom": {
+      "model": "minecraft:block/iron_door_bottom_left",
+      "y": 90
+    },
+    "facing=south,part=middle": {
+      "model": "minecraft:block/iron_door_top_left",
+      "y": 90
+    },
+    "facing=south,part=top": {
+      "model": "minecraft:block/iron_door_top_left",
+      "y": 90
+    },
+    "facing=west,part=bottom": {
+      "model": "minecraft:block/iron_door_bottom_left",
+      "y": 180
+    },
+    "facing=west,part=middle": {
+      "model": "minecraft:block/iron_door_top_left",
+      "y": 180
+    },
+    "facing=west,part=top": {
+      "model": "minecraft:block/iron_door_top_left",
+      "y": 180
+    }
+  }
+}

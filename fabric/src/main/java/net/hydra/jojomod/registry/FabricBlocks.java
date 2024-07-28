@@ -37,6 +37,8 @@ public class FabricBlocks {
     );
     public static final Block BARBED_WIRE_BUNDLE = registerBlock("barbed_wire_bundle",ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES
     );
+    public static final Block GODDESS_STATUE_BLOCK = registerBlock("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
+    );
 
 
     private static Block registerBlock(String name, Block block) {
@@ -58,6 +60,7 @@ public class FabricBlocks {
         ModBlocks.BARBED_WIRE = BARBED_WIRE;
         ModBlocks.BARBED_WIRE_BUNDLE = BARBED_WIRE_BUNDLE;
         ModBlocks.WIRE_TRAP = WIRE_TRAP;
+        ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
     }

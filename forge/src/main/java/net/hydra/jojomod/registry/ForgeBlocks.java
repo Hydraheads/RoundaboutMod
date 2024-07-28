@@ -36,4 +36,6 @@ public class ForgeBlocks {
             () -> ModBlocks.BARBED_WIRE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> BARBED_WIRE_BUNDLE = BLOCKS.register("barbed_wire_bundle",
             () -> ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES);
+    public static final RegistryObject<Block> GODDESS_STATUE_BLOCK = BLOCKS.register("goddess_statue",
+            () -> ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES);
 }

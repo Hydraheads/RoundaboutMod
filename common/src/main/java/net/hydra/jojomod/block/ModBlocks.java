@@ -8,15 +8,14 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
 public class ModBlocks {
     /**This is where blocks are listed and called upon.
      * Forge and fabric files must define these variables so they are not empty.**/
+    public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static Block METEOR_BLOCK;
@@ -29,6 +28,7 @@ public class ModBlocks {
     public static Block WIRE_TRAP;
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
+    public static Block GODDESS_STATUE_BLOCK;
     public static Block METEOR_BLOCK_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
@@ -100,6 +100,16 @@ public class ModBlocks {
                     .strength(1.5F, 1.0F)
                     .sound(SoundType.METAL)
                     .forceSolidOn().noCollission().requiresCorrectToolForDrops()
+    );
+    public static GoddessStatueBlock GODDESS_STATUE_BLOCK_PROPERTIES = new GoddessStatueBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .noOcclusion()
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(1.5F, 1.0F)
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
     );
 
 }
