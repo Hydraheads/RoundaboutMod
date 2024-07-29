@@ -168,13 +168,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$postTSHurtTime--;
         } if (roundabout$gasTicks > -1){
             if (!this.level().isClientSide){
-                roundabout$setGasolineTime(roundabout$gasTicks-1);
-                if (this.tickCount%2 == 0) {
-                    float width = this.getBbWidth() / 2;
-                    float height = this.getBbHeight() / 4;
-                    float height2 = this.getBbHeight()/2;
-                    ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getX(), this.getY() + height2, this.getZ(),
-                            1, width, height, width, 0.1);
+                if (this.isInWaterOrRain()) {
+                    roundabout$setGasolineTime(-1);
+                } else {
+                    roundabout$setGasolineTime(roundabout$gasTicks-1);
+                    if (this.tickCount%2 == 0) {
+                        float width = this.getBbWidth() / 2;
+                        float height = this.getBbHeight() / 4;
+                        float height2 = this.getBbHeight()/2;
+                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getX(), this.getY() + height2, this.getZ(),
+                                1, width, height, width, 0.1);
+                    }
                 }
             }
         }
