@@ -62,7 +62,7 @@ public class ForgeItems {
             )));
     public static final RegistryObject<BlockItem> GODDESS_STATUE_ITEM = addToTab(ITEMS.register("goddess_statue",
             () -> new BlockItem(ForgeBlocks.GODDESS_STATUE_BLOCK.get(),
-                    new Item.Properties()
+                    new Item.Properties().stacksTo(1)
             )));
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
             () -> new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties())

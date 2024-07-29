@@ -79,6 +79,7 @@
   "death.attack.fusion.player": "%1$s was fused into %2$s!",
   "death.attack.harpoon": "%1$s was speared by %2$s",
   "death.attack.harpoon.item": "%1$s was speared by %2$s with %3$s",
+  "death.attack.statue": "%1$s was impaled by a statue of the Goddess of Love!",
 
   "commands.roundabout.force_summon.multiple": "Summoned stands from %s entities",
   "commands.roundabout.force_summon.single": "Summoned stand from %s",

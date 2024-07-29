@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -25,22 +26,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
 
 public class GoddessStatueBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<GoddessStatuePart> PART = ModBlocks.GODDESS_STATUE_PART;
-    protected static final VoxelShape BASE = Block.box(0.0, 0.0, 0.0, 12.0, 16.0, 12.0);
-    protected static final VoxelShape TOP = Block.box(0.0, 3.0, 0.0, 12.0, 8.0, 12.0);
+    protected static final VoxelShape BASE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
+    protected static final VoxelShape TOP = Block.box(2.0, 0, 2.0, 14.0, 8.0, 14.0);
 
     public GoddessStatueBlock(BlockBehaviour.Properties $$1) {
         super($$1);
@@ -49,26 +44,17 @@ public class GoddessStatueBlock extends HorizontalDirectionalBlock {
 
     @Override
     public void fallOn(Level $$0, BlockState $$1, BlockPos $$2, Entity $$3, float $$4) {
-        super.fallOn($$0, $$1, $$2, $$3, $$4 * 0.5F);
+        super.fallOn($$0, $$1, $$2, $$3, $$4 * 2F);
     }
+
 
     @Override
-    public void updateEntityAfterFallOn(BlockGetter $$0, Entity $$1) {
-        if ($$1.isSuppressingBounce()) {
-            super.updateEntityAfterFallOn($$0, $$1);
-        } else {
-            this.bounceUp($$1);
+    public void stepOn(Level $$0, BlockPos $$1, BlockState $$2, Entity $$3) {
+        if ($$2.getValue(PART) == GoddessStatuePart.TOP) {
+            $$3.hurt(ModDamageTypes.of($$0, ModDamageTypes.STATUE), 2.0F);
         }
+        super.stepOn($$0, $$1, $$2, $$3);
     }
-
-    private void bounceUp(Entity $$0) {
-        Vec3 $$1 = $$0.getDeltaMovement();
-        if ($$1.y < 0.0) {
-            double $$2 = $$0 instanceof LivingEntity ? 1.0 : 0.8;
-            $$0.setDeltaMovement($$1.x, -$$1.y * 0.66F * $$2, $$1.z);
-        }
-    }
-
 
     private static Direction getNeighbourDirection(BedPart $$0, Direction $$1) {
         return $$0 == BedPart.FOOT ? $$1 : $$1.getOpposite();
@@ -127,6 +113,7 @@ public class GoddessStatueBlock extends HorizontalDirectionalBlock {
     }
 
 
+    @SuppressWarnings("deprecation")
     @Override
     public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
         if (!$$2.is(this) && $$0.getValue(PART) == GoddessStatuePart.BOTTOM && $$1.equals(Direction.UP)) {

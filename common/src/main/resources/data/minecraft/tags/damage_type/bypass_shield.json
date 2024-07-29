@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "roundabout:barbed_wire"
+    "roundabout:barbed_wire",
+    "roundabout:statue"
   ]
 }

@@ -37,12 +37,17 @@ public class FabricBlocks {
     );
     public static final Block BARBED_WIRE_BUNDLE = registerBlock("barbed_wire_bundle",ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES
     );
-    public static final Block GODDESS_STATUE_BLOCK = registerBlock("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
-    );
+    public static final Block GODDESS_STATUE_BLOCK = registerBlockUnstackable("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
+    , 1);
 
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
+    private static Block registerBlockUnstackable(String name, Block block, int stacksize) {
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
+                new BlockItem(block, new Item.Properties().stacksTo(stacksize)));
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
 
