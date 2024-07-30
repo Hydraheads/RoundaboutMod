@@ -1,49 +1,52 @@
 {
   "variants": {
     "facing=east,part=bottom": {
-      "model": "minecraft:block/iron_door_bottom_left"
+      "model": "roundabout:block/statue_bottom",
+      "y": 270
     },
     "facing=east,part=middle": {
-      "model": "minecraft:block/iron_door_top_left"
+      "model": "roundabout:block/statue_middle",
+      "y": 270
     },
     "facing=east,part=top": {
-      "model": "minecraft:block/iron_door_top_left"
+      "model": "roundabout:block/statue_top",
+      "y": 270
     },
     "facing=north,part=bottom": {
-      "model": "minecraft:block/iron_door_bottom_left",
-      "y": 270
+      "model": "roundabout:block/statue_bottom",
+      "y": 180
     },
     "facing=north,part=middle": {
-      "model": "minecraft:block/iron_door_top_left",
-      "y": 270
+      "model": "roundabout:block/statue_middle",
+      "y": 180
     },
     "facing=north,part=top": {
-      "model": "minecraft:block/iron_door_top_left",
-      "y": 270
+      "model": "roundabout:block/statue_top",
+      "y": 180
     },
     "facing=south,part=bottom": {
-      "model": "minecraft:block/iron_door_bottom_left",
-      "y": 90
+      "model": "roundabout:block/statue_bottom",
+      "y": 0
     },
     "facing=south,part=middle": {
-      "model": "minecraft:block/iron_door_top_left",
-      "y": 90
+      "model": "roundabout:block/statue_middle",
+      "y": 0
     },
     "facing=south,part=top": {
-      "model": "minecraft:block/iron_door_top_left",
-      "y": 90
+      "model": "roundabout:block/statue_top",
+      "y": 0
     },
     "facing=west,part=bottom": {
-      "model": "minecraft:block/iron_door_bottom_left",
-      "y": 180
+      "model": "roundabout:block/statue_bottom",
+      "y": 90
     },
     "facing=west,part=middle": {
-      "model": "minecraft:block/iron_door_top_left",
-      "y": 180
+      "model": "roundabout:block/statue_middle",
+      "y": 90
     },
     "facing=west,part=top": {
-      "model": "minecraft:block/iron_door_top_left",
-      "y": 180
+      "model": "roundabout:block/statue_top",
+      "y": 90
     }
   }
 }

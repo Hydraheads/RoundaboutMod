@@ -1,8 +1,11 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public class ModItems {
     public static Item STAND_ARROW;
@@ -18,6 +21,7 @@ public class ModItems {
     public static Item KNIFE_BUNDLE;
     public static Item MATCH;
     public static Item MATCH_BUNDLE;
+
     public static Item GASOLINE_CAN;
     public static Item GASOLINE_BUCKET;
     public static Item LUCK_SWORD;

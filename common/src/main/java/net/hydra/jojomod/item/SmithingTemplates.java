@@ -11,7 +11,7 @@ import net.minecraft.world.item.SmithingTemplateItem;
 
 import java.util.List;
 
-public  class SmithingTemplates {
+public class SmithingTemplates {
     public static final ChatFormatting DESCRIPTION_FORMAT = ChatFormatting.BLUE;
     public static final Component LUCK_UPGRADE_APPLIES_TO = Component.translatable(
                     String.valueOf(new ResourceLocation(Roundabout.MOD_ID, "item.roundabout.smithing_template.luck_upgrade.applies_to"))
