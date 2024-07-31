@@ -4,10 +4,12 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 
@@ -34,6 +36,12 @@ public class FabricItems {
     public static Item LOCACACA_BRANCH = registerItem("locacaca_branch", (Item) new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
+    public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
+            new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 178));
+    public static Item MUSIC_DISC_HALLELUJAH = registerItem("music_disc_hallelujah",
+            new RecordItem(1, ModSounds.HALLELUJAH_EVENT,
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 178));
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
@@ -72,9 +80,13 @@ public class FabricItems {
                         entries.accept(NEW_LOCACACA);
                         entries.accept(METEORITE);
 
+                        entries.accept(MUSIC_DISC_TORTURE_DANCE);
+                        entries.accept(MUSIC_DISC_HALLELUJAH);
+
                         entries.accept(ModBlocks.METEOR_BLOCK);
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
+                        entries.accept(ModBlocks.STEREO);
 
                     }).build());
 
@@ -98,5 +110,7 @@ public class FabricItems {
         ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;
         ModItems.NEW_LOCACACA = NEW_LOCACACA;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
+        ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
+        ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
     }
 }

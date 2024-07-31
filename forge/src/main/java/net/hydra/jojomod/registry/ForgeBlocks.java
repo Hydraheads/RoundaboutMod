@@ -1,12 +1,13 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.BarbedWireBlock;
-import net.hydra.jojomod.block.BarbedWireBundleBlock;
-import net.hydra.jojomod.block.GasolineBlock;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
+import net.minecraft.Util;
+import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -17,6 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ForgeBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Roundabout.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
 
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
@@ -38,4 +40,8 @@ public class ForgeBlocks {
             () -> ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES);
     public static final RegistryObject<Block> GODDESS_STATUE_BLOCK = BLOCKS.register("goddess_statue",
             () -> ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> STEREO = BLOCKS.register("stereo",
+            () -> ModBlocks.STEREO_PROPERTIES);
+    public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",
+            () -> BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stereo")));
 }

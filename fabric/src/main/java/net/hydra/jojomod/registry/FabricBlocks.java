@@ -1,20 +1,23 @@
 package net.hydra.jojomod.registry;
 
+import com.mojang.datafixers.types.Type;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
-import net.hydra.jojomod.block.BarbedWireBlock;
-import net.hydra.jojomod.block.BarbedWireBundleBlock;
-import net.hydra.jojomod.block.GasolineBlock;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
+import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -39,7 +42,16 @@ public class FabricBlocks {
     );
     public static final Block GODDESS_STATUE_BLOCK = registerBlockUnstackable("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
     , 1);
+    public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
 
+    public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
+           registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
+
+
+    private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
+        Type<?> $$2 = Util.fetchChoiceType(References.BLOCK_ENTITY, $$0);
+        return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(Roundabout.MOD_ID,$$0), $$1.build($$2));
+    }
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
@@ -66,6 +78,8 @@ public class FabricBlocks {
         ModBlocks.BARBED_WIRE_BUNDLE = BARBED_WIRE_BUNDLE;
         ModBlocks.WIRE_TRAP = WIRE_TRAP;
         ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
+        ModBlocks.STEREO = STEREO;
+        ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
     }

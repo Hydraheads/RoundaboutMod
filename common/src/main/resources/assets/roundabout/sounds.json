@@ -304,5 +304,17 @@
     "sounds": [
       "roundabout:harpoon_return"
     ]
+  },
+  "hallelujah": {
+    "subtitle": "sounds.roundabout.hallelujah",
+    "sounds": [
+      "roundabout:hallelujah"
+    ]
+  },
+  "torture_dance": {
+    "subtitle": "sounds.roundabout.torture_dance",
+    "sounds": [
+      "roundabout:torture_dance"
+    ]
   }
 }

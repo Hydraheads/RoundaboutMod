@@ -7,6 +7,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
@@ -29,6 +32,9 @@ public class ModBlocks {
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
+    public static Block STEREO;
+
+    public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static Block METEOR_BLOCK_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
@@ -111,5 +117,9 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()
     );
+
+    public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
+                    instrument(NoteBlockInstrument.BASS).strength(2.0F, 6.0F));
 
 }

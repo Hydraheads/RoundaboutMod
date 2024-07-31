@@ -28,6 +28,9 @@ public class ModItems {
     public static Item LUCK_UPGRADE;
     public static Item HARPOON;
 
+    public static Item MUSIC_DISC_TORTURE_DANCE;
+    public static Item MUSIC_DISC_HALLELUJAH;
+
     public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "harpoon_in_hand", "inventory");
 
 }

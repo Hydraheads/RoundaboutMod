@@ -72,5 +72,8 @@ public class FabricSounds {
         addSound(ModSounds.HARPOON_HIT_ID, ModSounds.HARPOON_HIT_EVENT);
         addSound(ModSounds.HARPOON_GROUND_ID, ModSounds.HARPOON_GROUND_EVENT);
         addSound(ModSounds.HARPOON_RETURN_ID, ModSounds.HARPOON_RETURN_EVENT);
+
+        addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
+        addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
     }
 }

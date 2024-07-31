@@ -18,6 +18,10 @@
   "item.roundabout.locacaca_pit": "Locacaca Pit",
   "item.roundabout.locacaca_branch": "Locacaca Branch",
   "item.roundabout.new_locacaca": "New Locacaca",
+  "item.roundabout.music_disc_hallelujah": "Music Disc",
+  "item.roundabout.music_disc_hallelujah.desc": "Edison - Hallelujah's Chorus",
+  "item.roundabout.music_disc_torture_dance": "Music Disc",
+  "item.roundabout.music_disc_torture_dance.desc": "Yugo Kanno - Torture Dance Song",
 
   "text.roundabout.meteorite": "Meteorite",
 
@@ -41,6 +45,7 @@
   "block.roundabout.barbed_wire": "Barbed Wire Trap",
   "block.roundabout.barbed_wire_bundle": "Barbed Wire Bunch",
   "block.roundabout.goddess_statue": "Love Goddess Statue",
+  "block.roundabout.stereo": "Stereo",
 
   "itemgroup.jojo": "Roundabout",
 
@@ -137,6 +142,8 @@
   "sounds.roundabout.harpoon_return":  "Harpoon returns",
   "sounds.roundabout.harpoon_throw":  "Harpoon thrown",
 
+  "sounds.roundabout.hallelujah":  "Hallelujah",
+  "sounds.roundabout.torture_dance":  "Torture Dance",
 
   "sounds.roundabout.can_bounce": "Thunk",
   "sounds.roundabout.can_bounce_end": "Gasoline can thunk",

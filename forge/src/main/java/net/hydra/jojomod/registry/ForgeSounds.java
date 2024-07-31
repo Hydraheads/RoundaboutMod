@@ -117,6 +117,10 @@ public class ForgeSounds {
             register(ModSounds.HARPOON_GROUND, ModSounds.HARPOON_GROUND_ID);
     public static final RegistryObject<SoundEvent> HARPOON_RETURN =
             register(ModSounds.HARPOON_RETURN, ModSounds.HARPOON_RETURN_ID);
+    public static final RegistryObject<SoundEvent> HALLELUJAH =
+            register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
+    public static final RegistryObject<SoundEvent> TORTURE_DANCE =
+            register(ModSounds.TORTURE_DANCE, ModSounds.TORTURE_DANCE_ID);
 
     public static RegistryObject<SoundEvent> register(String id, ResourceLocation id2){
         return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(id2));

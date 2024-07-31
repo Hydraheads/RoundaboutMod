@@ -48,7 +48,6 @@ public class Roundabout {
             LOGGER.info("Hello to roundabout");
         }
         ModSounds.registerSoundEvents();
-        DispenserRegistry.init();
     }
 
     public static ResourceLocation location(String path) {
