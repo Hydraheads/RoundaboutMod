@@ -144,6 +144,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundaboutTSHurtTime = 0;
     @Unique
     private int roundabout$postTSHurtTime = 0;
+    @Unique
+    private int roundabout$gasolineIFRAMES = 0;
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void tickRoundabout(CallbackInfo ci) {
@@ -152,6 +154,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.tickGuard();
         this.tickDaze();
 
+        if (roundabout$gasolineIFRAMES > 0){
+            roundabout$gasolineIFRAMES--;
+            if (roundabout$gasolineIFRAMES==0){
+                roundabout$gasolineIFRAMES = 0;
+            }
+        }
         if (roundabout$knifeIFrameTicks > 0){
             roundabout$knifeIFrameTicks--;
             if (roundabout$knifeIFrameTicks==0){
@@ -710,18 +718,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+
+        if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
+            if (roundabout$gasolineIFRAMES > 0){
+                ci.setReturnValue(false);
+                return;
+            }
+        }
+
         if (this.roundabout$gasTicks > -1) {
             if ($$0.is(DamageTypeTags.IS_FIRE) || ($$0.getDirectEntity() instanceof Projectile && $$0.getDirectEntity().isOnFire())) {
-                float power = Roundabout.gasDamage*14;
+                float power = Roundabout.gasDamage*18;
                 if ($$0.is(DamageTypeTags.IS_FIRE)) {
                     if ($$0.getDirectEntity() instanceof Projectile) {
                         if ($$0.getDirectEntity() instanceof MatchEntity){
                             if (((MatchEntity) $$0.getDirectEntity()).isBundle){
-                                power = Roundabout.gasDamage*15;
+                                power = Roundabout.gasDamage*20;
                             }
                         }
                     } else {
-                        power = Roundabout.gasDamage*10;
+                        power = Roundabout.gasDamage*14;
                     }
                 }
                 this.roundabout$setGasolineTime(-1);
@@ -850,6 +866,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
+        if (roundabout$gasolineIFRAMES > 0){
+            ci.setReturnValue(false);
+            return;
+        } else {
+            if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)) {
+                roundabout$gasolineIFRAMES = 10;
+            }
+        }
+
         LivingEntity entity = ((LivingEntity)(Object) this);
         if (entity.level().isClientSide){
             ci.setReturnValue(false);
@@ -921,6 +946,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     return;
                 } else {
                     if ($$0.is(ModDamageTypes.KNIFE) || $$0.is(ModDamageTypes.MATCH)) {
+                        if ($$0.is(ModDamageTypes.KNIFE)){
+                            roundabout$gasolineIFRAMES = 10;
+                        }
                         if (roundabout$stackedKnivesAndMatches < 12) {
                             if (roundabout$stackedKnivesAndMatches <= 0) {
                                 roundabout$knifeIFrameTicks = 9;
@@ -931,6 +959,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 ((IPlayerEntity) entity).roundabout$addKnife();
                             }
                         } else {
+                            roundabout$gasolineIFRAMES = 10;
                             ci.setReturnValue(false);
                             return;
                         }

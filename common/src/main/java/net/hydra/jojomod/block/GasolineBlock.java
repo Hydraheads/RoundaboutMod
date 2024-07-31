@@ -131,9 +131,9 @@ public class GasolineBlock extends Block {
         if (!$$0.isClientSide) {
             BlockPos $$4 = $$2.getBlockPos();
             if (($$3.isOnFire() || $$3 instanceof MatchEntity) && $$3.mayInteract($$0, $$4)) {
-                float power = Roundabout.gasDamage*14;
+                float power = Roundabout.gasDamage*18;
                 if ($$3 instanceof MatchEntity && ((MatchEntity)$$3).isBundle){
-                    power = Roundabout.gasDamage*15;
+                    power = Roundabout.gasDamage*20;
                 }
                 MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 2, 4, power);
             }
@@ -161,7 +161,7 @@ public class GasolineBlock extends Block {
             return super.use($$0, $$1, $$2, $$3, $$4, $$5);
         } else {
             if (!$$1.isClientSide) {
-                MainUtil.gasExplode($$0, (ServerLevel) $$1, $$2, 0, 2, 4, Roundabout.gasDamage*12);
+                MainUtil.gasExplode($$0, (ServerLevel) $$1, $$2, 0, 2, 4, Roundabout.gasDamage*14);
             }
             $$1.setBlock($$2, Blocks.AIR.defaultBlockState(), 11);
             Item $$7 = $$6.getItem();

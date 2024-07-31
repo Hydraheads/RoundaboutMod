@@ -23,7 +23,7 @@ public class ForgeFireBlock {
         BlockState blkSt = $$0.getBlockState($$1);
         Block blk = blkSt.getBlock();
         if (blk instanceof GasolineBlock){
-            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 2, 4, Roundabout.gasDamage*10);
+            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 2, 4, Roundabout.gasDamage*14);
             ci.cancel();
         }
     }

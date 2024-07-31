@@ -75,7 +75,7 @@ public class GasolineSplatterEntity extends ThrowableItemProjectile {
                         40, 0.0, 0.2, 0.0, 0.2);
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                         1, 0.5, 0.5, 0.5, 0.2);
-                MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, Roundabout.gasDamage*10);
+                MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, Roundabout.gasDamage*14);
             } else {
                 ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                         15, 0.4, 0.4, 0.25, 0.4);
@@ -117,7 +117,7 @@ public class GasolineSplatterEntity extends ThrowableItemProjectile {
                     40, 0.0, 0.2, 0.0, 0.2);
             ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                     1, 0.5, 0.5, 0.5, 0.2);
-            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, Roundabout.gasDamage*10);
+            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, Roundabout.gasDamage*14);
             this.discard();
             return;
         }
