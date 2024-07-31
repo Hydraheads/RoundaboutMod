@@ -712,16 +712,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
         if (this.roundabout$gasTicks > -1) {
             if ($$0.is(DamageTypeTags.IS_FIRE) || ($$0.getDirectEntity() instanceof Projectile && $$0.getDirectEntity().isOnFire())) {
-                float power = 16;
+                float power = Roundabout.gasDamage*14;
                 if ($$0.is(DamageTypeTags.IS_FIRE)) {
                     if ($$0.getDirectEntity() instanceof Projectile) {
                         if ($$0.getDirectEntity() instanceof MatchEntity){
                             if (((MatchEntity) $$0.getDirectEntity()).isBundle){
-                                power = 18;
+                                power = Roundabout.gasDamage*15;
                             }
                         }
                     } else {
-                        power = 10;
+                        power = Roundabout.gasDamage*10;
                     }
                 }
                 this.roundabout$setGasolineTime(-1);

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -22,7 +23,7 @@ public class ForgeFireBlock {
         BlockState blkSt = $$0.getBlockState($$1);
         Block blk = blkSt.getBlock();
         if (blk instanceof GasolineBlock){
-            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 2, 4, 10);
+            MainUtil.gasExplode(blkSt, (ServerLevel) $$0, $$1, 0, 2, 4, Roundabout.gasDamage*10);
             ci.cancel();
         }
     }

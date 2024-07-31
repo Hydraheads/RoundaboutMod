@@ -65,7 +65,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                     40, 0.0, 0.2, 0.0, 0.2);
             ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                     1, 0.5, 0.5, 0.5, 0.2);
-            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, 10);
+            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, Roundabout.gasDamage*10);
             this.discard();
             return;
         }
@@ -126,7 +126,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                         40, 0.0, 0.2, 0.0, 0.2);
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                         1, 0.5, 0.5, 0.5, 0.2);
-                MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 3, 4, 14);
+                MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 3, 4, Roundabout.gasDamage*12);
             }
             this.discard();
             return true;

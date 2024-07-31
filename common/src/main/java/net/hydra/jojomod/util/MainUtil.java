@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -160,6 +161,7 @@ public class MainUtil {
             List<Entity> entities = MainUtil.hitboxGas(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
                     blkPos.getZ(), hitRadius, hitRadius+1, hitRadius));
             if (!entities.isEmpty()) {
+                DamageSource $$5 = ModDamageTypes.of(level,ModDamageTypes.GASOLINE_EXPLOSION);
                 for (Entity value : entities) {
                     if (value instanceof GasolineCanEntity){
                         value.remove(Entity.RemovalReason.DISCARDED);
@@ -174,10 +176,10 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            value.hurt(level.damageSources().onFire(),power);
+                            value.hurt($$5,power);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            value.hurt(level.damageSources().onFire(),power);
+                            value.hurt($$5,power);
                         }
                     }
                 }

@@ -33,6 +33,8 @@ public class Roundabout {
     public static boolean canBreathInTS = true;
     public static boolean renderGasOverlay = false;
 
+    public static int gasDamage = 1;
+
     public static void init() {
         LOGGER.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
         LOGGER.info("The ID for diamonds is {}", BuiltInRegistries.ITEM.getKey(Items.DIAMOND));
