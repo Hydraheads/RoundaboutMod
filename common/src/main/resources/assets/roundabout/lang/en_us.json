@@ -138,6 +138,7 @@
   "sounds.roundabout.timestop_impact":  "Time Impact",
   "sounds.roundabout.timestop_impact2":  "Time Impact",
   "sounds.roundabout.harpoon_hit":  "Harpoon spears",
+  "sounds.roundabout.harpoon_crit":  "Harpoon snipes air target",
   "sounds.roundabout.harpoon_ground":  "Harpoon lands",
   "sounds.roundabout.harpoon_return":  "Harpoon returns",
   "sounds.roundabout.harpoon_throw":  "Harpoon thrown",

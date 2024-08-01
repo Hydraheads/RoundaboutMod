@@ -46,6 +46,12 @@ public class FabricLootTables {
             = new ResourceLocation("minecraft", "chests/nether_bridge");
     public static final ResourceLocation BASTION_BRIDGE
             = new ResourceLocation("minecraft", "chests/bastion_bridge");
+    public static final ResourceLocation VILLAGE_TEMPLE
+            = new ResourceLocation("minecraft", "chests/village/village_temple");
+    public static final ResourceLocation WOODLAND_MANSION
+            = new ResourceLocation("minecraft", "chests/village/woodland_mansion");
+    public static final ResourceLocation BURIED_TREASURE
+            = new ResourceLocation("minecraft", "chests/buried_treasure");
 
     public static void modifyLootTables(){
 
@@ -58,6 +64,22 @@ public class FabricLootTables {
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
                         tableBuilder.pool(poolBuilder.build());
                     }
+            if (SHIPWRECK_ID.equals(id) || BURIED_TREASURE.equals(id)) {
+                LootPool.Builder poolBuilder2 = LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(LootItemRandomChanceCondition.randomChance(0.2F))
+                        .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
+                tableBuilder.pool(poolBuilder2.build());
+            }
+            if (WOODLAND_MANSION.equals(id) || VILLAGE_TEMPLE.equals(id)) {
+                LootPool.Builder poolBuilder2 = LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(LootItemRandomChanceCondition.randomChance(0.15F))
+                        .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
+                tableBuilder.pool(poolBuilder2.build());
+            }
             if (DESERT_HOUSE_ID.equals(id) || TAIGA_HOUSE_ID.equals(id)) {
                 LootPool.Builder poolBuilder = LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(3.0F))

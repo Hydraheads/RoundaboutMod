@@ -305,6 +305,12 @@
       "roundabout:harpoon_return"
     ]
   },
+  "harpoon_crit": {
+    "subtitle": "sounds.roundabout.harpoon_crit",
+    "sounds": [
+      "roundabout:harpoon_crit"
+    ]
+  },
   "hallelujah": {
     "subtitle": "sounds.roundabout.hallelujah",
     "sounds": [

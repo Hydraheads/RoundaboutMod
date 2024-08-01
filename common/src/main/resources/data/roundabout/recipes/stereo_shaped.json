@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "IDI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:stereo"
+  },
+  "show_notification": true
+}

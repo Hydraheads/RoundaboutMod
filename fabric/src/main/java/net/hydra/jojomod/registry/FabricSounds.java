@@ -70,6 +70,7 @@ public class FabricSounds {
         addSound(ModSounds.MATCH_THROW_ID, ModSounds.MATCH_THROW_EVENT);
         addSound(ModSounds.HARPOON_THROW_ID, ModSounds.HARPOON_THROW_EVENT);
         addSound(ModSounds.HARPOON_HIT_ID, ModSounds.HARPOON_HIT_EVENT);
+        addSound(ModSounds.HARPOON_CRIT_ID, ModSounds.HARPOON_CRIT_EVENT);
         addSound(ModSounds.HARPOON_GROUND_ID, ModSounds.HARPOON_GROUND_EVENT);
         addSound(ModSounds.HARPOON_RETURN_ID, ModSounds.HARPOON_RETURN_EVENT);
 

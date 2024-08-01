@@ -74,7 +74,7 @@ public class HarpoonEntity extends AbstractArrow {
 
             Entity $$0 = this.getOwner();
             //int $$1 = this.entityData.get(ID_LOYALTY);
-            int $$1 = 1;
+            int $$1 = 2;
             if ($$1 > 0 && (this.dealtDamage || this.isNoPhysics()) && $$0 != null) {
                 if (!this.isAcceptibleReturnOwner()) {
                     if (!this.level().isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
@@ -123,6 +123,7 @@ public class HarpoonEntity extends AbstractArrow {
             return this.dealtDamage ? null : super.findHitEntity($$0, $$1);
         }
 
+        public boolean skyHit = false;
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
@@ -134,8 +135,8 @@ public class HarpoonEntity extends AbstractArrow {
             Entity $$4 = this.getOwner();
             DamageSource $$5 = ModDamageTypes.of(this.level(),ModDamageTypes.HARPOON,this, (Entity)($$4 == null ? this : $$4));
             this.dealtDamage = true;
-            SoundEvent $$6 = ModSounds.HARPOON_HIT_EVENT;
 
+            skyHit = false;
             $$2 = addSkyDamage($$1,$$2);
 
             if ($$1.hurt($$5, $$2)) {
@@ -155,28 +156,35 @@ public class HarpoonEntity extends AbstractArrow {
 
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
             float $$8 = 1.0F;
-
-            this.playSound($$6, $$8, 1.0F);
+            if (skyHit){
+                this.playSound(ModSounds.HARPOON_CRIT_EVENT, $$8, 1.0F);
+            } else {
+                this.playSound(ModSounds.HARPOON_HIT_EVENT, $$8, 1.0F);
+            }
         }
 
         public float addSkyDamage(Entity target, float damage){
             if (target instanceof Player){
                 if (((Player)target).isFallFlying()){
+                    skyHit = true;
                     damage += 10;
                 }
                 int airTime = ((IPlayerEntity)target).roundabout$getAirTime();
                 if (airTime > 0){
                     /**the longer a player is in the air without levitation, the more damage the harpoon will do*/
                     damage+= Math.min(12F,((float) airTime /10));
+                    skyHit = true;
                 }
 
             } else if (target instanceof Phantom
                     || target instanceof Bat){
+                skyHit = true;
                 damage += 10;
             }
 
             if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
                 damage += 4;
+                skyHit = true;
             }
 
             return damage;

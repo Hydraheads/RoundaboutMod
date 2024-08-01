@@ -82,11 +82,10 @@ public class StereoBlock extends JukeboxBlock {
     @Override
     public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
         if ($$0.getValue(HAS_RECORD) && $$1.getBlockEntity($$2) instanceof StereoBlockEntity $$6) {
-            Roundabout.LOGGER.info("yes");
+
             $$6.popOutRecord();
             return InteractionResult.sidedSuccess($$1.isClientSide);
         } else {
-            Roundabout.LOGGER.info("no");
             return InteractionResult.PASS;
         }
     }

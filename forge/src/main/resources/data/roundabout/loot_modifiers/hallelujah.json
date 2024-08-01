@@ -1,0 +1,21 @@
+{
+  "type": "roundabout:add_items",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:chests/village/village_temple"
+        },
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:chests/village/woodland_mansion"
+        }
+      ]
+    }
+  ],
+  "item": "roundabout:music_disc_hallelujah",
+  "probability": 0.15,
+  "maxCount": 1
+}

@@ -113,6 +113,8 @@ public class ForgeSounds {
             register(ModSounds.HARPOON_THROW, ModSounds.HARPOON_THROW_ID);
     public static final RegistryObject<SoundEvent> HARPOON_HIT =
             register(ModSounds.HARPOON_HIT, ModSounds.HARPOON_HIT_ID);
+    public static final RegistryObject<SoundEvent> HARPOON_CRIT =
+            register(ModSounds.HARPOON_CRIT, ModSounds.HARPOON_CRIT_ID);
     public static final RegistryObject<SoundEvent> HARPOON_GROUND =
             register(ModSounds.HARPOON_GROUND, ModSounds.HARPOON_GROUND_ID);
     public static final RegistryObject<SoundEvent> HARPOON_RETURN =
