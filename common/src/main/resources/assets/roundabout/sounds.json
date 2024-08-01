@@ -308,13 +308,19 @@
   "hallelujah": {
     "subtitle": "sounds.roundabout.hallelujah",
     "sounds": [
-      "roundabout:hallelujah"
+      {
+      "name":"roundabout:hallelujah",
+      "stream": true
+      }
     ]
   },
   "torture_dance": {
     "subtitle": "sounds.roundabout.torture_dance",
     "sounds": [
-      "roundabout:torture_dance"
+      {
+        "name":"roundabout:torture_dance",
+        "stream": true
+      }
     ]
   }
 }

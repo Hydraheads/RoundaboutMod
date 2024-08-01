@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -134,20 +135,28 @@ public class NewLocacacaItem extends Item {
                         if (health > maxHealth) {
                             health = maxHealth;
                         }
+
                         if (ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), exchangeDamage)){
                             SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
                             level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
                             entity.setHealth(health);
+                            List<MobEffect> effects = Lists.newArrayList();
                             Iterator<MobEffectInstance> collection = entity.getActiveEffectsMap().values().iterator();
 
-                            boolean bool;
-                            for (bool = false; collection.hasNext(); bool = true) {
+                            while (collection.hasNext()) {
                                 MobEffectInstance effectInstance = collection.next();
                                 if (!effectInstance.getEffect().isBeneficial()){
                                     ent.addEffect(effectInstance);
-                                    entity.removeEffect(effectInstance.getEffect());
+                                    effects.add(effectInstance.getEffect());
                                 }
                             }
+
+                            if (!effects.isEmpty()){
+                                for (int f = effects.size() - 1; f >= 0; --f) {
+                                    entity.removeEffect(effects.get(f));
+                                }
+                            }
+
                         }
                     }
                 }
