@@ -38,6 +38,10 @@ public class StandIcons {
     public static final ResourceLocation THE_WORLD_TIME_STOP_RESUME = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stop_time_resume.png");
 
+    public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/dodge.png");
+    public static final ResourceLocation STAND_LEAP_WORLD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/stand_leap_world.png");
     public static final ResourceLocation SKILL2_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/assault.png");
 

@@ -222,7 +222,11 @@ public abstract class StandPowers {
         if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
             cd = StandCooldowns.get(CDI);
         }
-        if (slot==4){x+=100;y-=1;}
+        if (slot==4){x+=100;}
+        else if (slot==3){x+=75;}
+        else if (slot==2){x+=50;}
+        else if (slot==1){x+=25;}
+        y-=1;
         if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI)){
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);

@@ -492,6 +492,11 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
+        if (this.getSelf().isCrouching()){
+            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_1_SNEAK);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_1);
+        }
 
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
             setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_RESUME, PowerIndex.NO_CD);
