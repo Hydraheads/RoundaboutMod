@@ -51,10 +51,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Byte> DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
+
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.INT);
     @Shadow
     @Final
     private Inventory inventory;
 
+    /**Used by Harpoon calculations*/
     @Unique
     private int roundabout$airTime = 0;
 
@@ -72,6 +77,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     public byte roundabout$GetPos(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT_POS);
+    }
+    @Unique
+    @Override
+    public void roundabout$setDodgeTime(int dodgeTime){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$DODGE_TIME, dodgeTime);
+    }
+    @Unique
+    @Override
+    public int roundabout$getDodgeTime(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$DODGE_TIME);
     }
 
     @Unique
@@ -176,6 +191,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
+
+        boolean notSkybound = (this.onGround() || this.isSwimming()|| this.onClimbable() || this.isPassenger()
+                || this.hasEffect(MobEffects.LEVITATION));
+
         if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty()) {
             if (((TimeStop) ((Player) (Object) this).level()).CanTimeStopEntity(((Player) (Object) this))) {
                 ci.cancel();
@@ -183,8 +202,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((StandUser) this).setRoundaboutIdleTime(-1);
                 roundabout$airTime = 0;
             } else {
-                if (this.onGround() || this.isInWater() || this.isSwimming()|| this.onClimbable() || this.isPassenger()
-                || this.hasEffect(MobEffects.LEVITATION)){
+                if (notSkybound || this.isInWater()){
                     roundabout$airTime = 0;
                 } else {
                     roundabout$airTime += 1;
@@ -229,6 +247,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_POS, PlayerPosIndex.NONE);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
         ((LivingEntity)(Object)this).getEntityData().define(DATA_KNIFE_COUNT_ID, (byte)0);
     }
 

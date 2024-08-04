@@ -24,6 +24,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -98,6 +99,32 @@ public class MainUtil {
             f += 360.0f;
         }
         return (f*Mth.DEG_TO_RAD);
+    }
+
+    public static Vec3 getMoveRelative(float $$0, Vec3 $$1, Entity ett) {
+        return getInputVector($$1, $$0, ett.getYRot());
+    }
+
+    private static Vec3 getInputVector(Vec3 $$0, float $$1, float $$2) {
+        double $$3 = $$0.lengthSqr();
+        if ($$3 < 1.0E-7) {
+            return Vec3.ZERO;
+        } else {
+            Vec3 $$4 = ($$3 > 1.0 ? $$0.normalize() : $$0).scale((double)$$1);
+            float $$5 = Mth.sin($$2 * (float) (Math.PI / 180.0));
+            float $$6 = Mth.cos($$2 * (float) (Math.PI / 180.0));
+            return new Vec3($$4.x * (double)$$6 - $$4.z * (double)$$5, $$4.y, $$4.z * (double)$$6 + $$4.x * (double)$$5);
+        }
+    }
+
+
+    public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
+        entity.hurtMarked = true;
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        entity.setDeltaMovement(- vec3d2.x,
+                -vec3d2.y,
+                - vec3d2.z);
+        entity.hasImpulse = true;
     }
 
 

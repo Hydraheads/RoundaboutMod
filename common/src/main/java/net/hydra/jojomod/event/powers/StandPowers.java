@@ -1,12 +1,12 @@
 package net.hydra.jojomod.event.powers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -41,7 +41,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-import org.spongepowered.asm.mixin.injection.modify.LocalVariableDiscriminator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +140,8 @@ public abstract class StandPowers {
     private int chargedTSTicks = 0;
     public boolean hasActedInTS = false;
 
+    public int storedInt = 0;
+
     public int getChargedTSTicks(){
         return this.chargedTSTicks;
     }
@@ -178,7 +179,10 @@ public abstract class StandPowers {
     }
 
     /**Override this to set the special move key press conditions*/
-    public void buttonInputSpecial(boolean keyIsDown, Options options){
+    public void buttonInput4(boolean keyIsDown, Options options){
+
+    }
+    public void buttonInput3(boolean keyIsDown, Options options){
 
     }
 
@@ -366,6 +370,7 @@ public abstract class StandPowers {
             if (this.summonCD > 0) {
                 this.summonCD--;
             }
+            this.tickDash();
             this.tickCooldowns();
         }
         if (this.self.level().isClientSide) {
@@ -373,6 +378,9 @@ public abstract class StandPowers {
         }
     }
 
+    public void tickDash(){
+
+    }
     public void tickCooldowns(){
         int amt = 1;
         if (this.self instanceof Player) {
@@ -1346,6 +1354,8 @@ public abstract class StandPowers {
                     this.setPowerClash();
                 } else if (move == PowerIndex.SPECIAL) {
                     this.setPowerSpecial(move);
+                } else if (move == PowerIndex.MOVEMENT) {
+                    this.setPowerMovement(move);
                 } else {
                     this.setPowerOther(move, this.getActivePower());
                 }
@@ -1399,6 +1409,7 @@ public abstract class StandPowers {
         if (!this.self.level().isClientSide()) {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
+                Roundabout.LOGGER.info("erm what the sigma");
                 playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 32, false);
             }
         }
@@ -1478,6 +1489,8 @@ public abstract class StandPowers {
 
     /**Override this to set the special move*/
     public void setPowerSpecial(int lastMove) {
+    }
+    public void setPowerMovement(int lastMove) {
     }
     public void setPowerOther(int move, int lastMove) {
     }

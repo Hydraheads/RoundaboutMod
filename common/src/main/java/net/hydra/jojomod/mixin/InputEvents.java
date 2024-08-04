@@ -19,7 +19,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
@@ -269,16 +268,15 @@ public abstract class InputEvents {
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
                     if (sameKeyOne(KeyInputRegistry.abilityOneKey)) {
-                        //client.player.sendMessage(Text.of("Ability Key"));
+                        //client.player.sendMessage(Text.of("Ability Key 1));
                     }
                     if (sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
                         //client.player.sendMessage(Text.of("Ability Key 2"));
                     }
-                    if (sameKeyOne(KeyInputRegistry.abilityThreeKey)) {
-                        //client.player.sendMessage(Text.of("Ability Key 3"));
-                    }
+                    KeyInputs.MoveKey3(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityThreeKey),
+                        this.options);
 
-                    KeyInputs.specialMoveKey(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityFourKey),
+                    KeyInputs.MoveKey4(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityFourKey),
                             this.options);
 
                     if (KeyInputRegistry.menuKey.isDown()) {

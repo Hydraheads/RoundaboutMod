@@ -2,28 +2,34 @@ package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class PowersTheWorld extends StandPowers {
@@ -38,9 +44,52 @@ public class PowersTheWorld extends StandPowers {
     }
 
 
+    /**Dodge ability*/
+    @Override
+    public void buttonInput3(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide) {
+            if (keyIsDown) {
+                if (this.getSelf().onGround()) {
+                    byte forward = 0;
+                    byte strafe = 0;
+                    if (options.keyUp.isDown()) forward++;
+                    if (options.keyDown.isDown()) forward--;
+                    if (options.keyLeft.isDown()) strafe++;
+                    if (options.keyRight.isDown()) strafe--;
+                    int degrees = (int) (this.getSelf().getYRot() % 360);
+
+                    if (strafe > 0 && forward == 0) {
+                        degrees -= 90;
+                        degrees = degrees % 360;
+                    } else if (strafe > 0 && forward > 0) {
+                        degrees -= 45;
+                        degrees = degrees % 360;
+                    } else if (strafe > 0) {
+                        degrees -= 135;
+                        degrees = degrees % 360;
+                    } else if (strafe < 0 && forward == 0) {
+                        degrees += 90;
+                        degrees = degrees % 360;
+                    } else if (strafe < 0 && forward > 0) {
+                        degrees += 45;
+                        degrees = degrees % 360;
+                    } else if (strafe < 0) {
+                        degrees += 135;
+                        degrees = degrees % 360;
+                    } else if (forward < 0) {
+                        degrees += 180;
+                        degrees = degrees % 360;
+                    }
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, degrees);
+
+                }
+            }
+        }
+    }
+
     /**Begin Charging Time Stop, also detects activation via release**/
     @Override
-    public void buttonInputSpecial(boolean keyIsDown, Options options) {
+    public void buttonInput4(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
             if (!this.onCooldown(PowerIndex.SKILL_4) || ((Player)this.getSelf()).isCreative()) {
                 if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
@@ -86,6 +135,7 @@ public class PowersTheWorld extends StandPowers {
             }
         }
     }
+
 
     @Override
     public void tryPower(int move, boolean forced) {
@@ -185,6 +235,22 @@ public class PowersTheWorld extends StandPowers {
         return false;
     }
 
+    /**Tick through dash*/
+    @Override
+    public void tickDash(){
+        if (this.getSelf() instanceof Player) {
+            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
+                ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
+                byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
+                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
+                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
+                }
+            } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
+                ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
+            }
+        }
+    }
+
     public void resumeTime() {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
@@ -234,11 +300,23 @@ public class PowersTheWorld extends StandPowers {
         this.setActivePower(PowerIndex.SPECIAL);
         poseStand(OffsetIndex.GUARD);
         animateStand((byte) 30);
-
         if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
             playSoundsIfNearby(getTSVoice(), 100, false);
         }
         playSoundsIfNearby(TIME_STOP_CHARGE, 100, true);
+    }
+    @Override
+    public void setPowerMovement(int lastMove) {
+        if (this.getSelf() instanceof Player){
+            ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(0);
+            ((IPlayerEntity)this.getSelf()).roundabout$SetPos((byte) 2);
+            this.getSelf().setXRot(this.getSelf().getXRot()+20F);
+        }
+        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1F,
+                Mth.sin(storedInt * ((float) Math.PI / 180)),
+                Mth.sin(-20 * ((float) Math.PI / 180)),
+                -Mth.cos(storedInt * ((float) Math.PI / 180)));
+        //playSoundsIfNearby(getTSVoice(), 100, false);
     }
 
     public byte getTSVoice(){
@@ -372,6 +450,8 @@ public class PowersTheWorld extends StandPowers {
             if (this.getChargedTSTicks() > chargeTime){
                 this.setChargedTSTicks(chargeTime);
             }
+        } else if (move == PowerIndex.MOVEMENT) {
+            this.storedInt = chargeTime;
         }
         super.tryChargedPower(move, forced, chargeTime);
         return true;
