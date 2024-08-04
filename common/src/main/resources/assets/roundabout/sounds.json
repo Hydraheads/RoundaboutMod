@@ -125,6 +125,12 @@
       "roundabout:timestop_impact2"
     ]
   },
+  "dodge": {
+    "subtitle": "sounds.roundabout.dodge",
+    "sounds": [
+      "roundabout:dodge"
+    ]
+  },
   "stand_theworld_muda1": {
     "subtitle": "sounds.roundabout.stand_theworld_muda1",
     "sounds": [

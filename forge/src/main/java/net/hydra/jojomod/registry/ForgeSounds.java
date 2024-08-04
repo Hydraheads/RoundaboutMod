@@ -41,6 +41,8 @@ public class ForgeSounds {
             register(ModSounds.PUNCH_3_SOUND, ModSounds.PUNCH_3_SOUND_ID);
     public static final RegistryObject<SoundEvent> PUNCH_4_SOUND_EVENT =
             register(ModSounds.PUNCH_4_SOUND, ModSounds.PUNCH_4_SOUND_ID);
+    public static final RegistryObject<SoundEvent> DODGE_EVENT =
+            register(ModSounds.DODGE, ModSounds.DODGE_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA1_SOUND_EVENT =
             register(ModSounds.STAND_THEWORLD_MUDA1_SOUND, ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA2_SOUND_EVENT =

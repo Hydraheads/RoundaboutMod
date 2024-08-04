@@ -307,16 +307,28 @@ public class PowersTheWorld extends StandPowers {
     }
     @Override
     public void setPowerMovement(int lastMove) {
-        if (this.getSelf() instanceof Player){
-            ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(0);
-            ((IPlayerEntity)this.getSelf()).roundabout$SetPos((byte) 2);
-            this.getSelf().setXRot(this.getSelf().getXRot()+20F);
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            int cdTime = 50;
+            if (this.getSelf() instanceof Player) {
+                if (((Player)this.getSelf()).isCreative()){
+                    cdTime = 7;
+                }
+                ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
+                ((IPlayerEntity) this.getSelf()).roundabout$SetPos((byte) 2);
+                this.getSelf().setXRot(this.getSelf().getXRot() + 20F);
+            }
+            this.setCooldown(PowerIndex.SKILL_3, cdTime);
+            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1F,
+                    Mth.sin(storedInt * ((float) Math.PI / 180)),
+                    Mth.sin(-20 * ((float) Math.PI / 180)),
+                    -Mth.cos(storedInt * ((float) Math.PI / 180)));
+            playSoundsIfNearby(DODGE_NOISE, 100, false);
+            if (!this.getSelf().level().isClientSide()) {
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, cdTime);
+                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+            }
+
         }
-        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1F,
-                Mth.sin(storedInt * ((float) Math.PI / 180)),
-                Mth.sin(-20 * ((float) Math.PI / 180)),
-                -Mth.cos(storedInt * ((float) Math.PI / 180)));
-        //playSoundsIfNearby(getTSVoice(), 100, false);
     }
 
     public byte getTSVoice(){
@@ -573,9 +585,9 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
-            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_1_SNEAK);
+            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
         }
 
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
@@ -682,6 +694,7 @@ public class PowersTheWorld extends StandPowers {
     }
 
 
+    public static final byte DODGE_NOISE = 19;
 
     public static final byte BARRAGE_NOISE = 20;
     public static final byte BARRAGE_NOISE_2 = BARRAGE_NOISE+1;

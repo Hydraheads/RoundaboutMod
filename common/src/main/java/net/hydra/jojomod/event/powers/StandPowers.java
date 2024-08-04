@@ -401,8 +401,8 @@ public abstract class StandPowers {
                     ci.time=-1;
                 }
                 if (this.self instanceof Player) {
-                    if (((Player)this.self).isCreative()){
-                        ci.time=-1;
+                    if (((Player)this.self).isCreative() && ci.time > 2){
+                        ci.time=2;
                     }
                 }
             }
