@@ -50,38 +50,65 @@ public class PowersTheWorld extends StandPowers {
         if (this.getSelf().level().isClientSide) {
             if (keyIsDown) {
                 if (this.getSelf().onGround()) {
-                    byte forward = 0;
-                    byte strafe = 0;
-                    if (options.keyUp.isDown()) forward++;
-                    if (options.keyDown.isDown()) forward--;
-                    if (options.keyLeft.isDown()) strafe++;
-                    if (options.keyRight.isDown()) strafe--;
-                    int degrees = (int) (this.getSelf().getYRot() % 360);
+                    if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                        byte forward = 0;
+                        byte strafe = 0;
+                        if (options.keyUp.isDown()) forward++;
+                        if (options.keyDown.isDown()) forward--;
+                        if (options.keyLeft.isDown()) strafe++;
+                        if (options.keyRight.isDown()) strafe--;
+                        int degrees = (int) (this.getSelf().getYRot() % 360);
+                        int backwards = 0;
 
-                    if (strafe > 0 && forward == 0) {
-                        degrees -= 90;
-                        degrees = degrees % 360;
-                    } else if (strafe > 0 && forward > 0) {
-                        degrees -= 45;
-                        degrees = degrees % 360;
-                    } else if (strafe > 0) {
-                        degrees -= 135;
-                        degrees = degrees % 360;
-                    } else if (strafe < 0 && forward == 0) {
-                        degrees += 90;
-                        degrees = degrees % 360;
-                    } else if (strafe < 0 && forward > 0) {
-                        degrees += 45;
-                        degrees = degrees % 360;
-                    } else if (strafe < 0) {
-                        degrees += 135;
-                        degrees = degrees % 360;
-                    } else if (forward < 0) {
-                        degrees += 180;
-                        degrees = degrees % 360;
+                        if (strafe > 0 && forward == 0) {
+                            degrees -= 90;
+                            degrees = degrees % 360;
+                        } else if (strafe > 0 && forward > 0) {
+                            degrees -= 45;
+                            degrees = degrees % 360;
+                        } else if (strafe > 0) {
+                            degrees -= 135;
+                            degrees = degrees % 360;
+                            backwards = 1;
+                        } else if (strafe < 0 && forward == 0) {
+                            degrees += 90;
+                            degrees = degrees % 360;
+                        } else if (strafe < 0 && forward > 0) {
+                            degrees += 45;
+                            degrees = degrees % 360;
+                        } else if (strafe < 0) {
+                            degrees += 135;
+                            degrees = degrees % 360;
+                            backwards = 1;
+                        } else if (forward < 0) {
+                            degrees += 180;
+                            degrees = degrees % 360;
+                            backwards = 1;
+                        }
+
+
+                        int cdTime = 50;
+                        if (this.getSelf() instanceof Player) {
+                            if (((Player)this.getSelf()).isCreative()){
+                                cdTime = 7;
+                            }
+                            ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
+                            /*
+                            if (backwards > 0){
+                                ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
+                            } else {
+                                ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                            }
+                            */
+                        }
+                        this.setCooldown(PowerIndex.SKILL_3, cdTime);
+                        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1F,
+                                Mth.sin(degrees * ((float) Math.PI / 180)),
+                                Mth.sin(-20 * ((float) Math.PI / 180)),
+                                -Mth.cos(degrees * ((float) Math.PI / 180)));
+
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
                     }
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, degrees);
-
                 }
             }
         }
@@ -239,14 +266,31 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void tickDash(){
         if (this.getSelf() instanceof Player) {
+
+            if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
+                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
+                if (!this.getSelf().level().isClientSide){
+                    ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
+                    byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
+                    if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
+                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
+                    }
+                }
+            } else if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 0){
+                ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getClientDodgeTime()+1);
+            }
+
             if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
+
                 ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
                 byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
                 if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
                     ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
                 }
             } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
-                ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
+                if (this.getSelf().level().isClientSide){
+                    ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
+                }
             }
         }
     }
@@ -307,28 +351,18 @@ public class PowersTheWorld extends StandPowers {
     }
     @Override
     public void setPowerMovement(int lastMove) {
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
-            int cdTime = 50;
             if (this.getSelf() instanceof Player) {
-                if (((Player)this.getSelf()).isCreative()){
-                    cdTime = 7;
-                }
+                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
-                ((IPlayerEntity) this.getSelf()).roundabout$SetPos((byte) 2);
-                this.getSelf().setXRot(this.getSelf().getXRot() + 20F);
+                if (storedInt > 0){
+                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
+                } else {
+                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                }
             }
-            this.setCooldown(PowerIndex.SKILL_3, cdTime);
-            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1F,
-                    Mth.sin(storedInt * ((float) Math.PI / 180)),
-                    Mth.sin(-20 * ((float) Math.PI / 180)),
-                    -Mth.cos(storedInt * ((float) Math.PI / 180)));
-            playSoundsIfNearby(DODGE_NOISE, 100, false);
             if (!this.getSelf().level().isClientSide()) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, cdTime);
                 this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
             }
-
-        }
     }
 
     public byte getTSVoice(){

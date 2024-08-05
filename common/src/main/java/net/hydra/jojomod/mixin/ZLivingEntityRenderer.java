@@ -57,21 +57,23 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             if (playerP == PlayerPosIndex.DODGE_FORWARD || playerP == PlayerPosIndex.DODGE_BACKWARD) {
                 int dodgeTime = ((IPlayerEntity)$$0).roundabout$getDodgeTime();
                 float $$5;
-                if (dodgeTime > 5){
-                    $$5 = ((11 - ((float) dodgeTime + 1 + $$4 - 1.0F)) / 20.0F * 1.6F);
-                } else {
-                    $$5 = ((float) dodgeTime + 1 + $$4 - 1.0F) / 20.0F * 1.6F;
-                }
-                $$5 = Mth.sqrt($$5);
-                if ($$5 > 1.0F) {
-                    $$5 = 1.0F;
-                }
+                if (dodgeTime > -1) {
+                    if (dodgeTime > 5) {
+                        $$5 = ((11 - ((float) dodgeTime + 1 + $$4 - 1.0F)) / 20.0F * 1.6F);
+                    } else {
+                        $$5 = ((float) dodgeTime + 1 + $$4 - 1.0F) / 20.0F * 1.6F;
+                    }
+                    $$5 = Mth.sqrt($$5);
+                    if ($$5 > 1.0F) {
+                        $$5 = 1.0F;
+                    }
 
-                if (playerP == PlayerPosIndex.DODGE_FORWARD){
-                    $$5*= -1;
-                }
+                    if (playerP == PlayerPosIndex.DODGE_FORWARD) {
+                        $$5 *= -1;
+                    }
 
-                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 45));
+                    $$1.mulPose(Axis.XP.rotationDegrees($$5 * 45));
+                }
             }
         }
     }

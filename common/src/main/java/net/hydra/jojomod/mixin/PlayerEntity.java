@@ -62,6 +62,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**Used by Harpoon calculations*/
     @Unique
     private int roundabout$airTime = 0;
+    @Unique
+    private int roundabout$clientDodgeTime = 0;
 
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -80,8 +82,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Unique
     @Override
+    public void roundabout$setClientDodgeTime(int dodgeTime){
+        roundabout$clientDodgeTime = dodgeTime;
+    }
+    @Unique
+    @Override
     public void roundabout$setDodgeTime(int dodgeTime){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$DODGE_TIME, dodgeTime);
+    }
+    @Unique
+    @Override
+    public int roundabout$getClientDodgeTime(){
+        return roundabout$clientDodgeTime;
     }
     @Unique
     @Override
