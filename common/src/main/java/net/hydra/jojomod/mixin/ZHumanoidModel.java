@@ -64,9 +64,9 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
         }
     }
 
+    /**Animation for dodge skill*/
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundaboutSetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
-
        if ($$0 instanceof Player){
             byte pos = ((IPlayerEntity)$$0).roundabout$GetPos();
             if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD){

@@ -290,6 +290,11 @@ public class PowersTheWorld extends StandPowers {
             } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
                 if (this.getSelf().level().isClientSide){
                     ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
+                    if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() > 2){
+                        this.getSelf().setDeltaMovement(this.getSelf().getDeltaMovement().x*0.82,
+                                this.getSelf().getDeltaMovement().y,
+                                this.getSelf().getDeltaMovement().z*0.82);
+                    }
                 }
             }
         }
@@ -352,6 +357,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void setPowerMovement(int lastMove) {
             if (this.getSelf() instanceof Player) {
+                this.setPowerNone();
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
                 if (storedInt > 0){

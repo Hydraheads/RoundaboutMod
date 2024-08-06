@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -507,6 +508,12 @@ public abstract class StandPowers {
                 local.input.leftImpulse *= 0.5f;
                 local.input.forwardImpulse *= 0.5f;
                 sprintTrigger = 0;
+            }
+            int dodgeTime = ((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime();
+            if (dodgeTime > 3){
+
+                local.input.leftImpulse/= dodgeTime-2;
+                local.input.forwardImpulse *= 0.1f;
             }
         }
         return sprintTrigger;
