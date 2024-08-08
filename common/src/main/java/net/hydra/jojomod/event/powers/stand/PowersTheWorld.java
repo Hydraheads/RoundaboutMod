@@ -132,10 +132,14 @@ public class PowersTheWorld extends StandPowers {
         Vec3 vec3d2 = entity.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+
+        double mag = this.getSelf().getPosition(0).distanceTo(
+                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.7+1;
+
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                (blockHit.getBlockPos().getX() - this.getSelf().getX())*0.1,
-                (blockHit.getBlockPos().getY() - this.getSelf().getY())*0.1,
-                (blockHit.getBlockPos().getZ() - this.getSelf().getZ())*0.1
+                (blockHit.getLocation().x - this.getSelf().getX())/mag,
+                0.6+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0),
+                (blockHit.getLocation().z - this.getSelf().getZ())/mag
         );
 
     }

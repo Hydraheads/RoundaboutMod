@@ -117,6 +117,9 @@ public class MainUtil {
         }
     }
 
+    public static double fixAngle(float angle){
+       return (Math.abs(angle) % 360);
+    }
 
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
