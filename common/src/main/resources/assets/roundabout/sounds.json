@@ -131,6 +131,12 @@
       "roundabout:dodge"
     ]
   },
+  "stand_leap": {
+    "subtitle": "sounds.roundabout.stand_leap",
+    "sounds": [
+      "roundabout:stand_leap"
+    ]
+  },
   "stand_theworld_muda1": {
     "subtitle": "sounds.roundabout.stand_theworld_muda1",
     "sounds": [

@@ -126,7 +126,25 @@ public class MainUtil {
                 - vec3d2.z);
         entity.hasImpulse = true;
     }
+    public static void takeUnresistableKnockbackWithY2(Entity entity,double x, double y, double z) {
+        entity.hurtMarked = true;
+        entity.setDeltaMovement( x,
+                y,
+                z);
+        entity.hasImpulse = true;
+    }
 
+    public static double lengthdir_x(double length, double angle) {
+        return length * (Math.cos(toRadians(angle))) * -1;
+    }
+
+    public static double lengthdir_z(double length, double angle) {
+        return length * (Math.sin(toRadians(angle)));
+    }
+
+    public static double toRadians(double angle) {
+        return angle * (Math.PI / 180);
+    }
 
     public static double cheapDistanceTo(double x,double y,double z,double x2,double y2,double z2){
         double mdist = 0;

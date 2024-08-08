@@ -1363,6 +1363,8 @@ public abstract class StandPowers {
                     this.setPowerSpecial(move);
                 } else if (move == PowerIndex.MOVEMENT) {
                     this.setPowerMovement(move);
+                } else if (move == PowerIndex.SNEAK_MOVEMENT) {
+                    this.setPowerSneakMovement(move);
                 } else {
                     this.setPowerOther(move, this.getActivePower());
                 }
@@ -1498,6 +1500,8 @@ public abstract class StandPowers {
     public void setPowerSpecial(int lastMove) {
     }
     public void setPowerMovement(int lastMove) {
+    }
+    public void setPowerSneakMovement(int lastMove) {
     }
     public void setPowerOther(int move, int lastMove) {
     }
