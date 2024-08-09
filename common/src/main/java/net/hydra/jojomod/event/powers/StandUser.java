@@ -97,6 +97,12 @@ public interface StandUser {
 
     int getRoundaboutIdleTime();
 
+
+    int roundabout$getMaxLeapTicks();
+    int roundabout$getLeapTicks();
+
+    void roundabout$setLeapTicks(int leapTicks);
+
     int roundabout$getGasolineTime();
     int roundabout$getGasolineRenderTime();
     void roundabout$setGasolineTime(int gasTicks);
@@ -107,4 +113,6 @@ public interface StandUser {
     void setRoundaboutIdleTime(int roundaboutIdleTime);
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
+
+
 }

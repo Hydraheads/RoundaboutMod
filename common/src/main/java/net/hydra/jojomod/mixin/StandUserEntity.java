@@ -20,6 +20,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -47,6 +48,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -61,6 +63,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected boolean jumping;
 
     @Shadow private float speed;
+    @Unique
+    private int roundabout$leapTicks = -1;
+    @Unique
+    private final int roundabout$maxLeapTicks = 80;
 
     public StandUserEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -153,7 +159,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.getStandPowers().tickPower();
         this.tickGuard();
         this.tickDaze();
-
+        if (this.roundabout$leapTicks > -1){
+            if (this.onGround() && roundabout$leapTicks < (roundabout$maxLeapTicks - 5)){
+                roundabout$leapTicks = -1;
+            }
+            roundabout$leapTicks--;
+            if (!this.level().isClientSide){
+                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(1f,0.65f,0), 1f), this.getX(), this.getY(), this.getZ(),
+                        1, 0, 0, 0, 0.1);
+            }
+        }
         if (roundabout$gasolineIFRAMES > 0){
             roundabout$gasolineIFRAMES--;
             if (roundabout$gasolineIFRAMES==0){
@@ -210,6 +225,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$maxBucketGasTicks;
     }
 
+    @Unique
+    public int roundabout$getLeapTicks(){
+        return this.roundabout$leapTicks;
+    }
+    @Unique
+    public int roundabout$getMaxLeapTicks(){
+        return this.roundabout$maxLeapTicks;
+    }
+    @Unique
+    public void roundabout$setLeapTicks(int leapTicks){
+        this.roundabout$leapTicks = leapTicks;
+    }
     @Unique
     public void roundabout$setGasolineTime(int gasTicks){
         this.roundabout$gasTicks = gasTicks;
@@ -853,6 +880,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+
+        if (this.roundabout$leapTicks > -1){
+            ((LivingEntity) (Object) this).resetFallDistance();
+        }
         return $$1;
     }
 
@@ -866,12 +897,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
-        if (roundabout$gasolineIFRAMES > 0){
+        if (roundabout$gasolineIFRAMES > 0 && $$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             ci.setReturnValue(false);
             return;
         } else {
             if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)) {
                 roundabout$gasolineIFRAMES = 10;
+                roundabout$knifeIFrameTicks = 10;
+                roundabout$stackedKnivesAndMatches = 12;
             }
         }
 

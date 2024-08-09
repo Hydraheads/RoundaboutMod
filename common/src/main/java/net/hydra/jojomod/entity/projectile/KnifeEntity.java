@@ -113,7 +113,7 @@ public class KnifeEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
-        float $$2 = 3.0F;
+        float $$2 = 4.0F;
         if ($$1 instanceof LivingEntity $$3) {
             $$2 += EnchantmentHelper.getDamageBonus(this.knifeItem, $$3.getMobType());
         }

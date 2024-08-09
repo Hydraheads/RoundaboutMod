@@ -117,8 +117,9 @@ public class PowersTheWorld extends StandPowers {
                     } else {
                         if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                             if (this.getSelf().onGround()) {
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 50);
+                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
                                 bigLeap(this.getSelf(),20);
+                                ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                             }
                         }
@@ -405,9 +406,12 @@ public class PowersTheWorld extends StandPowers {
     public void setPowerSneakMovement(int lastMove) {
         if (this.getSelf() instanceof Player) {
             this.setPowerNone();
+            this.setPowerNone();
         }
+        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.98 + (Math.random() * 0.04)));
         }
     }
     public byte getTSVoice(){

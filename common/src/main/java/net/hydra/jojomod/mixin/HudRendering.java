@@ -159,6 +159,19 @@ public abstract class HudRendering implements IHudAccess {
         return false;
     }
 
+
+    @Inject(method = "renderExperienceBar", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V", shift = At.Shift.AFTER),
+            cancellable = true)
+    public void roundabout$renderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
+        if (((StandUser) minecraft.player).roundabout$getLeapTicks() > -1){
+            int k = screenWidth/2 - 5;
+            int l = screenHeight - 31 - 5;
+            $$0.blit(StandIcons.JOJO_ICONS, k, l, 183, 40, 9, 9);
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
         StandHudRender.renderAttackHud($$0, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), flashAlpha, otherFlashAlpha);
