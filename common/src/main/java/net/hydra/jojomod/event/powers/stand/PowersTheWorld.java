@@ -53,6 +53,7 @@ public class PowersTheWorld extends StandPowers {
     public boolean impactBrace = false;
 
     public int impactSlowdown = -1;
+    public int impactAirTime = -1;
 
     /**Dodge ability*/
     @Override
@@ -469,8 +470,12 @@ public class PowersTheWorld extends StandPowers {
         }
     }
     public void fallBraceInit() {
-        this.getSelf().resetFallDistance();
+        this.getSelf().fallDistance -= 20;
+        if (this.getSelf().fallDistance < 0){
+            this.getSelf().fallDistance = 0;
+        }
         impactBrace = true;
+        impactAirTime = 15;
 
         animateStand((byte) 10);
         this.setAttackTimeDuring(0);
@@ -492,7 +497,6 @@ public class PowersTheWorld extends StandPowers {
                     this.getSelf().getX(), this.getSelf().getOnPos().getY()+1.1, this.getSelf().getZ(),
                     30, 1, 0.05, 1, 0.4);
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.98 + (Math.random() * 0.04)));
-        } else {
             int degrees = (int) (this.getSelf().getYRot() % 360);
             MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.7F,
                     Mth.sin(degrees * ((float) Math.PI / 180)),
@@ -540,8 +544,16 @@ public class PowersTheWorld extends StandPowers {
                     }
 
                 } else {
+                    if (impactAirTime > -1){
+                        impactAirTime--;
+                    }
                     impactSlowdown = 15;
-                    this.getSelf().resetFallDistance();
+                    if (impactAirTime > -1 || this.getSelf().tickCount % 2 == 0){
+                        this.getSelf().fallDistance -= 1;
+                        if (this.getSelf().fallDistance < 0){
+                            this.getSelf().fallDistance = 0;
+                        }
+                    }
                 }
             }
         }
@@ -756,11 +768,11 @@ public class PowersTheWorld extends StandPowers {
             } else {
                 if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3) {
                     done=true;
-                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
                 }
             }
             if (!done){
-                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_EXTRA);
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
             }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);

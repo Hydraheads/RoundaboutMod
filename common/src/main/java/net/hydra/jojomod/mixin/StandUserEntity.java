@@ -66,7 +66,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$leapTicks = -1;
     @Unique
-    private final int roundabout$maxLeapTicks = 80;
+    private final int roundabout$maxLeapTicks = 60;
 
     public StandUserEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
