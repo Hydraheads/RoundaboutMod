@@ -9,6 +9,7 @@ public class OffsetIndex {
     public static final byte GUARD = 2;
     public static final byte LOOSE = 3;
     public static final byte FLOAT = 5;
+    public static final byte BENEATH = 6;
 
 
 
@@ -19,7 +20,7 @@ public class OffsetIndex {
     public static byte OffsetStyle(byte offsetType){
         if (offsetType == FOLLOW){
             return FOLLOW_STYLE;
-        } else if (offsetType == ATTACK || offsetType == GUARD){
+        } else if (offsetType == ATTACK || offsetType == GUARD || offsetType == BENEATH){
             return FIXED_STYLE;
         } else if (offsetType == LOOSE){
             return LOOSE_STYLE;

@@ -24,9 +24,10 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     }public void setBodyRotations(float pitch,float yaw){
         this.body.xRot = pitch;
         this.body.yRot = yaw;
-    } public void setStandRotations(float pitch,float yaw){
+    } public void setStandRotations(float pitch,float yaw, float z){
         this.stand.xRot = pitch;
         this.stand.yRot = yaw;
+        this.stand.zRot = z;
     }
 
     @Override
@@ -72,7 +73,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             } else {
                     float rotX = entity.getStandRotationX();
                     float rotY = entity.getStandRotationY();
-                    this.setStandRotations(rotX, rotY);
+                    float rotZ = entity.getStandRotationZ();
+                    this.setStandRotations(rotX, rotY, rotZ);
                     if (this.root().hasChild("stand2")) {
 
                         if (this.root().getChild("stand2").hasChild("head")) {
@@ -143,18 +145,27 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
 
         float rotX = mobEntity.getStandRotationX();
         float rotY = mobEntity.getStandRotationY();
+        float rotZ = mobEntity.getStandRotationZ();
         float cRX = 0;
         float cRY = 0;
+        float cRZ = 0;
         if (animationStyle == OffsetIndex.FIXED_STYLE){
             cRX = (mobEntity.getUser().getViewXRot(tickDelta)%360) * Mth.DEG_TO_RAD;
+
+            if (animationNumber == OffsetIndex.BENEATH){
+                cRX = 90 * Mth.DEG_TO_RAD;
+                cRZ = 180 * Mth.DEG_TO_RAD;
+            }
         } else if (animationStyle == OffsetIndex.LOOSE_STYLE){
             cRX = (mobEntity.getViewXRot(tickDelta)%360) * Mth.DEG_TO_RAD;
         }
         rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRX, 0.8f);
         rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, cRY, 0.8f);
+        rotZ = MainUtil.controlledLerpRadianDegrees(tickDelta, rotZ, cRZ, 0.8f);
         mobEntity.setStandRotationX(rotX);
         mobEntity.setStandRotationY(rotY);
-        this.setStandRotations(rotX,rotY);
+        mobEntity.setStandRotationZ(rotZ);
+        this.setStandRotations(rotX,rotY,rotZ);
 
     }
     public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
@@ -184,8 +195,10 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRot, 0.15f);
             rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
         } else if (animationStyle == OffsetIndex.FIXED_STYLE) {
-            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
-            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
+            float xRot = 0;
+            float yRot = 0;
+            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, xRot, 0.8f);
+            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, yRot, 0.8f);
         } else if (animationStyle == OffsetIndex.LOOSE_STYLE) {
             rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
             rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);

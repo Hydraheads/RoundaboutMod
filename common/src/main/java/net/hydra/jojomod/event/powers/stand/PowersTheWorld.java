@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -18,8 +19,11 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Main;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -46,11 +50,14 @@ public class PowersTheWorld extends StandPowers {
         return ModSounds.WORLD_SUMMON_SOUND_EVENT;
     }
 
+    public boolean impactBrace = false;
+
+    public int impactSlowdown = -1;
 
     /**Dodge ability*/
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
+        if (this.getSelf().level().isClientSide && !this.isClashing()) {
             if (keyIsDown) {
                     if (!options.keyShift.isDown()){
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
@@ -115,14 +122,27 @@ public class PowersTheWorld extends StandPowers {
                             }
                         }
                     } else {
-                        if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                            if (this.getSelf().onGround()) {
+                        if (this.getSelf().onGround()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                                 this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
                                 bigLeap(this.getSelf(),20);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                             }
+                        } else {
+                            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
+
+                            } else {
+                                if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                                    if (this.getSelf().fallDistance > 3){
+                                        this.setCooldown(PowerIndex.SKILL_EXTRA, 300);
+                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
+                                    }
+                                }
+                            }
                         }
+
                     }
             }
         }
@@ -281,6 +301,10 @@ public class PowersTheWorld extends StandPowers {
                 local.input.leftImpulse *= 0.48f;
                 local.input.forwardImpulse *= 0.48f;
                 sprintTrigger = 0;
+            } else if (impactSlowdown > -1) {
+                local.input.leftImpulse = 0f;
+                local.input.forwardImpulse = 0;
+                sprintTrigger = 0;
             }
         }
         return super.inputSpeedModifiers(sprintTrigger);
@@ -438,6 +462,42 @@ public class PowersTheWorld extends StandPowers {
             this.resumeTime();
         } else if (move == PowerIndex.SPECIAL_CHARGED){
             this.stopTime();
+        } else if (move == PowerIndex.EXTRA){
+            this.fallBraceInit();
+        } else if (move == PowerIndex.EXTRA_FINISH){
+            this.fallBrace();
+        }
+    }
+    public void fallBraceInit() {
+        this.getSelf().resetFallDistance();
+        impactBrace = true;
+
+        animateStand((byte) 10);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.EXTRA);
+        this.poseStand(OffsetIndex.BENEATH);
+        if (!this.getSelf().level().isClientSide()) {
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.78 + (Math.random() * 0.04)));
+        }
+    }
+    public void fallBrace() {
+        impactBrace = false;
+
+        this.setAttackTimeDuring(-15);
+        if (!this.getSelf().level().isClientSide()) {
+                ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                        this.getSelf().getX(), this.getSelf().getOnPos().getY()+1.1, this.getSelf().getZ(),
+                        50, 1.1, 0.05, 1.1, 0.4);
+            ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                    this.getSelf().getX(), this.getSelf().getOnPos().getY()+1.1, this.getSelf().getZ(),
+                    30, 1, 0.05, 1, 0.4);
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.98 + (Math.random() * 0.04)));
+        } else {
+            int degrees = (int) (this.getSelf().getYRot() % 360);
+            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.7F,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-12 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
         }
     }
 
@@ -464,6 +524,28 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    @Override
+    public void tickPower(){
+        super.tickPower();
+        if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+            if (impactSlowdown > -1){
+                impactSlowdown--;
+            }
+
+            if (impactBrace){
+                if (this.getSelf().onGround()){
+                    ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA_FINISH, true);
+                    if (!this.getSelf().level().isClientSide){
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
+                    }
+
+                } else {
+                    impactSlowdown = 15;
+                    this.getSelf().resetFallDistance();
+                }
+            }
+        }
+    }
     @Override
     public void timeTickStopPower(){
         if (!(this.getSelf() instanceof Player && ((Player)this.getSelf()).isCreative())) {
@@ -668,7 +750,18 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
-            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
+            boolean done = false;
+            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
+
+            } else {
+                if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3) {
+                    done=true;
+                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_3_SNEAK);
+                }
+            }
+            if (!done){
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_EXTRA);
+            }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
         }

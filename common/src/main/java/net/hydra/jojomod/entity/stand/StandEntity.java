@@ -72,6 +72,7 @@ public abstract class StandEntity extends Mob{
     public float headRotationY =0;
     public float standRotationX =0;
     public float standRotationY =0;
+    public float standRotationZ =0;
 
     /**isDisplay could theoretically be data set on a stand to not be
      * faded out if it doesnt have a user. It is not
@@ -256,12 +257,18 @@ public abstract class StandEntity extends Mob{
     public float getStandRotationY() {
         return this.standRotationY;
     }
+    public float getStandRotationZ() {
+        return this.standRotationZ;
+    }
 
     public void setStandRotationX(float bodRot) {
         this.standRotationX = bodRot;
     }
     public void setStandRotationY(float bodRot) {
         this.standRotationY = bodRot;
+    }
+    public void setStandRotationZ(float bodRot) {
+        this.standRotationZ = bodRot;
     }
 
     /**
@@ -529,28 +536,33 @@ public abstract class StandEntity extends Mob{
      * Involves the stand being in an L shape away from the user,
      * with the StandModel.java handling the inward rotation*/
     public Vec3 getAttackOffset(LivingEntity standUser, byte ot) {
-        float distanceFront;
-        float standrotDir2 = 0;
-        float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
-                1);
-        if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
-        float addY = 0.3F;
-        float addXYZ = 0.3F;
-        float addXZ = 0.7F;
-
-        if (ot == OffsetIndex.GUARD) {
-            addXZ-= 0.015F;
-            distanceFront = 1.05F;
+        if (ot == OffsetIndex.BENEATH) {
+            Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
+            return new Vec3(frontVectors.x, frontVectors.y-1.1, frontVectors.z);
         } else {
-            distanceFront = ((StandUser) standUser).getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).getStandReach(),true);
+            float distanceFront;
+            float standrotDir2 = 0;
+            float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
+                    1);
+            if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
+            float addY = 0.3F;
+            float addXYZ = 0.3F;
+            float addXZ = 0.7F;
+
+            if (ot == OffsetIndex.GUARD) {
+                addXZ-= 0.015F;
+                distanceFront = 1.05F;
+            } else {
+                distanceFront = ((StandUser) standUser).getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).getStandReach(),true);
+            }
+
+            Vec3 frontVectors = FrontVectors(standUser, 0, distanceFront);
+
+            Vec3 vec3d2 = DamageHandler.getRotationVector(0, standUser.getYHeadRot()+ standrotDir2);
+            frontVectors = frontVectors.add(vec3d2.x * addXZ, 0, vec3d2.z * addXZ);
+            return new Vec3(frontVectors.x,frontVectors.y + standUser.getEyeHeight(standUser.getPose()) + addY - 1.6,
+                    frontVectors.z);
         }
-
-        Vec3 frontVectors = FrontVectors(standUser, 0, distanceFront);
-
-        Vec3 vec3d2 = DamageHandler.getRotationVector(0, standUser.getYHeadRot()+ standrotDir2);
-        frontVectors = frontVectors.add(vec3d2.x * addXZ, 0, vec3d2.z * addXZ);
-        return new Vec3(frontVectors.x,frontVectors.y + standUser.getEyeHeight(standUser.getPose()) + addY - 1.6,
-                frontVectors.z);
     }
 
     /** Uses rotation to grab a point in front of an entity, with DR being an optional pitch offset*/

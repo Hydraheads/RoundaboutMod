@@ -18,6 +18,10 @@ public class PowerIndex {
     public static final byte MOVEMENT = 12;
     public static final byte SNEAK_MOVEMENT = 13;
     public static final byte CLASH_CANCEL = 14;
+    public static final byte EXTRA = 15;
+    public static final byte EXTRA_2 = 16;
+    public static final byte EXTRA_FINISH = 17;
+    public static final byte EXTRA_2_FINISH = 18;
     public static final byte LEAD_IN = 30;
 
     /**Even more basic, refers to the buttons for cooldowns*/
@@ -30,5 +34,7 @@ public class PowerIndex {
     public static final byte SKILL_2_SNEAK = 5;
     public static final byte SKILL_3_SNEAK = 6;
     public static final byte SKILL_4_SNEAK = 7;
+    public static final byte SKILL_EXTRA = 8;
+    public static final byte SKILL_EXTRA_2 = 8;
 
 }

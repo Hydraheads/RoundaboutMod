@@ -99,8 +99,9 @@ public interface StandUser {
 
 
     int roundabout$getMaxLeapTicks();
-    int roundabout$getLeapTicks();
 
+
+    int roundabout$getLeapTicks();
     void roundabout$setLeapTicks(int leapTicks);
 
     int roundabout$getGasolineTime();

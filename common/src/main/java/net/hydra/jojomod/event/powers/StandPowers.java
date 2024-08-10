@@ -191,7 +191,7 @@ public abstract class StandPowers {
 
     public List<CooldownInstance> initStandCooldowns(){
         List<CooldownInstance> Cooldowns = new ArrayList<>();
-        for (byte i = 0; i < 9; i++) {
+        for (byte i = 0; i < 10; i++) {
             Cooldowns.add(new CooldownInstance(-1, -1));
         }
         return Cooldowns;

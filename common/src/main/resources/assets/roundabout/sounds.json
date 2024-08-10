@@ -137,6 +137,12 @@
       "roundabout:stand_leap"
     ]
   },
+  "fall_brace": {
+    "subtitle": "sounds.roundabout.fall_brace",
+    "sounds": [
+      "roundabout:fall_brace"
+    ]
+  },
   "stand_theworld_muda1": {
     "subtitle": "sounds.roundabout.stand_theworld_muda1",
     "sounds": [
