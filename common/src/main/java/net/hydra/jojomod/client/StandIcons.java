@@ -44,6 +44,8 @@ public class StandIcons {
             "textures/gui/icons/the_world/stand_leap_world.png");
     public static final ResourceLocation THE_WORLD_FALL_CATCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/fall_brace.png");
+    public static final ResourceLocation THE_WORLD_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/stand_ledge_grab.png");
     public static final ResourceLocation SKILL2_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/assault.png");
 

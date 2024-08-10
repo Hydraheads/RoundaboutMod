@@ -19,6 +19,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -56,6 +57,7 @@ public class PowersTheWorld extends StandPowers {
     public int impactAirTime = -1;
 
     /**Dodge ability*/
+    @SuppressWarnings("deprecation")
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing()) {
@@ -134,8 +136,27 @@ public class PowersTheWorld extends StandPowers {
                             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
 
                             } else {
-                                if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                                    if (this.getSelf().fallDistance > 3){
+
+                                Vec3 vec3d = this.getSelf().getEyePosition(0);
+                                Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                                Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+                                BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+                                if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
+                                        && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
+                                    if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                                        this.setCooldown(PowerIndex.SKILL_3_SNEAK, 100);
+                                        double mag = this.getSelf().getPosition(0).distanceTo(
+                                                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*1.68+1;
+
+                                        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                                                (blockHit.getLocation().x - this.getSelf().getX())/mag,
+                                                0.45+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0),
+                                                (blockHit.getLocation().z - this.getSelf().getZ())/mag
+                                        );
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
+                                    }
+                                } else if (this.getSelf().fallDistance > 3){
+                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
                                         this.setCooldown(PowerIndex.SKILL_EXTRA, 300);
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
@@ -467,6 +488,8 @@ public class PowersTheWorld extends StandPowers {
             this.fallBraceInit();
         } else if (move == PowerIndex.EXTRA_FINISH){
             this.fallBrace();
+        } else if (move == PowerIndex.VAULT){
+            this.vault();
         }
     }
     public void fallBraceInit() {
@@ -483,6 +506,12 @@ public class PowersTheWorld extends StandPowers {
         this.poseStand(OffsetIndex.BENEATH);
         if (!this.getSelf().level().isClientSide()) {
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.78 + (Math.random() * 0.04)));
+        }
+    }
+    public void vault() {
+        if (!this.getSelf().level().isClientSide()) {
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (1.1 + (Math.random() * 0.04)));
+
         }
     }
     public void fallBrace() {
@@ -759,6 +788,7 @@ public class PowersTheWorld extends StandPowers {
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
@@ -766,9 +796,20 @@ public class PowersTheWorld extends StandPowers {
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
 
             } else {
-                if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3) {
-                    done=true;
-                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+
+                if (!this.getSelf().onGround()){
+                    Vec3 vec3d = this.getSelf().getEyePosition(0);
+                    Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+                    BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+                    if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
+                    && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
+                        done=true;
+                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                    } else if (this.getSelf().fallDistance > 3){
+                        done=true;
+                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+                    }
                 }
             }
             if (!done){
