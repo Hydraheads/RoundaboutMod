@@ -121,6 +121,7 @@ public class PowersTheWorld extends StandPowers {
                                         Mth.sin(-20 * ((float) Math.PI / 180)),
                                         -Mth.cos(degrees * ((float) Math.PI / 180)));
 
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.MOVEMENT,true);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
                             }
                         }
@@ -130,6 +131,7 @@ public class PowersTheWorld extends StandPowers {
                                 this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
                                 bigLeap(this.getSelf(),20);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.SNEAK_MOVEMENT,true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                             }
                         } else {
@@ -145,14 +147,16 @@ public class PowersTheWorld extends StandPowers {
                                         && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
                                     if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                                         this.setCooldown(PowerIndex.SKILL_3_SNEAK, 100);
+                                        this.setCooldown(PowerIndex.SKILL_EXTRA, this.getCooldown(PowerIndex.SKILL_EXTRA).time+20);
                                         double mag = this.getSelf().getPosition(0).distanceTo(
                                                 new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*1.68+1;
 
                                         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
                                                 (blockHit.getLocation().x - this.getSelf().getX())/mag,
-                                                0.45+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0),
+                                                0.35+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0),
                                                 (blockHit.getLocation().z - this.getSelf().getZ())/mag
                                         );
+                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.VAULT, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
                                     }
                                 } else if (this.getSelf().fallDistance > 3){
@@ -435,12 +439,14 @@ public class PowersTheWorld extends StandPowers {
     public void setPowerMovement(int lastMove) {
             if (this.getSelf() instanceof Player) {
                 this.setPowerNone();
+                if (!this.getSelf().level().isClientSide()) {
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
-                if (storedInt > 0){
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
-                } else {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                    if (storedInt > 0) {
+                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
+                    } else {
+                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                    }
                 }
             }
             if (!this.getSelf().level().isClientSide()) {
@@ -452,11 +458,9 @@ public class PowersTheWorld extends StandPowers {
     public void setPowerSneakMovement(int lastMove) {
         if (this.getSelf() instanceof Player) {
             this.setPowerNone();
-            this.setPowerNone();
         }
-        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
         if (!this.getSelf().level().isClientSide()) {
-
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.98 + (Math.random() * 0.04)));
         }
     }
@@ -509,8 +513,13 @@ public class PowersTheWorld extends StandPowers {
         }
     }
     public void vault() {
+        animateStand((byte) 15);
+        this.poseStand(OffsetIndex.GUARD);
+        this.setAttackTimeDuring(-7);
+        this.setActivePower(PowerIndex.VAULT);
+        this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (1.1 + (Math.random() * 0.04)));
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.8 + (Math.random() * 0.04)));
 
         }
     }
