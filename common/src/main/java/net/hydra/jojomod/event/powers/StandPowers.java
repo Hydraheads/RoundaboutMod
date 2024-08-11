@@ -31,10 +31,7 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -757,6 +754,17 @@ public abstract class StandPowers {
             }
         }
         return false;
+    }
+
+    public void cancelConsumableItem(LivingEntity entity){
+        ItemStack itemStack = entity.getUseItem();
+        Item item = itemStack.getItem();
+        if (item.isEdible() || item instanceof PotionItem) {
+            entity.releaseUsingItem();
+            if (entity instanceof Player) {
+                entity.stopUsingItem();
+            }
+        }
     }
 
     public boolean knockShield2(Entity entity, int duration){

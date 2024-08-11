@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -121,6 +122,7 @@ public abstract class InputEvents {
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
+
             StandUser standComp = ((StandUser) player);
 
             if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
@@ -130,6 +132,22 @@ public abstract class InputEvents {
                     ci.cancel();
                 }
             }
+
+
+            if (level != null) {
+                if (!this.player.isHandsBusy()) {
+                    if (this.hitResult != null) {
+
+                        for (InteractionHand $$0 : InteractionHand.values()) {
+                            ItemStack $$1 = this.player.getItemInHand($$0);
+                if ((((IPlayerEntity)player).roundabout$getDodgeTime() > -1 ||
+                                    ((StandUser)player).roundabout$getLeapTicks() > -1) &&
+                                    ($$1.getItem().isEdible()
+                                            || ($$1.getItem() instanceof PotionItem))){
+                    ci.cancel();
+                                return;
+                            }
+            }}}}
 
 
             if (level != null && ((StandUserClientPlayer) player).getRoundaboutNoPlaceTSTicks() > -1) {
@@ -183,6 +201,13 @@ public abstract class InputEvents {
                                         if ($$3 instanceof LivingEntity){
                                             roundabout$TryGuard();
                                             ci.cancel();
+
+                                            if ((((IPlayerEntity)player).roundabout$getDodgeTime() > -1 ||
+                                                    ((StandUser)player).roundabout$getLeapTicks() > -1) &&
+                                                    ($$1.getItem().isEdible()
+                                                            || ($$1.getItem() instanceof PotionItem))){
+                                                return;
+                                            }
 
                                             if (!$$1.isEmpty()) {
                                                 InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);

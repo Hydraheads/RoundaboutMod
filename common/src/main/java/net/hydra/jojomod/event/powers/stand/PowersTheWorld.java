@@ -3,7 +3,6 @@ package net.hydra.jojomod.event.powers.stand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -18,27 +17,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 public class PowersTheWorld extends StandPowers {
 
@@ -348,6 +339,10 @@ public class PowersTheWorld extends StandPowers {
     public void tickDash(){
         if (this.getSelf() instanceof Player) {
 
+            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0) {
+                cancelConsumableItem(this.getSelf());
+            }
+
             if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
                 if (!this.getSelf().level().isClientSide){
@@ -438,6 +433,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void setPowerMovement(int lastMove) {
             if (this.getSelf() instanceof Player) {
+                cancelConsumableItem(this.getSelf());
                 this.setPowerNone();
                 if (!this.getSelf().level().isClientSide()) {
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
@@ -458,6 +454,7 @@ public class PowersTheWorld extends StandPowers {
     public void setPowerSneakMovement(int lastMove) {
         if (this.getSelf() instanceof Player) {
             this.setPowerNone();
+            cancelConsumableItem(this.getSelf());
         }
         if (!this.getSelf().level().isClientSide()) {
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
@@ -515,6 +512,7 @@ public class PowersTheWorld extends StandPowers {
     public void vault() {
         animateStand((byte) 15);
         this.poseStand(OffsetIndex.GUARD);
+        cancelConsumableItem(this.getSelf());
         this.setAttackTimeDuring(-7);
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
@@ -526,6 +524,7 @@ public class PowersTheWorld extends StandPowers {
     public void fallBrace() {
         impactBrace = false;
 
+        cancelConsumableItem(this.getSelf());
         this.setAttackTimeDuring(-15);
         if (!this.getSelf().level().isClientSide()) {
                 ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),

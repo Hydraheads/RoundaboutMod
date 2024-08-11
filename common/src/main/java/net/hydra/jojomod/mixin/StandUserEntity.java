@@ -39,10 +39,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
@@ -163,6 +160,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.onGround() && roundabout$leapTicks < (roundabout$maxLeapTicks - 5)){
                 roundabout$leapTicks = -1;
             }
+            roundabout$cancelConsumableItem((LivingEntity)(Object)this);
             roundabout$leapTicks--;
             if (!this.level().isClientSide){
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(1f,0.65f,0), 1f), this.getX(), this.getY(), this.getZ(),
@@ -208,6 +206,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         //}
     }
 
+
+    public void roundabout$cancelConsumableItem(LivingEntity entity){
+        ItemStack itemStack = entity.getUseItem();
+        Item item = itemStack.getItem();
+        if (item.isEdible() || item instanceof PotionItem) {
+            entity.releaseUsingItem();
+            if (entity instanceof Player) {
+                ((Player) entity).stopUsingItem();
+            }
+        }
+    }
     @Unique
     public int roundabout$getGasolineTime(){
         return this.roundabout$gasTicks;
