@@ -46,6 +46,8 @@ public class PowersTheWorld extends StandPowers {
 
     public int impactSlowdown = -1;
     public int impactAirTime = -1;
+    public int bonusLeapCount = -1;
+    public int spacedJumpTime = -1;
 
     /**Dodge ability*/
     @SuppressWarnings("deprecation")
@@ -120,6 +122,7 @@ public class PowersTheWorld extends StandPowers {
                         if (this.getSelf().onGround()) {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                                 this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
+                                bonusLeapCount = 3;
                                 bigLeap(this.getSelf(),20);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
                                 ((StandUser) this.getSelf()).tryPower(PowerIndex.SNEAK_MOVEMENT,true);
@@ -127,7 +130,38 @@ public class PowersTheWorld extends StandPowers {
                             }
                         } else {
                             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
+                                /*Stand leap rebounds*/
+                                if (!this.getSelf().onGround()) {
+                                    if (bonusLeapCount > 0 && spacedJumpTime < 0 && !this.onCooldown(PowerIndex.EXTRA)) {
+                                        Vec3 vec3d = this.getSelf().getEyePosition(0);
+                                        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                                        spacedJumpTime = 5;
+                                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+                                        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+                                        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY() + 1) > this.getSelf().getY()) {
 
+                                            double mag = this.getSelf().getPosition(0).distanceTo(
+                                                    new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))+0.02;
+                                            Vec3 vec = new Vec3(blockHit.getLocation().x - this.getSelf().getX(),
+                                                    0,
+                                                    blockHit.getLocation().z - this.getSelf().getZ()).normalize();
+
+                                            Roundabout.LOGGER.info(""+vec.x+" "+vec.y+" "+vec.z);
+
+                                            MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                                                    -(0.3+(0.15*bonusLeapCount))*vec.x,
+                                                    0.2+Math.max(((-1*(0.2+(0.15*bonusLeapCount)))*((blockHit.getLocation().y-2) - this.getSelf().getY())),0),
+                                                    -(0.3+(0.15*bonusLeapCount))*(vec.z)
+                                            );
+                                            bonusLeapCount--;
+                                            if (bonusLeapCount <=0){
+                                                this.setCooldown(PowerIndex.EXTRA, 100);
+                                            }
+                                            ((StandUser) this.getSelf()).tryPower(PowerIndex.BOUNCE,true);
+                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BOUNCE);
+                                        }
+                                    }
+                                }
                             } else {
 
                                 Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -137,11 +171,11 @@ public class PowersTheWorld extends StandPowers {
                                 if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
                                         && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
                                     if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                                        /*Stand vaulting*/
                                         this.setCooldown(PowerIndex.SKILL_3_SNEAK, 100);
                                         this.setCooldown(PowerIndex.SKILL_EXTRA, this.getCooldown(PowerIndex.SKILL_EXTRA).time+20);
                                         double mag = this.getSelf().getPosition(0).distanceTo(
                                                 new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*1.68+1;
-
                                         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
                                                 (blockHit.getLocation().x - this.getSelf().getX())/mag,
                                                 0.35+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0),
@@ -491,8 +525,23 @@ public class PowersTheWorld extends StandPowers {
             this.fallBrace();
         } else if (move == PowerIndex.VAULT){
             this.vault();
+        } else if (move == PowerIndex.BOUNCE){
+            this.bounce();
         }
     }
+
+
+
+    public void bounce() {
+        this.setActivePower(PowerIndex.BOUNCE);
+        this.setAttackTimeDuring(-7);
+        this.getSelf().resetFallDistance();
+        if (!this.getSelf().level().isClientSide()) {
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
+        }
+    }
+
     public void fallBraceInit() {
         this.getSelf().fallDistance -= 20;
         if (this.getSelf().fallDistance < 0){
@@ -571,6 +620,10 @@ public class PowersTheWorld extends StandPowers {
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (impactSlowdown > -1){
                 impactSlowdown--;
+            }
+
+            if (spacedJumpTime > -1){
+                spacedJumpTime--;
             }
 
             if (impactBrace){
@@ -802,6 +855,17 @@ public class PowersTheWorld extends StandPowers {
         if (this.getSelf().isCrouching()){
             boolean done = false;
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
+
+                if (!this.getSelf().onGround()) {
+                    Vec3 vec3d = this.getSelf().getEyePosition(0);
+                    Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+                    BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+                    if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()){
+                        done=true;
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
+                    }
+                }
 
             } else {
 
