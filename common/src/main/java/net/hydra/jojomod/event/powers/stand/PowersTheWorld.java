@@ -74,27 +74,31 @@ public class PowersTheWorld extends StandPowers {
                                 if (strafe > 0 && forward == 0) {
                                     degrees -= 90;
                                     degrees = degrees % 360;
+                                    backwards = 1;
                                 } else if (strafe > 0 && forward > 0) {
                                     degrees -= 45;
                                     degrees = degrees % 360;
+                                    backwards = 2;
                                 } else if (strafe > 0) {
                                     degrees -= 135;
                                     degrees = degrees % 360;
-                                    backwards = 1;
+                                    backwards = -1;
                                 } else if (strafe < 0 && forward == 0) {
                                     degrees += 90;
                                     degrees = degrees % 360;
+                                    backwards = 3;
                                 } else if (strafe < 0 && forward > 0) {
                                     degrees += 45;
                                     degrees = degrees % 360;
+                                    backwards = 4;
                                 } else if (strafe < 0) {
                                     degrees += 135;
                                     degrees = degrees % 360;
-                                    backwards = 1;
+                                    backwards = -2;
                                 } else if (forward < 0) {
                                     degrees += 180;
                                     degrees = degrees % 360;
-                                    backwards = 1;
+                                    backwards = -3;
                                 }
 
 
@@ -487,10 +491,51 @@ public class PowersTheWorld extends StandPowers {
                 if (!this.getSelf().level().isClientSide()) {
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
-                    if (storedInt > 0) {
+                    if (storedInt < 0) {
                         ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
                     } else {
                         ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                    }
+
+                    int degrees = (int) (this.getSelf().getYRot() % 360);
+                    if (storedInt == 1) {
+                        degrees -= 90;
+                        degrees = degrees % 360;
+                    } else if (storedInt == 2) {
+                        degrees -= 45;
+                        degrees = degrees % 360;
+                    } else if (storedInt == -1) {
+                        degrees -= 135;
+                        degrees = degrees % 360;
+                    } else if (storedInt == 3) {
+                        degrees += 90;
+                        degrees = degrees % 360;
+                    } else if (storedInt == 4) {
+                        degrees += 45;
+                        degrees = degrees % 360;
+                    } else if (storedInt == -2) {
+                        degrees += 135;
+                        degrees = degrees % 360;
+                    } else if (storedInt == -3) {
+                        degrees += 180;
+                        degrees = degrees % 360;
+                    }
+                    for (int i = 0; i < 3; i++){
+                        float j = 0.1F;
+                        if (i == 1){
+                            degrees -= 20;
+                        } else if (i == 2){
+                            degrees += 40;
+                        } else {
+                            j = 0.2F;
+                        }
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                                this.getSelf().getX(), this.getSelf().getY()+0.1, this.getSelf().getZ(),
+                                0,
+                                Mth.sin(degrees * ((float) Math.PI / 180))*0.3,
+                                Mth.sin(-20 * ((float) Math.PI / 180))*-j,
+                                -Mth.cos(degrees * ((float) Math.PI / 180))*0.3,
+                                0.8);
                     }
                 }
             }
