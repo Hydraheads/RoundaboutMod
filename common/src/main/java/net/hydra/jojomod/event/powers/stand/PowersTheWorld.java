@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -132,7 +133,7 @@ public class PowersTheWorld extends StandPowers {
                                 standRebound();
                             } else {
                                if (!doVault() && this.getSelf().fallDistance > 3){
-                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && this.getActivePower() != PowerIndex.EXTRA) {
+                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && (this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
                                         this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
@@ -641,12 +642,18 @@ public class PowersTheWorld extends StandPowers {
             }
 
             if (impactBrace){
-                if (this.getSelf().onGround()){
+                if (this.getSelf().onGround()) {
                     ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA_FINISH, true);
-                    if (!this.getSelf().level().isClientSide){
+                    if (!this.getSelf().level().isClientSide) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
                     }
-
+                }else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)){
+                    impactSlowdown = -1;
+                    impactBrace = false;
+                    ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    if (!this.getSelf().level().isClientSide) {
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    }
                 } else {
                     if (impactAirTime > -1){
                         impactAirTime--;
