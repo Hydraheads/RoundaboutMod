@@ -112,6 +112,8 @@ public class PowersTheWorld extends StandPowers {
 
                                 ((StandUser) this.getSelf()).tryPower(PowerIndex.MOVEMENT,true);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
+                            } else {
+                                doVault();
                             }
                         }
                     } else {
@@ -129,30 +131,9 @@ public class PowersTheWorld extends StandPowers {
                                 /*Stand leap rebounds*/
                                 standRebound();
                             } else {
-
-                                Vec3 vec3d = this.getSelf().getEyePosition(0);
-                                Vec3 vec3d2 = this.getSelf().getViewVector(0);
-                                Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-                                BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-                                if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
-                                        && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
-                                    if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                        /*Stand vaulting*/
-                                        this.setCooldown(PowerIndex.SKILL_3_SNEAK, 100);
-                                        this.setCooldown(PowerIndex.SKILL_EXTRA, this.getCooldown(PowerIndex.SKILL_EXTRA).time+20);
-                                        double mag = this.getSelf().getPosition(0).distanceTo(
-                                                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*1.68+1;
-                                        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                                                (blockHit.getLocation().x - this.getSelf().getX())/mag,
-                                                0.35+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0),
-                                                (blockHit.getLocation().z - this.getSelf().getZ())/mag
-                                        );
-                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.VAULT, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
-                                    }
-                                } else if (this.getSelf().fallDistance > 3){
-                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                                        this.setCooldown(PowerIndex.SKILL_EXTRA, 300);
+                               if (!doVault() && this.getSelf().fallDistance > 3){
+                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && this.getActivePower() != PowerIndex.EXTRA) {
+                                        this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
                                     }
@@ -163,6 +144,34 @@ public class PowersTheWorld extends StandPowers {
                     }
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public boolean doVault(){
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
+                && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
+            if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                /*Stand vaulting*/
+                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 80);
+                this.setCooldown(PowerIndex.SKILL_EXTRA, this.getCooldown(PowerIndex.SKILL_EXTRA).time + 20);
+                double mag = this.getSelf().getPosition(0).distanceTo(
+                        new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
+                MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                        (blockHit.getLocation().x - this.getSelf().getX()) / mag,
+                        0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
+                        (blockHit.getLocation().z - this.getSelf().getZ()) / mag
+                );
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.VAULT, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
+                return true;
+            }
+            return true;
+        }
+        return false;
     }
 
     public void standRebound(){
@@ -854,7 +863,6 @@ public class PowersTheWorld extends StandPowers {
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
@@ -869,12 +877,7 @@ public class PowersTheWorld extends StandPowers {
             } else {
 
                 if (!this.getSelf().onGround()){
-                    Vec3 vec3d = this.getSelf().getEyePosition(0);
-                    Vec3 vec3d2 = this.getSelf().getViewVector(0);
-                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-                    BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-                    if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
-                    && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
+                    if (canVault()){
                         done=true;
                         setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
                     } else if (this.getSelf().fallDistance > 3){
@@ -890,8 +893,11 @@ public class PowersTheWorld extends StandPowers {
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
             } else {
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
-
+                if (!(((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
+                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+                }
             }
         }
 
@@ -901,6 +907,21 @@ public class PowersTheWorld extends StandPowers {
             setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4);
+        }
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public boolean canVault(){
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
+                && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
+            return true;
+        } else {
+            return false;
         }
     }
 
