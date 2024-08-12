@@ -56,7 +56,10 @@ public class PowersTheWorld extends StandPowers {
         if (this.getSelf().level().isClientSide && !this.isClashing()) {
             if (keyIsDown) {
                     if (!options.keyShift.isDown()){
-                        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                        if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
+                            /*Stand leap rebounds*/
+                            standRebound();
+                        } else if (!this.onCooldown(PowerIndex.SKILL_3)) {
                             if (this.getSelf().onGround()) {
                                 byte forward = 0;
                                 byte strafe = 0;
@@ -123,7 +126,7 @@ public class PowersTheWorld extends StandPowers {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                                 this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
                                 bonusLeapCount = 3;
-                                bigLeap(this.getSelf(),20);
+                                bigLeap(this.getSelf(),20,1);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
                                 ((StandUser) this.getSelf()).tryPower(PowerIndex.SNEAK_MOVEMENT,true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
@@ -131,37 +134,7 @@ public class PowersTheWorld extends StandPowers {
                         } else {
                             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
                                 /*Stand leap rebounds*/
-                                if (!this.getSelf().onGround()) {
-                                    if (bonusLeapCount > 0 && spacedJumpTime < 0 && !this.onCooldown(PowerIndex.EXTRA)) {
-                                        Vec3 vec3d = this.getSelf().getEyePosition(0);
-                                        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-                                        spacedJumpTime = 5;
-                                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-                                        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-                                        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY() + 1) > this.getSelf().getY()) {
-
-                                            double mag = this.getSelf().getPosition(0).distanceTo(
-                                                    new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))+0.02;
-                                            Vec3 vec = new Vec3(blockHit.getLocation().x - this.getSelf().getX(),
-                                                    0,
-                                                    blockHit.getLocation().z - this.getSelf().getZ()).normalize();
-
-                                            Roundabout.LOGGER.info(""+vec.x+" "+vec.y+" "+vec.z);
-
-                                            MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                                                    -(0.3+(0.15*bonusLeapCount))*vec.x,
-                                                    0.2+Math.max(((-1*(0.2+(0.15*bonusLeapCount)))*((blockHit.getLocation().y-2) - this.getSelf().getY())),0),
-                                                    -(0.3+(0.15*bonusLeapCount))*(vec.z)
-                                            );
-                                            bonusLeapCount--;
-                                            if (bonusLeapCount <=0){
-                                                this.setCooldown(PowerIndex.EXTRA, 100);
-                                            }
-                                            ((StandUser) this.getSelf()).tryPower(PowerIndex.BOUNCE,true);
-                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BOUNCE);
-                                        }
-                                    }
-                                }
+                                standRebound();
                             } else {
 
                                 Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -199,7 +172,50 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
-    public void bigLeap(LivingEntity entity,float range){
+    public void standRebound(){
+
+        if (!this.getSelf().onGround()) {
+            if (bonusLeapCount > 0 && spacedJumpTime < 0 && !this.onCooldown(PowerIndex.EXTRA) && canStandRebound()) {
+                spacedJumpTime = 5;
+
+                bigLeap(this.getSelf(), 20F, (float) (0.2+(bonusLeapCount*0.2)));
+                bonusLeapCount--;
+                if (bonusLeapCount <=0){
+                    this.setCooldown(PowerIndex.EXTRA, 100);
+                }
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.BOUNCE,true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BOUNCE);
+            }
+        }
+    }
+
+    public boolean canStandRebound(){
+        if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().east()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().west()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().north()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().south()).isSolid() ||
+
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().east().north()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().west().south()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().west().north()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().east().south()).isSolid() ||
+
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().east().north()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().west().south()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().west().north()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().east().south()).isSolid() ||
+
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().east()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().west()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().north()).isSolid() ||
+                this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().above().south()).isSolid()
+        ){
+            return true;
+        }
+        return false;
+    }
+
+    public void bigLeap(LivingEntity entity,float range, float mult){
         Vec3 vec3d = entity.getEyePosition(0);
         Vec3 vec3d2 = entity.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
@@ -209,9 +225,9 @@ public class PowersTheWorld extends StandPowers {
                 new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.7+1;
 
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                (blockHit.getLocation().x - this.getSelf().getX())/mag,
-                0.6+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0),
-                (blockHit.getLocation().z - this.getSelf().getZ())/mag
+                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult,
+                (0.6+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*mult,
+                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult
         );
 
     }
@@ -856,15 +872,9 @@ public class PowersTheWorld extends StandPowers {
             boolean done = false;
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
 
-                if (!this.getSelf().onGround()) {
-                    Vec3 vec3d = this.getSelf().getEyePosition(0);
-                    Vec3 vec3d2 = this.getSelf().getViewVector(0);
-                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-                    BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-                    if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()){
+                if (!this.getSelf().onGround() && canStandRebound()) {
                         done=true;
                         setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
-                    }
                 }
 
             } else {
@@ -888,7 +898,12 @@ public class PowersTheWorld extends StandPowers {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
             }
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+
+            }
         }
 
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
