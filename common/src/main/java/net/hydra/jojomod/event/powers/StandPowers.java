@@ -507,11 +507,6 @@ public abstract class StandPowers {
                 sprintTrigger = 0;
             }
             int dodgeTime = ((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime();
-            if (dodgeTime > 3){
-
-                local.input.leftImpulse/= dodgeTime-2;
-                local.input.forwardImpulse *= 0.1f;
-            }
         }
         return sprintTrigger;
     }

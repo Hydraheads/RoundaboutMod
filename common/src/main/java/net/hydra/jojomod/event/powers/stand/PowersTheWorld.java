@@ -59,7 +59,7 @@ public class PowersTheWorld extends StandPowers {
                         if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
                             /*Stand leap rebounds*/
                             standRebound();
-                        } else if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                        } else if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                             if (this.getSelf().onGround()) {
                                 byte forward = 0;
                                 byte strafe = 0;
@@ -97,22 +97,15 @@ public class PowersTheWorld extends StandPowers {
                                 }
 
 
-                                int cdTime = 50;
+                                int cdTime = 120;
                                 if (this.getSelf() instanceof Player) {
-                                    if (((Player) this.getSelf()).isCreative()) {
-                                        cdTime = 7;
-                                    }
                                     ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
-                                /*
-                                if (backwards > 0){
-                                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
-                                } else {
-                                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                                    if (options.keyJump.isDown()){
+                                        cdTime = 160;
+                                    }
                                 }
-                                */
-                                }
-                                this.setCooldown(PowerIndex.SKILL_3, cdTime);
-                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1F,
+                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, cdTime);
+                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.92F,
                                         Mth.sin(degrees * ((float) Math.PI / 180)),
                                         Mth.sin(-20 * ((float) Math.PI / 180)),
                                         -Mth.cos(degrees * ((float) Math.PI / 180)));
@@ -189,6 +182,7 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public boolean canStandRebound(){
         if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().east()).isSolid() ||
                 this.getSelf().level().getBlockState(this.getSelf().getOnPos().above().west()).isSolid() ||
@@ -416,11 +410,6 @@ public class PowersTheWorld extends StandPowers {
             } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
                 if (this.getSelf().level().isClientSide){
                     ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
-                    if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() > 2){
-                        this.getSelf().setDeltaMovement(this.getSelf().getDeltaMovement().x*0.82,
-                                this.getSelf().getDeltaMovement().y,
-                                this.getSelf().getDeltaMovement().z*0.82);
-                    }
                 }
             }
         }
@@ -901,7 +890,7 @@ public class PowersTheWorld extends StandPowers {
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
             } else {
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
 
             }
         }
