@@ -1368,6 +1368,8 @@ public abstract class StandPowers {
                     this.setPowerMovement(move);
                 } else if (move == PowerIndex.SNEAK_MOVEMENT) {
                     this.setPowerSneakMovement(move);
+                } else if (move == PowerIndex.MINING) {
+                    this.setPowerMining(move);
                 } else {
                     this.setPowerOther(move, this.getActivePower());
                 }
@@ -1507,6 +1509,12 @@ public abstract class StandPowers {
     public void setPowerSneakMovement(int lastMove) {
     }
     public void setPowerOther(int move, int lastMove) {
+    }
+    public void setPowerMining(int lastMove) {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.MINING);
+        this.poseStand(OffsetIndex.FIXED_STYLE);
+        animateStand((byte) 12);
     }
 
     public void setPowerClash() {

@@ -24,6 +24,7 @@ public class PowerIndex {
     public static final byte EXTRA_2_FINISH = 18;
     public static final byte VAULT = 19;
     public static final byte BOUNCE = 20;
+    public static final byte MINING = 29;
     public static final byte LEAD_IN = 30;
 
     /**Even more basic, refers to the buttons for cooldowns*/

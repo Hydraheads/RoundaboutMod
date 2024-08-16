@@ -14,8 +14,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +29,8 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.minecraft.world.level.block.WebBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +60,24 @@ public abstract class InputEvents {
     @Shadow
     public int missTime;
 
+    @Shadow
+    @Final
+    public ParticleEngine particleEngine;
+
+    @Shadow
+    @Nullable
+    public ClientLevel level;
+
+    @Shadow
+    @Nullable
+    public HitResult hitResult;
+
+    @Shadow
+    @Final
+    public GameRenderer gameRenderer;
+
+    @Unique
+    public boolean roundabout$activeMining = false;
 
     /** This class is in part for detecting and canceling mouse inputs during stand attacks.
      * Please note this should
@@ -63,25 +87,78 @@ public abstract class InputEvents {
             //handleInputEvents
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
+                boolean isMining = (standComp.getActivePower() == PowerIndex.MINING);
                 if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     ci.setReturnValue(true);
                 } else if (standComp.getActive()){
-                    ci.setReturnValue(true);
+                    if (this.hitResult != null) {
+                        boolean $$1 = false;
+                        if (isMining) {
+                            ci.setReturnValue(true);
+                            return;
+                        } else {
+                            switch (this.hitResult.getType()) {
+                                case BLOCK:
+                                    BlockHitResult $$2 = (BlockHitResult) this.hitResult;
+                                    BlockPos $$3 = $$2.getBlockPos();
+                                    if (!this.level.getBlockState($$3).isAir()) {
+                                        this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                        if (this.level.getBlockState($$3).isAir()) {
+                                            $$1 = true;
+                                        }
+                                        break;
+                                    }
+                            }
+                        }
+                        ci.setReturnValue($$1);
+
+                    }
                 }
                 //while (this.options.attackKey.wasPressed()) {
                 //}
             }
         }
+
+
+
+
         @Inject(method = "continueAttack", at = @At("HEAD"), cancellable = true)
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
-                if (standComp.getActive() || standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
+                boolean isMining = (standComp.getActivePower() == PowerIndex.MINING);
+                if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     if (!$$0){
                         this.missTime = 0;
                     }
                     if (this.gameMode != null) {
                         this.gameMode.stopDestroyBlock();
+                    }
+                    ci.cancel();
+                } else if (standComp.getActive()){
+                    if (isMining) {
+                        if (!this.player.isUsingItem()) {
+                            if ($$0 && this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK) {
+                                roundabout$activeMining = true;
+                                BlockHitResult $$1 = (BlockHitResult) this.hitResult;
+                                BlockPos $$2 = $$1.getBlockPos();
+                                if (!this.level.getBlockState($$2).isAir()) {
+                                    Direction $$3 = $$1.getDirection();
+                                    if (this.gameMode.continueDestroyBlock($$2, $$3)) {
+                                        this.particleEngine.crack($$2, $$3);
+                                    }
+                                }
+                            } else {
+                                standComp.tryPower(PowerIndex.NONE, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+
+                                this.gameMode.stopDestroyBlock();
+                            }
+                        }
+                    } else {
+                        if (!this.options.keyAttack.isDown()){
+                            roundabout$activeMining = false;
+                        }
                     }
                     ci.cancel();
                 }
@@ -105,18 +182,6 @@ public abstract class InputEvents {
             }
         }
 
-
-    @Shadow
-    @Nullable
-    public HitResult hitResult;
-
-    @Shadow
-    @Nullable
-    public ClientLevel level;
-
-    @Shadow
-    @Final
-    public GameRenderer gameRenderer;
 
 
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
@@ -325,17 +390,39 @@ public abstract class InputEvents {
                    ModPacketHandler.PACKET_ACCESS.StandGuardCancelClientPacket();
                 }
             }
+
             if (standComp.getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 if (this.options.keyAttack.isDown() && !player.isUsingItem()) {
 
-                    if (standComp.getInterruptCD()) {
+                    boolean isMining = (standComp.getActivePower() == PowerIndex.MINING);
+                    Entity TE = standComp.getTargetEntity(player, -1);
+                    if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
+                    && (standComp.getActivePower() == PowerIndex.NONE || standComp.getAttackTimeDuring() == -1)
+                    && !standComp.isGuarding()) {
+                        boolean $$1 = false;
+                        switch (this.hitResult.getType()) {
+                            case ENTITY:
+                                this.gameMode.attack(this.player, ((EntityHitResult) this.hitResult).getEntity());
+                                break;
+                            case BLOCK:
+                                BlockHitResult $$2 = (BlockHitResult) this.hitResult;
+                                BlockPos $$3 = $$2.getBlockPos();
+                                if (!this.level.getBlockState($$3).isAir()) {
+                                    this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                    standComp.tryPower(PowerIndex.MINING, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);
+                                    break;
+                                }
+                        }
+                    }
+                    if (!isMining && !roundabout$activeMining && standComp.getInterruptCD()) {
                         if (standComp.canAttack()) {
                             standComp.tryPower(PowerIndex.ATTACK, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
                         }
                     }
 
-                    if (standComp.isGuarding() && !standComp.isBarraging()
+                    if (!isMining && standComp.isGuarding() && !standComp.isBarraging()
                             && (standComp.getAttackTime() >= standComp.getAttackTimeMax() ||
                             (standComp.getActivePowerPhase() != standComp.getActivePowerPhaseMax()))){
                         standComp.tryPower(PowerIndex.BARRAGE_CHARGE, true);
