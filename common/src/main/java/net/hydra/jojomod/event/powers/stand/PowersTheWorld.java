@@ -50,6 +50,15 @@ public class PowersTheWorld extends StandPowers {
     public int bonusLeapCount = -1;
     public int spacedJumpTime = -1;
 
+    @Override
+    public boolean isMiningStand() {
+        return true;
+    }
+    @Override
+    public float getMiningSpeed() {
+        return 8F;
+    }
+
     /**Dodge ability*/
     @SuppressWarnings("deprecation")
     @Override

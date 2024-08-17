@@ -13,6 +13,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -23,7 +25,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -187,12 +192,50 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     /**your shield does not take damage if the stand blocks it*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundaboutJump(CallbackInfo ci) {
+    protected void roundabout$Jump(CallbackInfo ci) {
         if (((StandUser) this).isClashing()) {
             ci.cancel();
         }
     }
 
+    /**stand mining intercepts tools for drop so that it is hand level*/
+    @Inject(method = "hasCorrectToolForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$hasCorrectTool(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
+        if (((StandUser) this).getActive() && ((StandUser) this).getStandPowers().isMiningStand()) {
+            cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
+        }
+    }
+
+    /**stand mining intercepts mining speed as well*/
+    @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
+        if (((StandUser) this).getActive() && ((StandUser) this).getStandPowers().isMiningStand()) {
+            float mspeed = ((StandUser) this).getStandPowers().getMiningSpeed();
+            if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
+                if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL) || $$0.is(BlockTags.MINEABLE_WITH_AXE)){
+                    mspeed/=2;
+                } else {
+                    mspeed/=4;
+                }
+            } else {
+                mspeed*=3;
+            }
+
+
+            if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+                mspeed /= 5.0F;
+            }
+
+            if (!this.onGround()) {
+                mspeed /= 5.0F;
+            }
+
+            if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock) {
+                mspeed = 0.0F;
+            }
+            cir.setReturnValue(mspeed);
+        }
+    }
 
     /**If you are in a barrage, does not play the hurt sound*/
     @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)

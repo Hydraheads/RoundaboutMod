@@ -1514,7 +1514,16 @@ public abstract class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.MINING);
         this.poseStand(OffsetIndex.FIXED_STYLE);
-        animateStand((byte) 12);
+        animateStand((byte) 16);
+    }
+
+    public boolean isMiningStand() {
+        return false;
+    }
+
+
+    public float getMiningSpeed() {
+        return 3F;
     }
 
     public void setPowerClash() {

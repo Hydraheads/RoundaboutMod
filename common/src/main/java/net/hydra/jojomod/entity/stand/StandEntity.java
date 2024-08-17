@@ -112,6 +112,7 @@ public abstract class StandEntity extends Mob{
     public final AnimationState blockAnimationState = new AnimationState();
     public final AnimationState barrageChargeAnimationState = new AnimationState();
     public final AnimationState barrageAnimationState = new AnimationState();
+    public final AnimationState miningBarrageAnimationState = new AnimationState();
     public final AnimationState barrageEndAnimationState = new AnimationState();
     public final AnimationState barrageHurtAnimationState = new AnimationState();
     public final AnimationState brokenBlockAnimationState = new AnimationState();
@@ -172,6 +173,12 @@ public abstract class StandEntity extends Mob{
                 this.brokenBlockAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.brokenBlockAnimationState.stop();
+            }
+
+            if (this.getAnimation() == 16) {
+                this.miningBarrageAnimationState.startIfStopped(this.tickCount);
+            } else {
+                this.miningBarrageAnimationState.stop();
             }
         }
     }
