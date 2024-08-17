@@ -25,6 +25,7 @@
     "ZFishingHook",
     "ZInventoryAccess",
     "ZItemEntity",
+    "ZItemStack",
     "ZLivingEntity",
     "ZMinecartTNT",
     "ZMob",
