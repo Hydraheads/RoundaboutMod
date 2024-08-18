@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -895,7 +896,10 @@ public class PowersTheWorld extends StandPowers {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
                 if (!((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())){
-                    ((StandUserClient)this.getSelf()).clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
+                    TimeStopInstance tsi = ((TimeStop)this.getSelf().level()).getTimeStopperInstanceClient(this.getSelf().position());
+                    if (tsi != null && tsi.maxDuration >= 170) {
+                        ((StandUserClient)this.getSelf()).clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
+                    }
                 }
             }
         }
