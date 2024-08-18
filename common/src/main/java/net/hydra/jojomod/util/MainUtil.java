@@ -26,6 +26,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -218,16 +221,22 @@ public class MainUtil {
                     }
                     if (!value.fireImmune()) {
                         value.setSecondsOnFire(15);
+                        float np = power;
                         if (value instanceof LivingEntity){
                             ((StandUser)value).roundabout$setGasolineTime(-1);
+                            if (value instanceof Player){
+                                np *= 0.31F;
+                            }
+                            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, (LivingEntity) value);
+                            np = (float) (np * (1-(f*0.045)));
                         }
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            value.hurt($$5,power);
+                            value.hurt($$5,np);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            value.hurt($$5,power);
+                            value.hurt($$5,np);
                         }
                     }
                 }

@@ -30,6 +30,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -116,10 +117,14 @@ public class KnifeEntity extends AbstractArrow {
         float $$2 = 4.0F;
 
         if ($$1 instanceof Player) {
-            $$2 = 2.5F;
+            $$2 = 2.1F;
         }
 
         if ($$1 instanceof LivingEntity $$3) {
+            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
+            $$2 = (float) ($$2 * (1-(f*0.03)));
+
+
             $$2 += EnchantmentHelper.getDamageBonus(this.knifeItem, $$3.getMobType());
         }
 

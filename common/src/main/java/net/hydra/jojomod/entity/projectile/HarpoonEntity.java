@@ -29,6 +29,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -129,6 +130,8 @@ public class HarpoonEntity extends AbstractArrow {
             Entity $$1 = $$0.getEntity();
             float $$2 = 6.0F;
             if ($$1 instanceof LivingEntity $$3) {
+                int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
+                $$2 = (float) ($$2 * (1-(f*0.03)));
                 $$2 += EnchantmentHelper.getDamageBonus(this.harpoonItem, $$3.getMobType());
             }
 
