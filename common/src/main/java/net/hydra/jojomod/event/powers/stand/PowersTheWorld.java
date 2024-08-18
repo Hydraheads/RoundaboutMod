@@ -120,7 +120,7 @@ public class PowersTheWorld extends StandPowers {
                                     }
                                 }
                                 this.setCooldown(PowerIndex.SKILL_3_SNEAK, cdTime);
-                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.92F,
+                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
                                         Mth.sin(degrees * ((float) Math.PI / 180)),
                                         Mth.sin(-20 * ((float) Math.PI / 180)),
                                         -Mth.cos(degrees * ((float) Math.PI / 180)));
@@ -134,7 +134,7 @@ public class PowersTheWorld extends StandPowers {
                     } else {
                         if (this.getSelf().onGround()) {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
+                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 320);
                                 bonusLeapCount = 3;
                                 bigLeap(this.getSelf(),20,1);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
@@ -195,7 +195,7 @@ public class PowersTheWorld extends StandPowers {
             if (bonusLeapCount > 0 && spacedJumpTime < 0 && !this.onCooldown(PowerIndex.EXTRA) && canStandRebound()) {
                 spacedJumpTime = 5;
 
-                bigLeap(this.getSelf(), 20F, (float) (0.2+(bonusLeapCount*0.2)));
+                bigLeap(this.getSelf(), 20F, (float) (0.17+(bonusLeapCount*0.17)));
                 bonusLeapCount--;
                 if (bonusLeapCount <=0){
                     this.setCooldown(PowerIndex.EXTRA, 100);
@@ -240,7 +240,7 @@ public class PowersTheWorld extends StandPowers {
         BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
 
         double mag = this.getSelf().getPosition(0).distanceTo(
-                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.7+1;
+                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
 
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
                 ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult,
