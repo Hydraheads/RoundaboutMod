@@ -937,6 +937,9 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
+
+            setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_ITEM, PowerIndex.SKILL_2);
+
             boolean done = false;
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
 
@@ -961,6 +964,15 @@ public class PowersTheWorld extends StandPowers {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
             }
         } else {
+            /*If it can find a mob to grab, it will*/
+            Entity targetEntity = this.rayCastEntity(this.getSelf(),2F);
+            if (targetEntity != null) {
+                setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_MOB, PowerIndex.SKILL_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_BLOCK, PowerIndex.SKILL_2);
+            }
+
+
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
             } else {

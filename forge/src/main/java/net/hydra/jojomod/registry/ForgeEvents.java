@@ -6,6 +6,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
@@ -82,6 +83,8 @@ public class ForgeEvents {
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
 
+        ModEffects.BLEED = ForgeEffects.BLEED.get();
+        ModEffects.HEX = ForgeEffects.HEX.get();
 
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();

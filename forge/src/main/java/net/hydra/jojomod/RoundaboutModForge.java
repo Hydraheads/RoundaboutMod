@@ -24,6 +24,7 @@ public class RoundaboutModForge {
         ForgeBlocks.BLOCK_ENTITIES.register(bus);
         ForgeItems.ITEMS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
+        ForgeEffects.POTION_EFFECTS.register(bus);
         //
         BiomeCodec.BIOME_MODIFIER_SERIALIZERS.register(bus);
         ForgeLootModifiers.LOOT_MODIFIERS.register(bus);

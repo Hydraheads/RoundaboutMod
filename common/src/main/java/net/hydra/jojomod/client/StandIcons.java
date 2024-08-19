@@ -50,6 +50,12 @@ public class StandIcons {
             "textures/gui/icons/the_world/stand_ledge_grab.png");
     public static final ResourceLocation SKILL2_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/assault.png");
+    public static final ResourceLocation THE_WORLD_GRAB_BLOCK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/grab_block.png");
+    public static final ResourceLocation THE_WORLD_GRAB_ITEM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/grab_item.png");
+    public static final ResourceLocation THE_WORLD_GRAB_MOB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/grab_mob.png");
 
     public static final ResourceLocation HASTE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/haste.png");
