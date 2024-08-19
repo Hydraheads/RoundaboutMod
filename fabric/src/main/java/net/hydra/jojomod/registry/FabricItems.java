@@ -19,6 +19,7 @@ public class FabricItems {
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
     public static Item LUCK_SWORD = registerItem("luck_sword", new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties()));
+    public static Item SCISSORS = registerItem("scissors", new ScissorItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
     public static Item HARPOON = registerItem("harpoon", new HarpoonItem((new Item.Properties()).durability(250)));
 
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
@@ -61,6 +62,7 @@ public class FabricItems {
                         entries.accept(STAND_ARROW);
                         entries.accept(LUCK_UPGRADE);
                         entries.accept(LUCK_SWORD);
+                        entries.accept(SCISSORS);
                         entries.accept(HARPOON);
                         entries.accept(KNIFE);
                         entries.accept(KNIFE_BUNDLE);
@@ -95,6 +97,7 @@ public class FabricItems {
         ModItems.STAND_ARROW = STAND_ARROW;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
+        ModItems.SCISSORS = SCISSORS;
         ModItems.HARPOON = HARPOON;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;

@@ -62,6 +62,7 @@ public class ForgeEvents {
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
+        ModItems.SCISSORS = ForgeItems.SCISSORS.get();
         ModItems.HARPOON = ForgeItems.HARPOON.get();
         ModItems.KNIFE = ForgeItems.KNIFE.get();
         ModItems.KNIFE_BUNDLE = ForgeItems.KNIFE_BUNDLE.get();

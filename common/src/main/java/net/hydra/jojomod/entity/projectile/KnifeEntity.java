@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -17,6 +18,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -133,6 +135,9 @@ public class KnifeEntity extends AbstractArrow {
         SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
         Vec3 DM = $$1.getDeltaMovement();
         if ($$1.hurt($$5, $$2)) {
+            if ($$1 instanceof LivingEntity){
+                ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), this);
+            }
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
