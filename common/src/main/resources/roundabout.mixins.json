@@ -23,6 +23,7 @@
     "ZCrossbowAtk",
     "ZFireBlock",
     "ZFishingHook",
+    "ZFoodData",
     "ZInventoryAccess",
     "ZItemEntity",
     "ZItemStack",
