@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -137,6 +138,7 @@ public class KnifeEntity extends AbstractArrow {
         Vec3 DM = $$1.getDeltaMovement();
         if ($$1.hurt($$5, $$2)) {
                 if (MainUtil.getMobBleed($$1)){
+                    ((StandUser)$$1).roundabout$setBleedLevel(0);
                     ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 200, 0), this);
                 }
             if ($$1.getType() == EntityType.ENDERMAN) {

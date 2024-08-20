@@ -31,7 +31,7 @@ public class ZBeehiveBlock {
     /**Scissors*/
     @Shadow
     @Final
-    public static IntegerProperty HONEY_LEVEL = BlockStateProperties.LEVEL_HONEY;
+    public static IntegerProperty HONEY_LEVEL;
     @Shadow
     public void resetHoneyLevel(Level level, BlockState blockState, BlockPos blockPos){
     }

@@ -32,6 +32,10 @@ public interface StandUser {
     int getAttackTimeMax();
     int getAttackTime();
     int getAttackTimeDuring();
+    void roundabout$setBleedLevel(int bleedLevel);
+    int roundabout$getBleedLevel();
+    boolean roundabout$getOnlyBleeding();
+    void roundabout$setOnlyBleeding(boolean only);
     byte getActivePowerPhase();
     byte getActivePowerPhaseMax();
     byte getActivePower();

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import com.google.common.collect.Maps;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -7,6 +8,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -34,6 +36,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Illusioner;
@@ -42,10 +46,12 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -55,8 +61,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Map;
+
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow @javax.annotation.Nullable public abstract MobEffectInstance getEffect(MobEffect $$0);
+
     @Shadow protected boolean jumping;
 
     @Shadow private float speed;
@@ -70,11 +80,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Shadow protected abstract int increaseAirSupply(int $$0);
+    @Shadow
+    @Final
+    private Map<MobEffect, MobEffectInstance> activeEffects;
 
     /**If you are stand guarding, this controls you blocking enemy atttacks.
      * For the damage against stand guard, and sfx, see PlayerEntity mixin
      * damageShield
      */
+    @Shadow
+    public boolean hasEffect(MobEffect $$0) {
+        return this.activeEffects.containsKey($$0);
+    }
 
     @Unique
     private final LivingEntity User = ((LivingEntity)(Object) this);
@@ -96,6 +113,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$LOCACACA_CURSE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$BLEED_LEVEL = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BOOLEAN);
     @Unique
     private StandPowers roundabout$Powers;
 
@@ -149,6 +172,54 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$postTSHurtTime = 0;
     @Unique
     private int roundabout$gasolineIFRAMES = 0;
+
+    /**Tick thru effects for bleed to not show potion swirls*/
+    @Inject(method = "tickEffects", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
+    shift= At.Shift.AFTER,ordinal = 0),  cancellable = true)
+    public void roundabout$tickEffects(CallbackInfo ci) {
+        if (!this.level().isClientSide){
+            int bleedlvl = -1;
+            if (this.hasEffect(ModEffects.BLEED)){
+                bleedlvl = this.getEffect(ModEffects.BLEED).getAmplifier();
+            }
+            if (this.roundabout$getBleedLevel() != bleedlvl){
+                this.roundabout$setBleedLevel(bleedlvl);
+            }
+
+            boolean onlyBleeding = true;
+            if (this.activeEffects.size() > 1){
+                onlyBleeding = false;
+            }
+            if (this.roundabout$getOnlyBleeding() != onlyBleeding){
+                this.roundabout$setOnlyBleeding(onlyBleeding);
+            }
+        }
+        if (this.roundabout$getBleedLevel() > -1){
+            int bleedlvl = this.roundabout$getBleedLevel();
+            int bloodticks = 8;
+            if (bleedlvl == 1){
+                bloodticks = 6;
+            } else if (bleedlvl > 1){
+                bloodticks = 4;
+            }
+            if (this.tickCount % bloodticks == 0) {
+                this.level()
+                        .addParticle(
+                                new BlockParticleOption(ParticleTypes.BLOCK, Blocks.REDSTONE_BLOCK.defaultBlockState()),
+                                this.getRandomX(0.5),
+                                this.getRandomY(),
+                                this.getRandomZ(0.5),
+                                0,
+                                0,
+                                0
+                        );
+            }
+            if (this.roundabout$getOnlyBleeding()){
+                ci.cancel();
+            }
+        }
+    }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void tickRoundabout(CallbackInfo ci) {
@@ -299,11 +370,35 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.getEntityData().set(ROUNDABOUT$LOCACACA_CURSE, locacacaCurse);
         }
     }
+    @Unique
+    @Override
+    public void roundabout$setBleedLevel(int bleedLevel) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$BLEED_LEVEL, bleedLevel);
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setOnlyBleeding(boolean only) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$ONLY_BLEEDING, only);
+        }
+    }
 
     @Unique
     @Override
     public byte roundabout$getLocacacaCurse() {
         return this.getEntityData().get(ROUNDABOUT$LOCACACA_CURSE);
+    }
+    @Unique
+    @Override
+    public int roundabout$getBleedLevel() {
+        return this.getEntityData().get(ROUNDABOUT$BLEED_LEVEL);
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getOnlyBleeding() {
+        return this.getEntityData().get(ROUNDABOUT$ONLY_BLEEDING);
     }
     @Unique
     public void roundaboutSetStoredDamage(float roundaboutStoredDamage){
@@ -720,6 +815,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         ((LivingEntity)(Object)this).getEntityData().define(STAND_ID, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_TS_DAMAGE, (byte) 0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
         ((LivingEntity)(Object)this).getEntityData().define(STAND_ACTIVE, false);
     }
 

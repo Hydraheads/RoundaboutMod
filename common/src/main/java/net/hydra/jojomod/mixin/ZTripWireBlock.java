@@ -23,7 +23,7 @@ public abstract class ZTripWireBlock extends Block {
     /**Scissors*/
     @Shadow
     @Final
-    public static BooleanProperty DISARMED = BlockStateProperties.DISARMED;
+    public static BooleanProperty DISARMED;
     public ZTripWireBlock(Properties $$0) {
         super($$0);
     }

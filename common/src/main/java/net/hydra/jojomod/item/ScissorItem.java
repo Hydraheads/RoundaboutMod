@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -63,6 +64,7 @@ public class ScissorItem extends TieredItem implements Vanishable {
     @Override
     public boolean hurtEnemy(ItemStack $$0, LivingEntity $$1, LivingEntity $$2) {
         if (MainUtil.getMobBleed($$1)){
+            ((StandUser)$$1).roundabout$setBleedLevel(0);
             $$1.addEffect(new MobEffectInstance(ModEffects.BLEED, 200, 0), $$2);
         }
         $$0.hurtAndBreak(1, $$2, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
