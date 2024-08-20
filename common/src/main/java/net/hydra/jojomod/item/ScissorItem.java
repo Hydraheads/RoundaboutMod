@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,6 +34,7 @@ public class ScissorItem extends TieredItem implements Vanishable {
 
     public ScissorItem(Tier $$0, float $$1, float $$2, Item.Properties $$3) {
         super($$0, $$3);
+        $$3.defaultDurability(238);
         this.attackDamage = $$1 + $$0.getAttackDamageBonus();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> $$4 = ImmutableMultimap.builder();
         $$4.put(
@@ -60,7 +62,9 @@ public class ScissorItem extends TieredItem implements Vanishable {
 
     @Override
     public boolean hurtEnemy(ItemStack $$0, LivingEntity $$1, LivingEntity $$2) {
-        $$1.addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), $$2);
+        if (MainUtil.getMobBleed($$1)){
+            $$1.addEffect(new MobEffectInstance(ModEffects.BLEED, 200, 0), $$2);
+        }
         $$0.hurtAndBreak(1, $$2, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         return true;
     }
@@ -100,10 +104,12 @@ public class ScissorItem extends TieredItem implements Vanishable {
 
     @Override
     public float getDestroySpeed(ItemStack $$0, BlockState $$1) {
-        if ($$1.is(Blocks.COBWEB) || $$1.is(BlockTags.LEAVES)) {
-            return 15.0F;
+        if ($$1.is(BlockTags.LEAVES)) {
+            return 3.0F;
+        } else if ($$1.is(Blocks.COBWEB)) {
+            return 12.0F;
         } else if ($$1.is(BlockTags.WOOL)) {
-            return 5.0F;
+            return 4.0F;
         } else {
             return !$$1.is(Blocks.VINE) && !$$1.is(Blocks.GLOW_LICHEN) ? super.getDestroySpeed($$0, $$1) : 2.0F;
         }

@@ -24,7 +24,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -57,7 +62,16 @@ public class MainUtil {
         delta = Math.min(delta,1);
         return start + (delta * wrapRadians(end - start))*multiplier;
     }
-
+    public static boolean getMobBleed(Entity Mob) {
+        if (Mob instanceof LivingEntity){
+            if (Mob instanceof Zombie || Mob instanceof Animal || Mob instanceof Villager
+                    || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player
+                    || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static List<Entity> genHitbox(Level level, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {
         double k = Mth.floor(startX - radiusX);
