@@ -39,6 +39,7 @@ public class GasolineBlock extends Block {
     public static final IntegerProperty LEVEL = ModBlocks.GAS_CAN_LEVEL;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
     public static final BooleanProperty IGNITED = ModBlocks.IGNITED;
+    public static final BooleanProperty DECAY = ModBlocks.DECAY;
     public static final int MAX_AGE = 15;
     protected static final VoxelShape SHAPE = Block.box(0.0, 0.001, 0.0, 16.0, 1.0, 16.0);
     protected static final VoxelShape SHAPE_SMALL = Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
@@ -48,6 +49,7 @@ public class GasolineBlock extends Block {
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0))
                 .setValue(AGE, Integer.valueOf(0))
                 .setValue(IGNITED, Boolean.valueOf(false))
+                .setValue(DECAY, Boolean.valueOf(true))
         );
     }
     public GasolineBlock(BlockBehaviour.Properties $$0, int stage) {
@@ -55,6 +57,7 @@ public class GasolineBlock extends Block {
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(stage))
                 .setValue(AGE, Integer.valueOf(0))
                 .setValue(IGNITED, Boolean.valueOf(false))
+                .setValue(DECAY, Boolean.valueOf(true))
         );
     }
 
@@ -111,16 +114,19 @@ public class GasolineBlock extends Block {
             if (!$$0.canSurvive($$1, $$2)) {
                 $$1.removeBlock($$2, false);
             }
-            int $$6 = $$0.getValue(AGE);
+            if ($$0.getValue(DECAY)) {
 
-            int $$7 = Math.min(15, $$6 + $$3.nextInt(3) / 2);
-            if ($$6 != $$7) {
-                $$0 = $$0.setValue(AGE, Integer.valueOf($$7));
-                $$1.setBlock($$2, $$0, 4);
-            }
+                int $$6 = $$0.getValue(AGE);
 
-            if ($$6 == 15 && $$3.nextInt(4) == 0) {
-                $$1.removeBlock($$2, false);
+                int $$7 = Math.min(15, $$6 + $$3.nextInt(3) / 2);
+                if ($$6 != $$7) {
+                    $$0 = $$0.setValue(AGE, Integer.valueOf($$7));
+                    $$1.setBlock($$2, $$0, 4);
+                }
+
+                if ($$6 == 15 && $$3.nextInt(4) == 0) {
+                    $$1.removeBlock($$2, false);
+                }
             }
     }
 
@@ -151,6 +157,7 @@ public class GasolineBlock extends Block {
         $$0.add(LEVEL);
         $$0.add(AGE);
         $$0.add(IGNITED);
+        $$0.add(DECAY);
     }
 
     @SuppressWarnings("deprecation")

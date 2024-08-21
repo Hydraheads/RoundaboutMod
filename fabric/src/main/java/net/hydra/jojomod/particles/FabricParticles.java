@@ -16,8 +16,8 @@ public class FabricParticles {
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blood"), BLOOD);
-        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_blood"), BLOOD);
-        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ender_blood"), BLOOD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_blood"), BLUE_BLOOD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ender_blood"), ENDER_BLOOD);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;

@@ -21,6 +21,7 @@ public class ModBlocks {
     public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
+    public static final BooleanProperty DECAY = BooleanProperty.create("decay");
     public static Block METEOR_BLOCK;
     public static Block LOCACACA_CACTUS;
 
