@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
@@ -80,6 +81,11 @@ public class ForgeEvents {
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
+
+        ModParticles.HIT_IMPACT = ForgeParticles.HIT_IMPACT.get();
+        ModParticles.BLOOD = ForgeParticles.BLOOD.get();
+        ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
+        ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

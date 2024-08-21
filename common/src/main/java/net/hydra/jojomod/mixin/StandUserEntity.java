@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -61,6 +62,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Iterator;
 import java.util.Map;
 
 @Mixin(LivingEntity.class)
@@ -189,7 +191,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
             boolean onlyBleeding = true;
             if (this.activeEffects.size() > 1){
-                onlyBleeding = false;
+                Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
+                while ($$0.hasNext()) {
+                    MobEffect $$1 = $$0.next();
+                    MobEffectInstance $$2 = this.activeEffects.get($$1);
+                    if ($$2.isVisible() && !$$2.getEffect().equals(ModEffects.BLEED)){
+                        onlyBleeding = false;
+                    }
+                }
             }
             if (this.roundabout$getOnlyBleeding() != onlyBleeding){
                 this.roundabout$setOnlyBleeding(onlyBleeding);
@@ -206,7 +215,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.tickCount % bloodticks == 0) {
                 this.level()
                         .addParticle(
-                                new BlockParticleOption(ParticleTypes.BLOCK, Blocks.REDSTONE_BLOCK.defaultBlockState()),
+                                ModParticles.BLOOD,
                                 this.getRandomX(0.5),
                                 this.getRandomY(),
                                 this.getRandomZ(0.5),
