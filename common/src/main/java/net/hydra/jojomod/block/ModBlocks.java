@@ -20,6 +20,7 @@ public class ModBlocks {
      * Forge and fabric files must define these variables so they are not empty.**/
     public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
+    public static final IntegerProperty BLOOD_LEVEL = IntegerProperty.create("level", 0, 3);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static final BooleanProperty DECAY = BooleanProperty.create("decay");
     public static Block METEOR_BLOCK;
@@ -29,6 +30,10 @@ public class ModBlocks {
     public static Block NEW_LOCACACA_BLOCK;
 
     public static Block GASOLINE_SPLATTER;
+    public static Block BLOOD_SPLATTER;
+    public static Block BLUE_BLOOD_SPLATTER;
+    public static Block ENDER_BLOOD_SPLATTER;
+
     public static Block WIRE_TRAP;
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
@@ -81,6 +86,34 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)
                     .ignitedByLava()
                     .speedFactor(0.6F)
+    );
+    public static BloodBlock BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_RED)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.01F, 0.5F)
+                    .sound(SoundType.EMPTY)
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)
+    );
+    public static BloodBlock BLUE_BLOOD_SPLATTER_PROPERTIES = new EnderBloodBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.01F, 0.5F)
+                    .sound(SoundType.EMPTY)
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)
+                    .speedFactor(0.7F)
+    );
+    public static BloodBlock ENDER_BLOOD_SPLATTER_PROPERTIES = new EnderBloodBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.01F, 0.5F)
+                    .sound(SoundType.EMPTY)
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)
     );
     public static BarbedWireBlock WIRE_TRAP_PROPERTIES = new BarbedWireBlock(
             BlockBehaviour.Properties.of()

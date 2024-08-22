@@ -139,7 +139,7 @@ public class KnifeEntity extends AbstractArrow {
         if ($$1.hurt($$5, $$2)) {
                 if (MainUtil.getMobBleed($$1)){
                     ((StandUser)$$1).roundabout$setBleedLevel(0);
-                    ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 200, 0), this);
+                    ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
                 }
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;

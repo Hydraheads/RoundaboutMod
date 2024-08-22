@@ -34,6 +34,12 @@ public class FabricBlocks {
     );
     public static final Block GASOLINE_SPLATTER = registerBlock("gasoline_splatter", ModBlocks.GASOLINE_SPLATTER_PROPERTIES
     );
+    public static final Block BLOOD_SPLATTER = registerBlockItemless("blood_splatter", ModBlocks.BLOOD_SPLATTER_PROPERTIES
+    );
+    public static final Block BLUE_BLOOD_SPLATTER = registerBlockItemless("blue_blood_splatter", ModBlocks.BLUE_BLOOD_SPLATTER_PROPERTIES
+    );
+    public static final Block ENDER_BLOOD_SPLATTER = registerBlockItemless("ender_blood_splatter", ModBlocks.ENDER_BLOOD_SPLATTER_PROPERTIES
+    );
     public static final Block WIRE_TRAP = registerBlock("wire_trap", ModBlocks.WIRE_TRAP_PROPERTIES
     );
     public static final Block BARBED_WIRE = registerBlock("barbed_wire",ModBlocks.BARBED_WIRE_BLOCK_PROPERTIES
@@ -51,6 +57,10 @@ public class FabricBlocks {
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
         Type<?> $$2 = Util.fetchChoiceType(References.BLOCK_ENTITY, $$0);
         return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(Roundabout.MOD_ID,$$0), $$1.build($$2));
+    }
+
+    private static Block registerBlockItemless(String name, Block block) {
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
 
     private static Block registerBlock(String name, Block block) {
@@ -74,6 +84,9 @@ public class FabricBlocks {
         ModBlocks.LOCACACA_BLOCK = LOCACACA_BLOCK;
         ModBlocks.NEW_LOCACACA_BLOCK = NEW_LOCACACA_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
+        ModBlocks.BLOOD_SPLATTER = BLOOD_SPLATTER;
+        ModBlocks.BLUE_BLOOD_SPLATTER = BLUE_BLOOD_SPLATTER;
+        ModBlocks.ENDER_BLOOD_SPLATTER = ENDER_BLOOD_SPLATTER;
         ModBlocks.BARBED_WIRE = BARBED_WIRE;
         ModBlocks.BARBED_WIRE_BUNDLE = BARBED_WIRE_BUNDLE;
         ModBlocks.WIRE_TRAP = WIRE_TRAP;

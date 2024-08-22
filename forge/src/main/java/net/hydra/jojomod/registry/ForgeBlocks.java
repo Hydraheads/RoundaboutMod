@@ -32,6 +32,12 @@ public class ForgeBlocks {
             () -> ModBlocks.NEW_LOCACACA_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> GASOLINE_SPLATTER = BLOCKS.register("gasoline_splatter",
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
+    public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",
+            () -> ModBlocks.BLOOD_SPLATTER_PROPERTIES);
+    public static final RegistryObject<Block> BLUE_BLOOD_SPLATTER = BLOCKS.register("blue_blood_splatter",
+            () -> ModBlocks.BLUE_BLOOD_SPLATTER_PROPERTIES);
+    public static final RegistryObject<Block> ENDER_BLOOD_SPLATTER = BLOCKS.register("ender_blood_splatter",
+            () -> ModBlocks.ENDER_BLOOD_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> WIRE_TRAP = BLOCKS.register("wire_trap",
             () -> ModBlocks.WIRE_TRAP_PROPERTIES);
     public static final RegistryObject<Block> BARBED_WIRE = BLOCKS.register("barbed_wire",

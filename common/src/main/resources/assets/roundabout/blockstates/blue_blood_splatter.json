@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "roundabout:block/blue_blood_splatter_1"
+    },
+    "level=1": {
+      "model": "roundabout:block/blue_blood_splatter_2"
+    },
+    "level=2": {
+      "model": "roundabout:block/blue_blood_splatter_3"
+    },
+    "level=3": {
+      "model": "roundabout:block/blue_blood_splatter_4"
+    }
+  }
+}

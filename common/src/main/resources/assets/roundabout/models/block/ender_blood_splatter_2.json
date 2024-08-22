@@ -1,0 +1,17 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "#all",
+    "all": "roundabout:block/ender_blood_splatter_2"
+  },
+  "elements": [
+    {   "from": [ 0, 0.7, 0 ],
+      "to": [ 16, 0.7, 16 ],
+      "faces": {
+        "down":  { "uv": [ 0,  0, 16, 16 ], "texture": "#all"},
+        "up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#all"}
+      }
+    }
+  ],
+  "render_type": "cutout"
+}

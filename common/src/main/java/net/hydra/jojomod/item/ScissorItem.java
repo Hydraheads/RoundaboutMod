@@ -65,7 +65,7 @@ public class ScissorItem extends TieredItem implements Vanishable {
     public boolean hurtEnemy(ItemStack $$0, LivingEntity $$1, LivingEntity $$2) {
         if (MainUtil.getMobBleed($$1)){
             ((StandUser)$$1).roundabout$setBleedLevel(0);
-            $$1.addEffect(new MobEffectInstance(ModEffects.BLEED, 200, 0), $$2);
+            $$1.addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), $$2);
         }
         $$0.hurtAndBreak(1, $$2, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         return true;
