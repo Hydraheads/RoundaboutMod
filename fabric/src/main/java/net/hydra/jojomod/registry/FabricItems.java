@@ -22,6 +22,10 @@ public class FabricItems {
     public static Item SCISSORS = registerItem("scissors", new ScissorItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
     public static Item HARPOON = registerItem("harpoon", new HarpoonItem((new Item.Properties()).durability(250)));
 
+    public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.8F, new Item.Properties()));
+    public static Item DIAMOND_GLAIVE = registerItem("diamond_glaive", new GlaiveItem(Tiers.DIAMOND, 4F, -2.8F, new Item.Properties()));
+    public static Item NETHERITE_GLAIVE = registerItem("netherite_glaive", new GlaiveItem(Tiers.NETHERITE, 4F, -2.8F, new Item.Properties()));
+
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
     public static Item KNIFE_BUNDLE = registerItem("knife_bundle", new KnifeItem(new Item.Properties().stacksTo(16)));
 
@@ -62,6 +66,9 @@ public class FabricItems {
                         entries.accept(STAND_ARROW);
                         entries.accept(LUCK_UPGRADE);
                         entries.accept(LUCK_SWORD);
+                        entries.accept(IRON_GLAIVE);
+                        entries.accept(DIAMOND_GLAIVE);
+                        entries.accept(NETHERITE_GLAIVE);
                         entries.accept(SCISSORS);
                         entries.accept(HARPOON);
                         entries.accept(KNIFE);
@@ -98,6 +105,9 @@ public class FabricItems {
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
+        ModItems.IRON_GLAIVE = IRON_GLAIVE;
+        ModItems.DIAMOND_GLAIVE = DIAMOND_GLAIVE;
+        ModItems.NETHERITE_GLAIVE = NETHERITE_GLAIVE;
         ModItems.HARPOON = HARPOON;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;

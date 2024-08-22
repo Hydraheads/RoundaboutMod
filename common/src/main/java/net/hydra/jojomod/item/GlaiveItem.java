@@ -18,7 +18,7 @@ public class GlaiveItem extends SwordItem {
 
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BLOCK;
+        return UseAnim.BOW;
     }
 
     @Override

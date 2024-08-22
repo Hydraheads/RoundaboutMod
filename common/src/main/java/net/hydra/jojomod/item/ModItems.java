@@ -28,6 +28,9 @@ public class ModItems {
     public static Item LUCK_UPGRADE;
     public static Item HARPOON;
     public static Item SCISSORS;
+    public static Item IRON_GLAIVE;
+    public static Item DIAMOND_GLAIVE;
+    public static Item NETHERITE_GLAIVE;
 
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;

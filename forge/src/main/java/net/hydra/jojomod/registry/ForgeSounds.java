@@ -125,6 +125,10 @@ public class ForgeSounds {
             register(ModSounds.HARPOON_GROUND, ModSounds.HARPOON_GROUND_ID);
     public static final RegistryObject<SoundEvent> HARPOON_RETURN =
             register(ModSounds.HARPOON_RETURN, ModSounds.HARPOON_RETURN_ID);
+    public static final RegistryObject<SoundEvent> GLAIVE_CHARGE =
+            register(ModSounds.GLAIVE_CHARGE, ModSounds.GLAIVE_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> GLAIVE_ATTACK =
+            register(ModSounds.GLAIVE_ATTACK, ModSounds.GLAIVE_ATTACK_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =

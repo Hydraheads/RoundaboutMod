@@ -329,6 +329,18 @@
       "roundabout:harpoon_crit"
     ]
   },
+  "glaive_charge": {
+    "subtitle": "sounds.roundabout.glaive_charge",
+    "sounds": [
+      "roundabout:glaive_charge"
+    ]
+  },
+  "glaive_attack": {
+    "subtitle": "sounds.roundabout.glaive_attack",
+    "sounds": [
+      "roundabout:glaive_attack"
+    ]
+  },
   "hallelujah": {
     "subtitle": "sounds.roundabout.hallelujah",
     "sounds": [
