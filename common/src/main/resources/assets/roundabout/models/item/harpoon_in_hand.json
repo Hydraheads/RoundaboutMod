@@ -44,7 +44,7 @@
   "overrides": [
     {
       "predicate": {
-        "throwing": 1
+        "roundabout:throwing": 1
       },
       "model": "roundabout:item/harpoon_throwing"
     }

@@ -2,12 +2,19 @@ package net.hydra.jojomod.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.mixin.object.builder.client.ModelPredicateProviderRegistryAccessor;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.particles.FabricParticlesClient;
 import net.hydra.jojomod.registry.FabricEntityClient;
+import net.hydra.jojomod.registry.FabricItems;
 import net.hydra.jojomod.registry.FabricKeyInputs;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 
 public class RoundaboutFabricClient implements ClientModInitializer {
     @Override
@@ -23,5 +30,8 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         FabricPacketManager.registerS2CPackets();
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
+
+        ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
+
     }
 }

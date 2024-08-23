@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -42,9 +43,9 @@ public class ZItemInHandRenderer {
             return;
         }
         if (!itemStack.isEmpty()) {
-            if (itemStack.getUseAnimation() == UseAnim.SPEAR &&
+            if ((itemStack.getUseAnimation() == UseAnim.SPEAR &&
                     (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.KNIFE_BUNDLE)
-                            || itemStack.is(ModItems.MATCH) || itemStack.is(ModItems.MATCH_BUNDLE))) {
+                            || itemStack.is(ModItems.MATCH) || itemStack.is(ModItems.MATCH_BUNDLE))) || itemStack.getItem() instanceof GlaiveItem) {
         boolean bl = interactionHand == InteractionHand.MAIN_HAND;
         HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
 
@@ -63,7 +64,9 @@ public class ZItemInHandRenderer {
                     this.applyItemArmTransform(poseStack, humanoidArm, i);
                     poseStack.translate((float)q * -0.3f, 0.25, 0.15731531f);
                     if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.KNIFE_BUNDLE)) {
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-55.0f));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-55.0f));
+                    } else if (itemStack.getItem() instanceof GlaiveItem) {
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-90.0f));
                     } else {
                         poseStack.mulPose(Axis.XP.rotationDegrees(-10.0f));
                     }
@@ -83,7 +86,11 @@ public class ZItemInHandRenderer {
                     if (itemStack.is(ModItems.KNIFE_BUNDLE) || itemStack.is(ModItems.MATCH_BUNDLE)){
                         l/=2;
                     }
-                    poseStack.translate(0.0f, 0.0f, l * 0.2f);
+                    if (itemStack.getItem() instanceof GlaiveItem){
+                        poseStack.translate(0.0f, l * -0.4, l * 0.1f);
+                    } else {
+                        poseStack.translate(0.0f, 0.0f, l * 0.2f);
+                    }
                     poseStack.scale(1.0f, 1.0f, 1.0f + l * 0.2f);
                     poseStack.mulPose(Axis.YN.rotationDegrees((float)q * 45.0f));
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
