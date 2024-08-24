@@ -23,6 +23,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> FUSION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "fusion"));
         public static final ResourceKey<DamageType> STATUE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "statue"));
         public static final ResourceKey<DamageType> HARPOON = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "harpoon"));
+        public static final ResourceKey<DamageType> GLAIVE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "glaive"));
         public static final ResourceKey<DamageType> GASOLINE_EXPLOSION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "gas_explosion"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {

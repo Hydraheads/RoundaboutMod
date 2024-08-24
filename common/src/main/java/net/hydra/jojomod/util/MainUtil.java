@@ -7,10 +7,12 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -31,13 +33,17 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -314,6 +320,140 @@ public class MainUtil {
         return target;
     }
 
+    public static Entity getTargetEntity(LivingEntity User, float distance){
+        /*First, attempts to hit what you are looking at*/
+            getDistanceOut(User, distance, false);
+        Entity targetEntity = rayCastEntity(User,distance);
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distance*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            targetEntity = AttackHitboxNear(User, GrabHitbox(User, DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distance),distance);
+        }
+        return targetEntity;
+    }
+
+    public static float getDistanceOut(LivingEntity entity, float range, boolean offset){
+        float distanceFront = getRayDistance(entity, range);
+        if (offset) {
+            Entity targetEntity = rayCastEntity(entity,range);
+            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+                distanceFront = targetEntity.distanceTo(entity);
+            }
+            distanceFront -= 1;
+            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
+        }
+        return distanceFront;
+    }
+
+    public static float getRayDistance(LivingEntity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        if (blockHit.getType() != HitResult.Type.MISS){
+            return Mth.sqrt((float) entity.distanceToSqr(blockHit.getLocation()));
+        }
+        return range;
+    }
+
+    public static List<Entity> GrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())){
+                hitEntities.remove(value);
+            } else {
+                int angle = 25;
+                if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                    hitEntities.remove(value);
+                }
+            }
+        }
+        return hitEntities;
+    }
+
+    public static int getTargetEntityId(LivingEntity User){
+        Entity targetEntity = getTargetEntity(User, 3);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+
+    /**Returns the vertical angle between two mobs*/
+    public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
+        double f;
+        double d = targetEntity.getX() - user.getX();
+        double e = targetEntity.getZ() - user.getZ();
+        if (targetEntity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity)targetEntity;
+            f = livingEntity.getEyeY() - user.getEyeY();
+        } else {
+            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyeY();
+        }
+        double g = Math.sqrt(d * d + e * e);
+        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+    }
+
+    /**Returns the horizontal angle between two mobs*/
+    public static float getLookAtEntityYaw(Entity user, Entity targetEntity) {
+        double d = targetEntity.getX() - user.getX();
+        double e = targetEntity.getZ() - user.getZ();
+        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+    }
+
+    public static float angleDistance(float alpha, float beta) {
+        float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance
+        float distance = phi > 180 ? 360 - phi : phi;
+        return distance;
+    }
+
+    public static Entity AttackHitboxNear(Entity User, List<Entity> entities, float distance) {
+        float nearestDistance = -1;
+        Entity nearestMob = null;
+
+        if (entities != null) {
+            for (Entity value : entities) {
+                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID()) {
+                    float distanceTo = value.distanceTo(User);
+                    if ((nearestDistance < 0 || distanceTo < nearestDistance) && distanceTo <= distance) {
+                        nearestDistance = distanceTo;
+                        nearestMob = value;
+                    }
+                }
+            }
+        }
+        return nearestMob;
+    }
+    public static Entity rayCastEntity(Entity entityX, float reach){
+        float tickDelta = 0;
+        if (entityX.level().isClientSide()) {
+            Minecraft mc = Minecraft.getInstance();
+            tickDelta = mc.getDeltaFrameTime();
+        }
+        Vec3 vec3d = entityX.getEyePosition(tickDelta);
+
+        Vec3 vec3d2 = entityX.getViewVector(1.0f);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
+        float f = 1.0f;
+        AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
+
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
+        if (entityHitResult != null){
+            Entity hitResult = entityHitResult.getEntity();
+            if (hitResult.isAlive() && !hitResult.isRemoved()) {
+                return hitResult;
+            }
+        }
+        return null;
+    }
+
+
     /**A generalized packet for sending ints to the client. Context is what to do with the data int*/
     public static void handleIntPacketS2C(LocalPlayer player, int data, byte context){
         if (context == 1) {
@@ -336,6 +476,13 @@ public class MainUtil {
             } else {
                 player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data);
             }
+        }
+    }
+    public static void handleIntPacketC2S(Player player, int data, byte context){
+        if (context == PacketDataIndex.INT_GLAIVE_TARGET){
+            Entity target = player.level().getEntity(data);
+
+            target.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.GLAIVE), data);
         }
     }
 }

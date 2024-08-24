@@ -8,6 +8,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 public class FabricPackets implements IPacketAccess {
     @Override
@@ -212,7 +213,24 @@ public class FabricPackets implements IPacketAccess {
 
         buffer.writeFloat(value);
         buffer.writeByte(context);
+
         ClientPlayNetworking.send(ModMessages.FLOAT_C2S_PACKET, buffer);
+    }
+    @Override
+    public void intToServerPacket(int value, byte context){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeInt(value);
+        buffer.writeByte(context);
+        ClientPlayNetworking.send(ModMessages.INT_C2S_PACKET, buffer);
+    }
+    @Override
+    public void glaivePacket(ItemStack glaive, int target){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeInt(target);
+        buffer.writeItem(glaive);
+        ClientPlayNetworking.send(ModMessages.GLAIVE_C2S_PACKET, buffer);
     }
 
 }

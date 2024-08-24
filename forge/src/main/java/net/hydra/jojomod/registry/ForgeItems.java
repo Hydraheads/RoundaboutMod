@@ -87,10 +87,10 @@ public class ForgeItems {
     public static final RegistryObject<Item> IRON_GLAIVE = addToTab(ITEMS.register("iron_glaive",
             () -> new GlaiveItem(Tiers.IRON, 4F, -2.8F, new Item.Properties())
     ));
-    public static final RegistryObject<Item> DIAMOND_GLAIVE = addToTab(ITEMS.register("iron_glaive",
+    public static final RegistryObject<Item> DIAMOND_GLAIVE = addToTab(ITEMS.register("diamond_glaive",
             () -> new GlaiveItem(Tiers.DIAMOND, 4F, -2.8F, new Item.Properties())
     ));
-    public static final RegistryObject<Item> NETHERITE_GLAIVE = addToTab(ITEMS.register("iron_glaive",
+    public static final RegistryObject<Item> NETHERITE_GLAIVE = addToTab(ITEMS.register("netherite_glaive",
             () -> new GlaiveItem(Tiers.NETHERITE, 4F, -2.8F, new Item.Properties())
     ));
     public static final RegistryObject<Item> SCISSORS = addToTab(ITEMS.register("scissors",

@@ -8,4 +8,7 @@ public class PacketDataIndex {
 
 
     public static final byte FLOAT_VELOCITY_BARBED_WIRE = 1;
+
+    /**Int packets*/
+    public static final byte INT_GLAIVE_TARGET = 1;
 }

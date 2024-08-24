@@ -6,6 +6,7 @@ import net.hydra.jojomod.networking.s2c.*;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 public class ForgePackets implements IPacketAccess {
     @Override
@@ -111,12 +112,21 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
+    public void glaivePacket(ItemStack glaive, int target) {
+        ForgePacketHandler.sendToServer(new ForgeGlaivePacket(target,glaive));
+    }
+
+    @Override
     public void byteToServerPacket(byte value, byte context) {
         ForgePacketHandler.sendToServer(new ForgeByteC2SPacket(value, context));
     }
     @Override
     public void floatToServerPacket(float value, byte context) {
         ForgePacketHandler.sendToServer(new ForgeFloatC2SPacket(value, context));
+    }
+    @Override
+    public void intToServerPacket(int value, byte context) {
+        ForgePacketHandler.sendToServer(new ForgeIntC2SPacket(value, context));
     }
 
 

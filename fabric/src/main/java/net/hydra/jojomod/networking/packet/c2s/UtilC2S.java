@@ -2,12 +2,17 @@ package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class UtilC2S {
 
@@ -36,6 +41,37 @@ public class UtilC2S {
 
         server.execute(() -> {
             MainUtil.handleFloatPacketC2S(player, data, context);
+        });
+
+
+    }
+    /**A generalized packet for sending ints to the server. Context is what to do with the data byte*/
+    public static void UpdateInt(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                   FriendlyByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        ServerLevel world = (ServerLevel) player.level();
+        int data = buf.readInt();
+        byte context = buf.readByte();
+
+        server.execute(() -> {
+            MainUtil.handleIntPacketC2S(player, data, context);
+        });
+
+
+    }
+    /**A generalized packet for sending ints to the server. Context is what to do with the data byte*/
+    public static void glaiveAttack(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                 FriendlyByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        ServerLevel world = (ServerLevel) player.level();
+        int entityId = buf.readInt();
+        ItemStack context = buf.readItem();
+
+        server.execute(() -> {
+            Entity entity = world.getEntity(entityId);
+            if (entity != null && context.getItem() instanceof GlaiveItem) {
+                ((GlaiveItem)context.getItem()).glaiveAttack(context,world,player,entity);
+            }
         });
 
 

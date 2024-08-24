@@ -3,6 +3,7 @@ package net.hydra.jojomod.access;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 public interface IPacketAccess {
     /**Forge and Fabric both use this interface to use their own packet handling code.
@@ -39,6 +40,8 @@ public interface IPacketAccess {
     void moveSyncPacket(byte forward, byte strafe);
     void timeStopFloat(boolean TSJump);
     void standSummonPacket();
+    void glaivePacket(ItemStack glaive, int target);
     void byteToServerPacket(byte value, byte context);
     void floatToServerPacket(float value, byte context);
+    void intToServerPacket(int target, byte context);
 }
