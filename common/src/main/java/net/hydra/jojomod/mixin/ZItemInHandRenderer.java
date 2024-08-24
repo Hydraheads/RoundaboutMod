@@ -54,7 +54,11 @@ public class ZItemInHandRenderer {
                 if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
                     int q = bl2 ? 1 : -1;
                     float knifeTime = 10f;
-                    if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.MATCH)){knifeTime=5F;}
+                    if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.MATCH)){
+                        knifeTime=5F;
+                    } else if (itemStack.getItem() instanceof GlaiveItem){
+                        knifeTime=14F;
+                    }
                     float kT2 = (float) (knifeTime*0.1);
                     float kT3 = (float) (knifeTime*0.01);
 
@@ -83,7 +87,7 @@ public class ZItemInHandRenderer {
                         float o = m * n;
                         poseStack.translate(o * 0.0f, o * 0.004f, o * 0.0f);
                     }
-                    if (itemStack.is(ModItems.KNIFE_BUNDLE) || itemStack.is(ModItems.MATCH_BUNDLE)){
+                    if (itemStack.is(ModItems.KNIFE_BUNDLE) || itemStack.is(ModItems.MATCH_BUNDLE)|| itemStack.getItem() instanceof GlaiveItem){
                         l/=2;
                     }
                     if (itemStack.getItem() instanceof GlaiveItem){

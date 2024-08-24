@@ -67,6 +67,8 @@ import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract boolean isAlive();
+
     @Shadow @javax.annotation.Nullable public abstract MobEffectInstance getEffect(MobEffect $$0);
 
     @Shadow protected boolean jumping;
@@ -212,7 +214,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             } else if (bleedlvl > 1){
                 bloodticks = 4;
             }
-            if (this.tickCount % bloodticks == 0) {
+            if (this.tickCount % bloodticks == 0 && this.isAlive()) {
                 this.level()
                         .addParticle(
                                 ModParticles.BLOOD,

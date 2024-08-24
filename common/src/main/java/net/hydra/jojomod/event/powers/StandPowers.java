@@ -252,6 +252,8 @@ public abstract class StandPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return this.getBarrageChargeSound();
+        } else if (soundChoice == SoundIndex.GLAIVE_CHARGE) {
+            return ModSounds.GLAIVE_CHARGE_EVENT;
         }
         return null;
     }
@@ -1423,7 +1425,6 @@ public abstract class StandPowers {
         if (!this.self.level().isClientSide()) {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
-                Roundabout.LOGGER.info("erm what the sigma");
                 playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 32, false);
             }
         }
@@ -1612,7 +1613,10 @@ public abstract class StandPowers {
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
             return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
+            return SoundIndex.ITEM_GROUP;
         }
+
         return soundChoice;
     }
 }

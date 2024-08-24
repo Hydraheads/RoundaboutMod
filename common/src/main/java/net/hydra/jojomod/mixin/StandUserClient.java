@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -28,6 +29,7 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
     public ImmutableList<Byte> roundaboutSoundsToCancel = ImmutableList.of();
     public SoundEvent roundaboutSoundEvent;
 
+    public SoundInstance roundabout$GlaiveSoundInstance;
 
 
     /**This is called second by the packets, it sets up the client to play the sound on a game tick.
