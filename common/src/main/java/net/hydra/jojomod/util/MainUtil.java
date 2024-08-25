@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -25,6 +26,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -34,7 +36,10 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
@@ -374,8 +379,8 @@ public class MainUtil {
         return hitEntities;
     }
 
-    public static int getTargetEntityId(LivingEntity User){
-        Entity targetEntity = getTargetEntity(User, 3);
+    public static int getTargetEntityId(LivingEntity User, float distance){
+        Entity targetEntity = getTargetEntity(User, distance);
         int id;
         if (targetEntity != null) {
             id = targetEntity.getId();
@@ -453,6 +458,64 @@ public class MainUtil {
         return null;
     }
 
+    /**Guard breaking*/
+    public static StandUser getUserData(LivingEntity User){
+        return ((StandUser) User);
+    }
+    public static boolean knockShield(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    StandUser standUser= getUserData((LivingEntity) entity);
+                    if (!standUser.isGuarding()) {
+                        if (entity instanceof Player){
+                            ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                            Item item = itemStack.getItem();
+                            if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                                ((LivingEntity) entity).releaseUsingItem();
+                                ((Player) entity).stopUsingItem();
+                            }
+                            ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                            entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static boolean knockShieldPlusStand(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    StandUser standUser= getUserData((LivingEntity) entity);
+                    if (standUser.isGuarding()) {
+                        if (!standUser.getGuardBroken()){
+                            standUser.breakGuard();
+                        }
+                    }
+                    if (entity instanceof Player){
+                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            ((LivingEntity) entity).releaseUsingItem();
+                            ((Player) entity).stopUsingItem();
+                        }
+                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     /**A generalized packet for sending ints to the client. Context is what to do with the data int*/
     public static void handleIntPacketS2C(LocalPlayer player, int data, byte context){
@@ -465,6 +528,14 @@ public class MainUtil {
     public static void handleBytePacketC2S(Player player, byte data, byte context){
         if (context == PacketDataIndex.PLAY_SOUND_C2S_CONTEXT) {
             ((StandUser) player).getStandPowers().playSoundsIfNearby(data, 100, true);
+        }
+    }
+    /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
+    public static void handleSingleBytePacketC2S(Player player, byte context){
+        if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
+            ((StandUser) player).getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_STOP_SOUND) {
+            ((StandUser) player).getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30);
         }
     }
 

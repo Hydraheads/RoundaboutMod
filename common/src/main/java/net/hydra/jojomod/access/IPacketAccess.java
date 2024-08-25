@@ -44,4 +44,5 @@ public interface IPacketAccess {
     void byteToServerPacket(byte value, byte context);
     void floatToServerPacket(float value, byte context);
     void intToServerPacket(int target, byte context);
+    void singleByteToServerPacket(byte context);
 }

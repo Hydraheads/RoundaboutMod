@@ -32,7 +32,7 @@ public class ForgeGlaivePacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 Entity entity = player.level().getEntity(target);
-                if (entity != null && glaive.getItem() instanceof GlaiveItem) {
+                if (glaive.getItem() instanceof GlaiveItem) {
                     ((GlaiveItem)glaive.getItem()).glaiveAttack(glaive,player.level(),player,entity);
                 }
             }

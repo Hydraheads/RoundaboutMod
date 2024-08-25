@@ -225,6 +225,13 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.INT_C2S_PACKET, buffer);
     }
     @Override
+    public void singleByteToServerPacket(byte context){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeByte(context);
+        ClientPlayNetworking.send(ModMessages.SINGLE_BYTE_C2S_PACKET, buffer);
+    }
+    @Override
     public void glaivePacket(ItemStack glaive, int target){
         FriendlyByteBuf buffer = PacketByteBufs.create();
 

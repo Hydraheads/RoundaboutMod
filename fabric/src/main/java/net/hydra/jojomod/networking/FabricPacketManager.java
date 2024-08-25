@@ -25,6 +25,7 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.FLOAT_C2S_PACKET, UtilC2S::UpdateFloat);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INT_C2S_PACKET, UtilC2S::UpdateInt);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.GLAIVE_C2S_PACKET, UtilC2S::glaiveAttack);
+        ServerPlayNetworking.registerGlobalReceiver(ModMessages.SINGLE_BYTE_C2S_PACKET, UtilC2S::UpdateSingleByte);
     }
     //Server to Client
     public static void registerS2CPackets(){

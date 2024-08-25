@@ -31,6 +31,20 @@ public class UtilC2S {
 
     }
 
+    /**A generalized packet for sending only a byte to the server.*/
+    public static void UpdateSingleByte(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                  FriendlyByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        ServerLevel world = (ServerLevel) player.level();
+        byte context = buf.readByte();
+
+        server.execute(() -> {
+            MainUtil.handleSingleBytePacketC2S(player, context);
+        });
+
+
+    }
+
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void UpdateFloat(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                                   FriendlyByteBuf buf, PacketSender responseSender){
@@ -69,7 +83,7 @@ public class UtilC2S {
 
         server.execute(() -> {
             Entity entity = world.getEntity(entityId);
-            if (entity != null && context.getItem() instanceof GlaiveItem) {
+            if (context.getItem() instanceof GlaiveItem) {
                 ((GlaiveItem)context.getItem()).glaiveAttack(context,world,player,entity);
             }
         });
