@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -46,7 +47,7 @@ public class ZHeldItemLowering {
         if (((StandUser) this.minecraft.player).getActive()) {
             ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
             ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();
-            if (itemStack3.getItem() instanceof TieredItem){
+            if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)){
             if (this.mainHandHeight > 0.6) {
                 this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4f, 0.6f, 1.0f);
             }}
