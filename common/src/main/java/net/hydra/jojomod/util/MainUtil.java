@@ -6,6 +6,7 @@ import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -101,6 +102,13 @@ public class MainUtil {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static void makeBleed(Entity entity, int level, int ticks, Entity source){
+        if (getMobBleed(entity)){
+            ((StandUser)entity).roundabout$setBleedLevel(level);
+            ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.BLEED, ticks, level), source);
         }
     }
 
@@ -626,9 +634,13 @@ public class MainUtil {
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
             if (player.getVehicle() != null){
-                player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data);
+                if (player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
+                    MainUtil.makeBleed(player.getVehicle(),0,200,null);
+                }
             } else {
-                player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data);
+                if (player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
+                    MainUtil.makeBleed(player,0,200,null);
+                }
             }
         }
     }

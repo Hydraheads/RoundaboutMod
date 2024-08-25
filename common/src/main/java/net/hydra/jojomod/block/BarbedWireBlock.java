@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -73,11 +74,13 @@ public class BarbedWireBlock extends RotatedPillarBlock
                     Vec3 dm = entity.getDeltaMovement();
                     float power = (float) (Math.abs(dm.x) + Math.abs(dm.y) + Math.abs(dm.z));
                     if (power > 0) {
-                        power*= 10;
+                        power*= 15;
                         power*= this.wirePower;
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
-                            entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power);
+                            if (entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power)){
+                                MainUtil.makeBleed(entity,0,200,null);
+                            }
                         } else if (level.isClientSide && (entity instanceof Player || (entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player))){
                             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(power, PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE);
                         }

@@ -333,40 +333,46 @@ public class PowersTheWorld extends StandPowers {
 
     public void stopTime() {
                 /*Time Stop*/
-          if (!this.getSelf().level().isClientSide()) {
-              if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                  boolean animate = false;
-                  hasActedInTS = false;
-                  this.setCurrentMaxTSTime(this.getChargedTSTicks());
-                  if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
-                      if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
-                          /*Charged Sound*/
-                          animate = true;
-                          playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
-                      } else {
-                          /*No Charged Sound*/
-                          playSoundsIfNearby(TIME_STOP_NOISE_2, 100, true);
-                      }
-                  }
-                  ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
-                  if (this.getSelf() instanceof Player) {
-                      ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
-                  }
-                  ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
-                  /**
-                  if (animate){
-                      animateStand((byte) 31);
-                  }
-                   */
-              }
-          } else {
-              ((StandUser) this.getSelf()).tryPower(PowerIndex.LEAD_IN, true);
-          }
+        if (this.getActivePower() == PowerIndex.SPECIAL) {
+            if (!this.getSelf().level().isClientSide()) {
+                if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+                    boolean animate = false;
+                    hasActedInTS = false;
+                    this.setCurrentMaxTSTime(this.getChargedTSTicks());
+                    if (!(((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                        if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
+                            /*Charged Sound*/
+                            animate = true;
+                            playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
+                        } else {
+                            /*No Charged Sound*/
+                            playSoundsIfNearby(TIME_STOP_NOISE_2, 100, true);
+                        }
+                    }
+                    ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
+                    if (this.getSelf() instanceof Player) {
+                        ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
+                    }
+                    ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    /**
+                     if (animate){
+                     animateStand((byte) 31);
+                     }
+                     */
+                }
+            } else {
+                ((StandUser) this.getSelf()).tryPower(PowerIndex.LEAD_IN, true);
+            }
+        } else {
+            ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+        }
     }
 
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.SPECIAL){
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, 60);
+            this.setCooldown(PowerIndex.SKILL_4, 60);
             return true;
         } else {
             return super.canInterruptPower();
