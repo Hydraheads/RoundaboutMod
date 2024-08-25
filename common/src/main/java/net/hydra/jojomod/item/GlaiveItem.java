@@ -24,6 +24,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -115,8 +121,10 @@ public class GlaiveItem extends SwordItem {
                 Roundabout.LOGGER.info(String.valueOf(power));
                 power += this.chargeDamage;
                 if (target.hurt(ModDamageTypes.of($$1, ModDamageTypes.GLAIVE, player), power)) {
-                    ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem($$0)));
-                    item.hurt(1, $$1.getRandom(), player);
+                    if (!player.isCreative()) {
+                        ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem($$0)));
+                        item.hurt(1, $$1.getRandom(), player);
+                    }
                     if (target instanceof LivingEntity) {
                         ((LivingEntity) target).knockback(0.35f, player.getX() - target.getX(), player.getZ() - target.getZ());
                         if (MainUtil.getMobBleed(target)) {
@@ -126,6 +134,11 @@ public class GlaiveItem extends SwordItem {
 
                         int variety = (int) Math.round(Math.random()*4);
                         Block modBlock = ModBlocks.BLOOD_SPLATTER;
+                        if (MainUtil.hasBlueBlood(target)){
+                            modBlock = ModBlocks.BLUE_BLOOD_SPLATTER;
+                        } else if (MainUtil.hasEnderBlood(target)){
+                            modBlock = ModBlocks.ENDER_BLOOD_SPLATTER;
+                        }
 
                         if (variety != 1) {
                             MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 0, modBlock.defaultBlockState().

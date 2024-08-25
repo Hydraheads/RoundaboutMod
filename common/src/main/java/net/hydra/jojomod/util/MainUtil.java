@@ -21,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,6 +33,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
+import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.Villager;
@@ -47,6 +52,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -76,13 +82,58 @@ public class MainUtil {
     }
     public static boolean getMobBleed(Entity Mob) {
         if (Mob instanceof LivingEntity){
-            if (Mob instanceof Zombie || Mob instanceof Animal || Mob instanceof Villager
+            return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
+                    || Mob instanceof Villager
                     || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player
-                    || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan){
-                return true;
-            }
+                    || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
         return false;
+    }
+    public static boolean hasBlueBlood(Entity target){
+        if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean hasEnderBlood(Entity target){
+        if (target instanceof EnderMan || target instanceof Endermite || target instanceof EnderDragon){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**Imported Chrosu fruit TP code for ender blood*/
+    public static void randomChorusTeleport(LivingEntity entity){
+        Level $$1 = entity.level();
+        if (!$$1.isClientSide) {
+            double $$4 = entity.getX();
+            double $$5 = entity.getY();
+            double $$6 = entity.getZ();
+
+            for (int $$7 = 0; $$7 < 16; $$7++) {
+                double $$8 = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 16.0;
+                double $$9 = Mth.clamp(
+                        entity.getY() + (double) (entity.getRandom().nextInt(16) - 8),
+                        (double) $$1.getMinBuildHeight(),
+                        (double) ($$1.getMinBuildHeight() + ((ServerLevel) $$1).getLogicalHeight() - 1)
+                );
+                double $$10 = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 16.0;
+                if (entity.isPassenger()) {
+                    entity.stopRiding();
+                }
+
+                Vec3 $$11 = entity.position();
+                if (entity.randomTeleport($$8, $$9, $$10, true)) {
+                    $$1.gameEvent(GameEvent.TELEPORT, $$11, GameEvent.Context.of(entity));
+                    SoundEvent $$12 = entity instanceof Fox ? SoundEvents.FOX_TELEPORT : SoundEvents.CHORUS_FRUIT_TELEPORT;
+                    $$1.playSound(null, $$4, $$5, $$6, $$12, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    entity.playSound($$12, 1.0F, 1.0F);
+                    break;
+                }
+            }
+        }
     }
 
     public static List<Entity> genHitbox(Level level, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {

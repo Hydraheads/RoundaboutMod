@@ -25,6 +25,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -215,9 +216,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 bloodticks = 4;
             }
             if (this.tickCount % bloodticks == 0 && this.isAlive()) {
+                SimpleParticleType bloodType = ModParticles.BLOOD;
+                if (MainUtil.hasEnderBlood(this)){
+                    bloodType = ModParticles.ENDER_BLOOD;
+                } else if (MainUtil.hasBlueBlood(this)){
+                    bloodType = ModParticles.BLUE_BLOOD;
+                }
                 this.level()
                         .addParticle(
-                                ModParticles.BLOOD,
+                                bloodType,
                                 this.getRandomX(0.5),
                                 this.getRandomY(),
                                 this.getRandomZ(0.5),

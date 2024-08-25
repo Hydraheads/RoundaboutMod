@@ -96,7 +96,7 @@ public class ModBlocks {
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
     );
-    public static BloodBlock BLUE_BLOOD_SPLATTER_PROPERTIES = new EnderBloodBlock(
+    public static BloodBlock BLUE_BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_BLUE)
                     .instrument(NoteBlockInstrument.SNARE)
@@ -104,7 +104,7 @@ public class ModBlocks {
                     .sound(SoundType.EMPTY)
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
-                    .speedFactor(0.7F)
+                    .speedFactor(0.4F)
     );
     public static BloodBlock ENDER_BLOOD_SPLATTER_PROPERTIES = new EnderBloodBlock(
             BlockBehaviour.Properties.of()
