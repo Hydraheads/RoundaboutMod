@@ -16,6 +16,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -514,6 +515,37 @@ public class MainUtil {
             }
         }
         return false;
+    }
+
+    /**Code for determining if it is appropriate to place a splatter down*/
+    public static boolean canPlaceSplatter(Level level,BlockPos pos, int offsetX, int offsetY, int offsetZ){
+        BlockPos blk =  new BlockPos(pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ);
+
+        if (level.isEmptyBlock(blk)) {
+            BlockPos $$8 = blk.below();
+            if (level.getBlockState($$8).isFaceSturdy(level, $$8, Direction.UP)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void setSplatter(Level level,BlockPos pos, int offsetX, int offsetZ, BlockState state){
+        BlockPos blockPos = null;
+        if (canPlaceSplatter(level, pos, offsetX, +1, offsetZ)) {
+            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() + 1, pos.getZ() + offsetZ);
+        } else if (canPlaceSplatter(level, pos, offsetX, +2, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY() + 2,pos.getZ()+offsetZ);
+        } else if (canPlaceSplatter(level, pos, offsetX, 0, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY(),pos.getZ()+offsetZ);
+        } else if (canPlaceSplatter(level, pos, offsetX, -1, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()-1,pos.getZ()+offsetZ);
+        }
+        //if (this.level().getBlockState(pos).getBlock())
+        if (blockPos != null) {
+            level.setBlockAndUpdate(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), state);
+        }
     }
 
 

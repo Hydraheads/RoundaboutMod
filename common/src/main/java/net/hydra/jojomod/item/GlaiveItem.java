@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -30,6 +32,7 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 public class GlaiveItem extends SwordItem {
@@ -120,6 +123,24 @@ public class GlaiveItem extends SwordItem {
                             ((StandUser) target).roundabout$setBleedLevel(1);
                             ((LivingEntity) target).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 1), player);
                         }
+
+                        int variety = (int) Math.round(Math.random()*4);
+                        Block modBlock = ModBlocks.BLOOD_SPLATTER;
+
+                        if (variety != 1) {
+                            MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 0, modBlock.defaultBlockState().
+                                    setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                        }
+                        if (variety != 2) {
+                            MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, -1, modBlock.defaultBlockState().
+                                    setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                        }
+                        if (variety != 3) {
+                            MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
+                                    setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                        }
+
+
                     }
                 } else {
                     if (target instanceof LivingEntity) {
