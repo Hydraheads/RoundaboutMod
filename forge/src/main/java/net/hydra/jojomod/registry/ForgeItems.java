@@ -19,8 +19,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -33,6 +35,7 @@ import static net.hydra.jojomod.registry.ForgeCreativeTab.addToTab;
 
 public class ForgeItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Roundabout.MOD_ID);
+    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, Roundabout.MOD_ID);
 
     public static final RegistryObject<Item> COFFEE_GUM = addToTab(ITEMS.register("coffee_gum",
             () -> new Item(new Item.Properties()
@@ -127,6 +130,12 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));
+    public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
+            () -> new Potion(new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
+    public static final RegistryObject<Potion> HEX_POTION_EXTENDED = POTIONS.register("roundabout.long_hex",
+            () -> new Potion("roundabout.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
+    public static final RegistryObject<Potion> HEX_POTION_STRONG = POTIONS.register("roundabout.strong_hex",
+            () -> new Potion("roundabout.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 4800, 1)));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), KNIFE_DIS);

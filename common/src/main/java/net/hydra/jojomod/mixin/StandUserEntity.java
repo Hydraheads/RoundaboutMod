@@ -68,6 +68,8 @@ import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract void heal(float $$0);
+
     @Shadow public abstract boolean isAlive();
 
     @Shadow @javax.annotation.Nullable public abstract MobEffectInstance getEffect(MobEffect $$0);
@@ -185,7 +187,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$tickEffects(CallbackInfo ci) {
         if (!this.level().isClientSide){
             int bleedlvl = -1;
-            if (this.hasEffect(ModEffects.BLEED)){
+            if (this.hasEffect(ModEffects.BLEED) && this.getEffect(ModEffects.BLEED).isVisible()){
                 bleedlvl = this.getEffect(ModEffects.BLEED).getAmplifier();
             }
             if (this.roundabout$getBleedLevel() != bleedlvl){
@@ -915,6 +917,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.tryPower(PowerIndex.NONE, true);
             }
             this.setRoundaboutIdleTime(-1);
+        }
+    }
+
+    /**Hex prevents eating effects from golden apples. Once you reach level 3 (commands only), all foods lose them*/
+    @Inject(method = "addEatEffect", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$addEatEffect(ItemStack $$0, Level $$1, LivingEntity $$2, CallbackInfo ci) {
+        if (this.hasEffect(ModEffects.HEX)) {
+            int hexLevel = this.getEffect(ModEffects.HEX).getAmplifier();
+            if ((hexLevel >= 0 && $$0.is(Items.ENCHANTED_GOLDEN_APPLE)) || (hexLevel >= 1 && $$0.is(Items.GOLDEN_APPLE))
+                    || hexLevel >= 2){
+                ci.cancel();
+            }
         }
     }
 

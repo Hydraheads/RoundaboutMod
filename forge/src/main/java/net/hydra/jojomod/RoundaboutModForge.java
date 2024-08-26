@@ -18,13 +18,14 @@ public class RoundaboutModForge {
 
     public RoundaboutModForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        ForgeEffects.POTION_EFFECTS.register(bus);
         ForgeEntities.ENTITY_TYPES.register(bus);
         ForgeSounds.SOUNDS.register(bus);
         ForgeBlocks.BLOCKS.register(bus);
         ForgeBlocks.BLOCK_ENTITIES.register(bus);
         ForgeItems.ITEMS.register(bus);
+        ForgeItems.POTIONS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
-        ForgeEffects.POTION_EFFECTS.register(bus);
         ForgeParticles.PARTICLES.register(bus);
         //
         BiomeCodec.BIOME_MODIFIER_SERIALIZERS.register(bus);

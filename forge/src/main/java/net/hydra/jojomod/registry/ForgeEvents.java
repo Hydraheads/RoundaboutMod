@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.Utils.ForgeBrewingRecipes;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
@@ -11,9 +12,15 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.brewing.IBrewingRecipe;
+import net.minecraftforge.common.extensions.IForgePotion;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -87,6 +94,11 @@ public class ForgeEvents {
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
+
+        BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(Potions.AWKWARD, ModItems.LOCACACA_PIT, ForgeItems.HEX_POTION.get()));
+        BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.REDSTONE, ForgeItems.HEX_POTION_EXTENDED.get()));
+        BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.GLOWSTONE, ForgeItems.HEX_POTION_STRONG.get()));
+
 
         ModParticles.HIT_IMPACT = ForgeParticles.HIT_IMPACT.get();
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();

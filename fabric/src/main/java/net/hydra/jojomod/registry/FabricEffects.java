@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.FireBlock;
 public class FabricEffects extends MobEffect{
 
     public static final MobEffect BLEED = register("bleed", new FabricEffects(MobEffectCategory.HARMFUL, 11994666));
-    public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 16762706));
+    public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 11606258)); //old color 16762706
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);

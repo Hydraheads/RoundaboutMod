@@ -24,7 +24,7 @@ public class ForgeEffects{
             );
     public static final RegistryObject<MobEffect> HEX =
             POTION_EFFECTS.register("hex", () ->
-                    new Effect(MobEffectCategory.HARMFUL, 16762706)
+                    new Effect(MobEffectCategory.HARMFUL, 11606258)
             );
 
     public static class Effect extends MobEffect{

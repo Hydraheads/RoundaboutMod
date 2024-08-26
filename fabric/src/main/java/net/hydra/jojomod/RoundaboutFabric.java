@@ -11,14 +11,17 @@ public class RoundaboutFabric implements ModInitializer {
     
     @Override
     public void onInitialize() {
-        Roundabout.LOGGER.info("Hello Fabric world!");
+        Roundabout.LOGGER.info("Loading Roundabout (Fabric)");
+
+
+
         FabricLootTables.modifyLootTables();
 
+        FabricEffects.register();
         FabricEntities.register();
         FabricBlocks.register();
         FabricItems.register();
         FabricSounds.register();
-        FabricEffects.register();
         FabricPacketManager.registerC2SPackets();
         FabricParticles.registerParticles();
         CommandRegistryFabric.register();

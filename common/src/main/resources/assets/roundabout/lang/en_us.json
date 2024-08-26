@@ -71,9 +71,12 @@
   "roundabout:item.roundabout.smithing_template.luck_upgrade.additions_slot_description": "Add Gold Ingot",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.ingredients": "Gold Ingot",
 
+  "item.minecraft.potion.effect.roundabout.hex": "Potion of Hex",
+  "item.minecraft.lingering_potion.effect.roundabout.hex": "Lingering Potion of Hex",
+  "item.minecraft.splash_potion.effect.roundabout.hex": "Splash Potion of Hex",
+  "item.minecraft.tipped_arrow.effect.roundabout.hex": "Arrow of Hex",
 
   "roundabout:upgrade.roundabout.luck_upgrade": "Luck Upgrade",
-
 
   "key.category.roundabout.jojo": "Roundabout Controls",
   "hud.roundabout.standout": "Stand Summoned",

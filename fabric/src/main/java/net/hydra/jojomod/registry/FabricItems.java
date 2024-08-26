@@ -1,16 +1,24 @@
 package net.hydra.jojomod.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 
 public class FabricItems {
@@ -41,6 +49,7 @@ public class FabricItems {
     public static Item LOCACACA_BRANCH = registerItem("locacaca_branch", (Item) new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
+
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 178));
@@ -51,6 +60,21 @@ public class FabricItems {
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
 
+    public static final Potion HEX_POTION =
+            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
+                    new Potion(new MobEffectInstance(ModEffects.HEX, 9600, 0)));
+    public static final Potion HEX_POTION_EXTENDED =
+            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.long_hex"),
+                    new Potion("roundabout.hex", new MobEffectInstance(ModEffects.HEX, 19200, 0)));
+    public static final Potion HEX_POTION_STRONG =
+            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.strong_hex"),
+                    new Potion("roundabout.hex", new MobEffectInstance(ModEffects.HEX, 4800, 1)));
+
+    public static void registerPotions(){
+        FabricBrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.LOCACACA_PIT), HEX_POTION);
+        FabricBrewingRecipeRegistry.registerPotionRecipe(HEX_POTION, Ingredient.of(Items.REDSTONE), HEX_POTION_EXTENDED);
+        FabricBrewingRecipeRegistry.registerPotionRecipe(HEX_POTION, Ingredient.of(Items.GLOWSTONE), HEX_POTION_STRONG);
+    }
 
     private static Item registerItem(String name, Item item){
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID,name), item);
@@ -125,5 +149,8 @@ public class FabricItems {
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
+
+
+        registerPotions();
     }
 }
