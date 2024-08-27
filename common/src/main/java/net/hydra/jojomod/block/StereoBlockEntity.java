@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class StereoBlockEntity extends BlockEntity implements Clearable, ContainerSingleItem {
-
+    /**The specs of the Stereo are almost identical to MC jukebox code, out of need to function the same way*/
     private static final int SONG_END_PADDING = 20;
     private final NonNullList<ItemStack> items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
     private int ticksSinceLastEvent;

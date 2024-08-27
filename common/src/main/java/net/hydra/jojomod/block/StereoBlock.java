@@ -29,6 +29,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
 public class StereoBlock extends JukeboxBlock {
+    /**The specs of the Stereo are almost identical to MC jukebox code, out of need to function the same way*/
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     protected static final VoxelShape SHAPEA = Block.box(5.0, 0.0, 1.0, 11.0, 6.0, 15.0);
     protected static final VoxelShape SHAPEB = Block.box(1.0, 0.0, 5.0, 15.0, 6.0, 11.0);

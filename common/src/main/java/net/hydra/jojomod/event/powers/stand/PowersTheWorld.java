@@ -60,8 +60,20 @@ public class PowersTheWorld extends StandPowers {
         return 8F;
     }
 
+
     /**Dodge ability*/
-    @SuppressWarnings("deprecation")
+    @Override
+    public void buttonInput2(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide && !this.isClashing()) {
+            if (keyIsDown) {
+                if (!options.keyShift.isDown()) {
+                    ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2,true);
+                }
+            }
+        }
+    }
+
+    /**Dodge ability*/
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing()) {
@@ -259,6 +271,7 @@ public class PowersTheWorld extends StandPowers {
     /**Begin Charging Time Stop, also detects activation via release**/
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
+        Roundabout.LOGGER.info("wut1");
         if (this.getSelf().level().isClientSide) {
             if (!this.onCooldown(PowerIndex.SKILL_4) || ((Player)this.getSelf()).isCreative()) {
                 if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
@@ -333,7 +346,7 @@ public class PowersTheWorld extends StandPowers {
 
     public void stopTime() {
                 /*Time Stop*/
-        if (this.getActivePower() == PowerIndex.SPECIAL) {
+        if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player)this.getSelf()).isCreative()) || this.getChargedTSTicks() <= 20) {
             if (!this.getSelf().level().isClientSide()) {
                 if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                     boolean animate = false;
@@ -609,10 +622,20 @@ public class PowersTheWorld extends StandPowers {
             this.vault();
         } else if (move == PowerIndex.BOUNCE){
             this.bounce();
+        } else if (move == PowerIndex.POWER_2){
+            this.grab();
         }
     }
 
 
+    public void grab() {
+        this.setActivePower(PowerIndex.POWER_2);
+        this.setAttackTimeDuring(0);
+        this.getSelf().resetFallDistance();
+        if (!this.getSelf().level().isClientSide()) {
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
+        }
+    }
 
     public void bounce() {
         this.setActivePower(PowerIndex.BOUNCE);

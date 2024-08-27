@@ -98,6 +98,8 @@
   "death.attack.glaive": "%1$s was skewered by %2$s",
   "death.attack.glaive.item": "%1$s was skewered by %2$s using %3$s",
 
+  "item.glaive.charge_power": "Charge Attack",
+
   "commands.roundabout.force_summon.multiple": "Summoned stands from %s entities",
   "commands.roundabout.force_summon.single": "Summoned stand from %s",
 

@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class EnderBloodBlock extends BloodBlock{
+    /**Blood that teleports like a chorus fruit when walked on.*/
     public EnderBloodBlock(Properties $$0) {
         super($$0);
     }

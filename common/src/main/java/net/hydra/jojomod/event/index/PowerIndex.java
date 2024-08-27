@@ -24,8 +24,21 @@ public class PowerIndex {
     public static final byte EXTRA_2_FINISH = 18;
     public static final byte VAULT = 19;
     public static final byte BOUNCE = 20;
-    public static final byte MINING = 29;
-    public static final byte LEAD_IN = 30;
+    public static final byte POWER_1 = 21;
+    public static final byte POWER_1_SNEAK = 22;
+    public static final byte POWER_2 = 23;
+    public static final byte POWER_2_SNEAK = 24;
+    public static final byte POWER_3 = 25;
+    public static final byte POWER_3_SNEAK = 26;
+    public static final byte POWER_4 = 27;
+    public static final byte POWER_4_SNEAK = 28;
+    public static final byte POWER_2_SNEAK_EXTRA = 29;
+    public static final byte POWER_3_EXTRA = 30;
+    public static final byte POWER_3_SNEAK_EXTRA = 31;
+    public static final byte POWER_4_EXTRA = 32;
+    public static final byte POWER_4_SNEAK_EXTRA= 33;
+    public static final byte MINING = 39;
+    public static final byte LEAD_IN = 40;
 
     /**Even more basic, refers to the buttons for cooldowns*/
     public static final byte NO_CD = -1;

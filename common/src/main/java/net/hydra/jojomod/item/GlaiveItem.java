@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -11,7 +12,10 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -32,17 +36,19 @@ import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.gameevent.GameEvent;
 
-public class GlaiveItem extends SwordItem {
+import javax.annotation.Nullable;
+import java.util.List;
 
+public class GlaiveItem extends SwordItem {
+    /**Glaives inspired by the Harken Scythe mod, with sound design from the Hexxit modpack.
+     * I like the way it functioned there, but I added my own bleed effect as a part of
+     * the mechanism of how it works*/
     private final float chargeDamage;
 
     public GlaiveItem(Tier $$0, float $$1, float $$2, Properties $$3, float chargeDamage) {
@@ -54,6 +60,7 @@ public class GlaiveItem extends SwordItem {
         super($$0, $$1, $$2, $$3);
         this.chargeDamage =chargeDamage;
     }
+
 
 
     @Override

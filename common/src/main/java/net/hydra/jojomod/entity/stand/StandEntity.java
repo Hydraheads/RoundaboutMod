@@ -20,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -63,6 +64,10 @@ public abstract class StandEntity extends Mob{
      * as this file defines what each value plays on a per stand basis and can be overridden.*/
     protected static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
+
+    /**When stands grab and throw items, for instance, they hold this*/
+    protected static final EntityDataAccessor<ItemStack> HELD_ITEM = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.ITEM_STACK);
 
     /**This rotation data is for the model rotating when you look certain directions,
      * punch, etc. As it is dynamically calculated, it has to be stored somewhere.*/
@@ -199,6 +204,11 @@ public abstract class StandEntity extends Mob{
         this.entityData.set(ANIMATION, animation);
     }
 
+
+    public final void setHeldItem(ItemStack stack) {
+        this.entityData.set(HELD_ITEM, stack);
+    }
+
     /**
      * Presently, this is how the stand knows to lean in any direction based on player movement.
      * Creates the illusion of floaty movement within the stand.
@@ -226,6 +236,10 @@ public abstract class StandEntity extends Mob{
 
     public final byte getAnimation() {
         return this.entityData.get(ANIMATION);
+    }
+
+    public final ItemStack getHeldItem() {
+        return this.entityData.get(HELD_ITEM);
     }
 
     public final boolean getNeedsUser() {
@@ -357,6 +371,7 @@ public abstract class StandEntity extends Mob{
         this.entityData.define(USER_ID, -1);
         this.entityData.define(FOLLOWING_ID, -1);
         this.entityData.define(ANIMATION, (byte) 0);
+        this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
     }
 
 

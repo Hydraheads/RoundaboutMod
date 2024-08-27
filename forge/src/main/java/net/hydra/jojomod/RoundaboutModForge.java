@@ -1,5 +1,6 @@
 package net.hydra.jojomod;
 
+import net.hydra.jojomod.Utils.ForgeCommonConfig;
 import net.hydra.jojomod.Utils.ForgeItemModifiers;
 import net.hydra.jojomod.biome_modifiers.BiomeCodec;
 import net.hydra.jojomod.item.DispenserRegistry;
@@ -8,7 +9,9 @@ import net.hydra.jojomod.registry.*;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +21,8 @@ public class RoundaboutModForge {
 
     public RoundaboutModForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeCommonConfig.SPEC, "roundabout-common.toml");
+
         ForgeEffects.POTION_EFFECTS.register(bus);
         ForgeEntities.ENTITY_TYPES.register(bus);
         ForgeSounds.SOUNDS.register(bus);
@@ -37,6 +42,10 @@ public class RoundaboutModForge {
         Roundabout.init();
 
         //ForgeItems.assignStupidForge();
+    }
+
+    private void updateConfigs(){
+        Roundabout.canBreathInTS = ForgeCommonConfig.CAN_BREATHE_IN_TS.get();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event){

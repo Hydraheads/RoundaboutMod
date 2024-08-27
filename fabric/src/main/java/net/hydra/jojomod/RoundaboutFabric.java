@@ -8,12 +8,10 @@ import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.world.gen.ModWorldGeneration;
 
 public class RoundaboutFabric implements ModInitializer {
-    
+
     @Override
     public void onInitialize() {
         Roundabout.LOGGER.info("Loading Roundabout (Fabric)");
-
-
 
         FabricLootTables.modifyLootTables();
 
@@ -29,5 +27,6 @@ public class RoundaboutFabric implements ModInitializer {
         DispenserRegistry.init();
         Roundabout.init();
     }
+
     
 }

@@ -42,6 +42,12 @@ public class KeyInputs {
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
         ((StandUser) player).getStandPowers().buttonInput3(keyIsDown, option);
     }
+    public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
+        ((StandUser) player).getStandPowers().buttonInput2(keyIsDown, option);
+    }
+    public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
+        ((StandUser) player).getStandPowers().buttonInput1(keyIsDown, option);
+    }
 
 
 

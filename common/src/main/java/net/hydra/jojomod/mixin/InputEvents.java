@@ -357,12 +357,13 @@ public abstract class InputEvents {
                     if (sameKeyOne(KeyInputRegistry.summonKey)) {
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
-                    if (sameKeyOne(KeyInputRegistry.abilityOneKey)) {
-                        //client.player.sendMessage(Text.of("Ability Key 1));
-                    }
-                    if (sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
-                        //client.player.sendMessage(Text.of("Ability Key 2"));
-                    }
+
+                    KeyInputs.MoveKey1(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityOneKey),
+                        this.options);
+
+                    KeyInputs.MoveKey2(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityTwoKey),
+                        this.options);
+
                     KeyInputs.MoveKey3(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityThreeKey),
                         this.options);
 

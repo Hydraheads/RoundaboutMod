@@ -35,7 +35,6 @@ public class Roundabout {
 
     public static boolean canBreathInTS = true;
     public static boolean renderGasOverlay = false;
-
     public static float gasDamage = 0.83F;
 
 

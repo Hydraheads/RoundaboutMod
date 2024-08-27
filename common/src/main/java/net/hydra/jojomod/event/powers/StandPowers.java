@@ -183,6 +183,12 @@ public abstract class StandPowers {
     public void buttonInput3(boolean keyIsDown, Options options){
 
     }
+    public void buttonInput2(boolean keyIsDown, Options options){
+
+    }
+    public void buttonInput1(boolean keyIsDown, Options options){
+
+    }
 
     public List<CooldownInstance> StandCooldowns = initStandCooldowns();
 
