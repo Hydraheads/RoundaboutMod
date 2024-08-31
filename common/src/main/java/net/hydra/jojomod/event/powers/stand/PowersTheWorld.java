@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -18,10 +19,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -29,8 +32,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class PowersTheWorld extends StandPowers {
@@ -50,6 +56,7 @@ public class PowersTheWorld extends StandPowers {
     public int impactAirTime = -1;
     public int bonusLeapCount = -1;
     public int spacedJumpTime = -1;
+    public BlockPos grabBlock = null;
 
     @Override
     public boolean isMiningStand() {
@@ -64,19 +71,40 @@ public class PowersTheWorld extends StandPowers {
     /**Dodge ability*/
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing()) {
+        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                && this.getActivePower() != PowerIndex.POWER_2_SNEAK) {
             if (keyIsDown) {
                 if (!options.keyShift.isDown()) {
-                    ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2,true);
+                    //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
+                    BlockHitResult HR = getGrabBlock();
+                    if (HR != null){
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2,true);
+                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                    }
                 }
             }
         }
     }
 
+    /**Block Pos ability*/
+    public BlockHitResult getGrabBlock(){
+
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
+        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+        if (blockHit.getType() == HitResult.Type.BLOCK){
+            return blockHit;
+        }
+        return null;
+    }
+
     /**Dodge ability*/
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing()) {
+        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                && this.getActivePower() != PowerIndex.POWER_2_SNEAK) {
             if (keyIsDown) {
                     if (!options.keyShift.isDown()){
                         if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
@@ -207,6 +235,15 @@ public class PowersTheWorld extends StandPowers {
         return false;
     }
 
+    @Override
+    public boolean interceptAttack(){
+        return true;
+    }
+    @Override
+    public boolean interceptGuard(){
+        return true;
+    }
+
     public void standRebound(){
 
         if (!this.getSelf().onGround()) {
@@ -271,7 +308,6 @@ public class PowersTheWorld extends StandPowers {
     /**Begin Charging Time Stop, also detects activation via release**/
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
-        Roundabout.LOGGER.info("wut1");
         if (this.getSelf().level().isClientSide) {
             if (!this.onCooldown(PowerIndex.SKILL_4) || ((Player)this.getSelf()).isCreative()) {
                 if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
@@ -294,8 +330,8 @@ public class PowersTheWorld extends StandPowers {
                                 } else {
                                     if (this.getAttackTimeDuring() < 0) {
                                         this.setMaxChargeTSTime(this.getMaxTSTime());
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
                                         this.updateUniqueMoves();
                                     }
                                 }
@@ -320,11 +356,11 @@ public class PowersTheWorld extends StandPowers {
 
 
     @Override
-    public void tryPower(int move, boolean forced) {
+    public boolean tryPower(int move, boolean forced) {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
             this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100);
         }
-        super.tryPower(move,forced);
+        return super.tryPower(move,forced);
     }
 
     public void setMaxChargeTSTime(int chargedTSTicks){
@@ -344,7 +380,7 @@ public class PowersTheWorld extends StandPowers {
 
     /*Activate Time Stop**/
 
-    public void stopTime() {
+    public boolean stopTime() {
                 /*Time Stop*/
         if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player)this.getSelf()).isCreative()) || this.getChargedTSTicks() <= 20) {
             if (!this.getSelf().level().isClientSide()) {
@@ -379,6 +415,7 @@ public class PowersTheWorld extends StandPowers {
         } else {
             ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
         }
+        return true;
     }
 
     @Override
@@ -397,7 +434,7 @@ public class PowersTheWorld extends StandPowers {
         if (this.getSelf().level().isClientSide) {
             LocalPlayer local = ((LocalPlayer) this.getSelf());
             StandUser standUser = ((StandUser) this.getSelf());
-            if (standUser.roundaboutGetTSJump()) {
+            if (standUser.roundabout$getTSJump()) {
                 if (local.isCrouching()) {
                     local.input.leftImpulse *= 1.0f;
                     local.input.forwardImpulse *= 1.1f;
@@ -464,7 +501,7 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
-    public void resumeTime() {
+    public boolean resumeTime() {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
@@ -502,9 +539,10 @@ public class PowersTheWorld extends StandPowers {
         if (this.isBarraging()) {
             ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
         }
+        return true;
     }
     @Override
-    public void setPowerSpecial(int lastMove) {
+    public boolean setPowerSpecial(int lastMove) {
 
         this.setMaxChargeTSTime(this.getMaxTSTime());
         this.setAttackTimeDuring(0);
@@ -517,9 +555,10 @@ public class PowersTheWorld extends StandPowers {
             playSoundsIfNearby(getTSVoice(), 100, false);
         }
         playSoundsIfNearby(TIME_STOP_CHARGE, 100, true);
+        return true;
     }
     @Override
-    public void setPowerMovement(int lastMove) {
+    public boolean setPowerMovement(int lastMove) {
             if (this.getSelf() instanceof Player) {
                 cancelConsumableItem(this.getSelf());
                 this.setPowerNone();
@@ -577,10 +616,11 @@ public class PowersTheWorld extends StandPowers {
             if (!this.getSelf().level().isClientSide()) {
                 this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
             }
+            return true;
     }
 
     @Override
-    public void setPowerSneakMovement(int lastMove) {
+    public boolean setPowerSneakMovement(int lastMove) {
         if (this.getSelf() instanceof Player) {
             this.setPowerNone();
             cancelConsumableItem(this.getSelf());
@@ -589,6 +629,7 @@ public class PowersTheWorld extends StandPowers {
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.98 + (Math.random() * 0.04)));
         }
+        return true;
     }
     public byte getTSVoice(){
         double rand = Math.random();
@@ -609,35 +650,61 @@ public class PowersTheWorld extends StandPowers {
 
 
     @Override
-    public void setPowerOther(int move, int lastMove) {
+    public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.SPECIAL_FINISH) {
-            this.resumeTime();
+            return this.resumeTime();
         } else if (move == PowerIndex.SPECIAL_CHARGED){
-            this.stopTime();
+            return this.stopTime();
         } else if (move == PowerIndex.EXTRA){
-            this.fallBraceInit();
+            return this.fallBraceInit();
         } else if (move == PowerIndex.EXTRA_FINISH){
-            this.fallBrace();
+            return this.fallBrace();
         } else if (move == PowerIndex.VAULT){
-            this.vault();
+            return this.vault();
         } else if (move == PowerIndex.BOUNCE){
-            this.bounce();
+            return this.bounce();
         } else if (move == PowerIndex.POWER_2){
-            this.grab();
+            return this.grab();
         }
+        return false;
     }
 
 
-    public void grab() {
-        this.setActivePower(PowerIndex.POWER_2);
-        this.setAttackTimeDuring(0);
-        this.getSelf().resetFallDistance();
+    @SuppressWarnings("deprecation")
+    public boolean grab() {
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
+            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
+                if (this.grabBlock != null && grabBlock.distSqr(this.getSelf().getOnPos()) <= ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)) {
+
+                    if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
+                        if ((this.getSelf() instanceof Player &&
+                                !((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), this.grabBlock, ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer()))
+                                && this.getSelf().level().mayInteract(((Player) this.getSelf()), this.grabBlock)) {
+                            /*This is the code where blocks that are removable are grabbed*/
+                            boolean $$4 = this.getSelf().level().removeBlock(this.grabBlock, false);
+                            if ($$4) {
+                                standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
+                                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
+                                this.setActivePower(PowerIndex.POWER_2_SNEAK);
+                                this.setAttackTimeDuring(0);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_2);
+            return true;
         }
+        this.setPowerNone();
+        return false;
     }
 
-    public void bounce() {
+    public boolean bounce() {
         this.setActivePower(PowerIndex.BOUNCE);
         this.setAttackTimeDuring(-7);
         this.getSelf().resetFallDistance();
@@ -645,9 +712,10 @@ public class PowersTheWorld extends StandPowers {
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
         }
+        return true;
     }
 
-    public void fallBraceInit() {
+    public boolean fallBraceInit() {
         this.getSelf().fallDistance -= 20;
         if (this.getSelf().fallDistance < 0){
             this.getSelf().fallDistance = 0;
@@ -662,8 +730,9 @@ public class PowersTheWorld extends StandPowers {
         if (!this.getSelf().level().isClientSide()) {
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.78 + (Math.random() * 0.04)));
         }
+        return true;
     }
-    public void vault() {
+    public boolean vault() {
         animateStand((byte) 15);
         this.poseStand(OffsetIndex.GUARD);
         cancelConsumableItem(this.getSelf());
@@ -674,8 +743,9 @@ public class PowersTheWorld extends StandPowers {
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.8 + (Math.random() * 0.04)));
 
         }
+        return true;
     }
-    public void fallBrace() {
+    public boolean fallBrace() {
         impactBrace = false;
 
         cancelConsumableItem(this.getSelf());
@@ -694,6 +764,7 @@ public class PowersTheWorld extends StandPowers {
                     Mth.sin(-12 * ((float) Math.PI / 180)),
                     -Mth.cos(degrees * ((float) Math.PI / 180)));
         }
+        return true;
     }
 
     @Override
@@ -794,12 +865,40 @@ public class PowersTheWorld extends StandPowers {
                             playSoundsIfNearby(TIME_STOP_ENDING_NOISE_2,100);
                             playedResumeSound = true;
                         }
-                    }
-                     */
+                    }*/
                 }
                 this.setChargedTSTicks(TSChargeTicks);
             }
         }
+    }
+
+    @Override
+    public boolean setPowerAttack(){
+        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+            if (!standEntity.getHeldItem().isEmpty()){
+                return true;
+            }
+        }
+        return super.setPowerAttack();
+    }
+    @Override
+    public boolean setPowerGuard(){
+        if (this.getSelf() instanceof Player) {
+            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                if (!standEntity.getHeldItem().isEmpty()) {
+                    if (!this.getSelf().level().isClientSide) {
+                        ((Player) this.getSelf()).addItem(standEntity.getHeldItem());
+                        standEntity.setHeldItem(ItemStack.EMPTY);
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
+        return super.setPowerGuard();
     }
 
     /**If a client is behind a server on TS charging somehow, and the server finishes charging, this packet rounds
@@ -822,29 +921,56 @@ public class PowersTheWorld extends StandPowers {
 
     /**Charge up Time Stop*/
     @Override
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
-        if (move == PowerIndex.SPECIAL_CHARGED){
-            if (this.getSelf().level().isClientSide() ||
-                    !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                this.setChargedTSTicks(chargeTime);
+    public boolean canChangePower(int move, boolean forced){
+        if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            if ((this.getActivePower() == PowerIndex.NONE || forced) &&
+                    (!this.isDazed(this.getSelf()) || move == PowerIndex.BARRAGE_CLASH)) {
+                return true;
             }
-            super.tryChargedPower(move, forced, chargeTime);
-        } else if (move == PowerIndex.SPECIAL_TRACKER){
-            /*If the server is behind on the client TS time, update it to lower*/
-            if (this.getChargedTSTicks() > chargeTime){
-                this.setChargedTSTicks(chargeTime);
-            }
-            return false;
-        } else if (move == PowerIndex.SPECIAL_FINISH){
-            /*If the server is behind on the client TS time, update it to lower*/
-            if (this.getChargedTSTicks() > chargeTime){
-                this.setChargedTSTicks(chargeTime);
-            }
-        } else if (move == PowerIndex.MOVEMENT) {
-            this.storedInt = chargeTime;
         }
-        super.tryChargedPower(move, forced, chargeTime);
-        return true;
+        return false;
+    }
+
+    /**Charge up Time Stop*/
+    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+        if (this.canChangePower(move, forced)){
+            if (move == PowerIndex.POWER_2) {
+                this.grabBlock = blockPos;
+                return tryPower(move, forced);
+            }
+        }
+        return false;
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+    }
+
+    /**Charge up Time Stop*/
+    @Override
+    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+        if (this.canChangePower(move, forced) && this.getActivePower() != PowerIndex.POWER_2
+                && this.getActivePower() != PowerIndex.POWER_2_SNEAK) {
+            if (move == PowerIndex.SPECIAL_CHARGED) {
+                if (this.getSelf().level().isClientSide() ||
+                        !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+                    this.setChargedTSTicks(chargeTime);
+                }
+                super.tryChargedPower(move, forced, chargeTime);
+            } else if (move == PowerIndex.SPECIAL_TRACKER) {
+                /*If the server is behind on the client TS time, update it to lower*/
+                if (this.getChargedTSTicks() > chargeTime) {
+                    this.setChargedTSTicks(chargeTime);
+                }
+                return false;
+            } else if (move == PowerIndex.SPECIAL_FINISH) {
+                /*If the server is behind on the client TS time, update it to lower*/
+                if (this.getChargedTSTicks() > chargeTime) {
+                    this.setChargedTSTicks(chargeTime);
+                }
+            } else if (move == PowerIndex.MOVEMENT) {
+                this.storedInt = chargeTime;
+            }
+            return super.tryChargedPower(move, forced, chargeTime);
+        }
+        return false;
     }
 
     /**Indicates the standard max TS Time, for setting up bar length*/
@@ -960,7 +1086,8 @@ public class PowersTheWorld extends StandPowers {
     //public void setSkillIcon(GuiGraphics context, int x, int y, ResourceLocation rl, boolean dull, @Nullable CooldownInstance cooldownInstance){
     @Override
     public boolean isAttackIneptVisually(byte activeP){
-        return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
+        return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
+        || (this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0));
     }
 
     @Override
@@ -1057,13 +1184,13 @@ public class PowersTheWorld extends StandPowers {
 
     /**Barrage During a time stop, and it will cancel when time resumes, but it will also skip the charge*/
     @Override
-    public void setPowerBarrageCharge(){
+    public boolean setPowerBarrageCharge(){
         if (this.getSelf() != null && ((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())){
             timeStopStartedBarrage = true;
         } else {
             timeStopStartedBarrage = false;
         }
-        super.setPowerBarrageCharge();
+        return super.setPowerBarrageCharge();
     }
 
     @Override

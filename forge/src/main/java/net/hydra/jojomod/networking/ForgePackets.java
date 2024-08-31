@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.networking.c2s.*;
 import net.hydra.jojomod.networking.s2c.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -87,9 +88,13 @@ public class ForgePackets implements IPacketAccess {
 
     }
     @Override
+    public void StandPosPowerPacket(byte power, BlockPos blockPos) {
+        ForgePacketHandler.sendToServer(new ForgePosPowerPacket(power,blockPos));
+
+    }
+    @Override
     public void StandChargedPowerPacket(byte power, int chargeTime) {
         ForgePacketHandler.sendToServer(new ForgeChargedPowerPacket(power,chargeTime));
-
     }
     @Override
     public void StandPunchPacket(int targetID, byte APP) {

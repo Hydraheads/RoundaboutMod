@@ -75,7 +75,7 @@ public abstract class StandPowers {
     /**This variable exists so that a client can begin displaying your attack hud info without ticking through it.
      * Basically, stand attacks are clientside, but they need the server's confirmation to kickstart so you
      * can't hit targets in frozen tps*/
-    private boolean kickStarted = true;
+    public boolean kickStarted = true;
 
 
 
@@ -178,19 +178,47 @@ public abstract class StandPowers {
 
     /**Override this to set the special move key press conditions*/
     public void buttonInput4(boolean keyIsDown, Options options){
-
     }
+
     public void buttonInput3(boolean keyIsDown, Options options){
-
     }
+
     public void buttonInput2(boolean keyIsDown, Options options){
-
     }
+
     public void buttonInput1(boolean keyIsDown, Options options){
-
     }
 
-    public List<CooldownInstance> StandCooldowns = initStandCooldowns();
+    public boolean cancelItemUse() {
+        return false;
+    }
+
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
+            ((StandUser)this.getSelf()).tryPower(PowerIndex.GUARD,true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
+            return true;
+        }
+        return false;
+    }
+
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (this.canAttack()) {
+            this.tryPower(PowerIndex.ATTACK, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+        }
+    }
+
+    public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                (this.getActivePowerPhase() != this.getActivePowerPhaseMax())){
+            this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
+        }
+    }
+
+
+        public List<CooldownInstance> StandCooldowns = initStandCooldowns();
 
     public List<CooldownInstance> initStandCooldowns(){
         List<CooldownInstance> Cooldowns = new ArrayList<>();
@@ -1348,46 +1376,63 @@ public abstract class StandPowers {
         this.kickStarted = true;
     }
 
+
+    public boolean interceptAttack(){
+        return false;
+    }
+    public boolean interceptGuard(){
+        return false;
+    }
+    public boolean canChangePower(int move, boolean forced){
+        if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            if ((this.activePower == PowerIndex.NONE || forced) &&
+                    (!this.isDazed(this.self) || move == PowerIndex.BARRAGE_CLASH)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
-    public void tryPower(int move, boolean forced){
+    public boolean tryPower(int move, boolean forced){
         if (!this.self.level().isClientSide && this.isBarraging() && move != PowerIndex.BARRAGE && this.attackTimeDuring  > -1){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
         }
 
-        if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
-            if ((this.activePower == PowerIndex.NONE || forced) &&
-                    (!this.isDazed(this.self) || move == PowerIndex.BARRAGE_CLASH)) {
-
+        if (canChangePower(move, forced)) {
                 if (move == PowerIndex.NONE || move == PowerIndex.CLASH_CANCEL) {
-                    this.setPowerNone();
+                    return this.setPowerNone();
                 } else if (move == PowerIndex.ATTACK) {
-                    this.setPowerAttack();
+                    return this.setPowerAttack();
                 } else if (move == PowerIndex.GUARD) {
-                    this.setPowerGuard();
+                    return this.setPowerGuard();
                 } else if (move == PowerIndex.BARRAGE_CHARGE) {
-                    this.setPowerBarrageCharge();
+                    return this.setPowerBarrageCharge();
                 } else if (move == PowerIndex.BARRAGE) {
-                    this.setPowerBarrage();
+                    return this.setPowerBarrage();
                 } else if (move == PowerIndex.BARRAGE_CLASH) {
-                    this.setPowerClash();
+                    return this.setPowerClash();
                 } else if (move == PowerIndex.SPECIAL) {
-                    this.setPowerSpecial(move);
+                    return this.setPowerSpecial(move);
                 } else if (move == PowerIndex.MOVEMENT) {
-                    this.setPowerMovement(move);
+                    return this.setPowerMovement(move);
                 } else if (move == PowerIndex.SNEAK_MOVEMENT) {
-                    this.setPowerSneakMovement(move);
+                    return this.setPowerSneakMovement(move);
                 } else if (move == PowerIndex.MINING) {
-                    this.setPowerMining(move);
+                    return this.setPowerMining(move);
                 } else {
-                    this.setPowerOther(move, this.getActivePower());
+                    return this.setPowerOther(move, this.getActivePower());
                 }
-            }
-            if (this.self.level().isClientSide) {
-                kickStarted = false;
-            }
+
         }
+        return false;
     }
 
+    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+        tryPower(move, forced);
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+        return true;
+    }
     public boolean tryChargedPower(int move, boolean forced, int chargeTime){
         tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
@@ -1459,11 +1504,12 @@ public abstract class StandPowers {
     }
 
 
-    public void setPowerNone(){
+    public boolean setPowerNone(){
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
         animateStand((byte) 0);
+        return true;
     }
 
 
@@ -1474,7 +1520,7 @@ public abstract class StandPowers {
         }
         return false;
     }
-    public void setPowerGuard() {
+    public boolean setPowerGuard() {
         if (((StandUser)this.self).getGuardBroken()) {
             animateStand((byte) 15);
         } else {
@@ -1483,19 +1529,21 @@ public abstract class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.GUARD);
         this.poseStand(OffsetIndex.GUARD);
+        return true;
     }
 
 
-    public void setPowerBarrageCharge() {
+    public boolean setPowerBarrageCharge() {
         animateStand((byte) 11);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
         this.poseStand(OffsetIndex.ATTACK);
         this.clashDone = false;
         playBarrageChargeSound();
+        return true;
     }
 
-    public void setPowerBarrage() {
+    public boolean setPowerBarrage() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
@@ -1504,24 +1552,30 @@ public abstract class StandPowers {
         this.setAttackTime(19);
         animateStand((byte) 12);
         playBarrageCrySound();
+        return true;
     }
 
     public int clashStarter = 0;
 
     /**Override this to set the special move*/
-    public void setPowerSpecial(int lastMove) {
+    public boolean setPowerSpecial(int lastMove) {
+        return false;
     }
-    public void setPowerMovement(int lastMove) {
+    public boolean setPowerMovement(int lastMove) {
+        return false;
     }
-    public void setPowerSneakMovement(int lastMove) {
+    public boolean setPowerSneakMovement(int lastMove) {
+        return false;
     }
-    public void setPowerOther(int move, int lastMove) {
+    public boolean setPowerOther(int move, int lastMove) {
+        return false;
     }
-    public void setPowerMining(int lastMove) {
+    public boolean setPowerMining(int lastMove) {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.MINING);
         this.poseStand(OffsetIndex.FIXED_STYLE);
         animateStand((byte) 16);
+        return true;
     }
 
     public boolean isMiningStand() {
@@ -1533,7 +1587,7 @@ public abstract class StandPowers {
         return 3F;
     }
 
-    public void setPowerClash() {
+    public boolean setPowerClash() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CLASH);
         this.poseStand(OffsetIndex.LOOSE);
@@ -1545,6 +1599,7 @@ public abstract class StandPowers {
         if (this.self instanceof Player && !this.self.level().isClientSide) {
             ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.barrage_clash"), true);
         }
+        return true;
         //playBarrageGuardSound();
     }
 
@@ -1576,7 +1631,7 @@ public abstract class StandPowers {
         return 60;
     }
 
-    public void setPowerAttack(){
+    public boolean setPowerAttack(){
         if (this.attackTimeDuring <= -1) {
             if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                 if (this.activePowerPhase >= this.activePowerPhaseMax){
@@ -1597,8 +1652,10 @@ public abstract class StandPowers {
 
                 animateStand(this.activePowerPhase);
                 poseStand(OffsetIndex.ATTACK);
+                return true;
             }
         }
+        return false;
     }
 
     public void syncCooldowns(){

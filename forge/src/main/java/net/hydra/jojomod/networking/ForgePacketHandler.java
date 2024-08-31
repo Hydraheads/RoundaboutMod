@@ -47,6 +47,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeSwitchPowerPacket::toBytes)
                 .consumerMainThread(ForgeSwitchPowerPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgePosPowerPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ForgePosPowerPacket::new)
+                .encoder(ForgePosPowerPacket::toBytes)
+                .consumerMainThread(ForgePosPowerPacket::handle)
+                .add();
         INSTANCE.messageBuilder(ForgeChargedPowerPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeChargedPowerPacket::new)
                 .encoder(ForgeChargedPowerPacket::toBytes)

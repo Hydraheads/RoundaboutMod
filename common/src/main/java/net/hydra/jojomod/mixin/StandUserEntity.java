@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import com.google.common.collect.Maps;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -22,6 +21,7 @@ import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,7 +48,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -352,14 +351,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     /**TS Floating Code*/
     @Unique
-    boolean roundaboutTSJump = false;
+    boolean roundabout$tsJump = false;
     @Unique
-    public boolean roundaboutGetTSJump(){
-        return this.roundaboutTSJump;
+    public boolean roundabout$getTSJump(){
+        return this.roundabout$tsJump;
     }
     @Unique
-    public void roundaboutSetTSJump(boolean roundaboutTSJump){
-        this.roundaboutTSJump = roundaboutTSJump;
+    public void roundabout$setTSJump(boolean roundaboutTSJump){
+        this.roundabout$tsJump = roundaboutTSJump;
         if (((LivingEntity)(Object)this) instanceof Player){
             if (roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.NONE) {
                 ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.TS_FLOAT);
@@ -371,15 +370,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     /**TS Stored Damage Code*/
     @Unique
-    float roundaboutStoredDamage = 0;
+    float roundabout$storedDamage = 0;
     @Unique
-    Entity roundaboutStoredAttacker;
+    Entity roundabout$storedAttacker;
     @Unique
-    public float roundaboutGetStoredDamage(){
-        return this.roundaboutStoredDamage;
+    public float roundabout$getStoredDamage(){
+        return this.roundabout$storedDamage;
     }
     @Unique
-    public byte roundaboutGetStoredDamageByte(){
+    public byte roundabout$getStoredDamageByte(){
         return this.getEntityData().get(ROUNDABOUT_TS_DAMAGE);
     }
 
@@ -421,9 +420,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.getEntityData().get(ROUNDABOUT$ONLY_BLEEDING);
     }
     @Unique
-    public void roundaboutSetStoredDamage(float roundaboutStoredDamage){
+    public void roundabout$setStoredDamage(float roundaboutStoredDamage){
         if (!((LivingEntity) (Object) this).level().isClientSide) {
-            this.roundaboutStoredDamage = roundaboutStoredDamage;
+            this.roundabout$storedDamage = roundaboutStoredDamage;
             if (roundaboutStoredDamage <= 0) {
                 ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT_TS_DAMAGE, (byte) 0);
             } else {
@@ -454,11 +453,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public Entity roundaboutGetStoredAttacker(){
-        return this.roundaboutStoredAttacker;
+        return this.roundabout$storedAttacker;
     }
     @Unique
     public void roundaboutSetStoredAttacker(Entity roundaboutStoredAttacker){
-        this.roundaboutStoredAttacker = roundaboutStoredAttacker;
+        this.roundabout$storedAttacker = roundaboutStoredAttacker;
     }
 
     @Unique
@@ -549,14 +548,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.GuardPoints = finalGuard;
             this.syncGuard();
         }
-    } public void fixGuard() {
+    }
+    public void fixGuard() {
         this.GuardPoints = this.maxGuardPoints;
         this.GuardBroken = false;
         if (!this.level().isClientSide && this.getStandPowers().isGuarding()) {
             this.getStandPowers().animateStand((byte) 10);
         }
         this.syncGuard();
-    } public void regenGuard(float regen){
+    }
+    public void regenGuard(float regen){
         float finalGuard = this.GuardPoints + regen;
         if (finalGuard >= this.maxGuardPoints){
             this.fixGuard();
@@ -564,7 +565,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.GuardPoints = finalGuard;
             this.syncGuard();
         }
-    } public void tickGuard(){
+    }
+    public void tickGuard(){
         if (this.GuardPoints < this.maxGuardPoints) {
             if (this.GuardBroken){
                 float guardRegen = maxGuardPoints / 100;
@@ -578,7 +580,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.GuardCooldown > 0){this.GuardCooldown--;}
-    } public void tickDaze(){
+    }
+    public void tickDaze(){
         if (!this.User.level().isClientSide) {
             if (this.dazeTime > 0) {
                 ((LivingEntity)(Object)this).stopUsingItem();
@@ -611,12 +614,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
             this.getStandPowers().tryPower(move, forced);
             this.getStandPowers().syncCooldowns();
+            if (this.level().isClientSide) {
+                this.getStandPowers().kickStarted = false;
+            }
         }
     }
     public void tryChargedPower(int move, boolean forced, int chargeTime){
-            if (this.getStandPowers().tryChargedPower(move, forced, chargeTime)) {
-                this.getStandPowers().syncCooldowns();
-            }
+         this.getStandPowers().tryChargedPower(move, forced, chargeTime);
+        this.getStandPowers().syncCooldowns();
+        if (this.level().isClientSide) {
+            this.getStandPowers().kickStarted = false;
+        }
+    }
+    public void tryPosPower(int move, boolean forced, BlockPos blockPos){
+        this.getStandPowers().tryPosPower(move, forced, blockPos);
+        this.getStandPowers().syncCooldowns();
+        if (this.level().isClientSide) {
+            this.getStandPowers().kickStarted = false;
+        }
     }
 
 
@@ -1016,7 +1031,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             boolean $$2 = ((LivingEntity)(Object)this).getDeltaMovement().y <= 0.0;
             ((LivingEntity) (Object) this).resetFallDistance();
             if ($$2) {
-                if (this.roundaboutGetTSJump()){
+                if (this.roundabout$getTSJump()){
                     return 0;
                 } else {
                     return $$1;
@@ -1059,7 +1074,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
             if (this.roundaboutTSHurtTime <= 0 || $$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
 
-                float dmg = roundaboutGetStoredDamage();
+                float dmg = roundabout$getStoredDamage();
                 float max = roundaboutGetMaxStoredDamage();
 
 
@@ -1080,9 +1095,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 $$1*=0.66F;
                 if ((dmg + $$1) > max) {
-                    roundaboutSetStoredDamage(max);
+                    roundabout$setStoredDamage(max);
                 } else {
-                    roundaboutSetStoredDamage((dmg + $$1));
+                    roundabout$setStoredDamage((dmg + $$1));
                 }
                 if ($$0 != null && $$0.getEntity() != null) {
                     if ($$0.getEntity() instanceof LivingEntity){
@@ -1110,7 +1125,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         } else {
             /*This extra check ensures that extra damage will not be dealt if a projectile ticks before the TS damage catch-up*/
-            if (roundaboutGetStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
+            if (roundabout$getStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
                 ci.setReturnValue(false);
                 return;
             } if ($$0.is(ModDamageTypes.TIME)){

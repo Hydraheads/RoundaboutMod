@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.access.IPacketAccess;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -151,6 +152,14 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeByte(power);
         buffer.writeInt(chargeTime);
         ClientPlayNetworking.send(ModMessages.STAND_CHARGED_POWER_PACKET, buffer);
+    }
+
+    @Override
+    public void StandPosPowerPacket(byte power, BlockPos blockPos){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+        buffer.writeByte(power);
+        buffer.writeBlockPos(blockPos);
+        ClientPlayNetworking.send(ModMessages.STAND_POS_POWER_PACKET, buffer);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -20,6 +21,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -535,6 +538,14 @@ public abstract class StandEntity extends Mob{
         if (!this.level().isClientSide()) {
             if (currFade >= 0) {
                 this.incFadeOut((byte) -1);
+                if (!this.getHeldItem().isEmpty()) {
+                    double $$3 = this.getEyeY() - 0.3F;
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.getUUID());
+                    this.level().addFreshEntity($$4);
+                    this.setHeldItem(ItemStack.EMPTY);
+                }
             }
         }
         if (currFade < 0) {

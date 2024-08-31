@@ -1,5 +1,6 @@
 package net.hydra.jojomod.access;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,6 +32,7 @@ public interface IPacketAccess {
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();
     void StandPowerPacket(byte power);
+    void StandPosPowerPacket(byte power, BlockPos blockPos);
     void StandChargedPowerPacket(byte power, int chargeTime);
     void StandPunchPacket(int targetID, byte APP);
     void StandBarrageHitPacket(int targetID, int ATD);

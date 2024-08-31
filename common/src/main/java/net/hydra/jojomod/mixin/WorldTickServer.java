@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -169,10 +168,10 @@ public class WorldTickServer {
     private void roundaboutTickTSDamage(Entity entity){
         if (entity instanceof LivingEntity){
             ((StandUser)entity).roundaboutUniversalTick();
-            if (!(((TimeStop) this).CanTimeStopEntity(entity)) && ((StandUser)entity).roundaboutGetStoredDamage() > 0){
+            if (!(((TimeStop) this).CanTimeStopEntity(entity)) && ((StandUser)entity).roundabout$getStoredDamage() > 0){
 
                 if (DamageHandler.TimeDamageEntityAttack(entity,
-                        ((StandUser)entity).roundaboutGetStoredDamage(), 0, ((StandUser)entity).roundaboutGetStoredAttacker())){
+                        ((StandUser)entity).roundabout$getStoredDamage(), 0, ((StandUser)entity).roundaboutGetStoredAttacker())){
                     entity.hurtMarked = true;
                     entity.setDeltaMovement(Objects.requireNonNull(((IEntityAndData) entity).getRoundaboutDeltaBuildupTS()));
                     int TSHurt = ((StandUser)entity).roundaboutGetTSHurtSound();
@@ -188,7 +187,7 @@ public class WorldTickServer {
                     ((StandUser)entity).roundaboutSetTSHurtSound(0);
                     entity.hasImpulse = true;
                 }
-                ((StandUser)entity).roundaboutSetStoredDamage(0);
+                ((StandUser)entity).roundabout$setStoredDamage(0);
                 ((StandUser)entity).roundaboutSetStoredAttacker(null);
                 ((IEntityAndData)entity).setRoundaboutDeltaBuildupTS(new Vec3(0,0,0));
             }

@@ -26,7 +26,7 @@ public class ForgeTSJumpPacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
-                ((StandUser) player).roundaboutSetTSJump(TSJump);
+                ((StandUser) player).roundabout$setTSJump(TSJump);
             }
         });
         return true;

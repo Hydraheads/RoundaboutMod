@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -69,6 +70,7 @@ public interface StandUser {
 
     void tryPower(int move, boolean forced);
     void tryChargedPower(int move, boolean forced, int chargeTime);
+    void tryPosPower(int move, boolean forced, BlockPos blockPos);
 
     int roundaboutGetTSHurtSound();
 
@@ -81,21 +83,21 @@ public interface StandUser {
 
     LivingEntity getPowerUser();
 
-    void roundaboutSetTSJump(boolean roundaboutTSJump);
+    void roundabout$setTSJump(boolean roundaboutTSJump);
 
-    boolean roundaboutGetTSJump();
+    boolean roundabout$getTSJump();
 
     @Nullable
     StandEntity getStand();
 
-    float roundaboutGetStoredDamage();
+    float roundabout$getStoredDamage();
     Entity roundaboutGetStoredAttacker();
     void roundaboutSetStoredAttacker(Entity attacker);
-    void roundaboutSetStoredDamage(float roundaboutStoredDamage);
+    void roundabout$setStoredDamage(float roundaboutStoredDamage);
 
     float roundaboutGetMaxStoredDamage();
 
-    byte roundaboutGetStoredDamageByte();
+    byte roundabout$getStoredDamageByte();
 
     void roundaboutUniversalTick();
 

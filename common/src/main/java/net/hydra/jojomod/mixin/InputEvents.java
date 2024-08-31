@@ -19,7 +19,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +28,6 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.minecraft.world.level.block.WebBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -172,14 +170,12 @@ public abstract class InputEvents {
         }
 
         @Unique
-        public void roundabout$TryGuard(){
+        public boolean roundabout$TryGuard(){
             StandUser standComp = ((StandUser) player);
-            if (standComp.getActive()) {
-                if (!standComp.isGuarding() && !standComp.isBarraging() && !standComp.isClashing()) {
-                    standComp.tryPower(PowerIndex.GUARD,true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
-                }
+            if (standComp.getActive() && standComp.getStandPowers().interceptGuard()) {
+                return standComp.getStandPowers().buttonInputGuard(this.options.keyRight.isDown(),this.options);
             }
+            return false;
         }
 
 
@@ -193,7 +189,7 @@ public abstract class InputEvents {
             if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 ci.cancel();
             } else if (standComp.getActive()) {
-                if (standComp.isGuarding() || standComp.isBarraging() || standComp.isClashing()) {
+                if (standComp.isGuarding() || standComp.isBarraging() || standComp.isClashing() || standComp.getStandPowers().cancelItemUse()) {
                     ci.cancel();
                 }
             }
@@ -297,7 +293,7 @@ public abstract class InputEvents {
 
     @Unique
     public void roundaboutSetTSJump(boolean roundaboutTSJump){
-        ((StandUser)player).roundaboutSetTSJump(roundaboutTSJump);
+        ((StandUser)player).roundabout$setTSJump(roundaboutTSJump);
         ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
     }
 
@@ -309,7 +305,7 @@ public abstract class InputEvents {
                 //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
 
                 /**Time Stop Levitation*/
-                boolean TSJumping = ((StandUser)player).roundaboutGetTSJump();
+                boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
                 if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
                     if (player.getAbilities().flying && TSJumping) {
                         this.roundaboutSetTSJump(false);
@@ -417,17 +413,11 @@ public abstract class InputEvents {
                         }
                     }
                     if (!isMining && !roundabout$activeMining && standComp.getInterruptCD()) {
-                        if (standComp.canAttack()) {
-                            standComp.tryPower(PowerIndex.ATTACK, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
-                        }
+                        standComp.getStandPowers().buttonInputAttack(this.options.keyAttack.isDown(),this.options);
                     }
 
-                    if (!isMining && standComp.isGuarding() && !standComp.isBarraging()
-                            && (standComp.getAttackTime() >= standComp.getAttackTimeMax() ||
-                            (standComp.getActivePowerPhase() != standComp.getActivePowerPhaseMax()))){
-                        standComp.tryPower(PowerIndex.BARRAGE_CHARGE, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
+                    if (!isMining && standComp.isGuarding() && !standComp.isBarraging()){
+                        standComp.getStandPowers().buttonInputBarrage(this.options.keyAttack.isDown(),this.options);
                     }
                 }
             }

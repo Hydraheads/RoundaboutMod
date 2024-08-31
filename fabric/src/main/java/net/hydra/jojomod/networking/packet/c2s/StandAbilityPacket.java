@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -26,6 +27,14 @@ public class StandAbilityPacket {
         byte power = buf.readByte();
         server.execute(() -> {
             ((StandUser) player).tryPower(power, true);
+        });
+    }
+    public static void switchPosPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                   FriendlyByteBuf buf, PacketSender responseSender) {
+        byte power = buf.readByte();
+        BlockPos blockPos = buf.readBlockPos();
+        server.execute(() -> {
+            ((StandUser) player).tryPosPower(power, true, blockPos);
         });
     }
     public static void switchChargedPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,

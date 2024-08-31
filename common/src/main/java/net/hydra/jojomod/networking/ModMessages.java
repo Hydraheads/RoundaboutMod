@@ -16,6 +16,7 @@ public class ModMessages {
     public static final ResourceLocation GLAIVE_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"glaive_packet");
     public static final ResourceLocation STAND_PUNCH_PACKET = new ResourceLocation(Roundabout.MOD_ID,"punch_packet");
     public static final ResourceLocation STAND_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_packet");
+    public static final ResourceLocation STAND_POS_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"pos_power_packet");
     public static final ResourceLocation STAND_CHARGED_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"charged_power_packet");
     public static final ResourceLocation STAND_BARRAGE_HIT_PACKET = new ResourceLocation(Roundabout.MOD_ID,"barrage_hit_packet");
     public static final ResourceLocation NBT_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"nbt_sync");

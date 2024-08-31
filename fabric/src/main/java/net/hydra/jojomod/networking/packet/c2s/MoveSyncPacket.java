@@ -34,7 +34,7 @@ public class MoveSyncPacket {
         boolean TSJump = buf.readBoolean();
 
         server.execute(() -> {
-            ((StandUser) player).roundaboutSetTSJump(TSJump);
+            ((StandUser) player).roundabout$setTSJump(TSJump);
         });
 
 
