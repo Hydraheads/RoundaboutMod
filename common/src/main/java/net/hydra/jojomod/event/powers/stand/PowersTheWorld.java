@@ -62,6 +62,8 @@ public class PowersTheWorld extends StandPowers {
     public int spacedJumpTime = -1;
     public BlockPos grabBlock = null;
 
+    public int freezeAttackInput = -1;
+
     @Override
     public boolean isMiningStand() {
         return true;
@@ -76,7 +78,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                && this.getActivePower() != PowerIndex.POWER_2_SNEAK) {
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK) || this.getAttackTimeDuring() < 0) {
             if (keyIsDown) {
                 if (!options.keyShift.isDown()) {
                     //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
@@ -626,10 +628,18 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
-        if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
-                && !standEntity.getHeldItem().isEmpty())) {
-            this.tryPower(PowerIndex.ATTACK, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+        if (freezeAttackInput > -1) {
+            this.freezeAttackInput = 1;
+        }
+        if (freezeAttackInput < 0) {
+            if (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+                this.freezeAttackInput = 1;
+            }
+            if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
+                    && !standEntity.getHeldItem().isEmpty())) {
+                this.tryPower(PowerIndex.ATTACK, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+            }
         }
     }
 
@@ -686,7 +696,7 @@ public class PowersTheWorld extends StandPowers {
     public void throwObject(ItemStack item){
         ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item);
         thrownBlockOrItem.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(),
-                this.getSelf().getYRot(), -3F, 1F, 1.0F);
+                this.getSelf().getYRot(), -3F, 1.8F, 1.0F);
         this.getSelf().level().addFreshEntity(thrownBlockOrItem);
         this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.MATCH_THROW_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
     }
@@ -816,10 +826,14 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public void tickPower(){
+
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (impactSlowdown > -1){
                 impactSlowdown--;
+            }
+            if (freezeAttackInput > -1){
+                freezeAttackInput--;
             }
 
             if (spacedJumpTime > -1){
@@ -905,7 +919,8 @@ public class PowersTheWorld extends StandPowers {
                     if (!this.getSelf().level().isClientSide) {
                         throwObject(standEntity.getHeldItem());
                         standEntity.setHeldItem(ItemStack.EMPTY);
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                        this.setAttackTimeDuring(-10);
+                        this.syncCooldowns();
                         return true;
                     }
                     return false;
@@ -923,7 +938,8 @@ public class PowersTheWorld extends StandPowers {
                     if (!this.getSelf().level().isClientSide) {
                         ((Player) this.getSelf()).addItem(standEntity.getHeldItem());
                         standEntity.setHeldItem(ItemStack.EMPTY);
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                        this.setAttackTimeDuring(-10);
+                        this.syncCooldowns();
                         return true;
                     }
                     return false;
