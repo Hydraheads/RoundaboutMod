@@ -20,6 +20,7 @@ public class ModEntities {
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
 
+    public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");

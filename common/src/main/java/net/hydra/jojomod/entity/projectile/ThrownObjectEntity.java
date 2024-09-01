@@ -7,6 +7,9 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -18,6 +21,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -27,25 +32,37 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class MatchEntity extends ThrowableItemProjectile {
-    public MatchEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
+public class ThrownObjectEntity extends ThrowableItemProjectile {
+    private static final EntityDataAccessor<ItemStack> ITEM_STACK = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.ITEM_STACK);
+
+    public boolean isBundle = false;
+    public ThrownObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
 
-    public MatchEntity(LivingEntity living, Level $$1) {
+    public ThrownObjectEntity(LivingEntity living, Level $$1) {
         super(ModEntities.THROWN_OBJECT, living, $$1);
     }
 
+    public ThrownObjectEntity(LivingEntity living, Level $$1, ItemStack itemStack) {
+        super(ModEntities.THROWN_OBJECT, living, $$1);
+        this.entityData.set(ITEM_STACK, itemStack);
+    }
 
-    public MatchEntity(Level world, double p_36862_, double p_36863_, double p_36864_) {
+    public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack) {
         super(ModEntities.THROWN_OBJECT, p_36862_, p_36863_, p_36864_, world);
+        this.entityData.set(ITEM_STACK, itemStack);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ITEM_STACK, ItemStack.EMPTY);
     }
     @Override
     protected Item getDefaultItem() {
-        return ModItems.MATCH;
+        return this.entityData.get(ITEM_STACK).getItem();
     }
-
-    public boolean isBundle = false;
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
@@ -56,7 +73,7 @@ public class MatchEntity extends ThrowableItemProjectile {
 
         if (block instanceof GasolineBlock) {
             this.discard();
-        } else if(((IFireBlock)Blocks.FIRE).roundabout$canBurn(state)){
+        } else if(((IFireBlock) Blocks.FIRE).roundabout$canBurn(state)){
             if (block instanceof TntBlock) {
                 this.level().removeBlock($$0.getBlockPos(), false);
                 TntBlock.explode(this.level(), $$0.getBlockPos());

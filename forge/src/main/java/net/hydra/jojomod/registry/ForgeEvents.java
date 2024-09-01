@@ -120,6 +120,8 @@ public class ForgeEvents {
         ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
 
+        ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
+
         ForgeItems.assignStupidForge();
     }
 

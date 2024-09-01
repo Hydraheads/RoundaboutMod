@@ -65,4 +65,10 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_splatter").toString())
             );
+    public static final RegistryObject<EntityType<ThrownObjectEntity>> THROWN_OBJECT =
+            ENTITY_TYPES.register("thrown_object", () ->
+                    EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "thrown_object").toString())
+            );
 }

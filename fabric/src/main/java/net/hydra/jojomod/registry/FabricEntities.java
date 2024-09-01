@@ -80,6 +80,13 @@ public class FabricEntities {
                         EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).
                                 sized(0.8f, 0.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":gasoline_splatter")
                 );
+        public static final EntityType<ThrownObjectEntity> THROWN_OBJECT =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "thrown_object"),
+                        EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).
+                                sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_object")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -91,6 +98,8 @@ public class FabricEntities {
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
+
+                ModEntities.THROWN_OBJECT = THROWN_OBJECT;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());

@@ -5,6 +5,8 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -12,6 +14,7 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -38,6 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Shadow;
 
 public class PowersTheWorld extends StandPowers {
 
@@ -620,6 +624,16 @@ public class PowersTheWorld extends StandPowers {
     }
 
     @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
+                && !standEntity.getHeldItem().isEmpty())) {
+            this.tryPower(PowerIndex.ATTACK, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+        }
+    }
+
+    @Override
     public boolean setPowerSneakMovement(int lastMove) {
         if (this.getSelf() instanceof Player) {
             this.setPowerNone();
@@ -667,6 +681,14 @@ public class PowersTheWorld extends StandPowers {
             return this.grab();
         }
         return false;
+    }
+
+    public void throwObject(ItemStack item){
+        ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item);
+        thrownBlockOrItem.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(),
+                this.getSelf().getYRot(), -3F, 1F, 1.0F);
+        this.getSelf().level().addFreshEntity(thrownBlockOrItem);
+        this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.MATCH_THROW_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
     }
 
 
@@ -876,10 +898,18 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public boolean setPowerAttack(){
-        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
-        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
-            if (!standEntity.getHeldItem().isEmpty()){
-                return true;
+        if (this.getSelf() instanceof Player) {
+            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                if (!standEntity.getHeldItem().isEmpty()) {
+                    if (!this.getSelf().level().isClientSide) {
+                        throwObject(standEntity.getHeldItem());
+                        standEntity.setHeldItem(ItemStack.EMPTY);
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                        return true;
+                    }
+                    return false;
+                }
             }
         }
         return super.setPowerAttack();

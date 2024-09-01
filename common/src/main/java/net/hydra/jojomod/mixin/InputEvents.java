@@ -157,6 +157,8 @@ public abstract class InputEvents {
                     } else {
                         if (!this.options.keyAttack.isDown()){
                             roundabout$activeMining = false;
+                        } else {
+                            ci.cancel();
                         }
                     }
                 }
