@@ -689,6 +689,8 @@ public class PowersTheWorld extends StandPowers {
                                 this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
                                 this.setActivePower(PowerIndex.POWER_2_SNEAK);
                                 this.setAttackTimeDuring(0);
+                                poseStand(OffsetIndex.FOLLOW);
+                                animateStand((byte) 0);
                                 return true;
                             }
                         }

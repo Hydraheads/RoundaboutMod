@@ -153,12 +153,12 @@ public abstract class InputEvents {
                                 this.gameMode.stopDestroyBlock();
                             }
                         }
+                        ci.cancel();
                     } else {
                         if (!this.options.keyAttack.isDown()){
                             roundabout$activeMining = false;
                         }
                     }
-                    ci.cancel();
                 }
             }
         }
