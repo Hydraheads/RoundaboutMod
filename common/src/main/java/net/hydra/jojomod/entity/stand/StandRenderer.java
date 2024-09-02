@@ -1,13 +1,17 @@
 package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.entity.client.StoneLayer;
+import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.level.LightLayer;
 
 public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandModel<T>> {
@@ -15,6 +19,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
      * to make sure stand lighting doesn't mess up when they clip through blocks.*/
     public StandRenderer(EntityRendererProvider.Context context, StandModel<T> entityModel, float f) {
         super(context, entityModel, f);
+        this.addLayer(new StandHeldItemLayer<>(this, context.getItemInHandRenderer()));
     }
 
 
@@ -29,8 +34,6 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         (this.model).setAlpha(getStandOpacity(mobEntity));
-
-
 
         int plight = i;
         var owner = mobEntity.getUser();

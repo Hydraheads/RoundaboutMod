@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
@@ -17,6 +18,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     ModelPart stand;
     ModelPart head;
     ModelPart body;
+    ModelPart leftHand;
+    ModelPart rightHand;
 
     public void setHeadRotations(float pitch,float yaw){
         this.head.xRot = pitch;
@@ -28,6 +31,21 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.stand.xRot = pitch;
         this.stand.yRot = yaw;
         this.stand.zRot = z;
+    }
+
+    protected ModelPart getArm(HumanoidArm p_102852_) {
+        return p_102852_ == HumanoidArm.LEFT ? this.leftHand : this.rightHand;
+    }
+
+    public void translateToHand(HumanoidArm p_103778_, PoseStack p_103779_) {
+        float f = p_103778_ == HumanoidArm.RIGHT ? 9F : -9F;
+
+        ModelPart modelpart = this.getArm(p_103778_);
+        modelpart.x += f;
+        modelpart.y -= 2;
+        modelpart.translateAndRotate(p_103779_);
+        modelpart.x -= f;
+        modelpart.y += 2;
     }
 
     @Override

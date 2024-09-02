@@ -3,6 +3,7 @@
 // Paste this class into your mod and generate all required imports
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.minecraft.client.model.*;
@@ -20,6 +21,10 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		this.stand = root.getChild("stand");
 		this.head = stand.getChild("stand2").getChild("head");
 		this.body = stand.getChild("stand2").getChild("body");
+		this.leftHand = stand.getChild("stand2").getChild("body").getChild("body2")
+				.getChild("torso").getChild("upper_chest").getChild("left_arm").getChild("lower_left_arm");
+		this.rightHand = stand.getChild("stand2").getChild("body").getChild("body2")
+				.getChild("torso").getChild("upper_chest").getChild("right_arm").getChild("lower_right_arm");
 	}
 
 	public static LayerDefinition getTexturedModelData() {
