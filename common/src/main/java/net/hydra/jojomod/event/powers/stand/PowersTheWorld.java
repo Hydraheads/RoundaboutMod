@@ -78,7 +78,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK) || this.getAttackTimeDuring() < 0) {
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)) {
             if (keyIsDown) {
                 if (!options.keyShift.isDown()) {
                     //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
@@ -110,7 +110,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                && this.getActivePower() != PowerIndex.POWER_2_SNEAK) {
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)) {
             if (keyIsDown) {
                     if (!options.keyShift.isDown()){
                         if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
@@ -363,6 +363,9 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && move == PowerIndex.SNEAK_MOVEMENT && this.isClashing()){
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+        }
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
             this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100);
         }
@@ -645,8 +648,12 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public boolean setPowerSneakMovement(int lastMove) {
+
+        this.setAttackTimeDuring(-1);
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        animateStand((byte) 17);
         if (this.getSelf() instanceof Player) {
-            this.setPowerNone();
             cancelConsumableItem(this.getSelf());
         }
         if (!this.getSelf().level().isClientSide()) {
@@ -824,6 +831,7 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    private int leapEndTicks = -1;
     @Override
     public void tickPower(){
 
@@ -839,6 +847,26 @@ public class PowersTheWorld extends StandPowers {
             if (spacedJumpTime > -1){
                 spacedJumpTime--;
             }
+
+
+            if (this.getAnimation() == 18) {
+                leapEndTicks++;
+                if (leapEndTicks > 4) {
+                    animateStand((byte) 0);
+                    leapEndTicks = -1;
+                }
+            } else {
+                leapEndTicks = -1;
+            }
+            if (this.getSelf().onGround()){
+                if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
+                    if (this.getAnimation() == 17) {
+                        animateStand((byte) 18);
+                    }
+                }
+            }
+
+
 
             if (impactBrace){
                 if (this.getSelf().onGround()) {
@@ -995,7 +1023,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public boolean tryChargedPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced) && this.getActivePower() != PowerIndex.POWER_2
-                && this.getActivePower() != PowerIndex.POWER_2_SNEAK) {
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)) {
             if (move == PowerIndex.SPECIAL_CHARGED) {
                 if (this.getSelf().level().isClientSide() ||
                         !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {

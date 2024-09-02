@@ -48,6 +48,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.barrageEndAnimationState, StandAnimations.COMBO3, animationProgress, 2.2f);
         this.animate(entity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, animationProgress, 2.5f);
         this.animate(entity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, animationProgress, 1.8f);
+        this.animate(entity.standLeapAnimationState, StandAnimations.STAND_LEAP, animationProgress, 1f);
+        this.animate(entity.standLeapEndAnimationState, StandAnimations.STAND_LEAP_END, animationProgress, 3.0f);
     }
 
     /**If a stand has a head or a body, it pretty much could benefit from having

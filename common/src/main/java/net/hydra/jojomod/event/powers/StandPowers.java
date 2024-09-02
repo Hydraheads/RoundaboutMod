@@ -670,6 +670,13 @@ public abstract class StandPowers {
             stand.setAnimation(r);
         }
     }
+    public byte getAnimation(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            return stand.getAnimation();
+        }
+        return -1;
+    }
 
     public StandUser getUserData(LivingEntity User){
         return ((StandUser) User);
