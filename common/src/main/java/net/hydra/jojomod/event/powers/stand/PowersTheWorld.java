@@ -748,7 +748,7 @@ public class PowersTheWorld extends StandPowers {
                         this.setActivePower(PowerIndex.POWER_2_SNEAK);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW);
-                        animateStand((byte) 0);
+                        animateStand((byte) 32);
                         return true;
                     }
                 }
@@ -965,6 +965,7 @@ public class PowersTheWorld extends StandPowers {
                         throwObject(standEntity.getHeldItem());
                         standEntity.setHeldItem(ItemStack.EMPTY);
                         this.setAttackTimeDuring(-10);
+                        animateStand((byte) 33);
                         this.syncCooldowns();
                         return true;
                     }
