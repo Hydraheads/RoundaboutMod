@@ -3,14 +3,18 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.GasolineBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -19,7 +23,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -72,23 +78,17 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);
 
-        BlockState state = this.level().getBlockState($$0.getBlockPos());
-        Block block = state.getBlock();
 
-        if (block instanceof GasolineBlock) {
-            this.discard();
-        } else if(((IFireBlock) Blocks.FIRE).roundabout$canBurn(state)){
-            if (block instanceof TntBlock) {
-                this.level().removeBlock($$0.getBlockPos(), false);
-                TntBlock.explode(this.level(), $$0.getBlockPos());
+        if (!this.level().isClientSide) {
+            BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
+            BlockState state = this.level().getBlockState(pos);
+            if (this.places && (state.isAir() || state.canBeReplaced()) && !((this.getOwner() instanceof Player &&
+                    (((Player) this.getOwner()).blockActionRestricted(this.getOwner().level(), pos, ((ServerPlayer)
+                            this.getOwner()).gameMode.getGameModeForPlayer()))) ||
+                    !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos))){
+
+                this.level().setBlockAndUpdate(pos, ((BlockItem)this.getDefaultItem()).getBlock().defaultBlockState());
             }
-        } else {
-            if (!this.level().isClientSide) {
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(),
-                        0, 0.0, 0, 0.0, 0.4);
-            }
-            SoundEvent $$6 = SoundEvents.WOOD_STEP;
-            this.playSound($$6, 0.5F, 2F);
         }
         this.discard();
     }
@@ -142,6 +142,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         this.yRotO = this.getYRot();
         this.xRotO = this.getXRot();
     }
+
 
     public void shootFromRotationWithVariance(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
