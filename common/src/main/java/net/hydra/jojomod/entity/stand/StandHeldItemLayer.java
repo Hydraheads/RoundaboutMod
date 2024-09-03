@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -44,7 +45,15 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
     protected void renderArmWithItem(LivingEntity p_117185_, ItemStack p_117186_, ItemDisplayContext p_270970_, HumanoidArm p_117188_, PoseStack p_117189_, MultiBufferSource p_117190_, int p_117191_) {
         if (!p_117186_.isEmpty()) {
             p_117189_.pushPose();
-            this.getParentModel().translateToHand(p_117188_, p_117189_);
+            float shiftZ = 0;
+            float shiftY = 2;
+            if (p_117186_.getItem() instanceof BlockItem){
+                if (((StandEntity)p_117185_).getUser() != null) {
+                    shiftZ = 0 - Math.max(0,Math.min(((StandUser)((StandEntity) p_117185_).getUser()).getAttackTimeDuring(),10F))*1.4F;
+                    shiftY = -0.5F;
+                }
+            }
+            this.getParentModel().translateToHand(p_117188_, p_117189_, shiftZ, shiftY);
             p_117189_.mulPose(Axis.XP.rotationDegrees(-90.0F));
             p_117189_.mulPose(Axis.YP.rotationDegrees(180.0F));
             boolean flag = p_117188_ == HumanoidArm.LEFT;

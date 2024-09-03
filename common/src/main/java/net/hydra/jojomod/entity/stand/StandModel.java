@@ -37,15 +37,17 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         return p_102852_ == HumanoidArm.LEFT ? this.rightHand : this.leftHand;
     }
 
-    public void translateToHand(HumanoidArm p_103778_, PoseStack p_103779_) {
-        float f = p_103778_ == HumanoidArm.RIGHT ? 9F : -9F;
+    public void translateToHand(HumanoidArm p_103778_, PoseStack p_103779_, float zshift, float yshift) {
+        float f = p_103778_ == HumanoidArm.RIGHT ? 4F : -4F;
 
         ModelPart modelpart = this.getArm(p_103778_);
         modelpart.x += f;
-        modelpart.y -= 2;
+        modelpart.y -= yshift;
+        modelpart.z += zshift;
         modelpart.translateAndRotate(p_103779_);
         modelpart.x -= f;
-        modelpart.y += 2;
+        modelpart.y += yshift;
+        modelpart.z -= zshift;
     }
 
     @Override
@@ -204,6 +206,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                 cRot = 90 * Mth.DEG_TO_RAD;
             } else {
                 int moveForward = mobEntity.getMoveForward();
+                if (animationNumber==OffsetIndex.FOLLOW_NOLEAN){
+                    moveForward = 0;
+                }
                 if (moveForward < 0) {
                     cRot *= -moveForward;
                 } else if (moveForward > 0) {

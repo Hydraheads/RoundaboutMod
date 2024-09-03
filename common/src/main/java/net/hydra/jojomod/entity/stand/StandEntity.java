@@ -573,7 +573,7 @@ public abstract class StandEntity extends Mob{
      * Based on Jojovein donut code with great help from Urbancase.*/
     public Vec3 getStandOffsetVector(LivingEntity standUser){
         byte ot = this.getOffsetType();
-        if (ot == OffsetIndex.FOLLOW) {
+        if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FOLLOW_STYLE) {
             return getIdleOffset(standUser);
         } else if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FIXED_STYLE) {
             return getAttackOffset(standUser,ot);
