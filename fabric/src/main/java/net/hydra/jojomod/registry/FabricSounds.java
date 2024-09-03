@@ -81,6 +81,9 @@ public class FabricSounds {
         addSound(ModSounds.GLAIVE_CHARGE_ID, ModSounds.GLAIVE_CHARGE_EVENT);
         addSound(ModSounds.GLAIVE_ATTACK_ID, ModSounds.GLAIVE_ATTACK_EVENT);
 
+        addSound(ModSounds.BLOCK_GRAB_ID, ModSounds.BLOCK_GRAB_EVENT);
+        addSound(ModSounds.BLOCK_THROW_ID, ModSounds.BLOCK_THROW_EVENT);
+
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
     }

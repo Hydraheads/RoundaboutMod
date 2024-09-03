@@ -37,6 +37,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -701,11 +702,20 @@ public class PowersTheWorld extends StandPowers {
     }
 
     public void throwObject(ItemStack item){
-        ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item);
-        thrownBlockOrItem.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(),
-                this.getSelf().getYRot(), -3F, 1.8F, 1.0F);
+        boolean canPlace = false;
+        boolean acq = false;
+        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        if (standEntity != null && standEntity.canAcquireHeldItem){
+            acq = true;
+        }
+        if (acq && !(this.getSelf() instanceof Player && ((ServerPlayer)this.getSelf()).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)){
+            canPlace = true;
+        }
+        ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item,canPlace);
+        thrownBlockOrItem.shootFromRotation(this.getSelf(), this.getSelf().getXRot(),
+                this.getSelf().getYRot(), -0.5F, 1.7F, 0.8F);
         this.getSelf().level().addFreshEntity(thrownBlockOrItem);
-        this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.MATCH_THROW_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
+        this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
     }
 
 
@@ -724,15 +734,20 @@ public class PowersTheWorld extends StandPowers {
                             /*This is the code where blocks that are removable are grabbed*/
                             boolean $$4 = this.getSelf().level().removeBlock(this.grabBlock, false);
                             if ($$4) {
-                                standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
-                                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
-                                this.setActivePower(PowerIndex.POWER_2_SNEAK);
-                                this.setAttackTimeDuring(0);
-                                poseStand(OffsetIndex.FOLLOW);
-                                animateStand((byte) 0);
-                                return true;
+                                standEntity.canAcquireHeldItem = true;
+                            } else {
+                                standEntity.canAcquireHeldItem = false;
                             }
+                        } else {
+                            standEntity.canAcquireHeldItem = false;
                         }
+                        standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);
+                        this.setActivePower(PowerIndex.POWER_2_SNEAK);
+                        this.setAttackTimeDuring(0);
+                        poseStand(OffsetIndex.FOLLOW);
+                        animateStand((byte) 0);
+                        return true;
                     }
                 }
             }

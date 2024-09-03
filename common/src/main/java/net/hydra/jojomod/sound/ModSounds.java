@@ -230,6 +230,14 @@ public class ModSounds {
     public static final ResourceLocation GLAIVE_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GLAIVE_ATTACK);
     public static SoundEvent GLAIVE_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(GLAIVE_ATTACK_ID);
 
+
+    public static final String BLOCK_GRAB = "block_grab";
+    public static final ResourceLocation BLOCK_GRAB_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_GRAB);
+    public static SoundEvent BLOCK_GRAB_EVENT = SoundEvent.createVariableRangeEvent(BLOCK_GRAB_ID);
+    public static final String BLOCK_THROW = "block_throw";
+    public static final ResourceLocation BLOCK_THROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_THROW);
+    public static SoundEvent BLOCK_THROW_EVENT = SoundEvent.createVariableRangeEvent(BLOCK_THROW_ID);
+
     public static final String TORTURE_DANCE = "torture_dance";
     public static final ResourceLocation TORTURE_DANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TORTURE_DANCE);
     public static SoundEvent TORTURE_DANCE_EVENT = SoundEvent.createVariableRangeEvent(TORTURE_DANCE_ID);

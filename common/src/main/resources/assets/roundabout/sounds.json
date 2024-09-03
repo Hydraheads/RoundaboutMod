@@ -215,6 +215,18 @@
       "roundabout:stand_barrage_end_block"
     ]
   },
+  "block_grab": {
+    "subtitle": "sounds.roundabout.block_grab",
+    "sounds": [
+      "roundabout:block_grab"
+    ]
+  },
+  "block_throw": {
+    "subtitle": "sounds.roundabout.block_throw",
+    "sounds": [
+      "roundabout:block_throw"
+    ]
+  },
   "hit_sfx1": {
     "subtitle": "sounds.roundabout.hit_sfx1",
     "sounds": [

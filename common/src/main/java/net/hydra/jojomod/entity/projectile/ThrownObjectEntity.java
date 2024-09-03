@@ -34,24 +34,28 @@ import net.minecraft.world.phys.Vec3;
 
 public class ThrownObjectEntity extends ThrowableItemProjectile {
     private static final EntityDataAccessor<ItemStack> ITEM_STACK = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.ITEM_STACK);
+    public final boolean places;
 
-    public boolean isBundle = false;
     public ThrownObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
+        this.places = false;
     }
 
     public ThrownObjectEntity(LivingEntity living, Level $$1) {
         super(ModEntities.THROWN_OBJECT, living, $$1);
+        places = false;
     }
 
-    public ThrownObjectEntity(LivingEntity living, Level $$1, ItemStack itemStack) {
+    public ThrownObjectEntity(LivingEntity living, Level $$1, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, living, $$1);
         this.entityData.set(ITEM_STACK, itemStack);
+        this.places = places;
     }
 
-    public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack) {
+    public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, p_36862_, p_36863_, p_36864_, world);
         this.entityData.set(ITEM_STACK, itemStack);
+        this.places = places;
     }
 
     @Override

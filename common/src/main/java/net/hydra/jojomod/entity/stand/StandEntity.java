@@ -72,6 +72,8 @@ public abstract class StandEntity extends Mob{
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.ITEM_STACK);
 
+    public boolean canAcquireHeldItem = false;
+
     /**This rotation data is for the model rotating when you look certain directions,
      * punch, etc. As it is dynamically calculated, it has to be stored somewhere.*/
     public float bodyRotationX =0;
