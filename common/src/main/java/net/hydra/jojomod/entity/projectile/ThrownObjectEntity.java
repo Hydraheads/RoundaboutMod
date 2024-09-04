@@ -93,25 +93,44 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         this.discard();
     }
 
+    public float getDamage(){
+        float damage = 1;
+        if (this.getItem().getItem() instanceof BlockItem){
+            float DT =((BlockItem)this.getItem().getItem()).getBlock().defaultDestroyTime();
+            if (DT <= 1){
+                damage = 6F;
+            } else if (DT <= 1.5){
+                damage = 8F;
+            } else if (DT <= 2){
+                damage = 10F;
+            } else if (DT <= 3){
+                damage = 11F;
+            } else if (DT <= 5){
+                damage = 12F;
+            } else if (DT <= 10){
+                damage = 14F;
+            } else if (DT <= 25){
+                damage = 15F;
+            } else {
+                damage = 17F;
+            }
+                    //stone = 2 seconds, obsidian = 50 seconds, dirt = 0.5 seconds
+        }
+        return damage;
+    }
+
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
-        float $$2 = 2.0f;
 
         Entity $$4 = this.getOwner();
 
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MATCH, $$4);
+        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.THROWN_OBJECT, $$4);
 
         SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
         Vec3 DM = $$1.getDeltaMovement();
-        if ($$1 instanceof Creeper) {
-            ((Creeper)$$1).ignite();
-        } if ($$1.getType() == EntityType.TNT_MINECART) {
-            DamageSource DS = $$1.damageSources().explosion($$1, $$0.getEntity());
-            ((IMinecartTNT)$$1).roundabout$explode(DS, this.getDeltaMovement().lengthSqr());
-            this.discard();
-        } else if ($$1.hurt($$5, $$2)) {
+        if ($$1.hurt($$5, this.getDamage())) {
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
