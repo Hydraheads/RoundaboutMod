@@ -3,6 +3,7 @@
   "values": [
     "roundabout:match",
     "roundabout:knife",
-    "roundabout:harpoon"
+    "roundabout:harpoon",
+    "roundabout:power_throw"
   ]
 }

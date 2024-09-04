@@ -25,6 +25,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> HARPOON = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "harpoon"));
         public static final ResourceKey<DamageType> GLAIVE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "glaive"));
         public static final ResourceKey<DamageType> GASOLINE_EXPLOSION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "gas_explosion"));
+        public static final ResourceKey<DamageType> THROWN_OBJECT = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "power_throw"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);

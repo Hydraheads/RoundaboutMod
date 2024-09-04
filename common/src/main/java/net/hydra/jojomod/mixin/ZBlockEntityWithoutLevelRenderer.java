@@ -36,11 +36,11 @@ public class ZBlockEntityWithoutLevelRenderer {
     private EntityModelSet entityModelSet;
     @Inject(method = "onResourceManagerReload", at = @At(value = "TAIL"))
     public void roundabout$render(ResourceManager $$0, CallbackInfo ci){
-        //roundabout$harpoonModel = new HarpoonModel(this.entityModelSet.bakeLayer(ModEntityRendererClient.HARPOON_LAYER));
+        roundabout$harpoonModel = new HarpoonModel(this.entityModelSet.bakeLayer(ModEntityRendererClient.HARPOON_LAYER));
     }
     @Inject(method = "renderByItem", at = @At(value = "TAIL"))
     public void roundabout$render2(ItemStack $$0, ItemDisplayContext $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci){
-        /**
+
         if ($$0.is(ModItems.HARPOON)) {
             $$2.pushPose();
 
@@ -49,6 +49,5 @@ public class ZBlockEntityWithoutLevelRenderer {
             roundabout$harpoonModel.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
             $$2.popPose();
         }
-         */
     }
 }
