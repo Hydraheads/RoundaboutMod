@@ -82,13 +82,15 @@ public class PowersTheWorld extends StandPowers {
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-            if (keyIsDown) {
-                if (!options.keyShift.isDown()) {
-                    //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
-                    BlockHitResult HR = getGrabBlock();
-                    if (HR != null){
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2,true);
-                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                if (keyIsDown) {
+                    if (!options.keyShift.isDown()) {
+                        //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
+                        BlockHitResult HR = getGrabBlock();
+                        if (HR != null) {
+                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                        }
                     }
                 }
             }
@@ -115,8 +117,9 @@ public class PowersTheWorld extends StandPowers {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
             if (keyIsDown) {
-                    if (!options.keyShift.isDown()){
-                        if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
+                if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                    if (!options.keyShift.isDown()) {
+                        if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
                             /*Stand leap rebounds*/
                             standRebound();
                         } else {
@@ -164,7 +167,7 @@ public class PowersTheWorld extends StandPowers {
                                 int cdTime = 120;
                                 if (this.getSelf() instanceof Player) {
                                     ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
-                                    if (options.keyJump.isDown()){
+                                    if (options.keyJump.isDown()) {
                                         cdTime = 160;
                                     }
                                 }
@@ -174,10 +177,10 @@ public class PowersTheWorld extends StandPowers {
                                         Mth.sin(-20 * ((float) Math.PI / 180)),
                                         -Mth.cos(degrees * ((float) Math.PI / 180)));
 
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.MOVEMENT,true);
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.MOVEMENT, true);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
                             } else {
-                                if (!doVault() && this.getSelf().fallDistance > 3){
+                                if (!doVault() && this.getSelf().fallDistance > 3) {
                                     if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && (this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
                                         this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
@@ -191,17 +194,17 @@ public class PowersTheWorld extends StandPowers {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                                 this.setCooldown(PowerIndex.SKILL_3_SNEAK, 320);
                                 bonusLeapCount = 3;
-                                bigLeap(this.getSelf(),20,1);
+                                bigLeap(this.getSelf(), 20, 1);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.SNEAK_MOVEMENT,true);
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.SNEAK_MOVEMENT, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                             }
                         } else {
-                            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
+                            if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
                                 /*Stand leap rebounds*/
                                 standRebound();
                             } else {
-                               if ((!doVault()) && this.getSelf().fallDistance > 3){
+                                if ((!doVault()) && this.getSelf().fallDistance > 3) {
                                     if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && (this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
                                         this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
@@ -212,6 +215,7 @@ public class PowersTheWorld extends StandPowers {
                         }
 
                     }
+                }
             }
         }
     }
