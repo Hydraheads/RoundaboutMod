@@ -37,6 +37,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
@@ -90,6 +91,14 @@ public class PowersTheWorld extends StandPowers {
                         if (HR != null) {
                             ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
                             ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                        }
+                    } else {
+                        ItemStack stack = this.getSelf().getMainHandItem();
+                        if (!stack.isEmpty()) {
+                            ((StandUser) this.getSelf()).tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
+                                    ((Player)this.getSelf()).getInventory().selected);
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
+                                    ((Player)this.getSelf()).getInventory().selected);
                         }
                     }
                 }
@@ -703,6 +712,8 @@ public class PowersTheWorld extends StandPowers {
             return this.bounce();
         } else if (move == PowerIndex.POWER_2){
             return this.grab();
+        } else if (move == PowerIndex.POWER_2_SNEAK_EXTRA){
+            return this.inventoryGrab();
         }
         return false;
     }
@@ -715,7 +726,9 @@ public class PowersTheWorld extends StandPowers {
             acq = true;
         }
         if (acq && !(this.getSelf() instanceof Player && ((ServerPlayer)this.getSelf()).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)){
-            canPlace = true;
+            if (item.getItem() instanceof BlockItem){
+                canPlace = true;
+            }
         }
         ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item,canPlace);
         thrownBlockOrItem.shootFromRotation(this.getSelf(), this.getSelf().getXRot(),
@@ -755,6 +768,38 @@ public class PowersTheWorld extends StandPowers {
                         animateStand((byte) 32);
                         return true;
                     }
+                }
+            }
+        } else {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_2);
+            return true;
+        }
+        this.setPowerNone();
+        return false;
+    }
+
+    public int grabInventorySlot=1;
+
+    public boolean inventoryGrab() {
+        if (!this.getSelf().level().isClientSide()) {
+            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() && this.getSelf() instanceof Player) {
+                ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
+                if (!stack.isEmpty()) {
+                    standEntity.canAcquireHeldItem = true;
+                    standEntity.setHeldItem(stack.copy());
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);
+                    this.setActivePower(PowerIndex.POWER_2_SNEAK);
+                    this.setAttackTimeDuring(0);
+                    poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                    if (stack.getItem() instanceof BlockItem){
+                        animateStand((byte) 32);
+                    } else {
+                        animateStand((byte) 34);
+                    }
+                    stack.shrink(1);
+                    return true;
                 }
             }
         } else {
@@ -967,9 +1012,14 @@ public class PowersTheWorld extends StandPowers {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
                         throwObject(standEntity.getHeldItem());
+                        if (standEntity.getHeldItem().getItem() instanceof BlockItem){
+                            animateStand((byte) 33);
+                        } else {
+                            animateStand((byte) 35);
+                        }
                         standEntity.setHeldItem(ItemStack.EMPTY);
                         this.setAttackTimeDuring(-10);
-                        animateStand((byte) 33);
+
                         this.syncCooldowns();
                         return true;
                     }
@@ -1085,6 +1135,8 @@ public class PowersTheWorld extends StandPowers {
                 }
             } else if (move == PowerIndex.MOVEMENT) {
                 this.storedInt = chargeTime;
+            } else if (move == PowerIndex.POWER_2_SNEAK_EXTRA) {
+                this.grabInventorySlot = chargeTime;
             }
             return super.tryChargedPower(move, forced, chargeTime);
         }

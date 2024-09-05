@@ -37,8 +37,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         return p_102852_ == HumanoidArm.LEFT ? this.rightHand : this.leftHand;
     }
 
-    public void translateToHand(HumanoidArm p_103778_, PoseStack p_103779_, float zshift, float yshift) {
-        float f = p_103778_ == HumanoidArm.RIGHT ? 4F : -4F;
+    public void translateToHand(HumanoidArm p_103778_, PoseStack p_103779_, float zshift, float yshift, float xshift) {
+        float f = p_103778_ == HumanoidArm.RIGHT ? xshift : -xshift;
 
         ModelPart modelpart = this.getArm(p_103778_);
         modelpart.x += f;

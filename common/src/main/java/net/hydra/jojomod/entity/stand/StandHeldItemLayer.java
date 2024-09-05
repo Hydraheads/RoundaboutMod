@@ -45,15 +45,17 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
     protected void renderArmWithItem(LivingEntity p_117185_, ItemStack p_117186_, ItemDisplayContext p_270970_, HumanoidArm p_117188_, PoseStack p_117189_, MultiBufferSource p_117190_, int p_117191_) {
         if (!p_117186_.isEmpty()) {
             p_117189_.pushPose();
-            float shiftZ = 0;
-            float shiftY = 2;
+            float shiftZ = -5;
+            float shiftY = 1;
+            float shiftX = 4.3F;
             if (p_117186_.getItem() instanceof BlockItem){
                 if (((StandEntity)p_117185_).getUser() != null) {
                     shiftZ = 0 - Math.max(0,Math.min(((StandUser)((StandEntity) p_117185_).getUser()).getAttackTimeDuring(),10F))*1.4F;
                     shiftY = -0.5F;
+                    shiftX = 4;
                 }
             }
-            this.getParentModel().translateToHand(p_117188_, p_117189_, shiftZ, shiftY);
+            this.getParentModel().translateToHand(p_117188_, p_117189_, shiftZ, shiftY, shiftX);
             p_117189_.mulPose(Axis.XP.rotationDegrees(-90.0F));
             p_117189_.mulPose(Axis.YP.rotationDegrees(180.0F));
             boolean flag = p_117188_ == HumanoidArm.LEFT;

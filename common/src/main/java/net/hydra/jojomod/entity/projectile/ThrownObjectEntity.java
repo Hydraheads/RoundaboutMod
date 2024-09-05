@@ -87,7 +87,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                             this.getOwner()).gameMode.getGameModeForPlayer()))) ||
                     !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos))){
 
-                this.level().setBlockAndUpdate(pos, ((BlockItem)this.getDefaultItem()).getBlock().defaultBlockState());
+                if (this.getDefaultItem() instanceof BlockItem) {
+                    this.level().setBlockAndUpdate(pos, ((BlockItem) this.getDefaultItem()).getBlock().defaultBlockState());
+                }
             }
         }
         this.discard();
@@ -97,7 +99,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         float damage = 1;
         if (this.getItem().getItem() instanceof BlockItem){
             float DT =((BlockItem)this.getItem().getItem()).getBlock().defaultDestroyTime();
-            if (DT <= 1){
+            if (DT <= 0.4) {
+                damage = 1F;
+            } else if (DT <= 1){
                 damage = 6F;
             } else if (DT <= 1.5){
                 damage = 8F;

@@ -14,6 +14,8 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState timeStopReleaseAnimation = new AnimationState();
     public final AnimationState blockGrabAnimation = new AnimationState();
     public final AnimationState blockThrowAnimation = new AnimationState();
+    public final AnimationState itemGrabAnimation = new AnimationState();
+    public final AnimationState itemThrowAnimation = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
@@ -37,6 +39,16 @@ public class TheWorldEntity extends StandEntity {
                 this.blockThrowAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockThrowAnimation.stop();
+            }
+            if (this.getAnimation() == 34) {
+                this.itemGrabAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemGrabAnimation.stop();
+            }
+            if (this.getAnimation() == 35) {
+                this.itemThrowAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemThrowAnimation.stop();
             }
         }
     }
