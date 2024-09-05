@@ -788,12 +788,12 @@ public class PowersTheWorld extends StandPowers {
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
                 if (!stack.isEmpty()) {
                     standEntity.canAcquireHeldItem = true;
-                    standEntity.setHeldItem(stack.copy());
+                    standEntity.setHeldItem(stack.copyWithCount(1));
                     this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);
                     this.setActivePower(PowerIndex.POWER_2_SNEAK);
                     this.setAttackTimeDuring(0);
                     poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                    if (stack.getItem() instanceof BlockItem){
+                     if (MainUtil.isThrownBlockItem(stack.getItem())){
                         animateStand((byte) 32);
                     } else {
                         animateStand((byte) 34);
@@ -1012,7 +1012,7 @@ public class PowersTheWorld extends StandPowers {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
                         throwObject(standEntity.getHeldItem());
-                        if (standEntity.getHeldItem().getItem() instanceof BlockItem){
+                        if (MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())){
                             animateStand((byte) 33);
                         } else {
                             animateStand((byte) 35);

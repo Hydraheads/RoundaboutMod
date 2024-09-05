@@ -7,8 +7,10 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -17,7 +19,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,11 +33,12 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -87,13 +92,35 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                             this.getOwner()).gameMode.getGameModeForPlayer()))) ||
                     !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos))){
 
+                /**Dripstone block has a bug in its code where it crashes if placed naturally without an attached
+                 * player, so it is exempt from this list.*/
                 if (this.getDefaultItem() instanceof BlockItem) {
-                    this.level().setBlockAndUpdate(pos, ((BlockItem) this.getDefaultItem()).getBlock().defaultBlockState());
+                    Direction direction = this.getDirection();
+                    if (direction.getAxis() == Direction.Axis.X){
+                        direction = direction.getOpposite();
+                    }
+                    if (((BlockItem) this.getDefaultItem()).getBlock() instanceof RotatedPillarBlock){
+                        direction = $$0.getDirection();
+                    }
+                    if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(), pos,
+                            direction, this.entityData.get(ITEM_STACK),
+                            direction)) == InteractionResult.FAIL){
+                        if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(), pos.relative(direction),
+                                direction, this.entityData.get(ITEM_STACK),
+                                direction)) == InteractionResult.FAIL){
+                            if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(), pos.above(),
+                                    direction, this.entityData.get(ITEM_STACK),
+                                    direction)) == InteractionResult.FAIL){
+                            }
+                        }
+                    }
                 }
+
             }
         }
         this.discard();
     }
+
 
     public float getDamage(){
         float damage = 1;

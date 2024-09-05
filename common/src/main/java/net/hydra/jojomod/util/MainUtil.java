@@ -2,8 +2,7 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
-import net.hydra.jojomod.block.GasolineBlock;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -43,15 +42,12 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
@@ -421,6 +417,21 @@ public class MainUtil {
             return Mth.sqrt((float) entity.distanceToSqr(blockHit.getLocation()));
         }
         return range;
+    }
+
+
+    public static boolean isThrownBlockItem(Item item){
+        if (item instanceof BlockItem){
+            Block blk = ((BlockItem)item).getBlock();
+            if (item instanceof ItemNameBlockItem || blk instanceof BushBlock
+                    || blk instanceof WebBlock  || blk instanceof BarbedWireBundleBlock
+                    || blk instanceof HorizontalDirectionalBlock
+                    || blk instanceof SimpleWaterloggedBlock){
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public static List<Entity> GrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){

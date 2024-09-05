@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -46,7 +47,7 @@ public class ThrownObjectRenderer<T extends Entity>
             return;
         }
         poseStack.pushPose();
-        if (item.getItem() instanceof BlockItem){
+        if (MainUtil.isThrownBlockItem(item.getItem())){
             poseStack.scale((float) (this.scale*3), (float) (this.scale*3), (float) (this.scale*3));
         } else {
             poseStack.scale(this.scale, this.scale, this.scale);

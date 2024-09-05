@@ -16,6 +16,7 @@
     "ZBeehiveBlock",
     "ZBlaze",
     "ZBlockEntity",
+    "ZBlockFaceContext",
     "ZBoatAccess",
     "ZBucketItem",
     "ZChestBlock",

@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -48,7 +49,7 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             float shiftZ = -5;
             float shiftY = 1;
             float shiftX = 4.3F;
-            if (p_117186_.getItem() instanceof BlockItem){
+            if (MainUtil.isThrownBlockItem((p_117186_.getItem()))){
                 if (((StandEntity)p_117185_).getUser() != null) {
                     shiftZ = 0 - Math.max(0,Math.min(((StandUser)((StandEntity) p_117185_).getUser()).getAttackTimeDuring(),10F))*1.4F;
                     shiftY = -0.5F;
@@ -61,7 +62,7 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             boolean flag = p_117188_ == HumanoidArm.LEFT;
             p_117189_.translate((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
 
-            if (p_117186_.getItem() instanceof BlockItem){
+            if (MainUtil.isThrownBlockItem(p_117186_.getItem())){
                 p_117189_.scale(3,3,3);
             }
             this.itemInHandRenderer.renderItem(p_117185_, p_117186_, p_270970_, flag, p_117189_, p_117190_, p_117191_);
