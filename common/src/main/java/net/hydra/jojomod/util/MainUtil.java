@@ -425,6 +425,9 @@ public class MainUtil {
             Block blk = ((BlockItem)item).getBlock();
             if (item instanceof ItemNameBlockItem || blk instanceof BushBlock
                     || blk instanceof WebBlock  || blk instanceof BarbedWireBundleBlock
+                    || blk instanceof TorchBlock
+                    || blk instanceof GrowingPlantHeadBlock
+                    || blk instanceof RodBlock
                     || blk instanceof HorizontalDirectionalBlock
                     || (blk instanceof SimpleWaterloggedBlock && !(blk instanceof LeavesBlock))){
                 return false;

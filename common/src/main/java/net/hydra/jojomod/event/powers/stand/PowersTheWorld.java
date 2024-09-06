@@ -1042,15 +1042,17 @@ public class PowersTheWorld extends StandPowers {
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
-                        if (canAddItem(standEntity.getHeldItem(), ((Player) this.getSelf()).getInventory())){
-                            ((Player) this.getSelf()).addItem(standEntity.getHeldItem());
-                        } else {
-                            ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
-                                    this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
-                                    standEntity.getHeldItem());
-                            $$4.setPickUpDelay(40);
-                            $$4.setThrower(this.getSelf().getUUID());
-                            this.getSelf().level().addFreshEntity($$4);
+                        if (standEntity.canAcquireHeldItem) {
+                            if (canAddItem(standEntity.getHeldItem(), ((Player) this.getSelf()).getInventory())) {
+                                ((Player) this.getSelf()).addItem(standEntity.getHeldItem());
+                            } else {
+                                ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
+                                        this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                                        standEntity.getHeldItem());
+                                $$4.setPickUpDelay(40);
+                                $$4.setThrower(this.getSelf().getUUID());
+                                this.getSelf().level().addFreshEntity($$4);
+                            }
                         }
                         standEntity.setHeldItem(ItemStack.EMPTY);
                         this.setAttackTimeDuring(-10);
