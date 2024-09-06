@@ -8,6 +8,8 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,6 +29,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -119,10 +122,17 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if (!this.level().isClientSide) {
             BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
             BlockState state = this.level().getBlockState(pos);
-            if (!tryHitBlock($$0,pos,state)){
-                if (!tryHitBlock($$0,pos.relative(this.tempDirection),state)){
-                    tryHitBlock($$0,pos.above(),state);
-                }
+            if (tryHitBlock($$0,pos,state)){
+            } else if (tryHitBlock($$0,pos.relative(this.tempDirection),state)) {
+            } else if (tryHitBlock($$0,pos.above(),state)) {
+            } else {
+                ItemEntity $$4 = new ItemEntity(this.level(), pos.getX()+0.5F,
+                        pos.getY()+0.25F, pos.getZ()+0.5F,
+                        this.entityData.get(ITEM_STACK));
+                $$4.setPickUpDelay(40);
+                $$4.setThrower(this.getUUID());
+                $$4.setDeltaMovement(Math.random()*0.08F-0.04F,0.4F,Math.random()*0.08F-0.04F);
+                this.level().addFreshEntity($$4);
             }
         }
         this.discard();
@@ -133,7 +143,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         float damage = 1;
         if (this.getItem().getItem() instanceof BlockItem){
             float DT =((BlockItem)this.getItem().getItem()).getBlock().defaultDestroyTime();
-            if (DT <= 0.4) {
+            if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof GlassBlock) {
+                damage = 12F;
+            } else if (DT <= 0.4) {
                 damage = 1F;
             } else if (DT <= 1){
                 damage = 6F;
@@ -160,23 +172,32 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
+        //
         Entity $$1 = $$0.getEntity();
 
         Entity $$4 = this.getOwner();
 
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.THROWN_OBJECT, $$4);
 
-        SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
         Vec3 DM = $$1.getDeltaMovement();
         if ($$1.hurt($$5, this.getDamage())) {
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
 
-            if ($$1 instanceof LivingEntity $$7) {
-                $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
+            if (this.getDefaultItem() instanceof BlockItem && MainUtil.isThrownBlockItem(this.getDefaultItem())) {
+                SoundEvent SE = (((BlockItem) this.getDefaultItem()).getBlock()).
+                        defaultBlockState().getSoundType().getBreakSound();
+                this.playSound(SE, 1.0F, 1.0F);
+                if ($$1 instanceof LivingEntity $$7) {
+                    $$7.knockback(0.3f, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
+                }
+            } else {
+                if ($$1 instanceof LivingEntity $$7) {
+                    $$7.knockback(0.15f, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
+                }
             }
-            this.playSound($$6, 0.8F, 1.6F);
+
             this.discard();
         }
 
