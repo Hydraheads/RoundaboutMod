@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.GasolineBlock;
@@ -79,6 +80,37 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         return this.entityData.get(ITEM_STACK).getItem();
     }
 
+    Direction tempDirection = Direction.UP;
+
+    public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state){
+
+        if (this.places && (state.isAir() || state.canBeReplaced()) && !((this.getOwner() instanceof Player &&
+                (((Player) this.getOwner()).blockActionRestricted(this.getOwner().level(), pos, ((ServerPlayer)
+                        this.getOwner()).gameMode.getGameModeForPlayer()))) ||
+                !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos))){
+
+            if (this.getDefaultItem() instanceof BlockItem) {
+                Direction direction = this.getDirection();
+                if (direction.getAxis() == Direction.Axis.X){
+                    direction = direction.getOpposite();
+                }
+                if (((BlockItem) this.getDefaultItem()).getBlock() instanceof RotatedPillarBlock){
+                    direction = $$0.getDirection();
+                }
+
+                if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(),
+                        pos,
+                        direction, this.entityData.get(ITEM_STACK),
+                        direction)) != InteractionResult.FAIL){
+                    this.tempDirection = direction;
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);
@@ -87,35 +119,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if (!this.level().isClientSide) {
             BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
             BlockState state = this.level().getBlockState(pos);
-            if (this.places && (state.isAir() || state.canBeReplaced()) && !((this.getOwner() instanceof Player &&
-                    (((Player) this.getOwner()).blockActionRestricted(this.getOwner().level(), pos, ((ServerPlayer)
-                            this.getOwner()).gameMode.getGameModeForPlayer()))) ||
-                    !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos))){
-
-                /**Dripstone block has a bug in its code where it crashes if placed naturally without an attached
-                 * player, so it is exempt from this list.*/
-                if (this.getDefaultItem() instanceof BlockItem) {
-                    Direction direction = this.getDirection();
-                    if (direction.getAxis() == Direction.Axis.X){
-                        direction = direction.getOpposite();
-                    }
-                    if (((BlockItem) this.getDefaultItem()).getBlock() instanceof RotatedPillarBlock){
-                        direction = $$0.getDirection();
-                    }
-                    if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(), pos,
-                            direction, this.entityData.get(ITEM_STACK),
-                            direction)) == InteractionResult.FAIL){
-                        if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(), pos.relative(direction),
-                                direction, this.entityData.get(ITEM_STACK),
-                                direction)) == InteractionResult.FAIL){
-                            if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(), pos.above(),
-                                    direction, this.entityData.get(ITEM_STACK),
-                                    direction)) == InteractionResult.FAIL){
-                            }
-                        }
-                    }
+            if (!tryHitBlock($$0,pos,state)){
+                if (!tryHitBlock($$0,pos.relative(this.tempDirection),state)){
+                    tryHitBlock($$0,pos.above(),state);
                 }
-
             }
         }
         this.discard();

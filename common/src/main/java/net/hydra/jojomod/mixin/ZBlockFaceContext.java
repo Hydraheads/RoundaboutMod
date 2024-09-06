@@ -18,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BlockPlaceContext.class)
 public class ZBlockFaceContext extends UseOnContext {
 
+    /**Dripstone block has a bug in its code where it crashes if placed naturally without an attached
+     * player, so it is exempt from this list.*/
     public ZBlockFaceContext(Player $$0, InteractionHand $$1, BlockHitResult $$2) {
         super($$0, $$1, $$2);
     }

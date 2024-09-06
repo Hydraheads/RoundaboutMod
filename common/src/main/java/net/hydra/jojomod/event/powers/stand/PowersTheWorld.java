@@ -41,6 +41,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -744,7 +745,10 @@ public class PowersTheWorld extends StandPowers {
             StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
-                if (this.grabBlock != null && grabBlock.distSqr(this.getSelf().getOnPos()) <= ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)) {
+                if (this.grabBlock != null &&
+                        grabBlock.distSqr(this.getSelf().getOnPos()) <= ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE
+                        && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
+                && state.getBlock().defaultDestroyTime() >= 0) {
 
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
                         if ((this.getSelf() instanceof Player &&
@@ -784,9 +788,11 @@ public class PowersTheWorld extends StandPowers {
     public boolean inventoryGrab() {
         if (!this.getSelf().level().isClientSide()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
-            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() && this.getSelf() instanceof Player) {
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() &&
+                    this.getSelf() instanceof Player) {
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-                if (!stack.isEmpty()) {
+                if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
                     standEntity.canAcquireHeldItem = true;
                     standEntity.setHeldItem(stack.copyWithCount(1));
                     this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);

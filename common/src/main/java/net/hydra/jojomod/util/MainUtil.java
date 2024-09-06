@@ -426,7 +426,7 @@ public class MainUtil {
             if (item instanceof ItemNameBlockItem || blk instanceof BushBlock
                     || blk instanceof WebBlock  || blk instanceof BarbedWireBundleBlock
                     || blk instanceof HorizontalDirectionalBlock
-                    || blk instanceof SimpleWaterloggedBlock){
+                    || (blk instanceof SimpleWaterloggedBlock && !(blk instanceof LeavesBlock))){
                 return false;
             }
             return true;
