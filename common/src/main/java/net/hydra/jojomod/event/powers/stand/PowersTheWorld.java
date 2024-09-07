@@ -5,10 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.projectile.HarpoonEntity;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
-import net.hydra.jojomod.entity.projectile.MatchEntity;
-import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -755,6 +752,11 @@ public class PowersTheWorld extends StandPowers {
                     this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
             }
+        } else if (item.is(ModItems.GASOLINE_CAN)){
+            GasolineCanEntity $$7 = new GasolineCanEntity(this.getSelf(),this.getSelf().level());
+            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 1.5F, 0.5F);
+            this.getSelf().level().addFreshEntity($$7);
+            this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.is(ModItems.MATCH)){
             MatchEntity $$7 = new MatchEntity(this.getSelf(),this.getSelf().level());
             $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.5F, 0.5F);

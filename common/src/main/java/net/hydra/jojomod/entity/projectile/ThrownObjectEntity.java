@@ -19,6 +19,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -138,6 +139,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         } else {
                             dropItem(pos);
                         }
+                    } else {
+                        if (this.getDefaultItem() instanceof BlockItem){
+                            blockBreakParticles((((BlockItem) this.getDefaultItem()).getBlock()),
+                                    new Vec3(pos.getX()+0.5,
+                                            pos.getY()+0.5,
+                                            pos.getZ()+0.5));
+                        }
                     }
                 } else {
                     dropItem(pos);
@@ -165,7 +173,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof GlassBlock) {
                 damage = 12;
             } else if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof CactusBlock) {
-                    damage = 10;
+                damage = 10;
             } else if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof AnvilBlock) {
                 damage = 20.5F;
             } else if (DT <= 0.4) {
@@ -209,6 +217,14 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         }
         return damage;
+    }
+
+    public void blockBreakParticles(Block block, Vec3 pos){
+
+        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                block.defaultBlockState()),
+                pos.x, pos.y, pos.z,
+                100, 0, 0, 0, 0.5);
     }
 
 
@@ -255,7 +271,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                             defaultBlockState().getSoundType().getBreakSound();
                     this.playSound(SE, 1.0F, 1.0F);
                     if ($$1 instanceof LivingEntity $$7) {
-                        $$7.knockback(0.3f, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
+                        float kb = 0.3f;
+
+                        if (((BlockItem)this.getDefaultItem()).getBlock() instanceof SlimeBlock){
+                            kb = 0.5f;
+                        }
+                        $$7.knockback(kb, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
                     }
                 } else {
                     if ($$1 instanceof LivingEntity $$7) {
@@ -267,6 +288,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     if (!this.entityData.get(ITEM_STACK).hurt(1,this.level().getRandom(),null)){
                         this.dropItem($$1.getOnPos());
                     }
+                } else if (this.getDefaultItem() instanceof BlockItem){
+                    blockBreakParticles((((BlockItem) this.getDefaultItem()).getBlock()),$$0.getEntity().getPosition(0F).add(0,$$0.getEntity().getEyeHeight(),0));
                 }
             }
         } else {
