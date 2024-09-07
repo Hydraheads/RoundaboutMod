@@ -400,6 +400,11 @@ public class PowersTheWorld extends StandPowers {
                     if (!standEntity.getHeldItem().isEmpty() && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA) {
                         if (standEntity.canAcquireHeldItem) {
+                            if (!MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
+                                animateStand((byte) 37);
+                            } else {
+                                animateStand((byte) 36);
+                            }
                             double $$3 = standEntity.getEyeY() - 0.3F;
                             ItemEntity $$4 = new ItemEntity(standEntity.level(), standEntity.getX(), $$3, standEntity.getZ(), standEntity.getHeldItem());
                             $$4.setPickUpDelay(40);
@@ -929,6 +934,17 @@ public class PowersTheWorld extends StandPowers {
         return false;
     }
 
+    @Override
+    public boolean setPowerNone(){
+        this.setAttackTimeDuring(-1);
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        if (this.getAnimation() != 32 && this.getAnimation() != 34) {
+            animateStand((byte) 0);
+        }
+        return true;
+    }
+
     public boolean bounce() {
         this.setActivePower(PowerIndex.BOUNCE);
         this.setAttackTimeDuring(-7);
@@ -1016,6 +1032,7 @@ public class PowersTheWorld extends StandPowers {
     }
 
     private int leapEndTicks = -1;
+    private int retractEndTIcks = -1;
     @Override
     public void tickPower(){
 
@@ -1042,6 +1059,16 @@ public class PowersTheWorld extends StandPowers {
             } else {
                 leapEndTicks = -1;
             }
+            if (this.getAnimation() == 36 || this.getAnimation() == 37) {
+                retractEndTIcks++;
+                if (retractEndTIcks > 8) {
+                    animateStand((byte) 0);
+                    retractEndTIcks = -1;
+                }
+            } else {
+                retractEndTIcks = -1;
+            }
+
             if (this.getSelf().onGround()){
                 if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
                     if (this.getAnimation() == 17) {
@@ -1166,6 +1193,13 @@ public class PowersTheWorld extends StandPowers {
                                 this.getSelf().level().addFreshEntity($$4);
                             }
                         }
+
+                        if (this.getAnimation() == 34) {
+                            animateStand((byte) 37);
+                        } else {
+                            animateStand((byte) 36);
+                        }
+
                         standEntity.setHeldItem(ItemStack.EMPTY);
                         this.setAttackTimeDuring(-10);
                         this.syncCooldowns();
