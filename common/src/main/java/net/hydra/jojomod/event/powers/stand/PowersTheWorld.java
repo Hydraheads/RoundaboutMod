@@ -46,6 +46,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -392,7 +393,26 @@ public class PowersTheWorld extends StandPowers {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
             this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100);
         }
-        return super.tryPower(move,forced);
+        if (super.tryPower(move,forced)) {
+            if (!this.getSelf().level().isClientSide) {
+                StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+                if (standEntity != null) {
+                    if (!standEntity.getHeldItem().isEmpty() && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
+                            && move != PowerIndex.POWER_2_SNEAK_EXTRA) {
+                        if (standEntity.canAcquireHeldItem) {
+                            double $$3 = standEntity.getEyeY() - 0.3F;
+                            ItemEntity $$4 = new ItemEntity(standEntity.level(), standEntity.getX(), $$3, standEntity.getZ(), standEntity.getHeldItem());
+                            $$4.setPickUpDelay(40);
+                            $$4.setThrower(standEntity.getUUID());
+                            standEntity.level().addFreshEntity($$4);
+                            standEntity.setHeldItem(ItemStack.EMPTY);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public void setMaxChargeTSTime(int chargedTSTicks){
@@ -840,7 +860,7 @@ public class PowersTheWorld extends StandPowers {
                 if (this.grabBlock != null &&
                         grabBlock.distSqr(this.getSelf().getOnPos()) <= ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE
                         && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
-                && state.getBlock().defaultDestroyTime() >= 0) {
+                && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK) {
 
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
                         if ((this.getSelf() instanceof Player &&

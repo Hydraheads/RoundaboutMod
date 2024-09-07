@@ -555,12 +555,14 @@ public abstract class StandEntity extends Mob{
             if (currFade >= 0) {
                 this.incFadeOut((byte) -1);
                 if (!this.getHeldItem().isEmpty()) {
-                    double $$3 = this.getEyeY() - 0.3F;
-                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem());
-                    $$4.setPickUpDelay(40);
-                    $$4.setThrower(this.getUUID());
-                    this.level().addFreshEntity($$4);
-                    this.setHeldItem(ItemStack.EMPTY);
+                    if (this.canAcquireHeldItem) {
+                        double $$3 = this.getEyeY() - 0.3F;
+                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem());
+                        $$4.setPickUpDelay(40);
+                        $$4.setThrower(this.getUUID());
+                        this.level().addFreshEntity($$4);
+                        this.setHeldItem(ItemStack.EMPTY);
+                    }
                 }
             }
         }

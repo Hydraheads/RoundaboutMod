@@ -651,13 +651,6 @@ public abstract class StandPowers {
         }
     }
 
-    public void resetAttackState(){
-        this.interruptCD = 3;
-        this.setAttackTimeDuring(-1);
-        animateStand((byte) 0);
-        poseStand(OffsetIndex.FOLLOW);
-    }
-
     public void poseStand(byte r){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
@@ -1519,6 +1512,19 @@ public abstract class StandPowers {
         return true;
     }
 
+    public void resetAttackState(){
+        if (shouldReset(this.getActivePower())){
+            this.interruptCD = 3;
+            ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE,true);
+        }
+    }
+
+
+    /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
+    public boolean shouldReset(byte activeP){
+        return ((this.self.isUsingItem() &&
+                !(this.getActivePower() == PowerIndex.BARRAGE_CLASH)) || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
+    }
 
 
     public boolean canAttack(){
