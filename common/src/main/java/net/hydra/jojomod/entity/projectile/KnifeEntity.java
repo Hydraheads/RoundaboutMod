@@ -51,7 +51,7 @@ public class KnifeEntity extends AbstractArrow {
     public KnifeEntity(EntityType<? extends KnifeEntity> entity,  Level world) {
         super(entity, world);
     }
-    public KnifeEntity(Level world, Player player, ItemStack itemStack) {
+    public KnifeEntity(Level world, LivingEntity player, ItemStack itemStack) {
         super(ModEntities.THROWN_KNIFE, player, world);
         this.knifeItem = itemStack.copy();
         this.entityData.set(ID_FOIL, itemStack.hasFoil());

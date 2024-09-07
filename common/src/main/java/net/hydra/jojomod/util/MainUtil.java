@@ -427,6 +427,7 @@ public class MainUtil {
                     || blk instanceof WebBlock  || blk instanceof BarbedWireBundleBlock
                     || blk instanceof TorchBlock
                     || blk instanceof GrowingPlantHeadBlock
+                    || blk instanceof SkullBlock
                     || blk instanceof RodBlock
                     || blk instanceof HorizontalDirectionalBlock
                     || (blk instanceof SimpleWaterloggedBlock && !(blk instanceof LeavesBlock))){

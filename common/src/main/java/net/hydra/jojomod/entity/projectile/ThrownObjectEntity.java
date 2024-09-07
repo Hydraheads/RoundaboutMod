@@ -231,6 +231,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 int ench = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, this.entityData.get(ITEM_STACK));
                 if (ench >= 1) {
                     $$1.setSecondsOnFire((ench) * 4);
+                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof FlintAndSteelItem
+                        || this.entityData.get(ITEM_STACK).is(Items.MAGMA_BLOCK)
+                || this.entityData.get(ITEM_STACK).getItem() instanceof FireChargeItem){
+                    $$1.setSecondsOnFire(4);
+                } else if (this.entityData.get(ITEM_STACK).is(Items.LAVA_BUCKET)){
+                    $$1.setSecondsOnFire(8);
                 }
 
 

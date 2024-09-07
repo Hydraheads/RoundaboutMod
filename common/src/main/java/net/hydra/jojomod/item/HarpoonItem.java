@@ -66,13 +66,10 @@ public class HarpoonItem extends Item implements Vanishable {
         if ($$2 instanceof Player $$4) {
             int $$5 = this.getUseDuration($$0) - $$3;
             if ($$5 >= 10) {
-                int $$6 = EnchantmentHelper.getRiptide($$0);
-                if ($$6 <= 0 || $$4.isInWaterOrRain()) {
                     if (!$$1.isClientSide) {
                         $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
-                        if ($$6 == 0) {
                             HarpoonEntity $$7 = new HarpoonEntity($$1, $$4, $$0);
-                            $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, 2.5F + (float)$$6 * 0.5F, 1.0F);
+                            $$7.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, 2.5F, 1.0F);
                             if ($$4.getAbilities().instabuild) {
                                 $$7.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                             }
@@ -82,9 +79,7 @@ public class HarpoonItem extends Item implements Vanishable {
                             if (!$$4.getAbilities().instabuild) {
                                 $$4.getInventory().removeItem($$0);
                             }
-                        }
                     }
-                }
             }
         }
     }
