@@ -92,21 +92,23 @@ public class PowersTheWorld extends StandPowers {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                if (keyIsDown) {
-                    if (!options.keyShift.isDown()) {
-                        //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
-                        BlockHitResult HR = getGrabBlock();
-                        if (HR != null) {
-                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
-                        }
-                    } else {
-                        ItemStack stack = this.getSelf().getMainHandItem();
-                        if (!stack.isEmpty()) {
-                            ((StandUser) this.getSelf()).tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
-                                    ((Player)this.getSelf()).getInventory().selected);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
-                                    ((Player)this.getSelf()).getInventory().selected);
+                if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                    if (keyIsDown) {
+                        if (!options.keyShift.isDown()) {
+                            //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
+                            BlockHitResult HR = getGrabBlock();
+                            if (HR != null) {
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                            }
+                        } else {
+                            ItemStack stack = this.getSelf().getMainHandItem();
+                            if (!stack.isEmpty()) {
+                                ((StandUser) this.getSelf()).tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
+                                        ((Player) this.getSelf()).getInventory().selected);
+                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
+                                        ((Player) this.getSelf()).getInventory().selected);
+                            }
                         }
                     }
                 }
@@ -400,16 +402,16 @@ public class PowersTheWorld extends StandPowers {
                     if (!standEntity.getHeldItem().isEmpty() && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA) {
                         if (standEntity.canAcquireHeldItem) {
+                            if ((this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
+                                    && this.getAttackTimeDuring() < 10) {
+                                return false;
+                            }
                             if (!MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
                                 animateStand((byte) 37);
                             } else {
                                 animateStand((byte) 36);
                             }
-                            double $$3 = standEntity.getEyeY() - 0.3F;
-                            ItemEntity $$4 = new ItemEntity(standEntity.level(), standEntity.getX(), $$3, standEntity.getZ(), standEntity.getHeldItem());
-                            $$4.setPickUpDelay(40);
-                            $$4.setThrower(standEntity.getUUID());
-                            standEntity.level().addFreshEntity($$4);
+                            this.addItem(standEntity);
                             standEntity.setHeldItem(ItemStack.EMPTY);
                         }
                     }
@@ -509,6 +511,14 @@ public class PowersTheWorld extends StandPowers {
                 local.input.leftImpulse = 0f;
                 local.input.forwardImpulse = 0;
                 sprintTrigger = 0;
+            }
+
+            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            if (standEntity != null) {
+                if (!standEntity.getHeldItem().isEmpty()) {
+                    local.input.leftImpulse *= 0.7f;
+                    local.input.forwardImpulse *= 0.7f;
+                }
             }
         }
         return super.inputSpeedModifiers(sprintTrigger);
@@ -688,6 +698,15 @@ public class PowersTheWorld extends StandPowers {
             }
             if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
                     && !standEntity.getHeldItem().isEmpty())) {
+
+                if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                    if (!standEntity.getHeldItem().isEmpty() &&
+                            (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
+                            && this.getAttackTimeDuring() < 10) {
+                        return;
+                    }
+                }
+
                 this.tryPower(PowerIndex.ATTACK, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
             }
@@ -751,6 +770,8 @@ public class PowersTheWorld extends StandPowers {
     }
 
     public void throwObject(ItemStack item){
+        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 30);
+        this.setCooldown(PowerIndex.SKILL_2, 30);
         if (item.getItem() instanceof ThrowablePotionItem) {
             ThrownPotion $$4 = new ThrownPotion(this.getSelf().level(), this.getSelf());
             $$4.setItem(item);
@@ -932,6 +953,21 @@ public class PowersTheWorld extends StandPowers {
         }
         this.setPowerNone();
         return false;
+    }
+
+    @Override
+    public boolean shouldReset(byte activeP){
+
+        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+            if (!standEntity.getHeldItem().isEmpty() &&
+                    (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
+                    && this.getAttackTimeDuring() < 10) {
+                return false;
+            }
+        }
+
+        return super.shouldReset(activeP);
     }
 
     @Override
@@ -1174,6 +1210,41 @@ public class PowersTheWorld extends StandPowers {
         }
         return super.setPowerAttack();
     }
+
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+            if (!standEntity.getHeldItem().isEmpty() &&
+                    (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
+                    && this.getAttackTimeDuring() < 10) {
+                return false;
+            }
+        }
+        if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
+            ((StandUser)this.getSelf()).tryPower(PowerIndex.GUARD,true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
+            return true;
+        }
+        return false;
+    }
+
+    public void addItem(StandEntity standEntity){
+        if (canAddItem(standEntity.getHeldItem(), ((Player) this.getSelf()).getInventory())) {
+            ((Player) this.getSelf()).addItem(standEntity.getHeldItem());
+        } else {
+            ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
+                    this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                    standEntity.getHeldItem());
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(this.getSelf().getUUID());
+            this.getSelf().level().addFreshEntity($$4);
+        }
+
+        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
+        this.setCooldown(PowerIndex.SKILL_2, 10);
+    }
+
     @Override
     public boolean setPowerGuard(){
         if (this.getSelf() instanceof Player) {
@@ -1182,16 +1253,11 @@ public class PowersTheWorld extends StandPowers {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
                         if (standEntity.canAcquireHeldItem) {
-                            if (canAddItem(standEntity.getHeldItem(), ((Player) this.getSelf()).getInventory())) {
-                                ((Player) this.getSelf()).addItem(standEntity.getHeldItem());
-                            } else {
-                                ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
-                                        this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
-                                        standEntity.getHeldItem());
-                                $$4.setPickUpDelay(40);
-                                $$4.setThrower(this.getSelf().getUUID());
-                                this.getSelf().level().addFreshEntity($$4);
+                            if ((this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
+                                    && this.getAttackTimeDuring() < 10) {
+                                return false;
                             }
+                            this.addItem(standEntity);
                         }
 
                         if (this.getAnimation() == 34) {
