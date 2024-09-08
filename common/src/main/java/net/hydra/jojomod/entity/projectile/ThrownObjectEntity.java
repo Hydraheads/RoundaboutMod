@@ -288,6 +288,25 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
         Vec3 DM = $$1.getDeltaMovement();
 
+        boolean fire = false;
+        boolean onFire = $$1.isOnFire();
+        if (!this.entityData.get(ITEM_STACK).isEmpty()) {
+            int ench = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, this.entityData.get(ITEM_STACK));
+            if (ench >= 1) {
+                $$1.setSecondsOnFire((ench) * 4);
+                fire = true;
+            } else if (this.entityData.get(ITEM_STACK).getItem() instanceof FlintAndSteelItem
+                    || this.entityData.get(ITEM_STACK).is(Items.MAGMA_BLOCK)
+                    || this.entityData.get(ITEM_STACK).is(Items.CAMPFIRE)
+                    || this.entityData.get(ITEM_STACK).getItem() instanceof FireChargeItem) {
+                $$1.setSecondsOnFire(4);
+                fire = true;
+            } else if (this.entityData.get(ITEM_STACK).is(Items.LAVA_BUCKET)) {
+                $$1.setSecondsOnFire(8);
+                fire = true;
+            }
+        }
+
         if (this.entityData.get(ITEM_STACK).getItem() instanceof NameTagItem && $$1 instanceof LivingEntity) {
             if (!this.useNametag(this.entityData.get(ITEM_STACK), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
@@ -310,17 +329,6 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
 
             if (!this.entityData.get(ITEM_STACK).isEmpty()) {
-                int ench = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, this.entityData.get(ITEM_STACK));
-                if (ench >= 1) {
-                    $$1.setSecondsOnFire((ench) * 4);
-                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof FlintAndSteelItem
-                        || this.entityData.get(ITEM_STACK).is(Items.MAGMA_BLOCK)
-                        || this.entityData.get(ITEM_STACK).is(Items.CAMPFIRE)
-                || this.entityData.get(ITEM_STACK).getItem() instanceof FireChargeItem){
-                    $$1.setSecondsOnFire(4);
-                } else if (this.entityData.get(ITEM_STACK).is(Items.LAVA_BUCKET)){
-                    $$1.setSecondsOnFire(8);
-                }
 
                 if ($$1 instanceof LivingEntity L){
                     if (this.entityData.get(ITEM_STACK).is(Items.COBWEB)) {
@@ -377,6 +385,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
             }
         } else {
+            if (fire && !onFire){
+                $$1.clearFire();
+            }
             this.dropItem($$1.getOnPos());
         }
         this.discard();

@@ -479,6 +479,18 @@ public class PowersTheWorld extends StandPowers {
 
     @Override
     public boolean canInterruptPower(){
+
+
+        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        if (standEntity != null) {
+            if (!standEntity.getHeldItem().isEmpty()) {
+                if (!this.getSelf().level().isClientSide) {
+                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
+                    this.setCooldown(PowerIndex.SKILL_2, 20);
+                }
+                return true;
+            }
+        }
         if (this.getActivePower() == PowerIndex.SPECIAL){
             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, 60);
             this.setCooldown(PowerIndex.SKILL_4, 60);
