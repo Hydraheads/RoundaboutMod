@@ -863,10 +863,9 @@ public class PowersTheWorld extends StandPowers {
             if (standEntity != null && standEntity.canAcquireHeldItem) {
                 acq = true;
             }
-            if (acq && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)) {
-                if (item.getItem() instanceof BlockItem) {
-                    canPlace = true;
-                }
+            if (acq && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
+            && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
+                canPlace = true;
             }
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item, canPlace);
             thrownBlockOrItem.shootFromRotation(this.getSelf(), this.getSelf().getXRot(),

@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ScissorItem;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.Util;
@@ -30,15 +31,16 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
@@ -47,6 +49,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -150,6 +153,27 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                             pos.getZ()+0.5));
                         }
                     }
+                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof BoneMealItem) {
+                    if (this.places && useBonemeal(this.entityData.get(ITEM_STACK), $$0)){
+                    } else {
+                        dropItem(pos);
+                    }
+                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof HangingEntityItem he) {
+                    if (this.places && $$0.getDirection().getAxis().isHorizontal() && he.useOn(new DirectionalPlaceContext(this.level(),
+                                $$0.getBlockPos(),
+                                $$0.getDirection(), this.entityData.get(ITEM_STACK),
+                                $$0.getDirection())) != InteractionResult.FAIL){
+                    } else {
+                        dropItem(pos);
+                    }
+                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof SpawnEggItem se) {
+                    if (this.places && se.useOn(new DirectionalPlaceContext(this.level(),
+                                $$0.getBlockPos(),
+                                $$0.getDirection(), this.entityData.get(ITEM_STACK),
+                                $$0.getDirection())) != InteractionResult.FAIL){
+                    } else {
+                        dropItem(pos);
+                    }
                 } else {
                     dropItem(pos);
                 }
@@ -216,6 +240,22 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 damage = 10;
             } else if (this.getItem().is(Items.PRISMARINE_SHARD)){
                 damage = 7;
+            } else if (this.getItem().is(Items.BRICK)){
+                damage = 6;
+            } else if (this.getItem().is(Items.IRON_INGOT)){
+                damage = 10;
+            } else if (this.getItem().is(Items.DIAMOND)){
+                damage = 11;
+            } else if (this.getItem().is(Items.GOLD_NUGGET)){
+                damage = 6;
+            } else if (this.getItem().is(Items.GOLD_INGOT)){
+                damage = 6;
+            } else if (this.getItem().is(Items.COAL)){
+                damage = 3;
+            } else if (this.getItem().is(Items.COPPER_INGOT)){
+                damage = 5;
+            } else if (this.getItem().is(Items.AMETHYST_SHARD)){
+                damage = 7;
             }
             if (enchant){
                 if (ent instanceof LivingEntity){
@@ -247,7 +287,24 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.THROWN_OBJECT, $$4);
 
         Vec3 DM = $$1.getDeltaMovement();
-        if ($$1.hurt($$5, this.getDamage($$1))) {
+
+        if (this.entityData.get(ITEM_STACK).getItem() instanceof NameTagItem && $$1 instanceof LivingEntity) {
+            if (!this.useNametag(this.entityData.get(ITEM_STACK), ((LivingEntity) $$1))){
+                this.dropItem($$1.getOnPos());
+            }
+        } else if (this.entityData.get(ITEM_STACK).getItem() instanceof DyeItem && $$1 instanceof LivingEntity) {
+            if (!this.useDye(this.entityData.get(ITEM_STACK), ((LivingEntity) $$1))){
+                this.dropItem($$1.getOnPos());
+            }
+        } else if (this.entityData.get(ITEM_STACK).getItem() instanceof SaddleItem && $$1 instanceof LivingEntity) {
+            if (!this.useSaddle(this.entityData.get(ITEM_STACK), ((LivingEntity) $$1))){
+                this.dropItem($$1.getOnPos());
+            }
+        } else if (this.entityData.get(ITEM_STACK).getItem() instanceof LeadItem && $$1 instanceof Mob) {
+            if (!this.useLeash(this.entityData.get(ITEM_STACK), ((Mob) $$1))){
+                this.dropItem($$1.getOnPos());
+            }
+        } else if ($$1.hurt($$5, this.getDamage($$1))) {
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
@@ -279,7 +336,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
                 if (this.getDefaultItem() instanceof GlaiveItem || this.getDefaultItem() instanceof ScissorItem) {
                     MainUtil.makeBleed($$1, 0, 300, this);
-                } else if (this.entityData.get(ITEM_STACK).is(Items.PRISMARINE_SHARD)){
+                } else if (this.entityData.get(ITEM_STACK).is(Items.PRISMARINE_SHARD)
+                || this.entityData.get(ITEM_STACK).is(Items.GLASS_BOTTLE)){
                     MainUtil.makeBleed($$1, 0, 200, this);
 
                 }
@@ -325,6 +383,76 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     }
 
+    public boolean useBonemeal(ItemStack item, BlockHitResult pos){
+        Level $$1 = this.level();
+        BlockPos $$2 = pos.getBlockPos();
+        if (!this.level().getBlockState($$2.above()).isAir()){
+            $$2 = $$2.above();
+        }
+        BlockPos $$3 = $$2.relative(pos.getDirection());
+        if (BoneMealItem.growCrop(item, $$1, $$2)) {
+            if (!$$1.isClientSide) {
+                $$1.levelEvent(1505, $$2, 0);
+            }
+            return true;
+        } else {
+            BlockState $$4 = $$1.getBlockState($$2);
+            boolean $$5 = $$4.isFaceSturdy($$1, $$2, pos.getDirection());
+            if ($$5 && BoneMealItem.growWaterPlant(item, $$1, $$3, pos.getDirection())) {
+                if (!$$1.isClientSide) {
+                    $$1.levelEvent(1505, $$3, 0);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean useLeash(ItemStack stack, Mob entity) {
+        if (this.getOwner() != null && this.getOwner() instanceof Player player){
+            if (entity.canBeLeashed(player)) {
+                entity.setLeashedTo(player, true);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean useSaddle(ItemStack $$0, LivingEntity $$2){
+        if ($$2 instanceof Saddleable && $$2.isAlive()) {
+            Saddleable $$4 = (Saddleable)$$2;
+            if (!$$4.isSaddled() && $$4.isSaddleable()) {
+                if (!this.level().isClientSide) {
+                    $$4.equipSaddle(SoundSource.NEUTRAL);
+                    $$2.level().gameEvent($$2, GameEvent.EQUIP, $$2.position());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean useDye(ItemStack stack, LivingEntity entity) {
+        if (entity instanceof Sheep $$4 && $$4.isAlive() && !$$4.isSheared() && $$4.getColor() != ((DyeItem) stack.getItem()).getDyeColor()) {
+            $$4.level().playSound(null, $$4, SoundEvents.DYE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (!this.level().isClientSide) {
+                $$4.setColor(((DyeItem) stack.getItem()).getDyeColor());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean useNametag(ItemStack stack, LivingEntity entity){
+        if (stack.hasCustomHoverName() && !(entity instanceof Player)) {
+            if (!this.level().isClientSide && entity.isAlive()) {
+                entity.setCustomName(stack.getHoverName());
+                if (entity instanceof Mob) {
+                    ((Mob) entity).setPersistenceRequired();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {
         Vec3 $$5 = new Vec3($$0, $$1, $$2)
