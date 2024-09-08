@@ -3,10 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
-import net.hydra.jojomod.block.BarbedWireBlock;
-import net.hydra.jojomod.block.BarbedWireBundleBlock;
-import net.hydra.jojomod.block.GasolineBlock;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -56,6 +53,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -122,16 +121,16 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         this.getOwner()).gameMode.getGameModeForPlayer()))) ||
                 !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos))){
 
-            if (this.getDefaultItem() instanceof BlockItem) {
+            if (this.getItem().getItem() instanceof BlockItem) {
                 Direction direction = this.getDirection();
                 if (direction.getAxis() == Direction.Axis.X){
                     direction = direction.getOpposite();
                 }
-                if (((BlockItem) this.getDefaultItem()).getBlock() instanceof RotatedPillarBlock){
+                if (((BlockItem) this.getItem().getItem()).getBlock() instanceof RotatedPillarBlock){
                     direction = $$0.getDirection();
                 }
 
-                if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(),
+                if (((BlockItem)this.getItem().getItem()).place(new DirectionalPlaceContext(this.level(),
                         pos,
                         direction, this.getItem(),
                         direction)) != InteractionResult.FAIL){
@@ -162,8 +161,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                             dropItem(pos);
                         }
                     } else {
-                        if (this.getDefaultItem() instanceof BlockItem){
-                            blockBreakParticles((((BlockItem) this.getDefaultItem()).getBlock()),
+                        if (this.getItem().getItem() instanceof BlockItem){
+                            blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()),
                                     new Vec3(pos.getX()+0.5,
                                             pos.getY()+0.5,
                                             pos.getZ()+0.5));
@@ -184,9 +183,18 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 } else if (this.getItem().getItem() instanceof SpawnEggItem se) {
                     if (this.places && se.useOn(new DirectionalPlaceContext(this.level(),
-                                $$0.getBlockPos(),
-                                $$0.getDirection(), this.getItem(),
-                                $$0.getDirection())) != InteractionResult.FAIL){
+                            $$0.getBlockPos(),
+                            $$0.getDirection(), this.getItem(),
+                            $$0.getDirection())) != InteractionResult.FAIL) {
+                    } else {
+                        dropItem(pos);
+                    }
+                } else if (this.getItem().getItem() instanceof RecordItem se) {
+                    BlockEntity blke = this.level().getBlockEntity($$0.getBlockPos());
+                    if (blke instanceof JukeboxBlockEntity je && je.getFirstItem().isEmpty()) {
+                        je.setItem(0,this.getItem());
+                    } else if (blke instanceof StereoBlockEntity je && je.getFirstItem().isEmpty()) {
+                        je.setItem(0,this.getItem());
                     } else {
                         dropItem(pos);
                     }
@@ -358,7 +366,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 }
 
-                if (this.getDefaultItem() instanceof GlaiveItem || this.getDefaultItem() instanceof ScissorItem) {
+                if (this.getItem().getItem() instanceof GlaiveItem || this.getItem().getItem() instanceof ScissorItem) {
                     MainUtil.makeBleed($$1, 0, 300, this);
                 } else if (this.getItem().is(Items.PRISMARINE_SHARD)
                 || this.getItem().is(Items.GLASS_BOTTLE)){
@@ -366,8 +374,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
                 }
 
-                if (this.getDefaultItem() instanceof BlockItem && MainUtil.isThrownBlockItem(this.getDefaultItem())) {
-                    Block blk = ((BlockItem) this.getDefaultItem()).getBlock();
+                if (this.getItem().getItem() instanceof BlockItem && MainUtil.isThrownBlockItem(this.getItem().getItem())) {
+                    Block blk = ((BlockItem) this.getItem().getItem()).getBlock();
                     if (blk instanceof CactusBlock || blk instanceof GlassBlock || blk instanceof BarbedWireBlock
                             || blk instanceof BarbedWireBundleBlock) {
                         MainUtil.makeBleed($$1, 0, 300, this);
@@ -379,9 +387,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     if ($$1 instanceof LivingEntity $$7) {
                         float kb = 0.3f;
 
-                        if (((BlockItem)this.getDefaultItem()).getBlock() instanceof SlimeBlock){
+                        if (((BlockItem)this.getItem().getItem()).getBlock() instanceof SlimeBlock){
                             kb = 0.5f;
-                        } else if (((BlockItem)this.getDefaultItem()).getBlock() instanceof WebBlock){
+                        } else if (((BlockItem)this.getItem().getItem()).getBlock() instanceof WebBlock){
                             kb = 0.5f;
                         }
                         $$7.knockback(kb, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
@@ -396,8 +404,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     if (!this.getItem().hurt(1,this.level().getRandom(),null)){
                         this.dropItem($$1.getOnPos());
                     }
-                } else if (this.getDefaultItem() instanceof BlockItem){
-                    blockBreakParticles((((BlockItem) this.getDefaultItem()).getBlock()),$$0.getEntity().getPosition(0F).add(0,$$0.getEntity().getEyeHeight(),0));
+                } else if (this.getItem().getItem() instanceof BlockItem){
+                    blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()),$$0.getEntity().getPosition(0F).add(0,$$0.getEntity().getEyeHeight(),0));
                 }
             }
         } else {

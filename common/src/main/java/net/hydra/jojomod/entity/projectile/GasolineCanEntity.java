@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -41,7 +43,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     public float spinningCanX = 0;
     public float spinningCanXo = 0;
     public boolean done;
-    public float bounces = 3;
+    public int bounces = 3;
     public GasolineCanEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -53,6 +55,20 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     public GasolineCanEntity(LivingEntity living, Level $$1) {
         super(ModEntities.GASOLINE_CAN, living, $$1);
+    }
+
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0){
+        $$0.putBoolean("roundabout.Finished",done);
+        $$0.putInt("roundabout.Bounces",bounces);
+        super.addAdditionalSaveData($$0);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0){
+        this.done = $$0.getBoolean("roundabout.Finished");
+        this.bounces = $$0.getInt("roundabout.Bounces");
+        super.readAdditionalSaveData($$0);
     }
 
     @Override
