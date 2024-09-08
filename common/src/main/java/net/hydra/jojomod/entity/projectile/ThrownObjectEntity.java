@@ -23,6 +23,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -62,8 +63,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class ThrownObjectEntity extends ThrowableItemProjectile {
-    private static final EntityDataAccessor<ItemStack> ITEM_STACK = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.ITEM_STACK);
-    public final boolean places;
+   public boolean places;
 
     public ThrownObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
@@ -77,24 +77,40 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     public ThrownObjectEntity(LivingEntity living, Level $$1, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, living, $$1);
-        this.entityData.set(ITEM_STACK, itemStack);
+        this.setItem(itemStack);
         this.places = places;
     }
 
     public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, p_36862_, p_36863_, p_36864_, world);
-        this.entityData.set(ITEM_STACK, itemStack);
+        this.setItem(itemStack);
         this.places = places;
+    }
+
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0){
+        $$0.putBoolean("roundabout.AcquireHeldItem",places);
+        CompoundTag compoundtag = new CompoundTag();
+        $$0.put("roundabout.HeldItem",this.getItem().save(compoundtag));
+        super.addAdditionalSaveData($$0);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0){
+        this.places = $$0.getBoolean("roundabout.AcquireHeldItem");
+        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        ItemStack itemstack = ItemStack.of(compoundtag);
+        this.setItem(itemstack);
+        super.readAdditionalSaveData($$0);
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ITEM_STACK, ItemStack.EMPTY);
     }
     @Override
     protected Item getDefaultItem() {
-        return this.entityData.get(ITEM_STACK).getItem();
+        return Items.AIR;
     }
 
     Direction tempDirection = Direction.UP;
@@ -117,7 +133,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
                 if (((BlockItem)this.getDefaultItem()).place(new DirectionalPlaceContext(this.level(),
                         pos,
-                        direction, this.entityData.get(ITEM_STACK),
+                        direction, this.getItem(),
                         direction)) != InteractionResult.FAIL){
                     this.tempDirection = direction;
                     return true;
@@ -134,10 +150,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
 
         if (!this.level().isClientSide) {
-            if (!this.entityData.get(ITEM_STACK).isEmpty()) {
+            if (!this.getItem().isEmpty()) {
                 BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
                 BlockState state = this.level().getBlockState(pos);
-                if (this.entityData.get(ITEM_STACK).getItem() instanceof BlockItem) {
+                if (this.getItem().getItem() instanceof BlockItem) {
                     if (this.places) {
                         if (tryHitBlock($$0, pos, state)) {
                         } else if (tryHitBlock($$0, pos.relative(this.tempDirection), state)) {
@@ -153,23 +169,23 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                             pos.getZ()+0.5));
                         }
                     }
-                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof BoneMealItem) {
-                    if (this.places && useBonemeal(this.entityData.get(ITEM_STACK), $$0)){
+                } else if (this.getItem().getItem() instanceof BoneMealItem) {
+                    if (this.places && useBonemeal(this.getItem(), $$0)){
                     } else {
                         dropItem(pos);
                     }
-                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof HangingEntityItem he) {
+                } else if (this.getItem().getItem() instanceof HangingEntityItem he) {
                     if (this.places && $$0.getDirection().getAxis().isHorizontal() && he.useOn(new DirectionalPlaceContext(this.level(),
                                 $$0.getBlockPos(),
-                                $$0.getDirection(), this.entityData.get(ITEM_STACK),
+                                $$0.getDirection(), this.getItem(),
                                 $$0.getDirection())) != InteractionResult.FAIL){
                     } else {
                         dropItem(pos);
                     }
-                } else if (this.entityData.get(ITEM_STACK).getItem() instanceof SpawnEggItem se) {
+                } else if (this.getItem().getItem() instanceof SpawnEggItem se) {
                     if (this.places && se.useOn(new DirectionalPlaceContext(this.level(),
                                 $$0.getBlockPos(),
-                                $$0.getDirection(), this.entityData.get(ITEM_STACK),
+                                $$0.getDirection(), this.getItem(),
                                 $$0.getDirection())) != InteractionResult.FAIL){
                     } else {
                         dropItem(pos);
@@ -186,7 +202,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     public void dropItem(BlockPos pos){
         ItemEntity $$4 = new ItemEntity(this.level(), pos.getX() + 0.5F,
                 pos.getY() + 0.25F, pos.getZ() + 0.5F,
-                this.entityData.get(ITEM_STACK));
+                this.getItem());
         $$4.setPickUpDelay(40);
         $$4.setThrower(this.getUUID());
         $$4.setDeltaMovement(Math.random() * 0.1F - 0.05F, 0.2F, Math.random() * 0.18F - 0.05F);
@@ -259,9 +275,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
             if (enchant){
                 if (ent instanceof LivingEntity){
-                    damage+= EnchantmentHelper.getDamageBonus(this.entityData.get(ITEM_STACK), ((LivingEntity)ent).getMobType());
+                    damage+= EnchantmentHelper.getDamageBonus(this.getItem(), ((LivingEntity)ent).getMobType());
                 } else {
-                    damage+= EnchantmentHelper.getDamageBonus(this.entityData.get(ITEM_STACK), MobType.UNDEFINED);
+                    damage+= EnchantmentHelper.getDamageBonus(this.getItem(), MobType.UNDEFINED);
                 }
             }
         }
@@ -290,37 +306,37 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
         boolean fire = false;
         boolean onFire = $$1.isOnFire();
-        if (!this.entityData.get(ITEM_STACK).isEmpty()) {
-            int ench = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, this.entityData.get(ITEM_STACK));
+        if (!this.getItem().isEmpty()) {
+            int ench = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, this.getItem());
             if (ench >= 1) {
                 $$1.setSecondsOnFire((ench) * 4);
                 fire = true;
-            } else if (this.entityData.get(ITEM_STACK).getItem() instanceof FlintAndSteelItem
-                    || this.entityData.get(ITEM_STACK).is(Items.MAGMA_BLOCK)
-                    || this.entityData.get(ITEM_STACK).is(Items.CAMPFIRE)
-                    || this.entityData.get(ITEM_STACK).getItem() instanceof FireChargeItem) {
+            } else if (this.getItem().getItem() instanceof FlintAndSteelItem
+                    || this.getItem().is(Items.MAGMA_BLOCK)
+                    || this.getItem().is(Items.CAMPFIRE)
+                    || this.getItem().getItem() instanceof FireChargeItem) {
                 $$1.setSecondsOnFire(4);
                 fire = true;
-            } else if (this.entityData.get(ITEM_STACK).is(Items.LAVA_BUCKET)) {
+            } else if (this.getItem().is(Items.LAVA_BUCKET)) {
                 $$1.setSecondsOnFire(8);
                 fire = true;
             }
         }
 
-        if (this.entityData.get(ITEM_STACK).getItem() instanceof NameTagItem && $$1 instanceof LivingEntity) {
-            if (!this.useNametag(this.entityData.get(ITEM_STACK), ((LivingEntity) $$1))){
+        if (this.getItem().getItem() instanceof NameTagItem && $$1 instanceof LivingEntity) {
+            if (!this.useNametag(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.entityData.get(ITEM_STACK).getItem() instanceof DyeItem && $$1 instanceof LivingEntity) {
-            if (!this.useDye(this.entityData.get(ITEM_STACK), ((LivingEntity) $$1))){
+        } else if (this.getItem().getItem() instanceof DyeItem && $$1 instanceof LivingEntity) {
+            if (!this.useDye(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.entityData.get(ITEM_STACK).getItem() instanceof SaddleItem && $$1 instanceof LivingEntity) {
-            if (!this.useSaddle(this.entityData.get(ITEM_STACK), ((LivingEntity) $$1))){
+        } else if (this.getItem().getItem() instanceof SaddleItem && $$1 instanceof LivingEntity) {
+            if (!this.useSaddle(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.entityData.get(ITEM_STACK).getItem() instanceof LeadItem && $$1 instanceof Mob) {
-            if (!this.useLeash(this.entityData.get(ITEM_STACK), ((Mob) $$1))){
+        } else if (this.getItem().getItem() instanceof LeadItem && $$1 instanceof Mob) {
+            if (!this.useLeash(this.getItem(), ((Mob) $$1))){
                 this.dropItem($$1.getOnPos());
             }
         } else if ($$1.hurt($$5, this.getDamage($$1))) {
@@ -328,24 +344,24 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 return;
             }
 
-            if (!this.entityData.get(ITEM_STACK).isEmpty()) {
+            if (!this.getItem().isEmpty()) {
 
                 if ($$1 instanceof LivingEntity L){
-                    if (this.entityData.get(ITEM_STACK).is(Items.COBWEB)) {
+                    if (this.getItem().is(Items.COBWEB)) {
                         L.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0), this);
                     }
-                    if (this.entityData.get(ITEM_STACK).is(Items.PUFFERFISH)) {
+                    if (this.getItem().is(Items.PUFFERFISH)) {
                         L.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0), this);
                     }
-                    if (this.entityData.get(ITEM_STACK).is(Items.WITHER_ROSE)) {
+                    if (this.getItem().is(Items.WITHER_ROSE)) {
                         L.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 0), this);
                     }
                 }
 
                 if (this.getDefaultItem() instanceof GlaiveItem || this.getDefaultItem() instanceof ScissorItem) {
                     MainUtil.makeBleed($$1, 0, 300, this);
-                } else if (this.entityData.get(ITEM_STACK).is(Items.PRISMARINE_SHARD)
-                || this.entityData.get(ITEM_STACK).is(Items.GLASS_BOTTLE)){
+                } else if (this.getItem().is(Items.PRISMARINE_SHARD)
+                || this.getItem().is(Items.GLASS_BOTTLE)){
                     MainUtil.makeBleed($$1, 0, 200, this);
 
                 }
@@ -376,8 +392,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 }
 
-                if (this.entityData.get(ITEM_STACK).isDamageableItem()){
-                    if (!this.entityData.get(ITEM_STACK).hurt(1,this.level().getRandom(),null)){
+                if (this.getItem().isDamageableItem()){
+                    if (!this.getItem().hurt(1,this.level().getRandom(),null)){
                         this.dropItem($$1.getOnPos());
                     }
                 } else if (this.getDefaultItem() instanceof BlockItem){

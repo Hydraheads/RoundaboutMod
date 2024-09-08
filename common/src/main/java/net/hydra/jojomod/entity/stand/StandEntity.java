@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -27,6 +28,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Objects;
@@ -567,6 +572,16 @@ public abstract class StandEntity extends Mob{
             }
         }
         if (currFade < 0) {
+            if (!this.getHeldItem().isEmpty()) {
+                if (this.canAcquireHeldItem) {
+                    double $$3 = this.getEyeY() - 0.3F;
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.getUUID());
+                    this.level().addFreshEntity($$4);
+                    this.setHeldItem(ItemStack.EMPTY);
+                }
+            }
             this.remove(RemovalReason.DISCARDED);
         }
     }
@@ -615,6 +630,23 @@ public abstract class StandEntity extends Mob{
                     frontVectors.z);
         }
     }
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0){
+            $$0.putBoolean("roundabout.AcquireHeldItem",this.canAcquireHeldItem);
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
+        super.addAdditionalSaveData($$0);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0){
+        this.canAcquireHeldItem = $$0.getBoolean("roundabout.AcquireHeldItem");
+        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        ItemStack itemstack = ItemStack.of(compoundtag);
+        this.setHeldItem(itemstack);
+        super.readAdditionalSaveData($$0);
+    }
+
+
 
     /** Uses rotation to grab a point in front of an entity, with DR being an optional pitch offset*/
     public Vec3 FrontVectors(Entity standUser, double dr, float distance) {
