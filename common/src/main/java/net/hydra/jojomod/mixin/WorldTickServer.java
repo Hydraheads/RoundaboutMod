@@ -48,6 +48,20 @@ public class WorldTickServer {
                 this.tickStandIn(livingEntity, Objects.requireNonNull(((StandUser) $$0).getStand()));
             }
         }
+        for (Entity entity2 : $$0.getPassengers()) {
+            if (!entity2.isRemoved()) {
+
+                if (entity2.showVehicleHealth()) {
+                    LivingEntity livingEntity = (LivingEntity) entity2;
+                    if (((StandUser) livingEntity).getStand() != null) {
+                        StandEntity stand = ((StandUser) livingEntity).getStand();
+                        if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
+                            this.tickStandIn(livingEntity, stand);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
