@@ -20,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
@@ -104,6 +105,10 @@ public abstract class ForgePlayer extends LivingEntity {
 
                     if (!this.onGround()) {
                         f /= 5.0F;
+                    }
+
+                    if ($$0.is(Blocks.COBWEB)){
+                        f *= 5.0F;
                     }
 
                     f = net.minecraftforge.event.ForgeEventFactory.getBreakSpeed(((Player)(Object)this), $$0, f, pos);

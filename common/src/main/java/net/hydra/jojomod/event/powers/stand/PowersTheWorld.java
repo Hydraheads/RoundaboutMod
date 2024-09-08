@@ -693,7 +693,7 @@ public class PowersTheWorld extends StandPowers {
             this.freezeAttackInput = 1;
         }
         if (freezeAttackInput < 0) {
-            if (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || hasBlock()) {
+            if ( hasBlock()) {
                 this.freezeAttackInput = 1;
             }
             if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())

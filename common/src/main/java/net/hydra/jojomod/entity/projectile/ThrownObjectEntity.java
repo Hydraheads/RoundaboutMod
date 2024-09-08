@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.BarbedWireBundleBlock;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
@@ -32,6 +33,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -176,6 +179,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 damage = 10;
             } else if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof AnvilBlock) {
                 damage = 20.5F;
+            } else if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof WebBlock) {
+                damage = 1F;
             } else if (DT <= 0.4) {
                 damage = 1;
             } else if (DT <= 1){
@@ -207,6 +212,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             } else if (this.getItem().getItem() instanceof GlaiveItem){
                 damage = (float) (5+ (((GlaiveItem)this.getItem().getItem()).getDamage()*1.5));
                 enchant = true;
+            } else if (this.getItem().is(Items.IRON_NUGGET)){
+                damage = 10;
+            } else if (this.getItem().is(Items.PRISMARINE_SHARD)){
+                damage = 7;
             }
             if (enchant){
                 if (ent instanceof LivingEntity){
@@ -249,15 +258,30 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     $$1.setSecondsOnFire((ench) * 4);
                 } else if (this.entityData.get(ITEM_STACK).getItem() instanceof FlintAndSteelItem
                         || this.entityData.get(ITEM_STACK).is(Items.MAGMA_BLOCK)
+                        || this.entityData.get(ITEM_STACK).is(Items.CAMPFIRE)
                 || this.entityData.get(ITEM_STACK).getItem() instanceof FireChargeItem){
                     $$1.setSecondsOnFire(4);
                 } else if (this.entityData.get(ITEM_STACK).is(Items.LAVA_BUCKET)){
                     $$1.setSecondsOnFire(8);
                 }
 
+                if ($$1 instanceof LivingEntity L){
+                    if (this.entityData.get(ITEM_STACK).is(Items.COBWEB)) {
+                        L.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0), this);
+                    }
+                    if (this.entityData.get(ITEM_STACK).is(Items.PUFFERFISH)) {
+                        L.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0), this);
+                    }
+                    if (this.entityData.get(ITEM_STACK).is(Items.WITHER_ROSE)) {
+                        L.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 0), this);
+                    }
+                }
 
                 if (this.getDefaultItem() instanceof GlaiveItem || this.getDefaultItem() instanceof ScissorItem) {
                     MainUtil.makeBleed($$1, 0, 300, this);
+                } else if (this.entityData.get(ITEM_STACK).is(Items.PRISMARINE_SHARD)){
+                    MainUtil.makeBleed($$1, 0, 200, this);
+
                 }
 
                 if (this.getDefaultItem() instanceof BlockItem && MainUtil.isThrownBlockItem(this.getDefaultItem())) {
@@ -274,6 +298,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         float kb = 0.3f;
 
                         if (((BlockItem)this.getDefaultItem()).getBlock() instanceof SlimeBlock){
+                            kb = 0.5f;
+                        } else if (((BlockItem)this.getDefaultItem()).getBlock() instanceof WebBlock){
                             kb = 0.5f;
                         }
                         $$7.knockback(kb, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());

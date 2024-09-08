@@ -27,6 +27,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -232,6 +233,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
             if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock) {
                 mspeed = 0.0F;
+            }
+
+            if ($$0.is(Blocks.COBWEB)){
+                mspeed *= 5.0F;
             }
             cir.setReturnValue(mspeed);
         }

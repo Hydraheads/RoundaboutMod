@@ -426,7 +426,21 @@ public class MainUtil {
             if (item instanceof ItemNameBlockItem || blk instanceof BushBlock
                     || blk instanceof WebBlock  || blk instanceof BarbedWireBundleBlock
                     || blk instanceof TorchBlock
+                    || blk instanceof FrogspawnBlock
+                    || blk instanceof CauldronBlock
+                    || blk instanceof BellBlock
+                    || blk instanceof SnowLayerBlock
+                    || blk instanceof TurtleEggBlock
+                    || blk instanceof CarpetBlock
+                    || blk instanceof SugarCaneBlock
                     || blk instanceof GrowingPlantHeadBlock
+                    || blk instanceof StereoBlock
+                    || blk instanceof FlowerPotBlock
+                    || blk instanceof DaylightDetectorBlock
+                    || blk instanceof VineBlock
+                    || blk instanceof SnifferEggBlock
+                    || blk instanceof BasePressurePlateBlock
+                    || blk instanceof PowderSnowBlock
                     || blk instanceof SkullBlock
                     || blk instanceof RodBlock
                     || blk instanceof HorizontalDirectionalBlock
