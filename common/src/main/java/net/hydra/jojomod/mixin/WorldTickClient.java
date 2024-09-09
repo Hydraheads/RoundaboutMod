@@ -233,7 +233,7 @@ public abstract class WorldTickClient extends Level {
         } else if ($$1 instanceof Player || this.tickingEntities.contains($$1)) {
             if (((TimeStop) this).CanTimeStopEntity($$1)) {
                 $$1.setDeltaMovement(Vec3.ZERO);
-                roundaboutTSTickEntity($$0);
+                roundaboutTSTickEntity($$1);
                 if ($$1.isPassenger()) {
                     $$1.getVehicle().positionRider($$1);
                 }
