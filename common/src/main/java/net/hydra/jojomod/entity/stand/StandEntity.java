@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -22,13 +23,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -506,6 +511,41 @@ public abstract class StandEntity extends Mob{
         return true;
     }
 
+
+    @Override
+    public boolean isAttackable() {
+        return false;
+    }
+    @Override
+    public boolean skipAttackInteraction(Entity $$0) {
+        return true;
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return false;
+    }
+
+    @Override
+    public boolean canCollideWith(Entity $$0) {
+        return false;
+    }
+
+    @Override
+    public boolean canBeHitByProjectile() {
+        return false;
+    }
+
+    @Override
+    protected Entity.MovementEmission getMovementEmission() {
+        return Entity.MovementEmission.NONE;
+    }
+
     /** This happens every tick. Basic stand movement/fade code, also see vex code for turning on noclip.*/
     @Override
     public void tick() {
@@ -513,7 +553,6 @@ public abstract class StandEntity extends Mob{
         float pitch = this.getXRot();
         float yaw = this.getYRot();
         byte ot = this.getOffsetType();
-
         super.tick();
 
             if (this.level().isClientSide()){
