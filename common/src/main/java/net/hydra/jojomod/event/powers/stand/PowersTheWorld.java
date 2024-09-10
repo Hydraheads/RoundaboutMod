@@ -8,10 +8,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.ModItems;
@@ -1177,7 +1174,7 @@ public class PowersTheWorld extends StandPowers {
             } else {
                 if (this.getSelf().level().isClientSide) {
                     /*If the server is behind on the client TS time, update it to lower*/
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_TRACKER, TSChargeTicks);
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(TSChargeTicks, PacketDataIndex.INT_TS_TIME);
                 } else {
                     /** This code was for the time resume sfx creeping in, but it sounds very chaotic
                      * with all of the other TS sounds so I am opting out
@@ -1353,12 +1350,6 @@ public class PowersTheWorld extends StandPowers {
                     this.setChargedTSTicks(chargeTime);
                 }
                 super.tryChargedPower(move, forced, chargeTime);
-            } else if (move == PowerIndex.SPECIAL_TRACKER) {
-                /*If the server is behind on the client TS time, update it to lower*/
-                if (this.getChargedTSTicks() > chargeTime) {
-                    this.setChargedTSTicks(chargeTime);
-                }
-                return false;
             } else if (move == PowerIndex.SPECIAL_FINISH) {
                 /*If the server is behind on the client TS time, update it to lower*/
                 if (this.getChargedTSTicks() > chargeTime) {

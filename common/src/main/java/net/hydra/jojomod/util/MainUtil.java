@@ -678,6 +678,10 @@ public class MainUtil {
             Entity target = player.level().getEntity(data);
 
             target.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.GLAIVE), data);
+        } else if (context == PacketDataIndex.INT_TS_TIME){
+            if (((StandUser)player).getStandPowers().getChargedTSTicks() > data) {
+                ((StandUser)player).getStandPowers().setChargedTSTicks(data);
+            }
         }
     }
 }

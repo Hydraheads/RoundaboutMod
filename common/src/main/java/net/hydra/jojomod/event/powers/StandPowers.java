@@ -643,7 +643,7 @@ public abstract class StandPowers {
                 this.attackTimeMax = 0;
                 ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE,true);
             } else {
-                if (this.attackTimeDuring == 5 && this.activePowerPhase == 1
+                if ((this.attackTimeDuring == 5 && this.activePowerPhase == 1)
                 || this.attackTimeDuring == 6) {
                     this.standPunch();
                 }
@@ -716,6 +716,7 @@ public abstract class StandPowers {
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
+                Roundabout.LOGGER.info("how "+this.attackTimeDuring+", "+this.activePowerPhase+", "+this.getSelf().tickCount);
                 this.attackTimeDuring = -10;
                 ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(), this.activePowerPhase);
             }
