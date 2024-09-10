@@ -62,7 +62,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @Mixin(LivingEntity.class)
@@ -480,6 +482,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
+    }
+    @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
+    public List<Entity> roundabout$checkAutoSpin(List<Entity> list){
+        List<Entity> listE= new ArrayList<>();
+        for (Entity entity : list) {
+            if (!(entity instanceof StandEntity se && se.ignoreTridentSpin())) {
+                listE.add(entity);
+            }
+        }
+        return listE;
     }
 
     /**returns if the mob has a stand. For now, returns if stand is active, but in the future will be more

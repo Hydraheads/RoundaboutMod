@@ -688,6 +688,9 @@ public abstract class StandEntity extends Mob{
     }
 
 
+    public boolean ignoreTridentSpin(){
+        return true;
+    }
 
     /** Uses rotation to grab a point in front of an entity, with DR being an optional pitch offset*/
     public Vec3 FrontVectors(Entity standUser, double dr, float distance) {

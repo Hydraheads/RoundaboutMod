@@ -35,7 +35,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "the_world"),
                         EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).
-                                sized(0.7F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":the_world")
+                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":the_world")
                 );
 
         public static final EntityType<TheWorldEntity> STAR_PLATINUM =

@@ -25,7 +25,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
             ENTITY_TYPES.register("the_world", () ->
-                    EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).sized(0.7F, 2.05f).
+                    EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "the_world").toString())
             );
