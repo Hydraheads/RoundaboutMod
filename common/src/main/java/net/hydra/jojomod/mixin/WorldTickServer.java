@@ -76,9 +76,12 @@ public class WorldTickServer {
             return;
         }
         byte ot = passenger.getOffsetType();
-            passenger.setOldPosAndRot();
-            ++passenger.tickCount;
-            passenger.tickStandOut();
+        passenger.setOldPosAndRot();
+        ++passenger.tickCount;
+        passenger.tickStandOut();
+        for (Entity $$2 : passenger.getPassengers()) {
+            this.tickPassenger(passenger, $$2);
+        }
     }
 
     /**Time stop code*/

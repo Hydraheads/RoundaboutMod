@@ -35,10 +35,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
@@ -70,6 +74,7 @@ public class PowersTheWorld extends StandPowers {
     public int bonusLeapCount = -1;
     public int spacedJumpTime = -1;
     public BlockPos grabBlock = null;
+    public int grabEntity = -1;
 
     public int freezeAttackInput = -1;
 
@@ -87,16 +92,23 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
                 if (!this.onCooldown(PowerIndex.SKILL_2)) {
                     if (keyIsDown) {
                         if (!options.keyShift.isDown()) {
-                            //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
-                            BlockHitResult HR = getGrabBlock();
-                            if (HR != null) {
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                            Entity targetEntity = this.rayCastEntity(this.getSelf(),2F);
+                            if (targetEntity != null && canGrab(targetEntity)) {
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_EXTRA, true);
+                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
+                            } else {
+                                //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
+                                BlockHitResult HR = getGrabBlock();
+                                if (HR != null) {
+                                    ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                                }
                             }
                         } else {
                             ItemStack stack = this.getSelf().getMainHandItem();
@@ -131,6 +143,7 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
             if (keyIsDown) {
                 if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -411,6 +424,10 @@ public class PowersTheWorld extends StandPowers {
                             this.addItem(standEntity);
                             standEntity.setHeldItem(ItemStack.EMPTY);
                         }
+                    } else if (standEntity.getFirstPassenger() != null && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
+                            && move != PowerIndex.POWER_2_SNEAK_EXTRA && move != PowerIndex.POWER_2_EXTRA){
+                        standEntity.ejectPassengers();
+                        animateStand((byte) 36);
                     }
                 }
             }
@@ -527,6 +544,9 @@ public class PowersTheWorld extends StandPowers {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     local.input.leftImpulse *= 0.7f;
                     local.input.forwardImpulse *= 0.7f;
+                } else if (standEntity.getFirstPassenger() != null){
+                    local.input.leftImpulse *= 0.85f;
+                    local.input.forwardImpulse *= 0.85f;
                 }
             }
         }
@@ -702,16 +722,20 @@ public class PowersTheWorld extends StandPowers {
             this.freezeAttackInput = 1;
         }
         if (freezeAttackInput < 0) {
-            if ( hasBlock()) {
+            if ( hasBlock() || hasEntity()) {
                 this.freezeAttackInput = 1;
             }
             if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
-                    && !standEntity.getHeldItem().isEmpty())) {
+                    && !standEntity.getHeldItem().isEmpty()) || hasEntity()) {
 
                 if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                     if (!standEntity.getHeldItem().isEmpty() &&
                             (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
                             && this.getAttackTimeDuring() < 10) {
+                        return;
+                    } else if (standEntity.getFirstPassenger() != null &&
+                            (this.getActivePower() == PowerIndex.POWER_2_EXTRA)
+                            && this.getAttackTimeDuring() < 3) {
                         return;
                     }
                 }
@@ -772,6 +796,8 @@ public class PowersTheWorld extends StandPowers {
             return this.bounce();
         } else if (move == PowerIndex.POWER_2){
             return this.grab();
+        } else if (move == PowerIndex.POWER_2_EXTRA){
+            return this.mobGrab();
         } else if (move == PowerIndex.POWER_2_SNEAK_EXTRA){
             return this.inventoryGrab();
         }
@@ -884,6 +910,30 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    public boolean mobGrab() {
+        if (!this.getSelf().level().isClientSide()) {
+            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                Entity entity = this.getSelf().level().getEntity(this.grabEntity);
+                if (entity != null && this.canGrab(entity)) {
+                    if (entity.startRiding(standEntity)) {
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);
+                        this.setActivePower(PowerIndex.POWER_2_EXTRA);
+                        this.setAttackTimeDuring(0);
+                        poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                        animateStand((byte) 38);
+                        return true;
+                    }
+                }
+            }
+        } else {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_2);
+            return true;
+        }
+        this.setPowerNone();
+        return false;
+    }
 
     @SuppressWarnings("deprecation")
     public boolean grab() {
@@ -983,7 +1033,7 @@ public class PowersTheWorld extends StandPowers {
         this.setAttackTimeDuring(-1);
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
-        if (this.getAnimation() != 32 && this.getAnimation() != 34) {
+        if (this.getAnimation() != 32 && this.getAnimation() != 34 && this.getAnimation() != 38) {
             animateStand((byte) 0);
         }
         return true;
@@ -1075,6 +1125,17 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    @Override
+    public boolean cancelCollision(Entity et) {
+        if (((StandUser) this.getSelf()).getStand() != null){
+            if ((((StandUser) this.getSelf()).getStand().getFirstPassenger() != null &&
+                    (((StandUser) this.getSelf()).getStand().getFirstPassenger().is(et)))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private int leapEndTicks = -1;
     private int retractEndTIcks = -1;
     @Override
@@ -1082,6 +1143,21 @@ public class PowersTheWorld extends StandPowers {
 
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+
+            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            if (!this.getSelf().level().isClientSide) {
+                if (standEntity != null && this.getActivePower() == PowerIndex.POWER_2_EXTRA &&
+                        standEntity.getFirstPassenger() == null){
+                    ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    animateStand((byte) 36);
+                }
+            }
+
+            if (standEntity != null && this.getActivePower() == PowerIndex.POWER_2_EXTRA &&
+                    standEntity.getFirstPassenger() != null && !(standEntity.getFirstPassenger() instanceof Player)){
+                //clampRotation(standEntity.getFirstPassenger());
+            }
+
             if (impactSlowdown > -1){
                 impactSlowdown--;
             }
@@ -1213,6 +1289,31 @@ public class PowersTheWorld extends StandPowers {
                         return true;
                     }
                     return false;
+                } else if (standEntity.getFirstPassenger() != null){
+                    if (!this.getSelf().level().isClientSide) {
+                        this.setCooldown(PowerIndex.SKILL_2, 30);
+                        animateStand((byte) 33);
+                        Entity ent = standEntity.getFirstPassenger();
+                        ent.dismountTo(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
+
+                        this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                        int degrees = (int) (this.getSelf().getYRot() % 360);
+                        int degreesY = (int) this.getSelf().getXRot();
+                        float strength = 3.0F;
+                        if (ent instanceof Player){
+                            strength = 1.5F;
+                        }
+                        float ybias = (90F - Math.abs(degreesY)) /90F;
+                        MainUtil.takeUnresistableKnockbackWithY(ent, strength*(0.5+(ybias/2)),
+                                Mth.sin((degrees * ((float) Math.PI / 180))*ybias),
+                                Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                -Mth.cos((degrees * ((float) Math.PI / 180)))*ybias);
+                        this.setAttackTimeDuring(-10);
+
+                        this.syncCooldowns();
+                        return true;
+                    }
+                    return false;
                 }
             }
         }
@@ -1226,6 +1327,11 @@ public class PowersTheWorld extends StandPowers {
             if (!standEntity.getHeldItem().isEmpty() &&
                     (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
                     && this.getAttackTimeDuring() < 10) {
+                return false;
+            } else if (standEntity.getFirstPassenger() != null &&
+                    (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA
+                            || this.getActivePower() == PowerIndex.POWER_2_EXTRA)
+                    && this.getAttackTimeDuring() < 3) {
                 return false;
             }
         }
@@ -1280,6 +1386,13 @@ public class PowersTheWorld extends StandPowers {
                         return true;
                     }
                     return false;
+                } else if (standEntity.getFirstPassenger() != null){
+                    standEntity.ejectPassengers();
+                    animateStand((byte) 36);
+                    this.setAttackTimeDuring(-10);
+                    this.setCooldown(PowerIndex.SKILL_2, 10);
+                    this.syncCooldowns();
+                    return true;
                 }
             }
         }
@@ -1350,6 +1463,8 @@ public class PowersTheWorld extends StandPowers {
                     this.setChargedTSTicks(chargeTime);
                 }
                 super.tryChargedPower(move, forced, chargeTime);
+            } else if (move == PowerIndex.POWER_2_EXTRA){
+                this.grabEntity = chargeTime;
             } else if (move == PowerIndex.SPECIAL_FINISH) {
                 /*If the server is behind on the client TS time, update it to lower*/
                 if (this.getChargedTSTicks() > chargeTime) {
@@ -1479,12 +1594,20 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public boolean isAttackIneptVisually(byte activeP){
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
-        || ((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock());
+        || ((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity());
     }
 
     public boolean hasBlock(){
         if (((StandUser) this.getSelf()).getStand() != null){
             if (!((StandUser) this.getSelf()).getStand().getHeldItem().isEmpty()){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasEntity(){
+        if (((StandUser) this.getSelf()).getStand() != null){
+            if ((((StandUser) this.getSelf()).getStand().getFirstPassenger() != null)){
                 return true;
             }
         }
@@ -1523,7 +1646,7 @@ public class PowersTheWorld extends StandPowers {
         } else {
             /*If it can find a mob to grab, it will*/
             Entity targetEntity = this.rayCastEntity(this.getSelf(),2F);
-            if (targetEntity != null) {
+            if (targetEntity != null && canGrab(targetEntity)) {
                 setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_MOB, PowerIndex.SKILL_2);
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_BLOCK, PowerIndex.SKILL_2);
@@ -1661,6 +1784,25 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    public boolean canGrab(Entity entity){
+        if (!(entity instanceof EnderDragon) && !(entity instanceof WitherBoss) && !(entity instanceof Warden)
+                && !(entity instanceof LivingEntity ent && ent.getHealth() > this.getSelf().getMaxHealth())
+                && !(entity instanceof Player pl && pl.isCreative())
+                && !(entity instanceof StandEntity)){
+            return true;
+        }
+        return false;
+    }
+
+
+    protected void clampRotation(Entity $$0) {
+        $$0.setYBodyRot(this.getSelf().getYRot());
+        float $$1 = Mth.wrapDegrees($$0.getYRot() - this.getSelf().getYRot());
+        float $$2 = Mth.clamp($$1, -105.0F, 105.0F);
+        $$0.yRotO += $$2 - $$1;
+        $$0.setYRot($$0.getYRot() + $$2 - $$1);
+        $$0.setYHeadRot($$0.getYRot());
+    }
 
     public static final byte DODGE_NOISE = 19;
 

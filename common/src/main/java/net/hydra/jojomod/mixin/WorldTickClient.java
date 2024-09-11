@@ -101,6 +101,9 @@ public abstract class WorldTickClient extends Level {
         ++stand.tickCount;
         stand.setOldPosAndRot();
         stand.tickStandOut();
+        for (Entity $$2 : stand.getPassengers()) {
+            this.tickPassenger(stand, $$2);
+        }
     }
 
 

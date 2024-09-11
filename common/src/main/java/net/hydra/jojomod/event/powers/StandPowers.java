@@ -192,6 +192,9 @@ public abstract class StandPowers {
     public boolean cancelItemUse() {
         return false;
     }
+    public boolean cancelCollision(Entity et) {
+        return false;
+    }
 
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {

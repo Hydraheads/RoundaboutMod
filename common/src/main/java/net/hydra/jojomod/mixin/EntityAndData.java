@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -197,6 +198,14 @@ public abstract class EntityAndData implements IEntityAndData {
            syncPersistentData();
         }
     }
+
+    @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
+    protected void roundabout$push(Entity entity, CallbackInfo ci) {
+        if (entity instanceof LivingEntity le && ((StandUser) le).getStandPowers().cancelCollision(((Entity)(Object)this))) {
+            ci.cancel();
+        }
+    }
+
 
     @Shadow
     private Vec3 deltaMovement;

@@ -276,6 +276,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 damage = 6;
             } else if (this.getItem().is(Items.COAL)){
                 damage = 3;
+            } else if (this.getItem().is(Items.FLINT)){
+                damage = 5;
             } else if (this.getItem().is(Items.COPPER_INGOT)){
                 damage = 5;
             } else if (this.getItem().is(Items.AMETHYST_SHARD)){
@@ -293,11 +295,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     }
 
     public void blockBreakParticles(Block block, Vec3 pos){
-
-        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
-                block.defaultBlockState()),
-                pos.x, pos.y, pos.z,
-                100, 0, 0, 0, 0.5);
+        if (!this.level().isClientSide) {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    100, 0, 0, 0, 0.5);
+        }
     }
 
 

@@ -599,6 +599,7 @@ public abstract class StandEntity extends Mob{
         var currFade = this.getFadeOut();
         if (!this.level().isClientSide()) {
             if (currFade >= 0) {
+                this.ejectPassengers();
                 this.incFadeOut((byte) -1);
                 if (!this.getHeldItem().isEmpty()) {
                     if (this.canAcquireHeldItem) {
@@ -613,6 +614,7 @@ public abstract class StandEntity extends Mob{
             }
         }
         if (currFade < 0) {
+            this.ejectPassengers();
             if (!this.getHeldItem().isEmpty()) {
                 if (this.canAcquireHeldItem) {
                     double $$3 = this.getEyeY() - 0.3F;
