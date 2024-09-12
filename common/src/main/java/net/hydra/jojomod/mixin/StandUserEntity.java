@@ -438,6 +438,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    private int roundabout$restrainTicks = -1;
+    @Unique
     private int roundabout$knifeIFrameTicks = 0;
     @Unique
     private int roundabout$stackedKnivesAndMatches = 0;
@@ -500,6 +502,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
      * complicated**/
     public boolean isStandUser(){
         return this.getActive();
+    }
+
+
+
+    @Override
+    public boolean roundabout$isRestrained(){
+        return (this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted());
+    }
+
+    @Override
+    public int roundabout$getRestrainedTicks(){
+        return this.roundabout$restrainTicks;
+    }
+
+    @Override
+    public void roundabout$setRestrainedTicks(int restrain){
+        this.roundabout$restrainTicks = restrain;
     }
 
     public boolean isDazed(){

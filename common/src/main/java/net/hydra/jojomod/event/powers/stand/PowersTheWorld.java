@@ -100,9 +100,11 @@ public class PowersTheWorld extends StandPowers {
                     if (keyIsDown) {
                         if (!options.keyShift.isDown()) {
                             Entity targetEntity = this.rayCastEntity(this.getSelf(),2F);
-                            if (targetEntity != null && canGrab(targetEntity)) {
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_EXTRA, true);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
+                            if (targetEntity != null) {
+                                if (canGrab(targetEntity)) {
+                                    ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_EXTRA, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
+                                }
                             } else {
                                 //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
                                 BlockHitResult HR = getGrabBlock();
@@ -1308,7 +1310,7 @@ public class PowersTheWorld extends StandPowers {
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
                         float width = ent.getBbWidth()*1.8F;
-                        Vec3 vec3d3 = vec3d.add(vec3d2.x * width, vec3d2.y * width, vec3d2.z * width);
+                        Vec3 vec3d3 = vec3d.add(vec3d2.x * width, (vec3d2.y-(ent.getEyeHeight()*0.3)) * width, vec3d2.z * width);
                         standEntity.ejectPassengers();
                         boolean candoit = true;
                         for (var i = 0; i< ent.getBbHeight(); i++){
@@ -1330,7 +1332,7 @@ public class PowersTheWorld extends StandPowers {
                         int degreesY = (int) this.getSelf().getXRot();
                         float strength = 3.0F;
                         if (ent instanceof Player){
-                            strength = 2F;
+                            strength = 2.3F;
                         } else if (ent instanceof Boat){
                             strength = 6F;
                         } else if (ent instanceof Minecart){
@@ -1339,9 +1341,13 @@ public class PowersTheWorld extends StandPowers {
 
                         float ybias = (90F - Math.abs(degreesY)) /90F;
                         if (this.getSelf() instanceof Player pl && pl.isCrouching()){
-                            strength *= 0.6F;
+                            if (ent instanceof Player){
+                                strength *= 0.8F;
+                            } else {
+                                strength *= 0.6F;
+                            }
                             if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())){
-                                MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.5+(ybias/2)),
+                                MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.75+(ybias/4)),
                                         Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                         Mth.sin(degreesY * ((float) Math.PI / 180)),
                                         -Mth.cos((degrees * ((float) Math.PI / 180))),

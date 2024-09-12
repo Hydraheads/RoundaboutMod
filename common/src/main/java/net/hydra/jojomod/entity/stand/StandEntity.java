@@ -240,6 +240,10 @@ public abstract class StandEntity extends Mob{
         return true;
     }
 
+    public boolean canRestrainWhileMounted(){
+        return true;
+    }
+
     public final void setHeldItem(ItemStack stack) {
         this.entityData.set(HELD_ITEM, stack);
     }

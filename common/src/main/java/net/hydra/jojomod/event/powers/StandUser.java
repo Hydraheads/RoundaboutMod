@@ -65,6 +65,9 @@ public interface StandUser {
     boolean isGuardingEffectively2();
     boolean shieldNotDisabled();
     boolean isDazed();
+    boolean roundabout$isRestrained();
+    int roundabout$getRestrainedTicks();
+    void roundabout$setRestrainedTicks(int restrain);
     void setDazed(byte dazeTime);
     void setDazeTime(byte dazeTime);
 
