@@ -1134,7 +1134,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 if (roundaboutTSHurtSound < 1){
                     roundaboutTSHurtSound = 1;
-                } if (roundaboutTSHurtSound < 2 && $$0.is(ModDamageTypes.STAND)){
+                } if (roundaboutTSHurtSound < 2 && ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.PENETRATING_STAND))){
                     roundaboutTSHurtSound = 2;
                 }
                 $$1*=0.66F;

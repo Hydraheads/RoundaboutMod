@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "roundabout:barbed_wire",
+    "roundabout:penetrating_stand",
     "roundabout:statue",
     "roundabout:gas_explosion"
   ]

@@ -428,7 +428,7 @@ public class PowersTheWorld extends StandPowers {
                     } else if (standEntity.getFirstPassenger() != null && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA && move != PowerIndex.POWER_2_EXTRA){
                         MainUtil.ejectInFront(standEntity);
-                        animateStand((byte) 36);
+                            animateStand((byte) 36);
                     }
                 }
             }
@@ -1148,7 +1148,7 @@ public class PowersTheWorld extends StandPowers {
             StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
             if (!this.getSelf().level().isClientSide) {
                 if (standEntity != null && this.getActivePower() == PowerIndex.POWER_2_EXTRA &&
-                        standEntity.getFirstPassenger() == null){
+                        standEntity.getFirstPassenger() == null && this.getAttackTimeDuring() > -1){
                     ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
                     animateStand((byte) 36);
                 }
@@ -1270,6 +1270,14 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    private float getGrabThrowStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 3;
+        } else {
+            return 7;
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){
@@ -1284,6 +1292,7 @@ public class PowersTheWorld extends StandPowers {
                         } else {
                             animateStand((byte) 35);
                         }
+                        poseStand(OffsetIndex.FOLLOW);
                         standEntity.setHeldItem(ItemStack.EMPTY);
                         this.setAttackTimeDuring(-10);
 
@@ -1294,7 +1303,6 @@ public class PowersTheWorld extends StandPowers {
                     if (!this.getSelf().level().isClientSide) {
                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 30);
                         this.setCooldown(PowerIndex.SKILL_2, 30);
-                        animateStand((byte) 33);
                         Entity ent = standEntity.getFirstPassenger();
 
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -1318,24 +1326,47 @@ public class PowersTheWorld extends StandPowers {
                         }
 
 
-                        this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         int degrees = (int) (this.getSelf().getYRot() % 360);
                         int degreesY = (int) this.getSelf().getXRot();
                         float strength = 3.0F;
                         if (ent instanceof Player){
-                            strength = 1.5F;
+                            strength = 2F;
                         } else if (ent instanceof Boat){
                             strength = 6F;
                         } else if (ent instanceof Minecart){
                             strength = 4F;
                         }
+
                         float ybias = (90F - Math.abs(degreesY)) /90F;
-                        MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.5+(ybias/2)),
-                                Mth.sin(((degrees * ((float) Math.PI / 180)))),
-                                Mth.sin(degreesY * ((float) Math.PI / 180)),
-                                -Mth.cos((degrees * ((float) Math.PI / 180))),
-                                ybias);
-                        this.setAttackTimeDuring(-10);
+                        if (this.getSelf() instanceof Player pl && pl.isCrouching()){
+                            strength *= 0.6F;
+                            if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())){
+                                MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.5+(ybias/2)),
+                                        Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                        Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                        -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                        ybias);
+                                animateStand((byte) 3);
+                                poseStand(OffsetIndex.ATTACK);
+                                this.setAttackTimeDuring(-15);
+                                this.getSelf().level().playSound(null, ent, ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.18F);
+                            } else {
+                                animateStand((byte) 33);
+                                poseStand(OffsetIndex.FOLLOW);
+                                this.setAttackTimeDuring(-10);
+                            }
+                        } else {
+
+                            this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.5+(ybias/2)),
+                                    Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                    Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                    -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                    ybias);
+                            animateStand((byte) 33);
+                            poseStand(OffsetIndex.FOLLOW);
+                            this.setAttackTimeDuring(-10);
+                        }
 
                         return true;
                     }

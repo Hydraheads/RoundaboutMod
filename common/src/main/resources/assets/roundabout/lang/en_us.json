@@ -85,6 +85,7 @@
   "hud.roundabout.standout": "Stand Summoned",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
+  "death.attack.penetrating_stand": "%1$s was retired by %2$s",
   "death.attack.time": "Time caught up with %1$s whilst fighting %2$s",
   "death.attack.knife": "%1$s was knifed to death by %2$s",
   "death.attack.match": "%1$s met their match in battle with %2$s",
