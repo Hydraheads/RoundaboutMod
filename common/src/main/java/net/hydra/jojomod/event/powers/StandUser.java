@@ -103,6 +103,11 @@ public interface StandUser {
     byte roundabout$getStoredDamageByte();
 
     void roundaboutUniversalTick();
+    void roundabout$startAutoSpinAttack(int p_204080_);
+
+    void roundabout$setThrower(LivingEntity thrower);
+
+    LivingEntity roundabout$getThrower();
 
     int getRoundaboutIdleTime();
 

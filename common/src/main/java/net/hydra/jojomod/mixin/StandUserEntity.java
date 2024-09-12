@@ -13,10 +13,7 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -69,6 +66,8 @@ import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract boolean hurt(DamageSource $$0, float $$1);
+
     @Shadow public abstract void indicateDamage(double $$0, double $$1);
 
     @Shadow public abstract void heal(float $$0);
@@ -108,6 +107,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     @Unique
     private StandEntity Stand;
+    @Nullable
+    @Unique
+    private LivingEntity roundabout$thrower;
 
     /** StandID is used clientside only*/
 
@@ -163,6 +165,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void setRoundaboutIdleTime(int roundaboutIdleTime){
         this.roundaboutIdleTime = roundaboutIdleTime;
+    }
+    @Unique
+    @Override
+    public void roundabout$setThrower(LivingEntity thrower){
+        this.roundabout$thrower = thrower;
+    }
+    @Unique
+    @Override
+    public LivingEntity roundabout$getThrower(){
+        return this.roundabout$thrower;
     }
 
 
@@ -491,7 +503,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public List<Entity> roundabout$checkAutoSpin(List<Entity> list){
         List<Entity> listE= new ArrayList<>();
         for (Entity entity : list) {
-            if (!(entity instanceof StandEntity se && se.ignoreTridentSpin())) {
+            if (!(entity instanceof StandEntity se && se.ignoreTridentSpin()) && !(entity.is(this.roundabout$getThrower()))) {
                 listE.add(entity);
             }
         }
@@ -630,6 +642,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void syncGuard(){
         if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
             ModPacketHandler.PACKET_ACCESS.StandGuardPointPacket(((ServerPlayer) (Object) this),this.getGuardPoints(),this.getGuardBroken());
+        }
+    }
+
+    @Shadow
+    protected int autoSpinAttackTicks;
+    @Shadow
+    protected void setLivingEntityFlag(int $$0, boolean $$1){
+    }
+
+
+    @Override
+    public void roundabout$startAutoSpinAttack(int p_204080_) {
+        this.autoSpinAttackTicks = p_204080_;
+        if (!this.level().isClientSide) {
+            this.setLivingEntityFlag(4, true);
         }
     }
 
@@ -911,6 +938,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void isBlockingRoundabout(CallbackInfoReturnable<Boolean> ci) {
         if (this.isGuarding()){
             ci.setReturnValue(this.isGuardingEffectively());
+        }
+    }
+    @Inject(method = "doAutoAttackOnTouch", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$doAttackOnTouch(LivingEntity $$0, CallbackInfo ci) {
+        if (!$$0.is(this.roundabout$getThrower())){
+            DamageSource $$5 = ModDamageTypes.of($$0.level(), ModDamageTypes.THROWN_OBJECT, this.roundabout$getThrower());
+            $$0.hurt($$5, 8);
         }
     }
 

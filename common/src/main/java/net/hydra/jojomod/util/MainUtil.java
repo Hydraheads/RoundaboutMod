@@ -603,6 +603,7 @@ public class MainUtil {
         }
         return false;
     }
+
     public static boolean knockShieldPlusStand(Entity entity, int duration){
 
         if (entity != null && entity.isAlive() && !entity.isRemoved()) {

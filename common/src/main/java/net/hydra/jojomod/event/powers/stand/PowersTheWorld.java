@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -33,8 +34,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -1309,8 +1310,12 @@ public class PowersTheWorld extends StandPowers {
 
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
-                        float width = ent.getBbWidth()*1.8F;
-                        Vec3 vec3d3 = vec3d.add(vec3d2.x * width, (vec3d2.y-(ent.getEyeHeight()*0.3)) * width, vec3d2.z * width);
+                        double width = (this.getSelf().getBbWidth()*0.6)+ent.getBbWidth()*1.8F;
+                        double y = vec3d2.y;
+                        if (this.getSelf() instanceof Player pl && pl.isCrouching()){
+                            y-= (ent.getEyeHeight()*0.3);
+                        }
+                        Vec3 vec3d3 = vec3d.add(vec3d2.x * width, y * width, vec3d2.z * width);
                         standEntity.ejectPassengers();
                         boolean candoit = true;
                         for (var i = 0; i< ent.getBbHeight(); i++){
@@ -1330,7 +1335,7 @@ public class PowersTheWorld extends StandPowers {
 
                         int degrees = (int) (this.getSelf().getYRot() % 360);
                         int degreesY = (int) this.getSelf().getXRot();
-                        float strength = 3.0F;
+                        float strength = 2.8F;
                         if (ent instanceof Player){
                             strength = 2.3F;
                         } else if (ent instanceof Boat){
@@ -1362,7 +1367,13 @@ public class PowersTheWorld extends StandPowers {
                                 this.setAttackTimeDuring(-10);
                             }
                         } else {
-
+                            if (ent instanceof Mob && ent.getBbHeight() < 1 && ent.getPassengers().isEmpty()){
+                                ((StandUser)ent).roundabout$setThrower(this.getSelf());
+                                ((StandUser)ent).roundabout$startAutoSpinAttack(20);
+                            }
+                            if (ent instanceof NeutralMob NE && !(ent instanceof Animal)){
+                                NE.setTarget(this.getSelf());
+                            }
                             this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.5+(ybias/2)),
                                     Mth.sin(((degrees * ((float) Math.PI / 180)))),
