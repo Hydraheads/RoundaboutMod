@@ -89,6 +89,24 @@ public class PowersTheWorld extends StandPowers {
         return 8F;
     }
 
+    /**Assault Ability*/
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                    if (keyIsDown) {
+                        if (!options.keyShift.isDown()) {
+
+                        } else {
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /**Dodge ability*/
     @Override
@@ -1718,6 +1736,10 @@ public class PowersTheWorld extends StandPowers {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
             }
         } else {
+
+
+            //setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
+
             /*If it can find a mob to grab, it will*/
             Entity targetEntity = this.rayCastEntity(this.getSelf(),2F);
             if (targetEntity != null && canGrab(targetEntity)) {

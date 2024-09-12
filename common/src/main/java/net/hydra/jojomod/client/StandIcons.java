@@ -31,6 +31,8 @@ public class StandIcons {
     public static final ResourceLocation STONE_LEFT_LEG = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/locacaca_layers/left_leg.png");
 
+    public static final ResourceLocation THE_WORLD_ASSAULT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/assault.png");
     public static final ResourceLocation THE_WORLD_TIME_STOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stop_time.png");
     public static final ResourceLocation THE_WORLD_TIME_STOP_IMPULSE = new ResourceLocation(Roundabout.MOD_ID,
