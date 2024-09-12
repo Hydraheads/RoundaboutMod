@@ -69,6 +69,8 @@ import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract void indicateDamage(double $$0, double $$1);
+
     @Shadow public abstract void heal(float $$0);
 
     @Shadow public abstract boolean isAlive();
@@ -1065,6 +1067,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
         if (roundabout$gasolineIFRAMES > 0 && $$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
@@ -1075,6 +1078,35 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$gasolineIFRAMES = 10;
                 roundabout$knifeIFrameTicks = 10;
                 roundabout$stackedKnivesAndMatches = 12;
+            }
+        }
+
+        if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE){
+            if (SE.dismountOnHit() && ($$0.getDirectEntity() != null || $$0.is(DamageTypes.IN_WALL))) {
+                SE.ejectPassengers();
+                if (SE.getUser() != null) {
+                    //((StandUser)SE.getUser())
+                    boolean candoit = true;
+                    Vec3 vec3d3 = SE.getUser().getForward();
+                    for (var i = 0; i< this.getBbHeight(); i++){
+                        if (this.level().getBlockState(new BlockPos(
+                                (int) vec3d3.x(), (int) (vec3d3.y+i),
+                                (int) vec3d3.z)).isSolid()){
+                            candoit = false;
+                            break;
+                        }
+                    }
+                    if (candoit){
+                        this.dismountTo(vec3d3.x,vec3d3.y,vec3d3.z);
+                    } else {
+                        this.dismountTo(SE.getUser().getX(), SE.getUser().getY(), SE.getUser().getZ());
+                    }
+
+
+                }
+                if ($$0.is(DamageTypes.IN_WALL)) {
+                    ci.setReturnValue(false);
+                }
             }
         }
 

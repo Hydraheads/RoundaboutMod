@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -235,6 +236,9 @@ public abstract class StandEntity extends Mob{
         this.entityData.set(ANIMATION, animation);
     }
 
+    public boolean dismountOnHit(){
+        return true;
+    }
 
     public final void setHeldItem(ItemStack stack) {
         this.entityData.set(HELD_ITEM, stack);
@@ -599,7 +603,7 @@ public abstract class StandEntity extends Mob{
         var currFade = this.getFadeOut();
         if (!this.level().isClientSide()) {
             if (currFade >= 0) {
-                this.ejectPassengers();
+                MainUtil.ejectInFront(this);
                 this.incFadeOut((byte) -1);
                 if (!this.getHeldItem().isEmpty()) {
                     if (this.canAcquireHeldItem) {
@@ -614,7 +618,7 @@ public abstract class StandEntity extends Mob{
             }
         }
         if (currFade < 0) {
-            this.ejectPassengers();
+            MainUtil.ejectInFront(this);
             if (!this.getHeldItem().isEmpty()) {
                 if (this.canAcquireHeldItem) {
                     double $$3 = this.getEyeY() - 0.3F;

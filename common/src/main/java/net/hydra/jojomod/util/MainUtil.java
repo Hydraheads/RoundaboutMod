@@ -213,12 +213,39 @@ public class MainUtil {
                 - vec3d2.z);
         entity.hasImpulse = true;
     }
+    public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
+        entity.hurtMarked = true;
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        Vec3 vec3d3 = vec3d2.multiply(yBias,1,yBias);
+        entity.setDeltaMovement(- vec3d3.x,
+                -vec3d3.y,
+                - vec3d3.z);
+        entity.hasImpulse = true;
+    }
     public static void takeUnresistableKnockbackWithY2(Entity entity,double x, double y, double z) {
         entity.hurtMarked = true;
         entity.setDeltaMovement( x,
                 y,
                 z);
         entity.hasImpulse = true;
+    }
+
+    public static void ejectInFront(StandEntity stand){
+        if (stand.getFirstPassenger() != null && stand.getUser() != null){
+            Entity entity = stand.getFirstPassenger();
+            stand.ejectPassengers();
+            entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
+        }
+    }
+
+    public static void knockback(Entity entity, double d, double e, double f) {
+        if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+            return;
+        }
+        entity.hasImpulse = true;
+        Vec3 vec3 = entity.getDeltaMovement();
+        Vec3 vec32 = new Vec3(e, 0.0, f).normalize().scale(d);
+        entity.setDeltaMovement(vec3.x / 2.0 - vec32.x, entity.onGround() ? Math.min(0.4, vec3.y / 2.0 + d) : vec3.y, vec3.z / 2.0 - vec32.z);
     }
 
     public static double lengthdir_x(double length, double angle) {

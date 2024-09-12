@@ -43,6 +43,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
@@ -426,7 +427,7 @@ public class PowersTheWorld extends StandPowers {
                         }
                     } else if (standEntity.getFirstPassenger() != null && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA && move != PowerIndex.POWER_2_EXTRA){
-                        standEntity.ejectPassengers();
+                        MainUtil.ejectInFront(standEntity);
                         animateStand((byte) 36);
                     }
                 }
@@ -1269,6 +1270,7 @@ public class PowersTheWorld extends StandPowers {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){
         if (this.getSelf() instanceof Player) {
@@ -1285,16 +1287,36 @@ public class PowersTheWorld extends StandPowers {
                         standEntity.setHeldItem(ItemStack.EMPTY);
                         this.setAttackTimeDuring(-10);
 
-                        this.syncCooldowns();
                         return true;
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
                     if (!this.getSelf().level().isClientSide) {
+                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 30);
                         this.setCooldown(PowerIndex.SKILL_2, 30);
                         animateStand((byte) 33);
                         Entity ent = standEntity.getFirstPassenger();
-                        ent.dismountTo(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
+
+                        Vec3 vec3d = this.getSelf().getEyePosition(0);
+                        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                        float width = ent.getBbWidth()*1.8F;
+                        Vec3 vec3d3 = vec3d.add(vec3d2.x * width, vec3d2.y * width, vec3d2.z * width);
+                        standEntity.ejectPassengers();
+                        boolean candoit = true;
+                        for (var i = 0; i< ent.getBbHeight(); i++){
+                            if (this.getSelf().level().getBlockState(new BlockPos(
+                                    (int) vec3d3.x(), (int) (vec3d3.y+i),
+                                    (int) vec3d3.z)).isSolid()){
+                                candoit = false;
+                                break;
+                            }
+                        }
+                        if (candoit){
+                            ent.dismountTo(vec3d3.x,vec3d3.y,vec3d3.z);
+                        } else {
+                            ent.dismountTo(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
+                        }
+
 
                         this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         int degrees = (int) (this.getSelf().getYRot() % 360);
@@ -1302,15 +1324,19 @@ public class PowersTheWorld extends StandPowers {
                         float strength = 3.0F;
                         if (ent instanceof Player){
                             strength = 1.5F;
+                        } else if (ent instanceof Boat){
+                            strength = 6F;
+                        } else if (ent instanceof Minecart){
+                            strength = 4F;
                         }
                         float ybias = (90F - Math.abs(degreesY)) /90F;
-                        MainUtil.takeUnresistableKnockbackWithY(ent, strength*(0.5+(ybias/2)),
-                                Mth.sin((degrees * ((float) Math.PI / 180))*ybias),
+                        MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.5+(ybias/2)),
+                                Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                 Mth.sin(degreesY * ((float) Math.PI / 180)),
-                                -Mth.cos((degrees * ((float) Math.PI / 180)))*ybias);
+                                -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                ybias);
                         this.setAttackTimeDuring(-10);
 
-                        this.syncCooldowns();
                         return true;
                     }
                     return false;
@@ -1387,7 +1413,7 @@ public class PowersTheWorld extends StandPowers {
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
-                    standEntity.ejectPassengers();
+                    MainUtil.ejectInFront(standEntity);
                     animateStand((byte) 36);
                     this.setAttackTimeDuring(-10);
                     this.setCooldown(PowerIndex.SKILL_2, 10);
