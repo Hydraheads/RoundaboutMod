@@ -73,7 +73,10 @@ public abstract class WorldTickClient extends Level {
             if (((StandUser) livingEntity).getStand() != null) {
                 StandEntity stand = ((StandUser) livingEntity).getStand();
                 if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
-                    this.tickStandIn(livingEntity, stand);
+
+                    if (!(entity.getVehicle() != null && entity.getVehicle() == ((StandUser) entity).getStand())) {
+                        this.tickStandIn(livingEntity, stand);
+                    }
                 }
             }
         }
@@ -203,7 +206,10 @@ public abstract class WorldTickClient extends Level {
                 StandEntity stand = ((StandEntity)$$0);
                 if (stand.hasUser() && !stand.getUser().isRemoved()) {
                     if ((((StandUser) stand.getUser()).getStand() != null && ((StandUser) stand.getUser()).getStand().getId() == stand.getId())) {
-                        ci.cancel();
+                        if (!(stand.getUser().getVehicle() != null && stand.getUser().getVehicle() == ((StandUser) stand.getUser()).getStand()))
+                        {
+                            ci.cancel();
+                        }
                     }
                 }
             }

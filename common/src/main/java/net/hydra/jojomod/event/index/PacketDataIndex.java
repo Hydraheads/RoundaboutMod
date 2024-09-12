@@ -12,6 +12,7 @@ public class PacketDataIndex {
     /**Int packets*/
     public static final byte INT_GLAIVE_TARGET = 1;
     public static final byte INT_TS_TIME = 2;
+    public static final byte INT_RIDE_TICKS = 3;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;

@@ -45,7 +45,9 @@ public class WorldTickServer {
         if ($$0.showVehicleHealth()) {
             LivingEntity livingEntity = (LivingEntity) $$0;
             if (((StandUser) $$0).hasStandOut()) {
-                this.tickStandIn(livingEntity, Objects.requireNonNull(((StandUser) $$0).getStand()));
+                if (!($$0.getVehicle() != null && $$0.getVehicle() == ((StandUser) $$0).getStand())) {
+                    this.tickStandIn(livingEntity, Objects.requireNonNull(((StandUser) $$0).getStand()));
+                }
             }
         }
         for (Entity entity2 : $$0.getPassengers()) {
@@ -114,7 +116,10 @@ public class WorldTickServer {
                 StandEntity stand = ((StandEntity)$$0);
                 if (stand.hasUser() && !stand.getUser().isRemoved()){
                     if ((((StandUser)stand.getUser()).getStand() != null && ((StandUser)stand.getUser()).getStand().getId() == stand.getId())) {
-                        ci.cancel();
+                        if (!(stand.getUser().getVehicle() != null && stand.getUser().getVehicle() == ((StandUser) stand.getUser()).getStand()))
+                        {
+                            ci.cancel();
+                        }
                     }
                 }
             }

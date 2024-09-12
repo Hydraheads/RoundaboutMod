@@ -38,19 +38,15 @@ public abstract class ZMob extends LivingEntity {
     private void roundabout$Tick(CallbackInfo ci) {
         if (this instanceof Enemy || (this instanceof NeutralMob && !(((Mob)(Object) this) instanceof TamableAnimal))) {
             if (((StandUser) this).roundabout$isRestrained()) {
-                Roundabout.LOGGER.info("1");
                 int ticks = ((StandUser) this).roundabout$getRestrainedTicks();
                 if (ticks < 50) {
                     ticks++;
                     ((StandUser) this).roundabout$setRestrainedTicks(ticks);
                 }
                 if (ticks >= 50) {
-                    Roundabout.LOGGER.info("2");
                     if (this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()) {
-                        Roundabout.LOGGER.info("3");
                         SE.ejectPassengers();
                         if (SE.getUser() != null) {
-                            Roundabout.LOGGER.info("4");
                             //((StandUser)SE.getUser())
                             boolean candoit = true;
                             Vec3 vec3d3 = SE.getUser().getForward();

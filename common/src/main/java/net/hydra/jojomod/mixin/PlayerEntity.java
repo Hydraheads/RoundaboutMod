@@ -1,13 +1,13 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -29,7 +29,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -113,6 +112,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return this.roundabout$airTime;
     }
 
+    @Shadow
+    protected boolean wantsToStopRiding() {
+        return false;
+    }
+
 
     /**Attack Speed Decreases when your hand is stone*/
     @Inject(method = "getCurrentItemAttackStrengthDelay", at = @At(value = "HEAD"), cancellable = true)
@@ -137,6 +141,46 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 float dSpeed = this.getDestroySpeed($$0);
                 roundabout$destroySpeedRecursion = false;
                 cir.setReturnValue((float)(dSpeed*0.6));
+            }
+        }
+    }
+
+    /**Break free from stand grab*/
+    @Inject(method = "wantsToStopRiding", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$wantsToStopRiding(CallbackInfoReturnable<Boolean> cir) {
+        if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
+            int rticks = ((StandUser)this).roundabout$getRestrainedTicks();
+            if (rticks < 50){
+                cir.setReturnValue(false);
+            }
+        }
+    }
+    @Inject(method = "rideTick", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$rideTick(CallbackInfo ci) {
+        if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
+            int rticks = ((StandUser)this).roundabout$getRestrainedTicks();
+            if (this.level().isClientSide){
+                if (this.isCrouching()) {
+                    rticks++;
+                    if (rticks >= 30) {
+                        rticks = 30;
+                    }
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(rticks, PacketDataIndex.INT_RIDE_TICKS);
+                    ((StandUser) this).roundabout$setRestrainedTicks(rticks);
+                } else {
+                    rticks--;
+                    if (rticks <= -1) {
+                        rticks = -1;
+                    }
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(rticks, PacketDataIndex.INT_RIDE_TICKS);
+                    ((StandUser) this).roundabout$setRestrainedTicks(rticks);
+                }
+            } else {
+                if (rticks >= 30){
+                    this.stopRiding();
+                    this.setShiftKeyDown(false);
+                    ci.cancel();
+                }
             }
         }
     }
@@ -251,6 +295,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
+
+        if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
+            ((StandUser) this).roundabout$setRestrainedTicks(-1);
+        }
 
         boolean notSkybound = (this.onGround() || this.isSwimming()|| this.onClimbable() || this.isPassenger()
                 || this.hasEffect(MobEffects.LEVITATION));

@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -153,6 +154,10 @@ public abstract class HudRendering implements IHudAccess {
                     && (((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  ((StandUser) minecraft.player).getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true, this.getFont());
+                return true;
+            } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
+
+                StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha);
                 return true;
             }
         }

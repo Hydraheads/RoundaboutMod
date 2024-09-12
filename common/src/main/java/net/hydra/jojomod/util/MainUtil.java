@@ -709,6 +709,8 @@ public class MainUtil {
             if (((StandUser)player).getStandPowers().getChargedTSTicks() > data) {
                 ((StandUser)player).getStandPowers().setChargedTSTicks(data);
             }
+        } else if (context == PacketDataIndex.INT_RIDE_TICKS){
+            ((StandUser)player).roundabout$setRestrainedTicks(data);
         }
     }
 }
