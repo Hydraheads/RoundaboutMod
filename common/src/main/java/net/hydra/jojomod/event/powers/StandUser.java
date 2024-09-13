@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +30,8 @@ public interface StandUser {
     void regenGuard(float regen);
     void damageGuard(float damage);
     void breakGuard();
+    ItemStack roundabout$getStandDisc();
+    void roundabout$setStandDisc(ItemStack stack);
 
     int getAttackTimeMax();
     int getAttackTime();

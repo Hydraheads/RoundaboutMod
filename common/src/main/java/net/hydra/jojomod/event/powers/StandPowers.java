@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class StandPowers {
+public class StandPowers {
     /**StandPowers is a class that every stand has a variation of, override it
      * to define and tick through stand abilities and cooldowns.
      * Note that most generic STAND USER code is in a mixin to the livingentity class.*/
@@ -1444,6 +1444,14 @@ public abstract class StandPowers {
         tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
+    }
+
+
+    public boolean canSummonStand(){
+        return false;
+    }
+    public StandEntity getNewStandEntity(){
+        return null;
     }
 
     /**The Sound Event to cancel when your barrage is canceled*/

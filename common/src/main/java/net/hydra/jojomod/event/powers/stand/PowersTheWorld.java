@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -72,6 +73,15 @@ public class PowersTheWorld extends StandPowers {
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
         return new PowersTheWorld(entity);
+    }
+
+    @Override
+    public boolean canSummonStand(){
+        return true;
+    }
+    @Override
+    public StandEntity getNewStandEntity(){
+        return ModEntities.THE_WORLD.create(this.getSelf().level());
     }
 
     public boolean impactBrace = false;

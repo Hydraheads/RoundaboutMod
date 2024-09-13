@@ -7,10 +7,7 @@ import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.projectile.*;
-import net.hydra.jojomod.entity.stand.StandHeldItemLayer;
-import net.hydra.jojomod.entity.stand.StarPlatinumModel;
-import net.hydra.jojomod.entity.stand.TheWorldModel;
-import net.hydra.jojomod.entity.stand.TheWorldRenderer;
+import net.hydra.jojomod.entity.stand.*;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,6 +27,7 @@ public class FabricEntityClient {
     public static void register() {
         /*Renderers*/
         EntityRendererRegistry.register(FabricEntities.TERRIER_DOG, TerrierEntityRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.STAR_PLATINUM, StarPlatinumRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD, TheWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);

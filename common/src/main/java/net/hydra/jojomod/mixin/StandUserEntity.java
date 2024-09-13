@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -131,6 +132,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<ItemStack> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.ITEM_STACK);
     @Unique
     private StandPowers roundabout$Powers;
 
@@ -436,6 +440,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.getEntityData().get(ROUNDABOUT$ONLY_BLEEDING);
     }
     @Unique
+    @Override
+    public ItemStack roundabout$getStandDisc() {
+        return this.getEntityData().get(ROUNDABOUT$STAND_DISC);
+    }
+    @Unique
+    @Override
+    public void roundabout$setStandDisc(ItemStack stack) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
+        }
+    }
+    @Unique
     public void roundabout$setStoredDamage(float roundaboutStoredDamage){
         if (!((LivingEntity) (Object) this).level().isClientSide) {
             this.roundabout$storedDamage = roundaboutStoredDamage;
@@ -494,10 +510,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
+        if (!this.roundabout$getStandDisc().isEmpty()) {
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("roundabout.StandDisc",this.roundabout$getStandDisc().save(compoundtag));
+        }
         return $$0;
     }
+
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
+        if ($$0.contains("roundabout.HeldItem", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD){
+                this.roundabout$setStandDisc(itemstack);
+                SD.generateStandPowers((LivingEntity)(Object)this);
+            }
+        }
     }
     @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
     public List<Entity> roundabout$checkAutoSpin(List<Entity> list){
@@ -768,7 +797,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     public StandPowers getStandPowers() {
         if (this.roundabout$Powers == null) {
-            this.roundabout$Powers = new PowersTheWorld(User);
+            ItemStack StandDisc = this.roundabout$getStandDisc();
+            if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
+                SD.generateStandPowers((LivingEntity)(Object)this);
+            } else {
+
+                this.roundabout$Powers = new StandPowers(User);
+            }
         }
         return this.roundabout$Powers;
     }
@@ -801,29 +836,33 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         boolean active;
         if (!this.getActive() || forced) {
             //world.getEntity
-            StandEntity stand = ModEntities.THE_WORLD.create(User.level());
-            if (stand != null) {
-                InteractionHand hand = User.getUsedItemHand();
-                if (hand == InteractionHand.OFF_HAND) {
-                    ItemStack itemStack = User.getUseItem();
-                    Item item = itemStack.getItem();
-                    if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
-                        User.releaseUsingItem();
+            if (this.getStandPowers().canSummonStand()) {
+                StandEntity stand = this.getStandPowers().getNewStandEntity();
+                if (stand != null) {
+                    InteractionHand hand = User.getUsedItemHand();
+                    if (hand == InteractionHand.OFF_HAND) {
+                        ItemStack itemStack = User.getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            User.releaseUsingItem();
+                        }
                     }
+                    Vec3 spos = stand.getStandOffsetVector(User);
+                    stand.absMoveTo(spos.x(), spos.y(), spos.z());
+
+                    theWorld.addFreshEntity(stand);
+
+                    if (sound) {
+                        this.getStandPowers().playSummonSound();
+                    }
+
+                    this.standMount(stand);
                 }
-                Vec3 spos = stand.getStandOffsetVector(User);
-                stand.absMoveTo(spos.x(), spos.y(), spos.z());
-
-                theWorld.addFreshEntity(stand);
-
-                if (sound) {
-                    this.getStandPowers().playSummonSound();
-                }
-
-                this.standMount(stand);
+                active=true;
+            } else {
+                active=false;
             }
 
-            active=true;
         } else {
             this.tryPower(PowerIndex.NONE,true);
             active=false;
@@ -912,6 +951,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
         ((LivingEntity)(Object)this).getEntityData().define(STAND_ACTIVE, false);
     }
 
