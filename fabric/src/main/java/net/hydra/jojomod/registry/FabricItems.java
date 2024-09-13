@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
+import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.Registry;
@@ -23,6 +25,10 @@ import net.minecraft.world.level.block.Blocks;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new Item(new Item.Properties().stacksTo(1)));
+    public static Item STAND_DISC_STAR_PLATINUM = registerItem("star_platinum_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
+    public static Item STAND_DISC_THE_WORLD = registerItem("the_world_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -88,6 +94,7 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
 
                         entries.accept(STAND_ARROW);
+                        entries.accept(STAND_DISC);
                         entries.accept(LUCK_UPGRADE);
                         entries.accept(LUCK_SWORD);
                         entries.accept(IRON_GLAIVE);
@@ -105,7 +112,6 @@ public class FabricItems {
                         entries.accept(ModBlocks.BARBED_WIRE);
                         entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(TERRIER_SPAWN_EGG);
-                        entries.accept(STAND_DISC);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
@@ -123,9 +129,23 @@ public class FabricItems {
 
                     }).build());
 
+
+    public static final CreativeModeTab STAND_DISC_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
+            new ResourceLocation(Roundabout.MOD_ID, "jojo_discs"),
+            FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_discs"))
+                    .icon(() -> new ItemStack(STAND_DISC_STAR_PLATINUM)).displayItems((displayContext, entries) -> {
+                        //Add all items from the Jojo mod tab here
+
+                        entries.accept(STAND_DISC_STAR_PLATINUM);
+                        entries.accept(STAND_DISC_THE_WORLD);
+
+                    }).build());
+
     public static void register(){
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = STAND_ARROW;
+        ModItems.STAND_DISC_STAR_PLATINUM = STAND_DISC_STAR_PLATINUM;
+        ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;

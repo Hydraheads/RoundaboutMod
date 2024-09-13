@@ -78,10 +78,14 @@ public abstract class StandPowers {
     public boolean kickStarted = true;
 
 
-
     public StandPowers(LivingEntity self) {
         this.self = self;
     }
+
+    public StandPowers generateStandPowers(LivingEntity entity){
+        return null;
+    }
+
     public LivingEntity getSelf(){
         return this.self;
     }
@@ -719,7 +723,6 @@ public abstract class StandPowers {
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
-                Roundabout.LOGGER.info("how "+this.attackTimeDuring+", "+this.activePowerPhase+", "+this.getSelf().tickCount);
                 this.attackTimeDuring = -10;
                 ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(), this.activePowerPhase);
             }

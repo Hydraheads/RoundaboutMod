@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.StarPlatinumModel;
 import net.hydra.jojomod.entity.stand.TheWorldModel;
 import net.hydra.jojomod.entity.stand.TheWorldRenderer;
 import net.hydra.jojomod.particles.BloodParticle;
@@ -35,6 +36,7 @@ public class ClientForgeEvents {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);

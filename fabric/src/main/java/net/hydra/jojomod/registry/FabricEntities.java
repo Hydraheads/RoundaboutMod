@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Registry;
@@ -38,11 +39,11 @@ public class FabricEntities {
                                 sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":the_world")
                 );
 
-        public static final EntityType<TheWorldEntity> STAR_PLATINUM =
+        public static final EntityType<StarPlatinumEntity> STAR_PLATINUM =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "star_platinum"),
-                        EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).
+                        EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).
                                 sized(0.001F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":star_platinum")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =

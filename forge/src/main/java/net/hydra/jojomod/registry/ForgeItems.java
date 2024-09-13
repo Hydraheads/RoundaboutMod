@@ -4,6 +4,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
+import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
@@ -31,6 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
+import static net.hydra.jojomod.registry.ForgeCreativeTab.addToDiscTab;
 import static net.hydra.jojomod.registry.ForgeCreativeTab.addToTab;
 
 public class ForgeItems {
@@ -105,6 +108,7 @@ public class ForgeItems {
 
 
 
+
     public static final RegistryObject<Item> LUCK_UPGRADE = addToTab(ITEMS.register("luck_upgrade",
             () -> new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     ));
@@ -136,6 +140,12 @@ public class ForgeItems {
             () -> new Potion("roundabout.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
     public static final RegistryObject<Potion> HEX_POTION_STRONG = POTIONS.register("roundabout.strong_hex",
             () -> new Potion("roundabout.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 4800, 1)));
+
+    public static final RegistryObject<Item> STAND_DISC_STAR_PLATINUM = addToDiscTab(ITEMS.register("star_platinum_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null))));
+
+    public static final RegistryObject<Item> STAND_DISC_THE_WORLD = addToDiscTab(ITEMS.register("the_world_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null))));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), KNIFE_DIS);

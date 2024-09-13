@@ -30,6 +30,11 @@
   "item.roundabout.music_disc_torture_dance": "Music Disc",
   "item.roundabout.music_disc_torture_dance.desc": "Yugo Kanno - Torture Dance Song",
 
+  "item.roundabout.star_platinum_disc": "Stand Disc",
+  "item.roundabout.the_world_disc": "Stand Disc",
+  "item.roundabout.star_platinum_disc.desc": "Star Platinum",
+  "item.roundabout.the_world_disc.desc": "The World",
+
   "effect.roundabout.bleed": "Bleed",
   "effect.roundabout.hex": "Hex",
 
@@ -61,6 +66,7 @@
   "block.roundabout.stereo": "Stereo",
 
   "itemgroup.jojo": "Roundabout",
+  "itemgroup.jojo_discs": "Stand Discs",
 
   "key.roundabout.summon.stand": "Summon Stand",
   "key.roundabout.ability.one": "Skill 1",

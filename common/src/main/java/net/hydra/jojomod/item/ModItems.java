@@ -9,6 +9,8 @@ import net.minecraft.world.item.Items;
 
 public class ModItems {
     public static Item STAND_ARROW;
+    public static Item STAND_DISC_STAR_PLATINUM;
+    public static Item STAND_DISC_THE_WORLD;
     public static Item STAND_DISC;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;

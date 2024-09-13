@@ -3,10 +3,8 @@
 // Paste this class into your mod and generate all required imports
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
-import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;

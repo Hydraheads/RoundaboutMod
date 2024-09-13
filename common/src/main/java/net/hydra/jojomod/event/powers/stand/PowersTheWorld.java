@@ -69,6 +69,11 @@ public class PowersTheWorld extends StandPowers {
         return ModSounds.WORLD_SUMMON_SOUND_EVENT;
     }
 
+    @Override
+    public StandPowers generateStandPowers(LivingEntity entity){
+        return new PowersTheWorld(entity);
+    }
+
     public boolean impactBrace = false;
 
     public int impactSlowdown = -1;

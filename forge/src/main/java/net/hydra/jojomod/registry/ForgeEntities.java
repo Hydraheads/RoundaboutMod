@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -29,9 +30,9 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "the_world").toString())
             );
-    public static final RegistryObject<EntityType<TheWorldEntity>> STAR_PLATINUM =
+    public static final RegistryObject<EntityType<StarPlatinumEntity>> STAR_PLATINUM =
             ENTITY_TYPES.register("star_platinum", () ->
-                    EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).sized(0.001F, 2.05f).
+                    EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).sized(0.001F, 2.05f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "star_platinum").toString())
             );

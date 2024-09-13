@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandHeldItemLayer;
+import net.hydra.jojomod.entity.stand.StarPlatinumModel;
 import net.hydra.jojomod.entity.stand.TheWorldModel;
 import net.hydra.jojomod.entity.stand.TheWorldRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -39,6 +40,7 @@ public class FabricEntityClient {
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
