@@ -270,13 +270,6 @@ public class StandHudRender {
             context.blit(StandIcons.JOJO_ICONS, x, l, 0, v+5, k, 5);
         }
 
-
-        int u = 183;
-        k = scaledWidth/2 - 5;
-        l = scaledHeight - 31 - 5;
-        context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
-
-
         String $$6 = z + "";
         int $$7 = (scaledWidth - font.width($$6)) / 2;
         int $$8 = scaledHeight - 31 - 4;

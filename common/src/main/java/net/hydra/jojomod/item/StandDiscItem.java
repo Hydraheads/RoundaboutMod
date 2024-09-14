@@ -46,6 +46,7 @@ public class StandDiscItem extends Item {
             }
             if ($$3.getItem() instanceof StandDiscItem SI) {
                 ((StandUser) $$1).setStand(null);
+                ((StandUser) $$1).setActive(false);
                 ((StandUser) $$1).roundabout$setStandDisc($$3.copy());
                 SI.generateStandPowers($$1);
             }
