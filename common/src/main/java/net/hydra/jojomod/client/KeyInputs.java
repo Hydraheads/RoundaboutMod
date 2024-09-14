@@ -15,18 +15,20 @@ public class KeyInputs {
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
-            if (((StandUser) player).getActive()){
-                ((StandUser) player).setSummonCD(8);
-                ((StandUser) player).setActive(false);
-                ((StandUser) player).tryPower(PowerIndex.NONE,true);
-            } else {
-                ((StandUser) player).setActive(true);
-                ((StandUser) player).setSummonCD(2);
+        if (((StandUser) player).getStandPowers().canSummonStand()) {
+            if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
+                if (((StandUser) player).getActive()) {
+                    ((StandUser) player).setSummonCD(8);
+                    ((StandUser) player).setActive(false);
+                    ((StandUser) player).tryPower(PowerIndex.NONE, true);
+                } else {
+                    ((StandUser) player).setActive(true);
+                    ((StandUser) player).setSummonCD(2);
+                }
+                ModPacketHandler.PACKET_ACCESS.standSummonPacket();
             }
-            ModPacketHandler.PACKET_ACCESS.standSummonPacket();
+            roundaboutClickCount = 2;
         }
-        roundaboutClickCount = 2;
     }
 
     public static void menuKey(Player player, Minecraft client){

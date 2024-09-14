@@ -9,6 +9,13 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class GenericS2CPacket {
 
+    public static void sendSimpleByte(Minecraft client, ClientPacketListener handler,
+                               FriendlyByteBuf buf, PacketSender responseSender) {
+        if (client.player != null) {
+            byte activePower = buf.readByte();
+            MainUtil.handleSimpleBytePacketS2C(client.player,activePower);
+        }
+    }
 
     public static void sendInt(Minecraft client, ClientPacketListener handler,
                                     FriendlyByteBuf buf, PacketSender responseSender) {

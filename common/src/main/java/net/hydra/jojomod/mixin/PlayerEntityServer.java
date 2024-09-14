@@ -35,6 +35,10 @@ import static net.hydra.jojomod.stand.NBTData.syncModNbt;
             }
         }
 
+    @Inject(method = "restoreFrom(Lnet/minecraft/server/level/ServerPlayer;Z)V", at = @At(value = "TAIL"))
+    public void roundabout$restoreFrom(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
+        ((StandUser)this).roundabout$setStandDisc(((StandUser)$$0).roundabout$getStandDisc());
+    }
 
 
     @Override

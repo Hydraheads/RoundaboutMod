@@ -50,27 +50,27 @@ public class StandPowers {
      * Note that most generic STAND USER code is in a mixin to the livingentity class.*/
 
     /**Note that self refers to the stand user, and not the stand itself.*/
-    private final LivingEntity self;
+    public final LivingEntity self;
 
     /**The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.
     * It is also used to */
-    private int attackTime = -1;
+    public int attackTime = -1;
 
     /**The time within an attack. This matters, because if you desummon a stand the attack time doesnt reset */
-    private int attackTimeDuring = -1;
+    public int attackTimeDuring = -1;
 
     /**The time until the generic ability cooldown passes.
     This exists so you have downtime that non-stand users can get it and attack you during.*/
-    private int attackTimeMax = -1;
+    public int attackTimeMax = -1;
 
     /**The id of the move being used. Ex: 1 = punch*/
-    private byte activePower = 0;
+    public byte activePower = 0;
 
     /**The phase of the move being used, primarily to keep track of which punch you are on in a punch string.*/
-    private byte activePowerPhase = 0;
+    public byte activePowerPhase = 0;
 
     /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
-    private final byte activePowerPhaseMax = 3;
+    public final byte activePowerPhaseMax = 3;
 
     /**This variable exists so that a client can begin displaying your attack hud info without ticking through it.
      * Basically, stand attacks are clientside, but they need the server's confirmation to kickstart so you
@@ -340,8 +340,8 @@ public class StandPowers {
     public ResourceLocation getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
     }
-    private SoundEvent getLastHitSound(){
-        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+    public SoundEvent getLastHitSound(){
+        return null;
     }
 
     public ResourceLocation getLastHitID(){
@@ -549,7 +549,6 @@ public class StandPowers {
                 local.input.forwardImpulse *= 0.5f;
                 sprintTrigger = 0;
             }
-            int dodgeTime = ((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime();
         }
         return sprintTrigger;
     }
@@ -645,17 +644,6 @@ public class StandPowers {
         }
     }
     public void updateAttack(){
-        if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > this.attackTimeMax) {
-                this.attackTimeMax = 0;
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE,true);
-            } else {
-                if ((this.attackTimeDuring == 5 && this.activePowerPhase == 1)
-                || this.attackTimeDuring == 6) {
-                    this.standPunch();
-                }
-            }
-        }
     }
 
     public void poseStand(byte r){
@@ -689,7 +677,7 @@ public class StandPowers {
         return this.getUserData(User).getActive();
     }
 
-    float standReach = 5;
+    public float standReach = 5;
 
     public int getTargetEntityId(){
         Entity targetEntity = getTargetEntity(this.self, -1);
@@ -715,23 +703,6 @@ public class StandPowers {
             Entity targetEntity = getTargetEntity(this.self,-1);
             barrageImpact(targetEntity, this.attackTimeDuring);
         }
-    }
-
-    public void standPunch(){
-        /*By setting this to -10, there is a delay between the stand retracting*/
-
-        if (this.self instanceof Player){
-            if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
-                this.attackTimeDuring = -10;
-                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(), this.activePowerPhase);
-            }
-        } else {
-            /*Caps how far out the punch goes*/
-            Entity targetEntity = getTargetEntity(this.self,-1);
-            punchImpact(targetEntity);
-        }
-
     }
 
     /**This function ensures the client sending attack packets is ONLY the player using the attack, prevents double attacking*/
@@ -829,26 +800,26 @@ public class StandPowers {
     }
 
     /**Override these methods to fine tune the attack strength of the stand*/
-    private float getPunchStrength(Entity entity){
+    public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return 2;
         } else {
             return 5;
         }
-    } private float getHeavyPunchStrength(Entity entity){
+    } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return 3;
         } else {
             return 7;
         }
-    } private float getBarrageFinisherStrength(Entity entity){
+    } public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return 3;
         } else {
             return 8;
         }
     }
-    private float getBarrageFinisherKnockback(){
+    public float getBarrageFinisherKnockback(){
         return 2.8F;
     }
 
@@ -1072,7 +1043,7 @@ public class StandPowers {
     }
 
     /**ClashDone is a value that makes you lock in your barrage when you are done barraging**/
-    private boolean clashDone = false;
+    public boolean clashDone = false;
     public boolean getClashDone(){
         return this.clashDone;
     } public void setClashDone(boolean clashDone){
@@ -1108,66 +1079,6 @@ public class StandPowers {
     }
 
     public void punchImpact(Entity entity){
-        this.attackTimeDuring = -10;
-            if (entity != null) {
-                float pow;
-                float knockbackStrength;
-                if (this.activePowerPhase >= this.activePowerPhaseMax) {
-                    /*The last hit in a string has more power and knockback if you commit to it*/
-                    pow = getHeavyPunchStrength(entity);
-                    knockbackStrength = 1F;
-                } else {
-                    pow = getPunchStrength(entity);
-                    knockbackStrength = 0.2F;
-                }
-                if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                    this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
-                } else {
-                    if (this.activePowerPhase >= this.activePowerPhaseMax) {
-                        knockShield2(entity, 40);
-                    }
-                }
-            } else {
-                // This is less accurate raycasting as it is server sided but it is important for particle effects
-                float distMax = this.getDistanceOut(this.self, this.standReach, false);
-                float halfReach = (float) (distMax * 0.5);
-                Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
-                if (!this.self.level().isClientSide) {
-                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
-                            1, 0.0, 0.0, 0.0, 1);
-                }
-            }
-
-            SoundEvent SE;
-            float pitch = 1F;
-            if (this.activePowerPhase >= this.activePowerPhaseMax) {
-
-                if (!this.self.level().isClientSide()) {
-                    SoundEvent LastHitSound = this.getLastHitSound();
-                    if (LastHitSound != null) {
-                        this.self.level().playSound(null, this.self.blockPosition(), LastHitSound,
-                                SoundSource.PLAYERS, 1F, 1);
-                    }
-                }
-
-                if (entity != null) {
-                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
-                    pitch = 1.2F;
-                } else {
-                    SE = ModSounds.PUNCH_2_SOUND_EVENT;
-                }
-            } else {
-                if (entity != null) {
-                    SE = ModSounds.PUNCH_3_SOUND_EVENT;
-                    pitch = 1.1F + 0.07F * activePowerPhase;
-                } else {
-                    SE = ModSounds.PUNCH_1_SOUND_EVENT;
-                }
-            }
-
-            if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-            }
     }
 
     public void damage(Entity entity){
@@ -1562,24 +1473,10 @@ public class StandPowers {
 
 
     public boolean setPowerBarrageCharge() {
-        animateStand((byte) 11);
-        this.attackTimeDuring = 0;
-        this.setActivePower(PowerIndex.BARRAGE_CHARGE);
-        this.poseStand(OffsetIndex.ATTACK);
-        this.clashDone = false;
-        playBarrageChargeSound();
         return true;
     }
 
     public boolean setPowerBarrage() {
-        this.attackTimeDuring = 0;
-        this.setActivePower(PowerIndex.BARRAGE);
-        this.poseStand(OffsetIndex.ATTACK);
-        this.setAttackTimeMax(this.getBarrageRecoilTime());
-        this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        this.setAttackTime(19);
-        animateStand((byte) 12);
-        playBarrageCrySound();
         return true;
     }
 
@@ -1660,29 +1557,6 @@ public class StandPowers {
     }
 
     public boolean setPowerAttack(){
-        if (this.attackTimeDuring <= -1) {
-            if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
-                if (this.activePowerPhase >= this.activePowerPhaseMax){
-                    this.activePowerPhase = 1;
-                } else {
-                    this.activePowerPhase++;
-                    if (this.activePowerPhase == this.activePowerPhaseMax) {
-                        this.attackTimeMax= 40;
-                    } else {
-                        this.attackTimeMax= 30;
-                    }
-
-                }
-
-                this.attackTimeDuring = 0;
-                this.setActivePower(PowerIndex.ATTACK);
-                this.setAttackTime(0);
-
-                animateStand(this.activePowerPhase);
-                poseStand(OffsetIndex.ATTACK);
-                return true;
-            }
-        }
         return false;
     }
 

@@ -39,14 +39,18 @@ public class StandDiscItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        ItemStack currentDisc =((StandUser)$$1).roundabout$getStandDisc();
-        if (!currentDisc.isEmpty()){
-            addItem($$1, currentDisc);
+        if (!$$0.isClientSide) {
+            ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
+            if (!currentDisc.isEmpty()) {
+                addItem($$1, currentDisc.copy());
+            }
+            if ($$3.getItem() instanceof StandDiscItem SI) {
+                ((StandUser) $$1).setStand(null);
+                ((StandUser) $$1).roundabout$setStandDisc($$3.copy());
+                SI.generateStandPowers($$1);
+            }
+            $$3.shrink(1);
         }
-        if ($$3.getItem() instanceof StandDiscItem SI){
-            SI.generateStandPowers($$1);
-        }
-        $$3.shrink(1);
         return InteractionResultHolder.consume($$3);
     }
 

@@ -28,6 +28,7 @@ public interface IPacketAccess {
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);
+    void sendSimpleByte(ServerPlayer sp, byte context);
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();

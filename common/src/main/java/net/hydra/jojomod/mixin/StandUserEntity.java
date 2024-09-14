@@ -519,8 +519,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
-        if ($$0.contains("roundabout.HeldItem", 10)) {
-            CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        if ($$0.contains("roundabout.StandDisc", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("roundabout.StandDisc");
             ItemStack itemstack = ItemStack.of(compoundtag);
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD){
                 this.roundabout$setStandDisc(itemstack);
@@ -795,7 +795,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.getStandPowers().setInterruptCD(interruptCD);
     }
 
+    @Unique
+    public ItemStack roundabout$itemParityClient = ItemStack.EMPTY;
+
     public StandPowers getStandPowers() {
+        if (this.level().isClientSide){
+            if (!ItemStack.matches(roundabout$itemParityClient, this.roundabout$getStandDisc())){
+                roundabout$itemParityClient = this.roundabout$getStandDisc();
+                if (this.roundabout$getStandDisc().getItem() instanceof StandDiscItem SE){
+                    SE.generateStandPowers((LivingEntity)(Object)this);
+                }
+            }
+        }
+
         if (this.roundabout$Powers == null) {
             ItemStack StandDisc = this.roundabout$getStandDisc();
             if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
@@ -827,7 +839,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Only sets a user's stand. Distinction may be important depending on when it is called.*/
     public void setStand(StandEntity StandSet){
         this.Stand = StandSet;
-        ((LivingEntity) (Object) this).getEntityData().set(STAND_ID, StandSet.getId());
+        if (StandSet==null){
+            ((LivingEntity) (Object) this).getEntityData().set(STAND_ID, -1);
+        } else {
+            ((LivingEntity) (Object) this).getEntityData().set(STAND_ID, StandSet.getId());
+        }
     }
 
 

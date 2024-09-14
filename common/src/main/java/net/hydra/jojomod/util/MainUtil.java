@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -664,6 +665,12 @@ public class MainUtil {
         }
     }
 
+    /**A generalized packet for sending bytes to the client. Only a context is provided.*/
+    public static void handleSimpleBytePacketS2C(LocalPlayer player, byte context){
+        if (context == 1) {
+            ((StandUser) player).roundabout$setGasolineTime(context);
+        }
+    }
 
     /**A generalized packet for sending ints to the client. Context is what to do with the data int*/
     public static void handleIntPacketS2C(LocalPlayer player, int data, byte context){
@@ -674,8 +681,11 @@ public class MainUtil {
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleBytePacketC2S(Player player, byte data, byte context){
-        if (context == PacketDataIndex.PLAY_SOUND_C2S_CONTEXT) {
-            ((StandUser) player).getStandPowers().playSoundsIfNearby(data, 100, true);
+        if (context == PacketDataIndex.S2C_SIMPLE_GENERATE_POWERS) {
+            ItemStack itemStack = ((StandUser) player).roundabout$getStandDisc();
+            if (!itemStack.isEmpty() && itemStack.getItem() instanceof StandDiscItem SD){
+                SD.generateStandPowers(player);
+            }
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/

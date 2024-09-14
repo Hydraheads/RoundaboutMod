@@ -88,7 +88,7 @@ public abstract class InputEvents {
                 boolean isMining = (standComp.getActivePower() == PowerIndex.MINING);
                 if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     ci.setReturnValue(true);
-                } else if (standComp.getActive()){
+                } else if (standComp.getActive() && standComp.getStandPowers().interceptAttack()){
                     if (this.hitResult != null) {
                         boolean $$1 = false;
                         if (isMining) {
@@ -133,7 +133,7 @@ public abstract class InputEvents {
                         this.gameMode.stopDestroyBlock();
                     }
                     ci.cancel();
-                } else if (standComp.getActive()){
+                } else if (standComp.getActive() && standComp.getStandPowers().interceptAttack()){
                     if (isMining) {
                         if (!this.player.isUsingItem()) {
                             if ($$0 && this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK) {

@@ -76,6 +76,10 @@ public class ForgePackets implements IPacketAccess {
     public void sendIntPacket(ServerPlayer sp, byte activePower, int data) {
         ForgePacketHandler.sendToClient(new ForgeGenericIntPacket(activePower,data), sp);
     }
+    @Override
+    public void sendSimpleByte(ServerPlayer sp, byte context) {
+        ForgePacketHandler.sendToClient(new ForgeSimpleBytePacket(context), sp);
+    }
 
     @Override
     public void StandGuardCancelClientPacket() {

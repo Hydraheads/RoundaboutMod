@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -59,7 +60,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Shadow;
 
-public class PowersTheWorld extends StandPowers {
+public class PowersTheWorld extends PunchingStand {
 
     public PowersTheWorld(LivingEntity self) {
         super(self);
@@ -76,14 +77,14 @@ public class PowersTheWorld extends StandPowers {
     }
 
     @Override
-    public boolean canSummonStand(){
-        return true;
-    }
-    @Override
     public StandEntity getNewStandEntity(){
         return ModEntities.THE_WORLD.create(this.getSelf().level());
     }
 
+    @Override
+    public SoundEvent getLastHitSound(){
+        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+    }
     public boolean impactBrace = false;
 
     public int impactSlowdown = -1;
@@ -314,14 +315,6 @@ public class PowersTheWorld extends StandPowers {
         return false;
     }
 
-    @Override
-    public boolean interceptAttack(){
-        return true;
-    }
-    @Override
-    public boolean interceptGuard(){
-        return true;
-    }
 
     public void standRebound(){
 
