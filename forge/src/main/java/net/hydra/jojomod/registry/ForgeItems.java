@@ -114,7 +114,7 @@ public class ForgeItems {
     ));
 
     public static final RegistryObject<Item> STAND_DISC = addToTab(ITEMS.register("stand_disc",
-            () -> new Item(new Item.Properties().stacksTo(1))));
+            () -> new EmptyStandDiscItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> METEORITE = addToTab(ITEMS.register("meteorite",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",

@@ -73,16 +73,16 @@ public class WorldTickServer {
     }
 
 
-    private void tickStandIn(LivingEntity entity, StandEntity passenger) {
-        if (passenger == null || passenger.isRemoved() || passenger.getUser() != entity) {
+    private void tickStandIn(LivingEntity entity, StandEntity stand) {
+        if (stand == null || stand.isRemoved() || stand.getUser() != entity) {
             return;
         }
-        byte ot = passenger.getOffsetType();
-        passenger.setOldPosAndRot();
-        ++passenger.tickCount;
-        passenger.tickStandOut();
-        for (Entity $$2 : passenger.getPassengers()) {
-            this.tickPassenger(passenger, $$2);
+        byte ot = stand.getOffsetType();
+        stand.setOldPosAndRot();
+        ++stand.tickCount;
+        stand.tickStandOut();
+        for (Entity $$2 : stand.getPassengers()) {
+            this.tickPassenger(stand, $$2);
         }
     }
 

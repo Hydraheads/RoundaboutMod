@@ -391,9 +391,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         float kb = 0.3f;
 
                         if (((BlockItem)this.getItem().getItem()).getBlock() instanceof SlimeBlock){
-                            kb = 0.5f;
-                        } else if (((BlockItem)this.getItem().getItem()).getBlock() instanceof WebBlock){
-                            kb = 0.5f;
+                            kb = 0.8f;
                         }
                         $$7.knockback(kb, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
                     }

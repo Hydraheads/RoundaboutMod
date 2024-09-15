@@ -510,7 +510,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
-        if (!this.roundabout$getStandDisc().isEmpty()) {
+        if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {
             CompoundTag compoundtag = new CompoundTag();
             $$0.put("roundabout.StandDisc",this.roundabout$getStandDisc().save(compoundtag));
         }
@@ -804,6 +804,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$itemParityClient = this.roundabout$getStandDisc();
                 if (this.roundabout$getStandDisc().getItem() instanceof StandDiscItem SE){
                     SE.generateStandPowers((LivingEntity)(Object)this);
+                } else {
+                    this.setStandPowers(null);
                 }
             }
         }
