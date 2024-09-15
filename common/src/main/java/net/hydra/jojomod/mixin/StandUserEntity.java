@@ -1408,6 +1408,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+    /**If you have a chest turned to stone, decreases breath faster*/
+    @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
+    protected void roundabout$tick(CallbackInfo ci) {
+        if (!roundabout$qknockback.equals(Vec3.ZERO)){
+            MainUtil.takeUnresistableKnockbackWithYBias(this, roundabout$qknockbackparams.x,
+                    roundabout$qknockback.x,
+                    roundabout$qknockback.y,
+                    roundabout$qknockback.z,
+                    (float)roundabout$qknockbackparams.y);
+            roundabout$setQVec(Vec3.ZERO);
+        }
+    }
+
 
     /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
@@ -1470,6 +1483,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue((float) (this.speed * 0.85));
             }
         }
+    }
+
+
+    @Unique
+    private Vec3 roundabout$qknockback = Vec3.ZERO;
+    @Unique
+    private Vec3 roundabout$qknockbackparams = Vec3.ZERO;
+    @Unique
+    @Override
+    public void roundabout$setQVec(Vec3 ec){
+        roundabout$qknockback = ec;
+    }
+    @Unique
+    @Override
+    public void roundabout$setQVecParams(Vec3 ec){
+        roundabout$qknockbackparams = ec;
     }
 
     @Shadow

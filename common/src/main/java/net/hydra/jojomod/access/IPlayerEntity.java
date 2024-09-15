@@ -8,8 +8,6 @@ public interface IPlayerEntity {
 
     void roundabout$SetPos(byte Pos);
     int roundabout$getAirTime();
-    void roundabout$setQVec(Vec3 q);
-    void roundabout$setQVecParams(Vec3 ec);
     int roundabout$getClientDodgeTime();
     int roundabout$getDodgeTime();
     void roundabout$setClientDodgeTime(int dodgeTime);

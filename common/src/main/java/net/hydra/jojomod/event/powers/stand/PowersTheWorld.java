@@ -1378,11 +1378,11 @@ public class PowersTheWorld extends PunchingStand {
                                 strength *= 0.6F;
                             }
                             if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())){
-                                if (ent instanceof Player pe) {
-                                    ((IPlayerEntity)pe).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                if (ent instanceof LivingEntity le && (ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(le))) {
+                                    ((StandUser)le).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                             Mth.sin(degreesY * ((float) Math.PI / 180)),
                                             -Mth.cos((degrees * ((float) Math.PI / 180)))));
-                                    ((IPlayerEntity)pe).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
+                                    ((StandUser)le).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
                                             ybias,
                                             0F));
                                 } else {
@@ -1411,11 +1411,11 @@ public class PowersTheWorld extends PunchingStand {
                             }
                             this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
 
-                            if (ent instanceof Player pe) {
-                                ((IPlayerEntity)pe).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                            if (ent instanceof LivingEntity le && (ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(le))) {
+                                ((StandUser)le).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                         Mth.sin(degreesY * ((float) Math.PI / 180)),
                                         -Mth.cos((degrees * ((float) Math.PI / 180)))));
-                                ((IPlayerEntity)pe).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
+                                ((StandUser)le).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
                                         ybias,
                                         0F));
                             } else {

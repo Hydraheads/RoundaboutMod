@@ -71,10 +71,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private int roundabout$airTime = 0;
     @Unique
     private int roundabout$clientDodgeTime = 0;
-    @Unique
-    private Vec3 roundabout$qknockback = Vec3.ZERO;
-    @Unique
-    private Vec3 roundabout$qknockbackparams = Vec3.ZERO;
 
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -90,16 +86,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     public byte roundabout$GetPos(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT_POS);
-    }
-    @Unique
-    @Override
-    public void roundabout$setQVec(Vec3 ec){
-        roundabout$qknockback = ec;
-    }
-    @Unique
-    @Override
-    public void roundabout$setQVecParams(Vec3 ec){
-        roundabout$qknockbackparams = ec;
     }
     @Unique
     @Override
@@ -344,15 +330,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((StandUser) this).setRoundaboutIdleTime(-1);
         } else {
             ((StandUser) this).setRoundaboutIdleTime(((StandUser) this).getRoundaboutIdleTime() + 1);
-        }
-
-        if (!roundabout$qknockback.equals(Vec3.ZERO)){
-            MainUtil.takeUnresistableKnockbackWithYBias(this, roundabout$qknockbackparams.x,
-                    roundabout$qknockback.x,
-                    roundabout$qknockback.y,
-                    roundabout$qknockback.z,
-                    (float)roundabout$qknockbackparams.y);
-            roundabout$setQVec(Vec3.ZERO);
         }
     }
 
