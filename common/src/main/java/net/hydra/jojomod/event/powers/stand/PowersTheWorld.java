@@ -1378,11 +1378,20 @@ public class PowersTheWorld extends PunchingStand {
                                 strength *= 0.6F;
                             }
                             if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())){
-                                MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.75+(ybias/4)),
-                                        Mth.sin(((degrees * ((float) Math.PI / 180)))),
-                                        Mth.sin(degreesY * ((float) Math.PI / 180)),
-                                        -Mth.cos((degrees * ((float) Math.PI / 180))),
-                                        ybias);
+                                if (ent instanceof Player pe) {
+                                    ((IPlayerEntity)pe).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                            Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                            -Mth.cos((degrees * ((float) Math.PI / 180)))));
+                                    ((IPlayerEntity)pe).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
+                                            ybias,
+                                            0F));
+                                } else {
+                                    MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.75 + (ybias / 4)),
+                                            Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                            Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                            -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                            ybias);
+                                }
                                 animateStand((byte) 3);
                                 poseStand(OffsetIndex.ATTACK);
                                 this.setAttackTimeDuring(-15);
@@ -1401,11 +1410,21 @@ public class PowersTheWorld extends PunchingStand {
                                 NE.setTarget(this.getSelf());
                             }
                             this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-                            MainUtil.takeUnresistableKnockbackWithYBias(ent, strength*(0.5+(ybias/2)),
-                                    Mth.sin(((degrees * ((float) Math.PI / 180)))),
-                                    Mth.sin(degreesY * ((float) Math.PI / 180)),
-                                    -Mth.cos((degrees * ((float) Math.PI / 180))),
-                                    ybias);
+
+                            if (ent instanceof Player pe) {
+                                ((IPlayerEntity)pe).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                        Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                        -Mth.cos((degrees * ((float) Math.PI / 180)))));
+                                ((IPlayerEntity)pe).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
+                                        ybias,
+                                        0F));
+                            } else {
+                                MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.5 + (ybias / 2)),
+                                        Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                        Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                        -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                        ybias);
+                            }
                             animateStand((byte) 33);
                             poseStand(OffsetIndex.FOLLOW);
                             this.setAttackTimeDuring(-10);
