@@ -40,41 +40,30 @@ public class WorldTickServer {
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
      * @see StandEntity#tickStandOut */
 
-    @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"))
-    private void tickEntity2(Entity $$0, CallbackInfo ci) {
-        if ($$0.showVehicleHealth()) {
-            LivingEntity livingEntity = (LivingEntity) $$0;
-            if (((StandUser) $$0).hasStandOut()) {
-                if (!($$0.getVehicle() != null && $$0.getVehicle() == ((StandUser) $$0).getStand())) {
-                    this.tickStandIn(livingEntity, Objects.requireNonNull(((StandUser) $$0).getStand()));
-                }
-            }
-        }
-        for (Entity entity2 : $$0.getPassengers()) {
-            if (!entity2.isRemoved()) {
-
-                if (entity2.showVehicleHealth()) {
-                    LivingEntity livingEntity = (LivingEntity) entity2;
-                    if (((StandUser) livingEntity).getStand() != null) {
-                        StandEntity stand = ((StandUser) livingEntity).getStand();
-                        if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
-                            this.tickStandIn(livingEntity, stand);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickAllTimeStops();
+
+        this.entityTickList.forEach($$0x -> {
+            if ($$0x instanceof StandEntity standEntity) {
+                if (standEntity.getFollowing() != null){
+                    LivingEntity LE = standEntity.getFollowing();
+                    if (!((StandUser)LE).roundabout$hasFollower(standEntity)){
+                        ((StandUser)LE).roundabout$addFollower(standEntity);
+                    }
+                }
+            }
+        });
     }
 
 
     private void tickStandIn(LivingEntity entity, StandEntity stand) {
-        if (stand == null || stand.isRemoved() || stand.getUser() != entity) {
+        if (stand == null || stand.isRemoved()) {
+            return;
+        }
+        if (stand.getFollowing().getId() != entity.getId()) {
+            ((StandUser)entity).roundabout$removeFollower(stand);
             return;
         }
         byte ot = stand.getOffsetType();
@@ -112,15 +101,9 @@ public class WorldTickServer {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
-            if ($$0 instanceof StandEntity){
-                StandEntity stand = ((StandEntity)$$0);
-                if (stand.hasUser() && !stand.getUser().isRemoved()){
-                    if ((((StandUser)stand.getUser()).getStand() != null && ((StandUser)stand.getUser()).getStand().getId() == stand.getId())) {
-                        if (!(stand.getUser().getVehicle() != null && stand.getUser().getVehicle() == ((StandUser) stand.getUser()).getStand()))
-                        {
-                            ci.cancel();
-                        }
-                    }
+            if ($$0 instanceof StandEntity SE) {
+                if (SE.getFollowing() != null){
+                    ci.cancel();
                 }
             }
             roundaboutTickTSDamage($$0);
@@ -149,9 +132,28 @@ public class WorldTickServer {
             }
         }
     }
+    @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
+    private void roundaboutTickEntityX(Entity $$0, CallbackInfo ci) {
+        if (!$$0.isRemoved()) {
+            if ($$0 instanceof LivingEntity LE) {
+                for (StandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
+                    this.tickStandIn(LE, SE);
+                }
+            }
+        }
+    }
 
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+
+        if ($$1 instanceof StandEntity SE) {
+            if (SE.getFollowing() != null){
+                ci.cancel();
+            }
+        }
+        if ($$1 instanceof LivingEntity) {
+            ((StandUser) $$1).roundaboutUniversalTick();
+        }
         roundaboutTickTSDamage($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
             $$1.stopRiding();
@@ -174,6 +176,16 @@ public class WorldTickServer {
             }
         }
     }
+
+    @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
+    private void roundaboutTickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
+        if ($$1 instanceof LivingEntity LE) {
+            for (StandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
+                this.tickStandIn(LE, SE);
+            }
+        }
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundaboutTickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickTimeStoppingEntity();

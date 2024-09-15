@@ -1,5 +1,7 @@
 package net.hydra.jojomod.mixin;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -46,6 +48,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -64,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
@@ -111,6 +115,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     @Unique
     private LivingEntity roundabout$thrower;
+
+    @Nullable
+    @Unique
+    private ImmutableList<StandEntity> roundabout$followers = ImmutableList.of();
 
     /** StandID is used clientside only*/
 
@@ -316,6 +324,47 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         //}
     }
 
+    @Override
+    public void roundabout$addFollower(StandEntity $$0) {
+        if (this.roundabout$followers.isEmpty()) {
+            this.roundabout$followers = ImmutableList.of($$0);
+        } else {
+            List<StandEntity> $$1 = Lists.newArrayList(this.roundabout$followers);
+            $$1.add($$0);
+            this.roundabout$followers = ImmutableList.copyOf($$1);
+        }
+    }
+
+    @Override
+    public void roundabout$removeFollower(StandEntity $$0) {
+        if (this.roundabout$followers.size() == 1 && this.roundabout$followers.get(0) == $$0) {
+            this.roundabout$followers = ImmutableList.of();
+        } else {
+            this.roundabout$followers =
+                    this.roundabout$followers.stream().filter($$1 -> $$1 != $$0).collect(ImmutableList.toImmutableList());
+        }
+    }
+
+    @Override
+    public final List<StandEntity> roundabout$getFollowers() {
+        return this.roundabout$followers;
+    }
+
+    @Override
+    public boolean roundabout$hasFollower(StandEntity $$0) {
+        return this.roundabout$followers.contains($$0);
+    }
+
+    @Override
+    public boolean roundabout$hasFollower(Predicate<Entity> $$0) {
+        for (Entity $$1 : this.roundabout$followers) {
+            if ($$0.test($$1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public void roundabout$cancelConsumableItem(LivingEntity entity){
         ItemStack itemStack = entity.getUseItem();

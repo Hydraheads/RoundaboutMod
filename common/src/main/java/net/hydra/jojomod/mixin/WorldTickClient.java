@@ -51,21 +51,6 @@ public abstract class WorldTickClient extends Level {
         super($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8);
     }
 
-    @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"))
-    private void roundaboutTickEntity(Entity $$0, CallbackInfo ci) {
-
-        if (!$$0.isRemoved()) {
-            if ($$0 instanceof LivingEntity) {
-                ((StandUser) $$0).roundaboutUniversalTick();
-            }
-            this.standTickCheck($$0);
-            for (Entity entity2 : $$0.getPassengers()) {
-                if (!entity2.isRemoved()) {
-                    this.standTickCheck(entity2);
-                }
-            }
-        }
-    }
 
     private void standTickCheck(Entity entity){
         if (entity.showVehicleHealth()) {
@@ -97,7 +82,11 @@ public abstract class WorldTickClient extends Level {
     }
 
     private void tickStandIn(LivingEntity entity, StandEntity stand) {
-        if (stand == null || stand.isRemoved() || stand.getUser() != entity) {
+        if (stand == null || stand.isRemoved()) {
+            return;
+        }
+        if (stand.getFollowing().getId() != entity.getId()) {
+            ((StandUser)entity).roundabout$removeFollower(stand);
             return;
         }
         byte ot = stand.getOffsetType();
@@ -202,16 +191,14 @@ public abstract class WorldTickClient extends Level {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
-            if ($$0 instanceof StandEntity){
-                StandEntity stand = ((StandEntity)$$0);
-                if (stand.hasUser() && !stand.getUser().isRemoved()) {
-                    if ((((StandUser) stand.getUser()).getStand() != null && ((StandUser) stand.getUser()).getStand().getId() == stand.getId())) {
-                        if (!(stand.getUser().getVehicle() != null && stand.getUser().getVehicle() == ((StandUser) stand.getUser()).getStand()))
-                        {
-                            ci.cancel();
-                        }
-                    }
+            if ($$0 instanceof StandEntity SE) {
+                if (SE.getFollowing() != null){
+                    ci.cancel();
                 }
+            }
+
+            if ($$0 instanceof LivingEntity) {
+                ((StandUser) $$0).roundaboutUniversalTick();
             }
 
             roundaboutStoreOldPositionsForTS($$0);
@@ -224,6 +211,16 @@ public abstract class WorldTickClient extends Level {
             }
         }
     }
+    @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
+    private void roundaboutTickEntityX(Entity $$0, CallbackInfo ci) {
+        if (!$$0.isRemoved()) {
+            if ($$0 instanceof LivingEntity LE) {
+                for (StandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
+                    this.tickStandIn(LE, SE);
+                }
+            }
+        }
+    }
 
     public void roundaboutStoreOldPositionsForTS(Entity entity){
         ((IEntityAndData) entity).setRoundaboutPrevX(entity.getX());
@@ -233,9 +230,15 @@ public abstract class WorldTickClient extends Level {
 
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+        if ($$1 instanceof StandEntity SE) {
+            if (SE.getFollowing() != null){
+                ci.cancel();
+            }
+        }
         if ($$1 instanceof LivingEntity) {
             ((StandUser) $$1).roundaboutUniversalTick();
         }
+
         roundaboutStoreOldPositionsForTS($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
             $$1.stopRiding();
@@ -250,6 +253,14 @@ public abstract class WorldTickClient extends Level {
                     this.tickPassenger($$1, $$2);
                 }
                 ci.cancel();
+            }
+        }
+    }
+    @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
+    private void roundaboutTickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
+        if ($$1 instanceof LivingEntity LE) {
+            for (StandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
+                this.tickStandIn(LE, SE);
             }
         }
     }
@@ -284,6 +295,16 @@ public abstract class WorldTickClient extends Level {
                 ((StandUser) minecraft.player).getStandPowers().timeTickStopPower();
             }
         }
+        this.tickingEntities.forEach($$0x -> {
+            if ($$0x instanceof StandEntity standEntity) {
+                if (standEntity.getFollowing() != null){
+                    LivingEntity LE = standEntity.getFollowing();
+                    if (!((StandUser)LE).roundabout$hasFollower(standEntity)){
+                        ((StandUser)LE).roundabout$addFollower(standEntity);
+                    }
+                }
+            }
+        });
     }
 
     @Inject(method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", at = @At("HEAD"), cancellable = true)

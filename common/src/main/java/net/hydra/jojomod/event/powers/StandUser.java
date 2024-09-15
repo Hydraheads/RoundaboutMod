@@ -8,6 +8,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 public interface StandUser {
     /**This is in a LivingEntity Mixin, granting every living entity stand related functions and ddta.
      * Minimize the amount of synced data to just things you really need.*/
@@ -77,6 +80,12 @@ public interface StandUser {
     void tryPower(int move, boolean forced);
     void tryChargedPower(int move, boolean forced, int chargeTime);
     void tryPosPower(int move, boolean forced, BlockPos blockPos);
+    void roundabout$addFollower(StandEntity $$0);
+    void roundabout$removeFollower(StandEntity $$0);
+
+    List<StandEntity> roundabout$getFollowers();
+    boolean roundabout$hasFollower(StandEntity $$0);
+    boolean roundabout$hasFollower(Predicate<Entity> $$0);
 
     int roundaboutGetTSHurtSound();
 
