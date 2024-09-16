@@ -220,7 +220,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (!this.getSelf().onGround()){
                     if (canVault()){
                         done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3);
                     } else if (this.getSelf().fallDistance > 3){
                         done=true;
                         setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
@@ -248,7 +248,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
             } else {
                 if (!(((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
-                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3);
                 } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3){
                     setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
                 } else {

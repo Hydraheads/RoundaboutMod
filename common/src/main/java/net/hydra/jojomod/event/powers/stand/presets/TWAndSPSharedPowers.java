@@ -66,14 +66,18 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public float getMiningSpeed() {
         return 8F;
     }
+
+    public boolean inputDash = false;
     /**Dodge ability*/
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-            if (keyIsDown) {
-                if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+        if (keyIsDown) {
+            if (!inputDash){
+            inputDash = true;
+            if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                    && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                    && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+                if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
                     if (!options.keyShift.isDown()) {
                         if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
                             /*Stand leap rebounds*/
@@ -137,8 +141,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
                             } else {
                                 if (!doVault() && this.getSelf().fallDistance > 3) {
-                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && (this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
-                                        this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
+                                    if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
+
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
                                     }
@@ -161,8 +165,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 standRebound();
                             } else {
                                 if ((!doVault()) && this.getSelf().fallDistance > 3) {
-                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && (this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
-                                        this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
+                                    if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
+
                                         ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
                                     }
@@ -170,9 +174,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             }
                         }
 
+                        }
                     }
                 }
             }
+        } else {
+            inputDash = false;
         }
     }
 
@@ -821,10 +828,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
                 && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
-            if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+            if (!this.onCooldown(PowerIndex.SKILL_3)) {
                 /*Stand vaulting*/
-                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 80);
-                this.setCooldown(PowerIndex.SKILL_EXTRA, this.getCooldown(PowerIndex.SKILL_EXTRA).time + 20);
+                this.setCooldown(PowerIndex.SKILL_3, 80);
                 double mag = this.getSelf().getPosition(0).distanceTo(
                         new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
                 MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),

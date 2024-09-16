@@ -57,7 +57,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (!this.getSelf().onGround()){
                     if (canVault()){
                         done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3);
                     } else if (this.getSelf().fallDistance > 3){
                         done=true;
                         setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
@@ -85,7 +85,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
             } else {
                 if (!(((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
-                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3);
                 } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3){
                     setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
                 } else {
