@@ -143,6 +143,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         return false;
     }
 
+    //@SuppressWarnings("deprecation")
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -15,10 +16,12 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -34,9 +37,11 @@ import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -151,16 +156,7 @@ public class BlockGrabPreset extends PunchingStand{
                 this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else {
-            boolean canPlace = false;
-            boolean acq = false;
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
-            if (standEntity != null && standEntity.canAcquireHeldItem) {
-                acq = true;
-            }
-            if (acq && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
-                    && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
-                canPlace = true;
-            }
+            boolean canPlace = getCanPlace();
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item, canPlace);
             thrownBlockOrItem.shootFromRotation(this.getSelf(), this.getSelf().getXRot(),
                     this.getSelf().getYRot(), -0.5F, 1.7F, 0.8F);
@@ -169,10 +165,24 @@ public class BlockGrabPreset extends PunchingStand{
         }
     }
 
+    public boolean getCanPlace(){
+        boolean canPlace = false;
+        boolean acq = false;
+        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        if (standEntity != null && standEntity.canAcquireHeldItem) {
+            acq = true;
+        }
+        if (acq && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
+                && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
+            canPlace = true;
+        }
+        return canPlace;
+    }
+
     /**Charge up Time Stop*/
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
         if (this.canChangePower(move, forced)){
-            if (move == PowerIndex.POWER_2) {
+            if (move == PowerIndex.POWER_2 || move == PowerIndex.POWER_2_BONUS) {
                 this.grabBlock = blockPos;
                 return tryPower(move, forced);
             }
@@ -416,6 +426,8 @@ public class BlockGrabPreset extends PunchingStand{
             return this.mobGrab();
         } else if (move == PowerIndex.POWER_2_SNEAK_EXTRA){
             return this.inventoryGrab();
+        } else if (move == PowerIndex.POWER_2_BONUS){
+            return this.placeBlock();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -551,41 +563,54 @@ public class BlockGrabPreset extends PunchingStand{
         return true;
     }
 
+    public boolean hold3 = false;
     /**Grab ability*/
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                    if (keyIsDown) {
-                        if (!options.keyShift.isDown()) {
-                            Entity targetEntity = this.rayCastEntity(this.getSelf(),2F);
-                            if (targetEntity != null) {
-                                if (canGrab(targetEntity)) {
-                                    ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_EXTRA, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
-                                }
-                            } else {
-                                //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
-                                BlockHitResult HR = getGrabBlock();
-                                if (HR != null) {
-                                    ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+        if (this.getSelf().level().isClientSide && !this.isClashing()) {
+            if (keyIsDown) {
+                if (!hold3) {
+                    hold3 = true;
+                    if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                        if (this.getActivePower() != PowerIndex.POWER_2
+                                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                                if (!options.keyShift.isDown()) {
+                                    Entity targetEntity = this.rayCastEntity(this.getSelf(), 2F);
+                                    if (targetEntity != null) {
+                                        if (canGrab(targetEntity)) {
+                                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_EXTRA, true);
+                                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
+                                        }
+                                    } else {
+                                        //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
+                                        BlockHitResult HR = getGrabBlock();
+                                        if (HR != null) {
+                                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
+                                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                                        }
+                                    }
+                                } else {
+                                    ItemStack stack = this.getSelf().getMainHandItem();
+                                    if (!stack.isEmpty()) {
+                                        ((StandUser) this.getSelf()).tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
+                                                ((Player) this.getSelf()).getInventory().selected);
+                                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
+                                                ((Player) this.getSelf()).getInventory().selected);
+                                    }
                                 }
                             }
                         } else {
-                            ItemStack stack = this.getSelf().getMainHandItem();
-                            if (!stack.isEmpty()) {
-                                ((StandUser) this.getSelf()).tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
-                                        ((Player) this.getSelf()).getInventory().selected);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
-                                        ((Player) this.getSelf()).getInventory().selected);
+                            if (hasBlock() || hasEntity()) {
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_BONUS, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                             }
                         }
                     }
                 }
+            } else {
+                hold3 = false;
             }
         }
     }
@@ -662,6 +687,84 @@ public class BlockGrabPreset extends PunchingStand{
             break;
         }
         return bl;
+    }
+
+    @SuppressWarnings("deprecation")
+    public boolean placeBlock() {
+        if (!this.getSelf().level().isClientSide()) {
+            if (this.hasEntity()) {
+                StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+                if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                    if (standEntity.getFirstPassenger() != null) {
+                        MainUtil.ejectInFront(standEntity);
+                        animateStand((byte) 36);
+                        this.setAttackTimeDuring(-10);
+                        this.setCooldown(PowerIndex.SKILL_2, 10);
+                        this.syncCooldowns();
+                        return true;
+                    }
+                }
+            } else {
+                if (this.hasBlock()) {
+                    StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+                    if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                        Vec3 vec3d = this.getSelf().getEyePosition(0);
+                        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
+                        BlockHitResult $$0 = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
+                                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+                        BlockPos pos = null;
+                        if (this.getSelf().level().getBlockState($$0.getBlockPos()).isSolid()){
+                            pos = $$0.getBlockPos().relative($$0.getDirection());
+                        }
+                        if (pos != null) {
+                            BlockState state = this.getSelf().level().getBlockState(pos);
+                            if (standEntity.getHeldItem().getItem() instanceof BlockItem) {
+                                if (getCanPlace()) {
+                                    if (tryHitBlock($$0, pos, state, standEntity)) {
+                                        standEntity.setHeldItem(ItemStack.EMPTY);
+                                        animateStand((byte) 36);
+                                        this.setAttackTimeDuring(-10);
+                                        this.setCooldown(PowerIndex.SKILL_2, 10);
+                                        this.syncCooldowns();
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state, StandEntity standEntity){
+
+        if ((state.isAir() || state.canBeReplaced()) && !((this.getSelf() instanceof Player &&
+                (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
+                        this.getSelf()).gameMode.getGameModeForPlayer()))) ||
+                !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos))){
+
+            if (standEntity.getHeldItem().getItem() instanceof BlockItem) {
+                Direction direction = $$0.getDirection();
+                if (direction.getAxis() == Direction.Axis.X){
+                    direction = direction.getOpposite();
+                }
+                if (((BlockItem) standEntity.getHeldItem().getItem()).getBlock() instanceof RotatedPillarBlock){
+                    direction = $$0.getDirection();
+                }
+
+                if (((BlockItem)standEntity.getHeldItem().getItem()).place(new DirectionalPlaceContext(this.getSelf().level(),
+                        pos,
+                        direction, standEntity.getHeldItem(),
+                        direction)) != InteractionResult.FAIL){
+                    return true;
+                }
+            }
+
+        }
+        return false;
     }
 
     public boolean mobGrab() {

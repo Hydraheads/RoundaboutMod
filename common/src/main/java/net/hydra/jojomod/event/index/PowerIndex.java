@@ -38,6 +38,10 @@ public class PowerIndex {
     public static final byte POWER_3_SNEAK_EXTRA = 32;
     public static final byte POWER_4_EXTRA = 33;
     public static final byte POWER_4_SNEAK_EXTRA= 34;
+    public static final byte POWER_1_BONUS= 34;
+    public static final byte POWER_2_BONUS= 35;
+    public static final byte POWER_3_BONUS= 36;
+    public static final byte POWER_4_BONUS= 37;
     public static final byte MINING = 39;
     public static final byte LEAD_IN = 40;
 
