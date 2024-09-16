@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ScissorItem;
@@ -413,6 +414,18 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else {
             if (fire && !onFire){
                 $$1.clearFire();
+            }
+
+            if (!this.getItem().isEmpty()) {
+                if (this.getItem().getItem() instanceof GlaiveItem || this.getItem().getItem() instanceof AxeItem) {
+                    if ($$1 instanceof Player PE) {
+                        if (PE.isBlocking() && !((StandUser) PE).isGuarding()) {
+                            PE.getCooldowns().addCooldown(Items.SHIELD, 100);
+                            PE.stopUsingItem();
+                            PE.level().broadcastEntityEvent(this, (byte) 30);
+                        }
+                    }
+                }
             }
             this.dropItem($$1.getOnPos());
         }

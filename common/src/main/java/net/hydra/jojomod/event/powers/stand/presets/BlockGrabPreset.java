@@ -577,7 +577,7 @@ public class BlockGrabPreset extends PunchingStand{
                                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
                             if (!this.onCooldown(PowerIndex.SKILL_2)) {
                                 if (!options.keyShift.isDown()) {
-                                    Entity targetEntity = this.rayCastEntity(this.getSelf(), 2F);
+                                    Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);
                                     if (targetEntity != null) {
                                         if (canGrab(targetEntity)) {
                                             ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_EXTRA, true);

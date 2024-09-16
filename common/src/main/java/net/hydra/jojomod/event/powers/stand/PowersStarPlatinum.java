@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -73,7 +74,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             //setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
 
             /*If it can find a mob to grab, it will*/
-            Entity targetEntity = this.rayCastEntity(this.getSelf(),2F);
+            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);
             if (targetEntity != null && canGrab(targetEntity)) {
                 setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_MOB, PowerIndex.SKILL_2);
             } else {
