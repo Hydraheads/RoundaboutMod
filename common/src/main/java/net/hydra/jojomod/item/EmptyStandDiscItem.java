@@ -28,9 +28,9 @@ public class EmptyStandDiscItem extends Item {
                 $$3.shrink(1);
                 ((StandUser) $$1).setStand(null);
                 ((StandUser) $$1).setActive(false);
+                addItem($$1, currentDisc.copy());
                 ((StandUser) $$1).roundabout$setStandDisc(ItemStack.EMPTY);
                 this.generateStandPowers($$1);
-                addItem($$1, currentDisc.copy());
             }
         }
         return InteractionResultHolder.consume($$3);

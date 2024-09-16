@@ -665,7 +665,7 @@ public class BlockGrabPreset extends PunchingStand{
     }
 
     public boolean mobGrab() {
-        if (!this.getSelf().level().isClientSide()) {
+        if (!this.getSelf().level().isClientSide() && !this.hasBlock()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 Entity entity = this.getSelf().level().getEntity(this.grabEntity);
@@ -701,7 +701,7 @@ public class BlockGrabPreset extends PunchingStand{
 
     @SuppressWarnings("deprecation")
     public boolean grab() {
-        if (!this.getSelf().level().isClientSide()) {
+        if (!this.getSelf().level().isClientSide() && !this.hasEntity()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
