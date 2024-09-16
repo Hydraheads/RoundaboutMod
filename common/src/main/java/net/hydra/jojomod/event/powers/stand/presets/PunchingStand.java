@@ -36,6 +36,15 @@ public class PunchingStand extends StandPowers {
     }
 
     @Override
+    public boolean isMiningStand() {
+        return true;
+    }
+    @Override
+    public float getMiningSpeed() {
+        return 5F;
+    }
+
+    @Override
     public boolean setPowerAttack(){
         if (this.attackTimeDuring <= -1) {
             if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
