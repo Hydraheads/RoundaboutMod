@@ -830,9 +830,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
                 && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
-            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                 /*Stand vaulting*/
-                this.setCooldown(PowerIndex.SKILL_3, 80);
+                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 80);
                 double mag = this.getSelf().getPosition(0).distanceTo(
                         new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
                 MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
