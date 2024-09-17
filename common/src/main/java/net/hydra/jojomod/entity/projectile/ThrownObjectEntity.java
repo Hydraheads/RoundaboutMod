@@ -388,7 +388,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
                     SoundEvent SE = (blk).
                             defaultBlockState().getSoundType().getBreakSound();
-                    this.playSound(SE, 1.0F, 1.0F);
+                    this.playSound(SE, 1.0F, 0.9F);
                     if ($$1 instanceof LivingEntity $$7) {
                         float kb = 0.3f;
 

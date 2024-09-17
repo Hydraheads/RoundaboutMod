@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -17,8 +18,12 @@ import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
@@ -40,9 +45,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -654,15 +657,15 @@ public class BlockGrabPreset extends PunchingStand{
                 if (standEntity != null) {
                     if (!standEntity.getHeldItem().isEmpty() && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA) {
+                        if (!MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
+                            animateStand((byte) 37);
+                        } else {
+                            animateStand((byte) 36);
+                        }
                         if (standEntity.canAcquireHeldItem) {
                             if ((this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
                                     && this.getAttackTimeDuring() < 10) {
                                 return false;
-                            }
-                            if (!MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
-                                animateStand((byte) 37);
-                            } else {
-                                animateStand((byte) 36);
                             }
                             this.addItem(standEntity);
                             standEntity.setHeldItem(ItemStack.EMPTY);
@@ -723,7 +726,7 @@ public class BlockGrabPreset extends PunchingStand{
                     }
                 }
             } else {
-                if (this.hasBlock()) {
+                if (this.hasBlock() && this.attackTimeDuring >= 10) {
                     StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
                     if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -741,8 +744,9 @@ public class BlockGrabPreset extends PunchingStand{
                                 if (getCanPlace()) {
                                     if (tryHitBlock($$0, pos, state, standEntity)) {
                                         standEntity.setHeldItem(ItemStack.EMPTY);
+
+                                        ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
                                         animateStand((byte) 36);
-                                        this.setAttackTimeDuring(-10);
                                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
                                         this.setCooldown(PowerIndex.SKILL_2, 10);
                                         return true;
@@ -851,6 +855,29 @@ public class BlockGrabPreset extends PunchingStand{
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
                         animateStand((byte) 32);
+                        if (state.is(Blocks.GRASS_BLOCK) || (this.getSelf().level().getBlockState(this.grabBlock.above()).is(state.getBlock()) ||
+                                this.getSelf().level().getBlockState(this.grabBlock.below()).is(state.getBlock()) ||
+                                this.getSelf().level().getBlockState(this.grabBlock.north()).is(state.getBlock()) ||
+                                this.getSelf().level().getBlockState(this.grabBlock.south()).is(state.getBlock()) ||
+                                this.getSelf().level().getBlockState(this.grabBlock.east()).is(state.getBlock()) ||
+                                this.getSelf().level().getBlockState(this.grabBlock.west()).is(state.getBlock()) && !state.is(Blocks.PUMPKIN)
+                                && !(state.getBlock() instanceof StemGrownBlock)&& !(state.getBlock() instanceof GlassBlock))){
+                            if (!this.getSelf().level().isClientSide) {
+
+                                BlockState state1 = state;
+                               if (state.is(Blocks.GRASS_BLOCK)){
+                                    state1 = Blocks.DIRT.defaultBlockState();
+                               }
+                                ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                                                state1),
+                                        this.grabBlock.getX()+0.5, this.grabBlock.getY()+0.5, this.grabBlock.getZ()+0.5,
+                                        90, 0.4, 0.4, 0.4, 0.5);
+                                SoundEvent SE = state.getSoundType().getBreakSound();
+                                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SE, SoundSource.BLOCKS, 4.0F, 0.7F);
+                            }
+                        }
+
+
                         return true;
                     }
                 }
