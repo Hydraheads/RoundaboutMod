@@ -452,6 +452,9 @@ public abstract class StandEntity extends Mob{
         if (this.level().isClientSide){
             return (LivingEntity) this.level().getEntity(this.entityData.get(FOLLOWING_ID));
         } else {
+            if (this.Following != null && this.Following.isRemoved()){
+                this.setFollowing(null);
+            }
             return this.Following;
         }
     }
@@ -577,7 +580,7 @@ public abstract class StandEntity extends Mob{
 
             if (this.isAlive() && !this.dead){
                 if (this.getNeedsUser() && !this.isDisplay) {
-                    if (this.getUser() != null) {
+                    if (this.getUser() != null && !this.getUser().isRemoved()) {
                         boolean userActive = this.getUserData(this.getUser()).getActive();
                         LivingEntity thisStand = this.getUserData(this.getUser()).getStand();
                         if (this.getUser().isAlive() && userActive && (thisStand != null && thisStand.getId() == this.getId())) {
