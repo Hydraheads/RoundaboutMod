@@ -1420,6 +1420,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
+        if (!roundabout$qknockback2params.equals(Vec3.ZERO)){
+            this.teleportTo(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
+        }
         if (!roundabout$qknockback.equals(Vec3.ZERO)){
             MainUtil.takeUnresistableKnockbackWithYBias(this, roundabout$qknockbackparams.x,
                     roundabout$qknockback.x,
@@ -1500,6 +1503,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private Vec3 roundabout$qknockbackparams = Vec3.ZERO;
     @Unique
+    private Vec3 roundabout$qknockback2params = Vec3.ZERO;
+    @Unique
     @Override
     public void roundabout$setQVec(Vec3 ec){
         roundabout$qknockback = ec;
@@ -1508,6 +1513,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setQVecParams(Vec3 ec){
         roundabout$qknockbackparams = ec;
+    }
+    @Unique
+    @Override
+    public void roundabout$setQVec2Params(Vec3 ec){
+        roundabout$qknockback2params = ec;
     }
 
     @Shadow

@@ -235,7 +235,11 @@ public class MainUtil {
         if (stand.getFirstPassenger() != null && stand.getUser() != null){
             Entity entity = stand.getFirstPassenger();
             stand.ejectPassengers();
-            entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
+            if (entity instanceof Player ent) {
+                ((StandUser) ent).roundabout$setQVec2Params(new Vec3(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ()));
+            } else {
+                entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
+            }
         }
     }
 

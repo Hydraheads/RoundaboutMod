@@ -342,16 +342,17 @@ public class BlockGrabPreset extends PunchingStand{
                                 break;
                             }
                         }
+                        Vec3 qVec2 = Vec3.ZERO;
                         if (candoit){
+                            qVec2 = new Vec3(vec3d3.x,vec3d3.y,vec3d3.z);
                             ent.dismountTo(vec3d3.x,vec3d3.y,vec3d3.z);
-                            if (ent instanceof Player){
-
-                            }
                         } else {
+                            qVec2 = new Vec3(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
                             ent.dismountTo(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
-                            if (ent instanceof Player){
+                        }
 
-                            }
+                        if (ent instanceof Player){
+                            ((StandUser)ent).roundabout$setQVec2Params(qVec2);
                         }
 
 
@@ -414,6 +415,7 @@ public class BlockGrabPreset extends PunchingStand{
                                 ((StandUser)le).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
                                         ybias,
                                         0F));
+
                             } else {
                                 MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.5 + (ybias / 2)),
                                         Mth.sin(((degrees * ((float) Math.PI / 180)))),
