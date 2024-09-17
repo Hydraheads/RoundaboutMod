@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -102,6 +104,22 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     private int remainingFireTicks;
 
+    @Shadow
+    @Final
+    public double getX() {
+        return 0;
+    }
+
+    @Shadow
+    @Final
+    public double getY() {
+        return 0;
+    }
+    @Shadow
+    @Final
+    public double getZ() {
+        return 0;
+    }
 
     @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
     public void roundaboutTurn(double $$0, double $$1, CallbackInfo ci){

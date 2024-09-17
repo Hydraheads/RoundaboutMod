@@ -271,6 +271,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void tickRoundabout(CallbackInfo ci) {
         //if (StandID > -1) {
+        if (!this.level().isClientSide) {
+            if (this.getActive() &&this.getStandPowers().canSummonStand() && this.getStand() == null){
+                this.summonStand(this.level(),true,false);
+            }
+        }
+
         this.getStandPowers().tickPower();
         this.tickGuard();
         this.tickDaze();
@@ -942,9 +948,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Nullable
     public StandEntity getStand() {
-        if (((LivingEntity) (Object) this).level().isClientSide) {
-            return (StandEntity) ((LivingEntity) (Object) this).level().getEntity(((LivingEntity) (Object) this).getEntityData().get(STAND_ID));
+        if (this.level().isClientSide) {
+            return (StandEntity) this.level().getEntity(((LivingEntity) (Object) this).getEntityData().get(STAND_ID));
         } else {
+            if (this.Stand != null && this.Stand.isRemoved()){
+                this.setStand(null);
+            }
             return this.Stand;
         }
     }

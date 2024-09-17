@@ -260,6 +260,16 @@ public class BlockGrabPreset extends PunchingStand{
                         standEntity.getFirstPassenger() == null && this.getAttackTimeDuring() > -1){
                     ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
                     animateStand((byte) 36);
+                } else if (standEntity != null &&
+                        (this.getActivePower() == PowerIndex.POWER_2_EXTRA ||
+                                this.getActivePower() == PowerIndex.POWER_2 ||
+                                this.getActivePower() == PowerIndex.POWER_2_SNEAK ||
+                                this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA ||
+                                this.getActivePower() == PowerIndex.POWER_2_BONUS
+                        ) && !hasEntity() && !hasBlock()
+                ) {
+                    ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    animateStand((byte) 0);
                 }
             }
             if (this.getAnimation() == 36 || this.getAnimation() == 37) {
