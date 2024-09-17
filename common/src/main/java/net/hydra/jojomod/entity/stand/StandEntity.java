@@ -643,6 +643,12 @@ public abstract class StandEntity extends Mob{
         super.remove($$0);
     }
 
+
+    @Override
+    public boolean removeWhenFarAway(double $$0) {
+        return false;
+    }
+
     /** Math to determine the position of the stand floating away from its user.
      * Based on Jojovein donut code with great help from Urbancase.*/
     public Vec3 getStandOffsetVector(LivingEntity standUser){

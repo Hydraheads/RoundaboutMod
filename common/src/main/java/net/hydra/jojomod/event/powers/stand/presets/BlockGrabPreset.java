@@ -344,8 +344,14 @@ public class BlockGrabPreset extends PunchingStand{
                         }
                         if (candoit){
                             ent.dismountTo(vec3d3.x,vec3d3.y,vec3d3.z);
+                            if (ent instanceof Player){
+
+                            }
                         } else {
                             ent.dismountTo(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
+                            if (ent instanceof Player){
+
+                            }
                         }
 
 
