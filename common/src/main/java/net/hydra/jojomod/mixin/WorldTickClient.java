@@ -83,18 +83,14 @@ public abstract class WorldTickClient extends Level {
     }
 
     private void tickStandIn(LivingEntity entity, StandEntity stand) {
-        Roundabout.LOGGER.info("4");
         if (stand == null || stand.isRemoved()) {
             ((StandUser)entity).roundabout$removeFollower(stand);
-            Roundabout.LOGGER.info("5");
             return;
         }
         if (stand.getFollowing().getId() != entity.getId()) {
-            Roundabout.LOGGER.info("6");
             ((StandUser)entity).roundabout$removeFollower(stand);
             return;
         }
-        Roundabout.LOGGER.info("7");
         byte ot = stand.getOffsetType();
         ++stand.tickCount;
         stand.setOldPosAndRot();

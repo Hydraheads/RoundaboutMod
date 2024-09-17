@@ -743,8 +743,8 @@ public class BlockGrabPreset extends PunchingStand{
                                         standEntity.setHeldItem(ItemStack.EMPTY);
                                         animateStand((byte) 36);
                                         this.setAttackTimeDuring(-10);
+                                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
                                         this.setCooldown(PowerIndex.SKILL_2, 10);
-                                        this.syncCooldowns();
                                         return true;
                                     }
                                 }
