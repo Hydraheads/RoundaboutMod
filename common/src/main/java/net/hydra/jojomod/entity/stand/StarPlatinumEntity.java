@@ -24,6 +24,11 @@ public class StarPlatinumEntity extends StandEntity {
     protected void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
+            if (this.getAnimation() == 10) {
+                this.blockLoinAnimationState.startIfStopped(this.tickCount);
+            } else {
+                this.blockLoinAnimationState.stop();
+            }
             if (this.getAnimation() == 30) {
                 this.timeStopAnimationState.startIfStopped(this.tickCount);
             } else {

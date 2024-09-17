@@ -133,6 +133,7 @@ public abstract class StandEntity extends Mob{
     public final AnimationState punchState2 = new AnimationState();
     public final AnimationState punchState3 = new AnimationState();
     public final AnimationState blockAnimationState = new AnimationState();
+    public final AnimationState blockLoinAnimationState = new AnimationState();
     public final AnimationState barrageChargeAnimationState = new AnimationState();
     public final AnimationState barrageAnimationState = new AnimationState();
     public final AnimationState miningBarrageAnimationState = new AnimationState();
