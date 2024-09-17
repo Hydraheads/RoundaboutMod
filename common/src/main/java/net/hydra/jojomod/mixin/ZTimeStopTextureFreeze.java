@@ -12,8 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ZTimeStopTextureFreeze {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundaboutCancelTextures(CallbackInfo ci) {
-        if (((TimeStop) Minecraft.getInstance().player.level()).CanTimeStopEntity(Minecraft.getInstance().player) ||
-                ((TimeStop) Minecraft.getInstance().player.level()).isTimeStoppingEntity(Minecraft.getInstance().player)) {
+        if (((TimeStop) Minecraft.getInstance().player.level()).inTimeStopRange(Minecraft.getInstance().player)) {
             ci.cancel();
         }
     }
