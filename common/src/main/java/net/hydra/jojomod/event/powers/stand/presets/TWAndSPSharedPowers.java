@@ -312,7 +312,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                float tsTimeRemaining = (200+((this.getMaxChargeTSTime()-this.getChargedTSTicks())*5));
+                float tsTimeRemaining = (200+((this.maxChargedTSTicks-this.getChargedTSTicks())*5));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.SNEAK_ATTACK) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;
                 }
@@ -642,9 +642,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     /**The version of the above function to call at the end of a timestop. Used to calculate additional TS seconds*/
-    public void setCurrentMaxTSTime(float chargedTSSeconds){
-
+    public int setCurrentMaxTSTime(int chargedTSSeconds){
+        return 0;
     }
+
+    public int maxChargedTSTicks = 20;
 
     /**Charge up Time Stop*/
     @Override
@@ -762,7 +764,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                     boolean animate = false;
                     hasActedInTS = false;
-                    this.setCurrentMaxTSTime(this.getChargedTSTicks());
+                    this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
                     if (!(((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
                         if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                             /*Charged Sound*/

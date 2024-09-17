@@ -112,15 +112,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
-    public void setCurrentMaxTSTime(float chargedTSSeconds){
+    public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= 100){
             this.maxChargeTSTime = 180;
             this.setChargedTSTicks(180);
+            return 80;
         } else if (chargedTSSeconds == 20) {
             this.maxChargeTSTime = 20;
         } else {
             this.maxChargeTSTime = 100;
         }
+        return 0;
     }
 
 

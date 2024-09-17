@@ -110,7 +110,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return super.setPowerOther(move,lastMove);
     }
     @Override
-    public void setCurrentMaxTSTime(float chargedTSSeconds){
+    public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= 100){
             this.maxChargeTSTime = 100;
             this.setChargedTSTicks(100);
@@ -119,6 +119,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else {
             this.maxChargeTSTime = 100;
         }
+        return 0;
     }
 
     @Override

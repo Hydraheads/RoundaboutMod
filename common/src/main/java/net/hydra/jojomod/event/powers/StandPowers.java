@@ -279,6 +279,12 @@ public class StandPowers {
                 RenderSystem.enableBlend();
                 context.setColor(1f, 1f, 1f, 1f);
                 context.blit(StandIcons.COOLDOWN_ICON, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
+                int num = ((int)(Math.floor((double) cd.time /20)+1));
+                int offset = x+3;
+                if (num <=9){
+                    offset = x+7;
+                }
+                context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
                 RenderSystem.disableBlend();
             }
             context.setColor(1f, 1f, 1f, 0.9f);
