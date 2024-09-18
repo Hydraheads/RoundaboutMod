@@ -164,7 +164,11 @@ public class BlockGrabPreset extends PunchingStand{
             thrownBlockOrItem.shootFromRotation(this.getSelf(), this.getSelf().getXRot(),
                     this.getSelf().getYRot(), -0.5F, 1.7F, 0.8F);
             this.getSelf().level().addFreshEntity(thrownBlockOrItem);
-            this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+            if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND)|| item.is(Items.FLINT)) {
+                this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.BALL_BEARING_SHOT_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
+            } else {
+                this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+            }
         }
     }
 

@@ -117,10 +117,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state){
 
-        if ((state.isAir() || state.canBeReplaced()) && !((this.getOwner() instanceof Player &&
+        if ((state.isAir() || state.canBeReplaced()) && (this.getOwner() != null && !((this.getOwner() instanceof Player &&
                 (((Player) this.getOwner()).blockActionRestricted(this.getOwner().level(), pos, ((ServerPlayer)
                         this.getOwner()).gameMode.getGameModeForPlayer()))) ||
-                !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos))){
+                !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos)))){
 
             if (this.getItem().getItem() instanceof BlockItem) {
                 Direction direction = this.getDirection();

@@ -29,6 +29,12 @@
       "roundabout:punch_sfx1"
     ]
   },
+  "ball_bearing_shot": {
+    "subtitle": "sounds.roundabout.ball_bearing_shot",
+    "sounds": [
+      "roundabout:ball_bearing_shot"
+    ]
+  },
   "punch_sfx2": {
     "subtitle": "sounds.roundabout.punch_sfx2",
     "sounds": [
