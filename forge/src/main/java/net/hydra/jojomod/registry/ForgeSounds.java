@@ -57,6 +57,16 @@ public class ForgeSounds {
             register(ModSounds.STAND_THEWORLD_MUDA4_SOUND, ModSounds.STAND_THEWORLD_MUDA4_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA5_SOUND_EVENT =
             register(ModSounds.STAND_THEWORLD_MUDA5_SOUND, ModSounds.STAND_THEWORLD_MUDA5_SOUND_ID);
+    public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_EVENT =
+            register(ModSounds.STAR_PLATINUM_ORA, ModSounds.STAR_PLATINUM_ORA_ID);
+    public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_RUSH_EVENT =
+            register(ModSounds.STAR_PLATINUM_ORA_RUSH, ModSounds.STAR_PLATINUM_ORA_RUSH_ID);
+    public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_RUSH_2_EVENT =
+            register(ModSounds.STAR_PLATINUM_ORA_RUSH_2, ModSounds.STAR_PLATINUM_ORA_RUSH_2_ID);
+    public static final RegistryObject<SoundEvent> STAR_PLATINUM_TIMESTOP =
+            register(ModSounds.STAR_PLATINUM_TIMESTOP, ModSounds.STAR_PLATINUM_TIMESTOP_ID);
+    public static final RegistryObject<SoundEvent> STAR_PLATINUM_TIMESTOP_2 =
+            register(ModSounds.STAR_PLATINUM_TIMESTOP_2, ModSounds.STAR_PLATINUM_TIMESTOP_2_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_WINDUP_EVENT =
             register(ModSounds.STAND_BARRAGE_WINDUP, ModSounds.STAND_BARRAGE_WINDUP_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_MISS_EVENT =

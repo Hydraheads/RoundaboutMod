@@ -36,7 +36,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public SoundEvent getLastHitSound(){
-        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+        return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
     }
 
     @Override
@@ -134,11 +134,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
-            return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
+            return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
-            return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
+            return ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
-            return ModSounds.TIME_STOP_THE_WORLD_EVENT;
+            return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {
             return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
@@ -148,9 +148,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_CHARGE){
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
-            return ModSounds.TIME_STOP_VOICE_THE_WORLD_EVENT;
+            return ModSounds.STAR_PLATINUM_TIMESTOP_SOUND_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE_2){
-            return ModSounds.TIME_STOP_VOICE_THE_WORLD2_EVENT;
+            return ModSounds.STAR_PLATINUM_TIMESTOP_2_SOUND_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE_3){
             return ModSounds.TIME_STOP_VOICE_THE_WORLD3_EVENT;
         } else if (soundChoice == TIME_STOP_ENDING_NOISE){

@@ -179,6 +179,36 @@
       "roundabout:stand_theworld_muda5"
     ]
   },
+  "star_platinum_ora": {
+    "subtitle": "sounds.roundabout.star_platinum_ora",
+    "sounds": [
+      "roundabout:star_platinum_ora"
+    ]
+  },
+  "star_platinum_ora_rush": {
+    "subtitle": "sounds.roundabout.star_platinum_ora_rush",
+    "sounds": [
+      "roundabout:star_platinum_ora_rush"
+    ]
+  },
+  "star_platinum_ora_rush_2": {
+    "subtitle": "sounds.roundabout.star_platinum_ora_rush_2",
+    "sounds": [
+      "roundabout:star_platinum_ora_rush_2"
+    ]
+  },
+  "star_platinum_timestop": {
+    "subtitle": "sounds.roundabout.star_platinum_timestop",
+    "sounds": [
+      "roundabout:star_platinum_timestop"
+    ]
+  },
+  "star_platinum_timestop_2": {
+    "subtitle": "sounds.roundabout.star_platinum_timestop_2",
+    "sounds": [
+      "roundabout:star_platinum_timestop_2"
+    ]
+  },
   "stand_barrage_windup": {
     "subtitle": "sounds.roundabout.stand_barrage_windup",
     "sounds": [
