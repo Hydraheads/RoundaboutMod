@@ -93,8 +93,6 @@ public class ZWorldRenderer {
         }
     }
 
-
-
     @ModifyVariable(method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
     private float RoundaboutTSRainCancel(float $$1) {
         LivingEntity player = Minecraft.getInstance().player;

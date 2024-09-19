@@ -5,10 +5,12 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.entity.client.LocacacaBeamLayer;
 import net.hydra.jojomod.entity.client.ModFirstPersonLayers;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.util.Mth;
@@ -32,6 +34,49 @@ public class ZScreenShaking {
 
     @Shadow
     public void renderItemInHand(PoseStack $$0, Camera $$1, float $$2) {}
+
+
+    @Inject(method = "tickFov()V", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$tickfov(CallbackInfo ci) {
+        LivingEntity player = Minecraft.getInstance().player;
+        if (player != null){
+            StandPowers SP = ((StandUser)player).getStandPowers();
+            if (SP.scopeLevel > 0) {
+                ci.cancel();
+
+                float f = 1.0F;
+                this.oldFov = this.fov;
+
+                AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) this.minecraft.getCameraEntity();
+                if (abstractclientplayer != null && Minecraft.getInstance().options.getCameraType().isFirstPerson() && abstractclientplayer.isScoping()) {
+                    if (SP.scopeLevel == 1) {
+                        f = 0.05F;
+                    } else if (SP.scopeLevel == 2) {
+                        f = 0.0225F;
+                    } else {
+                        f = 0.01F;
+                    }
+                } else {
+                    if (SP.scopeLevel == 1) {
+                        f = 0.3F;
+                    } else if (SP.scopeLevel == 2) {
+                        f = 0.125F;
+                    } else {
+                        f = 0.05F;
+                    }
+                }
+
+                this.fov += (f - this.fov) * 0.5F;
+                if (this.fov > 1.5F) {
+                    this.fov = 1.5F;
+                }
+
+                if (this.fov < 0.01F) {
+                    this.fov = 0.01F;
+                }
+            }
+        }
+    }
 
 
     @Inject(method = "renderItemInHand", at = @At(value = "HEAD"), cancellable = true)
@@ -106,6 +151,9 @@ public class ZScreenShaking {
     @Shadow
     @Final
     private RenderBuffers renderBuffers;
+    @Shadow private float fov;
+    @Shadow private float oldFov;
+
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderLevel(float $$0, long $$1, PoseStack $$2, CallbackInfo ci) {
         /*

@@ -14,6 +14,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,7 +57,33 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (scopeTicks > -1){
                 scopeTicks--;
             }
+            if (scopeLevel > 0){
+                if (scopeTime < 10) {
+                    scopeTime++;
+                }
+            } else {
+                if (scopeTime > -1) {
+                    scopeTime--;
+                }
+            }
         }
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
+                || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity()) && slot != 1));
+    }
+    public int inputSpeedModifiers(int sprintTrigger){
+        if (this.getSelf().level().isClientSide) {
+            LocalPlayer local = ((LocalPlayer) this.getSelf());
+            if (this.scopeLevel > -1){
+                local.input.leftImpulse *= 0.85f;
+                local.input.forwardImpulse *= 0.85f;
+                sprintTrigger = 0;
+            }
+        }
+        return super.inputSpeedModifiers(sprintTrigger);
     }
 
     /**Assault Ability*/

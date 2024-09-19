@@ -981,7 +981,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     @Override
-    public boolean isAttackIneptVisually(byte activeP){
+    public boolean isAttackIneptVisually(byte activeP, int slot){
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
                 || ((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity());
     }

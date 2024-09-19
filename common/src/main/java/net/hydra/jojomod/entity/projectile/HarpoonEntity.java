@@ -113,10 +113,10 @@ public class HarpoonEntity extends AbstractArrow {
             }
 
             super.tick();
+            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+                this.setDeltaMovement(delta);
+            }
             if (!this.level().isClientSide) {
-                if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
-                    this.setDeltaMovement(delta);
-                }
                 if (superThrowTicks > -1) {
                     superThrowTicks--;
                     if (superThrowTicks <= -1) {
@@ -131,6 +131,16 @@ public class HarpoonEntity extends AbstractArrow {
                 }
             }
         }
+    public boolean getSuperThrow() {
+        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+    }
+    protected float getGravity() {
+        if (getSuperThrow()){
+            return 0;
+        } else {
+            return 0.03F;
+        }
+    }
 
         private boolean isAcceptibleReturnOwner() {
             Entity $$0 = this.getOwner();

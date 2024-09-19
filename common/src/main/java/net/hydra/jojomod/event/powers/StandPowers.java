@@ -225,6 +225,7 @@ public class StandPowers {
     }
 
     public int scopeLevel = 0;
+    public int scopeTime = -1;
 
     public boolean canScope(){
         return false;
@@ -275,7 +276,7 @@ public class StandPowers {
         else if (slot==2){x+=50;}
         else if (slot==1){x+=25;}
         y-=1;
-        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI)){
+        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI,slot)){
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
             if ((cd != null && (cd.time >= 0))) {
@@ -371,7 +372,7 @@ public class StandPowers {
     public boolean isAttackInept(byte activeP){
         return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
-    public boolean isAttackIneptVisually(byte activeP){
+    public boolean isAttackIneptVisually(byte activeP, int slot){
         return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
 
@@ -430,6 +431,7 @@ public class StandPowers {
         }
         if (this.scopeLevel != 0 && !this.canScope()){
             this.scopeLevel = 0;
+            this.scopeTime = -1;
         }
     }
 

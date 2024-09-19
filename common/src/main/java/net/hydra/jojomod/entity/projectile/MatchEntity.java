@@ -61,10 +61,11 @@ public class MatchEntity extends ThrowableItemProjectile {
     public void tick() {
         Vec3 delta = this.getDeltaMovement();
         super.tick();
+
+        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+            this.setDeltaMovement(delta);
+        }
         if (!this.level().isClientSide) {
-            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
-                this.setDeltaMovement(delta);
-            }
             if (superThrowTicks > -1) {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
@@ -172,6 +173,16 @@ public class MatchEntity extends ThrowableItemProjectile {
         this.xRotO = this.getXRot();
     }
 
+    public boolean getSuperThrow() {
+        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+    }
+    protected float getGravity() {
+        if (getSuperThrow()){
+            return 0;
+        } else {
+            return 0.03F;
+        }
+    }
     public void shootFromRotationWithVariance(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));

@@ -92,10 +92,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         }
         super.tick();
+        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+            this.setDeltaMovement(delta);
+        }
         if (!this.level().isClientSide) {
-            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
-                this.setDeltaMovement(delta);
-            }
             if (superThrowTicks > -1) {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
