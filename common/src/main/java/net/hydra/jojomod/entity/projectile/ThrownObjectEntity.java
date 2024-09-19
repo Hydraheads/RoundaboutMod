@@ -101,15 +101,15 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 if (superThrowTicks <= -1) {
                     this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
                 } else {
-                    if (this.tickCount % 4 == 0){
+                    if ((this.tickCount+2) % 4 == 0){
                         if (this.getItem().getItem() instanceof BlockItem){
                             ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                     this.getX(), this.getY()+0.5F, this.getZ(),
-                                    100, 0, 0, 0, 0.5);
+                                    0, 0, 0, 0, 0);
                         } else {
                             ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                     this.getX(), this.getY(), this.getZ(),
-                                    100, 0, 0, 0, 0.5);
+                                    0, 0, 0, 0, 0);
                         }
                     }
                 }

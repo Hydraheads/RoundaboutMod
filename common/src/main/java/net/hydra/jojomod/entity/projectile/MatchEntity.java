@@ -4,10 +4,14 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -38,6 +42,12 @@ public class MatchEntity extends ThrowableItemProjectile {
         super(ModEntities.THROWN_MATCH, living, $$1);
     }
 
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(MatchEntity.class, EntityDataSerializers.BOOLEAN);
+    private int superThrowTicks = -1;
+    public void starThrowInit(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        superThrowTicks = 50;
+    }
 
     public MatchEntity(Level world, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.THROWN_MATCH, p_36862_, p_36863_, p_36864_, world);
@@ -48,7 +58,28 @@ public class MatchEntity extends ThrowableItemProjectile {
     }
 
     public boolean isBundle = false;
-
+    public void tick() {
+        Vec3 delta = this.getDeltaMovement();
+        super.tick();
+        if (!this.level().isClientSide) {
+            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+                this.setDeltaMovement(delta);
+            }
+            if (superThrowTicks > -1) {
+                superThrowTicks--;
+                if (superThrowTicks <= -1) {
+                    superThrowTicks = -1;
+                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                } else {
+                    if ((this.tickCount+2) % 4 == 0){
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                this.getX(), this.getY(), this.getZ(),
+                                0, 0, 0, 0, 0);
+                    }
+                }
+            }
+        }
+    }
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);
@@ -104,6 +135,13 @@ public class MatchEntity extends ThrowableItemProjectile {
             this.discard();
         }
 
+    }
+
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
     }
 
     @Override

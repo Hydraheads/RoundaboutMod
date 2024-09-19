@@ -125,7 +125,7 @@ public class HarpoonEntity extends AbstractArrow {
                         if (this.tickCount % 4 == 0){
                                 ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                         this.getX(), this.getY(), this.getZ(),
-                                        100, 0, 0, 0, 0.5);
+                                        0, 0, 0, 0, 0);
                         }
                     }
                 }

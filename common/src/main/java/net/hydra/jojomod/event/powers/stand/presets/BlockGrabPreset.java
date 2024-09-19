@@ -103,7 +103,10 @@ public class BlockGrabPreset extends PunchingStand{
             this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.is(ModItems.MATCH)){
             MatchEntity $$7 = new MatchEntity(this.getSelf(),this.getSelf().level());
-            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.5F, getShotAccuracy());
+            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), getThrowAngle3(), 2.5F, getShotAccuracy());
+            if (this.canSnipe()) {
+                $$7.starThrowInit();
+            }
             this.getSelf().level().addFreshEntity($$7);
             this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.is(ModItems.MATCH_BUNDLE)){
