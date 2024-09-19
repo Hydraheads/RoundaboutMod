@@ -68,6 +68,7 @@
     "ZItemInHandLayer",
     "ZItemInHandRenderer",
     "ZItemRenderer",
+    "ZLightTextue",
     "ZLivingEntityRenderer",
     "ZModelBakery",
     "ZMultiPlayerGameMode",

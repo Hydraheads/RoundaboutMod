@@ -224,6 +224,11 @@ public class StandPowers {
         }
     }
 
+    public int scopeLevel = 0;
+
+    public boolean canScope(){
+        return false;
+    }
 
         public List<CooldownInstance> StandCooldowns = initStandCooldowns();
 
@@ -422,6 +427,9 @@ public class StandPowers {
         }
         if (this.self.level().isClientSide) {
             tickSounds();
+        }
+        if (this.scopeLevel != 0 && !this.canScope()){
+            this.scopeLevel = 0;
         }
     }
 

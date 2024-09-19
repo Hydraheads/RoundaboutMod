@@ -12,10 +12,12 @@ import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Items;
 
 public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public PowersStarPlatinum(LivingEntity self) {
@@ -40,7 +42,60 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public boolean canScope(){
+        return (this.getSelf().isBlocking() || this.hasBlock() || this.hasEntity()
+                || (this.getSelf().isUsingItem() && this.getSelf().getUseItem().is(Items.SPYGLASS)));
+    }
+
+    public int scopeTicks = -1;
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+        if (this.self.isAlive() && !this.self.isRemoved()) {
+            if (scopeTicks > -1){
+                scopeTicks--;
+            }
+        }
+    }
+
+    /**Assault Ability*/
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide && !this.isClashing() && !((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (keyIsDown) {
+                if (this.canScope()) {
+                    if (scopeTicks == -1) {
+                        scopeTicks = 6;
+                        int newLevel = scopeLevel + 1;
+                        if (newLevel > 3) {
+                            scopeLevel = 0;
+                        } else {
+                            this.getSelf().playSound(ModSounds.STAR_PLATINUM_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
+                            scopeLevel = newLevel;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @Override
     public void renderIcons(GuiGraphics context, int x, int y){
+
+        boolean rendered1 = false;
+        if (canScope()){
+            rendered1 = true;
+            if (scopeLevel == 1){
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_1, PowerIndex.NO_CD);
+            } else if (scopeLevel == 2) {
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_2, PowerIndex.NO_CD);
+            } else if (scopeLevel == 3) {
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_3, PowerIndex.NO_CD);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE, PowerIndex.NO_CD);
+            }
+        }
+
         if (this.getSelf().isCrouching()){
 
             setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_ITEM, PowerIndex.SKILL_2);

@@ -61,6 +61,8 @@ public class ForgeSounds {
             register(ModSounds.STAR_PLATINUM_ORA, ModSounds.STAR_PLATINUM_ORA_ID);
     public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_RUSH_EVENT =
             register(ModSounds.STAR_PLATINUM_ORA_RUSH, ModSounds.STAR_PLATINUM_ORA_RUSH_ID);
+    public static final RegistryObject<SoundEvent> STAR_PLATINUM_SCOPE_EVENT =
+            register(ModSounds.STAR_PLATINUM_SCOPE, ModSounds.STAR_PLATINUM_SCOPE_ID);
     public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_RUSH_2_EVENT =
             register(ModSounds.STAR_PLATINUM_ORA_RUSH_2, ModSounds.STAR_PLATINUM_ORA_RUSH_2_ID);
     public static final RegistryObject<SoundEvent> STAR_PLATINUM_TIMESTOP =

@@ -197,6 +197,12 @@
       "roundabout:star_platinum_ora_rush_2"
     ]
   },
+  "star_platinum_scope": {
+    "subtitle": "sounds.roundabout.star_platinum_scope",
+    "sounds": [
+      "roundabout:star_platinum_scope"
+    ]
+  },
   "star_platinum_timestop": {
     "subtitle": "sounds.roundabout.star_platinum_timestop",
     "sounds": [
