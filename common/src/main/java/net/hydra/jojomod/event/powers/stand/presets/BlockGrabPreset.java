@@ -68,24 +68,29 @@ public class BlockGrabPreset extends PunchingStand{
         if (item.getItem() instanceof ThrowablePotionItem) {
             ThrownPotion $$4 = new ThrownPotion(this.getSelf().level(), this.getSelf());
             $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 1.4F, 0.5F);
+            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 1.4F, getShotAccuracy());
             this.getSelf().level().addFreshEntity($$4);
             this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.getItem() instanceof SnowballItem){
             Snowball $$4 = new Snowball(this.getSelf().level(), this.getSelf());
             $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, 0.5F);
+            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, getShotAccuracy());
             this.getSelf().level().addFreshEntity($$4);
             this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.is(ModItems.KNIFE)){
             KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), item);
-            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.4F, 0.5F);
+            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), getThrowAngle3(), 2.4F, getShotAccuracy());
+
+            if (this.canSnipe()){
+                $$7.starThrowInit();
+            }
             this.getSelf().level().addFreshEntity($$7);
             this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.is(ModItems.KNIFE_BUNDLE)){
             for (int i = 0; i< 4; i++) {
                 KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), item);
-                $$7.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.4F, 0.5F);
+                $$7.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.4F, getBundleAccuracy());
+
                 this.getSelf().level().addFreshEntity($$7);
                 if (i ==0) {
                     this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -93,18 +98,18 @@ public class BlockGrabPreset extends PunchingStand{
             }
         } else if (item.is(ModItems.GASOLINE_CAN)){
             GasolineCanEntity $$7 = new GasolineCanEntity(this.getSelf(),this.getSelf().level());
-            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 1.5F, 0.5F);
+            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 1.5F, getShotAccuracy());
             this.getSelf().level().addFreshEntity($$7);
             this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.is(ModItems.MATCH)){
             MatchEntity $$7 = new MatchEntity(this.getSelf(),this.getSelf().level());
-            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.5F, 0.5F);
+            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.5F, getShotAccuracy());
             this.getSelf().level().addFreshEntity($$7);
             this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.is(ModItems.MATCH_BUNDLE)){
             for (int i = 0; i< 4; i++) {
                 MatchEntity $$7 = new MatchEntity(this.getSelf(),this.getSelf().level());
-                $$7.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.5F, 0.5F);
+                $$7.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.5F, getBundleAccuracy());
                 this.getSelf().level().addFreshEntity($$7);
                 if (i ==0) {
                     this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -113,13 +118,13 @@ public class BlockGrabPreset extends PunchingStand{
         } else if (item.getItem() instanceof EggItem){
             ThrownEgg $$4 = new ThrownEgg(this.getSelf().level(), this.getSelf());
             $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, 0.5F);
+            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, getShotAccuracy());
             this.getSelf().level().addFreshEntity($$4);
             this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.getItem() instanceof ExperienceBottleItem){
             ThrownExperienceBottle $$4 = new ThrownExperienceBottle(this.getSelf().level(), this.getSelf());
             $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, 0.5F);
+            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, getShotAccuracy());
             this.getSelf().level().addFreshEntity($$4);
             this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.getItem() instanceof EnderpearlItem){
@@ -133,28 +138,31 @@ public class BlockGrabPreset extends PunchingStand{
                 if (this.getSelf() instanceof Player PE) {
                     PE.getCooldowns().addCooldown(item.getItem(), 20);
                 }
-                $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0F, 1.8F, 0.5F);
+                $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0F, 1.8F, getShotAccuracy());
                 this.getSelf().level().addFreshEntity($$4);
                 this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else if (item.getItem() instanceof ArrowItem){
             ArrowItem $$10 = (ArrowItem) item.getItem();
             AbstractArrow $$11 = $$10.createArrow(this.getSelf().level(), item, this.getSelf());
-            $$11.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, 1.0F);
+            $$11.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
             $$11.setCritArrow(true);
             this.getSelf().level().addFreshEntity($$11);
             this.getSelf().level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.getItem() instanceof TridentItem){
             if (!item.hurt(1,this.getSelf().level().getRandom(),null)){
                 ThrownTrident $$7 = new ThrownTrident(this.getSelf().level(), this.getSelf(), item);
-                $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, 0.5F);
+                $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
                 this.getSelf().level().addFreshEntity($$7);
                 this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else if (item.getItem() instanceof HarpoonItem){
             if (!item.hurt(1,this.getSelf().level().getRandom(),null)){
                 HarpoonEntity $$7 = new HarpoonEntity(this.getSelf().level(), this.getSelf(), item);
-                $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, 0.5F);
+                $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
+                if (this.canSnipe()){
+                    $$7.starThrowInit();
+                }
                 this.getSelf().level().addFreshEntity($$7);
                 this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
@@ -162,7 +170,10 @@ public class BlockGrabPreset extends PunchingStand{
             boolean canPlace = getCanPlace();
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item, canPlace);
             thrownBlockOrItem.shootFromRotation(this.getSelf(), this.getSelf().getXRot(),
-                    this.getSelf().getYRot(), -0.5F, 1.7F, 0.8F);
+                    this.getSelf().getYRot(), getThrowAngle(), 1.7F, getThrowAngle2());
+            if (this.canSnipe()){
+                thrownBlockOrItem.starThrowInit();
+            }
             this.getSelf().level().addFreshEntity(thrownBlockOrItem);
             if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND)|| item.is(Items.FLINT)) {
                 this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.BALL_BEARING_SHOT_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
@@ -172,6 +183,24 @@ public class BlockGrabPreset extends PunchingStand{
         }
     }
 
+    public boolean canSnipe(){
+        return false;
+    }
+    public float getShotAccuracy(){
+        return 0.5F;
+    }
+    public float getBundleAccuracy(){
+        return 0.5F;
+    }
+    public float getThrowAngle(){
+        return -0.5F;
+    }
+    public float getThrowAngle2(){
+        return 0.8F;
+    }
+    public float getThrowAngle3(){
+        return -3.0F;
+    }
     public boolean getCanPlace(){
         boolean canPlace = false;
         boolean acq = false;

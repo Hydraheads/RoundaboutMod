@@ -1,24 +1,15 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IFireBlock;
-import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ScissorItem;
-import net.hydra.jojomod.mixin.PlayerEntity;
-import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.Util;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -30,26 +21,18 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -61,9 +44,17 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class ThrownObjectEntity extends ThrowableItemProjectile {
    public boolean places;
+
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private int superThrowTicks = -1;
+
+    private void initDataTrackerRoundabout(CallbackInfo ci) {
+    }
 
     public ThrownObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
@@ -81,12 +72,50 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         this.places = places;
     }
 
+    public void starThrowInit(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        superThrowTicks = 50;
+    }
+
     public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, p_36862_, p_36863_, p_36864_, world);
         this.setItem(itemStack);
         this.places = places;
     }
 
+    @Override
+    public void tick(){
+        Vec3 delta = this.getDeltaMovement();
+        if (!this.level().isClientSide) {
+            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+
+            }
+        }
+        super.tick();
+        if (!this.level().isClientSide) {
+            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+                this.setDeltaMovement(delta);
+            }
+            if (superThrowTicks > -1) {
+                superThrowTicks--;
+                if (superThrowTicks <= -1) {
+                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                } else {
+                    if (this.tickCount % 4 == 0){
+                        if (this.getItem().getItem() instanceof BlockItem){
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                    this.getX(), this.getY()+0.5F, this.getZ(),
+                                    100, 0, 0, 0, 0.5);
+                        } else {
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                    this.getX(), this.getY(), this.getZ(),
+                                    100, 0, 0, 0, 0.5);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
@@ -107,12 +136,24 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+    }
+    public boolean getSuperThrow() {
+        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
     }
     @Override
     protected Item getDefaultItem() {
         return Items.AIR;
     }
 
+    @Override
+    protected float getGravity() {
+        if (getSuperThrow()){
+            return 0;
+        } else {
+            return 0.03F;
+        }
+    }
     Direction tempDirection = Direction.UP;
 
     public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state){

@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.stand.StarPlatinumModel;
 import net.hydra.jojomod.entity.stand.StarPlatinumRenderer;
 import net.hydra.jojomod.entity.stand.TheWorldModel;
 import net.hydra.jojomod.entity.stand.TheWorldRenderer;
+import net.hydra.jojomod.particles.AirCrackleParticle;
 import net.hydra.jojomod.particles.BloodParticle;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -49,5 +50,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLUE_BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENDER_BLOOD.get(), BloodParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
     }
 }

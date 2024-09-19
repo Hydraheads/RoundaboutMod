@@ -123,6 +123,31 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public boolean canSnipe(){
+        return true;
+    }
+    @Override
+    public float getShotAccuracy(){
+        return 0.0F;
+    }
+    @Override
+    public float getBundleAccuracy(){
+        return 0.3F;
+    }
+    @Override
+    public float getThrowAngle2(){
+        return 0.0F;
+    }
+    @Override
+    public float getThrowAngle3(){
+        return 0.0F;
+    }
+    @Override
+    public float getThrowAngle(){
+        return 0F;
+    }
+
+    @Override
     public byte chooseBarrageSound(){
         double rand = Math.random();
         if (rand > 0.5) {

@@ -10,5 +10,6 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ENDER_BLOOD, BloodParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.AIR_CRACKLE, AirCrackleParticle.Provider::new);
     }
 }

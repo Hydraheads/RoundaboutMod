@@ -104,6 +104,7 @@ public class ForgeEvents {
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();
+        ModParticles.AIR_CRACKLE = ForgeParticles.AIR_CRACKLE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

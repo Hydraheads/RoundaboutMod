@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -60,15 +62,24 @@ public class HarpoonEntity extends AbstractArrow {
         this.entityData.set(ID_FOIL, $$2.hasFoil());
     }
 
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(HarpoonEntity.class, EntityDataSerializers.BOOLEAN);
+    private int superThrowTicks = -1;
+    public void starThrowInit(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        superThrowTicks = 50;
+    }
+
         @Override
         protected void defineSynchedData() {
             super.defineSynchedData();
             this.entityData.define(ID_LOYALTY, (byte)0);
+            this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
             this.entityData.define(ID_FOIL, false);
         }
 
         @Override
         public void tick() {
+            Vec3 delta = this.getDeltaMovement();
             if (this.inGroundTime > 4) {
                 this.dealtDamage = true;
             }
@@ -102,6 +113,23 @@ public class HarpoonEntity extends AbstractArrow {
             }
 
             super.tick();
+            if (!this.level().isClientSide) {
+                if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+                    this.setDeltaMovement(delta);
+                }
+                if (superThrowTicks > -1) {
+                    superThrowTicks--;
+                    if (superThrowTicks <= -1) {
+                        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                    } else {
+                        if (this.tickCount % 4 == 0){
+                                ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                        this.getX(), this.getY(), this.getZ(),
+                                        100, 0, 0, 0, 0.5);
+                        }
+                    }
+                }
+            }
         }
 
         private boolean isAcceptibleReturnOwner() {

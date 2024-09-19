@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -46,6 +48,12 @@ public class KnifeEntity extends AbstractArrow {
     private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(KnifeEntity.class, EntityDataSerializers.BOOLEAN);
     private final Set<MobEffectInstance> effects = Sets.newHashSet();
 
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(KnifeEntity.class, EntityDataSerializers.BOOLEAN);
+    private int superThrowTicks = -1;
+    public void starThrowInit(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        superThrowTicks = 50;
+    }
     private ItemStack knifeItem = new ItemStack(ModItems.KNIFE);
 
     public KnifeEntity(EntityType<? extends KnifeEntity> entity,  Level world) {
@@ -67,7 +75,26 @@ public class KnifeEntity extends AbstractArrow {
 
 
     public void tick() {
+        Vec3 delta = this.getDeltaMovement();
         super.tick();
+        if (!this.level().isClientSide) {
+            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+                this.setDeltaMovement(delta);
+            }
+            if (superThrowTicks > -1) {
+                superThrowTicks--;
+                if (superThrowTicks <= -1 || this.inGround) {
+                    superThrowTicks = -1;
+                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                } else {
+                    if (this.tickCount % 4 == 0){
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                this.getX(), this.getY(), this.getZ(),
+                                100, 0, 0, 0, 0.5);
+                    }
+                }
+            }
+        }
     }
     protected ItemStack getPickupItem() {
          return new ItemStack(ModItems.KNIFE);
@@ -77,6 +104,7 @@ public class KnifeEntity extends AbstractArrow {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
         this.entityData.define(ID_FOIL, false);
     }
     public boolean isFoil() {
