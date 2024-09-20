@@ -73,6 +73,13 @@ public class KnifeEntity extends AbstractArrow {
         super(ModEntities.THROWN_KNIFE, entity, world);
     }
 
+    @Override
+    public boolean isNoGravity() {
+        if (superThrowTicks > -1){
+            return true;
+        }
+        return false;
+    }
 
     public void tick() {
         Vec3 delta = this.getDeltaMovement();

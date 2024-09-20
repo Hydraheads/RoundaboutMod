@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -14,6 +15,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -27,12 +31,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -73,6 +79,17 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     @Override
     public void tick(){
+
+
+
+        Vec3 delta = this.getDeltaMovement();
+        if (!this.level().isClientSide) {
+            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+
+            }
+        }
+
+
         int spincount = 0;
         if (bounces <= 3){spincount = -15;}
         spinningCanX = Mth.wrapDegrees(spinningCanX+=spincount);
@@ -86,6 +103,30 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             return;
         }
         super.tick();
+
+        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+            this.setDeltaMovement(delta);
+        }
+        if (!this.level().isClientSide) {
+            if (superThrowTicks > -1) {
+                superThrowTicks--;
+                if (superThrowTicks <= -1) {
+                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                } else {
+                    if ((this.tickCount+2) % 4 == 0){
+                        if (this.getItem().getItem() instanceof BlockItem){
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                    this.getX(), this.getY()+0.5F, this.getZ(),
+                                    0, 0, 0, 0, 0);
+                        } else {
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                    this.getX(), this.getY(), this.getZ(),
+                                    0, 0, 0, 0, 0);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -131,6 +172,21 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         }
     }
 
+
+    private int superThrowTicks = -1;
+
+    private void initDataTrackerRoundabout(CallbackInfo ci) {
+    }
+
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.BOOLEAN);
+    public void starThrowInit(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        superThrowTicks = 50;
+    }
+
+    public boolean getSuperThrow() {
+        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+    }
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
 
@@ -184,6 +240,12 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     }
 
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+    }
 
     public void scatterGoo(BlockPos pos){
         if (!this.level().isClientSide) {
@@ -294,7 +356,11 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
 
     protected float getGravity() {
-        return 0.04F;
+        if (getSuperThrow()){
+            return 0;
+        } else {
+            return 0.04F;
+        }
     }
 
 }

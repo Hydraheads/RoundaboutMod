@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ScissorItem;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -377,8 +378,16 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         }
 
-        if (this.getItem().getItem() instanceof NameTagItem && $$1 instanceof LivingEntity) {
-            if (!this.useNametag(this.getItem(), ((LivingEntity) $$1))){
+        if (this.getItem().getItem() instanceof NameTagItem) {
+            if ($$1 instanceof LivingEntity && !this.useNametag(this.getItem(), ((LivingEntity) $$1))){
+                this.dropItem($$1.getOnPos());
+            }
+        } else if (this.getItem().getItem() instanceof StandDiscItem SD) {
+            if (this.places && $$1 instanceof LivingEntity LE && MainUtil.canGrantStand(LE)){
+                ((StandUser) LE).roundabout$setStandDisc(this.getItem());
+                SD.generateStandPowers(LE);
+                ((StandUser) LE).summonStand($$1.level(),true,true);
+            } else {
                 this.dropItem($$1.getOnPos());
             }
         } else if (this.getItem().getItem() instanceof DyeItem && $$1 instanceof LivingEntity) {

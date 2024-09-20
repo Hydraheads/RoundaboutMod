@@ -39,7 +39,9 @@ import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -100,6 +102,18 @@ public class MainUtil {
         } else {
             return false;
         }
+    }
+
+    public static boolean canGrantStand(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            if (!(ent instanceof WitherBoss) && !(ent instanceof EnderDragon) && !(ent instanceof Warden) &&
+            !(ent instanceof Player)){
+                if (((StandUser)LE).roundabout$getStandDisc().isEmpty()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void makeBleed(Entity entity, int level, int ticks, Entity source){

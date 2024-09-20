@@ -111,7 +111,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
-            playSoundsIfNearby(BARRAGE_NOISE, 32, false);
+            playSoundsIfNearby(BARRAGE_NOISE_2, 32, false);
         }
     }
     @Override
@@ -132,9 +132,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return 0;
     }
-
-
-
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
