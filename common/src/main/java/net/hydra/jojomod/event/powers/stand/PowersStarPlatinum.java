@@ -51,6 +51,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int scopeTicks = -1;
 
     @Override
+    public void playBarrageClashSound(){
+        if (!this.self.level().isClientSide()) {
+            playSoundsIfNearby(BARRAGE_NOISE, 32, false);
+        }
+    }
+    @Override
     public void tickPower() {
         super.tickPower();
         if (this.self.isAlive() && !this.self.isRemoved()) {

@@ -70,7 +70,7 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
                 QueueSoundInstance soundI = $$1.get(i);
                 SoundInstance qSound = new EntityBoundSoundInstance(
                         soundI.roundaboutSoundEvent,
-                        SoundSource.PLAYERS,
+                        SoundSource.NEUTRAL,
                         ((StandUser) this).getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
                         ((StandUser) this).getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte),
                         ((Entity) (Object) this),
@@ -99,7 +99,7 @@ public class StandUserClient implements net.hydra.jojomod.event.powers.StandUser
             SoundEvent SE =  ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
             SoundInstance qSound = new EntityBoundSoundInstance(
                     SE,
-                    SoundSource.PLAYERS,
+                    SoundSource.NEUTRAL,
                     ((StandUser) this).getStandPowers().getSoundVolumeFromByte(soundChoice),
                     ((StandUser) this).getStandPowers().getSoundPitchFromByte(soundChoice),
                     ((Entity) (Object) this),

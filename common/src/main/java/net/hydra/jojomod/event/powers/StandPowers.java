@@ -387,8 +387,7 @@ public class StandPowers {
                 if (this.attackTimeDuring != -1) {
                     this.attackTimeDuring++;
                     if (this.attackTimeDuring == -1) {
-                        animateStand((byte) 0);
-                        poseStand(OffsetIndex.FOLLOW);
+                        ((StandUser) this.self).tryPower(PowerIndex.NONE,true);
                     } else {
                         if (!this.isAttackInept(this.activePower)) {
                             if (this.activePower == PowerIndex.ATTACK) {
@@ -522,12 +521,16 @@ public class StandPowers {
 
     public void breakClash(LivingEntity winner, LivingEntity loser){
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
+            ((StandUser)winner).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
+            ((StandUser)loser).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
             ((StandUser)winner).getStandPowers().playBarrageEndNoise(0, loser);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
             ((StandUser)winner).getStandPowers().animateStand((byte) 13);
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){
+        ((StandUser)user1).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
+        ((StandUser)user2).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
         ((StandUser)user1).getStandPowers().playBarrageEndNoise(0F,user2);
         ((StandUser)user2).getStandPowers().playBarrageEndNoise(-0.05F,user1);
 
@@ -885,15 +888,17 @@ public class StandPowers {
         LivingEntity standSelf = ((StandUser) self).getStand();
 
         if (standEntity != null && standSelf != null){
+            ((StandUser) entity).getStandPowers().playBarrageClashSound();
+            ((StandUser) this.self).getStandPowers().playBarrageClashSound();
             Vec3 CenterPoint = entity.position().add(self.position()).scale(0.5);
 
             Vec3 entityPoint = offsetBarrageVector(
-                    CenterPoint.subtract(((CenterPoint.subtract(entity.position())).normalize()).scale(0.4)),
+                    CenterPoint.subtract(((CenterPoint.subtract(entity.position())).normalize()).scale(1.0)),
                     getLookAtEntityYaw(entity,self));
 
 
             Vec3 selfPoint = offsetBarrageVector(
-                    CenterPoint.subtract(((CenterPoint.subtract(self.position())).normalize()).scale(0.4)),
+                    CenterPoint.subtract(((CenterPoint.subtract(self.position())).normalize()).scale(1.0)),
                     getLookAtEntityYaw(self,entity));
 
             standEntity.setPosRaw(entityPoint.x(),entityPoint.y()+getYOffSet(standEntity),entityPoint.z());
@@ -1329,7 +1334,7 @@ public class StandPowers {
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public boolean tryPower(int move, boolean forced){
-        if (!this.self.level().isClientSide && this.isBarraging() && move != PowerIndex.BARRAGE && this.attackTimeDuring  > -1){
+        if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH) && this.attackTimeDuring  > -1){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
         }
 
@@ -1412,6 +1417,11 @@ public class StandPowers {
             if (barrageCrySound != SoundIndex.NO_SOUND) {
                 playSoundsIfNearby(barrageCrySound, 32, false);
             }
+        }
+    }
+
+    public void playBarrageClashSound(){
+        if (!this.self.level().isClientSide()) {
         }
     }
     public void playBarrageChargeSound(){

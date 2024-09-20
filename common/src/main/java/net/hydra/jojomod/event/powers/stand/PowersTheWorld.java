@@ -106,6 +106,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
     }
 
+
+
+    @Override
+    public void playBarrageClashSound(){
+        if (!this.self.level().isClientSide()) {
+            playSoundsIfNearby(BARRAGE_NOISE, 32, false);
+        }
+    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move,forced);

@@ -63,8 +63,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);
         this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.animate(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
-        this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 2.7f);
-        this.animate(entity.miningBarrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1.65f);
+        this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1f);
+        this.animate(entity.miningBarrageAnimationState, StandAnimations.MINING_BARRAGE, animationProgress, 1.65f);
         this.animate(entity.barrageEndAnimationState, StandAnimations.COMBO3, animationProgress, 2.2f);
         this.animate(entity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, animationProgress, 2.5f);
         this.animate(entity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, animationProgress, 1.8f);
