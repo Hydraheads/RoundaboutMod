@@ -13,8 +13,8 @@ public class SoundStopPacket {
 
     public static void playSound(Minecraft client, ClientPacketListener handler,
                                  FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            Entity User = client.player.level().getEntity(buf.readInt());
+        if (client.level != null) {
+            Entity User = client.level.getEntity(buf.readInt());
             if (User instanceof LivingEntity){
                 ((StandUserClient)User).clientQueSound(buf.readByte());
             }

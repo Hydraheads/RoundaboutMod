@@ -19,10 +19,16 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState blockRetractAnimation = new AnimationState();
     public final AnimationState itemRetractAnimation = new AnimationState();
     public final AnimationState entityGrabAnimation = new AnimationState();
+    public final AnimationState hideFists = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
+            if (this.getAnimation() != 12) {
+                this.hideFists.startIfStopped(this.tickCount);
+            } else {
+                this.hideFists.stop();
+            }
             if (this.getAnimation() == 30) {
                 this.timeStopAnimationState.startIfStopped(this.tickCount);
             } else {

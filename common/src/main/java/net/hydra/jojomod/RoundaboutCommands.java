@@ -3,6 +3,7 @@ package net.hydra.jojomod;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -27,6 +28,7 @@ public class RoundaboutCommands {
     static int executeDebugSummon(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity le) {
+                ((StandUser) entity).roundabout$setStandDisc(ModItems.STAND_DISC_THE_WORLD.getDefaultInstance());
                 ((StandUser) entity).setStandPowers(new PowersTheWorld(le));
                 ((StandUser) entity).summonStand(entity.level(), true,true);
             }

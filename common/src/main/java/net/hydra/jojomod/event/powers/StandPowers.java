@@ -893,12 +893,12 @@ public class StandPowers {
             Vec3 CenterPoint = entity.position().add(self.position()).scale(0.5);
 
             Vec3 entityPoint = offsetBarrageVector(
-                    CenterPoint.subtract(((CenterPoint.subtract(entity.position())).normalize()).scale(1.0)),
+                    CenterPoint.subtract(((CenterPoint.subtract(entity.position())).normalize()).scale(0.95)),
                     getLookAtEntityYaw(entity,self));
 
 
             Vec3 selfPoint = offsetBarrageVector(
-                    CenterPoint.subtract(((CenterPoint.subtract(self.position())).normalize()).scale(1.0)),
+                    CenterPoint.subtract(((CenterPoint.subtract(self.position())).normalize()).scale(0.95)),
                     getLookAtEntityYaw(self,entity));
 
             standEntity.setPosRaw(entityPoint.x(),entityPoint.y()+getYOffSet(standEntity),entityPoint.z());
