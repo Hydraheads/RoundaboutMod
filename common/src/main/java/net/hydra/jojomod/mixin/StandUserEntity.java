@@ -1422,6 +1422,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected void roundabout$tick(CallbackInfo ci) {
         if (!roundabout$qknockback2params.equals(Vec3.ZERO)){
             this.teleportTo(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
+            roundabout$qknockback2params =Vec3.ZERO;
         }
         if (!roundabout$qknockback.equals(Vec3.ZERO)){
             MainUtil.takeUnresistableKnockbackWithYBias(this, roundabout$qknockbackparams.x,
