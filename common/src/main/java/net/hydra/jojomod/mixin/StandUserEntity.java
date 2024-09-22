@@ -1265,12 +1265,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             break;
                         }
                     }
+                    Vec3 qVec2 = Vec3.ZERO;
                     if (candoit){
+                        qVec2 = new Vec3(vec3d3.x,vec3d3.y,vec3d3.z);
                         this.dismountTo(vec3d3.x,vec3d3.y,vec3d3.z);
                     } else {
+                        qVec2 = new Vec3(this.getX(),this.getY(),this.getZ());
                         this.dismountTo(SE.getUser().getX(), SE.getUser().getY(), SE.getUser().getZ());
                     }
 
+                    if (((LivingEntity)(Object)this) instanceof Player){
+                        ((StandUser)this).roundabout$setQVec2Params(qVec2);
+                    }
 
                 }
                 if ($$0.is(DamageTypes.IN_WALL)) {
