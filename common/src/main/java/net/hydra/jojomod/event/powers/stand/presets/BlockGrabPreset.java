@@ -835,7 +835,7 @@ public class BlockGrabPreset extends PunchingStand{
                 Entity entity = this.getSelf().level().getEntity(this.grabEntity);
                 if (entity != null && this.canGrab(entity)) {
                     if (entity.startRiding(standEntity)) {
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_EXTRA);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -858,6 +858,10 @@ public class BlockGrabPreset extends PunchingStand{
                 && !(entity instanceof LivingEntity ent && ent.getHealth() > this.getSelf().getMaxHealth())
                 && !(entity instanceof Player pl && pl.isCreative())
                 && !(entity instanceof StandEntity)){
+            if (!(entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).getStand() != null &&
+                    ((StandUser) pl).getStand().getUUID() == this.getSelf().getVehicle().getUUID())){
+                return false;
+            }
             return true;
         }
         return false;
@@ -889,7 +893,7 @@ public class BlockGrabPreset extends PunchingStand{
                             standEntity.canAcquireHeldItem = false;
                         }
                         standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_SNEAK);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -942,7 +946,7 @@ public class BlockGrabPreset extends PunchingStand{
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
                     standEntity.canAcquireHeldItem = true;
                     standEntity.setHeldItem(stack.copyWithCount(1));
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 20.0F, 1.3F);
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
                     this.setActivePower(PowerIndex.POWER_2_SNEAK);
                     this.setAttackTimeDuring(0);
                     poseStand(OffsetIndex.FOLLOW_NOLEAN);

@@ -421,7 +421,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         }
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
     }
@@ -439,7 +439,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         if (!this.getSelf().level().isClientSide()) {
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.98 + (Math.random() * 0.04)));
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
     }
@@ -492,14 +492,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (impactBrace){
                 if (this.getSelf().onGround()) {
                     ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA_FINISH, true);
-                    if (!this.getSelf().level().isClientSide) {
+                    if (this.getSelf().level().isClientSide) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
                     }
                 }else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)){
                     impactSlowdown = -1;
                     impactBrace = false;
                     ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
-                    if (!this.getSelf().level().isClientSide) {
+                    if (this.getSelf().level().isClientSide) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                     }
                 } else {
@@ -533,7 +533,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.5 + (Math.random() * 0.04)));
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.5 + (Math.random() * 0.04)));
         }
         return true;
     }
@@ -551,7 +551,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setActivePower(PowerIndex.EXTRA);
         this.poseStand(OffsetIndex.BENEATH);
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.78 + (Math.random() * 0.04)));
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
         }
         return true;
     }
@@ -563,7 +563,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.8 + (Math.random() * 0.04)));
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
 
         }
         return true;
@@ -580,7 +580,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
                     this.getSelf().getX(), this.getSelf().getOnPos().getY()+1.1, this.getSelf().getZ(),
                     30, 1, 0.05, 1, 0.4);
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 20.0F, (float) (0.98 + (Math.random() * 0.04)));
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
             int degrees = (int) (this.getSelf().getYRot() % 360);
             MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.7F,
                     Mth.sin(degrees * ((float) Math.PI / 180)),
