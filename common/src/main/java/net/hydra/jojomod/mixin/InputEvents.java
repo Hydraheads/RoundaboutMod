@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IGameRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
@@ -19,6 +20,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -180,7 +182,9 @@ public abstract class InputEvents {
             return false;
         }
 
-
+    @Inject(method = "tick", at = @At("TAIL"), cancellable = true)
+    public void roundabout$tick(CallbackInfo ci) {
+    }
 
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
     public void roundaboutDoItemUseCancel(CallbackInfo ci) {
@@ -353,6 +357,7 @@ public abstract class InputEvents {
 
                     //RoundaboutMod.LOGGER.info("px");
                     if (sameKeyOne(KeyInputRegistry.summonKey)) {
+                        //((IGameRenderer)this.gameRenderer).roundabout$loadEffect(new ResourceLocation("shaders/post/spider.json"));
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
 

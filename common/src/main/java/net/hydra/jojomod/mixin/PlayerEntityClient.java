@@ -31,7 +31,7 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     @Unique
     private int roundaboutNoPlaceTSTicks = -1;
 
-    private long clashDisplayExtraTimestamp = -1;
+    private long clashDisplayExtraTimestamp = -100;
     private float lastClashPower = -1;
 
     @Unique

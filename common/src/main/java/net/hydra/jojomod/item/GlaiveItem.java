@@ -125,7 +125,6 @@ public class GlaiveItem extends SwordItem {
                     $$2 = EnchantmentHelper.getDamageBonus($$0, MobType.UNDEFINED);
                 }
                 power += $$2;
-                Roundabout.LOGGER.info(String.valueOf(power));
                 power += this.chargeDamage;
                 if (target.hurt(ModDamageTypes.of($$1, ModDamageTypes.GLAIVE, player), power)) {
                     if (!player.isCreative()) {

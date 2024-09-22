@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGameRenderer;
 import net.hydra.jojomod.entity.client.LocacacaBeamLayer;
 import net.hydra.jojomod.entity.client.ModFirstPersonLayers;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -13,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
-public class ZScreenShaking {
+public class ZScreenShaking implements IGameRenderer {
 
     @Shadow
     @Final
@@ -33,8 +35,17 @@ public class ZScreenShaking {
 
 
     @Shadow
+    void loadEffect(ResourceLocation $$0){
+
+    }
+    @Shadow
     public void renderItemInHand(PoseStack $$0, Camera $$1, float $$2) {}
 
+
+    @Override
+    public void roundabout$loadEffect(ResourceLocation $$0){
+        this.loadEffect($$0);
+    }
 
     @Inject(method = "tickFov()V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$tickfov(CallbackInfo ci) {

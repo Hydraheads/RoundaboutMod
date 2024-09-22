@@ -138,12 +138,12 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, false, this.getFont());
                 return true;
             } else if (((StandUser) minecraft.player).isClashing()) {
-                ((StandUserClientPlayer) minecraft.player).setClashDisplayExtraTimestamp(this.minecraft.player.level().getGameTime());
+                ((StandUserClientPlayer) minecraft.player).setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
                 float c = (((StandUser) minecraft.player).getStandPowers().getClashProgress());
                 ((StandUserClientPlayer) minecraft.player).setLastClashPower(c);
                 StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, c);
                 return true;
-            } else if (((StandUserClientPlayer) minecraft.player).getClashDisplayExtraTimestamp() >= this.minecraft.player.level().getGameTime() - 20) {
+            } else if (((StandUserClientPlayer) minecraft.player).getClashDisplayExtraTimestamp() >= minecraft.player.tickCount - 20) {
                 StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).getLastClashPower());
                 return true;
             } else if (((StandUser) minecraft.player).isGuarding() || (((StandUser) minecraft.player).getGuardPoints() < ((StandUser) minecraft.player).getMaxGuardPoints()

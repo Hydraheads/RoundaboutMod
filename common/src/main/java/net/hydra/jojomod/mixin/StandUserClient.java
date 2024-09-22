@@ -41,21 +41,16 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
      * If you play it during the packet, it can crash the client because of HashMap problems*/
     @Override
     public void clientQueSound(byte soundChoice){
-        Roundabout.LOGGER.info("1: "+this.getName()+" "+soundChoice);
        SoundEvent soundE = ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
        if (soundE != null) {
-           Roundabout.LOGGER.info("2: "+this.getName());
             roundaboutAddSound(new QueueSoundInstance(soundE, soundChoice));
        }
     }
 
     public void roundaboutAddSound(QueueSoundInstance soundI) {
-        Roundabout.LOGGER.info("3: "+this.getName());
         if (this.roundaboutSounds.isEmpty()) {
-            Roundabout.LOGGER.info("4: "+this.getName());
             this.roundaboutSounds = ImmutableList.of(soundI);
         } else {
-            Roundabout.LOGGER.info("5: "+this.getName());
             List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundaboutSounds);
             $$1.add(soundI);
             this.roundaboutSounds = ImmutableList.copyOf($$1);
@@ -66,9 +61,7 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
 
     @Override
     public void clientPlaySound(){
-        Roundabout.LOGGER.info("6: "+this.getName());
         if (!this.roundaboutSounds.isEmpty()) {
-            Roundabout.LOGGER.info("7: "+this.getName());
             List<QueueSoundInstance> $$0 = Lists.newArrayList(this.roundaboutSounds);
             for (int i = $$0.size() - 1; i >= 0; --i) {
                 QueueSoundInstance soundI = $$0.get(i);
@@ -88,7 +81,6 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                         ((Entity) (Object) this),
                         ((Entity) (Object) this).level().random.nextLong()
                 );
-                Roundabout.LOGGER.info("8: "+this.getName());
                 Minecraft.getInstance().getSoundManager().play(qSound);
                 $$2.add(new PlayedSoundInstance(soundI.roundaboutSoundEvent,soundI.roundaboutSoundByte,qSound));
             }
@@ -101,12 +93,10 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
     public void clientPlaySoundIfNoneActive(byte soundChoice) {
 
             List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
-        Roundabout.LOGGER.info("9: "+this.getName());
         if (!this.roundaboutSounds.isEmpty()) {
             for (int i = $$2.size() - 1; i >= 0; --i) {
                 PlayedSoundInstance soundI = $$2.get(i);
                 if (soundI.roundaboutSoundByte == soundChoice) {
-                    Roundabout.LOGGER.info("10: "+this.getName());
                     return;
                 }
             }
@@ -120,7 +110,6 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                     ((Entity) (Object) this),
                     ((Entity) (Object) this).level().random.nextLong()
             );
-        Roundabout.LOGGER.info("11: "+this.getName());
             Minecraft.getInstance().getSoundManager().play(qSound);
             $$2.add(new PlayedSoundInstance(SE,soundChoice,qSound));
             this.roundaboutSoundsPlaying = ImmutableList.copyOf($$2);
@@ -133,11 +122,9 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
     @Override
     public void clientQueSoundCanceling(byte soundID){
         this.soundCancel = true;
-        Roundabout.LOGGER.info("12: "+this.getName());
         if (this.roundaboutSoundsToCancel.isEmpty()) {
             this.roundaboutSoundsToCancel = ImmutableList.of(soundID);
         } else {
-            Roundabout.LOGGER.info("13: "+this.getName());
             List<Byte> $$1 = Lists.newArrayList(this.roundaboutSoundsToCancel);
             $$1.add(soundID);
             this.roundaboutSoundsToCancel = ImmutableList.copyOf($$1);
@@ -151,7 +138,6 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
 
 
         if (!this.roundaboutSoundsToCancel.isEmpty()) {
-            Roundabout.LOGGER.info("14: "+this.getName());
             List<Byte> $$1 = Lists.newArrayList(this.roundaboutSoundsToCancel);
             List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
             for (int i = $$1.size() - 1; i >= 0; --i) {
@@ -169,7 +155,6 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
         }
 
         if (!this.roundaboutSoundsPlaying.isEmpty()) {
-            Roundabout.LOGGER.info("15: "+this.getName());
             List<PlayedSoundInstance> SIL = Lists.newArrayList(this.roundaboutSoundsPlaying);
             for (int i = SIL.size() - 1; i >= 0; --i) {
                 if (!Minecraft.getInstance().getSoundManager().isActive(SIL.get(i).roundaboutSoundInstance)){
