@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -31,6 +32,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
@@ -56,6 +58,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +81,26 @@ public class MainUtil {
     }public static float controlledLerpRadianDegrees(float delta, float start, float end, float multiplier) {
         delta = Math.min(delta,1);
         return start + (delta * wrapRadians(end - start))*multiplier;
+    }
+    public static double getWorthyOdds(Mob mob) {
+       if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
+           return 0;
+       }
+       return 0.05;
+    }
+    public static Mob homeOnWorthy(LivingEntity player, double range) {
+        List<Entity> EntitiesInRange = DamageHandler.genHitbox(player, player.getX(), player.getY(),
+                player.getZ(), range, range, range);
+        List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
+        };
+        for (Entity value : hitEntities) {
+            if (value instanceof Mob mb){
+                if (((IMob)value).roundabout$isWorthy()){
+                    return mb;
+                }
+            }
+        }
+        return null;
     }
     public static boolean getMobBleed(Entity Mob) {
         if (Mob instanceof LivingEntity){
