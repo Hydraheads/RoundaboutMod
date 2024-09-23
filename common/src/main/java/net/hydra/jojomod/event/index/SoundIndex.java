@@ -7,6 +7,7 @@ public class SoundIndex {
     public static final byte NO_SOUND = -1;
     public static final byte ALL_SOUNDS = 0;
     public static final byte GLAIVE_CHARGE = -2;
+    public static final byte STAND_ARROW_CHARGE = -3;
     public static final byte BARRAGE_CHARGE_SOUND = 1;
     public static final byte ALT_CHARGE_SOUND_1 = 2;
     public static final byte ALT_CHARGE_SOUND_2 = 3;

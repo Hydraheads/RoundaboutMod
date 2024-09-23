@@ -16,7 +16,8 @@ public class PacketDataIndex {
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
-    public static final byte SINGLE_BYTE_GLAIVE_STOP_SOUND = 2;
+    public static final byte SINGLE_BYTE_ITEM_STOP_SOUND = 2;
+    public static final byte SINGLE_BYTE_STAND_ARROW_START_SOUND = 3;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;

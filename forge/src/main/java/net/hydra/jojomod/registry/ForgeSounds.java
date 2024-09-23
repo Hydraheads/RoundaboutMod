@@ -15,6 +15,10 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> SUMMON_SOUND_EVENT =
             register(ModSounds.SUMMON_SOUND, ModSounds.SUMMON_SOUND_ID);
+    public static final RegistryObject<SoundEvent> STAND_ARROW_CHARGE_EVENT =
+            register(ModSounds.STAND_ARROW_CHARGE, ModSounds.STAND_ARROW_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> STAND_ARROW_USE_EVENT =
+            register(ModSounds.STAND_ARROW_USE, ModSounds.STAND_ARROW_USE_ID);
     public static final RegistryObject<SoundEvent> TERRIER_SOUND_EVENT =
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =

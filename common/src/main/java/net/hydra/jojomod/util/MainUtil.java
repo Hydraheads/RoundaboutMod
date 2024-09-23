@@ -13,7 +13,6 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandDiscItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -32,7 +31,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
@@ -711,8 +709,10 @@ public class MainUtil {
     public static void handleSingleBytePacketC2S(Player player, byte context){
         if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
             ((StandUser) player).getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_STOP_SOUND) {
+        } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
             ((StandUser) player).getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND) {
+            ((StandUser) player).getStandPowers().playSoundsIfNearby(SoundIndex.STAND_ARROW_CHARGE, 10, false);
         }
     }
 

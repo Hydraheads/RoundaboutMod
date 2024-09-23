@@ -307,6 +307,8 @@ public class StandPowers {
             return this.getBarrageChargeSound();
         } else if (soundChoice == SoundIndex.GLAIVE_CHARGE) {
             return ModSounds.GLAIVE_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.STAND_ARROW_CHARGE) {
+            return ModSounds.STAND_ARROW_CHARGE_EVENT;
         }
         return null;
     }

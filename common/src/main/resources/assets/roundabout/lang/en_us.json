@@ -35,10 +35,14 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
 
-  "item.roundabout.stand_arrow.roll": "Use 15 experience levels to",
-  "item.roundabout.stand_arrow.roll2": "charge arrow with a stand!",
+  "item.roundabout.stand_arrow.fail": "Need more experience!",
+
+  "item.roundabout.stand_arrow.roll": "???",
+  "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
+  "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
   "item.roundabout.stand_arrow.reroll": "Crouch to use 1 experience",
   "item.roundabout.stand_arrow.reroll2": "level for a different stand!",
+  "item.roundabout.stand_arrow.rerollOutcome": "Arrow Holds: ",
 
   "effect.roundabout.bleed": "Bleed",
   "effect.roundabout.hex": "Hex",
@@ -123,6 +127,8 @@
   "commands.roundabout.heal.single": "Healed %s",
 
   "sounds.roundabout.summon_stand":  "Stand summoned",
+  "sounds.roundabout.stand_arrow_charge":  "Stand Arrow Magnetizes",
+  "sounds.roundabout.stand_arrow_use":  "Stand acquired!",
   "sounds.roundabout.summon_star":  "Stand summoned",
   "sounds.roundabout.summon_world":  "Stand summoned",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",

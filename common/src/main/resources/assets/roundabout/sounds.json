@@ -5,6 +5,18 @@
       "roundabout:summon_stand"
     ]
   },
+  "stand_arrow_charge": {
+    "subtitle": "sounds.roundabout.stand_arrow_charge",
+    "sounds": [
+      "roundabout:stand_arrow_charge"
+    ]
+  },
+  "stand_arrow_use": {
+    "subtitle": "sounds.roundabout.stand_arrow_use",
+    "sounds": [
+      "roundabout:stand_arrow_use"
+    ]
+  },
   "terrier_pass": {
     "subtitle": "sounds.roundabout.terrier_pass",
     "sounds": [
