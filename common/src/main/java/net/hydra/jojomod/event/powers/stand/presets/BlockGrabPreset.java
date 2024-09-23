@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -394,7 +395,7 @@ public class BlockGrabPreset extends PunchingStand{
                         }
 
                         if (ent instanceof Player){
-                            ((StandUser)ent).roundabout$setQVec2Params(qVec2);
+                            ((IEntityAndData)ent).roundabout$setQVec2Params(qVec2);
                         }
 
 
@@ -417,11 +418,11 @@ public class BlockGrabPreset extends PunchingStand{
                                 strength *= 0.6F;
                             }
                             if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())){
-                                if (ent instanceof LivingEntity le && (ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(le))) {
-                                    ((StandUser)le).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
+                                    ((IEntityAndData)ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                             Mth.sin(degreesY * ((float) Math.PI / 180)),
                                             -Mth.cos((degrees * ((float) Math.PI / 180)))));
-                                    ((StandUser)le).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
+                                    ((IEntityAndData)ent).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
                                             ybias,
                                             0F));
                                 } else {
@@ -450,11 +451,11 @@ public class BlockGrabPreset extends PunchingStand{
                             }
                             this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
 
-                            if (ent instanceof LivingEntity le && (ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(le))) {
-                                ((StandUser)le).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                            if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
+                                ((IEntityAndData)ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                         Mth.sin(degreesY * ((float) Math.PI / 180)),
                                         -Mth.cos((degrees * ((float) Math.PI / 180)))));
-                                ((StandUser)le).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
+                                ((IEntityAndData)ent).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
                                         ybias,
                                         0F));
 
@@ -858,8 +859,8 @@ public class BlockGrabPreset extends PunchingStand{
                 && !(entity instanceof LivingEntity ent && ent.getHealth() > this.getSelf().getMaxHealth())
                 && !(entity instanceof Player pl && pl.isCreative())
                 && !(entity instanceof StandEntity)){
-            if (!(entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).getStand() != null &&
-                    ((StandUser) pl).getStand().getUUID() == this.getSelf().getVehicle().getUUID())){
+            if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).getStand() != null &&
+                    ((StandUser) pl).getStand().getUUID() == this.getSelf().getVehicle().getUUID()){
                 return false;
             }
             return true;

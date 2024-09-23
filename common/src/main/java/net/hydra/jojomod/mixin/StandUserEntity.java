@@ -1274,8 +1274,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         this.dismountTo(SE.getUser().getX(), SE.getUser().getY(), SE.getUser().getZ());
                     }
 
-                    if (((LivingEntity)(Object)this) instanceof Player){
-                        ((StandUser)this).roundabout$setQVec2Params(qVec2);
+                    if (((Entity)(Object)this) instanceof Player){
+                        ((IEntityAndData)this).roundabout$setQVec2Params(qVec2);
                     }
 
                 }
@@ -1385,6 +1385,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+    @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
+    protected void roundabout$tick(CallbackInfo ci) {
+        ((IEntityAndData)this).roundabout$tickQVec();
+    }
+
     @Shadow
     protected int decreaseAirSupply(int $$0) {
         return 0;
@@ -1421,22 +1427,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HEART), 1.0F);
                 }
             }
-        }
-    }
-    /**If you have a chest turned to stone, decreases breath faster*/
-    @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
-    protected void roundabout$tick(CallbackInfo ci) {
-        if (!roundabout$qknockback2params.equals(Vec3.ZERO)){
-            this.teleportTo(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
-            roundabout$qknockback2params =Vec3.ZERO;
-        }
-        if (!roundabout$qknockback.equals(Vec3.ZERO)){
-            MainUtil.takeUnresistableKnockbackWithYBias(this, roundabout$qknockbackparams.x,
-                    roundabout$qknockback.x,
-                    roundabout$qknockback.y,
-                    roundabout$qknockback.z,
-                    (float)roundabout$qknockbackparams.y);
-            roundabout$setQVec(Vec3.ZERO);
         }
     }
 
@@ -1504,28 +1494,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-
-    @Unique
-    private Vec3 roundabout$qknockback = Vec3.ZERO;
-    @Unique
-    private Vec3 roundabout$qknockbackparams = Vec3.ZERO;
-    @Unique
-    private Vec3 roundabout$qknockback2params = Vec3.ZERO;
-    @Unique
-    @Override
-    public void roundabout$setQVec(Vec3 ec){
-        roundabout$qknockback = ec;
-    }
-    @Unique
-    @Override
-    public void roundabout$setQVecParams(Vec3 ec){
-        roundabout$qknockbackparams = ec;
-    }
-    @Unique
-    @Override
-    public void roundabout$setQVec2Params(Vec3 ec){
-        roundabout$qknockback2params = ec;
-    }
 
     @Shadow
     protected float getJumpPower() {

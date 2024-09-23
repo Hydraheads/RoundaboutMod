@@ -2,6 +2,7 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -250,7 +251,7 @@ public class MainUtil {
             Entity entity = stand.getFirstPassenger();
             stand.ejectPassengers();
             if (entity instanceof Player ent) {
-                ((StandUser) ent).roundabout$setQVec2Params(new Vec3(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ()));
+                ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ()));
             } else {
                 entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
             }

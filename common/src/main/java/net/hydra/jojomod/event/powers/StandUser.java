@@ -88,9 +88,6 @@ public interface StandUser {
     boolean roundabout$hasFollower(StandEntity $$0);
     boolean roundabout$hasFollower(Predicate<Entity> $$0);
 
-    void roundabout$setQVec(Vec3 q);
-    void roundabout$setQVecParams(Vec3 ec);
-    void roundabout$setQVec2Params(Vec3 ec);
     int roundaboutGetTSHurtSound();
 
     void roundaboutSetTSHurtSound(int roundaboutTSHurtSound);

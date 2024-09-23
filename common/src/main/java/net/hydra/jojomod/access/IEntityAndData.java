@@ -54,5 +54,10 @@ public interface IEntityAndData {
     @Nullable Vec3 getRoundaboutDeltaBuildupTS();
 
     void setRoundaboutDeltaBuildupTS(Vec3 vec3);
+    void roundabout$tickQVec();
+
+    void roundabout$setQVec(Vec3 q);
+    void roundabout$setQVecParams(Vec3 ec);
+    void roundabout$setQVec2Params(Vec3 ec);
 
 }

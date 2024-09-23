@@ -4,6 +4,8 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -228,6 +230,10 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     private Vec3 deltaMovement;
 
+    @Shadow public abstract void moveTo(BlockPos $$0, float $$1, float $$2);
+
+    @Shadow public abstract void moveTo(double $$0, double $$1, double $$2);
+
     @Unique
     private Vec3 roundaboutDeltaBuildupTS = new Vec3(0,0,0);
 
@@ -269,5 +275,53 @@ public abstract class EntityAndData implements IEntityAndData {
             ci.cancel();
         }
     }
+
+    @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
+    protected void roundabout$tick(CallbackInfo ci) {
+        roundabout$tickQVec();
+    }
+
+    @Unique
+    @Override
+    public void roundabout$tickQVec(){
+        if (!roundabout$qknockback2params.equals(Vec3.ZERO)){
+            if (((Entity)(Object)this) instanceof LivingEntity le){
+                le.teleportTo(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
+            } else {
+                this.moveTo(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
+            }
+            roundabout$qknockback2params =Vec3.ZERO;
+        }
+        if (!roundabout$qknockback.equals(Vec3.ZERO)){
+            MainUtil.takeUnresistableKnockbackWithYBias(((Entity)(Object)this), roundabout$qknockbackparams.x,
+                    roundabout$qknockback.x,
+                    roundabout$qknockback.y,
+                    roundabout$qknockback.z,
+                    (float)roundabout$qknockbackparams.y);
+            roundabout$setQVec(Vec3.ZERO);
+        }
+    }
+    @Unique
+    private Vec3 roundabout$qknockback = Vec3.ZERO;
+    @Unique
+    private Vec3 roundabout$qknockbackparams = Vec3.ZERO;
+    @Unique
+    private Vec3 roundabout$qknockback2params = Vec3.ZERO;
+    @Unique
+    @Override
+    public void roundabout$setQVec(Vec3 ec){
+        roundabout$qknockback = ec;
+    }
+    @Unique
+    @Override
+    public void roundabout$setQVecParams(Vec3 ec){
+        roundabout$qknockbackparams = ec;
+    }
+    @Unique
+    @Override
+    public void roundabout$setQVec2Params(Vec3 ec){
+        roundabout$qknockback2params = ec;
+    }
+
 
 }
