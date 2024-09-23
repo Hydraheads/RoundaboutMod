@@ -24,7 +24,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 
 public class FabricItems {
-    public static Item STAND_ARROW = registerItem("stand_arrow", new Item(new Item.Properties().stacksTo(1)));
+    public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1)));
     public static Item STAND_DISC_STAR_PLATINUM = registerItem("star_platinum_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
     public static Item STAND_DISC_THE_WORLD = registerItem("the_world_disc",
@@ -170,6 +170,8 @@ public class FabricItems {
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
 
+        ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_STAR_PLATINUM);
+        ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_THE_WORLD);
 
         registerPotions();
     }

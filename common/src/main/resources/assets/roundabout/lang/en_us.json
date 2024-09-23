@@ -35,6 +35,11 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
 
+  "item.roundabout.stand_arrow.roll": "Use 15 experience levels to",
+  "item.roundabout.stand_arrow.roll2": "charge arrow with a stand!",
+  "item.roundabout.stand_arrow.reroll": "Crouch to use 1 experience",
+  "item.roundabout.stand_arrow.reroll2": "level for a different stand!",
+
   "effect.roundabout.bleed": "Bleed",
   "effect.roundabout.hex": "Hex",
 

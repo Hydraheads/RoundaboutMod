@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.Items;
@@ -94,6 +95,9 @@ public class ForgeEvents {
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
+
+        ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
+        ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
 
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(Potions.AWKWARD, ModItems.LOCACACA_PIT, ForgeItems.HEX_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.REDSTONE, ForgeItems.HEX_POTION_EXTENDED.get()));

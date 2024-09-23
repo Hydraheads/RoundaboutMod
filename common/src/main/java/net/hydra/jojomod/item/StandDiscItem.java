@@ -64,6 +64,10 @@ public class StandDiscItem extends Item {
         return Component.translatable(this.getDescriptionId() + ".desc");
     }
 
+    public static MutableComponent getDisplayName(StandDiscItem sd) {
+        return Component.translatable(sd.getDescriptionId() + ".desc");
+    }
+
 
     public void addItem(Player player, ItemStack stack){
         if (canAddItem(stack, player.getInventory())) {

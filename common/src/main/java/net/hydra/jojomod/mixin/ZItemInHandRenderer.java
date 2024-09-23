@@ -43,30 +43,31 @@ public class ZItemInHandRenderer {
             return;
         }
         if (!itemStack.isEmpty()) {
-            if ((itemStack.getUseAnimation() == UseAnim.SPEAR &&
-                    (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.KNIFE_BUNDLE)
-                            || itemStack.is(ModItems.MATCH) || itemStack.is(ModItems.MATCH_BUNDLE))) || itemStack.getItem() instanceof GlaiveItem) {
-        boolean bl = interactionHand == InteractionHand.MAIN_HAND;
-        HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+            if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
 
+                boolean bl = interactionHand == InteractionHand.MAIN_HAND;
+                HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
                 boolean bl2;
                 boolean bl3 = bl2 = humanoidArm == HumanoidArm.RIGHT;
-                if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
-                    int q = bl2 ? 1 : -1;
+                int q = bl2 ? 1 : -1;
+                if ((itemStack.getUseAnimation() == UseAnim.SPEAR &&
+                        (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.KNIFE_BUNDLE)
+                                || itemStack.is(ModItems.MATCH) || itemStack.is(ModItems.MATCH_BUNDLE))) || itemStack.getItem() instanceof GlaiveItem) {
+
                     float knifeTime = 10f;
-                    if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.MATCH)){
-                        knifeTime=5F;
-                    } else if (itemStack.getItem() instanceof GlaiveItem){
-                        knifeTime=14F;
+                    if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.MATCH)) {
+                        knifeTime = 5F;
+                    } else if (itemStack.getItem() instanceof GlaiveItem) {
+                        knifeTime = 14F;
                     }
-                    float kT2 = (float) (knifeTime*0.1);
-                    float kT3 = (float) (knifeTime*0.01);
+                    float kT2 = (float) (knifeTime * 0.1);
+                    float kT3 = (float) (knifeTime * 0.01);
 
                     ci.cancel();
                     poseStack.pushPose();
 
                     this.applyItemArmTransform(poseStack, humanoidArm, i);
-                    poseStack.translate((float)q * -0.3f, 0.25, 0.15731531f);
+                    poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
                     if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.KNIFE_BUNDLE)) {
                         poseStack.mulPose(Axis.XP.rotationDegrees(-55.0f));
                     } else if (itemStack.getItem() instanceof GlaiveItem) {
@@ -74,9 +75,9 @@ public class ZItemInHandRenderer {
                     } else {
                         poseStack.mulPose(Axis.XP.rotationDegrees(-10.0f));
                     }
-                        poseStack.mulPose(Axis.YP.rotationDegrees((float) q * 35.3f));
-                    poseStack.mulPose(Axis.ZP.rotationDegrees((float)q * -9.785f));
-                    float r = (float)itemStack.getUseDuration() - ((float)this.minecraft.player.getUseItemRemainingTicks() - f + kT2);
+                    poseStack.mulPose(Axis.YP.rotationDegrees((float) q * 35.3f));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees((float) q * -9.785f));
+                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - f + kT2);
                     float l = r / knifeTime;
                     if (l > kT2) {
                         l = kT2;
@@ -87,21 +88,49 @@ public class ZItemInHandRenderer {
                         float o = m * n;
                         poseStack.translate(o * 0.0f, o * 0.004f, o * 0.0f);
                     }
-                    if (itemStack.is(ModItems.KNIFE_BUNDLE) || itemStack.is(ModItems.MATCH_BUNDLE)|| itemStack.getItem() instanceof GlaiveItem){
-                        l/=2;
+                    if (itemStack.is(ModItems.KNIFE_BUNDLE) || itemStack.is(ModItems.MATCH_BUNDLE) || itemStack.getItem() instanceof GlaiveItem) {
+                        l /= 2;
                     }
-                    if (itemStack.getItem() instanceof GlaiveItem){
+                    if (itemStack.getItem() instanceof GlaiveItem) {
                         poseStack.translate(0.0f, l * -0.4, l * 0.1f);
                     } else {
                         poseStack.translate(0.0f, 0.0f, l * 0.2f);
                     }
                     poseStack.scale(1.0f, 1.0f, 1.0f + l * 0.2f);
-                    poseStack.mulPose(Axis.YN.rotationDegrees((float)q * 45.0f));
-                    this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
+                    poseStack.mulPose(Axis.YN.rotationDegrees((float) q * 45.0f));
+                    this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
+                            ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
+                    poseStack.popPose();
+                } else if (itemStack.getUseAnimation() == UseAnim.BLOCK && itemStack.is(ModItems.STAND_ARROW)) {
+                    ci.cancel();
+                    poseStack.pushPose();
+                    this.applyItemArmTransform(poseStack, humanoidArm, i);
+                    poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
+                    float knifeTime = 5f;
+                    float kT2 = (float) (knifeTime * 0.1);
+                    float kT3 = (float) (knifeTime * 0.01);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(30.0f));
+                    poseStack.mulPose(Axis.YP.rotationDegrees((float) q * -35.3f));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees((float) q * -9.785f));
+                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - f + kT2);
+                    float l = r / knifeTime;
+                    if (l > kT2) {
+                        l = kT2;
+                    }
+                    if (l > kT3) {
+                        float m = Mth.sin((r - kT3) * 1.3f);
+                        float n = l - kT3;
+                        float o = m * n;
+                        poseStack.translate(o * 0.0f, o * 0.004f, o * 0.0f);
+                    }
+                    poseStack.translate(0.0f, l * -0.6, l * -0.1f);
+                    poseStack.scale(1.0f, 1.0f, 1.0f);
+                    poseStack.mulPose(Axis.YN.rotationDegrees((float) q * 45.0f));
+                    this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
+                            ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
                     poseStack.popPose();
                 }
             }
         }
-
     }
 }
