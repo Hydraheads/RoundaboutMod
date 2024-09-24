@@ -3,8 +3,6 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -44,8 +42,5 @@ public class ModItems {
 
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();
-
-    public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "harpoon_in_hand", "inventory");
-    public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_bow_arrow", "inventory");
 
 }

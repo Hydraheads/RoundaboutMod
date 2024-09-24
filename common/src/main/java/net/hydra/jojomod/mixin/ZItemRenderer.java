@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.TridentModel;
 import net.minecraft.client.renderer.ItemModelShaper;
@@ -37,7 +38,7 @@ public class ZItemRenderer {
             MultiBufferSource vertexConsumers, int light, int overlay, BakedModel $$7) {
         if (stack.is(ModItems.HARPOON) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
             return this.itemModelShaper.getModelManager().
-                    getModel(ModItems.HARPOON_IN_HAND);
+                    getModel(ModItemModels.HARPOON_IN_HAND);
         }
 
         return value;
@@ -47,7 +48,7 @@ public class ZItemRenderer {
     public BakedModel roundabout$render(
             BakedModel value,ItemStack $$0, @Nullable Level $$1, @Nullable LivingEntity $$2, int $$3) {
         if ($$0.is(Items.BOW) && $$2 !=null && $$2.getProjectile($$0).getItem() == ModItems.STAND_ARROW) {
-            return this.itemModelShaper.getModelManager().getModel(ModItems.STAND_BOW);
+            return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BOW);
         }
 
         return value;

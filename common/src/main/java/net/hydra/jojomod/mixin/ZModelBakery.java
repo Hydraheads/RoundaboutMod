@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.client.ModItemModels;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -30,9 +30,9 @@ public abstract class ZModelBakery {
 
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void roundabout$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
-        this.loadTopLevel(ModItems.HARPOON_IN_HAND);
-        this.loadTopLevel(ModItems.STAND_BOW);
-        this.topLevelModels.get(ModItems.HARPOON_IN_HAND).resolveParents(this::getModel);
-        this.topLevelModels.get(ModItems.STAND_BOW).resolveParents(this::getModel);
+        this.loadTopLevel(ModItemModels.HARPOON_IN_HAND);
+        this.loadTopLevel(ModItemModels.STAND_BOW);
+        this.topLevelModels.get(ModItemModels.HARPOON_IN_HAND).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STAND_BOW).resolveParents(this::getModel);
     }
 }
