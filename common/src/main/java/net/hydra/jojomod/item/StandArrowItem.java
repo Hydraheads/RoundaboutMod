@@ -95,6 +95,26 @@ public class StandArrowItem extends Item {
         }
     }
 
+    public static void grantMobStand(ItemStack $$0, Level $$1, LivingEntity live){
+        if (!$$1.isClientSide) {
+            CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
+            CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+            if (tag2 != null) {
+                ItemStack itemstack = ItemStack.of(tag2);
+                if (itemstack.getItem() instanceof StandDiscItem de) {
+                    if (grantStand(itemstack, live)) {
+                        $$1.playSound(null, live.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+                        ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, live.getX(),
+                                live.getY() + live.getEyeHeight(), live.getZ(),
+                                20, 0, 0, 0, 0.4);
+                        $$0.removeTagKey("StandDisc");
+                        //$$0.removeTagKey("StandDisc");
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public int getUseDuration(ItemStack $$0) {
         return 72000;

@@ -88,14 +88,14 @@ public class MainUtil {
        }
        return 0.05;
     }
-    public static Mob homeOnWorthy(LivingEntity player, double range) {
-        List<Entity> EntitiesInRange = DamageHandler.genHitbox(player, player.getX(), player.getY(),
-                player.getZ(), range, range, range);
+    public static Mob homeOnWorthy(Level level, Vec3 vec3, double range) {
+        List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
+                vec3.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
         for (Entity value : hitEntities) {
             if (value instanceof Mob mb){
-                if (((IMob)value).roundabout$isWorthy()){
+                if (canGrantStand(mb)){
                     return mb;
                 }
             }
@@ -127,11 +127,10 @@ public class MainUtil {
     }
 
     public static boolean canGrantStand(Entity ent){
-        if (ent instanceof LivingEntity LE){
-            if (!(ent instanceof WitherBoss) && !(ent instanceof EnderDragon) && !(ent instanceof Warden) &&
-            !(ent instanceof Player)){
-                if (((StandUser)LE).roundabout$getStandDisc().isEmpty()){
-                    return true;
+        if (ent instanceof Mob ME){
+            if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)){
+                if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
+                    return ((IMob)ME).roundabout$isWorthy();
                 }
             }
         }

@@ -135,10 +135,9 @@ public class ZItemInHandRenderer {
                 }
             } else {
                 if (itemStack.is(ModItems.STAND_ARROW)){
-                    Mob ME =  MainUtil.homeOnWorthy(abstractClientPlayer,5);
+                    Mob ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
                     if (ME != null) {
                         float homingMod = (5-ME.distanceTo(abstractClientPlayer))/5;
-                        Roundabout.LOGGER.info(""+homingMod);
                         boolean bl = interactionHand == InteractionHand.MAIN_HAND;
                         HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
                         boolean bl2;
@@ -148,24 +147,12 @@ public class ZItemInHandRenderer {
                         poseStack.pushPose();
 
                         this.applyItemArmTransform(poseStack, humanoidArm, i);
-                        poseStack.translate((float) q * -0.3f, 0.15, 0.1);
+                        poseStack.translate((float) q * -0.28f, 0.15, 0.1);
                         float knifeTime = 5f;
                         float kT2 = (float) (knifeTime * 0.1);
-                        float kT3 = (float) (knifeTime * 0.01);
                         float r = (-ff + kT2);
-                        float l = (r / knifeTime)*homingMod;
-                        if (l > kT2) {
-                            l = kT2;
-                        }
-                        if (l > kT3) {
-                            float m = Mth.sin((r - kT3) * 1.3f);
-                            float n = l - kT3;
-                            float o = m * n;
-                            poseStack.translate(o * 0.0f, o * 0.002f, o * 0.0f);
-                        }
-                        poseStack.translate(0.0f, l * -0.4, l * -0.08f);
                         poseStack.scale(1.0f, 1.0f, 1.0f);
-                        poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f-Math.abs(20F*(r*homingMod))-(14F*homingMod)));
                         this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                                 ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
                         poseStack.popPose();
