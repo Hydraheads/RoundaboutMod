@@ -81,6 +81,13 @@ public class FabricEntities {
                         EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).
                                 sized(0.8f, 0.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":gasoline_splatter")
                 );
+        public static final EntityType<StandArrowEntity> STAND_ARROW =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "stand_arrow"),
+                        EntityType.Builder.<StandArrowEntity>of(StandArrowEntity::new, MobCategory.MISC).
+                                sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":stand_arrow")
+                );
         public static final EntityType<ThrownObjectEntity> THROWN_OBJECT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -99,6 +106,7 @@ public class FabricEntities {
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
+                ModEntities.STAND_ARROW = STAND_ARROW;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
 

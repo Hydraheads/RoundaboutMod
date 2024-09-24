@@ -19,6 +19,7 @@
     "ZBlockFaceContext",
     "ZBoat",
     "ZBoatAccess",
+    "ZBowItem",
     "ZBucketItem",
     "ZChestBlock",
     "ZCreeper",

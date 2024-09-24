@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -26,6 +27,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -40,8 +43,10 @@ public class StandArrowItem extends Item {
         super($$0);
     }
 
-
-
+    public StandArrowEntity createArrow(Level $$0, ItemStack $$1, LivingEntity $$2) {
+        StandArrowEntity $$3 = new StandArrowEntity($$0, $$2, $$1);
+        return $$3;
+    }
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);

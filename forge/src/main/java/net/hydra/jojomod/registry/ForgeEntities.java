@@ -66,6 +66,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_splatter").toString())
             );
+    public static final RegistryObject<EntityType<StandArrowEntity>> STAND_ARROW =
+            ENTITY_TYPES.register("stand_arrow", () ->
+                    EntityType.Builder.<StandArrowEntity>of(StandArrowEntity::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                            clientTrackingRange(6).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "stand_arrow").toString())
+            );
     public static final RegistryObject<EntityType<ThrownObjectEntity>> THROWN_OBJECT =
             ENTITY_TYPES.register("thrown_object", () ->
                     EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).sized(1f, 1f).

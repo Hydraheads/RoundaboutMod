@@ -18,8 +18,12 @@ public class ModEntities {
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;
+
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
+
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
+
+    public static EntityType<StandArrowEntity> STAND_ARROW;
 
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
