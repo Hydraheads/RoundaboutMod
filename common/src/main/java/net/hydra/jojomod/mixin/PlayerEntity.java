@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -23,10 +24,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -42,6 +40,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.function.Predicate;
 
 @Mixin(Player.class)
 public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity{
@@ -183,6 +183,20 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     this.setShiftKeyDown(false);
                     ci.cancel();
                 }
+            }
+        }
+    }
+    @Inject(method = "getProjectile(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At(value = "INVOKE",
+                    target="Lnet/minecraft/world/item/ProjectileWeaponItem;getAllSupportedProjectiles()Ljava/util/function/Predicate;",
+            shift= At.Shift.AFTER),
+            cancellable = true)
+    public void roundabout$getProjectile(ItemStack $$0, CallbackInfoReturnable<ItemStack> cir) {
+        Predicate<ItemStack> $$1 = ((ProjectileWeaponItem)$$0.getItem()).getAllSupportedProjectiles();
+        for (int $$3 = 0; $$3 < this.inventory.getContainerSize(); $$3++) {
+            ItemStack $$4 = this.inventory.getItem($$3);
+            if ($$1.test($$4) || $$4.is(ModItems.STAND_ARROW)) {
+                cir.setReturnValue($$4);
             }
         }
     }

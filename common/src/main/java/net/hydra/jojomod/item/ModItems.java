@@ -46,5 +46,6 @@ public class ModItems {
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();
 
     public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "harpoon_in_hand", "inventory");
+    public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_bow_arrow", "inventory");
 
 }

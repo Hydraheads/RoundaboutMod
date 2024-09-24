@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "roundabout:item/stand_bow_pulling_0"
+  }
+}

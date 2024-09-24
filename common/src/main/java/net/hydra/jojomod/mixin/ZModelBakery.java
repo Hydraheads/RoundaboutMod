@@ -31,6 +31,8 @@ public abstract class ZModelBakery {
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void roundabout$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
         this.loadTopLevel(ModItems.HARPOON_IN_HAND);
+        this.loadTopLevel(ModItems.STAND_BOW);
         this.topLevelModels.get(ModItems.HARPOON_IN_HAND).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItems.STAND_BOW).resolveParents(this::getModel);
     }
 }
