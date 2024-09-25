@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -195,7 +196,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         Predicate<ItemStack> $$1 = ((ProjectileWeaponItem)$$0.getItem()).getAllSupportedProjectiles();
         for (int $$3 = 0; $$3 < this.inventory.getContainerSize(); $$3++) {
             ItemStack $$4 = this.inventory.getItem($$3);
-            if ($$1.test($$4) || $$4.is(ModItems.STAND_ARROW)) {
+            if ($$1.test($$4) || $$4.getItem() instanceof StandArrowItem) {
                 cir.setReturnValue($$4);
             }
         }

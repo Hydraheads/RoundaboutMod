@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -104,7 +105,7 @@ public class ZItemInHandRenderer {
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                             ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
                     poseStack.popPose();
-                } else if (itemStack.getUseAnimation() == UseAnim.BLOCK && itemStack.is(ModItems.STAND_ARROW)) {
+                } else if (itemStack.getUseAnimation() == UseAnim.BLOCK && itemStack.getItem() instanceof StandArrowItem) {
                     ci.cancel();
                     poseStack.pushPose();
                     this.applyItemArmTransform(poseStack, humanoidArm, i);
@@ -134,10 +135,10 @@ public class ZItemInHandRenderer {
                     poseStack.popPose();
                 }
             } else {
-                if (itemStack.is(ModItems.STAND_ARROW)){
+                if (itemStack.getItem() instanceof StandArrowItem){
                     Mob ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
                     if (ME != null) {
-                        float homingMod = (5-ME.distanceTo(abstractClientPlayer))/5;
+                        float homingMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
                         boolean bl = interactionHand == InteractionHand.MAIN_HAND;
                         HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
                         boolean bl2;

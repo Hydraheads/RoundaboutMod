@@ -24,6 +24,8 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
 public class FabricBlocks {
+    public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
+    );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
     public static final Block LOCACACA_CACTUS = registerBlock("locacaca_cactus", ModBlocks.LOCACACA_CACTUS_PROPERTIES
@@ -79,6 +81,7 @@ public class FabricBlocks {
     }
 
     public static void register(){
+        ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
         ModBlocks.LOCACACA_CACTUS = LOCACACA_CACTUS;
         ModBlocks.LOCACACA_BLOCK = LOCACACA_BLOCK;

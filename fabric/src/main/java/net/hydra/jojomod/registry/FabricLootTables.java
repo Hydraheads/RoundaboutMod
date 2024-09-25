@@ -118,7 +118,7 @@ public class FabricLootTables {
                 //Add thrice if desert structure / sand
                 if(PYRAMID_ID.equals(id) || WELL_ID.equals(id) || OCEAN_WARM_ID.equals(id)){
                     entries.add(LootItem.lootTableItem(FabricItems.STAND_ARROW).build());
-                    entries.add(LootItem.lootTableItem(FabricItems.STAND_ARROW).build());
+                    entries.add(LootItem.lootTableItem(FabricItems.STAND_BEETLE_ARROW).build());
                 }
 
                 LootPool.Builder pool = LootPool.lootPool().with(entries);

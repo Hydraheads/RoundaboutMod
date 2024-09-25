@@ -46,7 +46,9 @@ public class ForgeItems {
             )));
 
     public static final RegistryObject<Item> STAND_ARROW = addToTab(ITEMS.register("stand_arrow",
-            () -> new StandArrowItem(new Item.Properties().stacksTo(1))));
+            () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
+    public static final RegistryObject<Item> STAND_BEETLE_ARROW = addToTab(ITEMS.register("stand_beetle_arrow",
+            () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
     public static final RegistryObject<Item> KNIFE = addToTab(ITEMS.register("knife",
             () -> new KnifeItem(new Item.Properties().stacksTo(64))));
     public static final RegistryObject<Item> KNIFE_BUNDLE = addToTab(ITEMS.register("knife_bundle",
@@ -69,6 +71,10 @@ public class ForgeItems {
             )));
     public static final RegistryObject<BlockItem> WIRE_BUNDLE = addToTab(ITEMS.register("barbed_wire_bundle",
             () -> new BlockItem(ForgeBlocks.BARBED_WIRE_BUNDLE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> ANCIENT_METEOR_ITEM = addToTab(ITEMS.register("ancient_meteor",
+            () -> new BlockItem(ForgeBlocks.ANCIENT_METEOR.get(),
                     new Item.Properties()
             )));
     public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToTab(ITEMS.register("meteor_block",
@@ -116,6 +122,8 @@ public class ForgeItems {
     public static final RegistryObject<Item> STAND_DISC = addToTab(ITEMS.register("stand_disc",
             () -> new EmptyStandDiscItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> METEORITE = addToTab(ITEMS.register("meteorite",
+            () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_INGOT",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
             () -> new ItemNameBlockItem(ForgeBlocks.LOCACACA_BLOCK.get(), new Item.Properties())));

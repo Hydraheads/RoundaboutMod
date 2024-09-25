@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "roundabout:meteor_block"
+    "roundabout:meteor_block",
+    "roundabout:ancient_meteor"
   ]
 }

@@ -56,6 +56,7 @@ public class ForgeEvents {
         /*Common Code Bridge*/
 
         ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
+        ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
         ModBlocks.NEW_LOCACACA_BLOCK = ForgeBlocks.NEW_LOCACACA_BLOCK.get();
@@ -72,6 +73,7 @@ public class ForgeEvents {
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
+        ModItems.STAND_BEETLE_ARROW = ForgeItems.STAND_BEETLE_ARROW.get();
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.IRON_GLAIVE = ForgeItems.IRON_GLAIVE.get();
@@ -88,6 +90,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
+        ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();

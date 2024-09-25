@@ -11,7 +11,9 @@ import net.minecraft.world.item.Items;
 import java.util.ArrayList;
 
 public class ModItems {
+
     public static Item STAND_ARROW;
+    public static Item STAND_BEETLE_ARROW;
     public static Item STAND_DISC_STAR_PLATINUM;
     public static Item STAND_DISC_THE_WORLD;
     public static Item STAND_DISC;
@@ -21,6 +23,7 @@ public class ModItems {
     public static Item NEW_LOCACACA;
     public static Item COFFEE_GUM;
     public static Item METEORITE;
+    public static Item METEORITE_INGOT;
     public static Item TERRIER_SPAWN_EGG;
     public static Item KNIFE;
     public static Item KNIFE_BUNDLE;

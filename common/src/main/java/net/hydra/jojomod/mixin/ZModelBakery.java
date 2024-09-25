@@ -32,7 +32,9 @@ public abstract class ZModelBakery {
     public void roundabout$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
         this.loadTopLevel(ModItemModels.HARPOON_IN_HAND);
         this.loadTopLevel(ModItemModels.STAND_BOW);
+        this.loadTopLevel(ModItemModels.STAND_BEETLE_BOW);
         this.topLevelModels.get(ModItemModels.HARPOON_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BOW).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STAND_BEETLE_BOW).resolveParents(this::getModel);
     }
 }

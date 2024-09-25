@@ -23,6 +23,7 @@ public class ModBlocks {
     public static final IntegerProperty BLOOD_LEVEL = IntegerProperty.create("level", 0, 3);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static final BooleanProperty DECAY = BooleanProperty.create("decay");
+    public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
     public static Block LOCACACA_CACTUS;
 
@@ -41,6 +42,14 @@ public class ModBlocks {
     public static Block STEREO;
 
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
+    public static Block ANCIENT_METEOR_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F)
+                    .sound(SoundType.METAL)
+    );
     public static Block METEOR_BLOCK_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)

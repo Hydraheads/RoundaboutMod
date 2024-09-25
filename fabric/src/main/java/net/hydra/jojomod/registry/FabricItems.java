@@ -26,7 +26,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 
 public class FabricItems {
-    public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1)));
+    public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
+    public static Item STAND_BEETLE_ARROW = registerItem("stand_beetle_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
     public static Item STAND_DISC_STAR_PLATINUM = registerItem("star_platinum_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
     public static Item STAND_DISC_THE_WORLD = registerItem("the_world_disc",
@@ -53,6 +54,7 @@ public class FabricItems {
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+    public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item LOCACACA_PIT = registerItem("locacaca_pit", (Item) new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA_BRANCH = registerItem("locacaca_branch", (Item) new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
@@ -96,6 +98,7 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
 
                         entries.accept(STAND_ARROW);
+                        entries.accept(STAND_BEETLE_ARROW);
                         entries.accept(STAND_DISC);
                         entries.accept(LUCK_UPGRADE);
                         entries.accept(LUCK_SWORD);
@@ -119,12 +122,14 @@ public class FabricItems {
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
+                        entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(METEORITE);
+                        entries.accept(METEORITE_INGOT);
+                        entries.accept(ModBlocks.METEOR_BLOCK);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
                         entries.accept(MUSIC_DISC_HALLELUJAH);
 
-                        entries.accept(ModBlocks.METEOR_BLOCK);
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
                         entries.accept(ModBlocks.STEREO);
@@ -146,6 +151,7 @@ public class FabricItems {
     public static void register(){
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = STAND_ARROW;
+        ModItems.STAND_BEETLE_ARROW = STAND_BEETLE_ARROW;
         ModItems.STAND_DISC_STAR_PLATINUM = STAND_DISC_STAR_PLATINUM;
         ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
@@ -164,6 +170,7 @@ public class FabricItems {
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
+        ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
         ModItems.LOCACACA = LOCACACA;
         ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;

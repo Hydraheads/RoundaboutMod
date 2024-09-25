@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 7.0,
+  "group": "roundabout:meteorite",
+  "ingredient": {
+    "item": "roundabout:meteorite"
+  },
+  "result": "roundabout:meteorite_ingot"
+}

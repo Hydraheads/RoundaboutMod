@@ -2,6 +2,7 @@
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
 
   "item.roundabout.stand_arrow": "Stand Arrow",
+  "item.roundabout.stand_beetle_arrow": "Stand Arrow",
   "item.roundabout.luck_sword": "Luck Sword",
   "item.roundabout.luck_upgrade": "Smithing Template",
   "item.roundabout.scissors": "Scissors",
@@ -13,7 +14,8 @@
   "item.roundabout.netherite_glaive": "Netherite Glaive",
   "item.roundabout.stand_disc": "Stand Disc",
   "item.roundabout.coffee_gum": "Coffee Gum",
-  "item.roundabout.meteorite": "Meteorite",
+  "item.roundabout.meteorite": "Ancient Meteorite",
+  "item.roundabout.meteorite_ingot": "Ancient Meteorite Ingot",
   "item.roundabout.harpoon": "Harpoon",
   "item.roundabout.knife": "Knife",
   "item.roundabout.knife_bundle": "Knives",
@@ -38,6 +40,7 @@
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
   "item.roundabout.stand_arrow.roll": "???",
+  "item.roundabout.stand_arrow.usedUp": "Out of power, repair with meteorite.",
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
   "item.roundabout.stand_arrow.bowTip": "In offhand, bows use it as ammo.",
@@ -62,6 +65,7 @@
   "entity.roundabout.gasoline_splatter": "Gasoline Splatter",
 
   "block.roundabout.meteor_block": "Meteorite Block",
+  "block.roundabout.ancient_meteor": "Ancient Meteor",
   "block.roundabout.locacaca_cactus": "Rooted Cactus",
   "block.roundabout.locacaca_plant": "Locacaca Plant",
   "block.roundabout.new_locacaca_plant": "New Locacaca Plant",

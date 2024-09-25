@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
@@ -22,6 +23,8 @@ import org.joml.Matrix4f;
 public class StandArrowRenderer<T extends StandArrowEntity> extends EntityRenderer<T> {
     public static final ResourceLocation STAND_ARROW_LOCATION = new ResourceLocation
             (Roundabout.MOD_ID, "textures/entity/projectile/stand_arrow.png");
+    public static final ResourceLocation STAND_BEETLE_ARROW_LOCATION = new ResourceLocation
+            (Roundabout.MOD_ID, "textures/entity/projectile/stand_beetle_arrow.png");
     //register(EntityType.ARROW, TippableArrowRenderer::new);
 
     public StandArrowRenderer(EntityRendererProvider.Context p_174422_) {
@@ -30,7 +33,11 @@ public class StandArrowRenderer<T extends StandArrowEntity> extends EntityRender
 
     @Override
     public ResourceLocation getTextureLocation(StandArrowEntity var1) {
-        return STAND_ARROW_LOCATION;
+        if (var1.getArrow().is(ModItems.STAND_BEETLE_ARROW)){
+            return STAND_BEETLE_ARROW_LOCATION;
+        } else {
+            return STAND_ARROW_LOCATION;
+        }
     }
 
     public void render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {

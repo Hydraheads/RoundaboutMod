@@ -47,8 +47,12 @@ public class ZItemRenderer {
     @ModifyVariable(method = "getModel", at = @At(value = "STORE"), ordinal = 0)
     public BakedModel roundabout$render(
             BakedModel value,ItemStack $$0, @Nullable Level $$1, @Nullable LivingEntity $$2, int $$3) {
-        if ($$0.is(Items.BOW) && $$2 !=null && $$2.getProjectile($$0).getItem() == ModItems.STAND_ARROW) {
-            return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BOW);
+        if ($$0.is(Items.BOW) && $$2 !=null){
+            if ($$2.getProjectile($$0).getItem() == ModItems.STAND_ARROW){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BOW);
+            } else if ($$2.getProjectile($$0).getItem() == ModItems.STAND_BEETLE_ARROW){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BEETLE_BOW);
+            }
         }
 
         return value;

@@ -20,6 +20,9 @@ public class ForgeBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Roundabout.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
 
+    public static final RegistryObject<Block> ANCIENT_METEOR = BLOCKS.register("ancient_meteor",
+            () -> ModBlocks.ANCIENT_METEOR_PROPERTIES
+    );
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " MM",
+    " SM",
+    "F  "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "M": {
+      "item": "roundabout:meteorite_ingot"
+    }
+  },
+  "result": {
+    "item": "roundabout:stand_arrow"
+  }
+}

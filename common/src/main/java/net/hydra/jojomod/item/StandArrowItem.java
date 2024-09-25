@@ -50,35 +50,37 @@ public class StandArrowItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
+        if (!($$3.getDamageValue() >= $$3.getMaxDamage())) {
             CompoundTag tag = $$3.isEmpty() ? null : $$3.getTagElement("StandDisc");
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
-                if ($$1.isCrouching()){
+                if ($$1.isCrouching()) {
                     if ($$1.experienceLevel >= 1 || $$1.isCreative()) {
                         if (!$$1.isCreative()) {
                             $$1.giveExperienceLevels(-1);
                         }
-                        rollStand($$0,$$1,$$3);
+                        rollStand($$0, $$1, $$3);
                         return InteractionResultHolder.consume($$3);
                     } else {
                         $$1.displayClientMessage(Component.translatable("container.enchant.level.requirement", 1).withStyle(ChatFormatting.RED), true);
                         return InteractionResultHolder.fail($$3);
                     }
                 } else {
-                   $$1.startUsingItem($$2);
-                   if ($$0.isClientSide()){
-                       ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND);
-                   }
-                   return InteractionResultHolder.consume($$3);
+                    $$1.startUsingItem($$2);
+                    if ($$0.isClientSide()) {
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND);
+                    }
+                    return InteractionResultHolder.consume($$3);
                 }
             } else {
                 if (!$$0.isClientSide) {
-                    rollStand($$0,$$1,$$3);
+                    rollStand($$0, $$1, $$3);
                     return InteractionResultHolder.consume($$3);
                 }
                 return InteractionResultHolder.fail($$3);
             }
-        //return InteractionResultHolder.fail($$3);
+        }
+        return InteractionResultHolder.fail($$3);
     }
 
     public void rollStand(Level $$0, Player $$1, ItemStack $$2) {
@@ -115,6 +117,12 @@ public class StandArrowItem extends Item {
         }
     }
 
+
+    @Override
+    public boolean isValidRepairItem(ItemStack $$0, ItemStack $$1) {
+        return $$1.is(ModItems.METEORITE);
+    }
+
     @Override
     public int getUseDuration(ItemStack $$0) {
         return 72000;
@@ -122,35 +130,37 @@ public class StandArrowItem extends Item {
     @Override
     public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
         if (!$$1.isClientSide) {
-            int $$5 = this.getUseDuration($$0) - $$3;
-            int itemTime = 5;
-            if ($$5 >= itemTime) {
-                if ($$2 instanceof Player PE) {
-                    if (!((StandUser)$$2).roundabout$getStandDisc().isEmpty()){
-                        PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
-                    } else {
-                        if (PE.experienceLevel >= 15 || PE.isCreative()){
-                            CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
-                            CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
-                            if (tag2 != null) {
-                                ItemStack itemstack = ItemStack.of(tag2);
-                                if (itemstack.getItem() instanceof StandDiscItem de) {
-                                    if (grantStand(itemstack, $$2)) {
-                                        $$1.playSound(null, $$2.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
-                                        PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
-                                        ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, $$2.getX(),
-                                                $$2.getY() + $$2.getEyeHeight(), $$2.getZ(),
-                                                20, 0, 0, 0, 0.4);
-                                        if (!PE.isCreative()) {
-                                            PE.giveExperienceLevels(-15);
+            if (!($$0.getDamageValue() >= $$0.getMaxDamage())) {
+                int $$5 = this.getUseDuration($$0) - $$3;
+                int itemTime = 5;
+                if ($$5 >= itemTime) {
+                    if ($$2 instanceof Player PE) {
+                        if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
+                            PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
+                        } else {
+                            if (PE.experienceLevel >= 15 || PE.isCreative()) {
+                                CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
+                                CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+                                if (tag2 != null) {
+                                    ItemStack itemstack = ItemStack.of(tag2);
+                                    if (itemstack.getItem() instanceof StandDiscItem de) {
+                                        if (grantStand(itemstack, $$2)) {
+                                            $$1.playSound(null, $$2.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+                                            PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
+                                            ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, $$2.getX(),
+                                                    $$2.getY() + $$2.getEyeHeight(), $$2.getZ(),
+                                                    20, 0, 0, 0, 0.4);
+                                            if (!PE.isCreative()) {
+                                                PE.giveExperienceLevels(-15);
+                                            }
+                                            $$0.removeTagKey("StandDisc");
+                                            //$$0.removeTagKey("StandDisc");
                                         }
-                                        $$0.removeTagKey("StandDisc");
-                                        //$$0.removeTagKey("StandDisc");
                                     }
                                 }
+                            } else {
+                                PE.displayClientMessage(Component.translatable("container.enchant.level.requirement", 15).withStyle(ChatFormatting.RED), true);
                             }
-                        } else {
-                            PE.displayClientMessage(Component.translatable("container.enchant.level.requirement", 15).withStyle(ChatFormatting.RED), true);
                         }
                     }
                 }
@@ -206,33 +216,38 @@ public class StandArrowItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
-
-        CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
-        CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
-        if (tag2 != null) {
-            ItemStack itemstack = ItemStack.of(tag2);
-            if (itemstack.isEmpty()) {
-                $$2.add(
-                        Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
-                );
-            } else if (itemstack.getItem() instanceof StandDiscItem de) {
+        if (!($$0.getDamageValue() >= $$0.getMaxDamage())) {
+            CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
+            CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+            if (tag2 != null) {
+                ItemStack itemstack = ItemStack.of(tag2);
+                if (itemstack.isEmpty()) {
+                    $$2.add(
+                            Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                    );
+                } else if (itemstack.getItem() instanceof StandDiscItem de) {
                     $$2.add(
                             de.getDisplayName().withStyle(ChatFormatting.AQUA)
                     );
-                //Component.translatable("item.roundabout.stand_arrow.reroll", Minecraft.getInstance().options.keyShift.getDefaultKey().getName())
+                    //Component.translatable("item.roundabout.stand_arrow.reroll", Minecraft.getInstance().options.keyShift.getDefaultKey().getName())
+                    $$2.add(
+                            Component.empty()
+                    );
+                    $$2.add(
+                            Component.translatable("item.roundabout.stand_arrow.reroll").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                    );
+                    $$2.add(
+                            Component.translatable("item.roundabout.stand_arrow.reroll2").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                    );
+                }
+            } else {
                 $$2.add(
-                        Component.empty()
-                );
-                $$2.add(
-                        Component.translatable("item.roundabout.stand_arrow.reroll").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
-                );
-                $$2.add(
-                        Component.translatable("item.roundabout.stand_arrow.reroll2").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                        Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
                 );
             }
         } else {
             $$2.add(
-                    Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                    Component.translatable("item.roundabout.stand_arrow.usedUp").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
             );
         }
     }

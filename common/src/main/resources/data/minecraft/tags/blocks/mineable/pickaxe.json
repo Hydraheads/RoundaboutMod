@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "roundabout:meteor_block",
+    "roundabout:ancient_meteor",
     "roundabout:barbed_wire",
     "roundabout:barbed_wire_bundle",
     "roundabout:goddess_statue"

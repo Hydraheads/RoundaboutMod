@@ -22,6 +22,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -54,6 +55,17 @@ public class StandArrowEntity extends AbstractArrow {
             }
         }
         super.tick();
+    }
+
+    public void addItem(Entity target, ItemStack stack){
+        if (target != null && !target.level().isClientSide()) {
+            ItemEntity $$4 = new ItemEntity(target.level(), target.getX(),
+                    target.getY() + target.getEyeHeight(), target.getZ(),
+                    stack);
+            $$4.setPickUpDelay(20);
+            $$4.setThrower(target.getUUID());
+            target.level().addFreshEntity($$4);
+        }
     }
 
     @Override
@@ -89,6 +101,10 @@ public class StandArrowEntity extends AbstractArrow {
             worthy = true;
             X = 0.2F;
             StandArrowItem.grantMobStand(this.getArrow(),this.level(),mob);
+            if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
+                addItem($$1,this.getArrow().copy());
+                this.discard();
+            }
         }
         if (!worthy && $$1.hurt($$6, X)) {
             if ($$8) {
@@ -114,7 +130,10 @@ public class StandArrowEntity extends AbstractArrow {
 
             this.playSound(this.getDefaultHitGroundSoundEvent(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
             if (this.getPierceLevel() <= 0) {
-                this.discard();
+                if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
+                    addItem($$1,this.getArrow().copy());
+                    this.discard();
+                }
             }
         } else {
             $$1.setRemainingFireTicks($$9);

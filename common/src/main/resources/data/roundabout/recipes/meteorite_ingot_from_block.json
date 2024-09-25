@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "roundabout:meteor_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "roundabout:meteorite_ingot"
+  }
+}
