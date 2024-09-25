@@ -123,7 +123,7 @@ public class ForgeItems {
             () -> new EmptyStandDiscItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> METEORITE = addToTab(ITEMS.register("meteorite",
             () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_INGOT",
+    public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_ingot",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
             () -> new ItemNameBlockItem(ForgeBlocks.LOCACACA_BLOCK.get(), new Item.Properties())));
@@ -156,223 +156,22 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null))));
 
     public static void assignStupidForge(){
-        DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), KNIFE_DIS);
+        DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 
+        DispenserBlock.registerBehavior(ForgeItems.KNIFE_BUNDLE.get(), DispenserRegistry.KNIFE_BUNDLE);
 
-        DispenserBlock.registerBehavior(ForgeItems.KNIFE_BUNDLE.get(), KNIFE_BUNDLE_DIS);
+        DispenserBlock.registerBehavior(ForgeItems.MATCH.get(), DispenserRegistry.MATCH);
 
+        DispenserBlock.registerBehavior(ForgeItems.MATCH_BUNDLE.get(), DispenserRegistry.MATCH_BUNDLE);
 
+        DispenserBlock.registerBehavior(ForgeItems.GASOLINE_BUCKET.get(),DispenserRegistry.GASOLINE_BUCKET);
 
-        DispenserBlock.registerBehavior(ForgeItems.MATCH.get(), MATCH_DIS);
+        DispenserBlock.registerBehavior(ForgeItems.GASOLINE_CAN.get(),DispenserRegistry.GASOLINE_CAN);
 
+        DispenserBlock.registerBehavior(ForgeItems.HARPOON.get(), DispenserRegistry.HARPOON);
 
-        DispenserBlock.registerBehavior(ForgeItems.MATCH_BUNDLE.get(), MATCH_BUNDLE_DIS);
+        DispenserBlock.registerBehavior(ForgeItems.STAND_ARROW.get(), DispenserRegistry.STAND_ARROW);
 
-
-        DispenserBlock.registerBehavior(ForgeItems.GASOLINE_BUCKET.get(),GASOLINE_BUCKET_DIS);
-
-        DispenserBlock.registerBehavior(ForgeItems.GASOLINE_CAN.get(),GASOLINE_CAN_DIS);
-
-
-        DispenserBlock.registerBehavior(ForgeItems.HARPOON.get(), HARPOON_DIS);
+        DispenserBlock.registerBehavior(ForgeItems.STAND_BEETLE_ARROW.get(), DispenserRegistry.STAND_ARROW);
     }
-
-
-    public static DefaultDispenseItemBehavior KNIFE_DIS = new DefaultDispenseItemBehavior() {
-        public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-            Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-            Position position = DispenserBlock.getDispensePosition(p_123556_);
-            double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-            double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
-            double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
-            Level level = p_123556_.getLevel();
-            RandomSource randomsource = level.random;
-            double d3 = randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*2;
-            double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*2;
-            double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*2;
-            KnifeEntity knife = new KnifeEntity(level, d0, d1, d2);
-            level.addFreshEntity(Util.make(knife, (p_123552_) -> {
-                p_123552_.setDeltaMovement(d3,d4,d5);
-                p_123552_.pickup = AbstractArrow.Pickup.ALLOWED;
-            }));
-            p_123557_.shrink(1);
-            return p_123557_;
-        }
-
-        protected void playSound(BlockSource p_123554_) {
-            p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.KNIFE_THROW_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-    };
-
-
-    public static DefaultDispenseItemBehavior KNIFE_BUNDLE_DIS = new DefaultDispenseItemBehavior() {
-        public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-            Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-            Position position = DispenserBlock.getDispensePosition(p_123556_);
-            double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-            double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
-            double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
-            Level level = p_123556_.getLevel();
-            RandomSource randomsource = level.random;
-
-            int knifeCount = 4;
-            for (int i = 0; i< knifeCount; i++) {
-                double d3 = randomsource.triangle((double) direction.getStepX(), 0.13)*1.4;
-                double d4 = randomsource.triangle((double) direction.getStepY(), 0.13)*1.4;
-                double d5 = randomsource.triangle((double) direction.getStepZ(), 0.13)*1.4;
-                KnifeEntity knife = new KnifeEntity(level, d0, d1, d2);
-                level.addFreshEntity(Util.make(knife, (p_123552_) -> {
-                    p_123552_.setDeltaMovement(d3, d4, d5);
-                    p_123552_.pickup = AbstractArrow.Pickup.ALLOWED;
-                }));
-            }
-            p_123557_.shrink(1);
-            return p_123557_;
-        }
-
-        protected void playSound(BlockSource p_123554_) {
-            p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.KNIFE_BUNDLE_THROW_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-    };
-
-
-    public static DefaultDispenseItemBehavior MATCH_DIS = new DefaultDispenseItemBehavior() {
-        public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-            Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-            Position position = DispenserBlock.getDispensePosition(p_123556_);
-            double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-            double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
-            double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
-            Level level = p_123556_.getLevel();
-            RandomSource randomsource = level.random;
-            double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*1.4)*0.9;
-            double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*1.4*0.9;
-            double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*1.4*0.9;
-            MatchEntity match = new MatchEntity(level, d0, d1, d2);
-            level.addFreshEntity(Util.make(match, (p_123552_) -> {
-                p_123552_.setDeltaMovement(d3,d4,d5);
-            }));
-            p_123557_.shrink(1);
-            return p_123557_;
-        }
-
-        protected void playSound(BlockSource p_123554_) {
-            p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.MATCH_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-    };
-
-    public static DefaultDispenseItemBehavior MATCH_BUNDLE_DIS =
-            new DefaultDispenseItemBehavior() {
-                public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-                    Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-                    Position position = DispenserBlock.getDispensePosition(p_123556_);
-                    double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-                    double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
-                    double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
-                    Level level = p_123556_.getLevel();
-                    RandomSource randomsource = level.random;
-
-                    int knifeCount = 4;
-                    for (int i = 0; i< knifeCount; i++) {
-                        double d3 = randomsource.triangle((double) direction.getStepX(), 0.13)*0.9;
-                        double d4 = randomsource.triangle((double) direction.getStepY(), 0.13)*0.9;
-                        double d5 = randomsource.triangle((double) direction.getStepZ(), 0.13)*0.9;
-                        MatchEntity match = new MatchEntity(level, d0, d1, d2);
-                        level.addFreshEntity(Util.make(match, (p_123552_) -> {
-                            p_123552_.setDeltaMovement(d3, d4, d5);
-                        }));
-                    }
-                    p_123557_.shrink(1);
-                    return p_123557_;
-                }
-
-                protected void playSound(BlockSource p_123554_) {
-                    p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.MATCH_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-                }
-            };
-
-    public static DefaultDispenseItemBehavior GASOLINE_BUCKET_DIS =
-            new DefaultDispenseItemBehavior() {
-                private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
-
-                public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-                    Level level = p_123556_.getLevel();
-                    Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-                    Position position = DispenserBlock.getDispensePosition(p_123556_);
-                    double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-                    double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
-                    double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
-                    RandomSource randomsource = level.random;
-                    double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*0.9);
-                    double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*0.9;
-                    double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*0.9;
-                    GasolineSplatterEntity gas = new GasolineSplatterEntity(level, d0, d1, d2);
-                    level.addFreshEntity(Util.make(gas, (p_123552_) -> {
-                        p_123552_.setDeltaMovement(d3,d4,d5);
-                    }));
-                    return new ItemStack(Items.BUCKET);
-                }
-                protected void playSound(BlockSource p_123554_) {
-                    p_123554_.getLevel().playSound(null, p_123554_.getPos(), SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 1.0F, 1.0F);
-                }
-            };
-
-    public static DefaultDispenseItemBehavior GASOLINE_CAN_DIS =
-            new DefaultDispenseItemBehavior() {
-
-                public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-                    Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-                    Position position = DispenserBlock.getDispensePosition(p_123556_);
-                    double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-                    double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
-                    double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
-                    Level level = p_123556_.getLevel();
-                    RandomSource randomsource = level.random;
-                    double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*0.6);
-                    double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*0.6;
-                    double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*0.6;
-                    GasolineCanEntity gas = new GasolineCanEntity(level, d0, d1, d2);
-                    level.addFreshEntity(Util.make(gas, (p_123552_) -> {
-                        p_123552_.setDeltaMovement(d3,d4,d5);
-                    }));
-                    p_123557_.shrink(1);
-                    return p_123557_;
-                }
-
-                protected void playSound(BlockSource p_123554_) {
-                    p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.GAS_CAN_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-                }
-            };
-
-    public static DefaultDispenseItemBehavior HARPOON_DIS =
-            new DefaultDispenseItemBehavior() {
-
-                public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-                    Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-                    Position position = DispenserBlock.getDispensePosition(p_123556_);
-                    double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-                    double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F );
-                    double d2 = position.z() + (double) ((float) direction.getStepZ()  * 0.3F);
-                    Level level = p_123556_.getLevel();
-                    RandomSource randomsource = level.random;
-                    double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D))*1.6;
-                    double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*1.6;
-                    double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*1.6;
-                    if (!p_123557_.hurt(1,level.getRandom(),null)){
-                        HarpoonEntity harpoon = new HarpoonEntity(level, null, p_123557_, d0, d1, d2);
-                        level.addFreshEntity(Util.make(harpoon, (p_123552_) -> {
-                            p_123552_.setDeltaMovement(d3,d4,d5);
-                            p_123552_.pickup = AbstractArrow.Pickup.ALLOWED;
-                        }));
-                    }
-                    p_123557_.shrink(1);
-                    return p_123557_;
-                }
-
-                protected void playSound(BlockSource p_123554_) {
-                    p_123554_.getLevel().playSound(null, p_123554_.getPos(), ModSounds.HARPOON_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-                }
-            };
-
-
 }

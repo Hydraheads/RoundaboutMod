@@ -46,6 +46,11 @@ public class StandArrowEntity extends AbstractArrow {
         super(ModEntities.STAND_ARROW, $$1, $$2, $$3, $$0);
     }
 
+    public StandArrowEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
+        super(ModEntities.STAND_ARROW, p_36862_, p_36863_, p_36864_, $$0);
+        this.setArrow($$2.copy());
+    }
+
     @Override
     public void tick() {
         Mob targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 15);

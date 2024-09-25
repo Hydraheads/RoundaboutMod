@@ -165,21 +165,21 @@ public class DispenserRegistry {
             new DefaultDispenseItemBehavior() {
 
                 public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
-                    Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
-                    Position position = DispenserBlock.getDispensePosition(p_123556_);
-                    double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
-                    double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
-                    double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
-                    Level level = p_123556_.getLevel();
-                    RandomSource randomsource = level.random;
-                    double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*0.6);
-                    double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*0.6;
-                    double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*0.6;
-                    GasolineCanEntity gas = new GasolineCanEntity(level, d0, d1, d2);
-                    level.addFreshEntity(Util.make(gas, (p_123552_) -> {
-                        p_123552_.setDeltaMovement(d3,d4,d5);
-                    }));
-                    p_123557_.shrink(1);
+                        Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
+                        Position position = DispenserBlock.getDispensePosition(p_123556_);
+                        double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
+                        double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
+                        double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
+                        Level level = p_123556_.getLevel();
+                        RandomSource randomsource = level.random;
+                        double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D) * 0.6);
+                        double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D) * 0.6;
+                        double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D) * 0.6;
+                        GasolineCanEntity gas = new GasolineCanEntity(level, d0, d1, d2);
+                        level.addFreshEntity(Util.make(gas, (p_123552_) -> {
+                            p_123552_.setDeltaMovement(d3, d4, d5);
+                        }));
+                        p_123557_.shrink(1);
                     return p_123557_;
                 }
 
@@ -218,26 +218,61 @@ public class DispenserRegistry {
                 }
             };
 
+    public static DefaultDispenseItemBehavior STAND_ARROW =
+            new DefaultDispenseItemBehavior() {
+
+                public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
+
+                    if (!(p_123557_.getDamageValue() >= p_123557_.getMaxDamage())) {
+                        Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
+                        Position position = DispenserBlock.getDispensePosition(p_123556_);
+                        double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
+                        double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F );
+                        double d2 = position.z() + (double) ((float) direction.getStepZ()  * 0.3F);
+                        Level level = p_123556_.getLevel();
+                        RandomSource randomsource = level.random;
+                        double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D))*1.6;
+                        double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*1.6;
+                        double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*1.6;
+                        StandArrowEntity stand_arrow = new StandArrowEntity(level, null, p_123557_, d0, d1, d2);
+                        level.addFreshEntity(Util.make(stand_arrow, (p_123552_) -> {
+                                p_123552_.setDeltaMovement(d3,d4,d5);
+                                p_123552_.pickup = AbstractArrow.Pickup.ALLOWED;
+                        }));
+                        p_123556_.getLevel().playSound(null, p_123556_.getPos(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                        p_123557_.shrink(1);
+                    } else {
+                        Direction $$2 = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
+                        Position $$3 = DispenserBlock.getDispensePosition(p_123556_);
+                        ItemStack $$4 = p_123557_.split(1);
+                        p_123556_.getLevel().levelEvent(1000, p_123556_.getPos(), 0);
+                        spawnItem(p_123556_.getLevel(), $$4, 6, $$2, $$3);
+                    }
+                    return p_123557_;
+                }
+
+                protected void playSound(BlockSource p_123554_) {
+                }
+            };
+
     public static void init(){
         DispenserBlock.registerBehavior(ModItems.KNIFE, KNIFE);
 
-
         DispenserBlock.registerBehavior(ModItems.KNIFE_BUNDLE, KNIFE_BUNDLE);
-
-
 
         DispenserBlock.registerBehavior(ModItems.MATCH, MATCH);
 
-
         DispenserBlock.registerBehavior(ModItems.MATCH_BUNDLE, MATCH_BUNDLE);
-
 
         DispenserBlock.registerBehavior(ModItems.GASOLINE_BUCKET,GASOLINE_BUCKET);
 
         DispenserBlock.registerBehavior(ModItems.GASOLINE_CAN,GASOLINE_CAN);
 
-
         DispenserBlock.registerBehavior(ModItems.HARPOON, HARPOON);
+
+        DispenserBlock.registerBehavior(ModItems.STAND_ARROW, STAND_ARROW);
+
+        DispenserBlock.registerBehavior(ModItems.STAND_BEETLE_ARROW, STAND_ARROW);
 
     }
 }
