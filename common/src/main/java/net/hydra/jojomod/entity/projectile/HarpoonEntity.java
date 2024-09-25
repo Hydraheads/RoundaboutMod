@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,10 +18,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -79,6 +77,21 @@ public class HarpoonEntity extends AbstractArrow {
 
         @Override
         public void tick() {
+
+            LivingEntity targetMob = MainUtil.homeOnFlier(this.level(), this.position(), 13);
+            if (targetMob != null && !(this.getOwner() != null && this.getOwner().getUUID() == targetMob.getUUID())){
+                if (!this.isNoPhysics()) {
+                    double ln = targetMob.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
+                    if (this.getDeltaMovement().length() > ln) {
+                        ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
+                    }
+
+                    this.setDeltaMovement(
+                            targetMob.position().subtract(this.position()).normalize().scale(ln)
+                    );
+                }
+            }
+
             Vec3 delta = this.getDeltaMovement();
             if (this.inGroundTime > 4) {
                 this.dealtDamage = true;
@@ -114,7 +127,9 @@ public class HarpoonEntity extends AbstractArrow {
 
             super.tick();
             if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
-                this.setDeltaMovement(delta);
+                if (!this.isNoPhysics()) {
+                    this.setDeltaMovement(delta);
+                }
             }
             if (!this.level().isClientSide) {
                 if (superThrowTicks > -1) {

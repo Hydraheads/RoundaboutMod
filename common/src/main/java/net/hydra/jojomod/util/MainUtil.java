@@ -102,6 +102,20 @@ public class MainUtil {
         }
         return null;
     }
+    public static LivingEntity homeOnFlier(Level level, Vec3 vec3, double range) {
+        List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
+                vec3.z, range, range, range);
+        List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
+        };
+        for (Entity value : hitEntities) {
+            if (value instanceof LivingEntity mb){
+                if (mb.isFallFlying() || mb instanceof Phantom){
+                    return mb;
+                }
+            }
+        }
+        return null;
+    }
     public static boolean getMobBleed(Entity Mob) {
         if (Mob instanceof LivingEntity){
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))

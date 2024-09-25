@@ -48,11 +48,12 @@ public class StandArrowEntity extends AbstractArrow {
 
     @Override
     public void tick() {
-        if (this.getOwner() != null) {
-            Mob targetMob = MainUtil.homeOnWorthy(this.getOwner().level(), this.getOwner().position(), 10);
-            if (targetMob != null){
+        Mob targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 15);
+        if (targetMob != null){
+            this.setDeltaMovement(
+                    targetMob.position().subtract(this.position()).normalize().scale(this.getDeltaMovement().length())
+            );
 
-            }
         }
         super.tick();
     }
