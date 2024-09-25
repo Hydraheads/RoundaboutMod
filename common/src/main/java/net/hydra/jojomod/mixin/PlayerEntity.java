@@ -196,7 +196,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         Predicate<ItemStack> $$1 = ((ProjectileWeaponItem)$$0.getItem()).getAllSupportedProjectiles();
         for (int $$3 = 0; $$3 < this.inventory.getContainerSize(); $$3++) {
             ItemStack $$4 = this.inventory.getItem($$3);
-            if ($$1.test($$4) || $$4.getItem() instanceof StandArrowItem) {
+            if ($$1.test($$4) || ($$4.getItem() instanceof StandArrowItem && !($$4.getDamageValue() >= $$4.getMaxDamage()))) {
                 cir.setReturnValue($$4);
             }
         }

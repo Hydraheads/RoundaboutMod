@@ -101,17 +101,21 @@ public class StandArrowItem extends Item {
         if (!$$1.isClientSide) {
             CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+            ItemStack itemstack = ItemStack.EMPTY;
+            if (tag2 == null){
+                itemstack = rerollStand($$0);
+            }
             if (tag2 != null) {
-                ItemStack itemstack = ItemStack.of(tag2);
-                if (itemstack.getItem() instanceof StandDiscItem de) {
-                    if (grantStand(itemstack, live)) {
-                        $$1.playSound(null, live.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
-                        ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, live.getX(),
-                                live.getY() + live.getEyeHeight(), live.getZ(),
-                                20, 0, 0, 0, 0.4);
-                        $$0.removeTagKey("StandDisc");
-                        //$$0.removeTagKey("StandDisc");
-                    }
+                itemstack = ItemStack.of(tag2);
+            }
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
+                if (grantStand(itemstack, live)) {
+                    $$1.playSound(null, live.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+                    ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, live.getX(),
+                            live.getY() + live.getEyeHeight(), live.getZ(),
+                            20, 0, 0, 0, 0.4);
+                    $$0.removeTagKey("StandDisc");
+                    //$$0.removeTagKey("StandDisc");
                 }
             }
         }
@@ -120,7 +124,7 @@ public class StandArrowItem extends Item {
 
     @Override
     public boolean isValidRepairItem(ItemStack $$0, ItemStack $$1) {
-        return $$1.is(ModItems.METEORITE);
+        return $$1.is(ModItems.METEORITE_INGOT);
     }
 
     @Override
@@ -154,6 +158,7 @@ public class StandArrowItem extends Item {
                                                 PE.giveExperienceLevels(-15);
                                             }
                                             $$0.removeTagKey("StandDisc");
+                                            $$0.hurt(1,PE.level().getRandom(),(ServerPlayer) PE);
                                             //$$0.removeTagKey("StandDisc");
                                         }
                                     }
@@ -170,7 +175,7 @@ public class StandArrowItem extends Item {
         }
     }
 
-    public ItemStack rerollStand(ItemStack $$0){
+    public static ItemStack rerollStand(ItemStack $$0){
         CompoundTag tag = $$0.getOrCreateTagElement("StandDisc");
         int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
         Item item = ModItems.STAND_ARROW_POOL.get(index);

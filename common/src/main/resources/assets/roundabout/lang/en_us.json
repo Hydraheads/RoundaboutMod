@@ -40,7 +40,7 @@
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
   "item.roundabout.stand_arrow.roll": "???",
-  "item.roundabout.stand_arrow.usedUp": "Out of power, repair with meteorite.",
+  "item.roundabout.stand_arrow.usedUp": "Out of power, craft with meteorite.",
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
   "item.roundabout.stand_arrow.bowTip": "In offhand, bows use it as ammo.",

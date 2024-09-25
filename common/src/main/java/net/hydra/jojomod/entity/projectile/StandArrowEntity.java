@@ -102,9 +102,10 @@ public class StandArrowEntity extends AbstractArrow {
             X = 0.2F;
             StandArrowItem.grantMobStand(this.getArrow(),this.level(),mob);
             if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
+                this.getArrow().hurt(1,this.level().getRandom(),null);
                 addItem($$1,this.getArrow().copy());
-                this.discard();
             }
+            this.discard();
         }
         if (!worthy && $$1.hurt($$6, X)) {
             if ($$8) {
@@ -131,9 +132,10 @@ public class StandArrowEntity extends AbstractArrow {
             this.playSound(this.getDefaultHitGroundSoundEvent(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
             if (this.getPierceLevel() <= 0) {
                 if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
+                    this.getArrow().hurt(1,this.level().getRandom(),null);
                     addItem($$1,this.getArrow().copy());
-                    this.discard();
                 }
+                this.discard();
             }
         } else {
             $$1.setRemainingFireTicks($$9);
