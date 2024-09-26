@@ -44,7 +44,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "star_platinum"),
                         EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).
-                                sized(0.001F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":star_platinum")
+                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":star_platinum")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(

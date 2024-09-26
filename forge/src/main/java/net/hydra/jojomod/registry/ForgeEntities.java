@@ -32,7 +32,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<StarPlatinumEntity>> STAR_PLATINUM =
             ENTITY_TYPES.register("star_platinum", () ->
-                    EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).sized(0.001F, 2.05f).
+                    EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "star_platinum").toString())
             );
