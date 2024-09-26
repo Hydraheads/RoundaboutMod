@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -15,6 +16,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PlayerRideableJumping;
 import net.minecraft.world.entity.player.Player;
@@ -49,6 +53,11 @@ public abstract class HudRendering implements IHudAccess {
     private boolean roundaboutRedo = false;
 
     @Shadow
+    @Final
+    private RandomSource random;
+
+
+    @Shadow
     protected void renderTextureOverlay(GuiGraphics p_282304_, ResourceLocation p_281622_, float p_281504_) {
     }
 
@@ -65,6 +74,89 @@ public abstract class HudRendering implements IHudAccess {
         /*This does not work on forge becasue the forcefully overwrite this function*/
     }
 
+    @Inject(method = "renderHearts", at = @At(value = "TAIL"))
+    private void renderHotbarMixin(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10, CallbackInfo ci) {
+        if (((StandUser)$$1).roundabout$getLocacacaCurse()== LocacacaCurseIndex.HEART){
+            int $$12 = 208;
+            int $$13 = Mth.ceil((double)$$6 / 2.0);
+            int $$14 = Mth.ceil((double)$$9 / 2.0);
+            int $$15 = $$13 * 2;
+
+            for (int $$16 = $$13 + $$14 - 1; $$16 >= 0; $$16--) {
+                int $$17 = $$16 / 10;
+                int $$18 = $$16 % 10;
+                int $$19 = $$2 + $$18 * 8;
+                int $$20 = $$3 - $$17 * $$4;
+                if ($$7 + $$9 <= 4) {
+                    $$20 += this.random.nextInt(2);
+                }
+
+                if ($$16 < $$13 && $$16 == $$5) {
+                    $$20 -= 2;
+                }
+                int $$21 = $$16 * 2;
+
+                if ($$10 && $$21 < $$8) {
+                    boolean $$25 = $$21 + 1 == $$8;
+                    boolean $$22 = $$16 >= $$13;
+                        this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, true, $$25);
+                }
+
+                if ($$21 < $$7) {
+                    boolean $$26 = $$21 + 1 == $$7;
+                        this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, false, $$26);
+                }
+            }
+        }
+        if ($$1.hasEffect(ModEffects.STAND_VIRUS)){
+
+            int $$12 = 216;
+            int $$13 = Mth.ceil((double)$$6 / 2.0);
+            int $$14 = Mth.ceil((double)$$9 / 2.0);
+            int $$15 = $$13 * 2;
+
+            for (int $$16 = $$13 + $$14 - 1; $$16 >= 0; $$16--) {
+                int $$17 = $$16 / 10;
+                int $$18 = $$16 % 10;
+                int $$19 = $$2 + $$18 * 8;
+                int $$20 = $$3 - $$17 * $$4;
+                if ($$7 + $$9 <= 4) {
+                    $$20 += this.random.nextInt(2);
+                }
+
+                if ($$16 < $$13 && $$16 == $$5) {
+                    $$20 -= 2;
+                }
+                int $$21 = $$16 * 2;
+
+                if ($$10 && $$21 < $$8) {
+                    boolean $$25 = $$21 + 1 == $$8;
+                    boolean $$22 = $$16 >= $$13;
+                    this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, true, $$25);
+                }
+
+                if ($$21 < $$7) {
+                    boolean $$26 = $$21 + 1 == $$7;
+                    this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, false, $$26);
+                }
+            }
+        }
+    }
+
+    @Unique
+    private void roundabout$renderStoneHeart(GuiGraphics p_283024_, int p_283636_, int p_283279_, int p_283188_, boolean p_283440_, boolean p_282496_) {
+        p_283024_.blit(StandIcons.JOJO_ICONS, p_283636_, p_283279_, roundabout$getXShift(p_282496_, p_283440_), p_283188_, 9, 9);
+    }
+
+    @Unique
+    public int roundabout$getXShift(boolean p_168735_, boolean p_168736_) {
+        int i;
+        int j = p_168735_ ? 1 : 0;
+        int k = p_168736_ ? 2 : 0;
+        i = j + k;
+
+        return 16 + (i * 9);
+    }
 
     /** The guard HUD uses the exp bar, because you dont need to check exp
      *  while you are blocking, efficient HUD use.*/

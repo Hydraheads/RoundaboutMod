@@ -50,6 +50,7 @@
 
   "effect.roundabout.bleed": "Bleed",
   "effect.roundabout.hex": "Hex",
+  "effect.roundabout.stand_virus": "Stand Virus",
 
   "text.roundabout.meteorite": "Meteorite",
 
@@ -122,6 +123,7 @@
   "death.attack.gas_explosion.player": "%1$s was cooked by %2$s",
   "death.attack.glaive": "%1$s was skewered by %2$s",
   "death.attack.glaive.item": "%1$s was skewered by %2$s using %3$s",
+  "death.attack.stand_virus": "%1$s was turned into tomato sauce",
 
   "item.glaive.charge_power": "Charge Attack",
 

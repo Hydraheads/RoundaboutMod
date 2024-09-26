@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -122,6 +123,11 @@ public class BlockGrabPreset extends PunchingStand{
                     this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
             }
+        } else if (item.getItem() instanceof StandArrowItem && !(item.getDamageValue() >= item.getMaxDamage())){
+            StandArrowEntity $$4 = new StandArrowEntity(this.getSelf().level(), this.getSelf(), item);
+            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 3F, getShotAccuracy());
+            this.getSelf().level().addFreshEntity($$4);
+            this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.getItem() instanceof EggItem){
             ThrownEgg $$4 = new ThrownEgg(this.getSelf().level(), this.getSelf());
             $$4.setItem(item);

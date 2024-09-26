@@ -16,6 +16,7 @@ public class FabricEffects extends MobEffect{
 
     public static final MobEffect BLEED = register("bleed", new FabricEffects(MobEffectCategory.HARMFUL, 11994666));
     public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 11606258)); //old color 16762706
+    public static final MobEffect STAND_VIRUS = register("stand_virus", new FabricEffects(MobEffectCategory.HARMFUL, 9979490));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -29,5 +30,6 @@ public class FabricEffects extends MobEffect{
     public static void register(){
         ModEffects.BLEED = BLEED;
         ModEffects.HEX = HEX;
+        ModEffects.STAND_VIRUS = STAND_VIRUS;
     }
 }

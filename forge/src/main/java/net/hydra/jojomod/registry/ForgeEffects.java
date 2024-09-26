@@ -26,6 +26,10 @@ public class ForgeEffects{
             POTION_EFFECTS.register("hex", () ->
                     new Effect(MobEffectCategory.HARMFUL, 11606258)
             );
+    public static final RegistryObject<MobEffect> STAND_VIRUS =
+            POTION_EFFECTS.register("stand_virus", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 9979490)
+            );
 
     public static class Effect extends MobEffect{
         public Effect(MobEffectCategory typeIn, int liquidColorIn) {

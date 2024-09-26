@@ -118,6 +118,7 @@ public class ForgeEvents {
 
         ModEffects.BLEED = ForgeEffects.BLEED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
+        ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
 
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();

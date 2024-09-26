@@ -1,20 +1,12 @@
 package net.hydra.jojomod.entity.projectile;
 
-import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -23,20 +15,19 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Arrays;
 
 public class StandArrowEntity extends AbstractArrow {
     private static final EntityDataAccessor<ItemStack> STAND_ARROW = SynchedEntityData.defineId(StandArrowEntity.class,
             EntityDataSerializers.ITEM_STACK);
+
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(StandArrowEntity.class, EntityDataSerializers.BOOLEAN);
 
     public StandArrowEntity(EntityType<? extends StandArrowEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -158,6 +149,13 @@ public class StandArrowEntity extends AbstractArrow {
         }
     }
 
+    private int superThrowTicks = -1;
+    public void starThrowInit(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        superThrowTicks = 50;
+    }
+
+
     public StandArrowEntity(Level $$0, LivingEntity $$1, ItemStack stack) {
         super(ModEntities.STAND_ARROW, $$1, $$0);
         setArrow(stack.copy());
@@ -171,6 +169,10 @@ public class StandArrowEntity extends AbstractArrow {
     @Override
     protected ItemStack getPickupItem() {
         return getArrow();
+    }
+
+    public boolean getSuperThrow() {
+        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
     }
 
 
@@ -190,6 +192,7 @@ public class StandArrowEntity extends AbstractArrow {
 
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
         this.entityData.define(STAND_ARROW, ItemStack.EMPTY);
     }
 }
