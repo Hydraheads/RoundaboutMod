@@ -36,6 +36,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -84,6 +85,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public SoundEvent getLastHitSound(){
+        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+    }
+    @Override
+    public SoundEvent getLastRejectionHitSound(){
         return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
     }
 
@@ -160,7 +165,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return false;
     }
-
 
     @Override
     public byte chooseBarrageSound(){

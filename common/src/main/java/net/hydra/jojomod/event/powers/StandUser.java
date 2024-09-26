@@ -61,6 +61,11 @@ public interface StandUser {
 
     StandPowers getStandPowers();
 
+    StandPowers roundabout$getRejectionStandPowers();
+    void roundabout$setRejectionStandPowers(StandPowers powers);
+    ItemStack roundabout$getRejectionStandDisc();
+    void roundabout$setRejectionStandDisc(ItemStack disc);
+
     void setStandPowers(StandPowers standPowers);
     void setAttackTimeDuring(int attackTimeDuring);
     void setInterruptCD(int interruptCD);

@@ -145,6 +145,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.ITEM_STACK);
     @Unique
     private StandPowers roundabout$Powers;
+    @Unique
+    private StandPowers roundabout$RejectionStandPowers = null;
+    @Unique
+    private ItemStack roundabout$RejectionStandDisc = null;
 
     /** Guard variables for stand blocking**/
     @Unique
@@ -496,6 +500,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public StandPowers roundabout$getRejectionStandPowers() {
+        return this.roundabout$RejectionStandPowers;
+    }
+    @Unique
+    @Override
+    public ItemStack roundabout$getRejectionStandDisc() {
+        return this.roundabout$RejectionStandDisc;
+    }
+    @Unique
+    @Override
+    public void roundabout$setRejectionStandPowers(StandPowers powers) {
+        if (!(this.level().isClientSide)) {
+            this.roundabout$RejectionStandPowers = powers;
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setRejectionStandDisc(ItemStack disc) {
+        if (!(this.level().isClientSide)) {
+            this.roundabout$RejectionStandDisc = disc;
+        }
+    }
+    @Unique
+    @Override
     public ItemStack roundabout$getStandDisc() {
         return this.getEntityData().get(ROUNDABOUT$STAND_DISC);
     }
@@ -569,6 +597,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             CompoundTag compoundtag = new CompoundTag();
             $$0.put("roundabout.StandDisc",this.roundabout$getStandDisc().save(compoundtag));
         }
+        if ((this.roundabout$getRejectionStandDisc() != null && !this.roundabout$getRejectionStandDisc().isEmpty()) || $$0.contains("roundabout.StandRejectionDisc", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            if (roundabout$getRejectionStandDisc() == null){
+                roundabout$setRejectionStandDisc(ItemStack.EMPTY);
+            }
+            $$0.put("roundabout.StandRejectionDisc",this.roundabout$getRejectionStandDisc().save(compoundtag));
+        }
         return $$0;
     }
 
@@ -580,6 +615,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD){
                 this.roundabout$setStandDisc(itemstack);
                 SD.generateStandPowers((LivingEntity)(Object)this);
+            }
+        }if ($$0.contains("roundabout.StandRejectionDisc", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("roundabout.StandRejectionDisc");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD){
+                this.roundabout$setRejectionStandDisc(itemstack);
+                SD.generateStandPowerRejection((LivingEntity)(Object)this);
             }
         }
     }
@@ -1417,7 +1459,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**If you have a chest turned to stone, decreases breath faster*/
+    /**Stone Heart and Potion Ticksr*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
         byte curse = this.roundabout$getLocacacaCurse();
@@ -1430,7 +1472,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (this.hasEffect(ModEffects.STAND_VIRUS)) {
             if (this.tickCount % 20 == 0) {
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_VIRUS), this.getEffect(ModEffects.STAND_VIRUS).getAmplifier()+1);
+                if (!this.level().isClientSide()){
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_VIRUS), this.getEffect(ModEffects.STAND_VIRUS).getAmplifier()+1);
+                }
+            }
+            if (this.roundabout$RejectionStandPowers != null){
+                this.roundabout$RejectionStandPowers.tickStandRejection(this.getEffect(ModEffects.STAND_VIRUS));
+            }
+        } else {
+            if (!this.level().isClientSide()){
+                if (this.roundabout$RejectionStandPowers != null){
+                    roundabout$RejectionStandPowers = null;
+                    roundabout$RejectionStandDisc = null;
+                }
             }
         }
     }

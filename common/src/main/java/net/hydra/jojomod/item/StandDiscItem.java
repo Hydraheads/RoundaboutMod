@@ -35,6 +35,9 @@ public class StandDiscItem extends Item {
         ((StandUser)entity).setStandPowers(standPowers.generateStandPowers(entity));
     }
 
+    public void generateStandPowerRejection(LivingEntity entity){
+        ((StandUser)entity).roundabout$setRejectionStandPowers(standPowers.generateStandPowers(entity));
+    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {

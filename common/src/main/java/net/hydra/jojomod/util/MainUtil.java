@@ -93,14 +93,17 @@ public class MainUtil {
                 vec3.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
+        Mob mm = null;
+        double distance = -1;
         for (Entity value : hitEntities) {
             if (value instanceof Mob mb){
-                if (canGrantStand(mb)){
-                    return mb;
+                if (canGrantStand(mb) && (distance == -1 || mb.distanceToSqr(vec3) < distance)){
+                    mm = mb;
+                    distance = mb.distanceToSqr(vec3);
                 }
             }
         }
-        return null;
+        return mm;
     }
     public static LivingEntity homeOnFlier(Level level, Vec3 vec3, double range) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
@@ -140,6 +143,20 @@ public class MainUtil {
         }
     }
 
+    public static boolean canCauseRejection(Entity ent){
+        if (ent instanceof Mob ME){
+            if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)){
+                if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
+                    return true;
+                }
+            }
+        } else if (ent instanceof Player PE){
+            if (PE.experienceLevel < 15 && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean canGrantStand(Entity ent){
         if (ent instanceof Mob ME){
             if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)){

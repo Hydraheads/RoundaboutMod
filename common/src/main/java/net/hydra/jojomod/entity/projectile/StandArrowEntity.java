@@ -1,7 +1,10 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -9,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,10 +48,10 @@ public class StandArrowEntity extends AbstractArrow {
 
     @Override
     public void tick() {
-        Mob targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 15);
+        Mob targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 5);
         if (targetMob != null){
             this.setDeltaMovement(
-                    targetMob.position().subtract(this.position()).normalize().scale(this.getDeltaMovement().length())
+                    targetMob.position().add(0,targetMob.getEyeHeight(),0).subtract(this.position()).normalize().scale(this.getDeltaMovement().length())
             );
 
         }
@@ -110,6 +114,12 @@ public class StandArrowEntity extends AbstractArrow {
             }
 
             if ($$1 instanceof LivingEntity $$10) {
+               if (MainUtil.canCauseRejection($$10)){
+                   $$10.addEffect(new MobEffectInstance(ModEffects.STAND_VIRUS, 200, 0),this);
+                   if (this.getArrow().getItem() instanceof StandArrowItem){
+                       StandArrowItem.grantMobRejection(this.getArrow(),this.level(),$$10);
+                   }
+               }
                     if (this.getKnockback() > 0) {
                         double $$11 = Math.max(0.0, 1.0 - $$10.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
                         Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) this.getKnockback() * 0.6 * $$11);

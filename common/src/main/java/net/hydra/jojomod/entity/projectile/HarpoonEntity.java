@@ -87,7 +87,7 @@ public class HarpoonEntity extends AbstractArrow {
                     }
 
                     this.setDeltaMovement(
-                            targetMob.position().subtract(this.position()).normalize().scale(ln)
+                            targetMob.position().add(0,targetMob.getEyeHeight(),0).subtract(this.position()).normalize().scale(ln)
                     );
                 }
             }

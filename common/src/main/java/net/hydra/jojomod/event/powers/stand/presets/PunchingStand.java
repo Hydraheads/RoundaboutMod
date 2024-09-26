@@ -10,9 +10,13 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -42,6 +46,10 @@ public class PunchingStand extends StandPowers {
     @Override
     public float getMiningSpeed() {
         return 5F;
+    }
+
+    public SoundEvent getLastRejectionHitSound(){
+        return null;
     }
 
     @Override
@@ -172,6 +180,58 @@ public class PunchingStand extends StandPowers {
         animateStand((byte) 12);
         playBarrageCrySound();
         return true;
+    }
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            float kbs = 0;
+            float pow = 0;
+            boolean throwPunch = false;
+            SoundEvent SE = null;
+            float pitch = 0;
+            if (effect.getDuration() == 13 || effect.getDuration() == 7) {
+                kbs = 0.2F;
+                pow = getPunchStrength(this.getSelf());
+                throwPunch = true;
+                SE = ModSounds.PUNCH_3_SOUND_EVENT;
+                if (effect.getDuration() == 7) {
+                    pitch = 1.24F;
+                } else {
+                    pitch = 1.17F;
+                }
+            } else if (effect.getDuration() == 1) {
+                kbs = 1F;
+                pow = getHeavyPunchStrength(this.getSelf());
+                throwPunch = true;
+                SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                pitch = 1.2F;
+                SoundEvent LastHitSound = this.getLastHitSound();
+                if (LastHitSound != null) {
+                    this.self.level().playSound(null, this.self.blockPosition(), LastHitSound,
+                            SoundSource.PLAYERS, 1F, 1);
+                }
+            }
+
+            if (throwPunch) {
+                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+                if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
+                    this.takeDeterminedKnockback(this.self, this.getSelf(), kbs);
+                    if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+                        return;
+                    }
+                    this.getSelf().hurtMarked = true;
+                    Vec3 vec3d2 = new Vec3(Mth.sin(
+                            this.getSelf().getYRot() * ((float) Math.PI / 180)),
+                            0,
+                            -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180))).normalize().scale(kbs).reverse();
+                    this.getSelf().setDeltaMovement(- vec3d2.x,
+                            this.getSelf().onGround() ? 0.28 : 0,
+                            - vec3d2.z);
+                    this.getSelf().hasImpulse = true;
+                }
+            }
+        }
     }
 
     public void standPunch(){

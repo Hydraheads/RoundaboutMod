@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -119,6 +120,23 @@ public class StandArrowItem extends Item {
                 }
             }
         }
+    }
+
+    public static void grantMobRejection(ItemStack $$0, Level $$1, LivingEntity live){
+            CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
+            CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+            ItemStack itemstack = ItemStack.EMPTY;
+            if (tag2 == null){
+                itemstack = rerollStand($$0);
+            }
+            if (tag2 != null) {
+                itemstack = ItemStack.of(tag2);
+            }
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
+                ((StandUser)live).roundabout$setRejectionStandDisc(itemstack.copy());
+                de.generateStandPowerRejection(live);
+                $$0.removeTagKey("StandDisc");
+            }
     }
 
 
