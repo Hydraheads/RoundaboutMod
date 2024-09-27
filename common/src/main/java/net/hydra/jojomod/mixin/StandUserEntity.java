@@ -822,7 +822,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
 
-    public boolean canAttack(){
+    @Unique
+    public boolean roundabout$canAttack(){
         return this.getStandPowers().canAttack();
     }
     public int getSummonCD2(){

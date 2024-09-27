@@ -434,6 +434,9 @@ public class StandPowers {
         }
     }
 
+    public void tickMobAi(){
+
+    }
     public void tickDash(){
 
     }
