@@ -293,14 +293,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         /**Passive to neutral stuff for stand users*/
-        if (!((StandUser)this).roundabout$getStandDisc().isEmpty() && !(((Mob)(Object)this) instanceof Enemy)
-                && !(((Mob)(Object)this) instanceof NeutralMob)){
+        if (this.isAlive()) {
+            if (!((StandUser) this).roundabout$getStandDisc().isEmpty() && !(((Mob) (Object) this) instanceof Enemy)
+                    && !(((Mob) (Object) this) instanceof NeutralMob)) {
 
-            if (roundabout$canContinueToUse() && this.getTarget() != null){
-                if (!roundabout$nav){
-                    this.getNavigation().createPath(this.getTarget(), 0);
-                    roundabout$nav = true;
-                }
+                if (roundabout$canContinueToUse() && this.getTarget() != null) {
+                    if (!roundabout$nav) {
+                        this.getNavigation().createPath(this.getTarget(), 0);
+                        roundabout$nav = true;
+                    }
 
                     LivingEntity $$0 = this.getTarget();
                     if ($$0 != null) {
@@ -334,9 +335,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         this.roundabout$ticksUntilNextAttack = Math.max(this.roundabout$ticksUntilNextAttack - 1, 0);
                         this.roundabout$checkAndPerformAttack($$0, $$1);
                     }
-            } else {
-                roundabout$nav = false;
-                this.setTarget(null);
+                } else {
+                    roundabout$nav = false;
+                    this.setTarget(null);
+                }
             }
         }
         if (this instanceof Enemy || (this instanceof NeutralMob && !(((Mob)(Object) this) instanceof TamableAnimal))) {
@@ -348,7 +350,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
                 if (ticks >= 50) {
                     if (this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()) {
-                        SE.ejectPassengers();
+                        if (!SE.getPassengers().isEmpty()) {
+                            SE.ejectPassengers();
+                        }
                         if (SE.getUser() != null) {
                             //((StandUser)SE.getUser())
                             boolean candoit = true;

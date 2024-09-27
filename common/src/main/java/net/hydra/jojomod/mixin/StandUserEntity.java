@@ -1473,7 +1473,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (this.hasEffect(ModEffects.STAND_VIRUS)) {
             if (this.tickCount % 20 == 0) {
-                if (!this.level().isClientSide()){
+                if (!this.level().isClientSide() && this.isAlive()){
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_VIRUS), this.getEffect(ModEffects.STAND_VIRUS).getAmplifier()+1);
                 }
             }
