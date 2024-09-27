@@ -16,8 +16,6 @@ public interface StandUser {
     /**This is in a LivingEntity Mixin, granting every living entity stand related functions and ddta.
      * Minimize the amount of synced data to just things you really need.*/
     boolean hasStandOut();
-    void roundabout$toggleFightOrFlight(boolean flight);
-    boolean roundabout$getFightOrFlight();
     void onStandOutLookAround(StandEntity passenger);
 
     void updateStandOutPosition(StandEntity passenger);

@@ -38,21 +38,18 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     @Shadow public abstract Brain<Villager> getBrain();
 
-    public boolean roundabout$fightOrFlightInstincts = true;
     @Inject(method = "customServerAiStep", at = @At(value = "HEAD"))
     private void roundabout$customServerAiStep(CallbackInfo ci) {
         if (!((StandUser)this).roundabout$getStandDisc().isEmpty()) {
-            if (roundabout$fightOrFlightInstincts && this.getHealth() > this.getMaxHealth()*0.6){
+            if (((IMob)this).roundabout$getFightOrFlight() && this.getHealth() > this.getMaxHealth()*0.6){
                 this.refreshBrain(((ServerLevel)this.level()));
-                roundabout$fightOrFlightInstincts = false;
-                ((StandUser)this).roundabout$toggleFightOrFlight(false);
-            } else if (!roundabout$fightOrFlightInstincts && this.getHealth() < this.getMaxHealth()*0.35){
+                ((IMob)this).roundabout$toggleFightOrFlight(false);
+            } else if (!((IMob)this).roundabout$getFightOrFlight() && this.getHealth() < this.getMaxHealth()*0.35){
                 this.roundabout$refreshBrainOG(((ServerLevel)this.level()));
-                roundabout$fightOrFlightInstincts = true;
-                ((StandUser)this).roundabout$toggleFightOrFlight(true);
+                ((IMob)this).roundabout$toggleFightOrFlight(true);
             }
 
-            if (!roundabout$fightOrFlightInstincts){
+            if (!((IMob)this).roundabout$getFightOrFlight()){
             }
         }
     }

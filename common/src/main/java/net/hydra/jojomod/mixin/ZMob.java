@@ -288,6 +288,18 @@ public abstract class ZMob extends LivingEntity implements IMob {
             }
     }
 
+    @Unique
+    public boolean roundabout$fightOrFlight = false;
+    @Unique
+    public void roundabout$toggleFightOrFlight(boolean flight){
+        this.roundabout$fightOrFlight = flight;
+    }
+    @Unique
+    public boolean roundabout$getFightOrFlight(){
+        return this.roundabout$fightOrFlight;
+    }
+    @Unique
+    public int roundabout$retractTicks = 140;
 
     @SuppressWarnings("deprecation")
     @Inject(method = "serverAiStep", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/ai/navigation/PathNavigation;tick()V",
@@ -296,50 +308,69 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
         /**Passive to neutral stuff for stand users*/
         if (this.isAlive()) {
-            if (!((StandUser) this).roundabout$getStandDisc().isEmpty() && !(((Mob) (Object) this) instanceof Enemy)
-                    && !(((Mob) (Object) this) instanceof NeutralMob) && !((StandUser)this).roundabout$getFightOrFlight()) {
+            if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
 
-                if (roundabout$canContinueToUse() && this.getTarget() != null) {
-                    if (!roundabout$nav) {
-                        this.getNavigation().createPath(this.getTarget(), 0);
-                        roundabout$nav = true;
+                if (this.getTarget() != null && !this.roundabout$getFightOrFlight()){
+                    if (!((StandUser) this).getActive()){
+                        ((StandUser)this).summonStand(this.level(),true,true);
                     }
-
-                    LivingEntity $$0 = this.getTarget();
-                    if ($$0 != null) {
-                        this.getLookControl().setLookAt($$0, 30.0F, 30.0F);
-                        double $$1 = this.getPerceivedTargetDistanceSquareForMeleeAttack($$0);
-                        this.roundabout$ticksUntilNextPathRecalculation = Math.max(this.roundabout$ticksUntilNextPathRecalculation - 1, 0);
-                        if ((this.roundabout$followingTargetEvenIfNotSeen || this.getSensing().hasLineOfSight($$0))
-                                && this.roundabout$ticksUntilNextPathRecalculation <= 0
-                                && (
-                                this.roundabout$pathedTargetX == 0.0 && this.roundabout$pathedTargetY == 0.0 && this.roundabout$pathedTargetZ == 0.0
-                                        || $$0.distanceToSqr(this.roundabout$pathedTargetX, this.roundabout$pathedTargetY, this.roundabout$pathedTargetZ) >= 1.0
-                                        || this.getRandom().nextFloat() < 0.05F
-                        )) {
-                            this.roundabout$pathedTargetX = $$0.getX();
-                            this.roundabout$pathedTargetY = $$0.getY();
-                            this.roundabout$pathedTargetZ = $$0.getZ();
-                            this.roundabout$ticksUntilNextPathRecalculation = 4 + this.getRandom().nextInt(7);
-                            if ($$1 > 1024.0) {
-                                this.roundabout$ticksUntilNextPathRecalculation += 10;
-                            } else if ($$1 > 256.0) {
-                                this.roundabout$ticksUntilNextPathRecalculation += 5;
-                            }
-
-                            if (!this.getNavigation().moveTo($$0, this.roundabout$speedModifier)) {
-                                this.roundabout$ticksUntilNextPathRecalculation += 15;
-                            }
-
-                            this.roundabout$ticksUntilNextPathRecalculation = this.roundabout$adjustedTickDelay(this.roundabout$ticksUntilNextPathRecalculation);
-                        }
-
-                        this.roundabout$ticksUntilNextAttack = Math.max(this.roundabout$ticksUntilNextAttack - 1, 0);
-                        this.roundabout$checkAndPerformAttack($$0, $$1);
+                    if (roundabout$retractTicks != 140) {
+                        roundabout$retractTicks = 140;
                     }
                 } else {
-                    roundabout$nav = false;
-                    this.setTarget(null);
+                    roundabout$retractTicks = Math.max(roundabout$retractTicks-1,-1);
+                    if (roundabout$retractTicks == -1 || this.roundabout$getFightOrFlight()){
+                        if (((StandUser) this).getActive()){
+                            ((StandUser)this).summonStand(this.level(),false,false);
+                        }
+                    }
+                }
+
+                if (!(((Mob) (Object) this) instanceof Enemy)
+                        && !(((Mob) (Object) this) instanceof NeutralMob) && !this.roundabout$getFightOrFlight()) {
+
+                    if (roundabout$canContinueToUse() && this.getTarget() != null) {
+                        if (!roundabout$nav) {
+                            this.getNavigation().createPath(this.getTarget(), 0);
+                            roundabout$nav = true;
+                        }
+
+                        LivingEntity $$0 = this.getTarget();
+                        if ($$0 != null) {
+                            this.getLookControl().setLookAt($$0, 30.0F, 30.0F);
+                            double $$1 = this.getPerceivedTargetDistanceSquareForMeleeAttack($$0);
+                            this.roundabout$ticksUntilNextPathRecalculation = Math.max(this.roundabout$ticksUntilNextPathRecalculation - 1, 0);
+                            if ((this.roundabout$followingTargetEvenIfNotSeen || this.getSensing().hasLineOfSight($$0))
+                                    && this.roundabout$ticksUntilNextPathRecalculation <= 0
+                                    && (
+                                    this.roundabout$pathedTargetX == 0.0 && this.roundabout$pathedTargetY == 0.0 && this.roundabout$pathedTargetZ == 0.0
+                                            || $$0.distanceToSqr(this.roundabout$pathedTargetX, this.roundabout$pathedTargetY, this.roundabout$pathedTargetZ) >= 1.0
+                                            || this.getRandom().nextFloat() < 0.05F
+                            )) {
+                                this.roundabout$pathedTargetX = $$0.getX();
+                                this.roundabout$pathedTargetY = $$0.getY();
+                                this.roundabout$pathedTargetZ = $$0.getZ();
+                                this.roundabout$ticksUntilNextPathRecalculation = 4 + this.getRandom().nextInt(7);
+                                if ($$1 > 1024.0) {
+                                    this.roundabout$ticksUntilNextPathRecalculation += 10;
+                                } else if ($$1 > 256.0) {
+                                    this.roundabout$ticksUntilNextPathRecalculation += 5;
+                                }
+
+                                if (!this.getNavigation().moveTo($$0, this.roundabout$speedModifier)) {
+                                    this.roundabout$ticksUntilNextPathRecalculation += 15;
+                                }
+
+                                this.roundabout$ticksUntilNextPathRecalculation = this.roundabout$adjustedTickDelay(this.roundabout$ticksUntilNextPathRecalculation);
+                            }
+
+                            this.roundabout$ticksUntilNextAttack = Math.max(this.roundabout$ticksUntilNextAttack - 1, 0);
+                            this.roundabout$checkAndPerformAttack($$0, $$1);
+                        }
+                    } else {
+                        roundabout$nav = false;
+                        this.setTarget(null);
+                    }
                 }
             }
         }

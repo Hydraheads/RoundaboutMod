@@ -213,16 +213,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
     @Unique
-    public boolean roundabout$fightOrFlight = false;
-    @Unique
-    public void roundabout$toggleFightOrFlight(boolean flight){
-        roundabout$fightOrFlight = flight;
-    }
-    @Unique
-    public boolean roundabout$getFightOrFlight(boolean flight){
-        return roundabout$fightOrFlight;
-    }
-    @Unique
     public boolean roundabout$toggleFightOrFlight = false;
 
     /**Tick thru effects for bleed to not show potion swirls*/
