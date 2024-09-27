@@ -49,6 +49,7 @@
     "ZSnowGolem",
     "ZThrowableProjectile",
     "ZTripWireBlock",
+    "ZVillager",
     "ZWitch"
   ],
   "client": [

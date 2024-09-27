@@ -211,6 +211,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$gasolineIFRAMES = 0;
 
+
+    @Unique
+    public boolean roundabout$fightOrFlight = false;
+    @Unique
+    public void roundabout$toggleFightOrFlight(boolean flight){
+        roundabout$fightOrFlight = flight;
+    }
+    @Unique
+    public boolean roundabout$getFightOrFlight(boolean flight){
+        return roundabout$fightOrFlight;
+    }
+    @Unique
+    public boolean roundabout$toggleFightOrFlight = false;
+
     /**Tick thru effects for bleed to not show potion swirls*/
     @Inject(method = "tickEffects", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
@@ -1460,7 +1474,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**Stone Heart and Potion Ticksr*/
+    /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
         byte curse = this.roundabout$getLocacacaCurse();

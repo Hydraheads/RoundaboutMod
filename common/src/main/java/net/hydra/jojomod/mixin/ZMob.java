@@ -290,12 +290,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
 
     @SuppressWarnings("deprecation")
-    @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void roundabout$Tick(CallbackInfo ci) {
+    @Inject(method = "serverAiStep", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/ai/navigation/PathNavigation;tick()V",
+    shift= At.Shift.BEFORE))
+    private void roundabout$serverAiStep(CallbackInfo ci) {
+
         /**Passive to neutral stuff for stand users*/
         if (this.isAlive()) {
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty() && !(((Mob) (Object) this) instanceof Enemy)
-                    && !(((Mob) (Object) this) instanceof NeutralMob)) {
+                    && !(((Mob) (Object) this) instanceof NeutralMob) && !((StandUser)this).roundabout$getFightOrFlight()) {
 
                 if (roundabout$canContinueToUse() && this.getTarget() != null) {
                     if (!roundabout$nav) {
@@ -341,6 +343,11 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    private void roundabout$Tick(CallbackInfo ci) {
         if (this instanceof Enemy || (this instanceof NeutralMob && !(((Mob)(Object) this) instanceof TamableAnimal))) {
             if (((StandUser) this).roundabout$isRestrained()) {
                 int ticks = ((StandUser) this).roundabout$getRestrainedTicks();
