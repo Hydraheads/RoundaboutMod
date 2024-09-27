@@ -36,29 +36,42 @@ public abstract class ZPanicGoal extends Goal {
     @Final
     private static TargetingConditions roundabout$HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
 
+    @Unique
     @Final
     private static int roundabout$ALERT_RANGE_Y = 10;
+    @Unique
     private boolean roundabout$alertSameType;
+    @Unique
     private int roundabout$timestamp;
 
+    @Unique
     @Final
     private static int roundabout$EMPTY_REACH_CACHE = 0;
+    @Unique
     @Final
     private static int roundabout$CAN_REACH_CACHE = 1;
+    @Unique
     @Final
     private static int roundabout$CANT_REACH_CACHE = 2;
+    @Unique
     @Final
     protected Mob roundabout$mob;
     @Final
     protected boolean mustSee;
     @Final
     private boolean mustReach;
+    @Unique
     private int roundabout$reachCache;
+    @Unique
     private int roundabout$reachCacheTime;
+    @Unique
     private int roundabout$unseenTicks;
+    @Unique
     @Nullable
     protected LivingEntity roundabout$targetMob;
+    @Unique
     protected int roundabout$unseenMemoryTicks = 60;
+    @Unique
     @Nullable
     private Class<?>[] roundabout$toIgnoreAlert;
 

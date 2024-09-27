@@ -289,6 +289,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
 
+    @SuppressWarnings("deprecation")
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         /**Passive to neutral stuff for stand users*/
