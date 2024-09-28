@@ -63,7 +63,9 @@ public class PunchingStand extends StandPowers {
             if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
                     || attackTarget.distanceTo(this.getSelf()) <= 5){
                 this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                this.getSelf().setYRot(getLookAtEntityYaw(this.getSelf(), attackTarget));
+                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                this.getSelf().setYRot(yrot);
+                this.getSelf().setYHeadRot(yrot);
             }
 
             Entity targetEntity = getTargetEntity(this.self, -1);

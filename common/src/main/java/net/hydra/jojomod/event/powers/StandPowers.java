@@ -529,6 +529,7 @@ public class StandPowers {
             ((StandUser)winner).getStandPowers().playBarrageEndNoise(0, loser);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
             ((StandUser)winner).getStandPowers().animateStand((byte) 13);
+            ((StandUser)loser).tryPower(PowerIndex.NONE,true);
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){

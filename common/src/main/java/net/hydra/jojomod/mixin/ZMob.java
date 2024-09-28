@@ -26,6 +26,8 @@ import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 import org.spongepowered.asm.mixin.Final;
@@ -46,6 +49,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mixin(Mob.class)
@@ -301,6 +305,29 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Unique
+    public void roundabout$targetVillageEnemies(){
+        LivingEntity potentialTarget = null;
+        AABB $$0 = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+        List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
+        float mindist = -1;
+
+        for (LivingEntity $$3 : $$1) {
+            if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget().is(this)) ||
+                    ($$3 instanceof Player Pl && Pl.getLastHurtMob() !=null &&
+                            Pl.getLastHurtMob().getMobType() == this.getMobType())){
+                if (mindist == -1 || this.distanceTo($$3) < mindist){
+                    mindist = this.distanceTo($$3);
+                    potentialTarget = $$3;
+                }
+            }
+        }
+
+        if (potentialTarget != null && (!(potentialTarget instanceof Player) || !potentialTarget.isSpectator() && !((Player) potentialTarget).isCreative())){
+            this.setTarget(potentialTarget);
+        }
+    }
+
+    @Unique
     public boolean roundabout$fightOrFlight = false;
     @Unique
     public void roundabout$toggleFightOrFlight(boolean flight){
@@ -341,6 +368,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 if (!(((Mob) (Object) this) instanceof Enemy)
                         && !(((Mob) (Object) this) instanceof NeutralMob) && !this.roundabout$getFightOrFlight()) {
 
+                    if (((Mob) (Object) this) instanceof AbstractVillager){
+                        if (this.getTarget() == null){
+                            if (this.tickCount % 4 == 0){
+                                roundabout$targetVillageEnemies();
+                            }
+                        }
+                    }
+
                     if (roundabout$canContinueToUse() && this.getTarget() != null) {
                         if (!roundabout$nav) {
                             this.getNavigation().createPath(this.getTarget(), 0);
@@ -380,13 +415,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
                             this.roundabout$checkAndPerformAttack($$0, $$1);
                         }
                     } else {
-                        roundabout$nav = false;
-                        this.setTarget(null);
+                        if (roundabout$nav) {
+                            roundabout$nav = false;
+                            this.setTarget(null);
+                            roundabout$resetAtkCD();
+                        }
                     }
-                }
-
-                if (!this.roundabout$getFightOrFlight()) {
-                    ((StandUser) this).getStandPowers().tickMobAI(this.getTarget());
                 }
 
             }
@@ -396,6 +430,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @SuppressWarnings("deprecation")
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
+        if (this.isAlive()) {
+            if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
+                if (!this.roundabout$getFightOrFlight()) {
+                    ((StandUser) this).getStandPowers().tickMobAI(this.getTarget());
+                }
+            }
+        }
+
         if (this instanceof Enemy || (this instanceof NeutralMob && !(((Mob)(Object) this) instanceof TamableAnimal))) {
             if (((StandUser) this).roundabout$isRestrained()) {
                 int ticks = ((StandUser) this).roundabout$getRestrainedTicks();

@@ -34,6 +34,7 @@ import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Fox;
@@ -89,6 +90,7 @@ public class MainUtil {
        }
        return 0.05;
     }
+    public static final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(20.0);
     public static double getStandUserOdds(Mob mob) {
         if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
             return 0;
