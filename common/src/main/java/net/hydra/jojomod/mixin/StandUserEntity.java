@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
@@ -37,12 +38,14 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
@@ -1283,15 +1286,29 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     /**This code prevents you from swimming upwards while barrage clashing*/
     @Inject(method = "jumpInLiquid", at = @At(value = "HEAD"), cancellable = true)
-    protected void swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
+    protected void rooundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
         if (this.isClashing()) {
             ci.cancel();
         }
     }
 
+
+
+    /**This code makes stand user mobs resist attacks from other mobs*/
+    @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "RETURN"), cancellable = true)
+    protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> cir) {
+        if (((LivingEntity)(Object)this) instanceof Mob){
+            if (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
+                    ($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.MOB_PROJECTILE))
+                    || $$0.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
+                cir.setReturnValue($$1*0.5F);
+            }
+        }
+    }
     @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    protected void roundaboutHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
+    protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
+
         if (roundabout$gasolineIFRAMES > 0 && $$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             ci.setReturnValue(false);
             return;
@@ -1570,6 +1587,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 basis = (basis * 0.85F);
             }
         }
+        if (!((StandUser) this).roundabout$getStandDisc().isEmpty() &&
+                ((LivingEntity)(Object)this) instanceof AbstractVillager AV &&
+                AV.getTarget() != null && !(((IMob) this).roundabout$getFightOrFlight())){
+            basis *= 0.5F;
+        }
+
         if (basis != this.speed){
             cir.setReturnValue(basis);
         }

@@ -384,7 +384,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         this.setTarget(null);
                     }
                 }
-                ((StandUser)this).getStandPowers().tickMobAI(this.getTarget());
+
+                if (!this.roundabout$getFightOrFlight()) {
+                    ((StandUser) this).getStandPowers().tickMobAI(this.getTarget());
+                }
 
             }
         }

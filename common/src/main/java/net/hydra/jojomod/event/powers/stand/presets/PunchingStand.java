@@ -60,6 +60,12 @@ public class PunchingStand extends StandPowers {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive()){
+            if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
+                    || attackTarget.distanceTo(this.getSelf()) <= 5){
+                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+                this.getSelf().setYRot(getLookAtEntityYaw(this.getSelf(), attackTarget));
+            }
+
             Entity targetEntity = getTargetEntity(this.self, -1);
             if (targetEntity != null && targetEntity.is(attackTarget)) {
                 if (this.attackTimeDuring <= -1) {
