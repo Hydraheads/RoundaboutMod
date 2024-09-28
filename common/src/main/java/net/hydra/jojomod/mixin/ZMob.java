@@ -3,6 +3,9 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -143,7 +146,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
-        if ($$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
+        if ($$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))) {
+            this.roundabout$setWorthy(true);
+            int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
+            ItemStack stack = ModItems.STAND_ARROW_POOL.get(index).getDefaultInstance();
+            if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem){
+                ((StandUser)this).roundabout$setStandDisc(stack);
+            }
+        } else if ($$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
             this.roundabout$setWorthy(true);
         }
     }
@@ -314,8 +324,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     if (!((StandUser) this).getActive()){
                         ((StandUser)this).summonStand(this.level(),true,true);
                     }
-                    if (roundabout$retractTicks != 140) {
-                        roundabout$retractTicks = 140;
+                    if (roundabout$retractTicks != 100) {
+                        roundabout$retractTicks = 100;
                     }
                 } else {
                     roundabout$retractTicks = Math.max(roundabout$retractTicks-1,-1);

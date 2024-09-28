@@ -160,16 +160,17 @@ public class StandArrowEntity extends AbstractArrow {
     }
 
     private int superThrowTicks = -1;
+
     public void starThrowInit(){
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
         superThrowTicks = 50;
     }
 
-
     public StandArrowEntity(Level $$0, LivingEntity $$1, ItemStack stack) {
         super(ModEntities.STAND_ARROW, $$1, $$0);
         setArrow(stack.copy());
     }
+
     public ItemStack getArrow() {
         return this.entityData.get(STAND_ARROW);
     }

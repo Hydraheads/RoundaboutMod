@@ -43,6 +43,7 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -87,6 +88,14 @@ public class MainUtil {
            return 0;
        }
        return 0.05;
+    }
+    public static double getStandUserOdds(Mob mob) {
+        if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
+            return 0;
+        } else if (mob instanceof AbstractVillager){
+            return 0.02;
+        }
+        return 0.01;
     }
     public static Mob homeOnWorthy(Level level, Vec3 vec3, double range) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
