@@ -1038,6 +1038,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             Vec3 grabPos = stand.getStandOffsetVector(User);
             positionUpdater.accept(stand, grabPos.x, grabPos.y, grabPos.z);
 
+            if (!this.level().isClientSide() || ((LivingEntity) (Object) this) instanceof Player) {
                 stand.setYRot(User.getYHeadRot() % 360);
                 stand.setXRot(User.getXRot());
                 stand.setYBodyRot(User.getYHeadRot() % 360);
@@ -1053,6 +1054,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     stand.setYRot(rot);
                     stand.setYBodyRot(rot);
                 }
+            }
         } else {
             positionUpdater.accept(stand, stand.getX(), stand.getY(), stand.getZ());
         }

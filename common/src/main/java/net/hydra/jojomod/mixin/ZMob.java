@@ -292,11 +292,11 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public boolean roundabout$fightOrFlight = false;
     @Unique
     public void roundabout$toggleFightOrFlight(boolean flight){
-        this.roundabout$fightOrFlight = flight;
+        roundabout$fightOrFlight = flight;
     }
     @Unique
     public boolean roundabout$getFightOrFlight(){
-        return this.roundabout$fightOrFlight;
+        return roundabout$fightOrFlight;
     }
     @Unique
     public int roundabout$retractTicks = 140;
