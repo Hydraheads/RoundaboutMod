@@ -96,7 +96,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     /**Minor code, mobs in a barrage should not be attacking*/
     @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
-        if (((StandUser) this).isDazed() || ((StandUser) this).roundabout$isRestrained()) {
+        if (((StandUser) this).isDazed() ||
+                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser)this).getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
             ci.setReturnValue(false);
         } else {
             if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
@@ -382,6 +384,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         this.setTarget(null);
                     }
                 }
+                ((StandUser)this).getStandPowers().tickMobAI(this.getTarget());
+
             }
         }
     }

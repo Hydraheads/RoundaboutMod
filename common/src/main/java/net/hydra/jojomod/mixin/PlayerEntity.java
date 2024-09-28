@@ -204,14 +204,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
+        float basis = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
+            basis = ((StandUser)this).getStandPowers().inputSpeedModifiers(basis);
+        }
         byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
         if (curse > -1) {
             if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
-                cir.setReturnValue((float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.82));
+                basis = (basis * 0.82F);
             } else if (curse == LocacacaCurseIndex.CHEST) {
-                cir.setReturnValue((float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.85));
+                basis = (basis * 0.85F);
             }
         }
+        cir.setReturnValue(basis);
     }
 
     /**if your stand guard is broken, disable shields. Also, does not run takeshieldhit code if stand guarding.*/

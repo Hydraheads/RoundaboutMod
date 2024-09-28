@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net/minecraft/world/entity/monster/Blaze$BlazeAttackGoal")
-public class ZBlaze extends Goal {
+public abstract class ZBlaze extends Goal {
     /**Minor code for blazes to stop shooting in a barrage*/
     @Shadow
     private final Blaze blaze;
@@ -22,15 +22,12 @@ public class ZBlaze extends Goal {
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)blaze).isDazed()) {
+        if (((StandUser)blaze).isDazed() ||
+                (!((StandUser)blaze).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser)blaze).getStandPowers().disableMobAiAttack())) {
             super.tick();
             ci.cancel();
         }
     }
 
-    @Override
-    public boolean canUse() {
-        LivingEntity livingEntity = this.blaze.getTarget();
-        return livingEntity != null && livingEntity.isAlive() && this.blaze.canAttack(livingEntity);
-    }
 }

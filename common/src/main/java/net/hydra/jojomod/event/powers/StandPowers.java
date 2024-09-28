@@ -549,30 +549,19 @@ public class StandPowers {
 
 
     /**Stand related things that slow you down or speed you up*/
-    public int inputSpeedModifiers(int sprintTrigger){
-        if (this.getSelf().level().isClientSide) {
-            LocalPlayer local = ((LocalPlayer) this.getSelf());
+    public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());
             if (standUser.isDazed()) {
-                local.input.leftImpulse = 0;
-                local.input.forwardImpulse = 0;
-                sprintTrigger = 0;
-            } else if (!(local.getVehicle() != null && local.getControlledVehicle() == null) &&
-                    (standUser.isGuarding() && local.getVehicle() == null)) {
-                local.input.leftImpulse *= 0.3f;
-                local.input.forwardImpulse *= 0.3f;
-                sprintTrigger = 0;
+                basis = 0;
+            } else if (!(this.getSelf().getVehicle() != null && this.getSelf().getControlledVehicle() == null) &&
+                    (standUser.isGuarding() && this.getSelf().getVehicle() == null)) {
+                basis*=0.3f;
             } else if (this.isBarrageAttacking() || standUser.isClashing()) {
-                local.input.leftImpulse *= 0.2f;
-                local.input.forwardImpulse *= 0.2f;
-                sprintTrigger = 0;
+                    basis*=0.2f;
             } else if (this.isBarrageCharging()) {
-                local.input.leftImpulse *= 0.5f;
-                local.input.forwardImpulse *= 0.5f;
-                sprintTrigger = 0;
+                basis*=0.5f;
             }
-        }
-        return sprintTrigger;
+        return basis;
     }
 
     public void updateClashing(){
@@ -649,7 +638,7 @@ public class StandPowers {
         }
     }
     public void updateBarrage(){
-        if (this.attackTimeDuring == -2) {
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
             ((StandUser) this.self).tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getBarrageLength()) {
@@ -878,7 +867,9 @@ public class StandPowers {
         return power;
     }
     public boolean getReducedDamage(Entity entity){
-        return entity instanceof Player;
+        return (entity instanceof Player ||
+                (entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty())
+        );
     }
 
     /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
@@ -1581,7 +1572,13 @@ public class StandPowers {
     public boolean isClashing(){
         return this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1;
     }
+    public boolean disableMobAiAttack(){
+        return ((this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1) || this.isBarraging());
+    }
 
+    /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
+    public void tickMobAI(LivingEntity attackTarget){
+    }
     public int getBarrageWindup(){
         return 29;
     }

@@ -226,31 +226,20 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
 
     /**Stand related things that slow you down or speed you up*/
-    public int inputSpeedModifiers(int sprintTrigger){
-        if (this.getSelf().level().isClientSide) {
-            LocalPlayer local = ((LocalPlayer) this.getSelf());
+    public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());
             if (standUser.roundabout$getTSJump()) {
-                if (local.isCrouching()) {
-                    local.input.leftImpulse *= 1.0f;
-                    local.input.forwardImpulse *= 1.1f;
-                    sprintTrigger = 0;
+                if (this.getSelf().isCrouching()) {
+                    basis *= 1.1f;
                 } else {
-                    local.input.leftImpulse *= 0.85f;
-                    local.input.forwardImpulse *= 0.85f;
-                    sprintTrigger = 0;
+                    basis *= 0.85f;
                 }
             } else if (this.getActivePower() == PowerIndex.SPECIAL) {
-                local.input.leftImpulse *= 0.48f;
-                local.input.forwardImpulse *= 0.48f;
-                sprintTrigger = 0;
+                basis *= 0.48f;
             } else if (impactSlowdown > -1) {
-                local.input.leftImpulse = 0f;
-                local.input.forwardImpulse = 0;
-                sprintTrigger = 0;
+                basis = 0f;
             }
-        }
-        return super.inputSpeedModifiers(sprintTrigger);
+        return super.inputSpeedModifiers(basis);
     }
 
 

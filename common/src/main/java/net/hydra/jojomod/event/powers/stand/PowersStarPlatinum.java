@@ -84,16 +84,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
                 || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity()) && slot != 1));
     }
-    public int inputSpeedModifiers(int sprintTrigger){
-        if (this.getSelf().level().isClientSide) {
-            LocalPlayer local = ((LocalPlayer) this.getSelf());
+    public float inputSpeedModifiers(float basis){
             if (this.scopeLevel > -1){
-                local.input.leftImpulse *= 0.85f;
-                local.input.forwardImpulse *= 0.85f;
-                sprintTrigger = 0;
+                basis *= 0.85f;
             }
-        }
-        return super.inputSpeedModifiers(sprintTrigger);
+        return super.inputSpeedModifiers(basis);
     }
 
     /**Assault Ability*/

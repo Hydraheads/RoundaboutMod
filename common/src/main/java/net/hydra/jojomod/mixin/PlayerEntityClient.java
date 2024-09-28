@@ -59,7 +59,7 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/Tutorial;onInput(Lnet/minecraft/client/player/Input;)V", shift = At.Shift.AFTER))
     private void RoundaboutTickMovement(CallbackInfo ci) {
         /*Time Stop Levitation*/
-        this.sprintTriggerTime = ((StandUser)this).getStandPowers().inputSpeedModifiers(this.sprintTriggerTime);
+        //this.sprintTriggerTime = ((StandUser)this).getStandPowers().inputSpeedModifiers(this.sprintTriggerTime);
         RoundaboutClashJump();
     }
     private void RoundaboutClashJump(){

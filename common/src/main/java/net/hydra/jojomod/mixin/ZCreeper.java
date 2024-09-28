@@ -46,7 +46,9 @@ public class ZCreeper extends Monster {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)this).isDazed()) {
+        if (((StandUser)this).isDazed() ||
+                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser)this).getStandPowers().disableMobAiAttack())) {
             if (((Creeper)(Object)this).isAlive()) {
                 oldSwell = swell;
             }

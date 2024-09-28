@@ -544,23 +544,18 @@ public class BlockGrabPreset extends PunchingStand{
         }
         return super.canInterruptPower();
     }
-    public int inputSpeedModifiers(int sprintTrigger){
-        if (this.getSelf().level().isClientSide) {
-            LocalPlayer local = ((LocalPlayer) this.getSelf());
+    public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());
 
             StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
             if (standEntity != null) {
                 if (!standEntity.getHeldItem().isEmpty()) {
-                    local.input.leftImpulse *= 0.7f;
-                    local.input.forwardImpulse *= 0.7f;
+                    basis *= 0.7f;
                 } else if (standEntity.getFirstPassenger() != null){
-                    local.input.leftImpulse *= 0.85f;
-                    local.input.forwardImpulse *= 0.85f;
+                    basis *= 0.85f;
                 }
             }
-        }
-        return super.inputSpeedModifiers(sprintTrigger);
+        return super.inputSpeedModifiers(basis);
     }
 
 

@@ -23,7 +23,9 @@ public class ZCreeperIgnite extends Goal {
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)this.creeper).isDazed()) {
+        if (((StandUser)this.creeper).isDazed() ||
+                (!((StandUser)this.creeper).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser)this.creeper).getStandPowers().disableMobAiAttack())){
            this.creeper.setSwellDir(-1);
            ci.cancel();
         }

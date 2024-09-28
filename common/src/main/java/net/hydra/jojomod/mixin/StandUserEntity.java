@@ -1159,7 +1159,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if ($$0.getDirectEntity() != null) {
             if (this.isBarraging()) {
-                this.tryPower(PowerIndex.GUARD, true);
+                if (((LivingEntity)(Object)this) instanceof Player){
+                    this.tryPower(PowerIndex.GUARD, true);
+                } else {
+                    this.tryPower(PowerIndex.NONE, true);
+                }
             } else if (this.getStandPowers().canInterruptPower()) {
                 this.tryPower(PowerIndex.NONE, true);
             }
@@ -1550,13 +1554,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
+        float basis = this.speed;
+        if (!roundabout$getStandDisc().isEmpty()){
+            if (isClashing()) {
+                cir.setReturnValue((float) 0);
+                return;
+            }
+            basis = getStandPowers().inputSpeedModifiers(basis);
+        }
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1) {
             if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
-                cir.setReturnValue((float) (this.speed * 0.82));
+                basis = (basis * 0.82F);
             } else if (curse == LocacacaCurseIndex.CHEST) {
-                cir.setReturnValue((float) (this.speed * 0.85));
+                basis = (basis * 0.85F);
             }
+        }
+        if (basis != this.speed){
+            cir.setReturnValue(basis);
         }
     }
 

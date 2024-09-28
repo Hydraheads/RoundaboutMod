@@ -52,6 +52,30 @@ public class PunchingStand extends StandPowers {
         return null;
     }
 
+    public boolean wentForCharge = false;
+
+
+    /**Punching stands only go for barrages when facing players, because barrages will be interrupted 100% of the time
+     * otherwise.*/
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive()){
+            Entity targetEntity = getTargetEntity(this.self, -1);
+            if (targetEntity != null && targetEntity.is(attackTarget)) {
+                if (this.attackTimeDuring <= -1) {
+                    double RNG = Math.random();
+                    if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
+                        wentForCharge = true;
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                    } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                        wentForCharge = false;
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.ATTACK, true);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public boolean setPowerAttack(){
         if (this.attackTimeDuring <= -1) {

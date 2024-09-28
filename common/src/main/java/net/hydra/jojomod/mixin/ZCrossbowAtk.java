@@ -22,7 +22,9 @@ public class ZCrossbowAtk<T extends Monster & CrossbowAttackMob> {
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)this.mob).isDazed()) {
+        if (((StandUser)this.mob).isDazed() ||
+                (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser)this.mob).getStandPowers().disableMobAiAttack())){
             ci.cancel();
         }
     }
