@@ -778,7 +778,19 @@ public class MainUtil {
                 target.zOld = vec.z;
                 ((ILivingEntityAccess) LE).setLerp(vec);
                 LE.setPos(vec.x, vec.y, vec.z);
-                ((ILivingEntityAccess) target).setLerpSteps(0);
+
+                StandEntity SE = ((StandUser)target).getStand();
+                if (SE != null){
+                    ((ILivingEntityAccess) SE).setLerpSteps(0);
+                    SE.xo = vec.x;
+                    SE.yo = vec.y;
+                    SE.zo = vec.z;
+                    SE.xOld = vec.x;
+                    SE.yOld = vec.y;
+                    SE.zOld = vec.z;
+                    ((ILivingEntityAccess) SE).setLerp(vec);
+                    SE.setPos(vec.x, vec.y, vec.z);
+                }
             }
         }
     }

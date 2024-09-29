@@ -26,6 +26,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -273,9 +274,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
 
             if ($$11) {
-                this.getSelf().teleportTo($$0, $$7, $$2);
-                if ($$10.noCollision(this.getSelf()) && !$$10.containsAnyLiquid(this.getSelf().getBoundingBox())) {
+                AABB bb2 = this.getSelf().getDimensions(this.getSelf().getPose()).makeBoundingBox($$0,$$7,$$2);
+                if ($$10.noCollision(null,bb2) && !$$10.containsAnyLiquid(bb2)) {
                     $$8 = true;
+                    packetNearby(new Vector3f((float) $$0, (float) $$7, (float) $$2));
+                    this.getSelf().teleportTo($$0, $$7, $$2);
                     packetNearby(new Vector3f((float) $$0, (float) $$7, (float) $$2));
                 }
             }
