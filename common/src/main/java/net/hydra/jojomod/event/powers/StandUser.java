@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -107,6 +108,8 @@ public interface StandUser {
     void roundabout$setTSJump(boolean roundaboutTSJump);
 
     boolean roundabout$getTSJump();
+    void roundabout$setBlip(Vector3f vec);
+    void roundabout$tryBlip();
 
     @Nullable
     StandEntity getStand();

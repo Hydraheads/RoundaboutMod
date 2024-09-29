@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -75,19 +76,27 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
-    @Shadow public abstract boolean hurt(DamageSource $$0, float $$1);
+    @Shadow
+    public abstract boolean hurt(DamageSource $$0, float $$1);
 
-    @Shadow public abstract void indicateDamage(double $$0, double $$1);
+    @Shadow
+    public abstract void indicateDamage(double $$0, double $$1);
 
-    @Shadow public abstract void heal(float $$0);
+    @Shadow
+    public abstract void heal(float $$0);
 
-    @Shadow public abstract boolean isAlive();
+    @Shadow
+    public abstract boolean isAlive();
 
-    @Shadow @javax.annotation.Nullable public abstract MobEffectInstance getEffect(MobEffect $$0);
+    @Shadow
+    @javax.annotation.Nullable
+    public abstract MobEffectInstance getEffect(MobEffect $$0);
 
-    @Shadow protected boolean jumping;
+    @Shadow
+    protected boolean jumping;
 
-    @Shadow private float speed;
+    @Shadow
+    private float speed;
     @Unique
     private int roundabout$leapTicks = -1;
     @Unique
@@ -97,12 +106,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         super($$0, $$1);
     }
 
-    @Shadow protected abstract int increaseAirSupply(int $$0);
+    @Shadow
+    protected abstract int increaseAirSupply(int $$0);
+
     @Shadow
     @Final
     private Map<MobEffect, MobEffectInstance> activeEffects;
 
-    /**If you are stand guarding, this controls you blocking enemy atttacks.
+    /**
+     * If you are stand guarding, this controls you blocking enemy atttacks.
      * For the damage against stand guard, and sfx, see PlayerEntity mixin
      * damageShield
      */
@@ -112,7 +124,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
-    private final LivingEntity User = ((LivingEntity)(Object) this);
+    private final LivingEntity User = ((LivingEntity) (Object) this);
     @Nullable
     @Unique
     private StandEntity Stand;
@@ -124,7 +136,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private ImmutableList<StandEntity> roundabout$followers = ImmutableList.of();
 
-    /** StandID is used clientside only*/
+    /**
+     * StandID is used clientside only
+     */
 
     @Unique
     private static final EntityDataAccessor<Integer> STAND_ID = SynchedEntityData.defineId(LivingEntity.class,
@@ -154,7 +168,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private ItemStack roundabout$RejectionStandDisc = null;
 
-    /** Guard variables for stand blocking**/
+    /**
+     * Guard variables for stand blocking
+     **/
     @Unique
     public final float maxGuardPoints = 15F;
     @Unique
@@ -164,6 +180,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int GuardCooldown = 0;
 
+    @Unique
+    public boolean roundabout$blip = false;
+
+    @Unique
+    public Vector3f roundabout$blipVector;
 
     @Unique
     private int roundabout$gasTicks = -1;
@@ -172,33 +193,47 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$maxGasTicks = 200;
     private int roundabout$maxBucketGasTicks = 600;
 
-    /**Idle time is how long you are standing still without using skills, eating, or */
+    /**
+     * Idle time is how long you are standing still without using skills, eating, or
+     */
     @Unique
     private int roundaboutIdleTime = -1;
 
     @Unique
     @Override
-    public int getRoundaboutIdleTime(){
+    public int getRoundaboutIdleTime() {
         return this.roundaboutIdleTime;
     }
+
     @Unique
     @Override
-    public void setRoundaboutIdleTime(int roundaboutIdleTime){
+    public void setRoundaboutIdleTime(int roundaboutIdleTime) {
         this.roundaboutIdleTime = roundaboutIdleTime;
     }
+
     @Unique
     @Override
-    public void roundabout$setThrower(LivingEntity thrower){
+    public void roundabout$setThrower(LivingEntity thrower) {
         this.roundabout$thrower = thrower;
     }
+
     @Unique
     @Override
-    public LivingEntity roundabout$getThrower(){
+    public void roundabout$setBlip(Vector3f vec) {
+        this.roundabout$blip = true;
+        this.roundabout$blipVector = vec;
+    }
+
+    @Unique
+    @Override
+    public LivingEntity roundabout$getThrower() {
         return this.roundabout$thrower;
     }
 
 
-    /** These variables control if someone is dazed, stunned, frozen, or controlled.**/
+    /**
+     * These variables control if someone is dazed, stunned, frozen, or controlled.
+     **/
 
     /* dazeTime: how many ticks left of daze. Inflicted by stand barrage,
      * daze lets you scroll items and look around, but it takes away
@@ -219,48 +254,50 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public boolean roundabout$toggleFightOrFlight = false;
 
-    /**Tick thru effects for bleed to not show potion swirls*/
+    /**
+     * Tick thru effects for bleed to not show potion swirls
+     */
     @Inject(method = "tickEffects", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
-    shift= At.Shift.AFTER,ordinal = 0),  cancellable = true)
+            shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
     public void roundabout$tickEffects(CallbackInfo ci) {
-        if (!this.level().isClientSide){
+        if (!this.level().isClientSide) {
             int bleedlvl = -1;
-            if (this.hasEffect(ModEffects.BLEED) && this.getEffect(ModEffects.BLEED).isVisible()){
+            if (this.hasEffect(ModEffects.BLEED) && this.getEffect(ModEffects.BLEED).isVisible()) {
                 bleedlvl = this.getEffect(ModEffects.BLEED).getAmplifier();
             }
-            if (this.roundabout$getBleedLevel() != bleedlvl){
+            if (this.roundabout$getBleedLevel() != bleedlvl) {
                 this.roundabout$setBleedLevel(bleedlvl);
             }
 
             boolean onlyBleeding = true;
-            if (this.activeEffects.size() > 1){
+            if (this.activeEffects.size() > 1) {
                 Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
                 while ($$0.hasNext()) {
                     MobEffect $$1 = $$0.next();
                     MobEffectInstance $$2 = this.activeEffects.get($$1);
-                    if ($$2.isVisible() && !$$2.getEffect().equals(ModEffects.BLEED)){
+                    if ($$2.isVisible() && !$$2.getEffect().equals(ModEffects.BLEED)) {
                         onlyBleeding = false;
                     }
                 }
             }
-            if (this.roundabout$getOnlyBleeding() != onlyBleeding){
+            if (this.roundabout$getOnlyBleeding() != onlyBleeding) {
                 this.roundabout$setOnlyBleeding(onlyBleeding);
             }
         }
-        if (this.roundabout$getBleedLevel() > -1){
+        if (this.roundabout$getBleedLevel() > -1) {
             int bleedlvl = this.roundabout$getBleedLevel();
             int bloodticks = 8;
-            if (bleedlvl == 1){
+            if (bleedlvl == 1) {
                 bloodticks = 6;
-            } else if (bleedlvl > 1){
+            } else if (bleedlvl > 1) {
                 bloodticks = 4;
             }
             if (this.tickCount % bloodticks == 0 && this.isAlive()) {
                 SimpleParticleType bloodType = ModParticles.BLOOD;
-                if (MainUtil.hasEnderBlood(this)){
+                if (MainUtil.hasEnderBlood(this)) {
                     bloodType = ModParticles.ENDER_BLOOD;
-                } else if (MainUtil.hasBlueBlood(this)){
+                } else if (MainUtil.hasBlueBlood(this)) {
                     bloodType = ModParticles.BLUE_BLOOD;
                 }
                 this.level()
@@ -274,9 +311,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 0
                         );
             }
-            if (this.roundabout$getOnlyBleeding()){
+            if (this.roundabout$getOnlyBleeding()) {
                 ci.cancel();
             }
+        }
+    }
+
+    @Unique
+    @Override
+    public void roundabout$tryBlip() {
+        if (roundabout$blip && roundabout$blipVector !=null){
+            ((ILivingEntityAccess) this).setLerpSteps(0);
+            this.xo = roundabout$blipVector.x;
+            this.yo = roundabout$blipVector.y;
+            this.zo = roundabout$blipVector.z;
+            this.xOld = roundabout$blipVector.x;
+            this.yOld = roundabout$blipVector.y;
+            this.zOld = roundabout$blipVector.z;
+            ((ILivingEntityAccess) this).setLerp(roundabout$blipVector);
+            this.setPos(roundabout$blipVector.x, roundabout$blipVector.y, roundabout$blipVector.z);
+            this.roundabout$blip = false;
         }
     }
 

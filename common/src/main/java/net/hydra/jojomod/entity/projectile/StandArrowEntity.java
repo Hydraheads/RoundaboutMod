@@ -104,7 +104,6 @@ public class StandArrowEntity extends AbstractArrow {
             StandArrowItem.grantMobStand(this.getArrow(),this.level(),mob);
             if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
                 this.getArrow().hurt(1,this.level().getRandom(),null);
-                addItem($$1,this.getArrow().copy());
             }
             this.discard();
         }
@@ -140,7 +139,6 @@ public class StandArrowEntity extends AbstractArrow {
             if (this.getPierceLevel() <= 0) {
                 if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
                     this.getArrow().hurt(1,this.level().getRandom(),null);
-                    addItem($$1,this.getArrow().copy());
                 }
                 this.discard();
             }
@@ -150,15 +148,19 @@ public class StandArrowEntity extends AbstractArrow {
             this.setYRot(this.getYRot() + 180.0F);
             this.yRotO += 180.0F;
             if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7) {
-                if (this.pickup == AbstractArrow.Pickup.ALLOWED) {
-                    this.spawnAtLocation(this.getPickupItem(), 0.1F);
-                }
 
                 this.discard();
             }
         }
     }
 
+    @Override
+    public void remove(Entity.RemovalReason $$0) {
+        if (this.pickup == AbstractArrow.Pickup.ALLOWED) {
+            this.spawnAtLocation(this.getPickupItem().copy(), 0.1F);
+        }
+        this.setRemoved($$0);
+    }
     private int superThrowTicks = -1;
 
     public void starThrowInit(){

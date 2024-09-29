@@ -33,7 +33,7 @@ public class GenericS2CPacket {
             byte activePower = buf.readByte();
             int data = buf.readInt();
             Vector3f location = buf.readVector3f();
-            MainUtil.handleBlipPacketS2C(client.player,data,activePower,location);
+            MainUtil.handleBlipPacketS2C(client.player, data, activePower, location);
         }
     }
 }

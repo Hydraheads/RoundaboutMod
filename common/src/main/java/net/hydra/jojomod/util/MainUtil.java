@@ -769,27 +769,11 @@ public class MainUtil {
             /*This code makes the world using mobs appear to teleport by skipping interpolation*/
             Entity target = player.level().getEntity(data);
             if (target instanceof LivingEntity LE){
-                ((ILivingEntityAccess) target).setLerpSteps(0);
-                target.xo = vec.x;
-                target.yo = vec.y;
-                target.zo = vec.z;
-                target.xOld = vec.x;
-                target.yOld = vec.y;
-                target.zOld = vec.z;
-                ((ILivingEntityAccess) LE).setLerp(vec);
-                LE.setPos(vec.x, vec.y, vec.z);
+                ((StandUser)target).roundabout$setBlip(vec);
 
                 StandEntity SE = ((StandUser)target).getStand();
                 if (SE != null){
-                    ((ILivingEntityAccess) SE).setLerpSteps(0);
-                    SE.xo = vec.x;
-                    SE.yo = vec.y;
-                    SE.zo = vec.z;
-                    SE.xOld = vec.x;
-                    SE.yOld = vec.y;
-                    SE.zOld = vec.z;
-                    ((ILivingEntityAccess) SE).setLerp(vec);
-                    SE.setPos(vec.x, vec.y, vec.z);
+                    ((StandUser)SE).roundabout$setBlip(vec);
                 }
             }
         }

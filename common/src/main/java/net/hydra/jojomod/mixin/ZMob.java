@@ -16,6 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
@@ -75,7 +76,37 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public void roundabout$setWorthy(boolean $$0) {
         this.getEntityData().set(ROUNDABOUT$IS_WORTHY, $$0);
     }
+    @Override
+    @Unique
+    public boolean roundabout$getIsNaturalStandUser() {
+        return roundabout$isNaturalStandUser;
+    }
+    @Override
+    @Unique
+    public void roundabout$setIsNaturalStandUser(boolean set) {
+        roundabout$isNaturalStandUser = set;
+    }
+    @Unique
+    public boolean roundabout$isNaturalStandUser = false;
 
+    @Inject(method = "dropCustomDeathLoot", at = @At(value = "HEAD"))
+    private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
+        if (roundabout$isNaturalStandUser){
+            if ($$0.getEntity() != null) {
+                this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                if (this.random.nextDouble() < 0.5) {
+                    this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                }
+                if ($$1 > 0){
+                    for (int i = 0; i < $$1; i++){
+                        if (this.random.nextDouble() < 0.5) {
+                            this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
@@ -86,12 +117,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("roundabout.isWorthy", this.roundabout$isWorthy());
+        $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isWorthy());
         return $$0;
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         this.roundabout$setWorthy($$0.getBoolean("roundabout.isWorthy"));
+        this.roundabout$setIsNaturalStandUser($$0.getBoolean("roundabout.isNaturalStandUser"));
     }
 
     @Shadow
@@ -156,6 +189,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         RandomSource $$5 = $$0.getRandom();
         if ($$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))) {
             this.roundabout$setWorthy(true);
+            this.roundabout$setIsNaturalStandUser(true);
             int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
             ItemStack stack = ModItems.STAND_ARROW_POOL.get(index).getDefaultInstance();
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem){

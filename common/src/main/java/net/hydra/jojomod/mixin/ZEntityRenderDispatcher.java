@@ -5,10 +5,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.stand.SethanRenderer;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -36,6 +38,12 @@ public class ZEntityRenderDispatcher {
     @Final
     private static RenderType SHADOW_RENDER_TYPE;
 
+    @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
+    protected <E extends Entity>  void roundabout$render(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
+        if ($$0 instanceof LivingEntity){
+            ((StandUser)$$0).roundabout$tryBlip();
+        }
+    }
     @Shadow
     private static void renderBlockShadow(
             PoseStack.Pose $$0, VertexConsumer $$1, ChunkAccess $$2, LevelReader $$3, BlockPos $$4, double $$5, double $$6, double $$7, float $$8, float $$9
