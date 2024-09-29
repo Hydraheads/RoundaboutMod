@@ -6,6 +6,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
+import org.joml.Vector3f;
 
 public class GenericS2CPacket {
 
@@ -23,6 +24,16 @@ public class GenericS2CPacket {
             byte activePower = buf.readByte();
             int data = buf.readInt();
             MainUtil.handleIntPacketS2C(client.player,data,activePower);
+        }
+    }
+
+    public static void blip(Minecraft client, ClientPacketListener handler,
+                               FriendlyByteBuf buf, PacketSender responseSender) {
+        if (client.player != null) {
+            byte activePower = buf.readByte();
+            int data = buf.readInt();
+            Vector3f location = buf.readVector3f();
+            MainUtil.handleBlipPacketS2C(client.player,data,activePower,location);
         }
     }
 }

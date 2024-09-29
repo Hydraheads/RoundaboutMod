@@ -1,66 +1,32 @@
 package net.hydra.jojomod.event.powers.stand;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.Terrier.TerrierEntity;
-import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
-import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.*;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.warden.Warden;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.*;
-import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.GameType;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Shadow;
+import org.joml.Vector3f;
 
 public class PowersTheWorld extends TWAndSPSharedPowers {
 
@@ -110,6 +76,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
         }
     }
+
 
 
 
@@ -176,6 +143,168 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
     }
 
+    public int teleportTime = 0;
+    public int postTPStall = 0;
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive()){
+            if (this.attackTimeDuring <= -1) {
+                if (!this.getSelf().isPassenger()) {
+                    teleportTime = Math.max(0,teleportTime-1);
+                    if (teleportTime == 0) {
+                        double dist = attackTarget.distanceTo(this.getSelf());
+                        if (dist <= 8) {
+                            Vec3 pos = this.getSelf().position().add(0,this.getSelf().getEyeHeight(),0);
+                            float p = 0;
+                            float y = 0;
+                            if (this.getSelf() instanceof Villager){
+                                p =getLookAtEntityPitch(this.getSelf(), attackTarget);
+                                y = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                            }
+                            if (this.teleport()){
+                                if (this.getSelf() instanceof Villager){
+                                    for (int i = 0; i< 4; i++) {
+                                        KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), ModItems.KNIFE.getDefaultInstance(),pos);
+                                        $$7.pickup = AbstractArrow.Pickup.DISALLOWED;
+                                        $$7.shootFromRotationWithVariance(this.getSelf(),
+                                                p,
+                                                y,
+                                                -0.5F, 1.5F, 1.0F);
+                                        this.getSelf().level().addFreshEntity($$7);
+                                    }
+                                }
+                                teleportTime = 200;
+                                postTPStall = 8;
+                            }
+                        } else if (dist < 40) {
+                            if (this.teleportTowards(attackTarget)) {
+                                this.teleportTime = 200;
+                                postTPStall = 8;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        postTPStall = Math.max(0,postTPStall-1);
+        if (postTPStall == 0) {
+            super.tickMobAI(attackTarget);
+        }
+    }
+
+
+    protected boolean teleport() {
+        if (!this.getSelf().level().isClientSide() && this.getSelf().isAlive()) {
+            double $$0 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
+            double $$1 = this.getSelf().getY() + (double)(this.getSelf().getRandom().nextInt(16) - 8);
+            double $$2 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
+            return this.teleport($$0, $$1, $$2);
+        } else {
+            return false;
+        }
+    }
+
+    boolean teleportTowards(Entity $$0) {
+        Vec3 $$1 = new Vec3(this.getSelf().getX() - $$0.getX(), this.getSelf().getY(0.5) - $$0.getEyeY(), this.getSelf().getZ() - $$0.getZ());
+        $$1 = $$1.normalize();
+        double $$2 = 16.0;
+        double $$3 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 8.0 - $$1.x * 16.0;
+        double $$4 = this.getSelf().getY() + (double)(this.getSelf().getRandom().nextInt(16) - 8) - $$1.y * 16.0;
+        double $$5 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 8.0 - $$1.z * 16.0;
+        return this.teleport($$3, $$4, $$5);
+    }
+
+    private boolean teleport(double $$0, double $$1, double $$2) {
+        BlockPos.MutableBlockPos $$3 = new BlockPos.MutableBlockPos($$0, $$1, $$2);
+
+        while ($$3.getY() > this.getSelf().level().getMinBuildHeight() && !this.getSelf().level().getBlockState($$3).blocksMotion()) {
+            $$3.move(Direction.DOWN);
+        }
+
+        BlockState $$4 = this.getSelf().level().getBlockState($$3);
+        boolean $$5 = $$4.blocksMotion();
+        boolean $$6 = $$4.getFluidState().is(FluidTags.WATER);
+        if ($$5 && !$$6) {
+            Vec3 $$7 = this.getSelf().position();
+            boolean $$8 = randomTeleport($$0, $$1, $$2, true);
+            if ($$8) {
+                if (!this.getSelf().isSilent()) {
+                    this.getSelf().level().playSound(null, this.getSelf().xo, this.getSelf().yo,
+                            this.getSelf().zo, ModSounds.TIME_SNAP_EVENT, this.getSelf().getSoundSource(), 2.0F, 1.0F);
+                    this.getSelf().playSound(ModSounds.TIME_SNAP_EVENT, 2.0F, 1.0F);
+                }
+            }
+
+            return $$8;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean randomTeleport(double $$0, double $$1, double $$2, boolean $$3) {
+        double $$4 = this.getSelf().getX();
+        double $$5 = this.getSelf().getY();
+        double $$6 = this.getSelf().getZ();
+        double $$7 = $$1;
+        boolean $$8 = false;
+        BlockPos $$9 = BlockPos.containing($$0, $$1, $$2);
+        Level $$10 = this.getSelf().level();
+        if ($$10.hasChunkAt($$9)) {
+            boolean $$11 = false;
+
+            while (!$$11 && $$9.getY() > $$10.getMinBuildHeight()) {
+                BlockPos $$12 = $$9.below();
+                BlockState $$13 = $$10.getBlockState($$12);
+                if ($$13.blocksMotion()) {
+                    $$11 = true;
+                } else {
+                    $$7--;
+                    $$9 = $$12;
+                }
+            }
+
+            if ($$11) {
+                this.getSelf().teleportTo($$0, $$7, $$2);
+                if ($$10.noCollision(this.getSelf()) && !$$10.containsAnyLiquid(this.getSelf().getBoundingBox())) {
+                    $$8 = true;
+                    packetNearby(new Vector3f((float) $$0, (float) $$7, (float) $$2));
+                }
+            }
+        }
+        if (!$$8) {
+            this.getSelf().teleportTo($$4, $$5, $$6);
+            return false;
+        } else {
+
+            if (this.getSelf() instanceof PathfinderMob) {
+                ((PathfinderMob)this.getSelf()).getNavigation().stop();
+            }
+
+            return true;
+        }
+    }
+
+
+    public final void packetNearby(Vector3f blip) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    ModPacketHandler.PACKET_ACCESS.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
+                }
+            }
+        }
+    }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {

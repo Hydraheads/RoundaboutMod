@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 public class FabricPackets implements IPacketAccess {
     @Override
@@ -134,6 +135,17 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeByte(activePower);
         buffer.writeInt(data);
         ServerPlayNetworking.send(sp, ModMessages.SEND_INT_DATA_PACKET, buffer);
+    }
+
+
+    @Override
+    public void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f vec) {
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeByte(activePower);
+        buffer.writeInt(data);
+        buffer.writeVector3f(vec);
+        ServerPlayNetworking.send(sp, ModMessages.BLIP_PACKET, buffer);
     }
 
     @Override

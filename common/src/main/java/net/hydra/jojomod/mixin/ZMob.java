@@ -26,9 +26,11 @@ import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -312,9 +314,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         float mindist = -1;
 
         for (LivingEntity $$3 : $$1) {
-            if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget().is(this)) ||
-                    ($$3 instanceof Player Pl && Pl.getLastHurtMob() !=null &&
-                            Pl.getLastHurtMob().getMobType() == this.getMobType())){
+            if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget().getMobType() == this.getMobType())){
                 if (mindist == -1 || this.distanceTo($$3) < mindist){
                     mindist = this.distanceTo($$3);
                     potentialTarget = $$3;
@@ -430,7 +430,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @SuppressWarnings("deprecation")
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
-        if (this.isAlive()) {
+        if (this.isAlive() && !this.level().isClientSide()) {
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
                 if (!this.roundabout$getFightOrFlight()) {
                     ((StandUser) this).getStandPowers().tickMobAI(this.getTarget());

@@ -106,6 +106,7 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         $$0.addActivity(Activity.REST, VillagerGoalPackages.getRestPackage($$1, 0.5F));
         $$0.addActivity(Activity.IDLE, VillagerGoalPackages.getIdlePackage($$1, 0.5F));
         $$0.addActivity(Activity.PRE_RAID, VillagerGoalPackages.getPreRaidPackage($$1, 0.5F));
+        $$0.addActivity(Activity.RAID, VillagerGoalPackages.getRaidPackage($$1, 0.5F));
         $$0.setCoreActivities(ImmutableSet.of(Activity.CORE));
         $$0.setDefaultActivity(Activity.IDLE);
         $$0.setActiveActivityIfPossible(Activity.IDLE);

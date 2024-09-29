@@ -179,6 +179,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeSimpleBytePacket::toBytes)
                 .consumerMainThread(ForgeSimpleBytePacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeBlipPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeBlipPacket::new)
+                .encoder(ForgeBlipPacket::toBytes)
+                .consumerMainThread(ForgeBlipPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message){

@@ -2,7 +2,9 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
@@ -61,6 +63,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -757,6 +760,23 @@ public class MainUtil {
     public static void handleIntPacketS2C(LocalPlayer player, int data, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(data);
+        }
+    }
+
+    /**A generalized packet for sending ints to the client. Context is what to do with the data int*/
+    public static void handleBlipPacketS2C(LocalPlayer player, int data, byte context, Vector3f vec){
+        if (context == 2) {
+            /*This code makes the world using mobs appear to teleport by skipping interpolation*/
+            Entity target = player.level().getEntity(data);
+            if (target instanceof LivingEntity LE){
+                ((ILivingEntityAccess) target).setLerpSteps(0);
+                target.xo = vec.x;
+                target.yo = vec.y;
+                target.zo = vec.z;
+                ((ILivingEntityAccess) LE).setLerp(vec);
+                LE.setPos(vec.x, vec.y, vec.z);
+                ((ILivingEntityAccess) target).setLerpSteps(0);
+            }
         }
     }
 

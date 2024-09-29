@@ -5,6 +5,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 public interface IPacketAccess {
     /**Forge and Fabric both use this interface to use their own packet handling code.
@@ -27,6 +28,7 @@ public interface IPacketAccess {
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
+    void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f blip);
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);
     void sendSimpleByte(ServerPlayer sp, byte context);
 

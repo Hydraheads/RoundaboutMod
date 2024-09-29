@@ -1,9 +1,12 @@
 package net.hydra.jojomod.access;
 
+import org.joml.Vector3f;
+
 public interface ILivingEntityAccess {
     public double getLerpX();
     public double getLerpY();
     public double getLerpZ();
+    public void setLerp(Vector3f lerp);
     public double getLerpXRot();
     public double getLerpYRot();
 

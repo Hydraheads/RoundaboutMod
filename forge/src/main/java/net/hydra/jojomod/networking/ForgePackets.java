@@ -8,6 +8,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 public class ForgePackets implements IPacketAccess {
     @Override
@@ -71,6 +72,10 @@ public class ForgePackets implements IPacketAccess {
     @Override
     public void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data) {
         ForgePacketHandler.sendToClient(new ForgePowerIntPacket(activePower,data), sp);
+    }
+    @Override
+    public void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f blip){
+        ForgePacketHandler.sendToClient(new ForgeBlipPacket(activePower,data, blip), sp);
     }
     @Override
     public void sendIntPacket(ServerPlayer sp, byte activePower, int data) {

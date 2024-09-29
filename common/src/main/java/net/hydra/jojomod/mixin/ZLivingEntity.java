@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -42,6 +43,14 @@ public abstract class ZLivingEntity implements ILivingEntityAccess {
     @Override
     public double getLerpZ() {
         return lerpZ;
+    }
+
+
+    @Override
+    public void setLerp(Vector3f lerp) {
+        lerpZ = lerp.z;
+        lerpX = lerp.x;
+        lerpY = lerp.y;
     }
 
     @Override

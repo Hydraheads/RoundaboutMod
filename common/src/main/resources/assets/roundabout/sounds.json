@@ -17,6 +17,12 @@
       "roundabout:stand_arrow_use"
     ]
   },
+  "time_snap": {
+    "subtitle": "sounds.roundabout.time_snap",
+    "sounds": [
+      "roundabout:time_snap"
+    ]
+  },
   "terrier_pass": {
     "subtitle": "sounds.roundabout.terrier_pass",
     "sounds": [

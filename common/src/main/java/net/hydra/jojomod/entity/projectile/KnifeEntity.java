@@ -64,6 +64,12 @@ public class KnifeEntity extends AbstractArrow {
         this.knifeItem = itemStack.copy();
         this.entityData.set(ID_FOIL, itemStack.hasFoil());
     }
+    public KnifeEntity(Level world, LivingEntity player, ItemStack itemStack, Vec3 pos) {
+        super(ModEntities.THROWN_KNIFE, player, world);
+        this.knifeItem = itemStack.copy();
+        this.entityData.set(ID_FOIL, itemStack.hasFoil());
+        this.setPos(pos);
+    }
 
     public KnifeEntity(Level world, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.THROWN_KNIFE, p_36862_, p_36863_, p_36864_, world);
