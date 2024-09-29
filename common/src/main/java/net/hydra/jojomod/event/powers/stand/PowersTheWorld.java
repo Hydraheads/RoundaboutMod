@@ -21,6 +21,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
@@ -154,7 +155,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     teleportTime = Math.max(0,teleportTime-1);
                     if (teleportTime == 0) {
                         double dist = attackTarget.distanceTo(this.getSelf());
-                        if (dist <= 8) {
+                        if (dist <= 8 && !(this.getSelf() instanceof Creeper)) {
                             Vec3 pos = this.getSelf().position().add(0,this.getSelf().getEyeHeight(),0);
                             float p = 0;
                             float y = 0;
@@ -179,7 +180,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             }
                         } else if (dist < 40) {
                             if (this.teleportTowards(attackTarget)) {
-                                this.teleportTime = 200;
+                                if (this.getSelf() instanceof Creeper){
+                                    this.teleportTime = 100;
+                                } else {
+                                    this.teleportTime = 200;
+                                }
                                 postTPStall = 8;
                             }
                         }
@@ -190,7 +195,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         postTPStall = Math.max(0,postTPStall-1);
         if (postTPStall == 0) {
-            super.tickMobAI(attackTarget);
+            if (!(this.getSelf() instanceof Creeper)) {
+                super.tickMobAI(attackTarget);
+            }
         }
     }
 

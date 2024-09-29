@@ -773,6 +773,9 @@ public class MainUtil {
                 target.xo = vec.x;
                 target.yo = vec.y;
                 target.zo = vec.z;
+                target.xOld = vec.x;
+                target.yOld = vec.y;
+                target.zOld = vec.z;
                 ((ILivingEntityAccess) LE).setLerp(vec);
                 LE.setPos(vec.x, vec.y, vec.z);
                 ((ILivingEntityAccess) target).setLerpSteps(0);

@@ -314,7 +314,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         float mindist = -1;
 
         for (LivingEntity $$3 : $$1) {
-            if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget().getMobType() == this.getMobType())){
+            if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget() instanceof AbstractVillager)){
                 if (mindist == -1 || this.distanceTo($$3) < mindist){
                     mindist = this.distanceTo($$3);
                     potentialTarget = $$3;
@@ -372,6 +372,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         if (this.getTarget() == null){
                             if (this.tickCount % 4 == 0){
                                 roundabout$targetVillageEnemies();
+                            }
+                            if (this.getTarget() instanceof AbstractVillager){
+                                this.setTarget(null);
                             }
                         }
                     }

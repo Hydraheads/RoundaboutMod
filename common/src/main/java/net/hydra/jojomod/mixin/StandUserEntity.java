@@ -53,6 +53,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -1158,6 +1159,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
 
                 ci.setReturnValue(true);
+                return;
             }
         }
         if ($$0.getDirectEntity() != null) {
@@ -1292,11 +1294,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**Villager call to action*/
+    @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true)
+    protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
+        if (((LivingEntity)(Object)this) instanceof AbstractVillager AV && !($$0.getEntity()
+                instanceof AbstractVillager) && $$0.getEntity() instanceof LivingEntity LE) {
+            if (!this.isInvulnerableTo($$0)) {
+                AABB AAB = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+                List<? extends AbstractVillager> ENT = this.level().getNearbyEntities(AbstractVillager.class, MainUtil.attackTargeting, ((LivingEntity)(Object)this), AAB);
 
-
+                for (AbstractVillager $$3 : ENT) {
+                    if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
+                        if($$3.getTarget() == null){
+                            $$3.setTarget(LE);
+                        }
+                    }
+                }
+            }
+        }
+    }
     /**This code makes stand user mobs resist attacks from other mobs*/
     @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "RETURN"), cancellable = true)
-    protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> cir) {
+    protected void rooundabout$armorAbsorb(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> cir) {
         if (((LivingEntity)(Object)this) instanceof Mob){
             if (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
                     ($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.MOB_PROJECTILE))

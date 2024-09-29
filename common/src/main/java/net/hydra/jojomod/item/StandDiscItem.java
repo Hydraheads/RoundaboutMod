@@ -73,16 +73,12 @@ public class StandDiscItem extends Item {
 
 
     public void addItem(Player player, ItemStack stack){
-        if (canAddItem(stack, player.getInventory())) {
-            player.addItem(stack);
-        } else {
             ItemEntity $$4 = new ItemEntity(player.level(), player.getX(),
                     player.getY() + player.getEyeHeight(), player.getZ(),
                     stack);
             $$4.setPickUpDelay(0);
             $$4.setThrower(player.getUUID());
             player.level().addFreshEntity($$4);
-        }
     }
     public boolean canAddItem(ItemStack itemStack, Inventory inventory) {
         boolean bl = false;
