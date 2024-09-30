@@ -1,0 +1,6 @@
+{
+  "parent": "roundabout:item/glaive_item",
+  "textures": {
+    "layer0": "roundabout:item/wooden_glaive"
+  }
+}

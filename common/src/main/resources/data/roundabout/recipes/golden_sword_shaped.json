@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "I":
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "pattern": [
+    " II",
+    "IS ",
+    "S  "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:golden_glaive"
+  },
+  "show_notification": true
+}

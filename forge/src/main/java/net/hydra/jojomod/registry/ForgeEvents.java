@@ -76,7 +76,10 @@ public class ForgeEvents {
         ModItems.STAND_BEETLE_ARROW = ForgeItems.STAND_BEETLE_ARROW.get();
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
+        ModItems.WOODEN_GLAIVE = ForgeItems.WOODEN_GLAIVE.get();
+        ModItems.STONE_GLAIVE = ForgeItems.STONE_GLAIVE.get();
         ModItems.IRON_GLAIVE = ForgeItems.IRON_GLAIVE.get();
+        ModItems.GOLDEN_GLAIVE = ForgeItems.GOLDEN_GLAIVE.get();
         ModItems.DIAMOND_GLAIVE = ForgeItems.DIAMOND_GLAIVE.get();
         ModItems.NETHERITE_GLAIVE = ForgeItems.NETHERITE_GLAIVE.get();
         ModItems.SCISSORS = ForgeItems.SCISSORS.get();

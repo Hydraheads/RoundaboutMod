@@ -114,27 +114,33 @@ public class GlaiveItem extends SwordItem {
                         ((LivingEntity) target).knockback(0.35f, player.getX() - target.getX(), player.getZ() - target.getZ());
                         if (MainUtil.getMobBleed(target)) {
                             ((StandUser) target).roundabout$setBleedLevel(1);
-                            ((LivingEntity) target).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 1), player);
-
-                            int variety = (int) Math.round(Math.random()*4);
-                            Block modBlock = ModBlocks.BLOOD_SPLATTER;
-                            if (MainUtil.hasBlueBlood(target)){
-                                modBlock = ModBlocks.BLUE_BLOOD_SPLATTER;
-                            } else if (MainUtil.hasEnderBlood(target)){
-                                modBlock = ModBlocks.ENDER_BLOOD_SPLATTER;
+                            if ($$0.getItem() instanceof GlaiveItem GI && GI.getTier() == Tiers.WOOD){
+                                ((LivingEntity) target).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), player);
+                            } else {
+                                ((LivingEntity) target).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 1), player);
                             }
 
-                            if (variety != 1) {
-                                MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 0, modBlock.defaultBlockState().
-                                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
-                            }
-                            if (variety != 2) {
-                                MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, -1, modBlock.defaultBlockState().
-                                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
-                            }
-                            if (variety != 3) {
-                                MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
-                                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                            if ($$0.getItem() instanceof GlaiveItem GI && GI.getTier() != Tiers.WOOD) {
+                                int variety = (int) Math.round(Math.random() * 4);
+                                Block modBlock = ModBlocks.BLOOD_SPLATTER;
+                                if (MainUtil.hasBlueBlood(target)) {
+                                    modBlock = ModBlocks.BLUE_BLOOD_SPLATTER;
+                                } else if (MainUtil.hasEnderBlood(target)) {
+                                    modBlock = ModBlocks.ENDER_BLOOD_SPLATTER;
+                                }
+
+                                if (variety != 1) {
+                                    MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 0, modBlock.defaultBlockState().
+                                            setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                                }
+                                if (variety != 2) {
+                                    MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, -1, modBlock.defaultBlockState().
+                                            setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                                }
+                                if (variety != 3) {
+                                    MainUtil.setSplatter($$1, target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
+                                            setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                                }
                             }
 
 

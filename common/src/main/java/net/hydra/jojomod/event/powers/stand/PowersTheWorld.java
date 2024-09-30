@@ -22,8 +22,10 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -160,7 +162,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             Vec3 pos = this.getSelf().position().add(0,this.getSelf().getEyeHeight(),0);
                             float p = 0;
                             float y = 0;
-                            if (this.getSelf() instanceof Villager){
+                            if (this.getSelf() instanceof Villager || this.getSelf() instanceof Skeleton){
                                 p =getLookAtEntityPitch(this.getSelf(), attackTarget);
                                 y = getLookAtEntityYaw(this.getSelf(), attackTarget);
                             }
@@ -175,6 +177,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                                 -0.5F, 1.5F, 1.0F);
                                         this.getSelf().level().addFreshEntity($$7);
                                     }
+                                } else if (this.getSelf() instanceof Skeleton){
+                                        Arrow $$7 = new Arrow(this.getSelf().level(),pos.x,pos.y,pos.z);
+                                        $$7.pickup = AbstractArrow.Pickup.DISALLOWED;
+                                        $$7.shootFromRotation(this.getSelf(),
+                                                p,
+                                                y,
+                                                0F, 3.0F, 1.0F);
+                                        $$7.setOwner(this.getSelf());
+                                        this.getSelf().level().addFreshEntity($$7);
                                 }
                                 teleportTime = 200;
                                 postTPStall = 8;

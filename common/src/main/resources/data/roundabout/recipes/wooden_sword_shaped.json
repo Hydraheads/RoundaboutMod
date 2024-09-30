@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "I":
+    {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    " II",
+    "IS ",
+    "S  "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:wooden_glaive"
+  },
+  "show_notification": true
+}

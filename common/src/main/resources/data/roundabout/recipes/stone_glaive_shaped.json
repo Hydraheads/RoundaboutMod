@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "I":
+    {
+      "tag": "minecraft:stone_tool_materials"
+    }
+  },
+  "pattern": [
+    " II",
+    "IS ",
+    "S  "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:stone_glaive"
+  },
+  "show_notification": true
+}

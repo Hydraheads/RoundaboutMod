@@ -39,7 +39,10 @@ public class FabricItems {
     public static Item SCISSORS = registerItem("scissors", new ScissorItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
     public static Item HARPOON = registerItem("harpoon", new HarpoonItem((new Item.Properties()).durability(250)));
 
+    public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
+    public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
+    public static Item GOLDEN_GLAIVE = registerItem("golden_glaive", new GlaiveItem(Tiers.GOLD, 4F, -2.9F, new Item.Properties(),10));
     public static Item DIAMOND_GLAIVE = registerItem("diamond_glaive", new GlaiveItem(Tiers.DIAMOND, 4F, -2.9F, new Item.Properties(),9));
     public static Item NETHERITE_GLAIVE = registerItem("netherite_glaive", new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties(),12));
 
@@ -102,7 +105,10 @@ public class FabricItems {
                         entries.accept(STAND_DISC);
                         entries.accept(LUCK_UPGRADE);
                         entries.accept(LUCK_SWORD);
+                        entries.accept(WOODEN_GLAIVE);
+                        entries.accept(STONE_GLAIVE);
                         entries.accept(IRON_GLAIVE);
+                        entries.accept(GOLDEN_GLAIVE);
                         entries.accept(DIAMOND_GLAIVE);
                         entries.accept(NETHERITE_GLAIVE);
                         entries.accept(SCISSORS);
@@ -157,7 +163,10 @@ public class FabricItems {
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
+        ModItems.WOODEN_GLAIVE = WOODEN_GLAIVE;
+        ModItems.STONE_GLAIVE = STONE_GLAIVE;
         ModItems.IRON_GLAIVE = IRON_GLAIVE;
+        ModItems.GOLDEN_GLAIVE = GOLDEN_GLAIVE;
         ModItems.DIAMOND_GLAIVE = DIAMOND_GLAIVE;
         ModItems.NETHERITE_GLAIVE = NETHERITE_GLAIVE;
         ModItems.HARPOON = HARPOON;
