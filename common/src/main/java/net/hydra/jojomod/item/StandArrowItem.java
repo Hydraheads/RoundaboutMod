@@ -262,10 +262,16 @@ public class StandArrowItem extends Item {
                     $$2.add(
                             Component.translatable("item.roundabout.stand_arrow.reroll2").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
                     );
+                    $$2.add(
+                            Component.translatable("item.roundabout.stand_arrow.magnet").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.ITALIC)
+                    );
                 }
             } else {
                 $$2.add(
                         Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                );
+                $$2.add(
+                        Component.translatable("item.roundabout.stand_arrow.magnet").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.ITALIC)
                 );
             }
         } else {

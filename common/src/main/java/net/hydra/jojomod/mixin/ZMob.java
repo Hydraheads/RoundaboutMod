@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -89,18 +90,27 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     public boolean roundabout$isNaturalStandUser = false;
 
+
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "HEAD"))
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
-                if (this.random.nextDouble() < 0.5) {
+                if (((Mob)(Object)this) instanceof Enemy) {
+                    if ($$0.getEntity() instanceof Player) {
+                        if (!this.level().isClientSide()){
+                            ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
+                        }
+                    }
+
                     this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
-                }
-                if ($$1 > 0){
-                    for (int i = 0; i < $$1; i++){
-                        if (this.random.nextDouble() < 0.5) {
-                            this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                    if (this.random.nextDouble() < 0.5) {
+                        this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                    }
+                    if ($$1 > 0) {
+                        for (int i = 0; i < $$1; i++) {
+                            if (this.random.nextDouble() < 0.5) {
+                                this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                            }
                         }
                     }
                 }
