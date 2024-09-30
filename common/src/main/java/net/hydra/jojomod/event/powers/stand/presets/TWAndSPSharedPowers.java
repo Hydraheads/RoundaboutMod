@@ -310,7 +310,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
 
                 ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
-                stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200);
+                stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,true);
                 if (this.getSelf() instanceof Player) {
                     ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
                 }
@@ -980,7 +980,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
         }
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
-            this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100);
+            this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100,true);
         }
         return super.tryPower(move,forced);
     }

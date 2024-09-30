@@ -2,6 +2,7 @@ package net.hydra.jojomod;
 
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.commands.CommandSourceStack;
@@ -78,8 +79,11 @@ public class RoundaboutCommands {
 
     static int executeDebugCancel(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
-            if (entity instanceof LivingEntity) {
+            if (entity instanceof LivingEntity LE) {
                 ((StandUser) entity).tryPower(PowerIndex.NONE, true);
+                if (((TimeStop) entity.level()).isTimeStoppingEntity(LE)){
+                    ((StandUser) entity).tryPower(PowerIndex.SPECIAL_FINISH, true);
+                }
             }
         }
         return targets.size();

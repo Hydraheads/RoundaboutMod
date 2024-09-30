@@ -524,8 +524,8 @@ public class StandPowers {
 
     public void breakClash(LivingEntity winner, LivingEntity loser){
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
-            ((StandUser)winner).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
-            ((StandUser)loser).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
+            ((StandUser)winner).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+            ((StandUser)loser).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
             ((StandUser)winner).getStandPowers().playBarrageEndNoise(0, loser);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
             ((StandUser)winner).getStandPowers().animateStand((byte) 13);
@@ -533,8 +533,8 @@ public class StandPowers {
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){
-        ((StandUser)user1).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
-        ((StandUser)user2).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
+        ((StandUser)user1).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+        ((StandUser)user2).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
         ((StandUser)user1).getStandPowers().playBarrageEndNoise(0F,user2);
         ((StandUser)user2).getStandPowers().playBarrageEndNoise(-0.05F,user1);
 
@@ -1334,7 +1334,7 @@ public class StandPowers {
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public boolean tryPower(int move, boolean forced){
         if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH) && this.attackTimeDuring  > -1){
-            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32);
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
         }
 
         if (canChangePower(move, forced)) {
@@ -1435,7 +1435,7 @@ public class StandPowers {
 
 
     /**This is called fourth by the server, it sends a packet to cancel the sound.*/
-    public final void stopSoundsIfNearby(byte soundNumber, double range) {
+    public final void stopSoundsIfNearby(byte soundNumber, double range, boolean onSelf) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
             Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
@@ -1448,7 +1448,11 @@ public class StandPowers {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
-                    ModPacketHandler.PACKET_ACCESS.stopSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
+                    if (!onSelf){
+                        ModPacketHandler.PACKET_ACCESS.stopSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
+                    } else {
+                        ModPacketHandler.PACKET_ACCESS.stopSoundPacket(serverPlayerEntity,serverPlayerEntity.getId(),soundNumber);
+                    }
                 }
             }
         }

@@ -794,7 +794,7 @@ public class MainUtil {
         if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
             ((StandUser) player).getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
-            ((StandUser) player).getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30);
+            ((StandUser) player).getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND) {
             ((StandUser) player).getStandPowers().playSoundsIfNearby(SoundIndex.STAND_ARROW_CHARGE, 10, false);
         }

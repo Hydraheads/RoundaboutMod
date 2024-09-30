@@ -387,7 +387,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Unique
     public void roundabout$standUserAttraction(){
-        if (this.tickCount % 2400 == 0 && Math.random() < 0.2) {
+        if (this.tickCount % 3600 == 0 && Math.random() < 0.1) {
             LivingEntity potentialTarget = null;
             AABB $$0 = this.getBoundingBox().inflate(35.0, 13.0, 35.0);
 
@@ -406,7 +406,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
             if (potentialTarget != null && (!(potentialTarget instanceof Player) || !potentialTarget.isSpectator() && !((Player) potentialTarget).isCreative())) {
                 roundabout$standPath = this.getNavigation().createPath(potentialTarget, 2);
-                this.getNavigation().moveTo(roundabout$standPath, 1.2);
+                this.getNavigation().moveTo(roundabout$standPath, 1.1);
                 roundabout$standAttractionTicks = 100;
             }
         }
@@ -505,7 +505,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     if (roundabout$standAttractionTicks > -1){
                         roundabout$standAttractionTicks = Math.max(roundabout$standAttractionTicks-1,-1);
                         if (roundabout$standPath != null){
-                            this.getNavigation().moveTo(roundabout$standPath, 1.2);
+                            this.getNavigation().moveTo(roundabout$standPath, 1.1);
                         }
                     }
                     roundabout$standUserAttraction();
