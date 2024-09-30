@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -359,8 +360,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
         for (LivingEntity $$3 : $$1) {
             if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget() instanceof AbstractVillager)){
-                if (mindist == -1 || this.distanceTo($$3) < mindist){
-                    mindist = this.distanceTo($$3);
+                if (mindist == -1 || this.distanceToSqr($$3) < mindist){
+                    mindist = (float) this.distanceToSqr($$3);
                     potentialTarget = $$3;
                 }
             }
@@ -383,6 +384,36 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @Unique
     public int roundabout$retractTicks = 140;
+
+    @Unique
+    public void roundabout$standUserAttraction(){
+        if (this.tickCount % 2400 == 0 && Math.random() < 0.2) {
+            LivingEntity potentialTarget = null;
+            AABB $$0 = this.getBoundingBox().inflate(35.0, 13.0, 35.0);
+
+            List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.followTargetting, this, $$0);
+            float mindist = -1;
+
+            for (LivingEntity $$3 : $$1) {
+                if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
+                    if (mindist == -1 || this.distanceToSqr($$3) < mindist){
+                        mindist = (float) this.distanceToSqr($$3);
+                        potentialTarget = $$3;
+                    }
+                }
+            }
+
+
+            if (potentialTarget != null && (!(potentialTarget instanceof Player) || !potentialTarget.isSpectator() && !((Player) potentialTarget).isCreative())) {
+                roundabout$standPath = this.getNavigation().createPath(potentialTarget, 2);
+                this.getNavigation().moveTo(roundabout$standPath, 1.2);
+                roundabout$standAttractionTicks = 100;
+            }
+        }
+    }
+
+    Path roundabout$standPath;
+    int roundabout$standAttractionTicks = -1;
 
     @SuppressWarnings("deprecation")
     @Inject(method = "serverAiStep", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/ai/navigation/PathNavigation;tick()V",
@@ -468,6 +499,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
                             roundabout$resetAtkCD();
                         }
                     }
+                }
+
+                if (this.getTarget() == null){
+                    if (roundabout$standAttractionTicks > -1){
+                        roundabout$standAttractionTicks = Math.max(roundabout$standAttractionTicks-1,-1);
+                        if (roundabout$standPath != null){
+                            this.getNavigation().moveTo(roundabout$standPath, 1.2);
+                        }
+                    }
+                    roundabout$standUserAttraction();
                 }
 
             }

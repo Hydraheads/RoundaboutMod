@@ -94,6 +94,7 @@ public class MainUtil {
        return 0.05;
     }
     public static final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(20.0);
+    public static final TargetingConditions followTargetting = TargetingConditions.forCombat().range(50.0);
     public static double getStandUserOdds(Mob mob) {
         if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
             return 0;

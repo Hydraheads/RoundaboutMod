@@ -76,6 +76,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract float getMaxHealth();
+
     @Shadow
     public abstract boolean hurt(DamageSource $$0, float $$1);
 
@@ -1371,10 +1373,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "RETURN"), cancellable = true)
     protected void rooundabout$armorAbsorb(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> cir) {
         if (((LivingEntity)(Object)this) instanceof Mob){
-            if (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                    ($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.MOB_PROJECTILE))
-                    || $$0.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
-                cir.setReturnValue($$1*0.5F);
+            if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
+                if (this.getMaxHealth() > 1) {
+                    if (this.getMaxHealth() <= 3) {
+                        $$1 *= 0.5F;
+                    } else if (this.getMaxHealth() <= 6) {
+                        $$1 *= 0.75F;
+                    }
+                }
+                if (($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.MOB_PROJECTILE))
+                        || $$0.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
+                    $$1*=0.5F;
+                }
+                cir.setReturnValue($$1);
             }
         }
     }
