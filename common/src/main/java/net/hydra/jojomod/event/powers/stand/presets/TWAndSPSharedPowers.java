@@ -186,8 +186,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             if (this.isStoppingTime()) {
                                 KeyInputs.roundaboutClickCount = 2;
                                 this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
                                 ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
+                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
                             } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                                 sendPacket = true;
                             } else {

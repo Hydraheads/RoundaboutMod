@@ -26,11 +26,15 @@ import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
+
+import java.util.Objects;
 
 public class PowersTheWorld extends TWAndSPSharedPowers {
 
@@ -72,7 +76,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (!this.onCooldown(PowerIndex.SKILL_1)) {
                     if (keyIsDown) {
                         if (!options.keyShift.isDown()) {
-
+                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_1, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                         } else {
                         }
                     }
@@ -111,17 +116,97 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-
+        if (move == PowerIndex.POWER_1) {
+            return this.assault();
+        }
         return super.setPowerOther(move,lastMove);
     }
 
+    public Vec3 assultVec = Vec3.ZERO;
+    public boolean assault(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1);
+            this.animateStand((byte)0);
+            this.poseStand(OffsetIndex.LOOSE);
+            stand.setYRot(this.getSelf().getYHeadRot() % 360);
+            stand.setXRot(this.getSelf().getXRot());
+            assultVec = DamageHandler.getRotationVector(
+                    this.getSelf().getXRot(), (float) (this.getSelf().getYRot())).scale(1.8).add(0,0.25,0);
+            stand.setPos(this.getSelf().position().add(assultVec));
+            return true;
+        }
+        return false;
+    }
 
+
+    @Override
+    public void updateUniqueMoves() {
+        /*Tick through Time Stop Charge*/
+        super.updateUniqueMoves();
+    }
+
+
+    @Override
+    public void tickPowerEnd(){
+
+        super.tickPowerEnd();
+        if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+            if (this.getActivePower() == PowerIndex.POWER_1) {
+                if (!this.getSelf().level().isClientSide()) {
+                    if (this.attackTimeDuring == 108) {
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    } else if (this.attackTimeDuring >= 0) {
+                        StandEntity stand = getStandEntity(this.self);
+                        if (Objects.nonNull(stand)) {
+                            Vec3 vec3d = this.getSelf().getEyePosition(0);
+                            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                            Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
+                            double mag = 0.05F;
+
+                            if (this.attackTimeDuring > 8) {
+                                mag += Math.pow(attackTimeDuring-8, 1.2) / 1000;
+                            }
+                            BlockHitResult blockHit = this.getSelf().level().clip(
+                                    new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                                            this.getSelf()));
+
+                            Vec3 blockCenterPlus = blockHit.getBlockPos().getCenter();
+
+                            assultVec = assultVec.add(
+                                    blockCenterPlus.subtract(this.getSelf().position().add(assultVec)).normalize().scale(mag)
+                            );
+                            Vec3 yes = this.getSelf().position().add(assultVec);
+                            double post = stand.position().distanceTo(blockHit.getBlockPos().getCenter());
+                            if (post< 1.5){
+                                stand.setYRot(this.getSelf().getYHeadRot() % 360);
+                                stand.setXRot(this.getSelf().getXRot());
+                            } else {
+                                stand.setYRot(getLookAtPlaceYaw(stand,blockCenterPlus));
+                                stand.setXRot(getLookAtPlacePitch(stand,blockCenterPlus));
+                            }
+                            if (post < 0.4){
+                                stand.setPos(blockHit.getBlockPos().getCenter());
+                            } else {
+                                stand.setPos(yes);
+                            }
+                            if (stand.position().distanceTo(this.getSelf().position()) > 10){
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                            } else if (stand.position().distanceTo(this.getSelf().position()) > 10){
+                                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     @Override
     public void tickPower(){
 
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
-
         }
     }
 
@@ -394,7 +479,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else {
 
 
-            //setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
 
             /*If it can find a mob to grab, it will*/
             Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);

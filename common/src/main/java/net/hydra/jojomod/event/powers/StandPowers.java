@@ -375,6 +375,9 @@ public class StandPowers {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
+    public void tickPowerEnd(){
+
+    }
 
     public void tickPower(){
         if (this.self.isAlive() && !this.self.isRemoved()) {
@@ -1196,6 +1199,24 @@ public class StandPowers {
     public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
         double d = targetEntity.getX() - user.getX();
         double e = targetEntity.getZ() - user.getZ();
+        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+    }
+
+
+
+    /**Returns the vertical angle between a mob and a position*/
+    public float getLookAtPlacePitch(Entity user, Vec3 vec) {
+        double f;
+        double d = vec.x() - user.getX();
+        double e = vec.z() - user.getZ();
+        f = vec.y() - user.getEyeY();
+        double g = Math.sqrt(d * d + e * e);
+        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+    }
+    /**Returns the horizontal angle between a mob and a position*/
+    public float getLookAtPlaceYaw(Entity user, Vec3 vec) {
+        double d = vec.x() - user.getX();
+        double e = vec.z() - user.getZ();
         return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
 

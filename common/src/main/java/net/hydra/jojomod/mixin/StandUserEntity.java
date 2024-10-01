@@ -336,6 +336,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    public void roundabout$endTick(CallbackInfo ci) {
+        if (!(((LivingEntity)(Object)this) instanceof Player)) {
+            this.getStandPowers().tickPowerEnd();
+        }
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void tickRoundabout(CallbackInfo ci) {
         //if (StandID > -1) {

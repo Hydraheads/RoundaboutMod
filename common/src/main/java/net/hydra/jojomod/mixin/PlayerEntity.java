@@ -351,6 +351,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         } else {
             ((StandUser) this).setRoundaboutIdleTime(((StandUser) this).getRoundaboutIdleTime() + 1);
         }
+        ((StandUser) this).getStandPowers().tickPowerEnd();
     }
 
     @Override
