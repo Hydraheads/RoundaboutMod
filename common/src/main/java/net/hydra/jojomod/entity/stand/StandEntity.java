@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,7 +25,11 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class StandEntity extends Mob{
@@ -701,6 +706,24 @@ public abstract class StandEntity extends Mob{
         ItemStack itemstack = ItemStack.of(compoundtag);
         this.setHeldItem(itemstack);
         super.readAdditionalSaveData($$0);
+    }
+
+    public boolean isTechnicallyInWall() {
+        float $$0 = this.getDimensions(this.getPose()).width * 0.8F;
+        AABB $$1 = AABB.ofSize(this.getEyePosition(), (double)$$0, 1.0E-6, (double)$$0);
+        return BlockPos.betweenClosedStream($$1)
+                .anyMatch(
+                        $$1x -> {
+                            BlockState $$2 = this.level().getBlockState($$1x);
+                            return !$$2.isAir()
+                                    && $$2.isSuffocating(this.level(), $$1x)
+                                    && Shapes.joinIsNotEmpty(
+                                    $$2.getCollisionShape(this.level(), $$1x).move((double)$$1x.getX(), (double)$$1x.getY(), (double)$$1x.getZ()),
+                                    Shapes.create($$1),
+                                    BooleanOp.AND
+                            );
+                        }
+                );
     }
 
 

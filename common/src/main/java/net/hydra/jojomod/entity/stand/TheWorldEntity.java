@@ -21,6 +21,8 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState entityGrabAnimation = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
+    public final AnimationState assault = new AnimationState();
+    public final AnimationState assault_punch = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
@@ -79,6 +81,16 @@ public class TheWorldEntity extends StandEntity {
                 this.entityGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.entityGrabAnimation.stop();
+            }
+            if (this.getAnimation() == 39) {
+                this.assault.startIfStopped(this.tickCount);
+            } else {
+                this.assault.stop();
+            }
+            if (this.getAnimation() == 40) {
+                this.assault_punch.startIfStopped(this.tickCount);
+            } else {
+                this.assault_punch.stop();
             }
         }
     }

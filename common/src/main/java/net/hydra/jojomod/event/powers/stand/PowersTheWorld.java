@@ -18,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.List;
 import java.util.Objects;
 
 public class PowersTheWorld extends TWAndSPSharedPowers {
@@ -67,21 +69,32 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     /**Assault Ability*/
+    public boolean hold1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                if (!this.onCooldown(PowerIndex.SKILL_1)) {
                     if (keyIsDown) {
-                        if (!options.keyShift.isDown()) {
-                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_1, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                        } else {
+                        if (!hold1) {
+                            hold1 = true;
+                            if (!options.keyShift.isDown()) {
+                                if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                    if (this.activePower == PowerIndex.POWER_1) {
+                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                    } else {
+                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_1, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                    }
+                                }
+                            } else {
+                            }
                         }
+                    } else {
+                        hold1 = false;
                     }
-                }
             }
         }
     }
@@ -128,7 +141,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
-            this.animateStand((byte)0);
+            this.animateStand((byte)39);
             this.poseStand(OffsetIndex.LOOSE);
             stand.setYRot(this.getSelf().getYHeadRot() % 360);
             stand.setXRot(this.getSelf().getXRot());
@@ -160,13 +173,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     } else if (this.attackTimeDuring >= 0) {
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
+                            AABB BB1 = stand.getBoundingBox();
                             Vec3 vec3d = this.getSelf().getEyePosition(0);
                             Vec3 vec3d2 = this.getSelf().getViewVector(0);
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
                             double mag = 0.05F;
 
-                            if (this.attackTimeDuring > 8) {
-                                mag += Math.pow(attackTimeDuring-8, 1.2) / 1000;
+                            if (this.attackTimeDuring > 10) {
+                                mag += Math.pow(attackTimeDuring-10, 1.4) / 1000;
                             }
                             BlockHitResult blockHit = this.getSelf().level().clip(
                                     new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
@@ -191,10 +205,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             } else {
                                 stand.setPos(yes);
                             }
-                            if (stand.position().distanceTo(this.getSelf().position()) > 10){
+                            if (stand.isTechnicallyInWall() || stand.position().distanceTo(this.getSelf().position()) > 10){
                                 ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
                             } else if (stand.position().distanceTo(this.getSelf().position()) > 10){
                                 ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                            }
+                            AABB BB2 = stand.getBoundingBox();
+                            if (this.attackTimeDuring > 10) {
+                                tryAssaultHit(stand, BB1, BB2);
                             }
                         }
                     }
@@ -202,6 +220,48 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
         }
     }
+
+    public boolean tryAssaultHit(StandEntity stand, AABB bb1, AABB bb2){
+        bb1 = bb1.inflate(1.6F);
+        bb2 = bb2.inflate(1.6F);
+
+        AABB $$2 = bb1.minmax(bb2);
+        List<Entity> $$3 = stand.level().getEntities(stand, $$2);
+        if (!$$3.isEmpty()) {
+            for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
+                Entity $$5 = $$3.get($$4);
+                if ($$5 instanceof LivingEntity && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
+                        !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
+                        this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
+
+                    if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
+                        MainUtil.makeBleed($$5,0,200,null);
+                    } else if (((LivingEntity) $$5).isBlocking()) {
+                        MainUtil.knockShieldPlusStand($$5,40);
+                    }
+
+                    stand.setYRot(getLookAtEntityYaw(stand,$$5));
+                    stand.setXRot(getLookAtEntityPitch(stand,$$5));
+                    this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 0.95F, 1.3F);
+                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 40);
+                    this.setCooldown(PowerIndex.SKILL_1, 40);
+                    this.setAttackTimeDuring(-12);
+                    animateStand((byte) 40);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public float getAssaultStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2.5F;
+        } else {
+            return 6;
+        }
+    }
+
     @Override
     public void tickPower(){
 

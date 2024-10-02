@@ -216,6 +216,8 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);
 		this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
 		this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
+		this.animate(pEntity.assault, StandAnimations.ASSAULT, pAgeInTicks, 1f);
+		this.animate(pEntity.assault_punch, StandAnimations.ASSAULT_PUNCH, pAgeInTicks, 2.5f);
 	}
 
 	@Override
