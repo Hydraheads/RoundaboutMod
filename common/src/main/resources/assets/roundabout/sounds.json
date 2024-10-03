@@ -167,6 +167,12 @@
       "roundabout:fall_brace"
     ]
   },
+  "the_world_assault": {
+    "subtitle": "sounds.roundabout.the_world_assault",
+    "sounds": [
+      "roundabout:the_world_assault"
+    ]
+  },
   "stand_theworld_muda1": {
     "subtitle": "sounds.roundabout.stand_theworld_muda1",
     "sounds": [

@@ -188,5 +188,6 @@
 				"down": {"uv": [0, 0, 1, 0], "texture": "#0"}
 			}
 		}
-	]
+	],
+	"render_type": "cutout"
 }

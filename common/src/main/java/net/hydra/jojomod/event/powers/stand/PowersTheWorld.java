@@ -110,6 +110,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (this.getActivePower() == PowerIndex.POWER_1){
+            stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
+        }
         return super.tryPower(move,forced);
     }
 
@@ -141,6 +144,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
+            playSoundsIfNearby(ASSAULT_NOISE, 32, false);
             this.animateStand((byte)39);
             this.poseStand(OffsetIndex.LOOSE);
             stand.setYRot(this.getSelf().getYHeadRot() % 360);
@@ -152,7 +156,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return false;
     }
-
+    public static final byte ASSAULT_NOISE = 80;
 
     @Override
     public void updateUniqueMoves() {
@@ -205,9 +209,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             } else {
                                 stand.setPos(yes);
                             }
-                            if (stand.isTechnicallyInWall() || stand.position().distanceTo(this.getSelf().position()) > 10){
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
-                            } else if (stand.position().distanceTo(this.getSelf().position()) > 10){
+                            if (stand.isTechnicallyInWall() ||
+                                    stand.position().distanceTo(this.getSelf().position()) > 10 ||
+                                    stand.position().distanceTo(this.getSelf().position()) > 10){
+                                stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
                                 ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
                             }
                             AABB BB2 = stand.getBoundingBox();
@@ -219,6 +224,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 }
             }
         }
+    }
+
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice >= ASSAULT_NOISE) {
+            return ASSAULT_NOISE;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
     }
 
     public boolean tryAssaultHit(StandEntity stand, AABB bb1, AABB bb2){
@@ -240,6 +253,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         MainUtil.knockShieldPlusStand($$5,40);
                     }
 
+                    stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
                     stand.setYRot(getLookAtEntityYaw(stand,$$5));
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 0.95F, 1.3F);
@@ -477,6 +491,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
             return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
+        } else if (soundChoice == ASSAULT_NOISE){
+            return ModSounds.THE_WORLD_ASSAULT_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {

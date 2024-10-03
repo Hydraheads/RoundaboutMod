@@ -53,6 +53,8 @@ public class ForgeSounds {
             register(ModSounds.FALL_BRACE, ModSounds.FALL_BRACE_ID);
     public static final RegistryObject<SoundEvent> TIME_SNAP_EVENT =
             register(ModSounds.TIME_SNAP, ModSounds.TIME_SNAP_ID);
+    public static final RegistryObject<SoundEvent> THE_WORLD_ASSAULT_EVENT =
+            register(ModSounds.THE_WORLD_ASSAULT, ModSounds.THE_WORLD_ASSAULT_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA1_SOUND_EVENT =
             register(ModSounds.STAND_THEWORLD_MUDA1_SOUND, ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA2_SOUND_EVENT =
