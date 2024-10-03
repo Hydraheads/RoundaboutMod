@@ -144,10 +144,10 @@ public class ForgeItems {
             () -> new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA))));
     public static final RegistryObject<Item> MUSIC_DISC_TORTURE_DANCE = addToTab(ITEMS.register("music_disc_torture_dance",
             () -> new RecordItem(1, ForgeSounds.TORTURE_DANCE,
-                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 178)));
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840)));
     public static final RegistryObject<Item> MUSIC_DISC_HALLELUJAH = addToTab(ITEMS.register("music_disc_hallelujah",
             () -> new RecordItem(1, ForgeSounds.HALLELUJAH,
-                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 178)));
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 4380)));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));

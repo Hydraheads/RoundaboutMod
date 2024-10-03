@@ -65,10 +65,10 @@ public class FabricItems {
 
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
-                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 178));
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840));
     public static Item MUSIC_DISC_HALLELUJAH = registerItem("music_disc_hallelujah",
             new RecordItem(1, ModSounds.HALLELUJAH_EVENT,
-                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 178));
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 4380));
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
