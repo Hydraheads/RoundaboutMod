@@ -49,6 +49,13 @@ public class LocacacaBlock extends BushBlock
         return new ItemStack(getFruitType());
     }
 
+
+    @Override
+    public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        BlockPos $$3 = $$2.below();
+        return this.mayPlaceOn($$1.getBlockState($$3), $$1, $$3);
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
