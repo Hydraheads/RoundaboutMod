@@ -933,7 +933,7 @@ public class StandPowers {
                 boolean lastHit = (hitNumber >= this.getBarrageLength());
                 if (entity != null) {
                     if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()
-                            && ((StandUser) entity).getAttackTimeDuring() > -1 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                            && ((StandUser) entity).getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
                         float pow;
