@@ -120,15 +120,18 @@ public class MainUtil {
         }
         return mm;
     }
-    public static LivingEntity homeOnFlier(Level level, Vec3 vec3, double range) {
+    public static LivingEntity homeOnFlier(Level level, Vec3 vec3, double range, Entity owner) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
                 vec3.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
         for (Entity value : hitEntities) {
             if (value instanceof LivingEntity mb){
-                if (mb.isFallFlying() || mb instanceof Phantom){
-                    return mb;
+                if ((mb.isFallFlying() || mb instanceof Phantom) && !(mb instanceof StandEntity)){
+                    if (owner != null && owner.getUUID() == mb.getUUID()) {
+                    } else {
+                        return mb;
+                    }
                 }
             }
         }
