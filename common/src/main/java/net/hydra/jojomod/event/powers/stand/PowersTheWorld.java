@@ -269,9 +269,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
                     stand.setYRot(getLookAtEntityYaw(stand,$$5));
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
-                    this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 0.95F, 1.3F);
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 40);
-                    this.setCooldown(PowerIndex.SKILL_1, 40);
+                    this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
+                            SoundSource.PLAYERS, 0.95F, 1.3F);
+                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                            PowerIndex.SKILL_1, 30);
+                    this.setCooldown(PowerIndex.SKILL_1, 30);
                     this.setAttackTimeDuring(-12);
                     animateStand((byte) 40);
                     return true;

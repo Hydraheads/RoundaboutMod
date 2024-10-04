@@ -211,6 +211,18 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
 
+    @Shadow
+    public boolean isShiftKeyDown() {
+        return false;
+    }
+    @Inject(method = "canRide", at = @At("HEAD"), cancellable = true)
+    protected void roundabout$canRide(Entity $$0, CallbackInfoReturnable<Boolean> cir){
+        if ($$0 instanceof StandEntity && (!(((Entity)(Object)this) instanceof LivingEntity) || ((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this)))){
+            cir.setReturnValue(!this.isShiftKeyDown());
+        }
+    }
+
+
     @Inject(method = "load", at = @At("HEAD"))
     protected void roundaboutRead(CompoundTag $$0, CallbackInfo info){
         if ($$0.contains("roundabout.stand_data",10)){
