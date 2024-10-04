@@ -861,7 +861,9 @@ public class BlockGrabPreset extends PunchingStand{
                 && !(entity instanceof Player pl && pl.isCreative())
                 && !(entity instanceof StandEntity)){
             if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).getStand() != null &&
-                    ((StandUser) pl).getStand().getUUID() == this.getSelf().getVehicle().getUUID()){
+                    ((StandUser) pl).getStand().is(this.getSelf().getVehicle())){
+                return false;
+            } else if (entity.getRootVehicle().hasPassenger(this.getSelf())){
                 return false;
             }
             return true;

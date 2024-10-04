@@ -221,6 +221,14 @@ public abstract class EntityAndData implements IEntityAndData {
             cir.setReturnValue(!this.isShiftKeyDown());
         }
     }
+    @Inject(method = "startRiding(Lnet/minecraft/world/entity/Entity;Z)Z", at = @At("HEAD"), cancellable = true)
+    protected void roundabout$startRiding(Entity $$0, boolean $$1, CallbackInfoReturnable<Boolean> cir){
+        if (((Entity)(Object)this) instanceof LivingEntity LE
+                && ((StandUser)LE).getStand() != null
+                && ($$0.getRootVehicle().is(((StandUser)LE).getStand()) || $$0.getRootVehicle().hasPassenger(((StandUser)LE).getStand()))){
+            cir.setReturnValue(false);
+        }
+    }
 
 
     @Inject(method = "load", at = @At("HEAD"))

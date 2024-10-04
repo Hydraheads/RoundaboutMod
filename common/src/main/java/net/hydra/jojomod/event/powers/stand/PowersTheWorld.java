@@ -272,8 +272,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
                     ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
-                            PowerIndex.SKILL_1, 30);
-                    this.setCooldown(PowerIndex.SKILL_1, 30);
+                            PowerIndex.SKILL_1, 40);
+                    this.setCooldown(PowerIndex.SKILL_1, 40);
                     this.setAttackTimeDuring(-12);
                     animateStand((byte) 40);
                     return true;
