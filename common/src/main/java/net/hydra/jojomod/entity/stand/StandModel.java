@@ -137,7 +137,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         float rotY = mobEntity.getHeadRotationY();
         if (animationStyle == OffsetIndex.FOLLOW_STYLE){
             /*This code makes the head of the model turn towards swim rotation while swimming*/
-            if (mobEntity.isSwimming() || mobEntity.isVisuallyCrawling() || mobEntity.isFallFlying()) {
+            if ((mobEntity.isSwimming() || mobEntity.isVisuallyCrawling() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
                 if (swimRotCorrect > -45) {
                     swimRotCorrect -= 2;
                     swimRotCorrect = Math.min(swimRotCorrect, -45);
@@ -200,9 +200,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         if (animationStyle == OffsetIndex.FOLLOW_STYLE){
             float cRot = maxRotX;
 
-            if (mobEntity.isSwimming() || mobEntity.isFallFlying()) {
+            if ((mobEntity.isSwimming() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
                 cRot = ((mobEntity.getUser().getViewXRot(tickDelta)%360) + 90) * Mth.DEG_TO_RAD;
-            } else if (mobEntity.isVisuallyCrawling()) {
+            } else if (mobEntity.isVisuallyCrawling() && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
                 cRot = 90 * Mth.DEG_TO_RAD;
             } else {
                 int moveForward = mobEntity.getMoveForward();

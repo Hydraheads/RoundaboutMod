@@ -101,7 +101,20 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
 
 
-
+    @Override
+    public void buttonInput3(boolean keyIsDown, Options options) {
+        if (this.activePower == PowerIndex.POWER_1){
+            return;
+        }
+        super.buttonInput3(keyIsDown,options);
+    }
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && slot != 2 && slot != 1){
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
