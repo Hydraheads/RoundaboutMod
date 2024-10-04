@@ -14,7 +14,6 @@ public interface IPacketAccess {
     /**Server To Client Packets*/
     void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken);
     void DazeTimePacket(ServerPlayer sp, byte dazeTime);
-    void NBTSyncPacket(ServerPlayer sp, CompoundTag NBT);
     void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,
                             byte activePower, byte activePowerPhase);
     void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown);

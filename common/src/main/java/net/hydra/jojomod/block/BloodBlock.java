@@ -33,9 +33,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+/**Uses textures from the Harken Scythe mod. Unlike that mod, insects and arthropods have hemolymph-
+ * their real-life blood equivalent, which causes slowdown.*/
 public class BloodBlock extends Block {
-    /**Uses textures from the Harken Scythe mod. Unlike that mod, insects and arthropods have hemolymph-
-     * their real-life blood equivalent, which causes slowdown.*/
     public static final IntegerProperty LEVEL = ModBlocks.BLOOD_LEVEL;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
     public static final BooleanProperty DECAY = ModBlocks.DECAY;

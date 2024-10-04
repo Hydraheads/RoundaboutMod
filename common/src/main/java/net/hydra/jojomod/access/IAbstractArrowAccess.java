@@ -6,6 +6,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
+/**This code lets me access the ZAbstractArrow Mixin externally, so I can call abstract arrow functions*/
 public interface IAbstractArrowAccess {
     boolean roundaboutGetInGround();
     void roundaboutSetInGround(boolean inGround);

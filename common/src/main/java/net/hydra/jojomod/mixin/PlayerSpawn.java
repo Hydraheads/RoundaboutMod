@@ -16,13 +16,4 @@ public class PlayerSpawn {
     /** Makes absolutely certain NBT is saved and loaded from players...
      * only relevant so long as
      * @see EntityAndData is.*/
-    @Inject(method = "placeNewPlayer", at = @At(value = "TAIL"))
-    private void onPlayerConnectMixin(Connection $$0, ServerPlayer $$1, CallbackInfo info) {
-        NBTData.syncModNbt($$1);
-    }
-
-    @Inject(method = "respawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;addRespawnedPlayer(Lnet/minecraft/server/level/ServerPlayer;)V"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void respawnPlayerMixin(ServerPlayer $$0, boolean $$1, CallbackInfoReturnable<ServerPlayer> info) {
-        NBTData.syncModNbt($$0);
-    }
 }

@@ -27,8 +27,6 @@ public class ForgeNBTPacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                ((IEntityAndData) player).getPersistentData().merge(NBT);
-                ((IEntityAndData) player).syncPersistentData();
             }
         });
         return true;

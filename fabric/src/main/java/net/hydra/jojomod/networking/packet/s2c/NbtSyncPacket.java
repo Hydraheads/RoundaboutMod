@@ -10,8 +10,6 @@ public class NbtSyncPacket {
     public static void receive(Minecraft client, ClientPacketListener handler,
                                FriendlyByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {
-            ((IEntityAndData) client.player).getPersistentData().merge(buf.readNbt());
-            ((IEntityAndData) client.player).syncPersistentData();
         }
     }
 }

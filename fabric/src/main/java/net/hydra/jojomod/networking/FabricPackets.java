@@ -27,12 +27,6 @@ public class FabricPackets implements IPacketAccess {
         ServerPlayNetworking.send(sp,ModMessages.DAZE_ID, buffer);
     }
 
-    @Override
-    public void NBTSyncPacket(ServerPlayer sp, CompoundTag NBT) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeNbt(NBT);
-        ServerPlayNetworking.send(sp, ModMessages.NBT_SYNC_ID, buffer);
-    }
 
     @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,

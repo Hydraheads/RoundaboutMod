@@ -29,10 +29,6 @@ public abstract class EntityAndData implements IEntityAndData {
     /** Code to store NBT on player. Undecided if this will remain.
      * @see PlayerSpawn
      * @see net.hydra.jojomod.stand.NBTData*/
-    private CompoundTag persistentData;
-    private boolean standOn;
-    private UUID activeStand;
-
     private float roundaboutPrevTick = 0;
 
     private double roundaboutPrevX = 0;
@@ -144,44 +140,10 @@ public abstract class EntityAndData implements IEntityAndData {
         roundaboutPrevTick = 0;
     }
 
-    @Override
-    public void setStandOn(boolean SO) {
-        this.standOn = SO;
-    }
-
-    @Nullable
-    public UUID getActiveStand() {
-        if (activeStand != null){
-            return activeStand;}
-        else {return null;}
-    }
-
-    @Override
-    public void setActiveStand(UUID SA) {
-        this.activeStand = SA;
-    }
-
-    public void syncPersistentData() {
-        if (persistentData != null){
-        standOn = persistentData.getBoolean("stand_on");
-            //RoundaboutMod.LOGGER.info(""+persistentData.getUuid("active_stand"));
-        if (persistentData.contains("active_stand") && persistentData.getUUID("active_stand") != null){
-            activeStand = persistentData.getUUID("active_stand");
-        }
-        }
-    }
-
-    @Override
-    public CompoundTag getPersistentData(){
-        if(persistentData == null){
-            persistentData = new CompoundTag();
-        }
-        return persistentData;
-    }
 
     /**In a timestop, fire doesn't tick*/
     @Inject(method = "setRemainingFireTicks", at = @At("HEAD"), cancellable = true)
-    protected void roundaboutSetFireTicks(int $$0, CallbackInfo ci){
+    protected void roundabout$SetFireTicks(int $$0, CallbackInfo ci){
         Entity entity = ((Entity)(Object) this);
         if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity)){
@@ -189,27 +151,13 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "clearFire", at = @At("HEAD"), cancellable = true)
-    protected void roundaboutClearFire(CallbackInfo ci){
+    protected void roundabout$ClearFire(CallbackInfo ci){
         Entity entity = ((Entity)(Object) this);
         if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity)){
             this.remainingFireTicks = 0;
         }
     }
-
-//why is activestand nulling a problem?
-    @Inject(method = "save", at = @At("HEAD"))
-    protected void roundaboutWrite(CompoundTag $$0, CallbackInfoReturnable info){
-        if (persistentData != null){
-              persistentData.putBoolean("stand_on", standOn);
-            if (getActiveStand() != null){
-                persistentData.putUUID("active_stand", getActiveStand());
-
-            }
-            $$0.put("roundabout.stand_data", persistentData);
-        }
-    }
-
 
     @Shadow
     public boolean isShiftKeyDown() {
@@ -231,13 +179,6 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
 
-    @Inject(method = "load", at = @At("HEAD"))
-    protected void roundaboutRead(CompoundTag $$0, CallbackInfo info){
-        if ($$0.contains("roundabout.stand_data",10)){
-           persistentData = $$0.getCompound("roundabout.stand_data");
-           syncPersistentData();
-        }
-    }
 
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {

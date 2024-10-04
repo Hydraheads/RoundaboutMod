@@ -22,11 +22,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void NBTSyncPacket(ServerPlayer sp, CompoundTag NBT) {
-        ForgePacketHandler.sendToClient(new ForgeNBTPacket(NBT), sp);
-    }
-
-    @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring, byte activePower, byte activePowerPhase) {
         ForgePacketHandler.sendToClient(new ForgeCDSyncPacket(attackTime,attackTimeMax,attackTimeDuring,activePower,activePowerPhase), sp);
     }

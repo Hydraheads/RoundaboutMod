@@ -36,6 +36,9 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
+/**Harpoons use retooled/edited trident code, so they can function similarly, but they have anti-air properties
+ * such as damaging airborne mobs more based on airtime, and sniping elytra users/phantoms.
+ * The code for sniping and loyalty will be replaced by enchants in future versions*/
 public class HarpoonEntity extends AbstractArrow {
         private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(HarpoonEntity.class, EntityDataSerializers.BYTE);
         private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(HarpoonEntity.class, EntityDataSerializers.BOOLEAN);

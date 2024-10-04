@@ -19,7 +19,6 @@ public class StandAbilityPacket {
         ServerLevel world = (ServerLevel) player.level();
         server.execute(() -> {
             ((StandUser) player).summonStand(world, false, true);
-            ((IEntityAndData) player).getPersistentData().putLong("guard", (player.level().getGameTime() + 200));
         });
     }
     public static void switchPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,

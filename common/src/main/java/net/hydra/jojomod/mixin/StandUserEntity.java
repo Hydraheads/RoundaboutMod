@@ -346,7 +346,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void tickRoundabout(CallbackInfo ci) {
         //if (StandID > -1) {
         if (!this.level().isClientSide) {
-            if (this.getActive() &&this.getStandPowers().canSummonStand() && this.getStand() == null){
+            if (this.getActive() &&this.getStandPowers().canSummonStand() && (this.getStand() == null ||
+                    (this.getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
+                            OffsetIndex.OffsetStyle(this.getStand().getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
                 this.summonStand(this.level(),true,false);
             }
         }

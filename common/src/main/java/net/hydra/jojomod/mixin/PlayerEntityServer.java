@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.authlib.GameProfile;
-import net.hydra.jojomod.access.ServerPlayerAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
@@ -15,10 +14,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.hydra.jojomod.stand.NBTData.syncModNbt;
 
 @Mixin(ServerPlayer.class)
-    public abstract class PlayerEntityServer extends Player implements ServerPlayerAccess {
+    public abstract class PlayerEntityServer extends Player {
 
 
 
@@ -60,12 +58,4 @@ import static net.hydra.jojomod.stand.NBTData.syncModNbt;
         ((StandUser)this).roundabout$setStandDisc(((StandUser)$$0).roundabout$getStandDisc());
     }
 
-
-    @Override
-    public void compatSync() {
-            //MyComponents.STAND_USER.get(((ServerPlayerEntity) (Object) this)).sync();
-            syncModNbt((ServerPlayer) (Object) this);
-             ((StandUser)((ServerPlayer) (Object) this)).summonStand(this.level(), true,false);
-        compatSync = 5;
-    }
 }
