@@ -452,8 +452,10 @@ public class BlockGrabPreset extends PunchingStand{
                                 ((StandUser)ent).roundabout$setThrower(this.getSelf());
                                 ((StandUser)ent).roundabout$startAutoSpinAttack(20);
                             }
-                            if (ent instanceof NeutralMob NE && !(ent instanceof Animal)){
-                                NE.setTarget(this.getSelf());
+                            if (!this.getSelf().level().isClientSide) {
+                                if (ent instanceof NeutralMob NE && !(ent instanceof Animal) && !((ServerPlayer) this.getSelf()).isCreative()) {
+                                    NE.setTarget(this.getSelf());
+                                }
                             }
                             this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
 
