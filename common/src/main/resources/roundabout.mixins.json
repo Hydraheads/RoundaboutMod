@@ -50,6 +50,7 @@
     "ZThrowableProjectile",
     "ZTripWireBlock",
     "ZVillager",
+    "ZWarden",
     "ZWitch"
   ],
   "client": [
