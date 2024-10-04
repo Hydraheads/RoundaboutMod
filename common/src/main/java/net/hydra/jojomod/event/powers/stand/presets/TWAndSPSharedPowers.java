@@ -470,28 +470,37 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
 
             if (impactBrace){
-                if (this.getSelf().onGround()) {
-                    ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA_FINISH, true);
-                    if (this.getSelf().level().isClientSide) {
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
+                if (((StandUser) this.getSelf()).getActive()){
+                    if (this.getSelf().onGround()) {
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA_FINISH, true);
+                        if (this.getSelf().level().isClientSide) {
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
+                        }
+                    }else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)){
+                        impactSlowdown = -1;
+                        impactBrace = false;
+                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                        if (this.getSelf().level().isClientSide) {
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                        }
+                    } else {
+                        if (impactAirTime > -1){
+                            impactAirTime--;
+                        }
+                        impactSlowdown = 15;
+                        if (impactAirTime > -1 || this.getSelf().tickCount % 2 == 0){
+                            this.getSelf().fallDistance -= 1;
+                            if (this.getSelf().fallDistance < 0){
+                                this.getSelf().fallDistance = 0;
+                            }
+                        }
                     }
-                }else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)){
+                } else {
                     impactSlowdown = -1;
                     impactBrace = false;
                     ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
                     if (this.getSelf().level().isClientSide) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                    }
-                } else {
-                    if (impactAirTime > -1){
-                        impactAirTime--;
-                    }
-                    impactSlowdown = 15;
-                    if (impactAirTime > -1 || this.getSelf().tickCount % 2 == 0){
-                        this.getSelf().fallDistance -= 1;
-                        if (this.getSelf().fallDistance < 0){
-                            this.getSelf().fallDistance = 0;
-                        }
                     }
                 }
             }
