@@ -142,7 +142,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     } else {
                         if (this.getSelf().onGround()) {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 320);
+                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
                                 bonusLeapCount = 3;
                                 bigLeap(this.getSelf(), 20, 1);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());

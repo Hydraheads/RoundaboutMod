@@ -15,9 +15,13 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -81,7 +85,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             hold1 = true;
                             if (!options.keyShift.isDown()) {
                                 if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                    if (this.activePower == PowerIndex.POWER_1) {
+                                    if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
                                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                                     } else {
@@ -112,6 +116,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && slot != 2 && slot != 1){
             return true;
+        } else if (this.getActivePower() == PowerIndex.POWER_1_BONUS && this.getAttackTimeDuring() >= 0 && slot != 1){
+            return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
     }
@@ -123,8 +129,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
-        if (this.getActivePower() == PowerIndex.POWER_1){
-            stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
+        if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
+            if (move != PowerIndex.POWER_1_BONUS) {
+                stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
+            }
         }
         return super.tryPower(move,forced);
     }
@@ -147,11 +155,28 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1) {
             return this.assault();
+        } else if (move == PowerIndex.POWER_1_BONUS && this.getActivePower() == PowerIndex.POWER_1) {
+            return this.assaultGrab();
         }
         return super.setPowerOther(move,lastMove);
     }
 
     public Vec3 assultVec = Vec3.ZERO;
+    public boolean assaultGrab(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            this.setActivePower(PowerIndex.POWER_1_BONUS);
+            if (!this.getSelf().level().isClientSide) {
+                this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP,
+                        SoundSource.PLAYERS, 0.95F, 1.3F);
+                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                        stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                        30, 0.4, 0.4, 0.4, 0.4);
+            }
+            return true;
+        }
+        return false;
+    }
     public boolean assault(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
@@ -183,7 +208,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
         super.tickPowerEnd();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
-            if (this.getActivePower() == PowerIndex.POWER_1) {
+            if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS) {
                 if (!this.getSelf().level().isClientSide()) {
                     if (this.attackTimeDuring == 108) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
@@ -222,7 +247,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             } else {
                                 stand.setPos(yes);
                             }
-                            if (stand.isTechnicallyInWall() ||
+
+                            if (this.getActivePower() == PowerIndex.POWER_1_BONUS) {
+                                if (post <= 2){
+                                    ((StandUser) this.getSelf()).roundabout$tryPosPower(PowerIndex.POWER_2,
+                                            true, blockHit.getBlockPos());
+                                    return;
+                                }
+                            }
+
+                            if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
                                     stand.position().distanceTo(this.getSelf().position()) > 10 ||
                                     stand.position().distanceTo(this.getSelf().position()) > 10){
                                 stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
@@ -230,13 +264,23 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             }
                             AABB BB2 = stand.getBoundingBox();
                             if (this.attackTimeDuring > 10) {
-                                tryAssaultHit(stand, BB1, BB2);
+                                if (this.getActivePower() != PowerIndex.POWER_1_BONUS){
+                                    tryAssaultHit(stand, BB1, BB2);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public double getGrabRange(){
+        if (this.getActivePower() == PowerIndex.POWER_1_BONUS){
+            return 121;
+        }
+        return super.getGrabRange();
     }
 
     @Override
@@ -296,6 +340,32 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+        }
+    }
+
+    @Override
+    public void buttonInput2(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide && !this.isClashing()) {
+            if (keyIsDown) {
+                if (this.getActivePower() == PowerIndex.POWER_1){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+                    return;
+                }
+            }
+        }
+        super.buttonInput2(keyIsDown,options);
+    }
+
+    @Override
+    public boolean canInterruptPower(){
+
+        if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 60);
+            this.setCooldown(PowerIndex.SKILL_1, 60);
+            return true;
+        } else {
+            return super.canInterruptPower();
         }
     }
 

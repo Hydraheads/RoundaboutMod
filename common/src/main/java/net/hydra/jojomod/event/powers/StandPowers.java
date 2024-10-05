@@ -1120,6 +1120,13 @@ public class StandPowers {
             targetEntity = StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax));
         }
+
+        if (targetEntity instanceof StandEntity SE){
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+
         return targetEntity;
     }
 
@@ -1315,10 +1322,17 @@ public class StandPowers {
         if (entities != null){
             for (Entity value : entities) {
                 if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != this.self.getUUID()){
-                    float distanceTo = value.distanceTo(this.self);
-                    if ((nearestDistance < 0 || distanceTo < nearestDistance) && distanceTo <= this.standReach){
-                        nearestDistance = distanceTo;
-                        nearestMob = value;
+                    if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(this.getSelf()))) {
+                        float distanceTo = value.distanceTo(this.self);
+                        float range = this.standReach;
+                        if (value instanceof StandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
+                            range /= 2;
+                        }
+                        if ((nearestDistance < 0 || distanceTo < nearestDistance)
+                                && distanceTo <= range) {
+                            nearestDistance = distanceTo;
+                            nearestMob = value;
+                        }
                     }
                 }
             }

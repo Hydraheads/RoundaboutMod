@@ -870,14 +870,19 @@ public class BlockGrabPreset extends PunchingStand{
         return false;
     }
 
+    public double getGrabRange(){
+        return ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE;
+    }
+
     @SuppressWarnings("deprecation")
     public boolean grab() {
         if (!this.getSelf().level().isClientSide() && !this.hasEntity()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
                 if (this.grabBlock != null &&
-                        grabBlock.distSqr(this.getSelf().getOnPos()) <= ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE
+                        grabBlock.distSqr(this.getSelf().getOnPos()) <= getGrabRange()
                         && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
                         && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK) {
 

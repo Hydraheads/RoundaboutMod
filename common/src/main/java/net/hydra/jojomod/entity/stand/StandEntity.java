@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
@@ -13,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -262,6 +264,10 @@ public abstract class StandEntity extends Mob{
         return this.entityData.get(ANCHOR_PLACE);
     }
 
+    public boolean fireImmune() {
+        return true;
+    }
+
     public final byte getAnimation() {
         return this.entityData.get(ANIMATION);
     }
@@ -503,12 +509,15 @@ public abstract class StandEntity extends Mob{
 
     /** Stand does not take damage under normal circumstances.*/
     public boolean hurt(DamageSource source, float amount) {
+        if (this.getUser() != null && source.is(ModDamageTypes.STAND)){
+            return this.getUser().hurt(source,amount);
+        }
         return false;
     }
 
     @Override
     public boolean isInvulnerable() {
-        return true;
+        return false;
     }
     @Override
     public boolean isPushable() {

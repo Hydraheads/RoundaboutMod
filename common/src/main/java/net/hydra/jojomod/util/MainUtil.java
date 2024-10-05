@@ -238,7 +238,7 @@ public class MainUtil {
         List<net.minecraft.world.entity.Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive()){
+            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || value instanceof StandEntity){
                 hitEntities.remove(value);
             }
         }
