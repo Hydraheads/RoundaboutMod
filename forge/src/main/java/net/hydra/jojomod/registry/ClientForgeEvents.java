@@ -1,6 +1,8 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IBlockEntityWithoutLevelRenderer;
+import net.hydra.jojomod.access.IItemRenderer;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
@@ -11,6 +13,7 @@ import net.hydra.jojomod.entity.stand.TheWorldModel;
 import net.hydra.jojomod.entity.stand.TheWorldRenderer;
 import net.hydra.jojomod.particles.AirCrackleParticle;
 import net.hydra.jojomod.particles.BloodParticle;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;

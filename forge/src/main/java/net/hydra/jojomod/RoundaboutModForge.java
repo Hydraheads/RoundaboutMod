@@ -21,6 +21,7 @@ public class RoundaboutModForge {
 
     public RoundaboutModForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeCommonConfig.SPEC, "roundabout-client.toml");
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeCommonConfig.SPEC, "roundabout-common.toml");
 
         ForgeEffects.POTION_EFFECTS.register(bus);

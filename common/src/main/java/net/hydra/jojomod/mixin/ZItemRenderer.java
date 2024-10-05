@@ -3,9 +3,11 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IItemRenderer;
 import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.TridentModel;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -27,11 +30,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(ItemRenderer.class)
-public class ZItemRenderer {
+public class ZItemRenderer implements IItemRenderer {
 
     @Shadow
     @Final
+    private BlockEntityWithoutLevelRenderer blockEntityRenderer;
+    @Shadow
+    @Final
     private ItemModelShaper itemModelShaper;
+    @Unique
+    @Override
+    public BlockEntityWithoutLevelRenderer roundabout$getBlockEntityRenderer(){
+        return this.blockEntityRenderer;
+    }
     @ModifyVariable(method = "render", at = @At(value = "HEAD"), argsOnly = true)
     public BakedModel roundabout$render(
             BakedModel value, ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices,

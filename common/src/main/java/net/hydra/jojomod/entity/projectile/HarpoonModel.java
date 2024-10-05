@@ -6,6 +6,7 @@ package net.hydra.jojomod.entity.projectile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ModItemModels;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -26,6 +27,7 @@ public class HarpoonModel extends Model {
 
 		super(RenderType::entityCutout);
 		this.harpoon = root;
+		ModItemModels.HARPOON_MODEL = this;
 	}
 
 	public static LayerDefinition createBodyLayer() {
