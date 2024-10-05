@@ -16,7 +16,7 @@ public class CooldownSyncPacket {
             int attackTimeDuring = buf.readInt();
             byte activePower = buf.readByte();
             byte activePowerPhase = buf.readByte();
-            StandPowers powers = ((StandUser) client.player).getStandPowers();
+            StandPowers powers = ((StandUser) client.player).roundabout$getStandPowers();
             powers.setAttackTime(attackTime);
             powers.setAttackTimeMax(attackTimeMax);
             powers.setAttackTimeDuring(attackTimeDuring);
@@ -32,7 +32,7 @@ public class CooldownSyncPacket {
             byte standMove = buf.readByte();
             int cooldown = buf.readInt();
 
-            StandPowers powers = ((StandUser) client.player).getStandPowers();
+            StandPowers powers = ((StandUser) client.player).roundabout$getStandPowers();
             powers.setCooldown(standMove,cooldown);
         }
     }
@@ -43,8 +43,8 @@ public class CooldownSyncPacket {
         if (client.player != null) {
             float guardPoints = buf.readFloat();
             boolean guardBroken = buf.readBoolean();
-            ((StandUser) client.player).setGuardPoints(guardPoints);
-            ((StandUser) client.player).setGuardBroken(guardBroken);
+            ((StandUser) client.player).roundabout$setGuardPoints(guardPoints);
+            ((StandUser) client.player).roundabout$setGuardBroken(guardBroken);
         }
     }
 
@@ -52,7 +52,7 @@ public class CooldownSyncPacket {
                                    FriendlyByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {
             byte dazeTime = buf.readByte();
-            ((StandUser) client.player).setDazeTime(dazeTime);
+            ((StandUser) client.player).roundabout$setDazeTime(dazeTime);
         }
     }
 
@@ -61,7 +61,7 @@ public class CooldownSyncPacket {
         if (client.player != null) {
             byte activePower = buf.readByte();
             float data = buf.readFloat();
-            ((StandUser) client.player).getStandPowers().updatePowerFloat(activePower,data);
+            ((StandUser) client.player).roundabout$getStandPowers().updatePowerFloat(activePower,data);
         }
     }
     public static void sendIntPower(Minecraft client, ClientPacketListener handler,
@@ -69,7 +69,7 @@ public class CooldownSyncPacket {
         if (client.player != null) {
             byte activePower = buf.readByte();
             int data = buf.readInt();
-            ((StandUser) client.player).getStandPowers().updatePowerInt(activePower,data);
+            ((StandUser) client.player).roundabout$getStandPowers().updatePowerInt(activePower,data);
         }
     }
 }

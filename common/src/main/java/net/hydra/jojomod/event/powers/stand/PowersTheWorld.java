@@ -82,10 +82,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             if (!options.keyShift.isDown()) {
                                 if (!this.onCooldown(PowerIndex.SKILL_1)) {
                                     if (this.activePower == PowerIndex.POWER_1) {
-                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                                     } else {
-                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_1, true);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                                     }
                                 }
@@ -186,7 +186,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (this.getActivePower() == PowerIndex.POWER_1) {
                 if (!this.getSelf().level().isClientSide()) {
                     if (this.attackTimeDuring == 108) {
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     } else if (this.attackTimeDuring >= 0) {
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
@@ -226,7 +226,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                     stand.position().distanceTo(this.getSelf().position()) > 10 ||
                                     stand.position().distanceTo(this.getSelf().position()) > 10){
                                 stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             }
                             AABB BB2 = stand.getBoundingBox();
                             if (this.attackTimeDuring > 10) {

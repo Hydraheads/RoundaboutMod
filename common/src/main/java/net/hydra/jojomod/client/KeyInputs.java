@@ -15,15 +15,15 @@ public class KeyInputs {
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        if (((StandUser) player).getStandPowers().canSummonStand()) {
-            if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
-                if (((StandUser) player).getActive()) {
-                    ((StandUser) player).setSummonCD(8);
-                    ((StandUser) player).setActive(false);
-                    ((StandUser) player).tryPower(PowerIndex.NONE, true);
+        if (((StandUser) player).roundabout$getStandPowers().canSummonStand()) {
+            if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+                if (((StandUser) player).roundabout$getActive()) {
+                    ((StandUser) player).roundabout$setSummonCD(8);
+                    ((StandUser) player).roundabout$setActive(false);
+                    ((StandUser) player).roundabout$tryPower(PowerIndex.NONE, true);
                 } else {
-                    ((StandUser) player).setActive(true);
-                    ((StandUser) player).setSummonCD(2);
+                    ((StandUser) player).roundabout$setActive(true);
+                    ((StandUser) player).roundabout$setSummonCD(2);
                 }
                 ModPacketHandler.PACKET_ACCESS.standSummonPacket();
             }
@@ -32,23 +32,23 @@ public class KeyInputs {
     }
 
     public static void menuKey(Player player, Minecraft client){
-        if (((StandUser) player).getSummonCD() && roundaboutClickCount == 0) {
+        if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
             client.setScreen(new PowerInventoryScreen(player));
             roundaboutClickCount = 2;
         }
     }
 
     public static void MoveKey4(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).getStandPowers().buttonInput4(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().buttonInput4(keyIsDown, option);
     }
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).getStandPowers().buttonInput3(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().buttonInput3(keyIsDown, option);
     }
     public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).getStandPowers().buttonInput2(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().buttonInput2(keyIsDown, option);
     }
     public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).getStandPowers().buttonInput1(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().buttonInput1(keyIsDown, option);
     }
 
 

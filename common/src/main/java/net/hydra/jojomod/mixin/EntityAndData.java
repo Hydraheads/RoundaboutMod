@@ -6,7 +6,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -20,8 +19,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.UUID;
 
 @Mixin(Entity.class)
 public abstract class EntityAndData implements IEntityAndData {
@@ -172,8 +169,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "startRiding(Lnet/minecraft/world/entity/Entity;Z)Z", at = @At("HEAD"), cancellable = true)
     protected void roundabout$startRiding(Entity $$0, boolean $$1, CallbackInfoReturnable<Boolean> cir){
         if (((Entity)(Object)this) instanceof LivingEntity LE
-                && ((StandUser)LE).getStand() != null
-                && ($$0.getRootVehicle().is(((StandUser)LE).getStand()) || $$0.getRootVehicle().hasPassenger(((StandUser)LE).getStand()))){
+                && ((StandUser)LE).roundabout$getStand() != null
+                && ($$0.getRootVehicle().is(((StandUser)LE).roundabout$getStand()) || $$0.getRootVehicle().hasPassenger(((StandUser)LE).roundabout$getStand()))){
             cir.setReturnValue(false);
         }
     }
@@ -182,7 +179,7 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
-        if (entity instanceof LivingEntity le && ((StandUser) le).getStandPowers().cancelCollision(((Entity)(Object)this))) {
+        if (entity instanceof LivingEntity le && ((StandUser) le).roundabout$getStandPowers().cancelCollision(((Entity)(Object)this))) {
             ci.cancel();
         }
     }

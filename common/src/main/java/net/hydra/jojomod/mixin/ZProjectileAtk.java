@@ -22,9 +22,9 @@ public class ZProjectileAtk {
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)mob).isDazed() ||
+        if (((StandUser)mob).roundabout$isDazed() ||
                 (!((StandUser)mob).roundabout$getStandDisc().isEmpty() &&
-                ((StandUser)mob).getStandPowers().disableMobAiAttack())
+                ((StandUser)mob).roundabout$getStandPowers().disableMobAiAttack())
     ) {
             ci.cancel();
         }

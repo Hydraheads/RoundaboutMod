@@ -7,10 +7,8 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,7 +16,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -206,7 +203,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
         float basis = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
         if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
-            basis = ((StandUser)this).getStandPowers().inputSpeedModifiers(basis);
+            basis = ((StandUser)this).roundabout$getStandPowers().inputSpeedModifiers(basis);
         }
         byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
         if (curse > -1) {
@@ -222,8 +219,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**if your stand guard is broken, disable shields. Also, does not run takeshieldhit code if stand guarding.*/
     @Inject(method = "blockUsingShield", at = @At(value = "HEAD"), cancellable = true)
     protected void roundaboutTakeShieldHit(LivingEntity $$0, CallbackInfo ci) {
-        if (((StandUser) this).isGuarding()) {
-            if (((StandUser) this).getGuardBroken()){
+        if (((StandUser) this).roundabout$isGuarding()) {
+            if (((StandUser) this).roundabout$getGuardBroken()){
 
                 ItemStack itemStack = ((LivingEntity) (Object) this).getUseItem();
                 Item item = itemStack.getItem();
@@ -235,7 +232,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((Player) (Object) this).level().broadcastEntityEvent(((Player) (Object) this), EntityEvent.SHIELD_DISABLED);
             }
             ci.cancel();
-        } else if (((StandUser) $$0).getMainhandOverride()){
+        } else if (((StandUser) $$0).roundabout$getMainhandOverride()){
             ci.cancel();
         }
     }
@@ -253,14 +250,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**your shield does not take damage if the stand blocks it*/
     @Inject(method = "hurtCurrentlyUsedShield", at = @At(value = "HEAD"), cancellable = true)
     protected void roundaboutDamageShield(float $$0, CallbackInfo ci) {
-        if (((StandUser) this).isGuarding()) {
+        if (((StandUser) this).roundabout$isGuarding()) {
             ci.cancel();
         }
     }
     /**your shield does not take damage if the stand blocks it*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Jump(CallbackInfo ci) {
-        if (((StandUser) this).isClashing()) {
+        if (((StandUser) this).roundabout$isClashing()) {
             ci.cancel();
         }
     }
@@ -268,7 +265,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**stand mining intercepts tools for drop so that it is hand level*/
     @Inject(method = "hasCorrectToolForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$hasCorrectTool(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
-        if (((StandUser) this).getActive() && ((StandUser) this).getStandPowers().isMiningStand()) {
+        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().isMiningStand()) {
             cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
         }
     }
@@ -276,8 +273,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
-        if (((StandUser) this).getActive() && ((StandUser) this).getStandPowers().isMiningStand()) {
-            float mspeed = ((StandUser) this).getStandPowers().getMiningSpeed();
+        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().isMiningStand()) {
+            float mspeed = ((StandUser) this).roundabout$getStandPowers().getMiningSpeed();
             if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
                 if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL) || $$0.is(BlockTags.MINEABLE_WITH_AXE)){
                     mspeed/=2;
@@ -311,7 +308,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**If you are in a barrage, does not play the hurt sound*/
     @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutGetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
-        if (((StandUser) this).isDazed()) {
+        if (((StandUser) this).roundabout$isDazed()) {
             ci.setReturnValue(null);
         }
     }
@@ -329,7 +326,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (((TimeStop) ((Player) (Object) this).level()).CanTimeStopEntity(((Player) (Object) this))) {
                 ci.cancel();
             } else if ((((TimeStop) ((Player) (Object) this).level()).isTimeStoppingEntity(((Player) (Object) this)))) {
-                ((StandUser) this).setRoundaboutIdleTime(-1);
+                ((StandUser) this).roundabout$setIdleTime(-1);
                 roundabout$airTime = 0;
             } else {
                 if (notSkybound || this.isInWater()){
@@ -344,14 +341,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     protected void RoundaboutTick2(CallbackInfo ci) {
-        if (((StandUser)this).getAttackTimeDuring() > -1 || this.isUsingItem()) {
-            ((StandUser) this).setRoundaboutIdleTime(-1);
+        if (((StandUser)this).roundabout$getAttackTimeDuring() > -1 || this.isUsingItem()) {
+            ((StandUser) this).roundabout$setIdleTime(-1);
         } else if (!new Vec3(this.getX(), this.getY(), this.getZ()).equals(new Vec3(this.xOld, this.yOld, this.zOld))) {
-            ((StandUser) this).setRoundaboutIdleTime(-1);
+            ((StandUser) this).roundabout$setIdleTime(-1);
         } else {
-            ((StandUser) this).setRoundaboutIdleTime(((StandUser) this).getRoundaboutIdleTime() + 1);
+            ((StandUser) this).roundabout$setIdleTime(((StandUser) this).roundabout$getIdleTime() + 1);
         }
-        ((StandUser) this).getStandPowers().tickPowerEnd();
+        ((StandUser) this).roundabout$getStandPowers().tickPowerEnd();
     }
 
     @Override

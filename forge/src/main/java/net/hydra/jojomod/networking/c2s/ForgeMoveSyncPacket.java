@@ -31,7 +31,7 @@ public class ForgeMoveSyncPacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
-                ((StandUser) player).setDI(forward, strafe);
+                ((StandUser) player).roundabout$setDI(forward, strafe);
             }
         });
         return true;

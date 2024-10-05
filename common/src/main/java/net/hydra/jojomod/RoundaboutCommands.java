@@ -30,8 +30,8 @@ public class RoundaboutCommands {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity le) {
                 ((StandUser) entity).roundabout$setStandDisc(ModItems.STAND_DISC_THE_WORLD.getDefaultInstance());
-                ((StandUser) entity).setStandPowers(new PowersTheWorld(le));
-                ((StandUser) entity).summonStand(entity.level(), true,true);
+                ((StandUser) entity).roundabout$setStandPowers(new PowersTheWorld(le));
+                ((StandUser) entity).roundabout$summonStand(entity.level(), true,true);
             }
         }
         if (targets.size() == 1) {
@@ -45,7 +45,7 @@ public class RoundaboutCommands {
     static int executeDebugAttack(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                ((StandUser) entity).tryPower(PowerIndex.ATTACK, true);
+                ((StandUser) entity).roundabout$tryPower(PowerIndex.ATTACK, true);
             }
         }
         return targets.size();
@@ -53,7 +53,7 @@ public class RoundaboutCommands {
     static int executeDebugSpecial(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                ((StandUser) entity).tryPower(PowerIndex.SPECIAL, true);
+                ((StandUser) entity).roundabout$tryPower(PowerIndex.SPECIAL, true);
             }
         }
         return targets.size();
@@ -62,7 +62,7 @@ public class RoundaboutCommands {
     static int executeDebugBarrage(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                ((StandUser) entity).tryPower(PowerIndex.BARRAGE, true);
+                ((StandUser) entity).roundabout$tryPower(PowerIndex.BARRAGE, true);
             }
         }
         return targets.size();
@@ -71,7 +71,7 @@ public class RoundaboutCommands {
     static int executeDebugGuard(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
-                ((StandUser) entity).tryPower(PowerIndex.GUARD, true);
+                ((StandUser) entity).roundabout$tryPower(PowerIndex.GUARD, true);
             }
         }
         return targets.size();
@@ -80,9 +80,9 @@ public class RoundaboutCommands {
     static int executeDebugCancel(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity LE) {
-                ((StandUser) entity).tryPower(PowerIndex.NONE, true);
+                ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE, true);
                 if (((TimeStop) entity.level()).isTimeStoppingEntity(LE)){
-                    ((StandUser) entity).tryPower(PowerIndex.SPECIAL_FINISH, true);
+                    ((StandUser) entity).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
                 }
             }
         }
@@ -94,7 +94,7 @@ public class RoundaboutCommands {
         if (ability < 100) {
             for (Entity entity : targets) {
                 if (entity instanceof LivingEntity) {
-                    ((StandUser) entity).tryPower((byte) ability, true);
+                    ((StandUser) entity).roundabout$tryPower((byte) ability, true);
                 }
             }
         }

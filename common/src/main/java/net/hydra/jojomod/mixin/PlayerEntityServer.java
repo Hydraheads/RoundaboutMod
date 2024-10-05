@@ -45,9 +45,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
                 }
             });
             StandUser standUserData = ((StandUser) this);
-            if (standUserData.hasStandOut()) {
+            if (standUserData.roundabout$hasStandOut()) {
 
-                standUserData.updateStandOutPosition(standUserData.getStand(), Entity::moveTo);
+                standUserData.roundabout$updateStandOutPosition(standUserData.roundabout$getStand(), Entity::moveTo);
             }
         }
     }

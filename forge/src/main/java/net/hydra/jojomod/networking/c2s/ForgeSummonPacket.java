@@ -23,7 +23,7 @@ public class ForgeSummonPacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
-                ((StandUser) player).summonStand(level, false, true);
+                ((StandUser) player).roundabout$summonStand(level, false, true);
             }
         });
         return true;

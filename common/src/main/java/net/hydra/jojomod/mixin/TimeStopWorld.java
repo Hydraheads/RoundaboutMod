@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -122,9 +121,9 @@ public class TimeStopWorld implements TimeStop {
                         /*You only need data of time stopping mobs that are relatively close by*/
                         if (MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
                             ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), TSI.getX(),
-                                    TSI.getY(),TSI.getZ(),((StandUser) TSI).getStandPowers().getTimestopRange(),
-                                    ((StandUser) TSI).getStandPowers().getChargedTSTicks(),
-                                    ((StandUser) TSI).getStandPowers().getMaxChargeTSTime());
+                                    TSI.getY(),TSI.getZ(),((StandUser) TSI).roundabout$getStandPowers().getTimestopRange(),
+                                    ((StandUser) TSI).roundabout$getStandPowers().getChargedTSTicks(),
+                                    ((StandUser) TSI).roundabout$getStandPowers().getMaxChargeTSTime());
                         }
                     }
                 }
@@ -181,7 +180,7 @@ public class TimeStopWorld implements TimeStop {
                 if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive()){
                     removeTimeStoppingEntity($$1.get(i));
                 } else if (!((Level) (Object) this).isClientSide) {
-                    ((StandUser)$$1.get(i)).getStandPowers().timeTickStopPower();
+                    ((StandUser)$$1.get(i)).roundabout$getStandPowers().timeTickStopPower();
                 }
             }
         }
@@ -211,7 +210,7 @@ public class TimeStopWorld implements TimeStop {
                 List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).getStandPowers().getTimestopRange()) {
+                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
                         return true;
                     }
                 }
@@ -258,7 +257,7 @@ public class TimeStopWorld implements TimeStop {
                 List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).getStandPowers().getTimestopRange()) {
+                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
                         return it;
                     }
                 }

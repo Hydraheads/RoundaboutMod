@@ -2,7 +2,6 @@ package net.hydra.jojomod.networking.c2s;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -30,9 +29,9 @@ public class ForgeClashUpdatePacketC2S {
         context.enqueueWork(()-> {
             ServerPlayer player = context.getSender();
             if (player != null) {
-                if (((StandUser) player).isClashing()){
-                    ((StandUser) player).getStandPowers().setClashProgress(clashProg);
-                    ((StandUser) player).getStandPowers().setClashDone(clashDone);
+                if (((StandUser) player).roundabout$isClashing()){
+                    ((StandUser) player).roundabout$getStandPowers().setClashProgress(clashProg);
+                    ((StandUser) player).roundabout$getStandPowers().setClashDone(clashDone);
                 }
             }
         });

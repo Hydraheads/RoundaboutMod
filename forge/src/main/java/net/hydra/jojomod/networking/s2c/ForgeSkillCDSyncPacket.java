@@ -31,7 +31,7 @@ public class ForgeSkillCDSyncPacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                StandPowers powers = ((StandUser) player).getStandPowers();
+                StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
                 powers.setCooldown(power,cooldown);
             }
         });

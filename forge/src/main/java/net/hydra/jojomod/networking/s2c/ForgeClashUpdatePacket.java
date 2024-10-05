@@ -31,8 +31,8 @@ public class ForgeClashUpdatePacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                ((StandUser) player).getStandPowers().setClashOp((LivingEntity) player.level().getEntity(clashOpID));
-                ((StandUser) player).getStandPowers().setClashOpProgress(progress);
+                ((StandUser) player).roundabout$getStandPowers().setClashOp((LivingEntity) player.level().getEntity(clashOpID));
+                ((StandUser) player).roundabout$getStandPowers().setClashOpProgress(progress);
             }
         });
         return true;

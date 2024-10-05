@@ -4,8 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.model.ArmedModel;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -51,7 +49,7 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             float shiftX = 4.3F;
             if (MainUtil.isThrownBlockItem((p_117186_.getItem()))){
                 if (((StandEntity)p_117185_).getUser() != null) {
-                    shiftZ = 0 - Math.max(0,Math.min(((StandUser)((StandEntity) p_117185_).getUser()).getAttackTimeDuring(),10F))*1.4F;
+                    shiftZ = 0 - Math.max(0,Math.min(((StandUser)((StandEntity) p_117185_).getUser()).roundabout$getAttackTimeDuring(),10F))*1.4F;
                     shiftY = -0.5F;
                     shiftX = 4;
                 }

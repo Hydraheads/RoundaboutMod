@@ -19,7 +19,7 @@ public class MoveSyncPacket {
         byte strafe = buf.readByte();
 
         server.execute(() -> {
-            ((StandUser) player).setDI(forward, strafe);
+            ((StandUser) player).roundabout$setDI(forward, strafe);
         });
 
 

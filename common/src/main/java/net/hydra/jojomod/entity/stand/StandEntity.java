@@ -463,10 +463,10 @@ public abstract class StandEntity extends Mob{
      * When this is called, sets the User's owned stand to this one. Both the Stand and the User store
      * each other, and this is for setting the User's storage.
      *
-     * @see net.hydra.jojomod.event.powers.StandUser#setStand
+     * @see net.hydra.jojomod.event.powers.StandUser#roundabout$setStand
      */
     public boolean startStandRiding(LivingEntity entity, boolean force) {
-        ((StandUser) entity).setStand(this);
+        ((StandUser) entity).roundabout$setStand(this);
         return true;
         //RoundaboutMod.LOGGER.info("MF");
     }
@@ -488,7 +488,7 @@ public abstract class StandEntity extends Mob{
             if (this.getFollowing() == null) {
                 return;
             }
-            ((StandUser) this.getFollowing()).updateStandOutPosition(this);
+            ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
     }
 
     public void tickStandOut2() {
@@ -497,7 +497,7 @@ public abstract class StandEntity extends Mob{
             if (this.getFollowing() == null) {
                 return;
             }
-            ((StandUser) this.getFollowing()).updateStandOutPosition(this);
+            ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
     }
 
 
@@ -577,8 +577,8 @@ public abstract class StandEntity extends Mob{
             if (this.isAlive() && !this.dead){
                 if (this.getNeedsUser() && !this.isDisplay) {
                     if (this.getUser() != null && !this.getUser().isRemoved()) {
-                        boolean userActive = this.getUserData(this.getUser()).getActive();
-                        LivingEntity thisStand = this.getUserData(this.getUser()).getStand();
+                        boolean userActive = this.getUserData(this.getUser()).roundabout$getActive();
+                        LivingEntity thisStand = this.getUserData(this.getUser()).roundabout$getStand();
                         if (this.getUser().isAlive() && userActive && (thisStand != null && thisStand.getId() == this.getId())) {
 
                             //Make it fade in
@@ -681,7 +681,7 @@ public abstract class StandEntity extends Mob{
                 addXZ-= 0.015F;
                 distanceFront = 1.05F;
             } else {
-                distanceFront = ((StandUser) standUser).getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).getStandReach(),true);
+                distanceFront = ((StandUser) standUser).roundabout$getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).roundabout$getStandReach(),true);
             }
 
             Vec3 frontVectors = FrontVectors(standUser, 0, distanceFront);

@@ -111,7 +111,7 @@ public class WorldTickServer {
                 if ($$0 instanceof LivingEntity) {
                     ((LivingEntity) $$0).hurtTime = 0;
                     $$0.invulnerableTime = 0;
-                    ((StandUser)$$0).getStandPowers().timeTick();
+                    ((StandUser)$$0).roundabout$getStandPowers().timeTick();
                     ((ILivingEntityAccess) $$0).roundaboutPushEntities();
                 } else if ($$0 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
@@ -152,7 +152,7 @@ public class WorldTickServer {
             }
         }
         if ($$1 instanceof LivingEntity) {
-            ((StandUser) $$1).roundaboutUniversalTick();
+            ((StandUser) $$1).roundabout$UniversalTick();
         }
         roundaboutTickTSDamage($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
@@ -201,7 +201,7 @@ public class WorldTickServer {
 
     private void roundaboutTickTSDamage(Entity entity){
         if (entity instanceof LivingEntity){
-            ((StandUser)entity).roundaboutUniversalTick();
+            ((StandUser)entity).roundabout$UniversalTick();
             if (!(((TimeStop) this).CanTimeStopEntity(entity)) && ((StandUser)entity).roundabout$getStoredDamage() > 0){
 
                 if (DamageHandler.TimeDamageEntityAttack(entity,

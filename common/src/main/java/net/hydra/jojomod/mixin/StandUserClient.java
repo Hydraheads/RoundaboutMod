@@ -2,11 +2,9 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -41,7 +39,7 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
      * If you play it during the packet, it can crash the client because of HashMap problems*/
     @Override
     public void clientQueSound(byte soundChoice){
-       SoundEvent soundE = ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
+       SoundEvent soundE = ((StandUser) this).roundabout$getStandPowers().getSoundFromByte(soundChoice);
        if (soundE != null) {
             roundaboutAddSound(new QueueSoundInstance(soundE, soundChoice));
        }
@@ -65,7 +63,7 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
             List<QueueSoundInstance> $$0 = Lists.newArrayList(this.roundaboutSounds);
             for (int i = $$0.size() - 1; i >= 0; --i) {
                 QueueSoundInstance soundI = $$0.get(i);
-                ((StandUser) this).getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
+                ((StandUser) this).roundabout$getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
             }
 
             List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundaboutSounds);
@@ -76,8 +74,8 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                 SoundInstance qSound = new EntityBoundSoundInstance(
                         soundI.roundaboutSoundEvent,
                         SoundSource.NEUTRAL,
-                        ((StandUser) this).getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
-                        ((StandUser) this).getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte),
+                        ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
+                        ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte),
                         ((Entity) (Object) this),
                         ((Entity) (Object) this).level().random.nextLong()
                 );
@@ -101,12 +99,12 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                 }
             }
         }
-            SoundEvent SE =  ((StandUser) this).getStandPowers().getSoundFromByte(soundChoice);
+            SoundEvent SE =  ((StandUser) this).roundabout$getStandPowers().getSoundFromByte(soundChoice);
             SoundInstance qSound = new EntityBoundSoundInstance(
                     SE,
                     SoundSource.NEUTRAL,
-                    ((StandUser) this).getStandPowers().getSoundVolumeFromByte(soundChoice),
-                    ((StandUser) this).getStandPowers().getSoundPitchFromByte(soundChoice),
+                    ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundChoice),
+                    ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundChoice),
                     ((Entity) (Object) this),
                     ((Entity) (Object) this).level().random.nextLong()
             );
@@ -144,7 +142,7 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                 byte soundByte = $$1.get(i);
                 for (int j = $$2.size() - 1; j >= 0; --j) {
                     PlayedSoundInstance soundI = $$2.get(j);
-                    if (((StandUser) this).getStandPowers().getSoundCancelingGroupByte(soundI.roundaboutSoundByte) == soundByte){
+                    if (((StandUser) this).roundabout$getStandPowers().getSoundCancelingGroupByte(soundI.roundaboutSoundByte) == soundByte){
                         Minecraft.getInstance().getSoundManager().stop(soundI.roundaboutSoundInstance);
                         $$2.remove(j);
                     }

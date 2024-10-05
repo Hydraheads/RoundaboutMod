@@ -33,7 +33,7 @@ public class ForgeBarrageHitPacket {
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
                 Entity TE = player.level().getEntity(targetEntity);
-                ((StandUser) player).getStandPowers().barrageImpact(TE, hitNumber);
+                ((StandUser) player).roundabout$getStandPowers().barrageImpact(TE, hitNumber);
             }
         });
         return true;

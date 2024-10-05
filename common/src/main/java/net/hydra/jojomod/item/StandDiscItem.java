@@ -1,14 +1,10 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,7 +28,7 @@ public class StandDiscItem extends Item {
     }
 
     public void generateStandPowers(LivingEntity entity){
-        ((StandUser)entity).setStandPowers(standPowers.generateStandPowers(entity));
+        ((StandUser)entity).roundabout$setStandPowers(standPowers.generateStandPowers(entity));
     }
 
     public void generateStandPowerRejection(LivingEntity entity){
@@ -48,8 +44,8 @@ public class StandDiscItem extends Item {
                 addItem($$1, currentDisc.copy());
             }
             if ($$3.getItem() instanceof StandDiscItem SI) {
-                ((StandUser) $$1).setStand(null);
-                ((StandUser) $$1).setActive(false);
+                ((StandUser) $$1).roundabout$setStand(null);
+                ((StandUser) $$1).roundabout$setActive(false);
                 ((StandUser) $$1).roundabout$setStandDisc($$3.copy());
                 SI.generateStandPowers($$1);
             }

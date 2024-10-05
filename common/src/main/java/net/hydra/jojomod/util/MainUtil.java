@@ -2,9 +2,7 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
@@ -62,7 +60,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -674,7 +671,7 @@ public class MainUtil {
                 if (((LivingEntity) entity).isBlocking()) {
 
                     StandUser standUser= getUserData((LivingEntity) entity);
-                    if (!standUser.isGuarding()) {
+                    if (!standUser.roundabout$isGuarding()) {
                         if (entity instanceof Player){
                             ItemStack itemStack = ((LivingEntity) entity).getUseItem();
                             Item item = itemStack.getItem();
@@ -700,9 +697,9 @@ public class MainUtil {
                 if (((LivingEntity) entity).isBlocking()) {
 
                     StandUser standUser= getUserData((LivingEntity) entity);
-                    if (standUser.isGuarding()) {
-                        if (!standUser.getGuardBroken()){
-                            standUser.breakGuard();
+                    if (standUser.roundabout$isGuarding()) {
+                        if (!standUser.roundabout$getGuardBroken()){
+                            standUser.roundabout$breakGuard();
                         }
                     }
                     if (entity instanceof Player){
@@ -775,7 +772,7 @@ public class MainUtil {
             if (target instanceof LivingEntity LE){
                 ((StandUser)target).roundabout$setBlip(vec);
 
-                StandEntity SE = ((StandUser)target).getStand();
+                StandEntity SE = ((StandUser)target).roundabout$getStand();
                 if (SE != null){
                     ((StandUser)SE).roundabout$setBlip(vec);
                 }
@@ -795,11 +792,11 @@ public class MainUtil {
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleSingleBytePacketC2S(Player player, byte context){
         if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
-            ((StandUser) player).getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+            ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
-            ((StandUser) player).getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
+            ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND) {
-            ((StandUser) player).getStandPowers().playSoundsIfNearby(SoundIndex.STAND_ARROW_CHARGE, 10, false);
+            ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.STAND_ARROW_CHARGE, 10, false);
         }
     }
 
@@ -823,8 +820,8 @@ public class MainUtil {
 
             target.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.GLAIVE), data);
         } else if (context == PacketDataIndex.INT_TS_TIME){
-            if (((StandUser)player).getStandPowers().getChargedTSTicks() > data) {
-                ((StandUser)player).getStandPowers().setChargedTSTicks(data);
+            if (((StandUser)player).roundabout$getStandPowers().getChargedTSTicks() > data) {
+                ((StandUser)player).roundabout$getStandPowers().setChargedTSTicks(data);
             }
         } else if (context == PacketDataIndex.INT_RIDE_TICKS){
             ((StandUser)player).roundabout$setRestrainedTicks(data);

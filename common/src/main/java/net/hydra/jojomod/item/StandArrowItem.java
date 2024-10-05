@@ -1,39 +1,25 @@
 package net.hydra.jojomod.item;
 
-import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -226,11 +212,11 @@ public class StandArrowItem extends Item {
 
     public static boolean grantStand(ItemStack discStack, LivingEntity target){
         if (discStack.getItem() instanceof StandDiscItem de){
-            ((StandUser) target).setStand(null);
-            ((StandUser) target).setActive(false);
+            ((StandUser) target).roundabout$setStand(null);
+            ((StandUser) target).roundabout$setActive(false);
             ((StandUser) target).roundabout$setStandDisc(discStack.copy());
             de.generateStandPowers(target);
-            ((StandUser) target).summonStand(target.level(),true,false);
+            ((StandUser) target).roundabout$summonStand(target.level(),true,false);
             return true;
         }
         return false;

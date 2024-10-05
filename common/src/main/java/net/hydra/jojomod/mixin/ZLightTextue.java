@@ -17,8 +17,8 @@ public class ZLightTextue {
 
     @ModifyVariable(method = "updateLightTexture(F)V", at = @At("STORE"), ordinal = 9)
     protected float roundabout$updateLightTexture(float $$0) {
-        if (this.minecraft.player != null && ((StandUser)this.minecraft.player).getStandPowers().scopeTime > -1){
-            return (float) Math.min($$0+(((((StandUser)this.minecraft.player).getStandPowers().scopeTime)*0.1)),1F);
+        if (this.minecraft.player != null && ((StandUser)this.minecraft.player).roundabout$getStandPowers().scopeTime > -1){
+            return (float) Math.min($$0+(((((StandUser)this.minecraft.player).roundabout$getStandPowers().scopeTime)*0.1)),1F);
         } else {
             return $$0;
         }

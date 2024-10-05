@@ -30,8 +30,8 @@ public class ZPassengers {
                 }
             });
             StandUser standUserData = ((StandUser) this);
-            if (standUserData.hasStandOut()) {
-                standUserData.updateStandOutPosition(standUserData.getStand(), Entity::moveTo);
+            if (standUserData.roundabout$hasStandOut()) {
+                standUserData.roundabout$updateStandOutPosition(standUserData.roundabout$getStand(), Entity::moveTo);
             }
 
         }

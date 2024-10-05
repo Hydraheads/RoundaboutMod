@@ -25,7 +25,7 @@ public class ZBossBar {
     /** When in a barrage clash, boss bars are hidden.*/
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void roundaboutRender(GuiGraphics context, CallbackInfo ci) {
-        if (minecraft.player != null && ((StandUser)minecraft.player).getStandPowers().isClashing()) {
+        if (minecraft.player != null && ((StandUser)minecraft.player).roundabout$getStandPowers().isClashing()) {
             ci.cancel();
         }
     }

@@ -1,14 +1,11 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceKey;
@@ -56,11 +53,11 @@ public abstract class WorldTickClient extends Level {
     private void standTickCheck(Entity entity){
         if (entity.showVehicleHealth()) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            if (((StandUser) livingEntity).getStand() != null) {
-                StandEntity stand = ((StandUser) livingEntity).getStand();
+            if (((StandUser) livingEntity).roundabout$getStand() != null) {
+                StandEntity stand = ((StandUser) livingEntity).roundabout$getStand();
                 if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
 
-                    if (!(entity.getVehicle() != null && entity.getVehicle() == ((StandUser) entity).getStand())) {
+                    if (!(entity.getVehicle() != null && entity.getVehicle() == ((StandUser) entity).roundabout$getStand())) {
                         this.tickStandIn(livingEntity, stand);
                     }
                 }
@@ -71,8 +68,8 @@ public abstract class WorldTickClient extends Level {
     private void updateStandTS(Entity entity){
         if (entity.showVehicleHealth()) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            if (((StandUser) livingEntity).getStand() != null) {
-                StandEntity stand = ((StandUser) livingEntity).getStand();
+            if (((StandUser) livingEntity).roundabout$getStand() != null) {
+                StandEntity stand = ((StandUser) livingEntity).roundabout$getStand();
                 if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
                     if (!(stand.isRemoved() || stand.getUser() != entity)) {
                         roundaboutTickLivingEntityTS(stand);
@@ -156,7 +153,7 @@ public abstract class WorldTickClient extends Level {
         if ($$0 instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) $$0;
             roundaboutTickLivingEntityTS(livingEntity);
-            ((StandUser)livingEntity).getStandPowers().timeTick();
+            ((StandUser)livingEntity).roundabout$getStandPowers().timeTick();
             updateStandTS(livingEntity);
             $$0.invulnerableTime = 0;
             ((LivingEntity) $$0).hurtTime = 0;
@@ -200,7 +197,7 @@ public abstract class WorldTickClient extends Level {
             }
 
             if ($$0 instanceof LivingEntity) {
-                ((StandUser) $$0).roundaboutUniversalTick();
+                ((StandUser) $$0).roundabout$UniversalTick();
             }
 
             roundaboutStoreOldPositionsForTS($$0);
@@ -238,7 +235,7 @@ public abstract class WorldTickClient extends Level {
             }
         }
         if ($$1 instanceof LivingEntity) {
-            ((StandUser) $$1).roundaboutUniversalTick();
+            ((StandUser) $$1).roundabout$UniversalTick();
         }
 
         roundaboutStoreOldPositionsForTS($$1);
@@ -294,7 +291,7 @@ public abstract class WorldTickClient extends Level {
     private void roundaboutTickEntity3(CallbackInfo ci) {
         if (minecraft.player != null){
             if (((TimeStop) this).isTimeStoppingEntity(minecraft.player)) {
-                ((StandUser) minecraft.player).getStandPowers().timeTickStopPower();
+                ((StandUser) minecraft.player).roundabout$getStandPowers().timeTickStopPower();
             }
         }
         this.tickingEntities.forEach($$0x -> {

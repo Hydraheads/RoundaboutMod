@@ -10,7 +10,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -74,10 +73,10 @@ public class PunchingStand extends StandPowers {
                     double RNG = Math.random();
                     if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
                         wentForCharge = true;
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
                     } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                         wentForCharge = false;
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.ATTACK, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
                     }
                 }
             }
@@ -117,7 +116,7 @@ public class PunchingStand extends StandPowers {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring > this.attackTimeMax) {
                 this.attackTimeMax = 0;
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE,true);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
             } else {
                 if ((this.attackTimeDuring == 5 && this.activePowerPhase == 1)
                         || this.attackTimeDuring == 6) {

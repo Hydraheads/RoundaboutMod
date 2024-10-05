@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.access.IGameRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
@@ -20,7 +19,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -87,10 +85,10 @@ public abstract class InputEvents {
             //handleInputEvents
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
-                boolean isMining = (standComp.getActivePower() == PowerIndex.MINING);
-                if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
+                boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
+                if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     ci.setReturnValue(true);
-                } else if (standComp.getActive() && standComp.getStandPowers().interceptAttack()){
+                } else if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack()){
                     if (this.hitResult != null) {
                         boolean $$1 = false;
                         if (isMining) {
@@ -126,8 +124,8 @@ public abstract class InputEvents {
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
-                boolean isMining = (standComp.getActivePower() == PowerIndex.MINING);
-                if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
+                boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
+                if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     if (!$$0){
                         this.missTime = 0;
                     }
@@ -135,7 +133,7 @@ public abstract class InputEvents {
                         this.gameMode.stopDestroyBlock();
                     }
                     ci.cancel();
-                } else if (standComp.getActive() && standComp.getStandPowers().interceptAttack()){
+                } else if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack()){
                     if (isMining) {
                         if (!this.player.isUsingItem()) {
                             if ($$0 && this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK) {
@@ -149,7 +147,7 @@ public abstract class InputEvents {
                                     }
                                 }
                             } else {
-                                standComp.tryPower(PowerIndex.NONE, true);
+                                standComp.roundabout$tryPower(PowerIndex.NONE, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
 
                                 this.gameMode.stopDestroyBlock();
@@ -176,8 +174,8 @@ public abstract class InputEvents {
         @Unique
         public boolean roundabout$TryGuard(){
             StandUser standComp = ((StandUser) player);
-            if (standComp.getActive() && standComp.getStandPowers().interceptGuard()) {
-                return standComp.getStandPowers().buttonInputGuard(this.options.keyRight.isDown(),this.options);
+            if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
+                return standComp.roundabout$getStandPowers().buttonInputGuard(this.options.keyRight.isDown(),this.options);
             }
             return false;
         }
@@ -192,10 +190,10 @@ public abstract class InputEvents {
 
             StandUser standComp = ((StandUser) player);
 
-            if (standComp.isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
+            if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 ci.cancel();
-            } else if (standComp.getActive()) {
-                if (standComp.isGuarding() || standComp.isBarraging() || standComp.isClashing() || standComp.getStandPowers().cancelItemUse()) {
+            } else if (standComp.roundabout$getActive()) {
+                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
                     ci.cancel();
                 }
             }
@@ -338,8 +336,8 @@ public abstract class InputEvents {
 
                 /*If you have a stand out, update the stand leaning attributes.
                  * Currently, strafe is reported, but unused.*/
-                if (((StandUser) player).getActive()) {
-                    StandEntity stand = ((StandUser) player).getStand();
+                if (((StandUser) player).roundabout$getActive()) {
+                    StandEntity stand = ((StandUser) player).roundabout$getStand();
                     if (stand != null) {
                         var mf = stand.getMoveForward();
                         byte forward = 0;
@@ -384,25 +382,25 @@ public abstract class InputEvents {
 
             StandUser standComp = ((StandUser) player);
             if (!this.options.keyUse.isDown()) {
-                if (standComp.isGuarding() || standComp.isBarraging()) {
+                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging()) {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                         * This delay exists so you can't right click left click chain for instant full power punches.*/
-                   if (standComp.getActivePowerPhase() > 0 ) {
-                       standComp.setInterruptCD(3);
+                   if (standComp.roundabout$getActivePowerPhase() > 0 ) {
+                       standComp.roundabout$setInterruptCD(3);
                    }
-                    standComp.tryPower(PowerIndex.NONE,true);
+                    standComp.roundabout$tryPower(PowerIndex.NONE,true);
                    ModPacketHandler.PACKET_ACCESS.StandGuardCancelClientPacket();
                 }
             }
 
-            if (standComp.getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
+            if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 if (this.options.keyAttack.isDown() && !player.isUsingItem()) {
 
-                    boolean isMining = (standComp.getActivePower() == PowerIndex.MINING);
-                    Entity TE = standComp.getTargetEntity(player, -1);
+                    boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
+                    Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                     if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
-                    && (standComp.getActivePower() == PowerIndex.NONE || standComp.getAttackTimeDuring() == -1)
-                    && !standComp.isGuarding()) {
+                    && (standComp.roundabout$getActivePower() == PowerIndex.NONE || standComp.roundabout$getAttackTimeDuring() == -1)
+                    && !standComp.roundabout$isGuarding()) {
                         boolean $$1 = false;
                         switch (this.hitResult.getType()) {
                             case ENTITY:
@@ -413,18 +411,18 @@ public abstract class InputEvents {
                                 BlockPos $$3 = $$2.getBlockPos();
                                 if (!this.level.getBlockState($$3).isAir()) {
                                     this.gameMode.startDestroyBlock($$3, $$2.getDirection());
-                                    standComp.tryPower(PowerIndex.MINING, true);
+                                    standComp.roundabout$tryPower(PowerIndex.MINING, true);
                                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);
                                     break;
                                 }
                         }
                     }
-                    if (!isMining && !roundabout$activeMining && standComp.getInterruptCD()) {
-                        standComp.getStandPowers().buttonInputAttack(this.options.keyAttack.isDown(),this.options);
+                    if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                        standComp.roundabout$getStandPowers().buttonInputAttack(this.options.keyAttack.isDown(),this.options);
                     }
 
-                    if (!isMining && standComp.isGuarding() && !standComp.isBarraging()){
-                        standComp.getStandPowers().buttonInputBarrage(this.options.keyAttack.isDown(),this.options);
+                    if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
+                        standComp.roundabout$getStandPowers().buttonInputBarrage(this.options.keyAttack.isDown(),this.options);
                     }
                 }
             }

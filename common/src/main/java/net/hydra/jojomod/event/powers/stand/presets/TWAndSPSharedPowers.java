@@ -14,7 +14,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -128,13 +127,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                         Mth.sin(-20 * ((float) Math.PI / 180)),
                                         -Mth.cos(degrees * ((float) Math.PI / 180)));
 
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.MOVEMENT, true);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
                             } else {
                                 if (!doVault() && this.getSelf().fallDistance > 3) {
                                     if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
 
-                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
                                     }
                                 }
@@ -147,7 +146,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 bonusLeapCount = 3;
                                 bigLeap(this.getSelf(), 20, 1);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                             }
                         } else {
@@ -158,7 +157,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 if ((!doVault()) && this.getSelf().fallDistance > 3) {
                                     if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
 
-                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA, true);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
                                     }
                                 }
@@ -186,7 +185,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             if (this.isStoppingTime()) {
                                 KeyInputs.roundaboutClickCount = 2;
                                 this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
                             } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                                 sendPacket = true;
@@ -199,7 +198,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 } else {
                                     if (this.getAttackTimeDuring() < 0) {
                                         this.setMaxChargeTSTime(this.getMaxTSTime());
-                                        ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL, true);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
                                         this.updateUniqueMoves();
                                     }
@@ -215,7 +214,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                     if (sendPacket) {
                         KeyInputs.roundaboutClickCount = 2;
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
                         ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSTicks());
                     }
                 }
@@ -324,7 +323,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         this.setChargedTSTicks(0);
         if (this.isBarraging()) {
-            ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
         }
         return true;
     }
@@ -470,16 +469,16 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
 
             if (impactBrace){
-                if (((StandUser) this.getSelf()).getActive()){
+                if (((StandUser) this.getSelf()).roundabout$getActive()){
                     if (this.getSelf().onGround()) {
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.EXTRA_FINISH, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA_FINISH, true);
                         if (this.getSelf().level().isClientSide) {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
                         }
                     }else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)){
                         impactSlowdown = -1;
                         impactBrace = false;
-                        ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                         if (this.getSelf().level().isClientSide) {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                         }
@@ -498,7 +497,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 } else {
                     impactSlowdown = -1;
                     impactBrace = false;
-                    ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     if (this.getSelf().level().isClientSide) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                     }
@@ -595,7 +594,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer)this.getSelf()),PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
                     }
                 }
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_CHARGED, true);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
             } else {
                 this.setChargedTSTicks(TSChargeSeconds);
             }
@@ -693,7 +692,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setChargedTSTicks(data);
         } else if (activePower == PowerIndex.SPECIAL_FINISH){
             if (this.isBarraging()) {
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
             }
         }
     }
@@ -717,7 +716,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (this.getSelf().level().isClientSide) {
                     ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH,TSChargeTicks);
                 }
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.SPECIAL_FINISH, true);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
             } else {
                 if (this.getSelf().level().isClientSide) {
                     /*If the server is behind on the client TS time, update it to lower*/
@@ -768,7 +767,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     if (this.getSelf() instanceof Player) {
                         ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
                     }
-                    ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     /**
                      if (animate){
                      animateStand((byte) 31);
@@ -776,10 +775,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                      */
                 }
             } else {
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.LEAD_IN, true);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN, true);
             }
         } else {
-            ((StandUser) this.getSelf()).tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
         }
         return true;
     }
@@ -829,7 +828,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
                         (blockHit.getLocation().z - this.getSelf().getZ()) / mag
                 );
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.VAULT, true);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
                 return true;
             }
@@ -850,7 +849,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (bonusLeapCount <=0){
                     this.setCooldown(PowerIndex.EXTRA, 100);
                 }
-                ((StandUser) this.getSelf()).tryPower(PowerIndex.BOUNCE,true);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BOUNCE,true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BOUNCE);
             }
         }

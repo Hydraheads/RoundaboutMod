@@ -21,18 +21,18 @@ public class ZWitch {
 
     @Inject(method = "isDrinkingPotion", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutIsDrinking(CallbackInfoReturnable<Boolean> ci) {
-        if (((StandUser) this).isDazed() ||
+        if (((StandUser) this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).getStandPowers().disableMobAiAttack())) {
+                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
             ci.setReturnValue(false);
         }
     }
 
     @Inject(method = "setUsingItem", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutSetDrinking(boolean $$0, CallbackInfo ci) {
-        if (((StandUser) this).isDazed() ||
+        if (((StandUser) this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).getStandPowers().disableMobAiAttack())) {
+                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
             ((Witch) (Object) this).getEntityData().set(DATA_USING_ITEM, false);
             ci.cancel();
         }

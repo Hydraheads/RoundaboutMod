@@ -1,19 +1,15 @@
 package net.hydra.jojomod.client.hud;
 
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +44,7 @@ public class StandHudRender {
             Minecraft mc = Minecraft.getInstance();
             float tickDelta = mc.getDeltaFrameTime();
 
-            boolean standOn = ((StandUser) playerEntity).getActive();
+            boolean standOn = ((StandUser) playerEntity).roundabout$getActive();
             if (standOn || animated > 0.1){
                 if (!standOn){
                     animated = Math.max(controlledLerp(tickDelta, animated,0,0.5f),0);
@@ -68,7 +64,7 @@ public class StandHudRender {
 
 
 
-                ((StandUser) playerEntity).getStandPowers().renderIcons(context, x, y);
+                ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
 
 
 
@@ -121,37 +117,37 @@ public class StandHudRender {
                                        float flashAlpha, float otherFlashAlpha){
         if (playerEntity != null) {
             StandUser standUser = ((StandUser) playerEntity);
-            boolean standOn = standUser.getActive();
+            boolean standOn = standUser.roundabout$getActive();
             int j = scaledHeight / 2 - 7 - 4;
             int k = scaledWidth / 2 - 8;
 
-            float attackTimeDuring = standUser.getAttackTimeDuring();
-            if (standOn && standUser.isClashing()) {
+            float attackTimeDuring = standUser.roundabout$getAttackTimeDuring();
+            if (standOn && standUser.roundabout$isClashing()) {
                 int ClashTime = 15 - Math.round((attackTimeDuring / 60)*15);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
-            } else if (standOn && standUser.getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
-                int ClashTime = 15 - Math.round((attackTimeDuring / standUser.getStandPowers().getBarrageLength())*15);
+            } else if (standOn && standUser.roundabout$getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
+                int ClashTime = 15 - Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageLength())*15);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
-            } else if (standOn && standUser.getStandPowers().isBarrageCharging()) {
-                int ClashTime = Math.round((attackTimeDuring / standUser.getStandPowers().getBarrageWindup())*15);
+            } else if (standOn && standUser.roundabout$getStandPowers().isBarrageCharging()) {
+                int ClashTime = Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageWindup())*15);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
             } else {
                 int barTexture = 0;
-                Entity TE = standUser.getTargetEntity(playerEntity, -1);
-                float attackTimeMax = standUser.getAttackTimeMax();
+                Entity TE = standUser.roundabout$getTargetEntity(playerEntity, -1);
+                float attackTimeMax = standUser.roundabout$getAttackTimeMax();
                 if (attackTimeMax > 0) {
-                    float attackTime = standUser.getAttackTime();
+                    float attackTime = standUser.roundabout$getAttackTime();
                     float finalATime = attackTime / attackTimeMax;
                     if (finalATime <= 1) {
 
 
-                        if (standUser.getActivePowerPhase() == standUser.getActivePowerPhaseMax()) {
+                        if (standUser.roundabout$getActivePowerPhase() == standUser.roundabout$getActivePowerPhaseMax()) {
                             barTexture = 24;
                         } else {
                             if (TE != null) {
@@ -181,9 +177,9 @@ public class StandHudRender {
     }
 
     private static int getFinalATimeInt(StandUser standUser) {
-        int barrageWindup = standUser.getStandPowers().getBarrageWindup();
-        int barrageLength = standUser.getStandPowers().getBarrageLength();
-        float attackTimeDuring = standUser.getAttackTimeDuring();
+        int barrageWindup = standUser.roundabout$getStandPowers().getBarrageWindup();
+        int barrageLength = standUser.roundabout$getStandPowers().getBarrageLength();
+        float attackTimeDuring = standUser.roundabout$getAttackTimeDuring();
         int finalATimeInt;
         if (attackTimeDuring <= barrageWindup){
             finalATimeInt = Math.round((attackTimeDuring / barrageWindup)*15);
@@ -220,12 +216,12 @@ public class StandHudRender {
         int v;
         l = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser) playerEntity);
-        if (standUser.getGuardBroken() || !standUser.shieldNotDisabled()){
+        if (standUser.roundabout$getGuardBroken() || !standUser.roundabout$shieldNotDisabled()){
             v = 10;
         } else {
             v = 0;
         }
-        k = (int) Math.floor((182/standUser.getMaxGuardPoints())*standUser.getGuardPoints());
+        k = (int) Math.floor((182/standUser.roundabout$getMaxGuardPoints())*standUser.roundabout$getGuardPoints());
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
            context.blit(StandIcons.JOJO_ICONS, x, l, 0, v+5, k, 5);
@@ -247,10 +243,10 @@ public class StandHudRender {
         int z;
         int y;
         StandUser standUser = ((StandUser) playerEntity);
-        if (isTSEntity || standUser.getStandPowers().getIsTsCharging()){
+        if (isTSEntity || standUser.roundabout$getStandPowers().getIsTsCharging()){
             v = 50;
-            k = (int) Math.floor((182 /((double) standUser.getStandPowers().getMaxChargeTSTime() /20))*((double) standUser.getStandPowers().getChargedTSTicks() /20));
-            z =  (int) Math.min((Math.floor(((double) standUser.getStandPowers().getChargedTSTicks()+19)/20)),((double) standUser.getStandPowers().getMaxChargeTSTime() /20));
+            k = (int) Math.floor((182 /((double) standUser.roundabout$getStandPowers().getMaxChargeTSTime() /20))*((double) standUser.roundabout$getStandPowers().getChargedTSTicks() /20));
+            z =  (int) Math.min((Math.floor(((double) standUser.roundabout$getStandPowers().getChargedTSTicks()+19)/20)),((double) standUser.roundabout$getStandPowers().getMaxChargeTSTime() /20));
             y = 7654088;
         } else {
             v = 60;
@@ -299,7 +295,7 @@ public class StandHudRender {
         int g = scaledHeight - 31 - 5;
         context.blit(StandIcons.JOJO_ICONS, f, g, 183, 20, 9, 9);
 
-        LivingEntity clashOp = (((StandUser) client.player).getStandPowers().getClashOp());
+        LivingEntity clashOp = (((StandUser) client.player).roundabout$getStandPowers().getClashOp());
         if (clashOp != null) {
             int i = context.guiWidth();
             int j = 12;
@@ -307,7 +303,7 @@ public class StandHudRender {
             int l = j;
 
             context.blit(StandIcons.JOJO_ICONS, k, l, 0, 40, 182, 5);
-            float q = (((StandUser) client.player).getStandPowers().getClashOpProgress());
+            float q = (((StandUser) client.player).roundabout$getStandPowers().getClashOpProgress());
             int r = (int) (q * 183.0f);
             context.blit(StandIcons.JOJO_ICONS, k, l, 0, 45, r, 5);
 

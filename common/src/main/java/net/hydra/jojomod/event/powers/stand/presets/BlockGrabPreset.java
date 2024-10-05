@@ -1,8 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -17,7 +15,6 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -143,7 +140,7 @@ public class BlockGrabPreset extends PunchingStand{
         } else if (item.getItem() instanceof EnderpearlItem){
             ThrownEnderpearl $$4 = new ThrownEnderpearl(this.getSelf().level(), this.getSelf());
             if (this.getSelf() instanceof Player PE && ((Player) this.getSelf()).getCooldowns().isOnCooldown(item.getItem())){
-                StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+                StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
                 if (standEntity != null) {
                     addItemLight(standEntity);
                 }
@@ -217,7 +214,7 @@ public class BlockGrabPreset extends PunchingStand{
     public boolean getCanPlace(){
         boolean canPlace = false;
         boolean acq = false;
-        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (standEntity != null && standEntity.canAcquireHeldItem) {
             acq = true;
         }
@@ -241,16 +238,16 @@ public class BlockGrabPreset extends PunchingStand{
     }
 
     public boolean hasBlock(){
-        if (((StandUser) this.getSelf()).getStand() != null){
-            if (!((StandUser) this.getSelf()).getStand().getHeldItem().isEmpty()){
+        if (((StandUser) this.getSelf()).roundabout$getStand() != null){
+            if (!((StandUser) this.getSelf()).roundabout$getStand().getHeldItem().isEmpty()){
                 return true;
             }
         }
         return false;
     }
     public boolean hasEntity(){
-        if (((StandUser) this.getSelf()).getStand() != null){
-            if ((((StandUser) this.getSelf()).getStand().getFirstPassenger() != null)){
+        if (((StandUser) this.getSelf()).roundabout$getStand() != null){
+            if ((((StandUser) this.getSelf()).roundabout$getStand().getFirstPassenger() != null)){
                 return true;
             }
         }
@@ -261,7 +258,7 @@ public class BlockGrabPreset extends PunchingStand{
     @Override
     public boolean setPowerGuard(){
         if (this.getSelf() instanceof Player) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
@@ -303,11 +300,11 @@ public class BlockGrabPreset extends PunchingStand{
     public void tickPower(){
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
                 if (standEntity != null && this.getActivePower() == PowerIndex.POWER_2_EXTRA &&
                         standEntity.getFirstPassenger() == null && this.getAttackTimeDuring() > -1){
-                    ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     animateStand((byte) 36);
                 } else if (standEntity != null &&
                         (this.getActivePower() == PowerIndex.POWER_2_EXTRA ||
@@ -317,7 +314,7 @@ public class BlockGrabPreset extends PunchingStand{
                                 this.getActivePower() == PowerIndex.POWER_2_BONUS
                         ) && !hasEntity() && !hasBlock()
                 ) {
-                    ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
+                    ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     animateStand((byte) 0);
                 }
             }
@@ -350,7 +347,7 @@ public class BlockGrabPreset extends PunchingStand{
     @Override
     public boolean setPowerAttack(){
         if (this.getSelf() instanceof Player) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
@@ -512,7 +509,7 @@ public class BlockGrabPreset extends PunchingStand{
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
             if (!standEntity.getHeldItem().isEmpty() &&
                     (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
@@ -526,7 +523,7 @@ public class BlockGrabPreset extends PunchingStand{
             }
         }
         if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
-            ((StandUser)this.getSelf()).tryPower(PowerIndex.GUARD,true);
+            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
             return true;
         }
@@ -534,7 +531,7 @@ public class BlockGrabPreset extends PunchingStand{
     }
     @Override
     public boolean canInterruptPower(){
-        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (standEntity != null) {
             if (!standEntity.getHeldItem().isEmpty()) {
                 if (!this.getSelf().level().isClientSide) {
@@ -549,7 +546,7 @@ public class BlockGrabPreset extends PunchingStand{
     public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());
 
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null) {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     basis *= 0.7f;
@@ -564,7 +561,7 @@ public class BlockGrabPreset extends PunchingStand{
     @Override
     public boolean shouldReset(byte activeP){
 
-        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
             if (!standEntity.getHeldItem().isEmpty() &&
                     (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
@@ -578,7 +575,7 @@ public class BlockGrabPreset extends PunchingStand{
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (freezeAttackInput > -1) {
             this.freezeAttackInput = 1;
         }
@@ -608,9 +605,9 @@ public class BlockGrabPreset extends PunchingStand{
     }
     @Override
     public boolean cancelCollision(Entity et) {
-        if (((StandUser) this.getSelf()).getStand() != null){
-            if ((((StandUser) this.getSelf()).getStand().getFirstPassenger() != null &&
-                    (((StandUser) this.getSelf()).getStand().getFirstPassenger().is(et)))) {
+        if (((StandUser) this.getSelf()).roundabout$getStand() != null){
+            if ((((StandUser) this.getSelf()).roundabout$getStand().getFirstPassenger() != null &&
+                    (((StandUser) this.getSelf()).roundabout$getStand().getFirstPassenger().is(et)))) {
                 return true;
             }
         }
@@ -644,21 +641,21 @@ public class BlockGrabPreset extends PunchingStand{
                                     Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);
                                     if (targetEntity != null) {
                                         if (canGrab(targetEntity)) {
-                                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_EXTRA, true);
+                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
                                             ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
                                         }
                                     } else {
                                         //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
                                         BlockHitResult HR = getGrabBlock();
                                         if (HR != null) {
-                                            ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2, true);
+                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                                             ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
                                         }
                                     }
                                 } else {
                                     ItemStack stack = this.getSelf().getMainHandItem();
                                     if (!stack.isEmpty()) {
-                                        ((StandUser) this.getSelf()).tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
+                                        ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
                                                 ((Player) this.getSelf()).getInventory().selected);
                                         ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
                                                 ((Player) this.getSelf()).getInventory().selected);
@@ -667,7 +664,7 @@ public class BlockGrabPreset extends PunchingStand{
                             }
                         } else {
                             if (hasBlock() || hasEntity()) {
-                                ((StandUser) this.getSelf()).tryPower(PowerIndex.POWER_2_BONUS, true);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                             }
                         }
@@ -696,7 +693,7 @@ public class BlockGrabPreset extends PunchingStand{
     public boolean tryPower(int move, boolean forced) {
         if (super.tryPower(move,forced)) {
             if (!this.getSelf().level().isClientSide) {
-                StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+                StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
                 if (standEntity != null) {
                     if (!standEntity.getHeldItem().isEmpty() && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA) {
@@ -757,7 +754,7 @@ public class BlockGrabPreset extends PunchingStand{
     public boolean placeBlock() {
         if (!this.getSelf().level().isClientSide()) {
             if (this.hasEntity()) {
-                StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+                StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
                 if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                     if (standEntity.getFirstPassenger() != null) {
                         MainUtil.ejectInFront(standEntity);
@@ -770,7 +767,7 @@ public class BlockGrabPreset extends PunchingStand{
                 }
             } else {
                 if (this.hasBlock() && this.attackTimeDuring >= 10) {
-                    StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+                    StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
                     if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
@@ -788,7 +785,7 @@ public class BlockGrabPreset extends PunchingStand{
                                     if (tryHitBlock($$0, pos, state, standEntity)) {
                                         standEntity.setHeldItem(ItemStack.EMPTY);
 
-                                        ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE, true);
+                                        ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                         animateStand((byte) 36);
                                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
                                         this.setCooldown(PowerIndex.SKILL_2, 10);
@@ -834,7 +831,7 @@ public class BlockGrabPreset extends PunchingStand{
 
     public boolean mobGrab() {
         if (!this.getSelf().level().isClientSide() && !this.hasBlock()) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 Entity entity = this.getSelf().level().getEntity(this.grabEntity);
                 if (entity != null && this.canGrab(entity)) {
@@ -862,8 +859,8 @@ public class BlockGrabPreset extends PunchingStand{
                 && !(entity instanceof LivingEntity ent && ent.getHealth() > this.getSelf().getMaxHealth())
                 && !(entity instanceof Player pl && pl.isCreative())
                 && !(entity instanceof StandEntity)){
-            if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).getStand() != null &&
-                    ((StandUser) pl).getStand().is(this.getSelf().getVehicle())){
+            if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).roundabout$getStand() != null &&
+                    ((StandUser) pl).roundabout$getStand().is(this.getSelf().getVehicle())){
                 return false;
             } else if (entity.getRootVehicle().hasPassenger(this.getSelf())){
                 return false;
@@ -876,7 +873,7 @@ public class BlockGrabPreset extends PunchingStand{
     @SuppressWarnings("deprecation")
     public boolean grab() {
         if (!this.getSelf().level().isClientSide() && !this.hasEntity()) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
                 if (this.grabBlock != null &&
@@ -944,7 +941,7 @@ public class BlockGrabPreset extends PunchingStand{
 
     public boolean inventoryGrab() {
         if (!this.getSelf().level().isClientSide()) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() &&
                     this.getSelf() instanceof Player) {
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);

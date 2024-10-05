@@ -11,7 +11,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -200,7 +199,7 @@ public class StandPowers {
 
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
-            ((StandUser)this.getSelf()).tryPower(PowerIndex.GUARD,true);
+            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
             return true;
         }
@@ -390,7 +389,7 @@ public class StandPowers {
                 if (this.attackTimeDuring != -1) {
                     this.attackTimeDuring++;
                     if (this.attackTimeDuring == -1) {
-                        ((StandUser) this.self).tryPower(PowerIndex.NONE,true);
+                        ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE,true);
                     } else {
                         if (!this.isAttackInept(this.activePower)) {
                             if (this.activePower == PowerIndex.ATTACK) {
@@ -404,7 +403,7 @@ public class StandPowers {
                                         this.updateBarrage();
                                     }
                                 } else {
-                                    ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+                                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
                                 }
                             } else {
                                 this.updateUniqueMoves();
@@ -446,7 +445,7 @@ public class StandPowers {
     public void tickCooldowns(){
         int amt = 1;
         if (this.self instanceof Player) {
-            int idle = ((StandUser) this.getSelf()).getRoundaboutIdleTime();
+            int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
             if (idle > 300) {
                 amt *= 4;
             } else if (idle > 200) {
@@ -527,19 +526,19 @@ public class StandPowers {
 
     public void breakClash(LivingEntity winner, LivingEntity loser){
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
-            ((StandUser)winner).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
-            ((StandUser)loser).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
-            ((StandUser)winner).getStandPowers().playBarrageEndNoise(0, loser);
+            ((StandUser)winner).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+            ((StandUser)loser).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+            ((StandUser)winner).roundabout$getStandPowers().playBarrageEndNoise(0, loser);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
-            ((StandUser)winner).getStandPowers().animateStand((byte) 13);
-            ((StandUser)loser).tryPower(PowerIndex.NONE,true);
+            ((StandUser)winner).roundabout$getStandPowers().animateStand((byte) 13);
+            ((StandUser)loser).roundabout$tryPower(PowerIndex.NONE,true);
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){
-        ((StandUser)user1).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
-        ((StandUser)user2).getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
-        ((StandUser)user1).getStandPowers().playBarrageEndNoise(0F,user2);
-        ((StandUser)user2).getStandPowers().playBarrageEndNoise(-0.05F,user1);
+        ((StandUser)user1).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+        ((StandUser)user2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+        ((StandUser)user1).roundabout$getStandPowers().playBarrageEndNoise(0F,user2);
+        ((StandUser)user2).roundabout$getStandPowers().playBarrageEndNoise(-0.05F,user1);
 
         user1.hurtMarked = true;
         user2.hurtMarked = true;
@@ -555,12 +554,12 @@ public class StandPowers {
     /**Stand related things that slow you down or speed you up*/
     public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());
-            if (standUser.isDazed()) {
+            if (standUser.roundabout$isDazed()) {
                 basis = 0;
             } else if (!(this.getSelf().getVehicle() != null && this.getSelf().getControlledVehicle() == null) &&
-                    (standUser.isGuarding() && this.getSelf().getVehicle() == null)) {
+                    (standUser.roundabout$isGuarding() && this.getSelf().getVehicle() == null)) {
                 basis*=0.3f;
-            } else if (this.isBarrageAttacking() || standUser.isClashing()) {
+            } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
                     basis*=0.2f;
             } else if (this.isBarrageCharging()) {
                 basis*=0.5f;
@@ -578,8 +577,8 @@ public class StandPowers {
 
                 /*Rotation has to be set actively by both client and server,
                  * because serverPitch and serverYaw are inconsistent, client overwrites stand stuff sometimes*/
-                LivingEntity standEntity = ((StandUser) entity).getStand();
-                LivingEntity standSelf = ((StandUser) self).getStand();
+                LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
+                LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
                 if (standSelf != null && standEntity != null) {
                     if (!this.self.level().isClientSide) {
                         standSelf.setXRot(getLookAtEntityPitch(standSelf, standEntity));
@@ -595,8 +594,8 @@ public class StandPowers {
                 }
                 if (!this.self.level().isClientSide) {
 
-                    if ((this.getClashDone() && ((StandUser) entity).getStandPowers().getClashDone())
-                    || !((StandUser) this.self).getActive() || !((StandUser) entity).getActive()) {
+                    if ((this.getClashDone() && ((StandUser) entity).roundabout$getStandPowers().getClashDone())
+                    || !((StandUser) this.self).roundabout$getActive() || !((StandUser) entity).roundabout$getActive()) {
                         this.updateClashing2();
                     } else {
                         playBarrageNoise(this.attackTimeDuring+ clashStarter, entity);
@@ -609,41 +608,41 @@ public class StandPowers {
             }
         } else {
             if (!this.self.level().isClientSide) {
-                ((StandUser) this.self).tryPower(PowerIndex.CLASH_CANCEL, true);
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
             }
         }
     }
     private void updateClashing2(){
         if (this.getClashOp() != null) {
-            boolean thisActive = ((StandUser) this.self).getActive();
-            boolean opActive = ((StandUser) this.getClashOp()).getActive();
+            boolean thisActive = ((StandUser) this.self).roundabout$getActive();
+            boolean opActive = ((StandUser) this.getClashOp()).roundabout$getActive();
             if (thisActive && !opActive){
                 breakClash(this.self, this.getClashOp());
             } else if (!thisActive && opActive){
                 breakClash(this.getClashOp(), this.self);
             } else if (thisActive && opActive){
-                if ((this.getClashProgress() == ((StandUser) this.getClashOp()).getStandPowers().getClashProgress())) {
+                if ((this.getClashProgress() == ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress())) {
                     TieClash(this.self, this.getClashOp());
-                } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).getStandPowers().getClashProgress()) {
+                } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress()) {
                     breakClash(this.self, this.getClashOp());
                 } else {
                     breakClash(this.getClashOp(), this.self);
                 }
             }
-            ((StandUser) this.self).setAttackTimeDuring(-10);
-            ((StandUser) this.getClashOp()).setAttackTimeDuring(-10);
-            ((StandUser) this.self).getStandPowers().syncCooldowns();
-            ((StandUser) this.getClashOp()).getStandPowers().syncCooldowns();
+            ((StandUser) this.self).roundabout$setAttackTimeDuring(-10);
+            ((StandUser) this.getClashOp()).roundabout$setAttackTimeDuring(-10);
+            ((StandUser) this.self).roundabout$getStandPowers().syncCooldowns();
+            ((StandUser) this.getClashOp()).roundabout$getStandPowers().syncCooldowns();
         }
     }
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
-            ((StandUser) this.self).tryPower(PowerIndex.BARRAGE, true);
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
         }
     }
     public void updateBarrage(){
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).tryPower(PowerIndex.GUARD, true);
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getBarrageLength()) {
                 this.attackTimeDuring = -20;
@@ -685,11 +684,11 @@ public class StandPowers {
         return ((StandUser) User);
     }
     public StandEntity getStandEntity(LivingEntity User){
-        return this.getUserData(User).getStand();
+        return this.getUserData(User).roundabout$getStand();
     } public boolean hasStandEntity(LivingEntity User){
-        return this.getUserData(User).hasStandOut();
+        return this.getUserData(User).roundabout$hasStandOut();
     } public boolean hasStandActive(LivingEntity User){
-        return this.getUserData(User).getActive();
+        return this.getUserData(User).roundabout$getActive();
     }
 
     /**Edit this to apply special effect when stand virus is ravaging a mob with this stand.
@@ -736,7 +735,7 @@ public class StandPowers {
     //        1,0.0, 0.0, 0.0,1);
 
     public boolean isDazed(LivingEntity entity){
-        return this.getUserData(entity).isDazed();
+        return this.getUserData(entity).roundabout$isDazed();
     }
     private void setDazed(LivingEntity entity, byte dazeTime){
         if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
@@ -747,12 +746,12 @@ public class StandPowers {
             return;
         }
         if (dazeTime > 0){
-            ((StandUser) entity).tryPower(PowerIndex.NONE,true);
-            ((StandUser) entity).getStandPowers().animateStand((byte) 14);
+            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 14);
         } else {
-            ((StandUser) entity).getStandPowers().animateStand((byte) 0);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 0);
         }
-        this.getUserData(entity).setDazed(dazeTime);
+        this.getUserData(entity).roundabout$setDazed(dazeTime);
     }
 
     public boolean knockShield(Entity entity, int duration){
@@ -762,9 +761,9 @@ public class StandPowers {
                 if (((LivingEntity) entity).isBlocking()) {
 
                     StandUser standUser= this.getUserData((LivingEntity) entity);
-                    if (standUser.isGuarding()) {
-                        if (!standUser.getGuardBroken()){
-                            standUser.breakGuard();
+                    if (standUser.roundabout$isGuarding()) {
+                        if (!standUser.roundabout$getGuardBroken()){
+                            standUser.roundabout$breakGuard();
                         }
                     }
                     if (entity instanceof Player){
@@ -878,20 +877,20 @@ public class StandPowers {
 
     /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
     public void initiateClash(Entity entity){
-        ((StandUser) entity).getStandPowers().setClashOp(this.self);
-        ((StandUser) this.self).getStandPowers().setClashOp((LivingEntity) entity);
+        ((StandUser) entity).roundabout$getStandPowers().setClashOp(this.self);
+        ((StandUser) this.self).roundabout$getStandPowers().setClashOp((LivingEntity) entity);
         this.clashStarter = 0;
-        ((StandUser) entity).getStandPowers().clashStarter = 1;
+        ((StandUser) entity).roundabout$getStandPowers().clashStarter = 1;
 
-        ((StandUser) entity).tryPower(PowerIndex.BARRAGE_CLASH, true);
-        ((StandUser) self).tryPower(PowerIndex.BARRAGE_CLASH, true);
+        ((StandUser) entity).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
+        ((StandUser) self).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
 
-        LivingEntity standEntity = ((StandUser) entity).getStand();
-        LivingEntity standSelf = ((StandUser) self).getStand();
+        LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
+        LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
 
         if (standEntity != null && standSelf != null){
-            ((StandUser) entity).getStandPowers().playBarrageClashSound();
-            ((StandUser) this.self).getStandPowers().playBarrageClashSound();
+            ((StandUser) entity).roundabout$getStandPowers().playBarrageClashSound();
+            ((StandUser) this.self).roundabout$getStandPowers().playBarrageClashSound();
             Vec3 CenterPoint = entity.position().add(self.position()).scale(0.5);
 
             Vec3 entityPoint = offsetBarrageVector(
@@ -932,8 +931,8 @@ public class StandPowers {
             if (bonusBarrageConditions()) {
                 boolean lastHit = (hitNumber >= this.getBarrageLength());
                 if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).isBarraging()
-                            && ((StandUser) entity).getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
                         float pow;
@@ -983,10 +982,10 @@ public class StandPowers {
                     this.attackTimeDuring = -10;
                 }
             } else {
-                ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
             }
         } else {
-            ((StandUser) this.self).tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
         }
     }
 
@@ -1491,7 +1490,7 @@ public class StandPowers {
     public void resetAttackState(){
         if (shouldReset(this.getActivePower())){
             this.interruptCD = 3;
-            ((StandUser)this.getSelf()).tryPower(PowerIndex.NONE,true);
+            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
         }
     }
 
@@ -1510,7 +1509,7 @@ public class StandPowers {
         return false;
     }
     public boolean setPowerGuard() {
-        if (((StandUser)this.self).getGuardBroken()) {
+        if (((StandUser)this.self).roundabout$getGuardBroken()) {
             animateStand((byte) 15);
         } else {
             animateStand((byte) 10);

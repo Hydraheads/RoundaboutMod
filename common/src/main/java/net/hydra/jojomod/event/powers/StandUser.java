@@ -6,7 +6,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -16,77 +15,77 @@ import java.util.function.Predicate;
 public interface StandUser {
     /**This is in a LivingEntity Mixin, granting every living entity stand related functions and ddta.
      * Minimize the amount of synced data to just things you really need.*/
-    boolean hasStandOut();
-    void onStandOutLookAround(StandEntity passenger);
+    boolean roundabout$hasStandOut();
+    void roundabout$onStandOutLookAround(StandEntity passenger);
 
-    void updateStandOutPosition(StandEntity passenger);
+    void roundabout$updateStandOutPosition(StandEntity passenger);
 
-    void updateStandOutPosition(StandEntity passenger, Entity.MoveFunction positionUpdater);
-    void removeStandOut();
-    void setDI(byte forward, byte strafe);
-    void standMount(StandEntity StandSet);
-    void setStand(StandEntity StandSet);
-    float getGuardPoints();
-    float getMaxGuardPoints();
-    void setGuardPoints(float GuardPoints);
-    boolean getGuardBroken();
-    void setGuardBroken(boolean guardBroken);
-    void fixGuard();
-    void regenGuard(float regen);
-    void damageGuard(float damage);
-    void breakGuard();
+    void roundabout$updateStandOutPosition(StandEntity passenger, Entity.MoveFunction positionUpdater);
+    void roundabout$removeStandOut();
+    void roundabout$setDI(byte forward, byte strafe);
+    void roundabout$standMount(StandEntity StandSet);
+    void roundabout$setStand(StandEntity StandSet);
+    float roundabout$getGuardPoints();
+    float roundabout$getMaxGuardPoints();
+    void roundabout$setGuardPoints(float GuardPoints);
+    boolean roundabout$getGuardBroken();
+    void roundabout$setGuardBroken(boolean guardBroken);
+    void roundabout$fixGuard();
+    void roundabout$regenGuard(float regen);
+    void roundabout$damageGuard(float damage);
+    void roundabout$breakGuard();
     ItemStack roundabout$getStandDisc();
     void roundabout$setStandDisc(ItemStack stack);
 
-    int getAttackTimeMax();
-    int getAttackTime();
-    int getAttackTimeDuring();
+    int roundabout$getAttackTimeMax();
+    int roundabout$getAttackTime();
+    int roundabout$getAttackTimeDuring();
     void roundabout$setBleedLevel(int bleedLevel);
     int roundabout$getBleedLevel();
     boolean roundabout$getOnlyBleeding();
     void roundabout$setOnlyBleeding(boolean only);
-    byte getActivePowerPhase();
-    byte getActivePowerPhaseMax();
-    byte getActivePower();
-    public boolean getInterruptCD();
-    void setActive(boolean active);
+    byte roundabout$getActivePowerPhase();
+    byte roundabout$getActivePowerPhaseMax();
+    byte roundabout$getActivePower();
+    public boolean roundabout$getInterruptCD();
+    void roundabout$setActive(boolean active);
 
-    void summonStand(Level theWorld, boolean forced, boolean sound);
+    void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
 
-    boolean getActive();
-    boolean getMainhandOverride();
+    boolean roundabout$getActive();
+    boolean roundabout$getMainhandOverride();
     boolean canAttack();
-    float getRayDistance(Entity entity, float range);
-    float getDistanceOut(Entity entity, float range, boolean offset);
-    float getStandReach();
+    float roundabout$getRayDistance(Entity entity, float range);
+    float roundabout$getDistanceOut(Entity entity, float range, boolean offset);
+    float roundabout$getStandReach();
 
-    StandPowers getStandPowers();
+    StandPowers roundabout$getStandPowers();
 
     StandPowers roundabout$getRejectionStandPowers();
     void roundabout$setRejectionStandPowers(StandPowers powers);
     ItemStack roundabout$getRejectionStandDisc();
     void roundabout$setRejectionStandDisc(ItemStack disc);
 
-    void setStandPowers(StandPowers standPowers);
-    void setAttackTimeDuring(int attackTimeDuring);
-    void setInterruptCD(int interruptCD);
-    boolean isGuarding();
-    boolean isBarraging();
-    boolean isClashing();
-    float getGuardCooldown();
-    boolean isGuardingEffectively();
-    boolean isGuardingEffectively2();
-    boolean shieldNotDisabled();
-    boolean isDazed();
+    void roundabout$setStandPowers(StandPowers standPowers);
+    void roundabout$setAttackTimeDuring(int attackTimeDuring);
+    void roundabout$setInterruptCD(int interruptCD);
+    boolean roundabout$isGuarding();
+    boolean roundabout$isBarraging();
+    boolean roundabout$isClashing();
+    float roundabout$getGuardCooldown();
+    boolean roundabout$isGuardingEffectively();
+    boolean roundabout$isGuardingEffectively2();
+    boolean roundabout$shieldNotDisabled();
+    boolean roundabout$isDazed();
     boolean roundabout$isRestrained();
     int roundabout$getRestrainedTicks();
     void roundabout$setRestrainedTicks(int restrain);
-    void setDazed(byte dazeTime);
-    void setDazeTime(byte dazeTime);
+    void roundabout$setDazed(byte dazeTime);
+    void roundabout$setDazeTime(byte dazeTime);
 
-    void tryPower(int move, boolean forced);
-    void tryChargedPower(int move, boolean forced, int chargeTime);
-    void tryPosPower(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPower(int move, boolean forced);
+    void roundabout$tryChargedPower(int move, boolean forced, int chargeTime);
+    void roundabout$tryPosPower(int move, boolean forced, BlockPos blockPos);
     void roundabout$addFollower(StandEntity $$0);
     void roundabout$removeFollower(StandEntity $$0);
 
@@ -98,12 +97,12 @@ public interface StandUser {
 
     void roundaboutSetTSHurtSound(int roundaboutTSHurtSound);
 
-    void setSummonCD(int summonCD);
-    boolean getSummonCD();
-    int getSummonCD2();
-    Entity getTargetEntity(Entity User, float distMax);
+    void roundabout$setSummonCD(int summonCD);
+    boolean roundabout$getSummonCD();
+    int roundabout$getSummonCD2();
+    Entity roundabout$getTargetEntity(Entity User, float distMax);
 
-    LivingEntity getPowerUser();
+    LivingEntity roundabout$getPowerUser();
 
     void roundabout$setTSJump(boolean roundaboutTSJump);
 
@@ -112,7 +111,7 @@ public interface StandUser {
     void roundabout$tryBlip();
 
     @Nullable
-    StandEntity getStand();
+    StandEntity roundabout$getStand();
 
     float roundabout$getStoredDamage();
     Entity roundaboutGetStoredAttacker();
@@ -123,14 +122,14 @@ public interface StandUser {
 
     byte roundabout$getStoredDamageByte();
 
-    void roundaboutUniversalTick();
+    void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
 
     void roundabout$setThrower(LivingEntity thrower);
 
     LivingEntity roundabout$getThrower();
 
-    int getRoundaboutIdleTime();
+    int roundabout$getIdleTime();
 
 
     int roundabout$getMaxLeapTicks();
@@ -146,7 +145,7 @@ public interface StandUser {
     int roundabout$getMaxGasolineTime();
     int roundabout$getMaxBucketGasolineTime();
 
-    void setRoundaboutIdleTime(int roundaboutIdleTime);
+    void roundabout$setIdleTime(int roundaboutIdleTime);
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
 

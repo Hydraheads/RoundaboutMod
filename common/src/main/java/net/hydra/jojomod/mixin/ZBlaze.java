@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Blaze;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,9 +21,9 @@ public abstract class ZBlaze extends Goal {
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)blaze).isDazed() ||
+        if (((StandUser)blaze).roundabout$isDazed() ||
                 (!((StandUser)blaze).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)blaze).getStandPowers().disableMobAiAttack())) {
+                        ((StandUser)blaze).roundabout$getStandPowers().disableMobAiAttack())) {
             super.tick();
             ci.cancel();
         }

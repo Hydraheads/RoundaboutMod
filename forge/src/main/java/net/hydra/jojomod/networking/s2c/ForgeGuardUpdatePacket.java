@@ -30,8 +30,8 @@ public class ForgeGuardUpdatePacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                ((StandUser) player).setGuardPoints(guardPoints);
-                ((StandUser) player).setGuardBroken(guardBroken);
+                ((StandUser) player).roundabout$setGuardPoints(guardPoints);
+                ((StandUser) player).roundabout$setGuardBroken(guardBroken);
             }
         });
         return true;

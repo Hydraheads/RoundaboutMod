@@ -386,7 +386,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (this.places && $$1 instanceof LivingEntity LE && MainUtil.canGrantStand(LE)){
                 ((StandUser) LE).roundabout$setStandDisc(this.getItem());
                 SD.generateStandPowers(LE);
-                ((StandUser) LE).summonStand($$1.level(),true,true);
+                ((StandUser) LE).roundabout$summonStand($$1.level(),true,true);
             } else {
                 this.dropItem($$1.getOnPos());
             }
@@ -469,7 +469,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (!this.getItem().isEmpty()) {
                 if (this.getItem().getItem() instanceof GlaiveItem || this.getItem().getItem() instanceof AxeItem) {
                     if ($$1 instanceof Player PE) {
-                        if (PE.isBlocking() && !((StandUser) PE).isGuarding()) {
+                        if (PE.isBlocking() && !((StandUser) PE).roundabout$isGuarding()) {
                             PE.getCooldowns().addCooldown(Items.SHIELD, 100);
                             PE.stopUsingItem();
                             PE.level().broadcastEntityEvent(this, (byte) 30);

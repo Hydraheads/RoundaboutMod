@@ -17,7 +17,7 @@ public class EmptyStandDiscItem extends Item {
     }
 
     public void generateStandPowers(LivingEntity entity){
-        ((StandUser)entity).setStandPowers(null);
+        ((StandUser)entity).roundabout$setStandPowers(null);
     }
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
@@ -26,8 +26,8 @@ public class EmptyStandDiscItem extends Item {
             ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
             if (!currentDisc.isEmpty()) {
                 $$3.shrink(1);
-                ((StandUser) $$1).setStand(null);
-                ((StandUser) $$1).setActive(false);
+                ((StandUser) $$1).roundabout$setStand(null);
+                ((StandUser) $$1).roundabout$setActive(false);
                 addItem($$1, currentDisc.copy());
                 ((StandUser) $$1).roundabout$setStandDisc(ItemStack.EMPTY);
                 this.generateStandPowers($$1);

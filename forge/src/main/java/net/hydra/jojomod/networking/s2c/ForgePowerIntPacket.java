@@ -30,7 +30,7 @@ public class ForgePowerIntPacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                ((StandUser) player).getStandPowers().updatePowerInt(activePower,data);
+                ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
             }
         });
         return true;

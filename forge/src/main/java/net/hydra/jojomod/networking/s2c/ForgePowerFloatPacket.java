@@ -30,7 +30,7 @@ public class ForgePowerFloatPacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                ((StandUser) player).getStandPowers().updatePowerFloat(activePower,data);
+                ((StandUser) player).roundabout$getStandPowers().updatePowerFloat(activePower,data);
             }
         });
         return true;

@@ -12,8 +12,8 @@ public class StandS2CPacket {
                                  FriendlyByteBuf buf, PacketSender responseSender) {
         //Everything here is server only!
         if (client.player != null) {
-            ((StandUser) client.player).getStandPowers().setClashOp((LivingEntity) client.player.level().getEntity(buf.readInt()));
-            ((StandUser) client.player).getStandPowers().setClashOpProgress(buf.readFloat());
+            ((StandUser) client.player).roundabout$getStandPowers().setClashOp((LivingEntity) client.player.level().getEntity(buf.readInt()));
+            ((StandUser) client.player).roundabout$getStandPowers().setClashOpProgress(buf.readFloat());
         }
     }
 }

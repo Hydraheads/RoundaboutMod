@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.GlaiveItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -45,7 +44,7 @@ public class ZHeldItemLowering {
     public void roundaboutHeldItems(CallbackInfo ci) {
         LocalPlayer clientPlayerEntity2 = this.minecraft.player;
         if (!this.minecraft.player.isHandsBusy()) {
-        if (((StandUser) this.minecraft.player).getActive()) {
+        if (((StandUser) this.minecraft.player).roundabout$getActive()) {
             ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
             ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();
             if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)){

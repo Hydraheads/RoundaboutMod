@@ -27,7 +27,7 @@ public class ForgeSwitchPowerPacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
-                ((StandUser) player).tryPower(power, true);
+                ((StandUser) player).roundabout$tryPower(power, true);
             }
         });
         return true;

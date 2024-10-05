@@ -3,7 +3,6 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
@@ -17,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 @Mixin(Creeper.class)
 public class ZCreeper extends Monster {
@@ -46,9 +44,9 @@ public class ZCreeper extends Monster {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutTick(CallbackInfo ci) {
-        if (((StandUser)this).isDazed() ||
+        if (((StandUser)this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).getStandPowers().disableMobAiAttack())) {
+                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
             if (((Creeper)(Object)this).isAlive()) {
                 oldSwell = swell;
             }

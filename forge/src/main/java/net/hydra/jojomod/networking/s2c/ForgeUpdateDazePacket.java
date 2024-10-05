@@ -26,7 +26,7 @@ public class ForgeUpdateDazePacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                ((StandUser) player).setDazeTime(dazeTime);
+                ((StandUser) player).roundabout$setDazeTime(dazeTime);
             }
         });
         return true;

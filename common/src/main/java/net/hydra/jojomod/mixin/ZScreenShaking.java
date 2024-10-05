@@ -4,8 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGameRenderer;
-import net.hydra.jojomod.entity.client.LocacacaBeamLayer;
-import net.hydra.jojomod.entity.client.ModFirstPersonLayers;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -51,7 +49,7 @@ public class ZScreenShaking implements IGameRenderer {
     private void roundabout$tickfov(CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null){
-            StandPowers SP = ((StandUser)player).getStandPowers();
+            StandPowers SP = ((StandUser)player).roundabout$getStandPowers();
             if (SP.scopeLevel > 0) {
                 ci.cancel();
 
@@ -114,7 +112,7 @@ public class ZScreenShaking implements IGameRenderer {
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutiltViewWhenHurt(PoseStack $$0, float $$1, CallbackInfo ci) {
         //$$0 is matrcices, $$1 is tickdelta
-            if (minecraft.player != null && ((StandUser) minecraft.player).isDazed()) {
+            if (minecraft.player != null && ((StandUser) minecraft.player).roundabout$isDazed()) {
                 assert minecraft.level != null;
                 if (minecraft.level.getGameTime() % 5 != 0) {
                     LivingEntity livingEntity = (LivingEntity) minecraft.getCameraEntity();

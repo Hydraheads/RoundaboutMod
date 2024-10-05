@@ -54,7 +54,7 @@ public class ZMultiPlayerGameMode {
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "stopDestroyBlock()V", at = @At("HEAD"), cancellable = true)
     public void roundabout$stopDestroyBlock(CallbackInfo ci) {
-        if (((StandUser) this.minecraft.player).getActive() && ((StandUser) this.minecraft.player).getStandPowers().isMiningStand()) {
+        if (((StandUser) this.minecraft.player).roundabout$getActive() && ((StandUser) this.minecraft.player).roundabout$getStandPowers().isMiningStand()) {
             if (this.isDestroying) {
                 BlockState $$0 = this.minecraft.level.getBlockState(this.destroyBlockPos);
                 this.minecraft.getTutorial().onDestroyBlock(this.minecraft.level, this.destroyBlockPos, $$0, -1.0F);

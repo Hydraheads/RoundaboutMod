@@ -33,8 +33,8 @@ public class ForgePunchPacket {
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
                 Entity TE = player.level().getEntity(targetEntity);
-                ((StandUser) player).getStandPowers().setActivePowerPhase(APP);
-                ((StandUser) player).getStandPowers().punchImpact(TE);
+                ((StandUser) player).roundabout$getStandPowers().setActivePowerPhase(APP);
+                ((StandUser) player).roundabout$getStandPowers().punchImpact(TE);
             }
         });
         return true;

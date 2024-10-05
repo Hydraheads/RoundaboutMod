@@ -1,11 +1,9 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -23,22 +21,15 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -55,7 +46,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Mixin(Mob.class)
 public abstract class ZMob extends LivingEntity implements IMob {
@@ -146,9 +136,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     /**Minor code, mobs in a barrage should not be attacking*/
     @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
-        if (((StandUser) this).isDazed() ||
+        if (((StandUser) this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
+                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
             ci.setReturnValue(false);
         } else {
             if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
@@ -425,8 +415,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
 
                 if (this.getTarget() != null && !this.roundabout$getFightOrFlight()){
-                    if (!((StandUser) this).getActive()){
-                        ((StandUser)this).summonStand(this.level(),true,true);
+                    if (!((StandUser) this).roundabout$getActive()){
+                        ((StandUser)this).roundabout$summonStand(this.level(),true,true);
                     }
                     if (roundabout$retractTicks != 100) {
                         roundabout$retractTicks = 100;
@@ -434,8 +424,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 } else {
                     roundabout$retractTicks = Math.max(roundabout$retractTicks-1,-1);
                     if (roundabout$retractTicks == -1 || this.roundabout$getFightOrFlight()){
-                        if (((StandUser) this).getActive()){
-                            ((StandUser)this).summonStand(this.level(),false,false);
+                        if (((StandUser) this).roundabout$getActive()){
+                            ((StandUser)this).roundabout$summonStand(this.level(),false,false);
                         }
                     }
                 }
@@ -521,7 +511,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (this.isAlive() && !this.level().isClientSide()) {
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
                 if (!this.roundabout$getFightOrFlight()) {
-                    ((StandUser) this).getStandPowers().tickMobAI(this.getTarget());
+                    ((StandUser) this).roundabout$getStandPowers().tickMobAI(this.getTarget());
                 }
             }
         }

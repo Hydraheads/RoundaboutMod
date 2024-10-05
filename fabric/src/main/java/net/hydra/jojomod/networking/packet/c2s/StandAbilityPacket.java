@@ -1,7 +1,6 @@
 package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
@@ -18,14 +17,14 @@ public class StandAbilityPacket {
         //Everything here is server only!
         ServerLevel world = (ServerLevel) player.level();
         server.execute(() -> {
-            ((StandUser) player).summonStand(world, false, true);
+            ((StandUser) player).roundabout$summonStand(world, false, true);
         });
     }
     public static void switchPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                               FriendlyByteBuf buf, PacketSender responseSender) {
         byte power = buf.readByte();
         server.execute(() -> {
-            ((StandUser) player).tryPower(power, true);
+            ((StandUser) player).roundabout$tryPower(power, true);
         });
     }
     public static void switchPosPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
@@ -33,7 +32,7 @@ public class StandAbilityPacket {
         byte power = buf.readByte();
         BlockPos blockPos = buf.readBlockPos();
         server.execute(() -> {
-            ((StandUser) player).tryPosPower(power, true, blockPos);
+            ((StandUser) player).roundabout$tryPosPower(power, true, blockPos);
         });
     }
     public static void switchChargedPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
@@ -41,7 +40,7 @@ public class StandAbilityPacket {
         byte power = buf.readByte();
         int charge = buf.readInt();
         server.execute(() -> {
-            ((StandUser) player).tryChargedPower(power, true, charge);
+            ((StandUser) player).roundabout$tryChargedPower(power, true, charge);
         });
     }
 
@@ -51,8 +50,8 @@ public class StandAbilityPacket {
         Entity targetEntity = player.level().getEntity(buf.readInt());
         byte APP = buf.readByte();
         server.execute(() -> {
-            ((StandUser) player).getStandPowers().setActivePowerPhase(APP);
-            ((StandUser) player).getStandPowers().punchImpact(targetEntity);
+            ((StandUser) player).roundabout$getStandPowers().setActivePowerPhase(APP);
+            ((StandUser) player).roundabout$getStandPowers().punchImpact(targetEntity);
         });
     }
     public static void barrageHit(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
@@ -61,7 +60,7 @@ public class StandAbilityPacket {
         Entity targetEntity = player.level().getEntity(buf.readInt());
         int hitNumber = buf.readInt();
         server.execute(() -> {
-            ((StandUser) player).getStandPowers().barrageImpact(targetEntity, hitNumber);
+            ((StandUser) player).roundabout$getStandPowers().barrageImpact(targetEntity, hitNumber);
         });
     }
 
@@ -71,8 +70,8 @@ public class StandAbilityPacket {
                              FriendlyByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         server.execute(() -> {
-            if (((StandUser) player).isGuarding() || ((StandUser) player).isBarraging()){
-                ((StandUser) player).tryPower(PowerIndex.NONE,true);
+            if (((StandUser) player).roundabout$isGuarding() || ((StandUser) player).roundabout$isBarraging()){
+                ((StandUser) player).roundabout$tryPower(PowerIndex.NONE,true);
             }
         });
     }
@@ -84,9 +83,9 @@ public class StandAbilityPacket {
         float clashProg = buf.readFloat();
         boolean clashDone = buf.readBoolean();
         server.execute(() -> {
-            if (((StandUser) player).isClashing()){
-                ((StandUser) player).getStandPowers().setClashProgress(clashProg);
-                ((StandUser) player).getStandPowers().setClashDone(clashDone);
+            if (((StandUser) player).roundabout$isClashing()){
+                ((StandUser) player).roundabout$getStandPowers().setClashProgress(clashProg);
+                ((StandUser) player).roundabout$getStandPowers().setClashDone(clashDone);
             }
         });
     }

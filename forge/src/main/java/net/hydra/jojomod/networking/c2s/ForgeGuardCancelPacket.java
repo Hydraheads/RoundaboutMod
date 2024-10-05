@@ -3,7 +3,6 @@ package net.hydra.jojomod.networking.c2s;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -22,8 +21,8 @@ public class ForgeGuardCancelPacket {
         context.enqueueWork(()-> {
             ServerPlayer player = context.getSender();
             if (player != null) {
-                if (((StandUser) player).isGuarding() || ((StandUser) player).isBarraging()){
-                    ((StandUser) player).tryPower(PowerIndex.NONE,true);
+                if (((StandUser) player).roundabout$isGuarding() || ((StandUser) player).roundabout$isBarraging()){
+                    ((StandUser) player).roundabout$tryPower(PowerIndex.NONE,true);
                 }
             }
         });

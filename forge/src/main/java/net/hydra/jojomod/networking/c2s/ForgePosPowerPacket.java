@@ -32,7 +32,7 @@ public class ForgePosPowerPacket {
                 ServerPlayer player = context.getSender();
                 if (player != null) {
                     ServerLevel level = (ServerLevel) player.level();
-                    ((StandUser) player).tryPosPower(power, true, blockPos);
+                    ((StandUser) player).roundabout$tryPosPower(power, true, blockPos);
                 }
             });
             return true;

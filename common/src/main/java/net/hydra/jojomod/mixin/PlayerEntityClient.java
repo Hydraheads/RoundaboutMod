@@ -7,7 +7,6 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -63,37 +62,37 @@ public class PlayerEntityClient implements StandUserClientPlayer {
         RoundaboutClashJump();
     }
     private void RoundaboutClashJump(){
-        if (((StandUser) this).isClashing()) {
-            if (!((StandUser)this).getStandPowers().getClashDone()) {
+        if (((StandUser) this).roundabout$isClashing()) {
+            if (!((StandUser)this).roundabout$getStandPowers().getClashDone()) {
                 if (this.clashIncrement < 0) {
                     ++this.clashIncrement;
                     if (this.clashIncrement == 0) {
-                        ((StandUser) this).getStandPowers().setClashProgress(0.0f);
+                        ((StandUser) this).roundabout$getStandPowers().setClashProgress(0.0f);
                     }
                 }
                 if (bl && !this.input.jumping) {
-                    ((StandUser)this).getStandPowers().setClashDone(true);
+                    ((StandUser)this).roundabout$getStandPowers().setClashDone(true);
                     //this.startRidingJump();
                 } else if (!bl && this.input.jumping) {
                     this.clashIncrement = 0;
-                    ((StandUser) this).getStandPowers().setClashProgress(0.0f);
+                    ((StandUser) this).roundabout$getStandPowers().setClashProgress(0.0f);
                 } else if (bl) {
                     ++this.clashIncrement;
-                    ((StandUser) this).getStandPowers().setClashProgress(this.clashIncrement < 10 ?
+                    ((StandUser) this).roundabout$getStandPowers().setClashProgress(this.clashIncrement < 10 ?
                             (float) this.clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.clashIncrement - 9) * 0.1f);
                 }
                 updateClash();
             }
         } else {
-            ((StandUser)this).getStandPowers().setClashProgress(0.0f);
-            ((StandUser)this).getStandPowers().setClashDone(false);
+            ((StandUser)this).roundabout$getStandPowers().setClashProgress(0.0f);
+            ((StandUser)this).roundabout$getStandPowers().setClashDone(false);
         }
         bl = this.input.jumping;
     }
 
     @Inject(method = "sendRidingJump", at = @At(value = "HEAD"), cancellable = true)
     protected void RoundaboutStartRidingJump(CallbackInfo ci) {
-        if (((StandUser) this).isClashing()) {
+        if (((StandUser) this).roundabout$isClashing()) {
             ci.cancel();
         }
     }
@@ -114,8 +113,8 @@ public class PlayerEntityClient implements StandUserClientPlayer {
 
     private void updateClash(){
         ModPacketHandler.PACKET_ACCESS.updateClashPacket(
-                ((StandUser) this).getStandPowers().getClashProgress(),
-                ((StandUser) this).getStandPowers().getClashDone()
+                ((StandUser) this).roundabout$getStandPowers().getClashProgress(),
+                ((StandUser) this).roundabout$getStandPowers().getClashDone()
         );
     }
 }
