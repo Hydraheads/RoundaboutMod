@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -22,12 +23,15 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -228,10 +232,98 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    public void updateImpale(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 24) {
+               this.standImpale();
+            }
+        }
+    }
 
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+             impaleImpact(target);
+        }
+    }
+
+    public void standImpale(){
+        /*By setting this to -10, there is a delay between the stand retracting*/
+
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                this.setAttackTimeDuring(-20);
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId2(3), PacketDataIndex.INT_STAND_ATTACK);
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+            Entity targetEntity = getTargetEntity(this.self,3);
+            impaleImpact(targetEntity);
+        }
+
+    }
+
+    public float getImpalePunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 3;
+        } else {
+            return 7;
+        }
+    }
+    public float getImpaleKnockback(){
+        return 1.3F;
+    }
+    public void impaleImpact(Entity entity){
+        this.setAttackTimeDuring(-20);
+        animateStand((byte) 3);
+        if (entity != null) {
+            float pow;
+            float knockbackStrength;
+            pow = getImpalePunchStrength(entity);
+            knockbackStrength = getImpaleKnockback();
+            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                if (entity instanceof LivingEntity) {
+                    if (MainUtil.getMobBleed(entity)) {
+                            MainUtil.makeBleed(entity,2,300, this.getSelf());
+                            MainUtil.makeMobBleed(entity);
+                    }
+                }
+                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+            } else {
+                if (this.activePowerPhase >= this.activePowerPhaseMax) {
+                    knockShield2(entity, 40);
+                }
+            }
+        }
+
+        if (this.getSelf() instanceof Player) {
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 60);
+        }
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK, 60);
+        SoundEvent SE;
+        float pitch = 1F;
+            if (entity != null) {
+                SE = ModSounds.IMPALE_HIT_EVENT;
+                pitch = 1.2F;
+            } else {
+                SE = ModSounds.PUNCH_2_SOUND_EVENT;
+            }
+
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
+    }
 
     /**Stand related things that slow you down or speed you up*/
     public float inputSpeedModifiers(float basis){
+        if (this.getActivePower()==PowerIndex.POWER_1_SNEAK){
+            if (this.getSelf().isCrouching()){
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1/f;
+                basis *= g;
+            }
+        }
+
             StandUser standUser = ((StandUser) this.getSelf());
             if (standUser.roundabout$getTSJump()) {
                 if (this.getSelf().isCrouching()) {
@@ -532,7 +624,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     if (keyIsDown) {
                         if (!hold1) {
                             hold1 = true;
-                            if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
                                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
@@ -633,6 +725,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             } else {
                 this.setChargedTSTicks(TSChargeSeconds);
             }
+        } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            updateImpale();
         }
     }
 
@@ -643,9 +737,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean canInterruptPower(){
 
-        if (this.getActivePower() == PowerIndex.SPECIAL){
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, 60);
+        if (this.getActivePower() == PowerIndex.SPECIAL) {
+            if (this.getSelf() instanceof Player) {
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, 60);
+            }
             this.setCooldown(PowerIndex.SKILL_4, 60);
+            return true;
+        } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            if (this.getSelf() instanceof Player) {
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 60);
+            }
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 60);
             return true;
         } else {
             return super.canInterruptPower();

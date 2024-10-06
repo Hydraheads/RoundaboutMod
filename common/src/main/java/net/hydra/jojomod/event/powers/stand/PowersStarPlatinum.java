@@ -107,7 +107,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             scopeLevel = newLevel;
                         }
                     }
+                } else {
+                    super.buttonInput1(keyIsDown,options);
                 }
+            } else {
+                hold1 = false;
             }
         }
     }

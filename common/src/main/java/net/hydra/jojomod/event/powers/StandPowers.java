@@ -712,6 +712,17 @@ public class StandPowers {
         }
         return id;
     }
+
+    public int getTargetEntityId2(float distance){
+        Entity targetEntity = getTargetEntity(this.self, distance);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
     public void standBarrageHit(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){
@@ -1471,6 +1482,8 @@ public class StandPowers {
         }
     }
 
+    public void handleStandAttack(Player player, Entity target){
+    }
 
 
     /**This is called fourth by the server, it sends a packet to cancel the sound.*/

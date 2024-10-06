@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -142,6 +143,28 @@ public class MainUtil {
                     || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
         return false;
+    }
+    public static void makeMobBleed(Entity target) {
+            int variety = (int) Math.round(Math.random() * 4);
+            Block modBlock = ModBlocks.BLOOD_SPLATTER;
+            if (MainUtil.hasBlueBlood(target)) {
+                modBlock = ModBlocks.BLUE_BLOOD_SPLATTER;
+            } else if (MainUtil.hasEnderBlood(target)) {
+                modBlock = ModBlocks.ENDER_BLOOD_SPLATTER;
+            }
+
+            if (variety != 1) {
+                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 0, modBlock.defaultBlockState().
+                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+            }
+            if (variety != 2) {
+                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, -1, modBlock.defaultBlockState().
+                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+            }
+            if (variety != 3) {
+                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
+                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+            }
     }
     public static boolean hasBlueBlood(Entity target){
         if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish){
@@ -826,6 +849,9 @@ public class MainUtil {
             }
         } else if (context == PacketDataIndex.INT_RIDE_TICKS){
             ((StandUser)player).roundabout$setRestrainedTicks(data);
+        } else if (context == PacketDataIndex.INT_STAND_ATTACK){
+            Entity target = player.level().getEntity(data);
+            ((StandUser)player).roundabout$getStandPowers().handleStandAttack(player,target);
         }
     }
 }
