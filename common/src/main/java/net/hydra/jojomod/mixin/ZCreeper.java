@@ -43,7 +43,7 @@ public class ZCreeper extends Monster {
         return col;
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutTick(CallbackInfo ci) {
+    protected void roundabout$Tick(CallbackInfo ci) {
         if (((StandUser)this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {

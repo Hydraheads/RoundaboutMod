@@ -4,14 +4,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.HitResult;
 
 public interface IProjectileAccess {
-    float getRoundaboutSpeedMultiplier();
+    float roundabout$getRoundaboutSpeedMultiplier();
     float setRoundaboutSpeedMultiplier(float roundaboutSpeedMultiplier);
-    boolean getRoundaboutIsTimeStopCreated();
-    void setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated);
+    boolean roundabout$getRoundaboutIsTimeStopCreated();
+    void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated);
 
     void roundaboutOnHit(HitResult $$0);
 
-    boolean roundaboutCanHitEntity(Entity $$0x);
+    boolean roundabout$CanHitEntity(Entity $$0x);
 
-    void roundaboutCheckInsideBlocks();
+    void roundabout$CheckInsideBlocks();
 }

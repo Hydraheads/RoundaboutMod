@@ -43,12 +43,12 @@ public abstract class HudRendering implements IHudAccess {
     private int screenHeight;
 
     @Unique
-    private float flashAlpha = 0f;
+    private float roundabout$flashAlpha = 0f;
     @Unique
-    private float otherFlashAlpha = 0f;
+    private float roundabout$otherFlashAlpha = 0f;
 
     @Unique
-    private boolean roundaboutRedo = false;
+    private boolean roundabout$Redo = false;
 
     @Shadow
     @Final
@@ -64,8 +64,8 @@ public abstract class HudRendering implements IHudAccess {
 
     /** The stand move HUD renders with the hotbar so that it may exist in all gamemodes.*/
     @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
-    private void renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
-        StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), flashAlpha, otherFlashAlpha);
+    private void roundabout$renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
+        StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
     }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
@@ -73,7 +73,7 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     @Inject(method = "renderHearts", at = @At(value = "TAIL"))
-    private void renderHotbarMixin(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10, CallbackInfo ci) {
+    private void roundabout$renderHotbarMixin(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10, CallbackInfo ci) {
         if (((StandUser)$$1).roundabout$getLocacacaCurse()== LocacacaCurseIndex.HEART){
             int $$12 = 208;
             int $$13 = Mth.ceil((double)$$6 / 2.0);
@@ -159,14 +159,14 @@ public abstract class HudRendering implements IHudAccess {
     /** The guard HUD uses the exp bar, because you dont need to check exp
      *  while you are blocking, efficient HUD use.*/
     @Inject(method = "renderExperienceBar", at = @At(value = "HEAD"), cancellable = true)
-    public void roundaboutRenderExperienceBar(GuiGraphics $$0, int $$1, CallbackInfo ci){
-        if (roundaboutRenderBars($$0, $$1)){
+    public void roundabout$RenderExperienceBar(GuiGraphics $$0, int $$1, CallbackInfo ci){
+        if (roundabout$RenderBars($$0, $$1)){
             ci.cancel();
         }
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "HEAD"), cancellable = true)
-    public void roundaboutRenderMountJumpBar(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
-        if (roundaboutRenderBars($$1, $$2)){
+    public void roundabout$RenderMountJumpBar(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
+        if (roundabout$RenderBars($$1, $$2)){
             ci.cancel();
         }
     }
@@ -182,19 +182,20 @@ public abstract class HudRendering implements IHudAccess {
     /**desaturate hearts when time is stopped*/
     @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderHealth(GuiGraphics $$0, CallbackInfo ci){
-        if (minecraft.player != null && minecraft.level != null && !roundaboutRedo) {
+        if (minecraft.player != null && minecraft.level != null && !roundabout$Redo) {
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
-                roundaboutRedo = true;
+                roundabout$Redo = true;
                 $$0.setColor(0.7F, 0.7F, 0.7F, 1.0F);
                 renderPlayerHealth($$0);
                 $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                roundaboutRedo = false;
+                roundabout$Redo = false;
                 ci.cancel();
             }
         }
     }
 
-    private boolean roundaboutRenderBars(GuiGraphics context, int x){
+    @Unique
+    private boolean roundabout$RenderBars(GuiGraphics context, int x){
         if (minecraft.player != null && minecraft.level != null) {
 
 
@@ -225,29 +226,29 @@ public abstract class HudRendering implements IHudAccess {
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, false, this.getFont());
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
             } else if (((StandUser) minecraft.player).roundabout$isClashing()) {
-                ((StandUserClientPlayer) minecraft.player).setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
+                ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
                 float c = (((StandUser) minecraft.player).roundabout$getStandPowers().getClashProgress());
-                ((StandUserClientPlayer) minecraft.player).setLastClashPower(c);
-                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, c);
+                ((StandUserClientPlayer) minecraft.player).roundabout$setLastClashPower(c);
+                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, c);
                 return true;
-            } else if (((StandUserClientPlayer) minecraft.player).getClashDisplayExtraTimestamp() >= minecraft.player.tickCount - 20) {
-                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).getLastClashPower());
+            } else if (((StandUserClientPlayer) minecraft.player).roundabout$getClashDisplayExtraTimestamp() >= minecraft.player.tickCount - 20) {
+                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).roundabout$getLastClashPower());
                 return true;
             } else if (((StandUser) minecraft.player).roundabout$isGuarding() || (((StandUser) minecraft.player).roundabout$getGuardPoints() < ((StandUser) minecraft.player).roundabout$getMaxGuardPoints()
             && !isTSEntity)) {
-                StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha);
+                StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             } else if (isTSEntity || (((StandUser) minecraft.player).roundabout$getStandPowers().getMaxTSTime() > 0
                     && (((StandUser) minecraft.player).roundabout$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  ((StandUser) minecraft.player).roundabout$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
 
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha, true, this.getFont());
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, true, this.getFont());
                 return true;
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
 
-                StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, flashAlpha, otherFlashAlpha);
+                StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             }
         }
@@ -269,7 +270,7 @@ public abstract class HudRendering implements IHudAccess {
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
-        StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), flashAlpha, otherFlashAlpha);
+        StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
     }
 
     @Shadow
@@ -290,13 +291,13 @@ public abstract class HudRendering implements IHudAccess {
     @Shadow public abstract Font getFont();
 
     @Override
-    public void setFlashAlpha(float flashAlpha) {
-        this.flashAlpha = flashAlpha;
+    public void roundabout$setFlashAlpha(float flashAlpha) {
+        this.roundabout$flashAlpha = flashAlpha;
     }
 
     @Override
-    public void setOtherFlashAlpha(float otherFlashAlpha) {
-        this.otherFlashAlpha = otherFlashAlpha;
+    public void roundabout$setOtherFlashAlpha(float otherFlashAlpha) {
+        this.roundabout$otherFlashAlpha = otherFlashAlpha;
     }
 //    public static final String DEBUG_TEXT_1 = "hud.roundabout.standout";
 }

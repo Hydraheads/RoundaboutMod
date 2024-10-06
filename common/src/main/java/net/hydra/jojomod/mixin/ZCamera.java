@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
@@ -18,15 +17,15 @@ public class ZCamera {
     public void setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {}
 
 
-    public boolean cleared = false;
+    public boolean roundabout$cleared = false;
     @Inject(method = "setup", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutBobView(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
-        if (!cleared) {
+    private void roundabout$BobView(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
+        if (!roundabout$cleared) {
             if (entity != null && ((TimeStop) entity.level()).CanTimeStopEntity(entity)) {
-                    f = ((IEntityAndData) entity).getPreTSTick();
-                    cleared = true;
+                    f = ((IEntityAndData) entity).roundabout$getPreTSTick();
+                    roundabout$cleared = true;
                     this.setup(blockGetter, entity, bl, bl2, f);
-                    cleared = false;
+                    roundabout$cleared = false;
                 ci.cancel();
             }
         }

@@ -20,8 +20,8 @@ public abstract class ZThrowableProjectile extends Entity {
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    private void roundaboutSetPosForTS(CallbackInfo ci) {
-        if (((TimeStop)this.level()).inTimeStopRange(((ThrowableProjectile)(Object)this)) && ((IProjectileAccess) this).getRoundaboutIsTimeStopCreated()) {
+    private void roundabout$SetPosForTS(CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((ThrowableProjectile)(Object)this)) && ((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
             super.tick();
             TimeMovingProjectile.tick((ThrowableProjectile) (Object) this);
             this.checkInsideBlocks();

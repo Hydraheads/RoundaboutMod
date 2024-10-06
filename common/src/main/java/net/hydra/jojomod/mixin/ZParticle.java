@@ -4,33 +4,35 @@ import net.hydra.jojomod.access.IParticleAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Particle.class)
 public class ZParticle implements IParticleAccess {
     /**Particles Created during a timestop are not frozen*/
-    public boolean roundaboutIsTimeStopCreated = false;
-    public boolean getRoundaboutIsTimeStopCreated(){
-        return roundaboutIsTimeStopCreated;
+    @Unique
+    public boolean roundabout$IsTimeStopCreated = false;
+    public boolean roundabout$getRoundaboutIsTimeStopCreated(){
+        return roundabout$IsTimeStopCreated;
     }
-    public void setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
-        this.roundaboutIsTimeStopCreated = roundaboutIsTimeStopCreated;
+    public void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
+        this.roundabout$IsTimeStopCreated = roundaboutIsTimeStopCreated;
     }
 
 
-    private float roundaboutPrevTick;
+    private float roundabout$PrevTick;
 
     @Override
-    public float getPreTSTick() {
-        return this.roundaboutPrevTick;
+    public float roundabout$getPreTSTick() {
+        return this.roundabout$PrevTick;
     }
 
     @Override
-    public void setPreTSTick() {
+    public void roundabout$setPreTSTick() {
         Minecraft mc = Minecraft.getInstance();
-        roundaboutPrevTick = mc.getFrameTime();
+        roundabout$PrevTick = mc.getFrameTime();
     }
     @Override
-    public void resetPreTSTick() {
-        roundaboutPrevTick = 0;
+    public void roundabout$resetPreTSTick() {
+        roundabout$PrevTick = 0;
     }
 }

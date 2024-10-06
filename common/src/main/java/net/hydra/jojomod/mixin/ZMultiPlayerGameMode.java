@@ -40,7 +40,7 @@ public class ZMultiPlayerGameMode {
 
     /**While your offhand is frozen in stone, you cannot use it*/
     @Inject(method = "useItem", at = @At("HEAD"), cancellable = true)
-    public void roundaboutBlockBreak(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+    public void roundabout$BlockBreak(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
 
         byte curse = ((StandUser)$$0).roundabout$getLocacacaCurse();
         if (curse > -1) {

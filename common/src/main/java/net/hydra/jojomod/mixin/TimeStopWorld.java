@@ -160,7 +160,7 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public void processTSBlockEntityPacket(BlockEntity blockEntity) {
         if (((Level) (Object) this).isClientSide) {
-            ((IBlockEntityAccess) blockEntity).setRoundaboutTimeInteracted(true);
+            ((IBlockEntityAccess) blockEntity).roundabout$setRoundaboutTimeInteracted(true);
         }
     }
 
@@ -303,7 +303,7 @@ public class TimeStopWorld implements TimeStop {
                 return false;
             }
         } else if (entity instanceof Projectile) {
-            if (((IProjectileAccess) entity).getRoundaboutIsTimeStopCreated()){
+            if (((IProjectileAccess) entity).roundabout$getRoundaboutIsTimeStopCreated()){
                 return false;
             } else {
                 return inTimeStopRange(entity);
@@ -370,7 +370,7 @@ public class TimeStopWorld implements TimeStop {
 
         if (inTimeStopRange($$0) && !(((Level) (Object) this).getBlockState($$0).is(Blocks.MOVING_PISTON))){
             BlockEntity blk = ((Level) (Object) this).getBlockEntity($$0);
-            if (blk != null && ((IBlockEntityAccess)blk).getRoundaboutTimeInteracted()) {
+            if (blk != null && ((IBlockEntityAccess)blk).roundabout$getRoundaboutTimeInteracted()) {
                 return;
             }
             ci.setReturnValue(false);

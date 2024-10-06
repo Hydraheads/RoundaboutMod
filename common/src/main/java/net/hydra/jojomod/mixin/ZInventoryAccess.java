@@ -11,5 +11,5 @@ import java.util.List;
 @Mixin(Inventory.class)
 public interface ZInventoryAccess {
     @Accessor("compartments")
-    List<NonNullList<ItemStack>> roundaboutGetCompartments();
+    List<NonNullList<ItemStack>> roundabout$GetCompartments();
 }

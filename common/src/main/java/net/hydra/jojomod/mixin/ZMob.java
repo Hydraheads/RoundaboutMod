@@ -115,7 +115,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
 
-    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0)
+    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("roundabout.isWorthy", this.roundabout$isWorthy());
         $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isWorthy());

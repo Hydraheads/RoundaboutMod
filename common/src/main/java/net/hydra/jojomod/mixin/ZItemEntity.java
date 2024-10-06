@@ -29,7 +29,8 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
         super($$0, $$1);
     }
 
-    public void RoundaboutTickPickupDelay(){
+    @Override
+    public void roundabout$TickPickupDelay(){
         if (this.getItem().isEmpty()) {
             this.discard();
         } else {

@@ -8,7 +8,6 @@
     "EntityAndData",
     "PlayerEntity",
     "PlayerEntityServer",
-    "PlayerSpawn",
     "StandUserEntity",
     "TimeStopWorld",
     "WorldTickServer",

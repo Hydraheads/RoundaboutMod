@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ClientLevel.ClientLevelData.class)
@@ -21,85 +20,85 @@ public abstract class ZClientLevelData implements IClientLevelData {
     private long dayTime;
 
     @Unique
-    private long roundaboutDayTimeActual = 0L;
+    private long roundabout$DayTimeActual = 0L;
     @Unique
-    private long roundaboutDayTimeTarget = 0L;
+    private long roundabout$DayTimeTarget = 0L;
     @Unique
-    private boolean roundaboutTimeStopInitialized = false;
+    private boolean roundabout$TimeStopInitialized = false;
     @Unique
-    private boolean roundaboutInterpolatingDaytime = false;
+    private boolean roundabout$InterpolatingDaytime = false;
 
     @Unique
     @Override
-    public long getRoundaboutDayTimeActual(){
-        return roundaboutDayTimeActual;
+    public long roundabout$getRoundaboutDayTimeActual(){
+        return roundabout$DayTimeActual;
     }
     @Unique
     @Override
-    public long getRoundaboutDayTimeTarget(){
-        return roundaboutDayTimeTarget;
+    public long roundabout$getRoundaboutDayTimeTarget(){
+        return roundabout$DayTimeTarget;
     }
     @Unique
     @Override
-    public boolean getRoundaboutTimeStopInitialized(){
-        return roundaboutTimeStopInitialized;
+    public boolean roundabout$getRoundaboutTimeStopInitialized(){
+        return roundabout$TimeStopInitialized;
     }
     @Unique
     @Override
-    public void setRoundaboutTimeStopInitialized(boolean roundaboutTimeStopInitialized){
-        this.roundaboutTimeStopInitialized = roundaboutTimeStopInitialized;
+    public void roundabout$setRoundaboutTimeStopInitialized(boolean roundaboutTimeStopInitialized){
+        this.roundabout$TimeStopInitialized = roundaboutTimeStopInitialized;
     }
     @Unique
     @Override
-    public boolean getRoundaboutInterpolatingDaytime(){
-        return roundaboutInterpolatingDaytime;
+    public boolean roundabout$getRoundaboutInterpolatingDaytime(){
+        return roundabout$InterpolatingDaytime;
     }
+
+    @Unique
+    @Override
+    public void roundabout$setRoundaboutInterpolatingDaytime(boolean roundaboutInterpolatingDaytime){
+        this.roundabout$InterpolatingDaytime = roundaboutInterpolatingDaytime;
+    }
+
 
     @Unique
     @Override
-    public void setRoundaboutInterpolatingDaytime(boolean roundaboutInterpolatingDaytime){
-        this.roundaboutInterpolatingDaytime = roundaboutInterpolatingDaytime;
-    }
-
-
-    @Unique
-    @Override
-    public void setRoundaboutDayTimeActual(long roundaboutDayTimeActual){
-        this.roundaboutDayTimeActual = roundaboutDayTimeActual;
+    public void roundabout$setRoundaboutDayTimeActual(long roundaboutDayTimeActual){
+        this.roundabout$DayTimeActual = roundaboutDayTimeActual;
     }
     @Unique
     @Override
-    public void setRoundaboutDayTimeTarget(long roundaboutDayTimeTarget){
-        this.roundaboutDayTimeTarget = roundaboutDayTimeTarget;
+    public void roundabout$setRoundaboutDayTimeTarget(long roundaboutDayTimeTarget){
+        this.roundabout$DayTimeTarget = roundaboutDayTimeTarget;
     }
     @Unique
     @Override
-    public long getRoundaboutDayTimeMinecraft(){
+    public long roundabout$getRoundaboutDayTimeMinecraft(){
         return this.dayTime;
     }
 
-    public void roundaboutInitializeTS(){
+    public void roundabout$roundaboutInitializeTS(){
         LocalPlayer LP = Minecraft.getInstance().player;
         if (LP != null && Minecraft.getInstance().level != null &&
                 ((TimeStop)Minecraft.getInstance().level).inTimeStopRange(LP)) {
-            if (!this.getRoundaboutTimeStopInitialized()){
-                this.roundaboutDayTimeActual = dayTime;
-                this.roundaboutDayTimeTarget = dayTime;
-                this.roundaboutTimeStopInitialized = true;
-                this.roundaboutInterpolatingDaytime = true;
+            if (!this.roundabout$getRoundaboutTimeStopInitialized()){
+                this.roundabout$DayTimeActual = dayTime;
+                this.roundabout$DayTimeTarget = dayTime;
+                this.roundabout$TimeStopInitialized = true;
+                this.roundabout$InterpolatingDaytime = true;
             }
         } else {
-            if (this.getRoundaboutTimeStopInitialized()){
-                this.roundaboutTimeStopInitialized = false;
+            if (this.roundabout$getRoundaboutTimeStopInitialized()){
+                this.roundabout$TimeStopInitialized = false;
             }
         }
     }
 
     @Inject(method = "getDayTime", at = @At(value = "HEAD"), cancellable = true)
-    public void roundaboutTickEntity3(CallbackInfoReturnable<Long> ci) {
-        roundaboutInitializeTS();
-        if (this.roundaboutInterpolatingDaytime) {
-            ci.setReturnValue(roundaboutDayTimeActual);
+    public void roundabout$TickEntity3(CallbackInfoReturnable<Long> ci) {
+        roundabout$roundaboutInitializeTS();
+        if (this.roundabout$InterpolatingDaytime) {
+            ci.setReturnValue(roundabout$DayTimeActual);
         }
     }
 }

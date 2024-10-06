@@ -1,50 +1,48 @@
 package net.hydra.jojomod.access;
 
-import java.util.UUID;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public interface IEntityAndData {
 
-    float getPreTSTick();
+    float roundabout$getPreTSTick();
 
-    double getRoundaboutPrevX();
+    double roundabout$getRoundaboutPrevX();
 
-    double getRoundaboutPrevY();
+    double roundabout$getRoundaboutPrevY();
 
-    void setRoundaboutJamBreath(boolean roundaboutJamBreath);
-    boolean getRoundaboutJamBreath();
+    void roundabout$setRoundaboutJamBreath(boolean roundaboutJamBreath);
+    boolean roundabout$getRoundaboutJamBreath();
 
-    double getRoundaboutPrevZ();
+    double roundabout$getRoundaboutPrevZ();
 
-    void setPreTSTick(float frameTime);
+    void roundabout$setPreTSTick(float frameTime);
 
-    void setRoundaboutPrevX(double roundaboutPrevX);
+    void roundabout$setRoundaboutPrevX(double roundaboutPrevX);
 
-    void setRoundaboutPrevY(double roundaboutPrevY);
-    void setRoundaboutPrevZ(double roundaboutPrevZ);
+    void roundabout$setRoundaboutPrevY(double roundaboutPrevY);
+    void roundabout$setRoundaboutPrevZ(double roundaboutPrevZ);
 
-    void resetPreTSTick();
+    void roundabout$resetPreTSTick();
 
-    void setRoundaboutRenderChest(@Nullable ItemStack chest);
-    void setRoundaboutRenderLegs(@Nullable ItemStack legs);
+    void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest);
+    void roundabout$setRoundaboutRenderLegs(@Nullable ItemStack legs);
 
-    void setRoundaboutRenderBoots(@Nullable ItemStack boots);
-    void setRoundaboutRenderHead(@Nullable ItemStack head);
-    void setRoundaboutRenderMainHand(@Nullable ItemStack main);
-    void setRoundaboutRenderOffHand(@Nullable ItemStack main);
+    void roundabout$setRoundaboutRenderBoots(@Nullable ItemStack boots);
+    void roundabout$setRoundaboutRenderHead(@Nullable ItemStack head);
+    void roundabout$setRoundaboutRenderMainHand(@Nullable ItemStack main);
+    void roundabout$setRoundaboutRenderOffHand(@Nullable ItemStack main);
 
-    @Nullable ItemStack getRoundaboutRenderChest();
-    @Nullable ItemStack getRoundaboutRenderLegs();
-    @Nullable ItemStack getRoundaboutRenderBoots();
-    @Nullable ItemStack getRoundaboutRenderHead();
-    @Nullable ItemStack getRoundaboutRenderMainHand();
-    @Nullable ItemStack getRoundaboutRenderOffHand();
-    @Nullable Vec3 getRoundaboutDeltaBuildupTS();
+    @Nullable ItemStack roundabout$getRoundaboutRenderChest();
+    @Nullable ItemStack roundabout$getRoundaboutRenderLegs();
+    @Nullable ItemStack roundabout$getRoundaboutRenderBoots();
+    @Nullable ItemStack roundabout$getRoundaboutRenderHead();
+    @Nullable ItemStack roundabout$getRoundaboutRenderMainHand();
+    @Nullable ItemStack roundabout$getRoundaboutRenderOffHand();
+    @Nullable Vec3 roundabout$getRoundaboutDeltaBuildupTS();
 
-    void setRoundaboutDeltaBuildupTS(Vec3 vec3);
+    void roundabout$setRoundaboutDeltaBuildupTS(Vec3 vec3);
     void roundabout$tickQVec();
 
     void roundabout$setQVec(Vec3 q);

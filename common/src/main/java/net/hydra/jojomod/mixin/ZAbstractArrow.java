@@ -1,24 +1,15 @@
 package net.hydra.jojomod.mixin;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.IParticleAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.TimeMovingProjectile;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.minecraft.client.Camera;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -72,7 +63,7 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
     }
     @Override
     @Nullable
-    public EntityHitResult roundaboutFindHitEntity(Vec3 $$0, Vec3 $$1){
+    public EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1){
         return this.findHitEntity($$0,$$1);
     }
     @Shadow
@@ -81,8 +72,8 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
         return null;
     }
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    private void roundaboutSetPosForTS(CallbackInfo ci) {
-        if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this)) && ((IProjectileAccess) this).getRoundaboutIsTimeStopCreated()) {
+    private void roundabout$SetPosForTS(CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this)) && ((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
             super.tick();
             TimeMovingProjectile.tick((AbstractArrow) (Object) this);
             this.checkInsideBlocks();
@@ -90,7 +81,7 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
         }
     }
     @Inject(method = "playerTouch", at = @At(value = "HEAD"),cancellable = true)
-    private void roundaboutShakeTime(Player $$0, CallbackInfo ci) {
+    private void roundaboutS$hakeTime(Player $$0, CallbackInfo ci) {
         if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this))) {
             if (!this.level().isClientSide && (this.inGround || this.isNoPhysics())) {
                 if (this.tryPickup($$0)) {

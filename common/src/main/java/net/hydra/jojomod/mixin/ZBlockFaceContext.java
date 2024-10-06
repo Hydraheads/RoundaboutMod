@@ -10,6 +10,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,6 +31,7 @@ public class ZBlockFaceContext extends UseOnContext {
             cir.setReturnValue(roundabout$getFacingAxis(Direction.Axis.Y));
         }
     }
+    @Unique
     public Direction roundabout$getFacingAxis(Direction.Axis axis) {
         return switch (axis) {
             default -> throw new IncompatibleClassChangeError();

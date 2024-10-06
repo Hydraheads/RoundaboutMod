@@ -20,7 +20,7 @@ public class ZWitch {
     private static final EntityDataAccessor<Boolean> DATA_USING_ITEM = SynchedEntityData.defineId(Witch.class, EntityDataSerializers.BOOLEAN);
 
     @Inject(method = "isDrinkingPotion", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutIsDrinking(CallbackInfoReturnable<Boolean> ci) {
+    protected void roundabout$IsDrinking(CallbackInfoReturnable<Boolean> ci) {
         if (((StandUser) this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
@@ -29,7 +29,7 @@ public class ZWitch {
     }
 
     @Inject(method = "setUsingItem", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutSetDrinking(boolean $$0, CallbackInfo ci) {
+    protected void roundabout$SetDrinking(boolean $$0, CallbackInfo ci) {
         if (((StandUser) this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {

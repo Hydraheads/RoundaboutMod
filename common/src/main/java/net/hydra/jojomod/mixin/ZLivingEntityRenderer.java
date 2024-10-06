@@ -30,15 +30,15 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Unique
-    private static int roundaboutPackRed(int $$0, int $$1) {
+    private static int roundabout$PackRed(int $$0, int $$1) {
         return $$0 | $$1 << 16;
     }
     @Unique
-    private static int roundaboutPackGreen(int $$0, int $$1) {
+    private static int roundabout$PackGreen(int $$0, int $$1) {
         return $$0 | $$1 << 8;
     }
     @Unique
-    private static int roundaboutPackBlue(int $$0, int $$1) {
+    private static int roundabout$PackBlue(int $$0, int $$1) {
         return $$0 | $$1;
     }
     @Inject(method = "setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V", at = @At(value = "TAIL"), cancellable = true)
@@ -74,9 +74,9 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
 
     @Inject(method = "getOverlayCoords", at = @At(value = "HEAD"), cancellable = true)
-    private static void roundaboutGetOverlayCoords(LivingEntity $$0, float $$1, CallbackInfoReturnable<Integer> ci) {
+    private static void roundabout$GetOverlayCoords(LivingEntity $$0, float $$1, CallbackInfoReturnable<Integer> ci) {
         if (((StandUser)$$0).roundabout$getStoredDamageByte() > 0) {
-            ci.setReturnValue(roundaboutPackRed(
+            ci.setReturnValue(roundabout$PackRed(
                     ((StandUser)$$0).roundabout$getStoredDamageByte(),
                     10));
         }

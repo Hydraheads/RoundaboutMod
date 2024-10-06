@@ -2,12 +2,12 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -39,7 +39,7 @@ public class ZFoodData {
             }
             boolean $$2 = $$0.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
             if ($$2 && this.saturationLevel > 0.0F && $$0.isHurt() && this.foodLevel >= 20) {
-                p1($$0);
+                roundabout$p1($$0);
                 this.tickTimer++;
                 if (this.tickTimer >= 10) {
                     float $$3 = Math.min(this.saturationLevel, 6.0F);
@@ -51,7 +51,7 @@ public class ZFoodData {
                 }
                 ci.cancel();
             } else if ($$2 && this.foodLevel >= 18 && $$0.isHurt()) {
-                p1($$0);
+                roundabout$p1($$0);
                 this.tickTimer++;
                 if (this.tickTimer >= 80) {
                     if (amp < 2) {
@@ -65,7 +65,8 @@ public class ZFoodData {
         }
     }
 
-    public void p1(Player $$0){
+    @Unique
+    public void roundabout$p1(Player $$0){
         Difficulty $$1 = $$0.level().getDifficulty();
         this.lastFoodLevel = this.foodLevel;
         if (this.exhaustionLevel > 4.0F) {

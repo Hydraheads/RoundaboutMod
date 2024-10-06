@@ -89,13 +89,13 @@ public class ZScreenShaking implements IGameRenderer {
 
 
     @Inject(method = "renderItemInHand", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutRenderHandsWithItems(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci){
+    private void roundabout$RenderHandsWithItems(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
         if (!cleared) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).CanTimeStopEntity(minecraft.player)) {
                 if (this.minecraft.getCameraEntity() != null) {
                     Entity Ent = this.minecraft.getCameraEntity();
-                    $$2 = ((IEntityAndData) Ent).getPreTSTick();
+                    $$2 = ((IEntityAndData) Ent).roundabout$getPreTSTick();
                     cleared = true;
                     this.renderItemInHand($$0, $$1, $$2);
                     cleared = false;
@@ -110,7 +110,7 @@ public class ZScreenShaking implements IGameRenderer {
 
     /**The amount of screen shakes has to be negligable for a 20 hits per sec move*/
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutiltViewWhenHurt(PoseStack $$0, float $$1, CallbackInfo ci) {
+    private void roundabout$tiltViewWhenHurt(PoseStack $$0, float $$1, CallbackInfo ci) {
         //$$0 is matrcices, $$1 is tickdelta
             if (minecraft.player != null && ((StandUser) minecraft.player).roundabout$isDazed()) {
                 assert minecraft.level != null;
@@ -139,13 +139,13 @@ public class ZScreenShaking implements IGameRenderer {
     @Shadow
     private void bobHurt(PoseStack $$0, float $$1){}
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutiltViewWhenHurt2(PoseStack $$0, float $$1, CallbackInfo ci){
+    private void roundabout$tiltViewWhenHurt2(PoseStack $$0, float $$1, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
         if (!cleared) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).CanTimeStopEntity(minecraft.player)) {
                 if (this.minecraft.getCameraEntity() instanceof LivingEntity) {
                     Player $$2 = (Player) this.minecraft.getCameraEntity();
-                    $$1 = ((IEntityAndData) $$2).getPreTSTick();
+                    $$1 = ((IEntityAndData) $$2).roundabout$getPreTSTick();
                     cleared = true;
                     this.bobHurt($$0, $$1);
                     cleared = false;
@@ -181,7 +181,7 @@ public class ZScreenShaking implements IGameRenderer {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).CanTimeStopEntity(minecraft.player)) {
                 if (this.minecraft.getCameraEntity() instanceof Player) {
                     Player $$2 = (Player) this.minecraft.getCameraEntity();
-                    $$1 = ((IEntityAndData) $$2).getPreTSTick();
+                    $$1 = ((IEntityAndData) $$2).roundabout$getPreTSTick();
                     cleared = true;
                     this.bobView($$0, $$1);
                     cleared = false;

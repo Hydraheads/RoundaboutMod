@@ -49,7 +49,7 @@ public class ZBeehiveBlock {
     }
 
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutTick(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
+    protected void roundabout$Tick(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack $$6 = $$3.getItemInHand($$4);
         if ($$6.is(ModItems.SCISSORS)) {
             ItemStack itemStack = $$3.getItemInHand($$4);

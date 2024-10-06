@@ -23,77 +23,84 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public abstract class EntityAndData implements IEntityAndData {
 
-    /** Code to store NBT on player. Undecided if this will remain.
-     * @see PlayerSpawn
-     * @see net.hydra.jojomod.stand.NBTData*/
-    private float roundaboutPrevTick = 0;
+    @Unique
+    private float roundabout$PrevTick = 0;
 
-    private double roundaboutPrevX = 0;
-    private double roundaboutPrevY = 0;
-    private double roundaboutPrevZ = 0;
+    @Unique
+    private double roundabout$PrevX = 0;
+    @Unique
+    private double roundabout$PrevY = 0;
+    @Unique
+    private double roundabout$PrevZ = 0;
 
-    public @Nullable ItemStack roundaboutRenderChest;
-    public @Nullable ItemStack roundaboutRenderLegs;
-    public @Nullable ItemStack roundaboutRenderBoots;
-    public @Nullable ItemStack roundaboutRenderHead;
-    public @Nullable ItemStack roundaboutRenderMainHand;
-    public @Nullable ItemStack roundaboutRenderOffHand;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderChest;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderLegs;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderBoots;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderHead;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderMainHand;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderOffHand;
 
-    public void setRoundaboutRenderChest(@Nullable ItemStack chest){
-        this.roundaboutRenderChest = chest;
+    public void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest){
+        this.roundabout$RenderChest = chest;
     }
-    public void setRoundaboutRenderLegs(@Nullable ItemStack legs){
-        this.roundaboutRenderLegs = legs;
+    public void roundabout$setRoundaboutRenderLegs(@Nullable ItemStack legs){
+        this.roundabout$RenderLegs = legs;
     }
-    public void setRoundaboutRenderBoots(@Nullable ItemStack boots){
-        this.roundaboutRenderBoots = boots;
+    public void roundabout$setRoundaboutRenderBoots(@Nullable ItemStack boots){
+        this.roundabout$RenderBoots = boots;
     }
-    public void setRoundaboutRenderHead(@Nullable ItemStack head){
-        this.roundaboutRenderHead = head;
+    public void roundabout$setRoundaboutRenderHead(@Nullable ItemStack head){
+        this.roundabout$RenderHead = head;
     }
-    public void setRoundaboutRenderMainHand(@Nullable ItemStack mainhand){
-        this.roundaboutRenderMainHand = mainhand;
+    public void roundabout$setRoundaboutRenderMainHand(@Nullable ItemStack mainhand){
+        this.roundabout$RenderMainHand = mainhand;
     }
-    public void setRoundaboutRenderOffHand(@Nullable ItemStack offhand){
-        this.roundaboutRenderOffHand = offhand;
-    }
-
-    public @Nullable ItemStack getRoundaboutRenderChest(){
-        return this.roundaboutRenderChest;
-    }
-    public @Nullable ItemStack getRoundaboutRenderLegs(){
-        return this.roundaboutRenderLegs;
-    }
-    public @Nullable ItemStack getRoundaboutRenderBoots(){
-        return this.roundaboutRenderBoots;
-    }
-    public @Nullable ItemStack getRoundaboutRenderHead(){
-        return this.roundaboutRenderHead;
-    }
-    public @Nullable ItemStack getRoundaboutRenderMainHand(){
-        return this.roundaboutRenderMainHand;
-    }
-    public @Nullable ItemStack getRoundaboutRenderOffHand(){
-        return this.roundaboutRenderOffHand;
+    public void roundabout$setRoundaboutRenderOffHand(@Nullable ItemStack offhand){
+        this.roundabout$RenderOffHand = offhand;
     }
 
-    public void setRoundaboutPrevX(double roundaboutPrevX){
-        this.roundaboutPrevX = roundaboutPrevX;
+    public @Nullable ItemStack roundabout$getRoundaboutRenderChest(){
+        return this.roundabout$RenderChest;
     }
-    public void setRoundaboutPrevY(double roundaboutPrevY){
-        this.roundaboutPrevY = roundaboutPrevY;
+    public @Nullable ItemStack roundabout$getRoundaboutRenderLegs(){
+        return this.roundabout$RenderLegs;
     }
-    public void setRoundaboutPrevZ(double roundaboutPrevZ){
-        this.roundaboutPrevZ = roundaboutPrevZ;
+    public @Nullable ItemStack roundabout$getRoundaboutRenderBoots(){
+        return this.roundabout$RenderBoots;
     }
-    public double getRoundaboutPrevX(){
-        return this.roundaboutPrevX;
+    public @Nullable ItemStack roundabout$getRoundaboutRenderHead(){
+        return this.roundabout$RenderHead;
     }
-    public double getRoundaboutPrevY(){
-        return this.roundaboutPrevY;
+    public @Nullable ItemStack roundabout$getRoundaboutRenderMainHand(){
+        return this.roundabout$RenderMainHand;
     }
-    public double getRoundaboutPrevZ(){
-        return this.roundaboutPrevZ;
+    public @Nullable ItemStack roundabout$getRoundaboutRenderOffHand(){
+        return this.roundabout$RenderOffHand;
+    }
+
+    public void roundabout$setRoundaboutPrevX(double roundaboutPrevX){
+        this.roundabout$PrevX = roundaboutPrevX;
+    }
+    public void roundabout$setRoundaboutPrevY(double roundaboutPrevY){
+        this.roundabout$PrevY = roundaboutPrevY;
+    }
+    public void roundabout$setRoundaboutPrevZ(double roundaboutPrevZ){
+        this.roundabout$PrevZ = roundaboutPrevZ;
+    }
+    public double roundabout$getRoundaboutPrevX(){
+        return this.roundabout$PrevX;
+    }
+    public double roundabout$getRoundaboutPrevY(){
+        return this.roundabout$PrevY;
+    }
+    public double roundabout$getRoundaboutPrevZ(){
+        return this.roundabout$PrevZ;
     }
 
     @Shadow
@@ -117,24 +124,24 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
     @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
-    public void roundaboutTurn(double $$0, double $$1, CallbackInfo ci){
+    public void roundabout$Turn(double $$0, double $$1, CallbackInfo ci){
         if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
             ci.cancel();
         }
     }
 
     @Override
-    public float getPreTSTick() {
-        return this.roundaboutPrevTick;
+    public float roundabout$getPreTSTick() {
+        return this.roundabout$PrevTick;
     }
 
     @Override
-    public void setPreTSTick(float frameTime) {
-        roundaboutPrevTick = frameTime;
+    public void roundabout$setPreTSTick(float frameTime) {
+        roundabout$PrevTick = frameTime;
     }
     @Override
-    public void resetPreTSTick() {
-        roundaboutPrevTick = 0;
+    public void roundabout$resetPreTSTick() {
+        roundabout$PrevTick = 0;
     }
 
 
@@ -193,43 +200,43 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow public abstract void moveTo(double $$0, double $$1, double $$2);
 
     @Unique
-    private Vec3 roundaboutDeltaBuildupTS = new Vec3(0,0,0);
+    private Vec3 roundabout$DeltaBuildupTS = new Vec3(0,0,0);
 
     @Unique
-    public Vec3 getRoundaboutDeltaBuildupTS(){
-        return this.roundaboutDeltaBuildupTS;
+    public Vec3 roundabout$getRoundaboutDeltaBuildupTS(){
+        return this.roundabout$DeltaBuildupTS;
     }
 
     @Unique
-    public void setRoundaboutDeltaBuildupTS(Vec3 vec3){
+    public void roundabout$setRoundaboutDeltaBuildupTS(Vec3 vec3){
         if (vec3 != null) {
-            this.roundaboutDeltaBuildupTS = vec3;
+            this.roundabout$DeltaBuildupTS = vec3;
         }
     }
     @Inject(method = "setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), cancellable = true)
-    protected void roundaboutSetDeltaMovement(Vec3 vec3, CallbackInfo ci){
+    protected void roundabout$SetDeltaMovement(Vec3 vec3, CallbackInfo ci){
         if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
-            if (vec3.distanceTo(new Vec3(0,0,0)) > (roundaboutDeltaBuildupTS.distanceTo(new Vec3(0,0,0)) - 0.35)) {
-                this.roundaboutDeltaBuildupTS = vec3;
+            if (vec3.distanceTo(new Vec3(0,0,0)) > (roundabout$DeltaBuildupTS.distanceTo(new Vec3(0,0,0)) - 0.35)) {
+                this.roundabout$DeltaBuildupTS = vec3;
             }
             ci.cancel();
         }
     }
 
     @Unique
-    public boolean roundaboutJamBreath = false;
+    public boolean roundabout$jamBreath = false;
     @Unique
-    public void setRoundaboutJamBreath(boolean roundaboutJamBreath){
-        this.roundaboutJamBreath = roundaboutJamBreath;
+    public void roundabout$setRoundaboutJamBreath(boolean roundaboutJamBreath){
+        this.roundabout$jamBreath = roundaboutJamBreath;
     }
     @Unique
-    public boolean getRoundaboutJamBreath(){
-        return this.roundaboutJamBreath;
+    public boolean roundabout$getRoundaboutJamBreath(){
+        return this.roundabout$jamBreath;
     }
 
     @Inject(method = "setAirSupply", at = @At("HEAD"), cancellable = true)
-    public void roundaboutSetAirSupply(int $$0, CallbackInfo ci) {
-        if (roundaboutJamBreath){
+    public void roundabout$SetAirSupply(int $$0, CallbackInfo ci) {
+        if (roundabout$jamBreath){
             ci.cancel();
         }
     }

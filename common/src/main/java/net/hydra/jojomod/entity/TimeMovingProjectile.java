@@ -3,7 +3,6 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -42,7 +41,7 @@ public class TimeMovingProjectile
                     if ($$7.move($$3).contains($$6)) {
                         if (projectile instanceof AbstractArrow) {
                             ((IAbstractArrowAccess)projectile).roundaboutSetInGround(true);
-                            ((IProjectileAccess)projectile).setRoundaboutIsTimeStopCreated(false);
+                            ((IProjectileAccess)projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
                         }
                         break;
                     }
@@ -50,7 +49,7 @@ public class TimeMovingProjectile
             }
         }
         if (projectile instanceof ThrowableProjectile) {
-            ((IProjectileAccess)projectile).roundaboutCheckInsideBlocks();
+            ((IProjectileAccess)projectile).roundabout$CheckInsideBlocks();
         }
 
         if (projectile instanceof AbstractArrow) {
@@ -69,7 +68,7 @@ public class TimeMovingProjectile
 
 
 
-        float speedMod = ((IProjectileAccess) projectile).getRoundaboutSpeedMultiplier();
+        float speedMod = ((IProjectileAccess) projectile).roundabout$getRoundaboutSpeedMultiplier();
         Vec3 position = new Vec3(projectile.getX(),projectile.getY(),projectile.getZ());
 
 
@@ -88,7 +87,7 @@ public class TimeMovingProjectile
             Vec3 pos2 = position.add(projectile.getDeltaMovement()).add(projectile.getDeltaMovement()).add(reducedDelta);
             float inflateDist = (float) Math.max(Math.max(reducedDelta.x, reducedDelta.y), reducedDelta.z) * 2;
             HitResult mobHit = ProjectileUtil.getEntityHitResult(
-                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1 + inflateDist), ((IProjectileAccess) projectile)::roundaboutCanHitEntity
+                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1 + inflateDist), ((IProjectileAccess) projectile)::roundabout$CanHitEntity
             );
             if (mobHit != null) {
                 speedMod *= 0.7F;
@@ -97,7 +96,7 @@ public class TimeMovingProjectile
             reducedDelta = projectile.getDeltaMovement().multiply(speedMod, speedMod, speedMod);
             pos2 = position.add(projectile.getDeltaMovement()).add(reducedDelta);
             HitResult mobHit2 = ProjectileUtil.getEntityHitResult(
-                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1), ((IProjectileAccess) projectile)::roundaboutCanHitEntity
+                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1), ((IProjectileAccess) projectile)::roundabout$CanHitEntity
             );
             if (mobHit2 != null) {
                 speedMod *= 0.6F;
@@ -136,22 +135,22 @@ public class TimeMovingProjectile
 
                 if ($$10 != null && $$10.getType() == HitResult.Type.BLOCK) {
                     ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(0);
-                    ((IProjectileAccess)projectile).setRoundaboutIsTimeStopCreated(false);
+                    ((IProjectileAccess)projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
                 } else if ($$10 != null && $$10.getType() == HitResult.Type.ENTITY) {
                     ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(0);
-                    ((IProjectileAccess)projectile).setRoundaboutIsTimeStopCreated(false);
+                    ((IProjectileAccess)projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
 
                 }
 
                 $$10 = null;
 
-        speedMod = ((IProjectileAccess) projectile).getRoundaboutSpeedMultiplier();
+        speedMod = ((IProjectileAccess) projectile).roundabout$getRoundaboutSpeedMultiplier();
         reducedDelta = projectile.getDeltaMovement().multiply(speedMod,speedMod,speedMod);
         if (speedMod > 0.01) {
             ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(speedMod* 0.87F);
             projectile.setPos(position.x + reducedDelta.x, position.y + reducedDelta.y, position.z + reducedDelta.z);
         } else {
-            ((IProjectileAccess) projectile).setRoundaboutIsTimeStopCreated(false);
+            ((IProjectileAccess) projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
         }
     }
 
@@ -171,7 +170,7 @@ public class TimeMovingProjectile
     @Nullable
     protected static EntityHitResult findHitEntity2(Projectile projectile, Vec3 $$0, Vec3 $$1, Vec3 delta) {
         return ProjectileUtil.getEntityHitResult(
-                projectile.level(), projectile, $$0, $$1, projectile.getBoundingBox().expandTowards(delta).inflate(1.0), ((IProjectileAccess) projectile)::roundaboutCanHitEntity
+                projectile.level(), projectile, $$0, $$1, projectile.getBoundingBox().expandTowards(delta).inflate(1.0), ((IProjectileAccess) projectile)::roundabout$CanHitEntity
         );
     }
 }

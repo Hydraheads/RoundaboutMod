@@ -8,7 +8,6 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
-import net.minecraft.client.renderer.entity.layers.PlayerItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,48 +28,46 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         super($$0);
     }
 
-
-    public boolean cleared = false;
-    public boolean roundaboutModifyEntity;
-    public @Nullable ItemStack roundaboutRenderMainHand;
-    public @Nullable ItemStack roundaboutRenderOffHand;
-    public boolean dominantHand;
+    public boolean roundabout$ModifyEntity;
+    public @Nullable ItemStack roundabout$RenderMainHand;
+    public @Nullable ItemStack roundabout$RenderOffHand;
+    public boolean dominant$Hand;
     @Inject(method = "render", at = @At(value = "HEAD"),cancellable = true)
-    public void roundaboutRender(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
-        dominantHand = $$3.getMainArm() == HumanoidArm.RIGHT;
+    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
+        dominant$Hand = $$3.getMainArm() == HumanoidArm.RIGHT;
         if ($$3 instanceof Player) {
-            roundaboutModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
-            if (roundaboutModifyEntity) {
-                if (((IEntityAndData) $$3).getRoundaboutRenderMainHand() == null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderMainHand($$3.getMainHandItem().copy());
+            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
+            if (roundabout$ModifyEntity) {
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderMainHand() == null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderMainHand($$3.getMainHandItem().copy());
                 }
-                if (((IEntityAndData) $$3).getRoundaboutRenderOffHand() == null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderOffHand($$3.getOffhandItem().copy());
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderOffHand() == null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderOffHand($$3.getOffhandItem().copy());
                 }
-                roundaboutRenderMainHand = ((IEntityAndData) $$3).getRoundaboutRenderMainHand();
-                roundaboutRenderOffHand = ((IEntityAndData) $$3).getRoundaboutRenderOffHand();
+                roundabout$RenderMainHand = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderMainHand();
+                roundabout$RenderOffHand = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderOffHand();
             } else {
-                if (((IEntityAndData) $$3).getRoundaboutRenderOffHand() != null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderOffHand(null);
-                } else if (((IEntityAndData) $$3).getRoundaboutRenderMainHand() != null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderMainHand(null);
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderOffHand() != null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderOffHand(null);
+                } else if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderMainHand() != null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderMainHand(null);
                 }
             }
         } else {
-            roundaboutModifyEntity = false;
+            roundabout$ModifyEntity = false;
         }
     }
 
     @ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 0)
-    public ItemStack roundaboutRender2(ItemStack it){
-        if (roundaboutModifyEntity) {
-            if (!dominantHand) {
-                if (roundaboutRenderMainHand != null) {
-                    return roundaboutRenderMainHand;
+    public ItemStack roundabout$Render2(ItemStack it){
+        if (roundabout$ModifyEntity) {
+            if (!dominant$Hand) {
+                if (roundabout$RenderMainHand != null) {
+                    return roundabout$RenderMainHand;
                 }
             } else {
-                if (roundaboutRenderOffHand != null) {
-                    return roundaboutRenderOffHand;
+                if (roundabout$RenderOffHand != null) {
+                    return roundabout$RenderOffHand;
                 }
             }
         }
@@ -78,15 +75,15 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     }
 
     @ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 1)
-    public ItemStack roundaboutRender3(ItemStack it){
-        if (roundaboutModifyEntity) {
-            if (dominantHand) {
-                if (roundaboutRenderMainHand != null) {
-                    return roundaboutRenderMainHand;
+    public ItemStack roundabout$Render3(ItemStack it){
+        if (roundabout$ModifyEntity) {
+            if (dominant$Hand) {
+                if (roundabout$RenderMainHand != null) {
+                    return roundabout$RenderMainHand;
                 }
             } else {
-                if (roundaboutRenderOffHand != null) {
-                    return roundaboutRenderOffHand;
+                if (roundabout$RenderOffHand != null) {
+                    return roundabout$RenderOffHand;
                 }
             }
         }

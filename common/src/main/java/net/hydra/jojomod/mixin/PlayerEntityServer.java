@@ -16,25 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(ServerPlayer.class)
-    public abstract class PlayerEntityServer extends Player {
+public abstract class PlayerEntityServer extends Player {
 
+    public PlayerEntityServer(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
+        super(world, pos, yaw, gameProfile);
+    }
 
-
-        /** This code makes sure stand is summoned properly when switching dimensions or performing other tasks*/
-        public int compatSync = 2;
-
-        public PlayerEntityServer(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
-            super(world, pos, yaw, gameProfile);
-        }
-
-        @Inject(method = "doTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;tick()V", shift = At.Shift.AFTER))
-        public void playerTickMixin(CallbackInfo info) {
-            if (compatSync > 0) {
-                compatSync--;
-                if (compatSync == 1) {
-                }
-            }
-        }
 
     @Inject(method = "teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDFF)V", at = @At(value = "TAIL"))
     public void roundabout$teleportTo(ServerLevel p_9000_, double p_9001_, double p_9002_, double p_9003_, float p_9004_, float p_9005_, CallbackInfo info) {

@@ -3,26 +3,26 @@ package net.hydra.jojomod.access;
 import org.joml.Vector3f;
 
 public interface ILivingEntityAccess {
-    public double getLerpX();
-    public double getLerpY();
-    public double getLerpZ();
-    public void setLerp(Vector3f lerp);
-    public double getLerpXRot();
-    public double getLerpYRot();
+    public double roundabout$getLerpX();
+    public double roundabout$getLerpY();
+    public double roundabout$getLerpZ();
+    public void roundabout$setLerp(Vector3f lerp);
+    public double roundabout$getLerpXRot();
+    public double roundabout$getLerpYRot();
 
-    void setAnimStep(float animStep);
+    void roundabout$setAnimStep(float animStep);
 
-    void setAnimStepO(float animStepO);
+    void roundabout$setAnimStepO(float animStepO);
 
-    float getAnimStep();
+    float roundabout$getAnimStep();
 
-    float getAnimStepO();
+    float roundabout$getAnimStepO();
 
-    int getLerpSteps();
+    int roundabout$getLerpSteps();
 
-    void setLerpSteps(int lerpSteps);
+    void roundabout$setLerpSteps(int lerpSteps);
 
-    void roundaboutPushEntities();
+    void roundabout$PushEntities();
 
-    int roundaboutDecreaseAirSupply(int amt);
+    int roundabout$DecreaseAirSupply(int amt);
 }

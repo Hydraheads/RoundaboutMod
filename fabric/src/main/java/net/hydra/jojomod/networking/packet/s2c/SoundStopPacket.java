@@ -1,7 +1,6 @@
 package net.hydra.jojomod.networking.packet.s2c;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -16,7 +15,7 @@ public class SoundStopPacket {
         if (client.level != null) {
             Entity User = client.level.getEntity(buf.readInt());
             if (User instanceof LivingEntity){
-                ((StandUserClient)User).clientQueSound(buf.readByte());
+                ((StandUserClient)User).roundabout$clientQueSound(buf.readByte());
             }
         }
     }
@@ -25,7 +24,7 @@ public class SoundStopPacket {
         if (client.player != null) {
             Entity User = client.player.level().getEntity(buf.readInt());
             if (User instanceof LivingEntity){
-                ((StandUserClient)User).clientQueSoundCanceling(buf.readByte());
+                ((StandUserClient)User).roundabout$clientQueSoundCanceling(buf.readByte());
             }
         }
     }

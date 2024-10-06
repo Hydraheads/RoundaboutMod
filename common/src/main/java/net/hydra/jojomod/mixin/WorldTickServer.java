@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,7 +43,7 @@ public class WorldTickServer {
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
+    private void roundabout$tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickAllTimeStops();
 
         this.entityTickList.forEach($$0x -> {
@@ -58,7 +59,8 @@ public class WorldTickServer {
     }
 
 
-    private void tickStandIn(LivingEntity entity, StandEntity stand) {
+    @Unique
+    private void roundabout$tickStandIn(LivingEntity entity, StandEntity stand) {
         if (stand == null || stand.isRemoved()) {
             return;
         }
@@ -77,14 +79,14 @@ public class WorldTickServer {
 
     /**Time stop code*/
     @Inject(method = "tickFluid", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutFluidTick(BlockPos $$0x, Fluid $$1x, CallbackInfo ci) {
+    private void roundabout$FluidTick(BlockPos $$0x, Fluid $$1x, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange($$0x)){
                 ((LevelAccessor) this).scheduleTick($$0x, $$1x, $$1x.getTickDelay(((LevelAccessor) this)));
             ci.cancel();
         }
     }
     @Inject(method = "tickBlock", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutBlockTick(BlockPos $$0x, Block $$1x, CallbackInfo ci) {
+    private void roundabout$BlockTick(BlockPos $$0x, Block $$1x, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange($$0x) && !($$1x instanceof CommandBlock)){
             ((LevelAccessor) this).scheduleTick($$0x, $$1x, 1);
             ci.cancel();
@@ -99,26 +101,26 @@ public class WorldTickServer {
     private void tickPassenger(Entity $$0, Entity $$1){
     }
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutTickEntity2(Entity $$0, CallbackInfo ci) {
+    private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof StandEntity SE) {
                 if (SE.getFollowing() != null){
                     ci.cancel();
                 }
             }
-            roundaboutTickTSDamage($$0);
+            roundabout$TickTSDamage($$0);
             if (((TimeStop) this).CanTimeStopEntity($$0)){
                 if ($$0 instanceof LivingEntity) {
                     ((LivingEntity) $$0).hurtTime = 0;
                     $$0.invulnerableTime = 0;
                     ((StandUser)$$0).roundabout$getStandPowers().timeTick();
-                    ((ILivingEntityAccess) $$0).roundaboutPushEntities();
+                    ((ILivingEntityAccess) $$0).roundabout$PushEntities();
                 } else if ($$0 instanceof ItemEntity) {
-                    ((IItemEntityAccess)$$0).RoundaboutTickPickupDelay();
+                    ((IItemEntityAccess)$$0).roundabout$TickPickupDelay();
                 } else if ($$0 instanceof FishingHook){
                     ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
                 } else if ($$0 instanceof Boat){
-                    ((IBoatAccess)$$0).roundaboutTickLerp();
+                    ((IBoatAccess)$$0).roundabout$TickLerp();
                     $$0.lerpTo($$0.getX(),$$0.getY(),$$0.getZ(),$$0.getYRot(),$$0.getXRot(),3,false);
                     $$0.walkDistO = $$0.walkDist;
                     $$0.xRotO = $$0.getXRot();
@@ -133,18 +135,18 @@ public class WorldTickServer {
         }
     }
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
-    private void roundaboutTickEntityX(Entity $$0, CallbackInfo ci) {
+    private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof LivingEntity LE) {
                 for (StandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
-                    this.tickStandIn(LE, SE);
+                    this.roundabout$tickStandIn(LE, SE);
                 }
             }
         }
     }
 
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutTickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+    private void roundabout$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
 
         if ($$1 instanceof StandEntity SE) {
             if (SE.getFollowing() != null){
@@ -154,7 +156,7 @@ public class WorldTickServer {
         if ($$1 instanceof LivingEntity) {
             ((StandUser) $$1).roundabout$UniversalTick();
         }
-        roundaboutTickTSDamage($$1);
+        roundabout$TickTSDamage($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
             $$1.stopRiding();
         } else if ($$1 instanceof Player || this.entityTickList.contains($$1)) {
@@ -162,9 +164,9 @@ public class WorldTickServer {
                 if ($$1 instanceof LivingEntity) {
                     $$1.invulnerableTime = 0;
                     ((LivingEntity) $$1).hurtTime = 0;
-                    ((ILivingEntityAccess) $$1).roundaboutPushEntities();
+                    ((ILivingEntityAccess) $$1).roundabout$PushEntities();
                 } else if ($$1 instanceof ItemEntity) {
-                    ((IItemEntityAccess)$$1).RoundaboutTickPickupDelay();
+                    ((IItemEntityAccess)$$1).roundabout$TickPickupDelay();
                 } else if ($$1 instanceof FishingHook){
                     ((IFishingRodAccess)$$1).roundaboutUpdateRodInTS();
                 }
@@ -178,20 +180,20 @@ public class WorldTickServer {
     }
 
     @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
-    private void roundaboutTickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
+    private void roundabout$TickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof LivingEntity LE) {
             for (StandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
-                this.tickStandIn(LE, SE);
+                this.roundabout$tickStandIn(LE, SE);
             }
         }
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void roundaboutTickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
+    private void roundabout$TickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickTimeStoppingEntity();
     }
     @Inject(method = "tickChunk", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutTickChunk(LevelChunk $$0, int $$1, CallbackInfo ci) {
+    private void roundabout$TickChunk(LevelChunk $$0, int $$1, CallbackInfo ci) {
         ChunkPos $$2 = $$0.getPos();
         BlockPos BP = $$2.getWorldPosition();
         if (((TimeStop) this).inTimeStopRange(new Vec3i(BP.getX(),BP.getY(),BP.getZ()))){
@@ -199,7 +201,8 @@ public class WorldTickServer {
         }
     }
 
-    private void roundaboutTickTSDamage(Entity entity){
+    @Unique
+    private void roundabout$TickTSDamage(Entity entity){
         if (entity instanceof LivingEntity){
             ((StandUser)entity).roundabout$UniversalTick();
             if (!(((TimeStop) this).CanTimeStopEntity(entity)) && ((StandUser)entity).roundabout$getStoredDamage() > 0){
@@ -207,7 +210,7 @@ public class WorldTickServer {
                 if (DamageHandler.TimeDamageEntityAttack(entity,
                         ((StandUser)entity).roundabout$getStoredDamage(), 0, ((StandUser)entity).roundaboutGetStoredAttacker())){
                     entity.hurtMarked = true;
-                    entity.setDeltaMovement(Objects.requireNonNull(((IEntityAndData) entity).getRoundaboutDeltaBuildupTS()));
+                    entity.setDeltaMovement(Objects.requireNonNull(((IEntityAndData) entity).roundabout$getRoundaboutDeltaBuildupTS()));
                     int TSHurt = ((StandUser)entity).roundaboutGetTSHurtSound();
                     if (TSHurt != 0){
                         if (TSHurt == 1){
@@ -223,7 +226,7 @@ public class WorldTickServer {
                 }
                 ((StandUser)entity).roundabout$setStoredDamage(0);
                 ((StandUser)entity).roundaboutSetStoredAttacker(null);
-                ((IEntityAndData)entity).setRoundaboutDeltaBuildupTS(new Vec3(0,0,0));
+                ((IEntityAndData)entity).roundabout$setRoundaboutDeltaBuildupTS(new Vec3(0,0,0));
             }
         }
     }

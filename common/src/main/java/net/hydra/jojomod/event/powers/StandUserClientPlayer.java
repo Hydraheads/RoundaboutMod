@@ -1,9 +1,9 @@
 package net.hydra.jojomod.event.powers;
 
 public interface StandUserClientPlayer {
-    long getClashDisplayExtraTimestamp();
-    float getLastClashPower();
-    void setClashDisplayExtraTimestamp(long set);
-    void setLastClashPower(float set);
-    int getRoundaboutNoPlaceTSTicks();
+    long roundabout$getClashDisplayExtraTimestamp();
+    float roundabout$getLastClashPower();
+    void roundabout$setClashDisplayExtraTimestamp(long set);
+    void roundabout$setLastClashPower(float set);
+    int roundabout$getRoundaboutNoPlaceTSTicks();
 }

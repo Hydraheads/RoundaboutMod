@@ -1,16 +1,16 @@
 package net.hydra.jojomod.access;
 
 public interface IClientLevelData {
-    long getRoundaboutDayTimeActual();
-    long getRoundaboutDayTimeTarget();
-    void setRoundaboutDayTimeActual(long roundaboutDayTimeActual);
-    void setRoundaboutDayTimeTarget(long roundaboutDayTimeTarget);
-    boolean getRoundaboutInterpolatingDaytime();
-    void setRoundaboutInterpolatingDaytime(boolean roundaboutTimeStopInitialized);
-    long getRoundaboutDayTimeMinecraft();
-    void setRoundaboutTimeStopInitialized(boolean roundaboutTimeStopInitialized);
-    boolean getRoundaboutTimeStopInitialized();
+    long roundabout$getRoundaboutDayTimeActual();
+    long roundabout$getRoundaboutDayTimeTarget();
+    void roundabout$setRoundaboutDayTimeActual(long roundaboutDayTimeActual);
+    void roundabout$setRoundaboutDayTimeTarget(long roundaboutDayTimeTarget);
+    boolean roundabout$getRoundaboutInterpolatingDaytime();
+    void roundabout$setRoundaboutInterpolatingDaytime(boolean roundaboutTimeStopInitialized);
+    long roundabout$getRoundaboutDayTimeMinecraft();
+    void roundabout$setRoundaboutTimeStopInitialized(boolean roundaboutTimeStopInitialized);
+    boolean roundabout$getRoundaboutTimeStopInitialized();
 
-    void roundaboutInitializeTS();
+    void roundabout$roundaboutInitializeTS();
 
 }

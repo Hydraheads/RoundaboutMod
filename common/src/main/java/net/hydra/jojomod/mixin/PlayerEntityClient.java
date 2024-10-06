@@ -23,32 +23,42 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     @Shadow
     protected int sprintTriggerTime;
 
-    private int clashIncrement;
-    private boolean bl = false;
+    @Unique
+    private int roundabout$clashIncrement;
+    @Unique
+    private boolean roundabout$bl = false;
 
     /**When time is stopped, it would be OP if you could place some blocks down*/
     @Unique
-    private int roundaboutNoPlaceTSTicks = -1;
-
-    private long clashDisplayExtraTimestamp = -100;
-    private float lastClashPower = -1;
+    private int roundabout$NoPlaceTSTicks = -1;
 
     @Unique
-    public int getRoundaboutNoPlaceTSTicks(){
-        return this.roundaboutNoPlaceTSTicks;
+    private long roundabout$clashDisplayExtraTimestamp = -100;
+    @Unique
+    private float roundabout$lastClashPower = -1;
+
+    @Unique
+    public int roundabout$getRoundaboutNoPlaceTSTicks(){
+        return this.roundabout$NoPlaceTSTicks;
     }
 
-    public long getClashDisplayExtraTimestamp(){
-        return this.clashDisplayExtraTimestamp;
+    @Unique
+    public long roundabout$getClashDisplayExtraTimestamp(){
+        return this.roundabout$clashDisplayExtraTimestamp;
     }
-    public float getLastClashPower(){
-        return this.lastClashPower;
+
+
+    @Unique
+    public float roundabout$getLastClashPower(){
+        return this.roundabout$lastClashPower;
     }
-    public void setClashDisplayExtraTimestamp(long set){
-        this.clashDisplayExtraTimestamp = set;
+    @Unique
+    public void roundabout$setClashDisplayExtraTimestamp(long set){
+        this.roundabout$clashDisplayExtraTimestamp = set;
     }
-    public void setLastClashPower(float set){
-        this.lastClashPower = set;
+    @Unique
+    public void roundabout$setLastClashPower(float set){
+        this.roundabout$lastClashPower = set;
     }
 
 
@@ -56,42 +66,43 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     /**This code mirrors item usage code, and it's why you are slower while eating.
      * The purpose of this mixin is to make stand blocking slow you down.*/
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/Tutorial;onInput(Lnet/minecraft/client/player/Input;)V", shift = At.Shift.AFTER))
-    private void RoundaboutTickMovement(CallbackInfo ci) {
+    private void roundabout$TickMovement(CallbackInfo ci) {
         /*Time Stop Levitation*/
         //this.sprintTriggerTime = ((StandUser)this).getStandPowers().inputSpeedModifiers(this.sprintTriggerTime);
-        RoundaboutClashJump();
+        roundabout$ClashJump();
     }
-    private void RoundaboutClashJump(){
+    @Unique
+    private void roundabout$ClashJump(){
         if (((StandUser) this).roundabout$isClashing()) {
             if (!((StandUser)this).roundabout$getStandPowers().getClashDone()) {
-                if (this.clashIncrement < 0) {
-                    ++this.clashIncrement;
-                    if (this.clashIncrement == 0) {
+                if (this.roundabout$clashIncrement < 0) {
+                    ++this.roundabout$clashIncrement;
+                    if (this.roundabout$clashIncrement == 0) {
                         ((StandUser) this).roundabout$getStandPowers().setClashProgress(0.0f);
                     }
                 }
-                if (bl && !this.input.jumping) {
+                if (roundabout$bl && !this.input.jumping) {
                     ((StandUser)this).roundabout$getStandPowers().setClashDone(true);
                     //this.startRidingJump();
-                } else if (!bl && this.input.jumping) {
-                    this.clashIncrement = 0;
+                } else if (!roundabout$bl && this.input.jumping) {
+                    this.roundabout$clashIncrement = 0;
                     ((StandUser) this).roundabout$getStandPowers().setClashProgress(0.0f);
-                } else if (bl) {
-                    ++this.clashIncrement;
-                    ((StandUser) this).roundabout$getStandPowers().setClashProgress(this.clashIncrement < 10 ?
-                            (float) this.clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.clashIncrement - 9) * 0.1f);
+                } else if (roundabout$bl) {
+                    ++this.roundabout$clashIncrement;
+                    ((StandUser) this).roundabout$getStandPowers().setClashProgress(this.roundabout$clashIncrement < 10 ?
+                            (float) this.roundabout$clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.roundabout$clashIncrement - 9) * 0.1f);
                 }
-                updateClash();
+                roundabout$updateClash();
             }
         } else {
             ((StandUser)this).roundabout$getStandPowers().setClashProgress(0.0f);
             ((StandUser)this).roundabout$getStandPowers().setClashDone(false);
         }
-        bl = this.input.jumping;
+        roundabout$bl = this.input.jumping;
     }
 
     @Inject(method = "sendRidingJump", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutStartRidingJump(CallbackInfo ci) {
+    protected void roundabout$startRidingJump(CallbackInfo ci) {
         if (((StandUser) this).roundabout$isClashing()) {
             ci.cancel();
         }
@@ -100,18 +111,19 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     /**If you are stopping time, make it so that you gain a block placement cooldown for blocks with
      * a certain level of hardness or danger*/
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutTick(CallbackInfo ci) {
+    protected void roundabout$tick(CallbackInfo ci) {
         if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty() &&
                 ((TimeStop) ((Player) (Object) this).level()).isTimeStoppingEntity(((Player) (Object) this))) {
-            this.roundaboutNoPlaceTSTicks = 6;
+            this.roundabout$NoPlaceTSTicks = 6;
         } else {
-            if (this.roundaboutNoPlaceTSTicks > -1){
-                this.roundaboutNoPlaceTSTicks--;
+            if (this.roundabout$NoPlaceTSTicks > -1){
+                this.roundabout$NoPlaceTSTicks--;
             }
         }
     }
 
-    private void updateClash(){
+    @Unique
+    private void roundabout$updateClash(){
         ModPacketHandler.PACKET_ACCESS.updateClashPacket(
                 ((StandUser) this).roundabout$getStandPowers().getClashProgress(),
                 ((StandUser) this).roundabout$getStandPowers().getClashDone()

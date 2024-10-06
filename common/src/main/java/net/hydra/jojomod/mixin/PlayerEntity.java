@@ -50,11 +50,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Shadow public abstract float getDestroySpeed(BlockState $$0);
 
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT_POS = SynchedEntityData.defineId(Player.class,
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
 
     @Unique
-    private static final EntityDataAccessor<Byte> DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(Player.class,
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
 
     @Unique
@@ -74,16 +74,17 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         super($$0, $$1);
     }
 
-    public Inventory roundaboutGetInventory(){
+    @Unique
+    public Inventory roundabout$GetInventory(){
         return inventory;
     }
 
     /**Keep track of unique player animations like floating*/
     public void roundabout$SetPos(byte Pos){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT_POS, Pos);
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POS, Pos);
     }
     public byte roundabout$GetPos(){
-        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT_POS);
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS);
     }
     @Unique
     @Override
@@ -130,6 +131,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
     /**Block Breaking Speed Decreases when your hand is stone*/
+    @Unique
     private boolean roundabout$destroySpeedRecursion = false;
     @Inject(method = "getDestroySpeed", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getDestroySpeed(BlockState $$0, CallbackInfoReturnable<Float> cir) {
@@ -237,7 +239,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
-    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0)
+    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"),
+            ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putByte("roundabout.LocacacaCurse", ((StandUser)this).roundabout$getLocacacaCurse());
         return $$0;
@@ -307,13 +310,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     /**If you are in a barrage, does not play the hurt sound*/
     @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutGetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
+    protected void roundabout$GetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
         if (((StandUser) this).roundabout$isDazed()) {
             ci.setReturnValue(null);
         }
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void RoundaboutTick(CallbackInfo ci) {
+    protected void roundabout$Tick(CallbackInfo ci) {
 
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
@@ -340,7 +343,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    protected void RoundaboutTick2(CallbackInfo ci) {
+    protected void roundabout$Tick2(CallbackInfo ci) {
         if (((StandUser)this).roundabout$getAttackTimeDuring() > -1 || this.isUsingItem()) {
             ((StandUser) this).roundabout$setIdleTime(-1);
         } else if (!new Vec3(this.getX(), this.getY(), this.getZ()).equals(new Vec3(this.xOld, this.yOld, this.zOld))) {
@@ -354,29 +357,29 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     @Unique
     public final int roundabout$getKnifeCount() {
-        return this.entityData.get(DATA_KNIFE_COUNT_ID);
+        return this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
     }
     @Override
     @Unique
     public void roundabout$addKnife() {
-        byte knifeCount = this.entityData.get(DATA_KNIFE_COUNT_ID);
+        byte knifeCount = this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
 
         knifeCount++;
         if (knifeCount <= 12){
-            ((LivingEntity) (Object) this).getEntityData().set(DATA_KNIFE_COUNT_ID, knifeCount);
+            ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knifeCount);
         }
     }
     @Override
     @Unique
     public void roundabout$setKnife(byte knives) {
-        ((LivingEntity) (Object) this).getEntityData().set(DATA_KNIFE_COUNT_ID, knives);
+        ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knives);
     }
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_POS, PlayerPosIndex.NONE);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
-        ((LivingEntity)(Object)this).getEntityData().define(DATA_KNIFE_COUNT_ID, (byte)0);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);
     }
 
     @Shadow

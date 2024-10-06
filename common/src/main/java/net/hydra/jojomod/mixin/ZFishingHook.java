@@ -9,7 +9,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,8 +44,8 @@ public abstract class ZFishingHook extends Entity implements IFishingRodAccess {
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    private void roundaboutSetPosForTS(CallbackInfo ci) {
-        if (((TimeStop)this.level()).inTimeStopRange(((FishingHook)(Object)this)) && ((IProjectileAccess) this).getRoundaboutIsTimeStopCreated()) {
+    private void roundabout$SetPosForTS(CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((FishingHook)(Object)this)) && ((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
             this.syncronizedRandom.setSeed(this.getUUID().getLeastSignificantBits() ^ this.level().getGameTime());
             Player $$0 = this.getPlayerOwner();
             if ($$0 == null) {
@@ -61,7 +60,7 @@ public abstract class ZFishingHook extends Entity implements IFishingRodAccess {
         }
     }
 
-    public void roundaboutUpdateRodInTS(){
+    public void roundabout$UpdateRodInTS(){
         Player $$0 = this.getPlayerOwner();
         if ($$0 == null) {
             this.discard();

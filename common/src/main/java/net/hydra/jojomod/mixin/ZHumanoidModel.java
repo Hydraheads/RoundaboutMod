@@ -51,7 +51,7 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
     @Shadow
     public HumanoidModel.ArmPose rightArmPose;
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z", shift = At.Shift.BEFORE, ordinal = 0))
-    public void roundaboutSetupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
+    public void roundabout$SetupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
         if ($$0 instanceof Player && ((IPlayerEntity)$$0).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT) {
             this.rightArm.xRot = 0F + Mth.cos(Math.abs(($$1)/5) * 0.6662F + (float) Math.PI) * 2.0F * Math.abs(($$2)/5) * 0.5F;
             this.leftArm.xRot = -0.22F + Mth.cos(Math.abs(($$1)/5) * 0.6662F) * 2.0F * Math.abs(($$2)/5) * 0.5F;
@@ -66,7 +66,7 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
 
     /**Animation for dodge skill*/
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
-    public void roundaboutSetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
+    public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
        if ($$0 instanceof Player){
             byte pos = ((IPlayerEntity)$$0).roundabout$GetPos();
             if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD){

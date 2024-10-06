@@ -8,11 +8,9 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -30,7 +28,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -874,7 +871,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             TSChargeTicks -= 1;
 
             if (!Roundabout.canBreathInTS){
-                this.getSelf().setAirSupply(((ILivingEntityAccess) this.getSelf()).roundaboutDecreaseAirSupply(this.getSelf().getAirSupply()));
+                this.getSelf().setAirSupply(((ILivingEntityAccess) this.getSelf()).roundabout$DecreaseAirSupply(this.getSelf().getAirSupply()));
             }
 
             if (TSChargeTicks < 0 || (!Roundabout.canBreathInTS && this.getSelf().getAirSupply() == -20)) {
@@ -1203,7 +1200,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (!((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())){
                     TimeStopInstance tsi = ((TimeStop)this.getSelf().level()).getTimeStopperInstanceClient(this.getSelf().position());
                     if (tsi != null && tsi.maxDuration >= 170) {
-                        ((StandUserClient)this.getSelf()).clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
+                        ((StandUserClient)this.getSelf()).roundabout$clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
                     }
                 }
             }

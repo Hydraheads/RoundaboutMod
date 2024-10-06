@@ -321,14 +321,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$tryBlip() {
         if (roundabout$blip && roundabout$blipVector !=null){
-            ((ILivingEntityAccess) this).setLerpSteps(0);
+            ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
             this.xo = roundabout$blipVector.x;
             this.yo = roundabout$blipVector.y;
             this.zo = roundabout$blipVector.z;
             this.xOld = roundabout$blipVector.x;
             this.yOld = roundabout$blipVector.y;
             this.zOld = roundabout$blipVector.z;
-            ((ILivingEntityAccess) this).setLerp(roundabout$blipVector);
+            ((ILivingEntityAccess) this).roundabout$setLerp(roundabout$blipVector);
             this.setPos(roundabout$blipVector.x, roundabout$blipVector.y, roundabout$blipVector.z);
             this.roundabout$blip = false;
         }
@@ -661,7 +661,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
-    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0)
+    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {
             CompoundTag compoundtag = new CompoundTag();
@@ -1586,7 +1586,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!Roundabout.canBreathInTS) {
             if (!((TimeStop) this.level()).getTimeStoppingEntities().isEmpty()
                     && ((TimeStop) this.level()).getTimeStoppingEntities().contains(((LivingEntity) (Object) this))) {
-                ((IEntityAndData) this).setRoundaboutJamBreath(true);
+                ((IEntityAndData) this).roundabout$setRoundaboutJamBreath(true);
             }
         }
     }
@@ -1594,8 +1594,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "baseTick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$BreathingCancel2(CallbackInfo ci){
         if (!Roundabout.canBreathInTS) {
-            if (((IEntityAndData) this).getRoundaboutJamBreath()) {
-                ((IEntityAndData) this).setRoundaboutJamBreath(false);
+            if (((IEntityAndData) this).roundabout$getRoundaboutJamBreath()) {
+                ((IEntityAndData) this).roundabout$setRoundaboutJamBreath(false);
             }
         }
     }

@@ -69,41 +69,41 @@ public class ZWorldRenderer {
 
     @Inject( method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "HEAD"), cancellable = true)
-    private void doNotDeltaTickEntityWhenTimeIsStopped1(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
+    private void roundabout$doNotDeltaTickEntityWhenTimeIsStopped1(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
 
         if(((TimeStop) level).inTimeStopRange($$0) && ((TimeStop) level).CanTimeStopEntity($$0) && !($$0 instanceof FishingHook)) {
             double $$7 = Mth.lerp((double)$$4, $$0.xOld, $$0.getX());
             double $$8 = Mth.lerp((double)$$4, $$0.yOld, $$0.getY());
             double $$9 = Mth.lerp((double)$$4, $$0.zOld, $$0.getZ());
             float $$10 = Mth.lerp($$4, $$0.yRotO, $$0.getYRot());
-            $$4 = ((IEntityAndData) $$0).getPreTSTick();
+            $$4 = ((IEntityAndData) $$0).roundabout$getPreTSTick();
             this.entityRenderDispatcher
                     .render($$0, $$7 - $$1, $$8 - $$2, $$9 - $$3, $$10, $$4, $$5, $$6, this.entityRenderDispatcher.getPackedLightCoords($$0, $$4));
             ci.cancel();
         } else {
             Minecraft mc = Minecraft.getInstance();
-            ((IEntityAndData) $$0).setPreTSTick(mc.getFrameTime());
+            ((IEntityAndData) $$0).roundabout$setPreTSTick(mc.getFrameTime());
         }
     }
 
     @ModifyVariable(method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
-    private float RoundaboutTSRainCancel(float $$1) {
+    private float roundabout$TSRainCancel(float $$1) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null){
             if (((TimeStop)player.level()).inTimeStopRange(player)){
                 //Roundabout.LOGGER.info(String.valueOf(player.level().getGameTime()));
-               return this.minecraft.level.getRainLevel(((IEntityAndData)player).getPreTSTick());
+               return this.minecraft.level.getRainLevel(((IEntityAndData)player).roundabout$getPreTSTick());
             }
         }
         return $$1;
     }
 
     @ModifyVariable(method = "renderClouds(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
-    private float RoundaboutTSCloudCancel(float $$2) {
+    private float roundabout$TSCloudCancel(float $$2) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null){
             if (((TimeStop)player.level()).inTimeStopRange(player)){
-               return ((IEntityAndData)player).getPreTSTick();
+               return ((IEntityAndData)player).roundabout$getPreTSTick();
             }
         }
         return $$2;
@@ -114,15 +114,15 @@ public class ZWorldRenderer {
     private void roundaboutRenderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
                                        GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
         IClientLevelData levelTimeData = ((IClientLevelData)this.level.getLevelData());
-        if (levelTimeData.getRoundaboutInterpolatingDaytime()){
+        if (levelTimeData.roundabout$getRoundaboutInterpolatingDaytime()){
             /*If a timestop is active, don't tick through a MIH or instead interpolate back*/
-            if (!levelTimeData.getRoundaboutTimeStopInitialized()){
-                long dayTime =levelTimeData.getRoundaboutDayTimeMinecraft();
-                long dayTimeOld = levelTimeData.getRoundaboutDayTimeActual();
+            if (!levelTimeData.roundabout$getRoundaboutTimeStopInitialized()){
+                long dayTime =levelTimeData.roundabout$getRoundaboutDayTimeMinecraft();
+                long dayTimeOld = levelTimeData.roundabout$getRoundaboutDayTimeActual();
                 if (Math.abs(dayTimeOld - dayTime) > 1L){
-                    levelTimeData.setRoundaboutDayTimeActual((long) Mth.lerp((double)$$1, dayTimeOld, dayTime));
+                    levelTimeData.roundabout$setRoundaboutDayTimeActual((long) Mth.lerp((double)$$1, dayTimeOld, dayTime));
                 } else {
-                    levelTimeData.setRoundaboutInterpolatingDaytime(false);
+                    levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(false);
                 }
             }
         }

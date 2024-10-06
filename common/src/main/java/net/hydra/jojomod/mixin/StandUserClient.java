@@ -15,20 +15,20 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserClient extends Entity implements net.hydra.jojomod.event.powers.StandUserClient {
-    public boolean soundCancel = false;
-    public boolean shouldCancel = false;
-
-    public ImmutableList<QueueSoundInstance> roundaboutSounds = ImmutableList.of();
-    public ImmutableList<PlayedSoundInstance> roundaboutSoundsPlaying = ImmutableList.of();
-    public ImmutableList<Byte> roundaboutSoundsToCancel = ImmutableList.of();
-    public SoundEvent roundaboutSoundEvent;
-
-    public SoundInstance roundabout$GlaiveSoundInstance;
+    @Unique
+    public boolean roundabout$soundCancel = false;
+    @Unique
+    public ImmutableList<QueueSoundInstance> roundabout$sounds = ImmutableList.of();
+    @Unique
+    public ImmutableList<PlayedSoundInstance> roundabout$soundsPlaying = ImmutableList.of();
+    @Unique
+    public ImmutableList<Byte> roundabout$soundsToCancel = ImmutableList.of();
 
     public StandUserClient(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -38,36 +38,37 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
     /**This is called second by the packets, it sets up the client to play the sound on a game tick.
      * If you play it during the packet, it can crash the client because of HashMap problems*/
     @Override
-    public void clientQueSound(byte soundChoice){
+    public void roundabout$clientQueSound(byte soundChoice){
        SoundEvent soundE = ((StandUser) this).roundabout$getStandPowers().getSoundFromByte(soundChoice);
        if (soundE != null) {
-            roundaboutAddSound(new QueueSoundInstance(soundE, soundChoice));
+            roundabout$AddSound(new QueueSoundInstance(soundE, soundChoice));
        }
     }
 
-    public void roundaboutAddSound(QueueSoundInstance soundI) {
-        if (this.roundaboutSounds.isEmpty()) {
-            this.roundaboutSounds = ImmutableList.of(soundI);
+    @Unique
+    public void roundabout$AddSound(QueueSoundInstance soundI) {
+        if (this.roundabout$sounds.isEmpty()) {
+            this.roundabout$sounds = ImmutableList.of(soundI);
         } else {
-            List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundaboutSounds);
+            List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundabout$sounds);
             $$1.add(soundI);
-            this.roundaboutSounds = ImmutableList.copyOf($$1);
+            this.roundabout$sounds = ImmutableList.copyOf($$1);
         }
     }
 
     /**This is called third by the client, it actually plays the sound.*/
 
     @Override
-    public void clientPlaySound(){
-        if (!this.roundaboutSounds.isEmpty()) {
-            List<QueueSoundInstance> $$0 = Lists.newArrayList(this.roundaboutSounds);
+    public void roundabout$clientPlaySound(){
+        if (!this.roundabout$sounds.isEmpty()) {
+            List<QueueSoundInstance> $$0 = Lists.newArrayList(this.roundabout$sounds);
             for (int i = $$0.size() - 1; i >= 0; --i) {
                 QueueSoundInstance soundI = $$0.get(i);
                 ((StandUser) this).roundabout$getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
             }
 
-            List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundaboutSounds);
-            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
+            List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundabout$sounds);
+            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
 
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 QueueSoundInstance soundI = $$1.get(i);
@@ -82,16 +83,16 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                 Minecraft.getInstance().getSoundManager().play(qSound);
                 $$2.add(new PlayedSoundInstance(soundI.roundaboutSoundEvent,soundI.roundaboutSoundByte,qSound));
             }
-            this.roundaboutSounds = ImmutableList.of();
-            this.roundaboutSoundsPlaying = ImmutableList.copyOf($$2);
+            this.roundabout$sounds = ImmutableList.of();
+            this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
         }
     }
 
     @Override
-    public void clientPlaySoundIfNoneActive(byte soundChoice) {
+    public void roundabout$clientPlaySoundIfNoneActive(byte soundChoice) {
 
-            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
-        if (!this.roundaboutSounds.isEmpty()) {
+            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
+        if (!this.roundabout$sounds.isEmpty()) {
             for (int i = $$2.size() - 1; i >= 0; --i) {
                 PlayedSoundInstance soundI = $$2.get(i);
                 if (soundI.roundaboutSoundByte == soundChoice) {
@@ -110,7 +111,7 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
             );
             Minecraft.getInstance().getSoundManager().play(qSound);
             $$2.add(new PlayedSoundInstance(SE,soundChoice,qSound));
-            this.roundaboutSoundsPlaying = ImmutableList.copyOf($$2);
+            this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
     }
 
 
@@ -118,26 +119,26 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
      * If you play it during the packet, it can crash the client because of HashMap problems*/
 
     @Override
-    public void clientQueSoundCanceling(byte soundID){
-        this.soundCancel = true;
-        if (this.roundaboutSoundsToCancel.isEmpty()) {
-            this.roundaboutSoundsToCancel = ImmutableList.of(soundID);
+    public void roundabout$clientQueSoundCanceling(byte soundID){
+        this.roundabout$soundCancel = true;
+        if (this.roundabout$soundsToCancel.isEmpty()) {
+            this.roundabout$soundsToCancel = ImmutableList.of(soundID);
         } else {
-            List<Byte> $$1 = Lists.newArrayList(this.roundaboutSoundsToCancel);
+            List<Byte> $$1 = Lists.newArrayList(this.roundabout$soundsToCancel);
             $$1.add(soundID);
-            this.roundaboutSoundsToCancel = ImmutableList.copyOf($$1);
+            this.roundabout$soundsToCancel = ImmutableList.copyOf($$1);
         }
     }
 
     /**This is called sixth by the client, it finally cancels the sound*/
 
     @Override
-    public void clientSoundCancel(){
+    public void roundabout$clientSoundCancel(){
 
 
-        if (!this.roundaboutSoundsToCancel.isEmpty()) {
-            List<Byte> $$1 = Lists.newArrayList(this.roundaboutSoundsToCancel);
-            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundaboutSoundsPlaying);
+        if (!this.roundabout$soundsToCancel.isEmpty()) {
+            List<Byte> $$1 = Lists.newArrayList(this.roundabout$soundsToCancel);
+            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 byte soundByte = $$1.get(i);
                 for (int j = $$2.size() - 1; j >= 0; --j) {
@@ -148,18 +149,18 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                     }
                 }
             }
-            this.roundaboutSoundsToCancel = ImmutableList.of();
-            this.roundaboutSoundsPlaying = ImmutableList.copyOf($$2);
+            this.roundabout$soundsToCancel = ImmutableList.of();
+            this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
         }
 
-        if (!this.roundaboutSoundsPlaying.isEmpty()) {
-            List<PlayedSoundInstance> SIL = Lists.newArrayList(this.roundaboutSoundsPlaying);
+        if (!this.roundabout$soundsPlaying.isEmpty()) {
+            List<PlayedSoundInstance> SIL = Lists.newArrayList(this.roundabout$soundsPlaying);
             for (int i = SIL.size() - 1; i >= 0; --i) {
                 if (!Minecraft.getInstance().getSoundManager().isActive(SIL.get(i).roundaboutSoundInstance)){
                     SIL.remove(i);
                 }
             }
-            this.roundaboutSoundsPlaying = ImmutableList.copyOf(SIL);
+            this.roundabout$soundsPlaying = ImmutableList.copyOf(SIL);
         }
 
     }

@@ -185,7 +185,7 @@ public abstract class InputEvents {
     }
 
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
-    public void roundaboutDoItemUseCancel(CallbackInfo ci) {
+    public void roundabout$DoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
 
             StandUser standComp = ((StandUser) player);
@@ -215,7 +215,7 @@ public abstract class InputEvents {
             }}}}
 
 
-            if (level != null && ((StandUserClientPlayer) player).getRoundaboutNoPlaceTSTicks() > -1) {
+            if (level != null && ((StandUserClientPlayer) player).roundabout$getRoundaboutNoPlaceTSTicks() > -1) {
                 if (!this.player.isHandsBusy()) {
                     if (this.hitResult != null) {
 
@@ -296,13 +296,13 @@ public abstract class InputEvents {
     }
 
     @Unique
-    public void roundaboutSetTSJump(boolean roundaboutTSJump){
+    public void roundabout$SetTSJump(boolean roundaboutTSJump){
         ((StandUser)player).roundabout$setTSJump(roundaboutTSJump);
         ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
     }
 
     @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
-    public void roundaboutInput(CallbackInfo ci){
+    public void roundabout$Input(CallbackInfo ci){
         if (player != null) {
 
             if (player.isAlive()) {
@@ -312,25 +312,25 @@ public abstract class InputEvents {
                 boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
                 if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
                     if (player.getAbilities().flying && TSJumping) {
-                        this.roundaboutSetTSJump(false);
+                        this.roundabout$SetTSJump(false);
                     } else {
                         if (TSJumping && player.onGround()) {
                             TSJumping = false;
-                            this.roundaboutSetTSJump(false);
+                            this.roundabout$SetTSJump(false);
                         }
                         if (options.keyJump.isDown()) {
                             if (player.getDeltaMovement().y <= 0 && !player.onGround()) {
                                 TSJumping = true;
-                                this.roundaboutSetTSJump(true);
+                                this.roundabout$SetTSJump(true);
                             }
                         } else {
                             TSJumping = false;
-                            this.roundaboutSetTSJump(false);
+                            this.roundabout$SetTSJump(false);
                         }
                     }
                 } else {
                     if (TSJumping) {
-                        this.roundaboutSetTSJump(false);
+                        this.roundabout$SetTSJump(false);
                     }
                 }
 
@@ -354,21 +354,21 @@ public abstract class InputEvents {
                 }
 
                     //RoundaboutMod.LOGGER.info("px");
-                    if (sameKeyOne(KeyInputRegistry.summonKey)) {
+                    if (roundabout$sameKeyOne(KeyInputRegistry.summonKey)) {
                         //((IGameRenderer)this.gameRenderer).roundabout$loadEffect(new ResourceLocation("shaders/post/spider.json"));
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
 
-                    KeyInputs.MoveKey1(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityOneKey),
+                    KeyInputs.MoveKey1(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
                         this.options);
 
-                    KeyInputs.MoveKey2(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityTwoKey),
+                    KeyInputs.MoveKey2(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey),
                         this.options);
 
-                    KeyInputs.MoveKey3(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityThreeKey),
+                    KeyInputs.MoveKey3(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityThreeKey),
                         this.options);
 
-                    KeyInputs.MoveKey4(player,((Minecraft) (Object) this),sameKeyOne(KeyInputRegistry.abilityFourKey),
+                    KeyInputs.MoveKey4(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey),
                             this.options);
 
                     if (KeyInputRegistry.menuKey.isDown()) {
@@ -430,7 +430,8 @@ public abstract class InputEvents {
         }
     }
 
-    public boolean sameKeyOne(KeyMapping key1){
+    @Unique
+    public boolean roundabout$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.options.keyLoadHotbarActivator) && this.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.options.keySaveHotbarActivator) && this.options.keySaveHotbarActivator.isDown()));
     }

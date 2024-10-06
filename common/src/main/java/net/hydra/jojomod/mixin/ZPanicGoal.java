@@ -1,18 +1,15 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.scores.Team;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 @Mixin(PanicGoal.class)
 public abstract class ZPanicGoal extends Goal {
@@ -37,29 +32,13 @@ public abstract class ZPanicGoal extends Goal {
     private static TargetingConditions roundabout$HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
 
     @Unique
-    @Final
-    private static int roundabout$ALERT_RANGE_Y = 10;
-    @Unique
-    private boolean roundabout$alertSameType;
-    @Unique
     private int roundabout$timestamp;
 
     @Unique
     @Final
-    private static int roundabout$EMPTY_REACH_CACHE = 0;
-    @Unique
+    protected boolean roundabout$mustSee;
     @Final
-    private static int roundabout$CAN_REACH_CACHE = 1;
-    @Unique
-    @Final
-    private static int roundabout$CANT_REACH_CACHE = 2;
-    @Unique
-    @Final
-    protected Mob roundabout$mob;
-    @Final
-    protected boolean mustSee;
-    @Final
-    private boolean mustReach;
+    private boolean roundabout$mustReach;
     @Unique
     private int roundabout$reachCache;
     @Unique
@@ -99,7 +78,7 @@ public abstract class ZPanicGoal extends Goal {
                     if (this.mob.distanceToSqr($$0) > $$3 * $$3) {
                         cir.setReturnValue(false);
                     } else {
-                        if (this.mustSee) {
+                        if (this.roundabout$mustSee) {
                             if (this.mob.getSensing().hasLineOfSight($$0)) {
                                 this.roundabout$unseenTicks = 0;
                             } else if (++this.roundabout$unseenTicks > reducedTickDelay(this.roundabout$unseenMemoryTicks)) {
@@ -182,7 +161,7 @@ public abstract class ZPanicGoal extends Goal {
         } else if (!this.mob.isWithinRestriction($$0.blockPosition())) {
             return false;
         } else {
-            if (this.mustReach) {
+            if (this.roundabout$mustReach) {
                 if (--this.roundabout$reachCacheTime <= 0) {
                     this.roundabout$reachCache = 0;
                 }

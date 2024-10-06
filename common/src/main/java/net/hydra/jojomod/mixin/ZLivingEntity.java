@@ -31,61 +31,61 @@ public abstract class ZLivingEntity implements ILivingEntityAccess {
     protected float animStepO;
 
     @Override
-    public double getLerpX() {
+    public double roundabout$getLerpX() {
         return lerpX;
     }
 
     @Override
-    public double getLerpY() {
+    public double roundabout$getLerpY() {
         return lerpY;
     }
 
     @Override
-    public double getLerpZ() {
+    public double roundabout$getLerpZ() {
         return lerpZ;
     }
 
 
     @Override
-    public void setLerp(Vector3f lerp) {
+    public void roundabout$setLerp(Vector3f lerp) {
         lerpZ = lerp.z;
         lerpX = lerp.x;
         lerpY = lerp.y;
     }
 
     @Override
-    public double getLerpXRot() {
+    public double roundabout$getLerpXRot() {
         return lerpXRot;
     }
 
     @Override
-    public double getLerpYRot() {
+    public double roundabout$getLerpYRot() {
         return lerpYRot;
     }
 
     @Override
-    public void setAnimStep(float animStep) {
+    public void roundabout$setAnimStep(float animStep) {
         this.animStep = animStep;
     }
     @Override
-    public void setAnimStepO(float animStepO) {
+    public void roundabout$setAnimStepO(float animStepO) {
         this.animStepO = animStepO;
     }
 
     @Override
-    public float getAnimStep(){
+    public float roundabout$getAnimStep(){
         return this.animStep;
     }
     @Override
-    public float getAnimStepO(){
+    public float roundabout$getAnimStepO(){
         return this.animStepO;
     }
     @Override
-    public int getLerpSteps(){
+    public int roundabout$getLerpSteps(){
         return this.lerpSteps;
     }
     @Override
-    public void setLerpSteps(int lerpSteps){
+    public void roundabout$setLerpSteps(int lerpSteps){
         this.lerpSteps = lerpSteps;
     }
 
@@ -97,11 +97,11 @@ public abstract class ZLivingEntity implements ILivingEntityAccess {
     protected abstract int decreaseAirSupply(int $$0);
 
     @Override
-    public void roundaboutPushEntities(){
+    public void roundabout$PushEntities(){
         this.pushEntities();
     }
     @Override
-    public int roundaboutDecreaseAirSupply(int amt){
+    public int roundabout$DecreaseAirSupply(int amt){
         return this.decreaseAirSupply(amt);
     }
 

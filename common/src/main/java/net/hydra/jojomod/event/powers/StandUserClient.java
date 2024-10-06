@@ -1,16 +1,14 @@
 package net.hydra.jojomod.event.powers;
 
 
-import net.minecraft.world.entity.Entity;
-
 public interface StandUserClient {
     /**This is for EVERY client to individually save sounds and other client variables on entities clientside.
      * It's how we cancel out barrage sounds on a per entity basis.*/
-    void clientQueSound(byte soundChoice);
-    void clientPlaySound();
-    void clientPlaySoundIfNoneActive(byte soundChoice);
+    void roundabout$clientQueSound(byte soundChoice);
+    void roundabout$clientPlaySound();
+    void roundabout$clientPlaySoundIfNoneActive(byte soundChoice);
 
-    void clientQueSoundCanceling(byte soundChoice);
+    void roundabout$clientQueSoundCanceling(byte soundChoice);
 
-    void clientSoundCancel();
+    void roundabout$clientSoundCancel();
 }

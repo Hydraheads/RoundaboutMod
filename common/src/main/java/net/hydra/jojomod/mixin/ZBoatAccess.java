@@ -27,7 +27,7 @@ public class ZBoatAccess implements IBoatAccess {
     }
 
     @Unique
-    public void roundaboutTickLerp(){
+    public void roundabout$TickLerp(){
         this.oldStatus = this.status;
         this.status = this.getStatus();
         if (this.status != Boat.Status.UNDER_WATER && this.status != Boat.Status.UNDER_FLOWING_WATER) {

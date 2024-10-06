@@ -34,7 +34,7 @@ public class ZBucketItem extends Item
     }
 
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
-    public void use(Level level, Player player, InteractionHand hand,
+    public void roundabout$use(Level level, Player player, InteractionHand hand,
                     CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         ItemStack itemStack = player.getItemInHand(hand);
         HitResult result = ProjectileUtil.getHitResultOnViewVector(player, entity -> !entity.isSpectator() && entity.isPickable(), 5);

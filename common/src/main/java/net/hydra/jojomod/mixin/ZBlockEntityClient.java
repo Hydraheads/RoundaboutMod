@@ -4,26 +4,28 @@ import net.hydra.jojomod.access.IBlockEntityClientAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(BlockEntity.class)
 public class ZBlockEntityClient implements IBlockEntityClientAccess {
     /**Store extra data on block entities*/
 
-    private float roundaboutPrevTick;
+    @Unique
+    private float roundabout$PrevTick;
 
     @Override
-    public float getPreTSTick() {
-        return this.roundaboutPrevTick;
+    public float roundabout$getPreTSTick() {
+        return this.roundabout$PrevTick;
     }
 
     @Override
-    public void setPreTSTick() {
+    public void roundabout$setPreTSTick() {
         Minecraft mc = Minecraft.getInstance();
-        roundaboutPrevTick = mc.getFrameTime();
+        roundabout$PrevTick = mc.getFrameTime();
     }
     @Override
-    public void resetPreTSTick() {
-        roundaboutPrevTick = 0;
+    public void roundabout$resetPreTSTick() {
+        roundabout$PrevTick = 0;
     }
 
 }

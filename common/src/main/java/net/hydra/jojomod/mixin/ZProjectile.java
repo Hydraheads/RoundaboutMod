@@ -14,6 +14,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,25 +25,27 @@ import javax.annotation.Nullable;
 public abstract class ZProjectile extends Entity implements IProjectileAccess{
     /**The main goal of this mixin is to make projectiles spawned after a timestop move partially in one*/
 
-    private boolean roundaboutIsTimeStopCreated = false;
+    @Unique
+    private boolean roundabout$IsTimeStopCreated = false;
+    @Unique
     private float roundaboutSpeedMultiplier = 0.75F;
 
     public ZProjectile(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
     }
 
-    public float getRoundaboutSpeedMultiplier(){
+    public float roundabout$getRoundaboutSpeedMultiplier(){
         return this.roundaboutSpeedMultiplier;
     }
     public float setRoundaboutSpeedMultiplier(float roundaboutSpeedMultiplier){
         return this.roundaboutSpeedMultiplier = roundaboutSpeedMultiplier;
     }
 
-    public boolean getRoundaboutIsTimeStopCreated(){
-        return roundaboutIsTimeStopCreated;
+    public boolean roundabout$getRoundaboutIsTimeStopCreated(){
+        return roundabout$IsTimeStopCreated;
     }
-    public void setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
-        this.roundaboutIsTimeStopCreated = roundaboutIsTimeStopCreated;
+    public void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
+        this.roundabout$IsTimeStopCreated = roundaboutIsTimeStopCreated;
     }
 
     @Override
@@ -60,12 +63,12 @@ public abstract class ZProjectile extends Entity implements IProjectileAccess{
        return false;
     }
     @Override
-    public boolean roundaboutCanHitEntity(Entity $$0x) {
+    public boolean roundabout$CanHitEntity(Entity $$0x) {
         return canHitEntity($$0x);
     }
 
     @Override
-    public void roundaboutCheckInsideBlocks() {
+    public void roundabout$CheckInsideBlocks() {
         this.checkInsideBlocks();
     }
 
@@ -74,11 +77,11 @@ public abstract class ZProjectile extends Entity implements IProjectileAccess{
     }
 
     @Inject(method = "setOwner", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutSetOwner(@Nullable Entity $$0, CallbackInfo ci) {
+    private void roundabout$SetOwner(@Nullable Entity $$0, CallbackInfo ci) {
         if ($$0 != null) {
             if ($$0 instanceof LivingEntity) {
                 if (((TimeStop) $$0.level()).inTimeStopRange($$0) && !(((TimeStop) $$0.level()).CanTimeStopEntity($$0))) {
-                    this.setRoundaboutIsTimeStopCreated(true);
+                    this.roundabout$setRoundaboutIsTimeStopCreated(true);
                     if (!$$0.level().isClientSide) {
                         ((StandUser) $$0).roundabout$getStandPowers().hasActedInTS = true;
                     }
@@ -89,7 +92,7 @@ public abstract class ZProjectile extends Entity implements IProjectileAccess{
 
     @Inject(method = "shootFromRotation", at = @At(value = "HEAD"), cancellable = true)
     public void roundaboutShootFromRotation(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
-        if ((((Projectile) (Object) this) instanceof ThrowableProjectile) && ((TimeStop) $$0.level()).inTimeStopRange($$0) && this.getRoundaboutIsTimeStopCreated()) {
+        if ((((Projectile) (Object) this) instanceof ThrowableProjectile) && ((TimeStop) $$0.level()).inTimeStopRange($$0) && this.roundabout$getRoundaboutIsTimeStopCreated()) {
             float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
             float $$7 = -Mth.sin($$1 * (float) (Math.PI / 180.0));
             float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));

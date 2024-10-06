@@ -3,27 +3,19 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.entity.stand.SethanRenderer;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -50,7 +42,7 @@ public class ZEntityRenderDispatcher {
     ) {}
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
-    private static void roundaboutRenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
+    private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
         if (((TimeStop)$$2.level()).CanTimeStopEntity($$2) && $$2 instanceof LivingEntity) {
             $$4 = Minecraft.getInstance().getFrameTime();
             float $$7 = shadowRadius;
@@ -58,9 +50,9 @@ public class ZEntityRenderDispatcher {
                 $$7 = shadowRadius * 0.5F;
             }
 
-            double $$9 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).getRoundaboutPrevX(), $$2.getX());
-            double $$10 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).getRoundaboutPrevY(), $$2.getY());
-            double $$11 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).getRoundaboutPrevZ(), $$2.getZ());
+            double $$9 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).roundabout$getRoundaboutPrevX(), $$2.getX());
+            double $$10 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).roundabout$getRoundaboutPrevY(), $$2.getY());
+            double $$11 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).roundabout$getRoundaboutPrevZ(), $$2.getZ());
             float $$12 = Math.min(renderDistance / 0.5F, $$7);
             int $$13 = Mth.floor($$9 - (double) $$7);
             int $$14 = Mth.floor($$9 + (double) $$7);

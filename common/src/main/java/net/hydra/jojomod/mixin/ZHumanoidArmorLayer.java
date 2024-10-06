@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -29,73 +30,79 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
         super($$0);
     }
 
-    public int roundaboutArmorPhase;
-    public boolean roundaboutModifyEntity;
-    public @Nullable ItemStack roundaboutRenderChest;
-    public @Nullable ItemStack roundaboutRenderLegs;
-    public @Nullable ItemStack roundaboutRenderBoots;
-    public @Nullable ItemStack roundaboutRenderHead;
+    @Unique
+    public int roundabout$ArmorPhase;
+    @Unique
+    public boolean roundabout$ModifyEntity;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderChest;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderLegs;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderBoots;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderHead;
     @Inject(method = "render", at = @At(value = "HEAD"))
-    public void roundaboutRender(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
-        roundaboutArmorPhase = 0;
+    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+        roundabout$ArmorPhase = 0;
         if ($$3 instanceof Player) {
-            roundaboutModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
-            if (roundaboutModifyEntity) {
-                if (((IEntityAndData) $$3).getRoundaboutRenderChest() == null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderChest($$3.getItemBySlot(EquipmentSlot.CHEST).copy());
+            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
+            if (roundabout$ModifyEntity) {
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderChest() == null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderChest($$3.getItemBySlot(EquipmentSlot.CHEST).copy());
                 }
-                if (((IEntityAndData) $$3).getRoundaboutRenderLegs() == null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderLegs($$3.getItemBySlot(EquipmentSlot.LEGS).copy());
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderLegs() == null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderLegs($$3.getItemBySlot(EquipmentSlot.LEGS).copy());
                 }
-                if (((IEntityAndData) $$3).getRoundaboutRenderBoots() == null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderBoots($$3.getItemBySlot(EquipmentSlot.FEET).copy());
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderBoots() == null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderBoots($$3.getItemBySlot(EquipmentSlot.FEET).copy());
                 }
-                if (((IEntityAndData) $$3).getRoundaboutRenderHead() == null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderHead($$3.getItemBySlot(EquipmentSlot.HEAD).copy());
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderHead() == null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderHead($$3.getItemBySlot(EquipmentSlot.HEAD).copy());
                 }
-                roundaboutRenderChest = ((IEntityAndData) $$3).getRoundaboutRenderChest();
-                roundaboutRenderLegs = ((IEntityAndData) $$3).getRoundaboutRenderLegs();
-                roundaboutRenderBoots = ((IEntityAndData) $$3).getRoundaboutRenderBoots();
-                roundaboutRenderHead = ((IEntityAndData) $$3).getRoundaboutRenderHead();
+                roundabout$RenderChest = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderChest();
+                roundabout$RenderLegs = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderLegs();
+                roundabout$RenderBoots = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderBoots();
+                roundabout$RenderHead = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderHead();
             } else {
-                if (((IEntityAndData) $$3).getRoundaboutRenderChest() != null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderChest(null);
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderChest() != null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderChest(null);
                 }
-                if (((IEntityAndData) $$3).getRoundaboutRenderLegs() != null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderLegs(null);
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderLegs() != null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderLegs(null);
                 }
-                if (((IEntityAndData) $$3).getRoundaboutRenderBoots() != null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderBoots(null);
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderBoots() != null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderBoots(null);
                 }
-                if (((IEntityAndData) $$3).getRoundaboutRenderHead() != null){
-                    ((IEntityAndData) $$3).setRoundaboutRenderHead(null);
+                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderHead() != null){
+                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderHead(null);
                 }
             }
         } else {
-            roundaboutModifyEntity = false;
+            roundabout$ModifyEntity = false;
         }
     }
 
     @ModifyVariable(method = "renderArmorPiece", at = @At(value = "STORE"), ordinal = 0)
-    private ItemStack renderArmorPiece(ItemStack $$0) {
-        if (roundaboutModifyEntity) {
+    private ItemStack roundabout$renderArmorPiece(ItemStack $$0) {
+        if (roundabout$ModifyEntity) {
             ItemStack rewrite;
-            roundaboutArmorPhase++;
-            if (roundaboutArmorPhase == 1){
-                if (roundaboutRenderChest != null) {
-                    return roundaboutRenderChest;
+            roundabout$ArmorPhase++;
+            if (roundabout$ArmorPhase == 1){
+                if (roundabout$RenderChest != null) {
+                    return roundabout$RenderChest;
                 }
-            } else if (roundaboutArmorPhase == 2){
-                if (roundaboutRenderLegs != null) {
-                    return roundaboutRenderLegs;
+            } else if (roundabout$ArmorPhase == 2){
+                if (roundabout$RenderLegs != null) {
+                    return roundabout$RenderLegs;
                 }
-            } else if (roundaboutArmorPhase == 3){
-                if (roundaboutRenderBoots != null) {
-                    return roundaboutRenderBoots;
+            } else if (roundabout$ArmorPhase == 3){
+                if (roundabout$RenderBoots != null) {
+                    return roundabout$RenderBoots;
                 }
             } else {
-                if (roundaboutRenderHead != null) {
-                    return roundaboutRenderHead;
+                if (roundabout$RenderHead != null) {
+                    return roundabout$RenderHead;
                 }
             }
             return $$0;

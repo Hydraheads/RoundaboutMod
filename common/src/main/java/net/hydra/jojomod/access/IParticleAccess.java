@@ -1,12 +1,12 @@
 package net.hydra.jojomod.access;
 
 public interface IParticleAccess {
-    boolean getRoundaboutIsTimeStopCreated();
-    void setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated);
+    boolean roundabout$getRoundaboutIsTimeStopCreated();
+    void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated);
 
-    float getPreTSTick();
+    float roundabout$getPreTSTick();
 
-    void setPreTSTick();
+    void roundabout$setPreTSTick();
 
-    void resetPreTSTick();
+    void roundabout$resetPreTSTick();
 }

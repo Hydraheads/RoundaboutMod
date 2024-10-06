@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(RecordItem.class)
 public class ZRecordItem {
     @Inject(method = "useOn", at = @At(value = "HEAD"),cancellable = true)
-    public void roundaboutShootFromRotation(UseOnContext $$0, CallbackInfoReturnable<InteractionResult> cir) {
+    public void roundabout$ShootFromRotation(UseOnContext $$0, CallbackInfoReturnable<InteractionResult> cir) {
 
         Level level = $$0.getLevel();
         BlockPos blockpos = $$0.getClickedPos();

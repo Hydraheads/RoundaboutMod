@@ -38,16 +38,15 @@ public class ZParticleEngine {
     @Shadow @Final
     private Map<ParticleRenderType, Queue<Particle>> particles;
 
-    private float tickDeltaCache = 0;
 
     /**When a particle is created, mark it as created in a TS or not, particles made in a TS tick*/
     @ModifyVariable(
             method = "add(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
     private Particle roundaboutMarkParticleTS(Particle $$0) {
-        if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((ZParticleAccess) $$0).getX(),
-                (int) ((ZParticleAccess) $$0).getY(),
-                (int) ((ZParticleAccess) $$0).getZ()))){
-            ((IParticleAccess) $$0).setRoundaboutIsTimeStopCreated(true);
+        if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((ZParticleAccess) $$0).roundabout$getX(),
+                (int) ((ZParticleAccess) $$0).roundabout$getY(),
+                (int) ((ZParticleAccess) $$0).roundabout$getZ()))){
+            ((IParticleAccess) $$0).roundabout$setRoundaboutIsTimeStopCreated(true);
         }
         return $$0;
     }
@@ -56,12 +55,12 @@ public class ZParticleEngine {
     void doNotTickParticleWhenTimeStopped(Particle particle, CallbackInfo ci) {
         ZParticleAccess particle1 = (ZParticleAccess) particle;
         if (!(particle instanceof ItemPickupParticle)) {
-            if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.getX(),
-                    (int) particle1.getY(),
-                    (int) particle1.getZ()))) {
-                particle1.setPrevX(particle1.getX());
-                particle1.setPrevY(particle1.getY());
-                particle1.setPrevZ(particle1.getZ());
+            if (!((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.roundabout$getX(),
+                    (int) particle1.roundabout$getY(),
+                    (int) particle1.roundabout$getZ()))) {
+                particle1.roundabout$setPrevX(particle1.roundabout$getX());
+                particle1.roundabout$setPrevY(particle1.roundabout$getY());
+                particle1.roundabout$setPrevZ(particle1.roundabout$getZ());
                 ci.cancel();
             }
         }
@@ -97,14 +96,14 @@ public class ZParticleEngine {
 
                             ZParticleAccess particle1 = ((ZParticleAccess) $$10);
                             float tickDeltaFixed = $$4;
-                            if (!((IParticleAccess) particle1).getRoundaboutIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
-                                Vec3i range = new Vec3i((int) particle1.getX(),
-                                        (int) particle1.getY(),
-                                        (int) particle1.getZ());
+                            if (!((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
+                                Vec3i range = new Vec3i((int) particle1.roundabout$getX(),
+                                        (int) particle1.roundabout$getY(),
+                                        (int) particle1.roundabout$getZ());
                                 if (((TimeStop) level).inTimeStopRange(range)) {
-                                    tickDeltaFixed = ((IParticleAccess) particle1).getPreTSTick();
+                                    tickDeltaFixed = ((IParticleAccess) particle1).roundabout$getPreTSTick();
                                 } else {
-                                    ((IParticleAccess) particle1).setPreTSTick();
+                                    ((IParticleAccess) particle1).roundabout$setPreTSTick();
                                 }
                             }
                             $$10.render($$9, $$3, tickDeltaFixed);

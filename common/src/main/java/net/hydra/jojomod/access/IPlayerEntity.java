@@ -1,10 +1,9 @@
 package net.hydra.jojomod.access;
 
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.phys.Vec3;
 
 public interface IPlayerEntity {
-    Inventory roundaboutGetInventory();
+    Inventory roundabout$GetInventory();
 
     void roundabout$SetPos(byte Pos);
     int roundabout$getAirTime();

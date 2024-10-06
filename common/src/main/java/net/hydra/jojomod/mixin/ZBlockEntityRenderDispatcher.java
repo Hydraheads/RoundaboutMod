@@ -39,12 +39,12 @@ public class ZBlockEntityRenderDispatcher {
     @Inject(
             method = "render",
             at = @At(value = "HEAD"), cancellable = true)
-    private <E extends BlockEntity> void doNotDeltaTickBlockWhenTimeIsStopped(E $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, CallbackInfo ci) {
+    private <E extends BlockEntity> void roundabout$doNotDeltaTickBlockWhenTimeIsStopped(E $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, CallbackInfo ci) {
         if(((TimeStop) $$0.getLevel()).inTimeStopRange($$0.getBlockPos()) && !($$0.getLevel().getBlockState($$0.getBlockPos()).is(Blocks.MOVING_PISTON))) {
-            if (((IBlockEntityAccess)$$0).getRoundaboutTimeInteracted()){
+            if (((IBlockEntityAccess)$$0).roundabout$getRoundaboutTimeInteracted()){
                 return;
             }
-                final float f1 = ((IBlockEntityClientAccess) $$0).getPreTSTick();
+                final float f1 = ((IBlockEntityClientAccess) $$0).roundabout$getPreTSTick();
                 BlockEntityRenderer<E> $$4 = this.getRenderer($$0);
                 if ($$4 != null) {
                     if ($$0.hasLevel() && $$0.getType().isValid($$0.getBlockState())) {
@@ -55,8 +55,8 @@ public class ZBlockEntityRenderDispatcher {
                 }
                 ci.cancel();
         } else {
-            ((IBlockEntityClientAccess)$$0).setPreTSTick();
-            ((IBlockEntityAccess)$$0).setRoundaboutTimeInteracted(false);
+            ((IBlockEntityClientAccess)$$0).roundabout$setPreTSTick();
+            ((IBlockEntityAccess)$$0).roundabout$setRoundaboutTimeInteracted(false);
         }
     }
 }
