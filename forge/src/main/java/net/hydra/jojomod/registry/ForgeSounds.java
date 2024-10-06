@@ -47,6 +47,10 @@ public class ForgeSounds {
             register(ModSounds.PUNCH_4_SOUND, ModSounds.PUNCH_4_SOUND_ID);
     public static final RegistryObject<SoundEvent> DODGE_EVENT =
             register(ModSounds.DODGE, ModSounds.DODGE_ID);
+    public static final RegistryObject<SoundEvent> IMPALE_CHARGE =
+            register(ModSounds.IMPALE_CHARGE, ModSounds.IMPALE_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> IMPALE_HIT =
+            register(ModSounds.IMPALE_HIT, ModSounds.IMPALE_HIT_ID);
     public static final RegistryObject<SoundEvent> STAND_LEAP_EVENT =
             register(ModSounds.STAND_LEAP, ModSounds.STAND_LEAP_ID);
     public static final RegistryObject<SoundEvent> FALL_BRACE_EVENT =

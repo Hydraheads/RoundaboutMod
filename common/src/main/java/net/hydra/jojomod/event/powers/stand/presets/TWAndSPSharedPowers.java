@@ -4,8 +4,11 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
+import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -14,6 +17,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +31,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Objects;
 
 public class TWAndSPSharedPowers extends BlockGrabPreset{
     public TWAndSPSharedPowers(LivingEntity self) {
@@ -514,6 +520,35 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    /**Assault Ability*/
+    public boolean hold1 = false;
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                if (options.keyShift.isDown()) {
+                    if (keyIsDown) {
+                        if (!hold1) {
+                            hold1 = true;
+                            if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                } else {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_SNEAK);
+                                }
+                            }
+                        }
+                    } else {
+                        hold1 = false;
+                    }
+                }
+            }
+        }
+    }
 
     public boolean bounce() {
         this.setActivePower(PowerIndex.BOUNCE);
@@ -674,10 +709,43 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return this.vault();
         } else if (move == PowerIndex.BOUNCE){
             return this.bounce();
+        } else if (move == PowerIndex.POWER_1_SNEAK){
+            return this.impale();
         }
         return super.setPowerOther(move,lastMove);
     }
 
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            Entity TE = this.getTargetEntity(playerEntity, 3F);
+            if (TE != null) {
+                int j = scaledHeight / 2 - 7 - 4;
+                int k = scaledWidth / 2 - 8;
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
+    }
+
+
+    public boolean impale(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1_SNEAK);
+            playSoundsIfNearby(IMPALE_NOISE, 32, false);
+            this.animateStand((byte)0);
+            this.poseStand(OffsetIndex.GUARD);
+
+            return true;
+        }
+        return false;
+    }
 
     /**If a client is behind a server on TS charging somehow, and the server finishes charging, this packet rounds
      * things out*/
@@ -990,6 +1058,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
             this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100,true);
         }
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
+        }
         return super.tryPower(move,forced);
     }
     @Override
@@ -1052,4 +1123,5 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+10;
     public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+11;
     public static final byte TIME_RESUME_NOISE = 60;
+    public static final byte IMPALE_NOISE = 105;
 }

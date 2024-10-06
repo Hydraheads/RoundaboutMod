@@ -33,6 +33,8 @@ public class StandIcons {
 
     public static final ResourceLocation THE_WORLD_ASSAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/assault.png");
+    public static final ResourceLocation THE_WORLD_IMPALE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/impale.png");
     public static final ResourceLocation THE_WORLD_TIME_STOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stop_time.png");
     public static final ResourceLocation THE_WORLD_TIME_STOP_IMPULSE = new ResourceLocation(Roundabout.MOD_ID,
@@ -50,8 +52,6 @@ public class StandIcons {
             "textures/gui/icons/the_world/fall_brace.png");
     public static final ResourceLocation THE_WORLD_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stand_ledge_grab.png");
-    public static final ResourceLocation SKILL2_ICON = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_world/assault.png");
     public static final ResourceLocation THE_WORLD_GRAB_BLOCK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/grab_block.png");
     public static final ResourceLocation THE_WORLD_GRAB_ITEM = new ResourceLocation(Roundabout.MOD_ID,
@@ -59,6 +59,8 @@ public class StandIcons {
     public static final ResourceLocation THE_WORLD_GRAB_MOB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/grab_mob.png");
 
+    public static final ResourceLocation STAR_PLATINUM_IMPALE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/impale.png");
     public static final ResourceLocation STAND_LEAP_STAR_PLATINUM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/stand_leap.png");
     public static final ResourceLocation STAND_LEAP_REBOUND_STAR_PLATINUM = new ResourceLocation(Roundabout.MOD_ID,

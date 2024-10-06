@@ -47,6 +47,18 @@
       "roundabout:punch_sfx1"
     ]
   },
+  "impale_charge": {
+    "subtitle": "sounds.roundabout.impale_charge",
+    "sounds": [
+      "roundabout:impale_charge"
+    ]
+  },
+  "impale_hit": {
+    "subtitle": "sounds.roundabout.impale_hit",
+    "sounds": [
+      "roundabout:impale_hit"
+    ]
+  },
   "ball_bearing_shot": {
     "subtitle": "sounds.roundabout.ball_bearing_shot",
     "sounds": [

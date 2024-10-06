@@ -73,34 +73,34 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     /**Assault Ability*/
-    public boolean hold1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                if (!options.keyShift.isDown()) {
                     if (keyIsDown) {
                         if (!hold1) {
                             hold1 = true;
-                            if (!options.keyShift.isDown()) {
-                                if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                    if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                                    } else {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                                    }
+                            if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                } else {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                                 }
-                            } else {
+                                return;
                             }
                         }
                     } else {
                         hold1 = false;
                     }
+                }
             }
         }
+        super.buttonInput1(keyIsDown,options);
     }
 
 
@@ -580,6 +580,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.THE_WORLD_ASSAULT_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
+        } else if (soundChoice == IMPALE_NOISE) {
+            return ModSounds.IMPALE_CHARGE_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {
             return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
@@ -612,6 +614,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
 
+            setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_IMPALE, PowerIndex.SKILL_1_SNEAK);
             setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_ITEM, PowerIndex.SKILL_2);
 
             boolean done = false;

@@ -263,6 +263,11 @@ public class StandPowers {
     /**Override this to render stand icons*/
     public void renderIcons(GuiGraphics context, int x, int y){
     }
+    public void renderAttackHud(GuiGraphics context,  Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha){
+
+    }
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
         CooldownInstance cd = null;
         if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){

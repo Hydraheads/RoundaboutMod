@@ -269,7 +269,7 @@ public abstract class HudRendering implements IHudAccess {
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
-        StandHudRender.renderAttackHud($$0, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), flashAlpha, otherFlashAlpha);
+        StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), flashAlpha, otherFlashAlpha);
     }
 
     @Shadow

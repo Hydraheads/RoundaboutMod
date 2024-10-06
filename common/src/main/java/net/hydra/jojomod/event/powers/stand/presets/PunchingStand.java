@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -283,5 +285,68 @@ public class PunchingStand extends StandPowers {
 
     }
 
+
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        StandUser standUser = ((StandUser) playerEntity);
+        boolean standOn = standUser.roundabout$getActive();
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+
+        float attackTimeDuring = standUser.roundabout$getAttackTimeDuring();
+        if (standOn && standUser.roundabout$isClashing()) {
+            int ClashTime = 15 - Math.round((attackTimeDuring / 60) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+        } else if (standOn && standUser.roundabout$getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+        } else if (standOn && standUser.roundabout$getStandPowers().isBarrageCharging()) {
+            int ClashTime = Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+        } else {
+            int barTexture = 0;
+            Entity TE = standUser.roundabout$getTargetEntity(playerEntity, -1);
+            float attackTimeMax = standUser.roundabout$getAttackTimeMax();
+            if (attackTimeMax > 0) {
+                float attackTime = standUser.roundabout$getAttackTime();
+                float finalATime = attackTime / attackTimeMax;
+                if (finalATime <= 1) {
+
+
+                    if (standUser.roundabout$getActivePowerPhase() == standUser.roundabout$getActivePowerPhaseMax()) {
+                        barTexture = 24;
+                    } else {
+                        if (TE != null) {
+                            barTexture = 12;
+                        } else {
+                            barTexture = 18;
+                        }
+                    }
+
+
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                    int finalATimeInt = Math.round(finalATime * 15);
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+
+
+                }
+            }
+            if (standOn) {
+                if (TE != null) {
+                    if (barTexture == 0) {
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                    }
+                }
+            }
+        }
+    }
 
 }

@@ -130,6 +130,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
         if (this.getSelf().isCrouching()){
 
+            setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
             setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_ITEM, PowerIndex.SKILL_2);
 
             boolean done = false;
@@ -251,6 +252,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
+        } else if (soundChoice == IMPALE_NOISE) {
+            return ModSounds.IMPALE_CHARGE_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {
             return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
