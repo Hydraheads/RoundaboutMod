@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
@@ -22,6 +23,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.BedBlock;
@@ -42,7 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Minecraft.class)
-public abstract class InputEvents {
+public abstract class InputEvents implements IInputEvents {
 
     @Shadow
     @Final
@@ -192,12 +194,13 @@ public abstract class InputEvents {
 
             if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 ci.cancel();
+                return;
             } else if (standComp.roundabout$getActive()) {
                 if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
                     ci.cancel();
+                    return;
                 }
             }
-
 
             if (level != null) {
                 if (!this.player.isHandsBusy()) {
@@ -247,7 +250,6 @@ public abstract class InputEvents {
                 }
             }
 
-
             if (level != null && ((TimeStop) level).isTimeStoppingEntity(player)) {
                 if (!this.player.isHandsBusy()) {
                     if (this.hitResult != null) {
@@ -292,6 +294,100 @@ public abstract class InputEvents {
                     }
                 }
             }
+        }
+    }
+
+    @Shadow
+    private int rightClickDelay;
+
+    @Shadow protected abstract void startUseItem();
+
+    @Unique
+    private void roundabout$startUseOppositeItem() {
+        if (!this.gameMode.isDestroying()) {
+            this.rightClickDelay = 4;
+            if (!this.player.isHandsBusy()) {
+                if (this.hitResult == null) {
+                }
+
+                for (InteractionHand $$0 : InteractionHand.values()) {
+                    if ($$0 == InteractionHand.MAIN_HAND){
+                        $$0 = InteractionHand.OFF_HAND;
+                    } else if ($$0 == InteractionHand.OFF_HAND){
+                        $$0 = InteractionHand.MAIN_HAND;
+                    }
+                    ItemStack $$1 = this.player.getItemInHand($$0);
+                    if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
+                        return;
+                    }
+
+                    if (this.hitResult != null) {
+                        switch (this.hitResult.getType()) {
+                            case ENTITY:
+                                EntityHitResult $$2 = (EntityHitResult)this.hitResult;
+                                Entity $$3 = $$2.getEntity();
+                                if (!this.level.getWorldBorder().isWithinBounds($$3.blockPosition())) {
+                                    return;
+                                }
+
+                                InteractionResult $$4 = this.gameMode.interactAt(this.player, $$3, $$2, $$0);
+                                if (!$$4.consumesAction()) {
+                                    $$4 = this.gameMode.interact(this.player, $$3, $$0);
+                                }
+
+                                if ($$4.consumesAction()) {
+                                    if ($$4.shouldSwing()) {
+                                        this.player.swing($$0);
+                                    }
+
+                                    return;
+                                }
+                                break;
+                            case BLOCK:
+                                BlockHitResult $$5 = (BlockHitResult)this.hitResult;
+                                int $$6 = $$1.getCount();
+                                InteractionResult $$7 = this.gameMode.useItemOn(this.player, $$0, $$5);
+                                if ($$7.consumesAction()) {
+                                    if ($$7.shouldSwing()) {
+                                        this.player.swing($$0);
+                                        if (!$$1.isEmpty() && ($$1.getCount() != $$6 || this.gameMode.hasInfiniteItems())) {
+                                            this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                        }
+                                    }
+
+                                    return;
+                                }
+
+                                if ($$7 == InteractionResult.FAIL) {
+                                    return;
+                                }
+                        }
+                    }
+
+                    if (!$$1.isEmpty()) {
+                        InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);
+                        if ($$8.consumesAction()) {
+                            if ($$8.shouldSwing()) {
+                                this.player.swing($$0);
+                            }
+
+                            this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Unique
+    public ItemStack roundabout$getItemInOppositeHand(LivingEntity live, InteractionHand $$0) {
+        if ($$0 == InteractionHand.MAIN_HAND) {
+            return live.getItemBySlot(EquipmentSlot.OFFHAND);
+        } else if ($$0 == InteractionHand.OFF_HAND) {
+            return live.getItemBySlot(EquipmentSlot.MAINHAND);
+        } else {
+            throw new IllegalArgumentException("Invalid hand " + $$0);
         }
     }
 
@@ -352,12 +448,15 @@ public abstract class InputEvents {
                         }
                     }
                 }
+                //RoundaboutMod.LOGGER.info("px");
 
                     //RoundaboutMod.LOGGER.info("px");
                     if (roundabout$sameKeyOne(KeyInputRegistry.summonKey)) {
                         //((IGameRenderer)this.gameRenderer).roundabout$loadEffect(new ResourceLocation("shaders/post/spider.json"));
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
+
+
 
                     KeyInputs.MoveKey1(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
                         this.options);
@@ -378,10 +477,28 @@ public abstract class InputEvents {
                         KeyInputs.roundaboutClickCount--;
                     }
 
+
+                if (player != null) {
+                    if (roundabout$sameKeyTwo(KeyInputRegistry.guardKey) && !player.isUsingItem()) {
+
+                        if (((StandUser) player).roundabout$getActive() && ((StandUser) player).roundabout$getStandPowers().interceptGuard()) {
+                            if (roundabout$sameKeyTwo(KeyInputRegistry.guardKey)) {
+                                roundabout$TryGuard();
+                            }
+                        } else {
+                            if (!roundabout$sameKeyUseOverride(KeyInputRegistry.guardKey)) {
+                                roundabout$startUseOppositeItem();
+                            } else {
+                                startUseItem();
+                            }
+                        }
+                    }
+                }
+
             }
 
             StandUser standComp = ((StandUser) player);
-            if (!this.options.keyUse.isDown()) {
+            if (!this.options.keyUse.isDown() && !roundabout$sameKeyOne(KeyInputRegistry.guardKey)) {
                 if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging()) {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                         * This delay exists so you can't right click left click chain for instant full power punches.*/
@@ -430,10 +547,24 @@ public abstract class InputEvents {
         }
     }
 
+    @Override
     @Unique
     public boolean roundabout$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.options.keyLoadHotbarActivator) && this.options.keyLoadHotbarActivator.isDown())
-                || (key1.same(this.options.keySaveHotbarActivator) && this.options.keySaveHotbarActivator.isDown()));
+                || (key1.same(this.options.keySaveHotbarActivator) && this.options.keySaveHotbarActivator.isDown())
+        );
     }
 
+    @Override
+    @Unique
+    public boolean roundabout$sameKeyTwo(KeyMapping key1){
+        return (key1.isDown() || (key1.same(this.options.keyPickItem) && this.options.keyPickItem.isDown())
+                || (key1.same(this.options.keyUse) && this.options.keyUse.isDown()));
+    }
+
+    @Override
+    @Unique
+    public boolean roundabout$sameKeyUseOverride(KeyMapping key1){
+        return (key1.same(this.options.keyUse));
+    }
 }

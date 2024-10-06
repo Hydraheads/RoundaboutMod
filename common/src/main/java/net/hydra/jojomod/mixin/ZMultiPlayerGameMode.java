@@ -1,5 +1,7 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IInputEvents;
+import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
@@ -51,6 +53,13 @@ public class ZMultiPlayerGameMode {
         }
     }
 
+    /**Prevents stand mining from making your vanilla attack cooldown reset*/
+    @Inject(method = "releaseUsingItem", at = @At("HEAD"), cancellable = true)
+    public void roundabout$releaseUsingItem(Player pl, CallbackInfo ci) {
+        if (((IInputEvents)Minecraft.getInstance()).roundabout$sameKeyTwo(KeyInputRegistry.guardKey)) {
+            ci.cancel();
+        }
+    }
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "stopDestroyBlock()V", at = @At("HEAD"), cancellable = true)
     public void roundabout$stopDestroyBlock(CallbackInfo ci) {
