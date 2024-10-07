@@ -14,17 +14,19 @@ public class FabricParticles {
     public static final SimpleParticleType BLUE_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType ENDER_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType AIR_CRACKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ender_blood"), ENDER_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "air_crackle"), AIR_CRACKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "menacing"), MENACING);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;
         ModParticles.HIT_IMPACT = HIT_IMPACT;
-        ModParticles.AIR_CRACKLE = AIR_CRACKLE;
+        ModParticles.MENACING = MENACING;
     }
 }

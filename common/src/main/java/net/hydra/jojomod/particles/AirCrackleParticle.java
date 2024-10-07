@@ -1,6 +1,5 @@
 package net.hydra.jojomod.particles;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -9,10 +8,8 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import java.util.function.Consumer;
 
 public class AirCrackleParticle extends TextureSheetParticle {
     private final SpriteSet sprites;

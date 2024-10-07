@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -233,6 +234,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring > 24) {
                this.standImpale();
+            } else {
+                if (!this.getSelf().level().isClientSide()) {
+                    if(this.attackTimeDuring%4==0) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                                this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
+                                1, 0.2, 0.2, 0.2, 0.05);
+                    }
+                }
             }
         }
     }

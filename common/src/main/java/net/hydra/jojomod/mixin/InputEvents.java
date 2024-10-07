@@ -251,7 +251,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if (level != null && ((TimeStop) level).isTimeStoppingEntity(player)) {
-                if (!this.player.isHandsBusy()) {
+                if (!this.player.isHandsBusy() && ((StandUser)player).roundabout$getActivePower() <= PowerIndex.NONE) {
                     if (this.hitResult != null) {
 
                         for (InteractionHand $$0 : InteractionHand.values()) {

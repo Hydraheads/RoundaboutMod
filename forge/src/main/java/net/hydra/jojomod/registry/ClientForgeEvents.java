@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.TheWorldModel;
 import net.hydra.jojomod.entity.stand.TheWorldRenderer;
 import net.hydra.jojomod.particles.AirCrackleParticle;
 import net.hydra.jojomod.particles.BloodParticle;
+import net.hydra.jojomod.particles.MenacingParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -55,5 +56,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.BLUE_BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENDER_BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.MENACING.get(), MenacingParticle.Provider::new);
     }
 }
