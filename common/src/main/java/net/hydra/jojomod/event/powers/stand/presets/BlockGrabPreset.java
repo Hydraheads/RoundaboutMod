@@ -40,6 +40,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.entity.vehicle.MinecartCommandBlock;
+import net.minecraft.world.entity.vehicle.MinecartSpawner;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
@@ -858,6 +860,8 @@ public class BlockGrabPreset extends PunchingStand{
         if (!(entity instanceof EnderDragon) && !(entity instanceof WitherBoss) && !(entity instanceof Warden)
                 && !(entity instanceof LivingEntity ent && ent.getHealth() > this.getSelf().getMaxHealth())
                 && !(entity instanceof Player pl && pl.isCreative())
+                && !(entity instanceof MinecartCommandBlock)
+                && !(entity instanceof MinecartSpawner)
                 && !(entity instanceof StandEntity)){
             if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).roundabout$getStand() != null &&
                     ((StandUser) pl).roundabout$getStand().is(this.getSelf().getVehicle())){
@@ -884,6 +888,9 @@ public class BlockGrabPreset extends PunchingStand{
                 if (this.grabBlock != null &&
                         grabBlock.distSqr(this.getSelf().getOnPos()) <= getGrabRange()
                         && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
+                        && !state.is(Blocks.REINFORCED_DEEPSLATE)
+                        && !(state.getBlock() instanceof InfestedBlock)
+                        && !(state.getBlock() instanceof BuddingAmethystBlock)
                         && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK) {
 
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
