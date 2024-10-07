@@ -48,12 +48,6 @@ public class KnifeEntity extends AbstractArrow {
     private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(KnifeEntity.class, EntityDataSerializers.BOOLEAN);
     private final Set<MobEffectInstance> effects = Sets.newHashSet();
 
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(KnifeEntity.class, EntityDataSerializers.BOOLEAN);
-    private int superThrowTicks = -1;
-    public void starThrowInit(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
-        superThrowTicks = 50;
-    }
     private ItemStack knifeItem = new ItemStack(ModItems.KNIFE);
 
     public KnifeEntity(EntityType<? extends KnifeEntity> entity,  Level world) {
@@ -79,35 +73,9 @@ public class KnifeEntity extends AbstractArrow {
         super(ModEntities.THROWN_KNIFE, entity, world);
     }
 
-    @Override
-    public boolean isNoGravity() {
-        if (superThrowTicks > -1){
-            return true;
-        }
-        return false;
-    }
 
     public void tick() {
-        Vec3 delta = this.getDeltaMovement();
         super.tick();
-        if (!this.level().isClientSide) {
-            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
-                this.setDeltaMovement(delta);
-            }
-            if (superThrowTicks > -1) {
-                superThrowTicks--;
-                if (superThrowTicks <= -1 || this.inGround) {
-                    superThrowTicks = -1;
-                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
-                } else {
-                    if ((this.tickCount+2) % 4 == 0){
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
-                                this.getX(), this.getY(), this.getZ(),
-                                0, 0, 0, 0, 0);
-                    }
-                }
-            }
-        }
     }
     protected ItemStack getPickupItem() {
          return new ItemStack(ModItems.KNIFE);
@@ -117,7 +85,6 @@ public class KnifeEntity extends AbstractArrow {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
         this.entityData.define(ID_FOIL, false);
     }
     public boolean isFoil() {

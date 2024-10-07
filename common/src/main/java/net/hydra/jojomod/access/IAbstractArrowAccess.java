@@ -12,7 +12,10 @@ public interface IAbstractArrowAccess {
 
     byte roundaboutGetPierceLevel();
 
-
+    boolean roundabout$getSuperThrow();
+    int roundabout$getSuperThrowTicks();
+    void roundabout$starThrowInit();
+    void roundabout$setSuperThrowTicks(int sTHrow);
     @Nullable
     EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1);
 }

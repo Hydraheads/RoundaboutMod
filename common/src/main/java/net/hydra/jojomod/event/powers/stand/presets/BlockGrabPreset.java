@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -83,7 +84,7 @@ public class BlockGrabPreset extends PunchingStand{
             $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), getThrowAngle3(), 2.4F, getShotAccuracy());
 
             if (this.canSnipe()){
-                $$7.starThrowInit();
+                ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
             }
             this.getSelf().level().addFreshEntity($$7);
             this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -159,12 +160,18 @@ public class BlockGrabPreset extends PunchingStand{
             AbstractArrow $$11 = $$10.createArrow(this.getSelf().level(), item, this.getSelf());
             $$11.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
             $$11.setCritArrow(true);
+            if (this.canSnipe()){
+                ((IAbstractArrowAccess)$$11).roundabout$starThrowInit();
+            }
             this.getSelf().level().addFreshEntity($$11);
             this.getSelf().level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         } else if (item.getItem() instanceof TridentItem){
             if (!item.hurt(1,this.getSelf().level().getRandom(),null)){
                 ThrownTrident $$7 = new ThrownTrident(this.getSelf().level(), this.getSelf(), item);
                 $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
+                if (this.canSnipe()){
+                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
+                }
                 this.getSelf().level().addFreshEntity($$7);
                 this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
@@ -173,7 +180,7 @@ public class BlockGrabPreset extends PunchingStand{
                 HarpoonEntity $$7 = new HarpoonEntity(this.getSelf().level(), this.getSelf(), item);
                 $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
                 if (this.canSnipe()){
-                    $$7.starThrowInit();
+                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
                 }
                 this.getSelf().level().addFreshEntity($$7);
                 this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
