@@ -49,6 +49,8 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -1398,6 +1400,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+
+    @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true)
+    protected void rooundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
+        if (this.roundabout$leapTicks > -1) {
+            this.level().gameEvent(GameEvent.HIT_GROUND, this.getPosition(0F),
+                    GameEvent.Context.of(this, this.mainSupportingBlockPos.map(blockPos -> this.level().getBlockState((BlockPos)blockPos)).orElse(this.level().getBlockState($$3))));
+        }
+    }
+
     /**This code makes stand user mobs resist attacks from other mobs*/
     @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "RETURN"), cancellable = true)
     protected void rooundabout$armorAbsorb(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> cir) {
