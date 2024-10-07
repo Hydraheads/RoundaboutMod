@@ -836,13 +836,13 @@ public class StandPowers {
     /**Override these methods to fine tune the attack strength of the stand*/
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2;
+            return 1.75F;
         } else {
             return 5;
         }
     } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 3;
+            return 2.5F;
         } else {
             return 7;
         }

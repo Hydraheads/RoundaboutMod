@@ -80,6 +80,9 @@ public class NewLocacacaItem extends Item {
         byte curse = ((StandUser)entity).roundabout$getLocacacaCurse();
         LivingEntity ent = MainUtil.getStoneTarget(level, entity);
         if (ent != null) {
+            if (entity instanceof Player PE){
+                PE.getCooldowns().addCooldown(this, 400);
+            }
             byte entCurse = ((StandUser)ent).roundabout$getLocacacaCurse();
             if (!level.isClientSide && entity.isAlive()) {
                 if (curse > -1 && curse != entCurse){

@@ -273,7 +273,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getReducedDamage(entity)){
             return 3;
         } else {
-            return 7;
+            return 11;
         }
     }
     public float getImpaleKnockback(){
@@ -290,15 +290,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity) {
                     if (MainUtil.getMobBleed(entity)) {
-                            MainUtil.makeBleed(entity,2,300, this.getSelf());
+                        if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                            MainUtil.makeBleed(entity, 2, 100, this.getSelf());
+                        } else {
+                            MainUtil.makeBleed(entity, 2, 300, this.getSelf());
+                        }
                             MainUtil.makeMobBleed(entity);
                     }
                 }
                 this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
-                if (this.activePowerPhase >= this.activePowerPhaseMax) {
-                    knockShield2(entity, 40);
-                }
+                knockShield2(entity, 100);
             }
         }
 
