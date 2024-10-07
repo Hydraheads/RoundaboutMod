@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
@@ -87,7 +88,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     @Override
     public void tick(){
         Vec3 delta = this.getDeltaMovement();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
 
             }
@@ -96,7 +97,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
             this.setDeltaMovement(delta);
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
+            Roundabout.LOGGER.info("1");
             if (superThrowTicks > -1) {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
@@ -104,10 +106,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 } else {
                     if ((this.tickCount+2) % 4 == 0){
                         if (this.getItem().getItem() instanceof BlockItem){
+                            Roundabout.LOGGER.info("2");
                             ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                     this.getX(), this.getY()+0.5F, this.getZ(),
                                     0, 0, 0, 0, 0);
                         } else {
+                            Roundabout.LOGGER.info("3");
                             ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                     this.getX(), this.getY(), this.getZ(),
                                     0, 0, 0, 0, 0);
@@ -339,7 +343,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     }
 
     public void blockBreakParticles(Block block, Vec3 pos){
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
                             block.defaultBlockState()),
                     pos.x, pos.y, pos.z,
@@ -533,7 +537,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     public boolean useDye(ItemStack stack, LivingEntity entity) {
         if (entity instanceof Sheep $$4 && $$4.isAlive() && !$$4.isSheared() && $$4.getColor() != ((DyeItem) stack.getItem()).getDyeColor()) {
             $$4.level().playSound(null, $$4, SoundEvents.DYE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 $$4.setColor(((DyeItem) stack.getItem()).getDyeColor());
                 return true;
             }
@@ -543,7 +547,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     public boolean useNametag(ItemStack stack, LivingEntity entity){
         if (stack.hasCustomHoverName() && !(entity instanceof Player)) {
-            if (!this.level().isClientSide && entity.isAlive()) {
+            if (!this.level().isClientSide() && entity.isAlive()) {
                 entity.setCustomName(stack.getHoverName());
                 if (entity instanceof Mob) {
                     ((Mob) entity).setPersistenceRequired();

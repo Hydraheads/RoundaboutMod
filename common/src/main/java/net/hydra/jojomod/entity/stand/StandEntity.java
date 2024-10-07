@@ -98,6 +98,12 @@ public abstract class StandEntity extends Mob{
     @Nullable
     private LivingEntity Following;
 
+
+    @Override
+    public boolean isAffectedByPotions() {
+        return false;
+    }
+
     public void setUser(LivingEntity StandSet){
         this.User = StandSet;
         int standSetId = -1;

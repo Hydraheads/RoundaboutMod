@@ -88,7 +88,7 @@ public abstract class WorldTickClient extends Level {
             ((StandUser)entity).roundabout$removeFollower(stand);
             return;
         }
-        if (stand.getFollowing().getId() != entity.getId()) {
+        if (stand.getFollowing() != null && stand.getFollowing().getId() != entity.getId()) {
             ((StandUser)entity).roundabout$removeFollower(stand);
             return;
         }

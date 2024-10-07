@@ -1390,7 +1390,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 for (AbstractVillager $$3 : ENT) {
                     if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
-                        if($$3.getTarget() == null){
+                        if($$3.getTarget() == null && !(LE instanceof Player PE && PE.isCreative())){
                             $$3.setTarget(LE);
                         }
                     }

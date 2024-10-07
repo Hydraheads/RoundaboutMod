@@ -27,6 +27,7 @@ public class FabricParticles {
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;
         ModParticles.HIT_IMPACT = HIT_IMPACT;
+        ModParticles.AIR_CRACKLE = AIR_CRACKLE;
         ModParticles.MENACING = MENACING;
     }
 }

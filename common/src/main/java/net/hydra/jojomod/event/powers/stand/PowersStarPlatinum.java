@@ -80,7 +80,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
-                || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity()) && slot != 1));
+                || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity()) && (slot != 1
+        || (slot == 1 && this.getSelf().isCrouching()))));
     }
     public float inputSpeedModifiers(float basis){
             if (this.scopeLevel > -1){
