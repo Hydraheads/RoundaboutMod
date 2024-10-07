@@ -636,7 +636,9 @@ public abstract class StandEntity extends Mob{
             }
         }
         if (currFade < 0) {
-
+            if (!this.getPassengers().isEmpty()){
+                this.ejectPassengers();
+            }
             this.remove(RemovalReason.DISCARDED);
         }
     }

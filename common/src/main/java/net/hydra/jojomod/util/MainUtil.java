@@ -340,10 +340,12 @@ public class MainUtil {
         if (stand.getFirstPassenger() != null && stand.getUser() != null){
             Entity entity = stand.getFirstPassenger();
             stand.ejectPassengers();
-            if (entity instanceof Player ent) {
-                ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ()));
-            } else {
-                entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
+            if (entity.level().dimensionTypeId() == stand.getUser().level().dimensionTypeId()) {
+                if (entity instanceof Player ent) {
+                    ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ()));
+                } else {
+                    entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
+                }
             }
         }
     }
