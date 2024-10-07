@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -644,16 +645,35 @@ public abstract class StandEntity extends Mob{
     }
 
     @Override
+    @javax.annotation.Nullable
+    public Entity changeDimension(ServerLevel $$0) {
+        if (this.level() instanceof ServerLevel && !this.isRemoved()) {
+            if (!this.getHeldItem().isEmpty()) {
+                if (this.canAcquireHeldItem) {
+                    double $$3 = this.getEyeY() - 0.3F;
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem().copy());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.getUUID());
+                    this.level().addFreshEntity($$4);
+                    this.setHeldItem(ItemStack.EMPTY);
+                }
+            }
+        }
+        return super.changeDimension($$0);
+    }
+
+    @Override
     public void remove(Entity.RemovalReason $$0) {
         MainUtil.ejectInFront(this);
         if (!this.getHeldItem().isEmpty()) {
             if (this.canAcquireHeldItem) {
-                double $$3 = this.getEyeY() - 0.3F;
-                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem());
-                $$4.setPickUpDelay(40);
-                $$4.setThrower(this.getUUID());
-                this.level().addFreshEntity($$4);
-                this.setHeldItem(ItemStack.EMPTY);
+
+                    double $$3 = this.getEyeY() - 0.3F;
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem().copy());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.getUUID());
+                    this.level().addFreshEntity($$4);
+                    this.setHeldItem(ItemStack.EMPTY);
             }
         }
         super.remove($$0);

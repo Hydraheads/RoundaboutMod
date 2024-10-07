@@ -6,9 +6,12 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -127,6 +130,37 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$Turn(double $$0, double $$1, CallbackInfo ci){
         if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
             ci.cancel();
+        }
+    }
+
+
+    @Shadow
+    public Level level() {
+        return null;
+    }
+    @Shadow
+    @Final
+    public boolean isRemoved() {
+        return false;
+    }
+    @Inject(method = "changeDimension", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$changeDim(ServerLevel $$0, CallbackInfoReturnable<Boolean> ci) {
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            if (this.level() instanceof ServerLevel && !this.isRemoved()) {
+                 if (((StandUser)this).roundabout$getStand() != null){
+                     StandEntity stand = ((StandUser)this).roundabout$getStand();
+                     if (!stand.getHeldItem().isEmpty()) {
+                         if (stand.canAcquireHeldItem) {
+                             double $$3 = stand.getEyeY() - 0.3F;
+                             ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem().copy());
+                             $$4.setPickUpDelay(40);
+                             $$4.setThrower(stand.getUUID());
+                             this.level().addFreshEntity($$4);
+                             stand.setHeldItem(ItemStack.EMPTY);
+                         }
+                     }
+                 }
+            }
         }
     }
 
