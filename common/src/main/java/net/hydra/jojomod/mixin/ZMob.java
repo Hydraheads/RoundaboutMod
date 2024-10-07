@@ -509,6 +509,29 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
 
+    @Unique
+    Mob roundabout$Mob;
+
+    @Inject(method = "convertTo(Lnet/minecraft/world/entity/EntityType;Z)Lnet/minecraft/world/entity/Mob;",
+            at = @At(value = "HEAD"))
+    private <T extends Mob> void roundabout$convertTo1(EntityType<T> $$0, boolean $$1, CallbackInfoReturnable<T> cir) {
+        if ($$0 != null) {
+            roundabout$Mob = ((Mob)(Object)this);
+        }
+    }
+    @ModifyVariable(method = "convertTo(Lnet/minecraft/world/entity/EntityType;Z)Lnet/minecraft/world/entity/Mob;",
+            at = @At(value = "STORE"),ordinal = 1)
+    private <T extends Mob> T roundabout$convertTo(Mob value) {
+        if (value != null) {
+            if (!((StandUser)roundabout$Mob).roundabout$getStandDisc().isEmpty()){
+                ((StandUser)value).roundabout$setStandDisc(((StandUser)roundabout$Mob).roundabout$getStandDisc());
+            } if (!((IMob)roundabout$Mob).roundabout$isWorthy()){
+                ((IMob)value).roundabout$setWorthy(true);
+            }
+        }
+        return (T) value;
+    }
+
     @SuppressWarnings("deprecation")
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
