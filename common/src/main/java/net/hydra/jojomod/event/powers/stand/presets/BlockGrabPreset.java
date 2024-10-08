@@ -969,7 +969,8 @@ public class BlockGrabPreset extends PunchingStand{
                 if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
                     /**Boat throw*/
-                    if (stack.getItem() instanceof BoatItem BE) {
+                    if (stack.getItem() instanceof BoatItem BE
+                            && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
                         Boat $$11 = ((IBoatItemAccess) BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0, 3, 0));
                         $$11.setVariant(((IBoatItemAccess) BE).roundabout$getType());
                         $$11.setYRot(this.getSelf().getYRot());
@@ -983,7 +984,8 @@ public class BlockGrabPreset extends PunchingStand{
                             animateStand((byte) 38);
                         }
                         /**Minecart Throw*/
-                    } else if (stack.getItem() instanceof MinecartItem ME){
+                    } else if (stack.getItem() instanceof MinecartItem ME
+                            && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
 
                         AbstractMinecart $$7 = AbstractMinecart.createMinecart(
                                 this.getSelf().level(), (double)this.getSelf().getX(),

@@ -26,6 +26,8 @@ import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -538,6 +540,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (this.isAlive() && !this.level().isClientSide()) {
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
                 if (!this.roundabout$getFightOrFlight()) {
+                    if (this.getTarget() != null){
+                        if (this.getVehicle() != null && (this.getVehicle() instanceof Boat ||
+                                this.getVehicle() instanceof Minecart)){
+                            Vec3 vec = this.getVehicle().getDismountLocationForPassenger(this);
+                            this.stopRiding();
+                            this.dismountTo(vec.x,vec.y,vec.z);
+                        }
+                    }
                     ((StandUser) this).roundabout$getStandPowers().tickMobAI(this.getTarget());
                 }
             }
