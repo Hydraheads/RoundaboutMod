@@ -12,6 +12,7 @@
     "TimeStopWorld",
     "WorldTickServer",
     "ZAbstractArrow",
+    "ZAnimal",
     "ZBeehiveBlock",
     "ZBlaze",
     "ZBlockEntity",
@@ -53,6 +54,7 @@
     "ZTridentEntity",
     "ZTripWireBlock",
     "ZVillager",
+    "ZVillagerMakeLove",
     "ZWarden",
     "ZWitch"
   ],

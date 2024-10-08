@@ -103,6 +103,12 @@ public class MainUtil {
         }
         return 0.005;
     }
+    public static double getWorthyBreedBonus(Mob mob) {
+        return 0.3;
+    }
+    public static double getStandUserBreedBonus(Mob mob) {
+        return 0.15;
+    }
     public static Mob homeOnWorthy(Level level, Vec3 vec3, double range) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
                 vec3.z, range, range, range);
