@@ -34,6 +34,7 @@
     "ZItemEntity",
     "ZItemStack",
     "ZLivingEntity",
+    "ZMinecartItem",
     "ZMinecartTNT",
     "ZMob",
     "ZMushroomCow",

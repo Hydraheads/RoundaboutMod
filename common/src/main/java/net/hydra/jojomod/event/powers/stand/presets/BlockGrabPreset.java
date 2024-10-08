@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand.presets;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IMinecartItemAccess;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -40,10 +41,7 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
-import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraft.world.entity.vehicle.MinecartCommandBlock;
-import net.minecraft.world.entity.vehicle.MinecartSpawner;
+import net.minecraft.world.entity.vehicle.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
@@ -968,21 +966,45 @@ public class BlockGrabPreset extends PunchingStand{
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
                 if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
-                    if (stack.getItem() instanceof BoatItem BE){
-                        Boat $$11 = ((IBoatItemAccess)BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0,3,0));
-                        $$11.setVariant(((IBoatItemAccess)BE).roundabout$getType());
+                    /**Boat throw*/
+                    if (stack.getItem() instanceof BoatItem BE) {
+                        Boat $$11 = ((IBoatItemAccess) BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0, 3, 0));
+                        $$11.setVariant(((IBoatItemAccess) BE).roundabout$getType());
                         $$11.setYRot(this.getSelf().getYRot());
                         this.getSelf().level().addFreshEntity($$11);
-                        this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0,3,0));
+                        this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0, 3, 0));
                         if ($$11.startRiding(standEntity)) {
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
                             animateStand((byte) 38);
-                            return true;
                         }
+                        /**Minecart Throw*/
+                    } else if (stack.getItem() instanceof MinecartItem ME){
+
+                        AbstractMinecart $$7 = AbstractMinecart.createMinecart(
+                                this.getSelf().level(), (double)this.getSelf().getX(),
+                                (double)this.getSelf().getY() + 3, (double)this.getSelf().getZ() + 0.5,
+                                ((IMinecartItemAccess)ME).roundabout$getType()
+                        );
+
+                        if (stack.hasCustomHoverName()) {
+                            $$7.setCustomName(stack.getHoverName());
+                        }
+                        $$7.setYRot(this.getSelf().getYRot());
+                        this.getSelf().level().addFreshEntity($$7);
+                        this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0,3,0));
+                        if ($$7.startRiding(standEntity)) {
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            this.setActivePower(PowerIndex.POWER_2_EXTRA);
+                            this.setAttackTimeDuring(0);
+                            poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                            animateStand((byte) 38);
+                        }
+                            /**Minecart Throw*/
                     } else {
+                        /**Item throw*/
                         standEntity.canAcquireHeldItem = true;
                         standEntity.setHeldItem(stack.copyWithCount(1));
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
