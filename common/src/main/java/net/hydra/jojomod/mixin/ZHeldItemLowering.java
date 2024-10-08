@@ -1,14 +1,13 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,10 +42,13 @@ public class ZHeldItemLowering {
         if (this.minecraft.player != null) {
             LocalPlayer clientPlayerEntity2 = this.minecraft.player;
             if (!this.minecraft.player.isHandsBusy()) {
-                if (((StandUser) this.minecraft.player).roundabout$getActive()) {
+                if (((StandUser) this.minecraft.player).roundabout$getActive() && ((StandUser) this.minecraft.player).roundabout$getStandPowers().isMiningStand()) {
                     ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
                     ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();
-                    if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)) {
+                    //if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)) {
+                    if ((itemStack3.getItem() instanceof Vanishable) && !clientPlayerEntity2.getUseItem().equals(itemStack3) &&
+                            !(((StandUser)this.minecraft.player).roundabout$getStandPowers().getActivePower() != PowerIndex.MINING &&
+                    this.minecraft.gameMode != null && this.minecraft.gameMode.isDestroying())) {
                         if (this.mainHandHeight > 0.6) {
                             this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4f, 0.6f, 1.0f);
                         }

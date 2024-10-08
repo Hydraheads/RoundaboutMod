@@ -268,7 +268,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**stand mining intercepts tools for drop so that it is hand level*/
     @Inject(method = "hasCorrectToolForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$hasCorrectTool(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().isMiningStand()) {
+        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+        ) {
             cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
         }
     }
@@ -276,7 +277,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().isMiningStand()) {
+        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
             float mspeed = ((StandUser) this).roundabout$getStandPowers().getMiningSpeed();
             if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
                 if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL) || $$0.is(BlockTags.MINEABLE_WITH_AXE)){

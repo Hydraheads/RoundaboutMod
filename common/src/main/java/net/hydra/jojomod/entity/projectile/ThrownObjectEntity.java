@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ScissorItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
@@ -423,6 +424,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     if (this.getItem().is(Items.WITHER_ROSE)) {
                         L.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 0), this);
                     }
+                    if (this.getItem().is(ModItems.GASOLINE_BUCKET)){
+                        ((StandUser) L).roundabout$setGasolineTime(((StandUser) L).roundabout$getMaxBucketGasolineTime());
+                    }
                 }
 
                 if (this.getItem().getItem() instanceof GlaiveItem || this.getItem().getItem() instanceof ScissorItem) {
@@ -432,6 +436,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     MainUtil.makeBleed($$1, 0, 200, this);
 
                 }
+
 
                 if (this.getItem().getItem() instanceof BlockItem && MainUtil.isThrownBlockItem(this.getItem().getItem())) {
                     Block blk = ((BlockItem) this.getItem().getItem()).getBlock();

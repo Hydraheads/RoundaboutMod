@@ -126,6 +126,7 @@ public abstract class InputEvents implements IInputEvents {
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
+
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
                 if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     if (!$$0){
@@ -160,9 +161,15 @@ public abstract class InputEvents implements IInputEvents {
                         if (!this.options.keyAttack.isDown()){
                             roundabout$activeMining = false;
                         } else {
-                            ci.cancel();
+                            if (standComp.roundabout$getActivePower() == PowerIndex.NONE || standComp.roundabout$getAttackTimeDuring() == -1){
+                                roundabout$activeMining = true;
+                            } else {
+                                ci.cancel();
+                            }
                         }
                     }
+                } else {
+                    roundabout$activeMining = false;
                 }
             }
         }
@@ -513,25 +520,29 @@ public abstract class InputEvents implements IInputEvents {
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 if (this.options.keyAttack.isDown() && !player.isUsingItem()) {
 
-                    boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
-                    Entity TE = standComp.roundabout$getTargetEntity(player, -1);
-                    if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
-                    && (standComp.roundabout$getActivePower() == PowerIndex.NONE || standComp.roundabout$getAttackTimeDuring() == -1)
-                    && !standComp.roundabout$isGuarding()) {
-                        boolean $$1 = false;
-                        switch (this.hitResult.getType()) {
-                            case ENTITY:
-                                this.gameMode.attack(this.player, ((EntityHitResult) this.hitResult).getEntity());
-                                break;
-                            case BLOCK:
-                                BlockHitResult $$2 = (BlockHitResult) this.hitResult;
-                                BlockPos $$3 = $$2.getBlockPos();
-                                if (!this.level.getBlockState($$3).isAir()) {
-                                    this.gameMode.startDestroyBlock($$3, $$2.getDirection());
-                                    standComp.roundabout$tryPower(PowerIndex.MINING, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);
-                                    break;
-                                }
+                    boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
+                            || this.gameMode.isDestroying();
+
+                    if (standComp.roundabout$getStandPowers().isMiningStand()){
+                        Entity TE = standComp.roundabout$getTargetEntity(player, -1);
+                        if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
+                                && (standComp.roundabout$getActivePower() == PowerIndex.NONE || standComp.roundabout$getAttackTimeDuring() == -1)
+                                && !standComp.roundabout$isGuarding()) {
+                            boolean $$1 = false;
+                            switch (this.hitResult.getType()) {
+                                case BLOCK:
+                                    BlockHitResult $$2 = (BlockHitResult) this.hitResult;
+                                    BlockPos $$3 = $$2.getBlockPos();
+                                    if (!this.level.getBlockState($$3).isAir()) {
+                                            this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                        if (standComp.roundabout$getStandPowers().canUseMiningStand()) {
+                                            standComp.roundabout$tryPower(PowerIndex.MINING, true);
+                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);
+                                        }
+                                        isMining = true;
+                                        break;
+                                    }
+                            }
                         }
                     }
                     if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {

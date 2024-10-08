@@ -1588,6 +1588,10 @@ public class StandPowers {
         return false;
     }
 
+    public boolean canUseMiningStand() {
+        return (isMiningStand() && (!(this.getSelf().getMainHandItem().getItem() instanceof DiggerItem) || this.getActivePower() == PowerIndex.MINING));
+    }
+
 
     public float getMiningSpeed() {
         return 3F;

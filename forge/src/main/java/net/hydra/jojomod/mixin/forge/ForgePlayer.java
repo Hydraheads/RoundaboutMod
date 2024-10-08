@@ -119,7 +119,7 @@ public abstract class ForgePlayer extends LivingEntity {
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().isMiningStand()) {
+        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
             float mspeed = ((StandUser) this).roundabout$getStandPowers().getMiningSpeed();
             if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
                 if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL) || $$0.is(BlockTags.MINEABLE_WITH_AXE)){
