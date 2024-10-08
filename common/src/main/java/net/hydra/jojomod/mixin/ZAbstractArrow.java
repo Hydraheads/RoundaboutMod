@@ -14,6 +14,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -49,6 +51,11 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
     public void roundabout$starThrowInit(){
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
         roundabout$superThrowTicks = 50;
+    }
+    @Unique
+    @Override
+    public void roundabout$cancelSuperThrow(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
     }
     @Unique
     @Override
@@ -126,21 +133,27 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
     @Inject(method = "tick", at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$SuperThrow(CallbackInfo ci) {
         if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
-            if (!this.isNoPhysics()) {
+            if (!this.isNoPhysics() && !this.inGround) {
                 this.setDeltaMovement(roundabout$delta);
             }
         }
         if (!this.level().isClientSide) {
-            if (roundabout$superThrowTicks > -1) {
-                roundabout$superThrowTicks--;
-                if (roundabout$superThrowTicks <= -1) {
-                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
-                } else {
-                    if (this.tickCount % 4 == 0){
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
-                                this.getX(), this.getY(), this.getZ(),
-                                0, 0, 0, 0, 0);
+            if (!this.isNoPhysics()) {
+                if (roundabout$superThrowTicks > -1) {
+                    roundabout$superThrowTicks--;
+                    if (roundabout$superThrowTicks <= -1) {
+                        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                    } else {
+                        if (this.tickCount % 4 == 0) {
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                    this.getX(), this.getY(), this.getZ(),
+                                    0, 0, 0, 0, 0);
+                        }
                     }
+                }
+            } else {
+                if (roundabout$superThrowTicks > -1) {
+                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
                 }
             }
         }

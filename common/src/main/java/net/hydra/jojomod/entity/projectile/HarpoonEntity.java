@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
@@ -177,7 +178,7 @@ public class HarpoonEntity extends AbstractArrow {
                     this.doPostHurtEffects($$7);
                 }
             }
-
+            ((IAbstractArrowAccess)this).roundabout$cancelSuperThrow();
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
             float $$8 = 1.0F;
             if (skyHit){

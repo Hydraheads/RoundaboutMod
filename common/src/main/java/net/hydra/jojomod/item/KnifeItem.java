@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class KnifeItem extends Item implements Vanishable {
+public class KnifeItem extends Item{
 
 
     public static final int THROW_THRESHOLD_TIME = 10;

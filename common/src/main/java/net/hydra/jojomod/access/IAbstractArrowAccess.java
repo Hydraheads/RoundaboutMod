@@ -12,6 +12,7 @@ public interface IAbstractArrowAccess {
 
     byte roundaboutGetPierceLevel();
 
+    void roundabout$cancelSuperThrow();
     boolean roundabout$getSuperThrow();
     int roundabout$getSuperThrowTicks();
     void roundabout$starThrowInit();
