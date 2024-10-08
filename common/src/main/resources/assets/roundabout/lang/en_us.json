@@ -3,6 +3,7 @@
 
   "item.roundabout.stand_arrow": "Stand Arrow",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
+  "item.roundabout.worthy_arrow": "Worthiness Arrow",
   "item.roundabout.luck_sword": "Luck Sword",
   "item.roundabout.luck_upgrade": "Smithing Template",
   "item.roundabout.scissors": "Scissors",
@@ -49,6 +50,9 @@
   "item.roundabout.stand_arrow.rerollOutcome": "Arrow Holds: ",
   "item.roundabout.stand_arrow.magnet": "Vibrates near worthy mobs.",
 
+  "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
+  "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
+
   "effect.roundabout.bleed": "Bleed",
   "effect.roundabout.hex": "Hex",
   "effect.roundabout.stand_virus": "Stand Virus",
@@ -65,6 +69,8 @@
   "entity.roundabout.knife": "Knife",
   "entity.roundabout.gasoline_can": "Gasoline Can",
   "entity.roundabout.gasoline_splatter": "Gasoline Splatter",
+  "entity.roundabout.stand_arrow": "Stand Arrow",
+  "entity.roundabout.worthy_arrow": "Worthiness Arrow",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.ancient_meteor": "Ancient Meteor",

@@ -87,14 +87,15 @@ public class MainUtil {
         delta = Math.min(delta,1);
         return start + (delta * wrapRadians(end - start))*multiplier;
     }
-    public static double getWorthyOdds(Mob mob) {
-       if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
-           return 0;
-       }
-       return 0.05;
-    }
     public static final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(20.0);
     public static final TargetingConditions followTargetting = TargetingConditions.forCombat().range(50.0);
+
+    public static double getWorthyOdds(Mob mob) {
+        if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
+            return 0;
+        }
+        return 0.05;
+    }
     public static double getStandUserOdds(Mob mob) {
         if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
             return 0;
@@ -104,9 +105,15 @@ public class MainUtil {
         return 0.005;
     }
     public static double getWorthyBreedBonus(Mob mob) {
-        return 0.3;
+        if (mob instanceof AbstractVillager){
+            return 0.3;
+        }
+        return 0.2;
     }
     public static double getStandUserBreedBonus(Mob mob) {
+        if (mob instanceof AbstractVillager){
+            return 0.2;
+        }
         return 0.15;
     }
     public static Mob homeOnWorthy(Level level, Vec3 vec3, double range) {

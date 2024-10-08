@@ -871,6 +871,7 @@ public class BlockGrabPreset extends PunchingStand{
                 && !(entity instanceof Player pl && pl.isCreative())
                 && !(entity instanceof MinecartCommandBlock)
                 && !(entity instanceof MinecartSpawner)
+                && !(entity instanceof Projectile)
                 && !(entity instanceof StandEntity)){
             if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).roundabout$getStand() != null &&
                     ((StandUser) pl).roundabout$getStand().is(this.getSelf().getVehicle())){
