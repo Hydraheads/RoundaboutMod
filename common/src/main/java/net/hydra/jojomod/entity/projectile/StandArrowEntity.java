@@ -31,8 +31,6 @@ public class StandArrowEntity extends AbstractArrow {
     private static final EntityDataAccessor<ItemStack> STAND_ARROW = SynchedEntityData.defineId(StandArrowEntity.class,
             EntityDataSerializers.ITEM_STACK);
 
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(StandArrowEntity.class, EntityDataSerializers.BOOLEAN);
-
     public StandArrowEntity(EntityType<? extends StandArrowEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -161,13 +159,6 @@ public class StandArrowEntity extends AbstractArrow {
         }
         this.setRemoved($$0);
     }
-    private int superThrowTicks = -1;
-
-    public void starThrowInit(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
-        superThrowTicks = 50;
-    }
-
     public StandArrowEntity(Level $$0, LivingEntity $$1, ItemStack stack) {
         super(ModEntities.STAND_ARROW, $$1, $$0);
         setArrow(stack.copy());
@@ -182,10 +173,6 @@ public class StandArrowEntity extends AbstractArrow {
     @Override
     protected ItemStack getPickupItem() {
         return getArrow();
-    }
-
-    public boolean getSuperThrow() {
-        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
     }
 
 
@@ -205,7 +192,6 @@ public class StandArrowEntity extends AbstractArrow {
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
         this.entityData.define(STAND_ARROW, ItemStack.EMPTY);
     }
 }

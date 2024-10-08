@@ -293,7 +293,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                             MainUtil.makeBleed(entity, 2, 100, this.getSelf());
                         } else {
-                            MainUtil.makeBleed(entity, 2, 300, this.getSelf());
+                            MainUtil.makeBleed(entity, 2, 200, this.getSelf());
                         }
                             MainUtil.makeMobBleed(entity);
                     }
@@ -398,7 +398,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                 float tsTimeRemaining = (200+((this.maxChargedTSTicks-this.getChargedTSTicks())*5));
-                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.SNEAK_ATTACK) && this.getAttackTimeDuring() > -1){
+                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
+                        this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
+                        this.getActivePower() == PowerIndex.POWER_1) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;
                 }
                 if (this.hasActedInTS){

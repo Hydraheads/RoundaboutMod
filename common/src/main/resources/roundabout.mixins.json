@@ -18,6 +18,7 @@
     "ZBlockFaceContext",
     "ZBoat",
     "ZBoatAccess",
+    "ZBoatItem",
     "ZBowItem",
     "ZBubbleColumn",
     "ZBucketItem",

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -49,6 +50,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -966,16 +968,32 @@ public class BlockGrabPreset extends PunchingStand{
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
                 if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
-                    standEntity.canAcquireHeldItem = true;
-                    standEntity.setHeldItem(stack.copyWithCount(1));
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
-                    this.setActivePower(PowerIndex.POWER_2_SNEAK);
-                    this.setAttackTimeDuring(0);
-                    poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                    if (MainUtil.isThrownBlockItem(stack.getItem())){
-                        animateStand((byte) 32);
+                    if (stack.getItem() instanceof BoatItem BE){
+                        Boat $$11 = ((IBoatItemAccess)BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0,3,0));
+                        $$11.setVariant(((IBoatItemAccess)BE).roundabout$getType());
+                        $$11.setYRot(this.getSelf().getYRot());
+                        this.getSelf().level().addFreshEntity($$11);
+                        this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0,3,0));
+                        if ($$11.startRiding(standEntity)) {
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            this.setActivePower(PowerIndex.POWER_2_EXTRA);
+                            this.setAttackTimeDuring(0);
+                            poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                            animateStand((byte) 38);
+                            return true;
+                        }
                     } else {
-                        animateStand((byte) 34);
+                        standEntity.canAcquireHeldItem = true;
+                        standEntity.setHeldItem(stack.copyWithCount(1));
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
+                        this.setActivePower(PowerIndex.POWER_2_SNEAK);
+                        this.setAttackTimeDuring(0);
+                        poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                        if (MainUtil.isThrownBlockItem(stack.getItem())) {
+                            animateStand((byte) 32);
+                        } else {
+                            animateStand((byte) 34);
+                        }
                     }
                     stack.shrink(1);
                     return true;
