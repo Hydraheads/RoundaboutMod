@@ -23,6 +23,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
     public static Item STAND_BEETLE_ARROW = registerItem("stand_beetle_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
+    public static Item WORTHY_ARROW = registerItem("worthy_arrow", new WorthyArrowItem(new Item.Properties()));
     public static Item STAND_DISC_STAR_PLATINUM = registerItem("star_platinum_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
     public static Item STAND_DISC_THE_WORLD = registerItem("the_world_disc",
@@ -134,6 +135,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
                         entries.accept(ModBlocks.STEREO);
+                        entries.accept(WORTHY_ARROW);
 
                     }).build());
 
@@ -153,6 +155,7 @@ public class FabricItems {
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = STAND_ARROW;
         ModItems.STAND_BEETLE_ARROW = STAND_BEETLE_ARROW;
+        ModItems.WORTHY_ARROW = WORTHY_ARROW;
         ModItems.STAND_DISC_STAR_PLATINUM = STAND_DISC_STAR_PLATINUM;
         ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;

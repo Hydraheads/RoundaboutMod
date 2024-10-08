@@ -33,8 +33,10 @@ public abstract class ZModelBakery {
         this.loadTopLevel(ModItemModels.HARPOON_IN_HAND);
         this.loadTopLevel(ModItemModels.STAND_BOW);
         this.loadTopLevel(ModItemModels.STAND_BEETLE_BOW);
+        this.loadTopLevel(ModItemModels.WORTHY_BOW);
         this.topLevelModels.get(ModItemModels.HARPOON_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BEETLE_BOW).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.WORTHY_BOW).resolveParents(this::getModel);
     }
 }

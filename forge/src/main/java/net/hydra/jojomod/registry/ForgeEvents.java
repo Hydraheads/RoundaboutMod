@@ -73,6 +73,7 @@ public class ForgeEvents {
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
+        ModItems.WORTHY_ARROW = ForgeItems.WORTHY_ARROW.get();
         ModItems.STAND_BEETLE_ARROW = ForgeItems.STAND_BEETLE_ARROW.get();
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();

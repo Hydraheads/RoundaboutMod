@@ -63,6 +63,8 @@ public class ZItemRenderer implements IItemRenderer {
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BOW);
             } else if ($$2.getProjectile($$0).getItem() == ModItems.STAND_BEETLE_ARROW){
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BEETLE_BOW);
+            } else if ($$2.getProjectile($$0).getItem() == ModItems.WORTHY_ARROW){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.WORTHY_BOW);
             }
         }
 

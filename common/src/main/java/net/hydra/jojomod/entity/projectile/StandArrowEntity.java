@@ -1,15 +1,22 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.item.WorthyArrowItem;
+import net.hydra.jojomod.mixin.ZMob;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,6 +26,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -46,12 +54,14 @@ public class StandArrowEntity extends AbstractArrow {
 
     @Override
     public void tick() {
-        Mob targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 5);
-        if (targetMob != null){
-            this.setDeltaMovement(
-                    targetMob.position().add(0,targetMob.getEyeHeight(),0).subtract(this.position()).normalize().scale(this.getDeltaMovement().length())
-            );
+        if (this.getArrow().getItem() instanceof StandArrowItem) {
+            Mob targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 5);
+            if (targetMob != null) {
+                this.setDeltaMovement(
+                        targetMob.position().add(0, targetMob.getEyeHeight(), 0).subtract(this.position()).normalize().scale(this.getDeltaMovement().length())
+                );
 
+            }
         }
         super.tick();
     }
@@ -96,27 +106,58 @@ public class StandArrowEntity extends AbstractArrow {
         }
         boolean worthy = false;
         float X = $$3;
-        if ($$1 instanceof Mob mob && MainUtil.canGrantStand(mob)){
-            worthy = true;
-            X = 0.2F;
-            StandArrowItem.grantMobStand(this.getArrow(),this.level(),mob);
-            if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
-                this.getArrow().hurt(1,this.level().getRandom(),null);
+        if (this.getArrow().getItem() instanceof StandArrowItem) {
+            if ($$1 instanceof Mob mob && MainUtil.canGrantStand(mob)) {
+                worthy = true;
+                X = 0.2F;
+                StandArrowItem.grantMobStand(this.getArrow(), this.level(), mob);
+                if (this.pickup == Pickup.ALLOWED) {
+                    this.getArrow().hurt(1, this.level().getRandom(), null);
+                }
+                this.discard();
             }
-            this.discard();
         }
-        if (!worthy && $$1.hurt($$6, X)) {
-            if ($$8) {
+        if (this.getArrow().getItem() instanceof WorthyArrowItem WI && ($$1 instanceof Mob || $$1 instanceof Player)) {
+            if (this.getOwner() instanceof Player PE && PE.isCreative() && !((StandUser)$$1).roundabout$getStandDisc().isEmpty()){
+                if (((StandUser)$$1).roundabout$getActive()){
+                    ((StandUser)$$1).roundabout$setActive(false);
+                }
+                ((StandUser)$$1).roundabout$setStandDisc(ItemStack.EMPTY);
+                ((IMob)$$1).roundabout$setWorthy(false);
+                particleStorm(this.level(),$$1);
+                this.discard();
                 return;
-            }
+            } else if ($$1 instanceof Mob mb){
+                if (((IMob)mb).roundabout$isWorthy()){
+                    if (this.getOwner() instanceof Player PE && PE.isCreative()){
+                        ((IMob)mb).roundabout$setWorthy(false);
+                        particleStorm(this.level(),$$1);
+                        this.discard();
+                        return;
+                    }
+                } else {
+                    ((IMob)mb).roundabout$setWorthy(true);
+                    particleStorm(this.level(),$$1);
 
-            if ($$1 instanceof LivingEntity $$10) {
-               if (MainUtil.canCauseRejection($$10)){
-                   $$10.addEffect(new MobEffectInstance(ModEffects.STAND_VIRUS, 200, 0),this);
-                   if (this.getArrow().getItem() instanceof StandArrowItem){
-                       StandArrowItem.grantMobRejection(this.getArrow(),this.level(),$$10);
-                   }
-               }
+                    this.discard();
+                    return;
+                }
+            }
+        }
+            if (!worthy && $$1.hurt($$6, X)) {
+                if ($$8) {
+                    return;
+                }
+
+                if ($$1 instanceof LivingEntity $$10) {
+                    if (this.getArrow().getItem() instanceof StandArrowItem) {
+                        if (MainUtil.canCauseRejection($$10)) {
+                            $$10.addEffect(new MobEffectInstance(ModEffects.STAND_VIRUS, 200, 0), this);
+                            if (this.getArrow().getItem() instanceof StandArrowItem) {
+                                StandArrowItem.grantMobRejection(this.getArrow(), this.level(), $$10);
+                            }
+                        }
+                    }
                     if (this.getKnockback() > 0) {
                         double $$11 = Math.max(0.0, 1.0 - $$10.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
                         Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) this.getKnockback() * 0.6 * $$11);
@@ -131,24 +172,33 @@ public class StandArrowEntity extends AbstractArrow {
                     }
 
                     this.doPostHurtEffects($$10);
-            }
-
-            this.playSound(this.getDefaultHitGroundSoundEvent(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-            if (this.getPierceLevel() <= 0) {
-                if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED){
-                    this.getArrow().hurt(1,this.level().getRandom(),null);
                 }
-                this.discard();
-            }
-        } else {
-            $$1.setRemainingFireTicks($$9);
-            this.setDeltaMovement(this.getDeltaMovement().scale(-0.1));
-            this.setYRot(this.getYRot() + 180.0F);
-            this.yRotO += 180.0F;
-            if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7) {
 
-                this.discard();
+                this.playSound(this.getDefaultHitGroundSoundEvent(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+                if (this.getPierceLevel() <= 0) {
+                    if (this.getArrow().getItem() instanceof StandArrowItem && this.pickup == Pickup.ALLOWED) {
+                        this.getArrow().hurt(1, this.level().getRandom(), null);
+                    }
+                    this.discard();
+                }
+            } else {
+                $$1.setRemainingFireTicks($$9);
+                this.setDeltaMovement(this.getDeltaMovement().scale(-0.1));
+                this.setYRot(this.getYRot() + 180.0F);
+                this.yRotO += 180.0F;
+                if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7) {
+
+                    this.discard();
+                }
             }
+    }
+
+    private void particleStorm(Level level, Entity live){
+        if (!level.isClientSide()) {
+            level.playSound(null, live.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+            ((ServerLevel) level).sendParticles(ParticleTypes.FIREWORK, live.getX(),
+                    live.getY() + live.getEyeHeight(), live.getZ(),
+                    20, 0, 0, 0, 0.4);
         }
     }
 

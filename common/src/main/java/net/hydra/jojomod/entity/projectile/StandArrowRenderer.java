@@ -25,6 +25,8 @@ public class StandArrowRenderer<T extends StandArrowEntity> extends EntityRender
             (Roundabout.MOD_ID, "textures/entity/projectile/stand_arrow.png");
     public static final ResourceLocation STAND_BEETLE_ARROW_LOCATION = new ResourceLocation
             (Roundabout.MOD_ID, "textures/entity/projectile/stand_beetle_arrow.png");
+    public static final ResourceLocation WORTHY_ARROW_LOCATION = new ResourceLocation
+            (Roundabout.MOD_ID, "textures/entity/projectile/worthy_arrow.png");
     //register(EntityType.ARROW, TippableArrowRenderer::new);
 
     public StandArrowRenderer(EntityRendererProvider.Context p_174422_) {
@@ -33,8 +35,10 @@ public class StandArrowRenderer<T extends StandArrowEntity> extends EntityRender
 
     @Override
     public ResourceLocation getTextureLocation(StandArrowEntity var1) {
-        if (var1.getArrow().is(ModItems.STAND_BEETLE_ARROW)){
+        if (var1.getArrow().is(ModItems.STAND_BEETLE_ARROW)) {
             return STAND_BEETLE_ARROW_LOCATION;
+        } else if (var1.getArrow().is(ModItems.WORTHY_ARROW)){
+                return WORTHY_ARROW_LOCATION;
         } else {
             return STAND_ARROW_LOCATION;
         }

@@ -24,16 +24,12 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class StandArrowItem extends Item {
+public class StandArrowItem extends RoundaboutArrowItem {
 
     public StandArrowItem(Properties $$0) {
         super($$0);
     }
 
-    public StandArrowEntity createArrow(Level $$0, ItemStack $$1, LivingEntity $$2) {
-        StandArrowEntity $$3 = new StandArrowEntity($$0, $$2, $$1);
-        return $$3;
-    }
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);

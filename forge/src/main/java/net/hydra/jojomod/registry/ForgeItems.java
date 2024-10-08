@@ -164,6 +164,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> STAND_DISC_THE_WORLD = addToDiscTab(ITEMS.register("the_world_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null))));
 
+    public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
+            () -> new WorthyArrowItem(new Item.Properties())));
+
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 
@@ -182,5 +185,7 @@ public class ForgeItems {
         DispenserBlock.registerBehavior(ForgeItems.STAND_ARROW.get(), DispenserRegistry.STAND_ARROW);
 
         DispenserBlock.registerBehavior(ForgeItems.STAND_BEETLE_ARROW.get(), DispenserRegistry.STAND_ARROW);
+
+        DispenserBlock.registerBehavior(ForgeItems.WORTHY_ARROW.get(), DispenserRegistry.STAND_ARROW);
     }
 }

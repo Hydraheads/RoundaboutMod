@@ -1,7 +1,9 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
+import net.hydra.jojomod.item.RoundaboutArrowItem;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.item.WorthyArrowItem;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -40,7 +42,7 @@ public class ZBowItem {
     public void roundabout$releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3, CallbackInfo ci) {
         if ($$2 instanceof Player $$4) {
             ItemStack $$6 = $$4.getProjectile($$0);
-            if ($$6.getItem() instanceof StandArrowItem SI){
+            if ($$6.getItem() instanceof RoundaboutArrowItem SI){
                 ci.cancel();
                 if (!$$6.isEmpty()){
 

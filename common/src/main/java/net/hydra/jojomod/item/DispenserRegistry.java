@@ -274,5 +274,7 @@ public class DispenserRegistry {
 
         DispenserBlock.registerBehavior(ModItems.STAND_BEETLE_ARROW, STAND_ARROW);
 
+        DispenserBlock.registerBehavior(ModItems.WORTHY_ARROW, STAND_ARROW);
+
     }
 }
