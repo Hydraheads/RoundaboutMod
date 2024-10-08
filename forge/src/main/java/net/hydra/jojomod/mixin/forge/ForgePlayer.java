@@ -38,18 +38,6 @@ public abstract class ForgePlayer extends LivingEntity {
     @Shadow public abstract boolean isSwimming();
 
     @Shadow public abstract float getDestroySpeed(BlockState $$0);
-
-    @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT_POS = SynchedEntityData.defineId(Player.class,
-            EntityDataSerializers.BYTE);
-
-    @Unique
-    private static final EntityDataAccessor<Byte> DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(Player.class,
-            EntityDataSerializers.BYTE);
-
-    @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(Player.class,
-            EntityDataSerializers.INT);
     @Shadow
     @Final
     private Inventory inventory;

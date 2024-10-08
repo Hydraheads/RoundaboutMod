@@ -26,26 +26,6 @@ public abstract class PlayerEntityServer extends Player {
         super(world, pos, yaw, gameProfile);
     }
 
-    @Inject(method = "changeDimension", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$changeDim(ServerLevel $$0, CallbackInfoReturnable<Boolean> ci) {
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            if (((StandUser)this).roundabout$getStand() != null){
-                StandEntity stand = ((StandUser)this).roundabout$getStand();
-                if (!stand.getHeldItem().isEmpty()) {
-                    if (stand.canAcquireHeldItem) {
-                        double $$3 = this.getEyeY();
-                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), stand.getHeldItem().copy());
-                        $$4.setPickUpDelay(40);
-                        $$4.setThrower(stand.getUUID());
-                        this.level().addFreshEntity($$4);
-                        stand.setHeldItem(ItemStack.EMPTY);
-                    }
-                }
-            }
-        }
-    }
-
-
     @Inject(method = "teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDFF)V", at = @At(value = "TAIL"))
     public void roundabout$teleportTo(ServerLevel p_9000_, double p_9001_, double p_9002_, double p_9003_, float p_9004_, float p_9005_, CallbackInfo info) {
         if (p_9000_ == this.level()) {
