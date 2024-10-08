@@ -23,6 +23,8 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState assault = new AnimationState();
     public final AnimationState assault_punch = new AnimationState();
+    public final AnimationState kick_barrage = new AnimationState();
+    public final AnimationState impale = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
@@ -32,10 +34,17 @@ public class TheWorldEntity extends StandEntity {
             } else {
                 this.hideFists.stop();
             }
+            if (this.getAnimation() == 81) {
+                this.impale.startIfStopped(this.tickCount);
+            } else {
+                this.impale.stop();
+            }
             if (this.getAnimation() != 80) {
                 this.hideLeg.startIfStopped(this.tickCount);
+                this.kick_barrage.stop();
             } else {
                 this.hideLeg.stop();
+                this.kick_barrage.startIfStopped(this.tickCount);
             }
             if (this.getAnimation() == 30) {
                 this.timeStopAnimationState.startIfStopped(this.tickCount);

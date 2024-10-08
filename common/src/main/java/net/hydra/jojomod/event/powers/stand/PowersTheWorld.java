@@ -401,7 +401,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (this.attackTimeDuring <= -1) {
                 if (!this.getSelf().isPassenger()) {
                     teleportTime = Math.max(0,teleportTime-1);
-                    if (teleportTime == 0) {
+                    if (teleportTime == 0 && !(this.getSelf() instanceof Creeper CREEP && CREEP.isIgnited())) {
                         double dist = attackTarget.distanceTo(this.getSelf());
                         if (dist <= 8 && !(this.getSelf() instanceof Creeper)) {
                             Vec3 pos = this.getSelf().position().add(0,this.getSelf().getEyeHeight(),0);

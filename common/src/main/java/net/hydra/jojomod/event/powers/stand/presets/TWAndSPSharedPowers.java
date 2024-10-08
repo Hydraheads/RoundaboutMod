@@ -281,7 +281,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     public void impaleImpact(Entity entity){
         this.setAttackTimeDuring(-20);
-        animateStand((byte) 3);
         if (entity != null) {
             float pow;
             float knockbackStrength;
@@ -851,7 +850,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1_SNEAK);
             playSoundsIfNearby(IMPALE_NOISE, 32, false);
-            this.animateStand((byte)0);
+            this.animateStand((byte)81);
             this.poseStand(OffsetIndex.GUARD);
 
             return true;

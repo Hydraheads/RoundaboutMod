@@ -21,6 +21,7 @@ public class StarPlatinumEntity extends StandEntity {
     public final AnimationState itemRetractAnimation = new AnimationState();
     public final AnimationState entityGrabAnimation = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
+    public final AnimationState impale = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
@@ -79,6 +80,12 @@ public class StarPlatinumEntity extends StandEntity {
                 this.entityGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.entityGrabAnimation.stop();
+            }
+
+            if (this.getAnimation() == 81) {
+                this.impale.startIfStopped(this.tickCount);
+            } else {
+                this.impale.stop();
             }
         }
     }

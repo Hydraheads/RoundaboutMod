@@ -301,6 +301,7 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
 		this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);
 		this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
+		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
 	}
 
 	@Override
