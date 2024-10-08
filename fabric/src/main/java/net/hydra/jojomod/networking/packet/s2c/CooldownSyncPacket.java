@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking.packet.s2c;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,13 +17,8 @@ public class CooldownSyncPacket {
             int attackTimeDuring = buf.readInt();
             byte activePower = buf.readByte();
             byte activePowerPhase = buf.readByte();
-            StandPowers powers = ((StandUser) client.player).roundabout$getStandPowers();
-            powers.setAttackTime(attackTime);
-            powers.setAttackTimeMax(attackTimeMax);
-            powers.setAttackTimeDuring(attackTimeDuring);
-            powers.setActivePower(activePower);
-            powers.setActivePowerPhase(activePowerPhase);
-            powers.kickStartClient();
+            MainUtil.syncCooldownsForAttacks(attackTime,attackTimeMax,attackTimeDuring,
+                    activePower,activePowerPhase,client.player);
         }
     }
 

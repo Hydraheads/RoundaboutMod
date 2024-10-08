@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -584,6 +585,7 @@ public class BlockGrabPreset extends PunchingStand{
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase());
         StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (freezeAttackInput > -1) {
             this.freezeAttackInput = 1;

@@ -2,6 +2,7 @@ package net.hydra.jojomod.networking.s2c;
 
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,13 +44,8 @@ public class ForgeCDSyncPacket {
         context.enqueueWork(()-> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
-                powers.setAttackTime(attackTime);
-                powers.setAttackTimeMax(attackTimeMax);
-                powers.setAttackTimeDuring(attackTimeDuring);
-                powers.setActivePower(activePower);
-                powers.setActivePowerPhase(activePowerPhase);
-                powers.kickStartClient();
+                MainUtil.syncCooldownsForAttacks(attackTime,attackTimeMax,attackTimeDuring,
+                        activePower,activePowerPhase,player);
             }
         });
         return true;

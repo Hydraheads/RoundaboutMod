@@ -9,9 +9,11 @@ import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -855,5 +857,21 @@ public class MainUtil {
             Entity target = player.level().getEntity(data);
             ((StandUser)player).roundabout$getStandPowers().handleStandAttack(player,target);
         }
+    }
+
+    public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,
+                                               byte activePower, byte activePowerPhase, Player pl){
+
+        StandPowers powers = ((StandUser) pl).roundabout$getStandPowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
     }
 }

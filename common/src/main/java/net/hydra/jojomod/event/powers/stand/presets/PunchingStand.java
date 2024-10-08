@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -88,36 +89,32 @@ public class PunchingStand extends StandPowers {
 
     @Override
     public boolean setPowerAttack(){
-        if (this.attackTimeDuring <= -1) {
-            if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
-                if (this.activePowerPhase >= this.activePowerPhaseMax){
-                    this.activePowerPhase = 1;
-                } else {
-                    this.activePowerPhase++;
-                    if (this.activePowerPhase == this.activePowerPhaseMax) {
-                        this.attackTimeMax= 40;
-                    } else {
-                        this.attackTimeMax= 30;
-                    }
-
-                }
-
-                this.attackTimeDuring = 0;
-                this.setActivePower(PowerIndex.ATTACK);
-                this.setAttackTime(0);
-
-                animateStand(this.activePowerPhase);
-                poseStand(OffsetIndex.ATTACK);
-                return true;
+        if (this.activePowerPhase >= 3){
+            this.activePowerPhase = 1;
+        } else {
+            this.activePowerPhase++;
+            if (this.activePowerPhase == 3) {
+                this.attackTimeMax= 40;
+            } else {
+                this.attackTimeMax= 30;
             }
+
         }
-        return false;
+
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.ATTACK);
+        this.setAttackTime(0);
+
+        animateStand(this.activePowerPhase);
+        poseStand(OffsetIndex.ATTACK);
+        return true;
     }
 
     @Override
     public void updateAttack(){
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring > this.attackTimeMax) {
+                this.attackTime = -1;
                 this.attackTimeMax = 0;
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
             } else {
