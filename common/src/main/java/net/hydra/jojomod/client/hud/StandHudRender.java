@@ -152,6 +152,26 @@ public class StandHudRender {
         l = scaledHeight - 31 - 5;
         context.blit(StandIcons.JOJO_ICONS, k, l, u, 50, 9, 9);
     }
+
+    public static void renderSealedDiscHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                        int scaledWidth, int scaledHeight, int ticks, int x,
+                                        float flashAlpha, float otherFlashAlpha) {
+        int l;
+        int k;
+        int v;
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser) playerEntity);
+        k = (int) Math.floor((182/300F)*(300-standUser.roundabout$getSealedTicks()));
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 90, 182, 5);
+        if (k > 0) {
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 90+5, k, 5);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+        context.blit(StandIcons.JOJO_ICONS, k, l, u, 60, 9, 9);
+    }
     public static void renderGuardHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
                                       float flashAlpha, float otherFlashAlpha) {

@@ -367,11 +367,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         1, 0, 0, 0, 0.1);
             }
         }
+        if (roundabout$sealedTicks > -1){
+            roundabout$sealedTicks--;
+        }
         if (roundabout$gasolineIFRAMES > 0){
             roundabout$gasolineIFRAMES--;
-            if (roundabout$gasolineIFRAMES==0){
-                roundabout$gasolineIFRAMES = 0;
-            }
         }
         if (roundabout$knifeIFrameTicks > 0){
             roundabout$knifeIFrameTicks--;
@@ -1023,6 +1023,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /** Turns your stand "on". This updates the HUD, and is necessary in case the stand doesn't have a body.*/
     public void roundabout$setActive(boolean active){
         ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$STAND_ACTIVE, active);
+    }
+
+    @Unique
+    public int roundabout$sealedTicks = -1;
+
+    @Override
+    @Unique
+    public void roundabout$setSealedTicks(int ticks){
+        roundabout$sealedTicks = ticks;
+    }
+    @Override
+    @Unique
+    public int roundabout$getSealedTicks(){
+        return roundabout$sealedTicks;
     }
 
     /** Sets a stand to a user, and a user to a stand.*/

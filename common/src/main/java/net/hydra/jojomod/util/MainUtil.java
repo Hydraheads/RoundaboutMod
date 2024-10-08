@@ -782,6 +782,8 @@ public class MainUtil {
     public static void handleSimpleBytePacketS2C(LocalPlayer player, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
+        } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
+            ((StandUser)player).roundabout$setSealedTicks(300);
         }
     }
 

@@ -15,7 +15,7 @@ public class KeyInputs {
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        if (((StandUser) player).roundabout$getStandPowers().canSummonStand()) {
+        if (((StandUser) player).roundabout$getStandPowers().canSummonStand() && ((StandUser) player).roundabout$getSealedTicks() <= -1) {
             if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
                 if (((StandUser) player).roundabout$getActive()) {
                     ((StandUser) player).roundabout$setSummonCD(8);

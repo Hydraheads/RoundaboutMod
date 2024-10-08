@@ -22,4 +22,5 @@ public class PacketDataIndex {
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;
+    public static final byte S2C_SIMPLE_FREEZE_STAND = 2;
 }

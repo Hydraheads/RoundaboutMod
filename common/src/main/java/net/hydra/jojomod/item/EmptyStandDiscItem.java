@@ -1,6 +1,9 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModPacketHandler;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +29,10 @@ public class EmptyStandDiscItem extends Item {
             ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
             if (!currentDisc.isEmpty()) {
                 $$3.shrink(1);
+                if (!$$1.isCreative()){
+                    ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
+                            ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
+                }
                 ((StandUser) $$1).roundabout$setStand(null);
                 ((StandUser) $$1).roundabout$setActive(false);
                 addItem($$1, currentDisc.copy());
