@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGameRenderer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -112,7 +113,8 @@ public class ZScreenShaking implements IGameRenderer {
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$tiltViewWhenHurt(PoseStack $$0, float $$1, CallbackInfo ci) {
         //$$0 is matrcices, $$1 is tickdelta
-            if (minecraft.player != null && ((StandUser) minecraft.player).roundabout$isDazed()) {
+            if (minecraft.player != null && (((StandUser) minecraft.player).roundabout$isDazed() ||
+                    (((IPlayerEntity) minecraft.player).roundabout$getCameraHits() > -1))) {
                 assert minecraft.level != null;
                 if (minecraft.level.getGameTime() % 5 != 0) {
                     LivingEntity livingEntity = (LivingEntity) minecraft.getCameraEntity();

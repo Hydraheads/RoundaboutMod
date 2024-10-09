@@ -350,7 +350,7 @@ public class StandPowers {
     public ResourceLocation getBarrageCryID(){
         return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
     }
-    private SoundEvent getBarrageChargeSound(){
+    public SoundEvent getBarrageChargeSound(){
         return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
     }
     public ResourceLocation getBarrageChargeID(){
@@ -385,6 +385,9 @@ public class StandPowers {
 
     public void tickPower(){
         if (this.self.isAlive() && !this.self.isRemoved()) {
+            if (this.self.level().isClientSide && !this.kickStarted && this.getAttackTimeDuring() <= -1){
+                this.kickStarted = true;
+            }
             if (this.isClashing()) {
                 if (this.attackTimeDuring != -1) {
                     this.attackTimeDuring++;
@@ -942,6 +945,10 @@ public class StandPowers {
         return yy;
     }
 
+    public boolean clickRelease(){
+        return false;
+    }
+
     public void barrageImpact(Entity entity, int hitNumber){
         if (this.isBarrageAttacking()) {
             if (bonusBarrageConditions()) {
@@ -1003,6 +1010,10 @@ public class StandPowers {
         } else {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
         }
+    }
+
+    public boolean cancelSprintJump(){
+        return this.isBarraging();
     }
 
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
@@ -1534,6 +1545,9 @@ public class StandPowers {
     }
 
 
+    public void updateMovesFromPacket(byte activePower){
+
+    }
     public boolean canAttack(){
         if (this.attackTimeDuring <= -1) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;

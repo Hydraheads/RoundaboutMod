@@ -70,7 +70,8 @@ public class StandAbilityPacket {
                              FriendlyByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
         server.execute(() -> {
-            if (((StandUser) player).roundabout$isGuarding() || ((StandUser) player).roundabout$isBarraging()){
+            if (((StandUser) player).roundabout$isGuarding() || ((StandUser) player).roundabout$isBarraging()
+                    || ((StandUser) player).roundabout$getStandPowers().clickRelease()){
                 ((StandUser) player).roundabout$tryPower(PowerIndex.NONE,true);
             }
         });

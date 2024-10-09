@@ -506,7 +506,8 @@ public abstract class InputEvents implements IInputEvents {
 
             StandUser standComp = ((StandUser) player);
             if (!this.options.keyUse.isDown() && !roundabout$sameKeyOne(KeyInputRegistry.guardKey)) {
-                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging()) {
+                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() ||
+                        standComp.roundabout$getStandPowers().clickRelease()) {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                         * This delay exists so you can't right click left click chain for instant full power punches.*/
                    if (standComp.roundabout$getActivePowerPhase() > 0 ) {

@@ -21,7 +21,8 @@ public class ForgeGuardCancelPacket {
         context.enqueueWork(()-> {
             ServerPlayer player = context.getSender();
             if (player != null) {
-                if (((StandUser) player).roundabout$isGuarding() || ((StandUser) player).roundabout$isBarraging()){
+                if (((StandUser) player).roundabout$isGuarding() || ((StandUser) player).roundabout$isBarraging()
+                        || ((StandUser) player).roundabout$getStandPowers().clickRelease()){
                     ((StandUser) player).roundabout$tryPower(PowerIndex.NONE,true);
                 }
             }

@@ -213,6 +213,14 @@ public class PunchingStand extends StandPowers {
     }
 
     @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
+
+    @Override
     public void tickStandRejection(MobEffectInstance effect){
         if (!this.getSelf().level().isClientSide()) {
             float kbs = 0;

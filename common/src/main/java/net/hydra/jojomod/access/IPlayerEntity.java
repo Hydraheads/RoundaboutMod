@@ -9,6 +9,8 @@ public interface IPlayerEntity {
     int roundabout$getAirTime();
     int roundabout$getClientDodgeTime();
     int roundabout$getDodgeTime();
+    int roundabout$getCameraHits();
+    void roundabout$setCameraHits(int ticks);
     void roundabout$setClientDodgeTime(int dodgeTime);
     void roundabout$setDodgeTime(int dodgeTime);
     void roundabout$setAirTime(int airTime);

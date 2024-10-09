@@ -886,6 +886,7 @@ public class MainUtil {
                 powers.setAttackTimeDuring(0);
             }
         }
+        powers.updateMovesFromPacket(activePower);
         powers.setActivePower(activePower);
         powers.kickStartClient();
     }

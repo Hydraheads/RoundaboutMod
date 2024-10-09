@@ -61,6 +61,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$CAMERA_HITS = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.INT);
     @Shadow
     @Final
     private Inventory inventory;
@@ -106,6 +109,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public int roundabout$getDodgeTime(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$DODGE_TIME);
+    }
+    @Unique
+    @Override
+    public int roundabout$getCameraHits(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$CAMERA_HITS);
+    }
+    @Unique
+    @Override
+    public void roundabout$setCameraHits(int ticks){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$CAMERA_HITS, ticks);
     }
 
     @Unique
@@ -326,6 +339,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
         }
 
+        if (roundabout$getCameraHits() > -1){
+            roundabout$setCameraHits(roundabout$getCameraHits()-1);
+        }
+
         boolean notSkybound = (this.onGround() || this.isSwimming()|| this.onClimbable() || this.isPassenger()
                 || this.hasEffect(MobEffects.LEVITATION));
 
@@ -383,6 +400,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);
     }
 

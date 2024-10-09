@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -103,6 +105,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public float inputSpeedModifiers(float basis){
+        if (this.activePower == PowerIndex.BARRAGE_2) {
+            basis*=0.3f;
+        } else if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+            basis*=0.5f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
         if (options.keyShift.isDown() && (this.getAttackTime() >= this.getAttackTimeMax() ||
                 (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))){
@@ -144,6 +156,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (!this.self.level().isClientSide &&
+                (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2)
+                && (move != PowerIndex.BARRAGE_2)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+        }
+
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
             if (move != PowerIndex.POWER_1_BONUS) {
                 stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
@@ -181,9 +199,18 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
 
+    @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
+
     public boolean setPowerKickBarrageCharge() {
         animateStand((byte) 11);
         this.attackTimeDuring = 0;
+        playKickBarrageChargeSound();
         this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
         this.poseStand(OffsetIndex.ATTACK);
         return true;
@@ -197,6 +224,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_2);
         this.poseStand(OffsetIndex.ATTACK);
+        playKickBarrageCrySound();
         this.setAttackTimeMax(this.getKickBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         animateStand((byte) 80);
@@ -249,6 +277,35 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
     }
 
+    public void playBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            byte barrageCrySound = this.chooseBarrageSound();
+            if (barrageCrySound != SoundIndex.NO_SOUND) {
+                playSoundsIfNearby(barrageCrySound, 32, false);
+            }
+        }
+    }
+    public void playKickBarrageChargeSound(){
+        if (!timeStopStartedBarrage) {
+            if (!this.self.level().isClientSide()) {
+                SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+                if (barrageChargeSound != null) {
+                    playSoundsIfNearby(SoundIndex.ALT_CHARGE_SOUND_1, 32, false);
+                }
+            }
+        }
+    }
+    private float getKickBarrageChargePitch(){
+        return 1/((float) this.getKickBarrageWindup() /20);
+    }
+    @Override
+    public float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1){
+            return this.getKickBarrageChargePitch();
+        } else {
+            return super.getSoundPitchFromByte(soundChoice);
+        }
+    }
     public int getKickBarrageLength(){
         return 50;
     }
@@ -268,9 +325,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 this.attackTimeDuring = -20;
             } else {
                 if (this.attackTimeDuring > 0) {
-                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                    this.setAttackTime((getKickBarrageRecoilTime() - 1) -
                             Math.round(((float) this.attackTimeDuring / this.getKickBarrageLength())
-                                    * (getBarrageRecoilTime() - 1)));
+                                    * (getKickBarrageRecoilTime() - 1)));
 
                     standBarrageHit();
                 }
@@ -283,7 +340,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (isPacketPlayer()){
                 ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
 
-                if (this.attackTimeDuring == this.getKickBarrageLength()){
+                if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                    this.attackTimeDuring = -10;
+                } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
                     this.attackTimeDuring = -10;
                 }
             }
@@ -293,13 +352,59 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             barrageImpact(targetEntity, this.attackTimeDuring);
         }
     }
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        StandUser standUser = ((StandUser) playerEntity);
+        boolean standOn = standUser.roundabout$getActive();
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getKickBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
+        } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
+    }
 
+    public void playKickBarrageNoise(int hitNumber, Entity entity){
+        if (!this.getSelf().level().isClientSide()) {
+            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                playBarrageBlockNoise();
+            } else {
+                if (hitNumber % 3 == 0) {
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                }
+            }
+        }
+    }
+
+    public float getKickBarrageFinisherKnockback(){
+        return 1.4F;
+    }
+
+    @Override
+    public boolean cancelItemUse() {
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean clickRelease(){
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
     @Override
     public void barrageImpact(Entity entity, int hitNumber){
         if (this.activePower == PowerIndex.BARRAGE_2) {
             if (bonusBarrageConditions()) {
-                boolean lastHit = (hitNumber >= this.getBarrageLength());
+                boolean lastHit = (hitNumber >= this.getKickBarrageLength());
                 if (entity != null) {
                     if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
@@ -312,10 +417,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         Vec3 prevVelocity = entity.getDeltaMovement();
                         if (lastHit) {
                             pow = this.getKickBarrageFinisherStrength(entity);
-                            knockbackStrength = this.getBarrageFinisherKnockback();
+                            knockbackStrength = this.getKickBarrageFinisherKnockback();
                         } else {
                             pow = this.getKickBarrageHitStrength(entity);
-                            float mn = this.getBarrageLength() - hitNumber;
+                            float mn = this.getKickBarrageLength() - hitNumber;
                             if (mn == 0) {
                                 mn = 0.015F;
                             } else {
@@ -326,15 +431,21 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                             if (entity instanceof LivingEntity) {
                                 if (lastHit) {
+                                    if (entity instanceof Player PE){
+                                        ((IPlayerEntity) PE).roundabout$setCameraHits(-1);
+                                    }
                                     playBarrageEndNoise(0, entity);
                                 } else {
-                                    playBarrageNoise(hitNumber, entity);
+                                    if (entity instanceof Player PE){
+                                        ((IPlayerEntity) PE).roundabout$setCameraHits(2);
+                                    }
+                                    playKickBarrageNoise(hitNumber, entity);
                                 }
                             }
-                            barrageImpact2(entity, lastHit, knockbackStrength);
+                            kickBarrageImpact2(entity, lastHit, knockbackStrength);
                         } else {
                             if (lastHit) {
-                                knockShield2(entity, 200);
+                                knockShield2(entity, 40);
                                 playBarrageBlockEndNoise(0, entity);
                             } else {
                                 entity.setDeltaMovement(prevVelocity);
@@ -356,6 +467,29 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             super.barrageImpact(entity,hitNumber);
         }
     }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2){
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
+
+    public void kickBarrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
+        if (entity instanceof LivingEntity){
+            if (lastHit) {
+                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+            } else {
+
+                this.takeKnockbackWithY(entity, knockbackStrength,
+                        Mth.sin(this.getSelf().getYRot() * ((float) Math.PI / 180)),
+                        Mth.sin(-15 * ((float) Math.PI / 180)),
+                        -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180)));
+            }
+        }
+    }
+
 
     public float getKickBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -467,8 +601,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice >= ASSAULT_NOISE) {
+        if (soundChoice == ASSAULT_NOISE) {
             return ASSAULT_NOISE;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1
+        || soundChoice == KICK_BARRAGE_NOISE_2 || soundChoice == KICK_BARRAGE_NOISE){
+                return SoundIndex.BARRAGE_SOUND_GROUP;
         }
         return super.getSoundCancelingGroupByte(soundChoice);
     }
@@ -520,6 +657,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void tickPower(){
 
+        //Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase()+" MAX:"+this.getActivePowerPhaseMax());
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
         }
@@ -573,6 +711,24 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return BARRAGE_NOISE;
         } else {
             return BARRAGE_NOISE_2;
+        }
+    }
+
+
+    public static final byte KICK_BARRAGE_NOISE = 106;
+    public static final byte KICK_BARRAGE_NOISE_2 = KICK_BARRAGE_NOISE+1;
+
+    /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
+    public void playKickBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            double rand = Math.random();
+            byte barrageCrySound;
+            if (rand > 0.5) {
+                barrageCrySound = KICK_BARRAGE_NOISE;
+            } else {
+                barrageCrySound = KICK_BARRAGE_NOISE_2;
+            }
+            playSoundsIfNearby(barrageCrySound, 32, false);
         }
     }
 
@@ -759,6 +915,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
+        } else if (soundChoice == KICK_BARRAGE_NOISE) {
+            return ModSounds.STAND_THEWORLD_MUDA4_SOUND_EVENT;
+        } else if (soundChoice == KICK_BARRAGE_NOISE_2) {
+            return ModSounds.THE_WORLD_WRY_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
             return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
         } else if (soundChoice == ASSAULT_NOISE){

@@ -168,7 +168,7 @@ public class BlockGrabPreset extends PunchingStand{
             }
             this.getSelf().level().addFreshEntity($$11);
             this.getSelf().level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.getItem() instanceof TridentItem){
+        } else if (item.is(Items.TRIDENT)){
             if (!item.hurt(1,this.getSelf().level().getRandom(),null)){
                 ThrownTrident $$7 = new ThrownTrident(this.getSelf().level(), this.getSelf(), item);
                 $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
@@ -587,7 +587,6 @@ public class BlockGrabPreset extends PunchingStand{
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase());
         StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (freezeAttackInput > -1) {
             this.freezeAttackInput = 1;

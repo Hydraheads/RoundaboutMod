@@ -1699,7 +1699,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
         byte curse = this.roundabout$getLocacacaCurse();
-        if (this.roundabout$getStandPowers().isBarraging() || (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))) {
+        if (this.roundabout$getStandPowers().cancelSprintJump() || (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))) {
             Vec3 $$0 = this.getDeltaMovement();
             this.setDeltaMovement($$0.x, (double) this.getJumpPower(), $$0.z);
             this.hasImpulse = true;

@@ -47,6 +47,12 @@
       "roundabout:punch_sfx1"
     ]
   },
+  "the_world_wry": {
+    "subtitle": "sounds.roundabout.the_world_wry",
+    "sounds": [
+      "roundabout:the_world_wry"
+    ]
+  },
   "impale_charge": {
     "subtitle": "sounds.roundabout.impale_charge",
     "sounds": [

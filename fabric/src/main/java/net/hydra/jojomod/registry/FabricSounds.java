@@ -46,6 +46,7 @@ public class FabricSounds {
         addSound(ModSounds.IMPALE_HIT_ID, ModSounds.IMPALE_HIT_EVENT);
 
         addSound(ModSounds.THE_WORLD_ASSAULT_ID, ModSounds.THE_WORLD_ASSAULT_EVENT);
+        addSound(ModSounds.THE_WORLD_WRY_ID, ModSounds.THE_WORLD_WRY_EVENT);
 
         addSound(ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID, ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT);
         addSound(ModSounds.STAND_THEWORLD_MUDA2_SOUND_ID, ModSounds.STAND_THEWORLD_MUDA2_SOUND_EVENT);
