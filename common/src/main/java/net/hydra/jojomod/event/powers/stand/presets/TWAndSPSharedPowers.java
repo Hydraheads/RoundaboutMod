@@ -396,6 +396,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+                //this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
+                Roundabout.LOGGER.info("maxChargedTSTicks: "+this.maxChargedTSTicks+" MaxChargedTSTime: "+this.maxChargeTSTime+
+                        " chargedtsticks: "+this.getChargedTSTicks()+" maxtst"+this.getMaxTSTime());
                 float tsTimeRemaining = (200+((this.maxChargedTSTicks-this.getChargedTSTicks())*5));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
                         this.getActivePower() == PowerIndex.SNEAK_ATTACK ||

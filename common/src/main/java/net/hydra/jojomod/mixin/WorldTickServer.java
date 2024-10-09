@@ -118,7 +118,7 @@ public class WorldTickServer {
                 } else if ($$0 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$0).roundabout$TickPickupDelay();
                 } else if ($$0 instanceof FishingHook){
-                    ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
+                    ((IFishingRodAccess)$$0).roundabout$UpdateRodInTS();
                 } else if ($$0 instanceof Boat){
                     ((IBoatAccess)$$0).roundabout$TickLerp();
                     $$0.lerpTo($$0.getX(),$$0.getY(),$$0.getZ(),$$0.getYRot(),$$0.getXRot(),3,false);
@@ -168,7 +168,7 @@ public class WorldTickServer {
                 } else if ($$1 instanceof ItemEntity) {
                     ((IItemEntityAccess)$$1).roundabout$TickPickupDelay();
                 } else if ($$1 instanceof FishingHook){
-                    ((IFishingRodAccess)$$1).roundaboutUpdateRodInTS();
+                    ((IFishingRodAccess)$$1).roundabout$UpdateRodInTS();
                 }
 
                 for (Entity $$3 : $$1.getPassengers()) {

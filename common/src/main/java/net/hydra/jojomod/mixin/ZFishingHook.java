@@ -60,6 +60,7 @@ public abstract class ZFishingHook extends Entity implements IFishingRodAccess {
         }
     }
 
+    @Override
     public void roundabout$UpdateRodInTS(){
         Player $$0 = this.getPlayerOwner();
         if ($$0 == null) {

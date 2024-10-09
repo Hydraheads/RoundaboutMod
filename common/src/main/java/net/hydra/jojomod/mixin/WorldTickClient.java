@@ -189,7 +189,7 @@ public abstract class WorldTickClient extends Level {
         if ($$0 instanceof ItemEntity) {
             ((IItemEntityAccess)$$0).roundabout$TickPickupDelay();
         } else if ($$0 instanceof FishingHook){
-            ((IFishingRodAccess)$$0).roundaboutUpdateRodInTS();
+            ((IFishingRodAccess)$$0).roundabout$UpdateRodInTS();
         }
     }
 
