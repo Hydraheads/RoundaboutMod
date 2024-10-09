@@ -737,7 +737,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        if (attackTarget != null && attackTarget.isAlive()){
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())){
             if (this.attackTimeDuring <= -1) {
                 if (!this.getSelf().isPassenger()) {
                     teleportTime = Math.max(0,teleportTime-1);
