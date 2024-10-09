@@ -207,7 +207,6 @@ public class PunchingStand extends StandPowers {
         this.poseStand(OffsetIndex.ATTACK);
         this.setAttackTimeMax(this.getBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        this.setAttackTime(19);
         animateStand((byte) 12);
         playBarrageCrySound();
         return true;

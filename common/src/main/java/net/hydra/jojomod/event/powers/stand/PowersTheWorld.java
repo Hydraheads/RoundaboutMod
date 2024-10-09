@@ -102,7 +102,23 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         super.buttonInput1(keyIsDown,options);
     }
 
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (options.keyShift.isDown() && (this.getAttackTime() >= this.getAttackTimeMax() ||
+                (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))){
+            this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+        } else {
+            super.buttonInputBarrage(keyIsDown,options);
+        }
+    }
 
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2 || this.activePower == PowerIndex.BARRAGE_2) {
+            return false;
+        }
+        return super.buttonInputGuard(keyIsDown,options);
+    }
 
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
@@ -156,10 +172,36 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return this.assault();
         } else if (move == PowerIndex.POWER_1_BONUS && this.getActivePower() == PowerIndex.POWER_1) {
             return this.assaultGrab();
+        } else if (move == PowerIndex.BARRAGE_CHARGE_2) {
+            return this.setPowerKickBarrageCharge();
+        } else if (move == PowerIndex.BARRAGE_2) {
+            return this.setPowerKickBarrage();
         }
         return super.setPowerOther(move,lastMove);
     }
 
+
+    public boolean setPowerKickBarrageCharge() {
+        animateStand((byte) 11);
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
+        this.poseStand(OffsetIndex.ATTACK);
+        return true;
+    }
+
+
+    public int getKickBarrageRecoilTime(){
+        return 35;
+    }
+    public boolean setPowerKickBarrage() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_2);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.setAttackTimeMax(this.getKickBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        animateStand((byte) 80);
+        return true;
+    }
     public Vec3 assultVec = Vec3.ZERO;
     public boolean assaultGrab(){
         StandEntity stand = getStandEntity(this.self);
@@ -198,9 +240,150 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
-        super.updateUniqueMoves();
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            updateKickBarrageCharge();
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
+            updateKickBarrage();
+        } else {
+            super.updateUniqueMoves();
+        }
     }
 
+    public int getKickBarrageLength(){
+        return 50;
+    }
+    public int getKickBarrageWindup(){
+            return 20;
+    }
+    public void updateKickBarrageCharge(){
+        if (this.attackTimeDuring >= this.getKickBarrageWindup()) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE_2, true);
+        }
+    }
+    public void updateKickBarrage(){
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getKickBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getKickBarrageLength())
+                                    * (getBarrageRecoilTime() - 1)));
+
+                    standBarrageHit();
+                }
+            }
+        }
+    }
+
+    public void standBarrageHit(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
+
+                if (this.attackTimeDuring == this.getKickBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
+            }
+        } else {
+            /*Caps how far out the barrage hit goes*/
+            Entity targetEntity = getTargetEntity(this.self,-1);
+            barrageImpact(targetEntity, this.attackTimeDuring);
+        }
+    }
+
+
+    @Override
+    public void barrageImpact(Entity entity, int hitNumber){
+        if (this.activePower == PowerIndex.BARRAGE_2) {
+            if (bonusBarrageConditions()) {
+                boolean lastHit = (hitNumber >= this.getBarrageLength());
+                if (entity != null) {
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                        initiateClash(entity);
+                    } else {
+                        float pow;
+                        float knockbackStrength = 0;
+                        /**By saving the velocity before hitting, we can let people approach barraging foes
+                         * through shields.*/
+                        Vec3 prevVelocity = entity.getDeltaMovement();
+                        if (lastHit) {
+                            pow = this.getKickBarrageFinisherStrength(entity);
+                            knockbackStrength = this.getBarrageFinisherKnockback();
+                        } else {
+                            pow = this.getKickBarrageHitStrength(entity);
+                            float mn = this.getBarrageLength() - hitNumber;
+                            if (mn == 0) {
+                                mn = 0.015F;
+                            } else {
+                                mn = ((0.015F / (mn)));
+                            }
+                            knockbackStrength = 0.014F - mn;
+                        }
+                        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                            if (entity instanceof LivingEntity) {
+                                if (lastHit) {
+                                    playBarrageEndNoise(0, entity);
+                                } else {
+                                    playBarrageNoise(hitNumber, entity);
+                                }
+                            }
+                            barrageImpact2(entity, lastHit, knockbackStrength);
+                        } else {
+                            if (lastHit) {
+                                knockShield2(entity, 200);
+                                playBarrageBlockEndNoise(0, entity);
+                            } else {
+                                entity.setDeltaMovement(prevVelocity);
+                            }
+                        }
+                    }
+                } else {
+                    playBarrageMissNoise(hitNumber);
+                }
+
+                if (lastHit) {
+                    animateStand((byte) 13);
+                    this.attackTimeDuring = -10;
+                }
+            } else {
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        } else {
+            super.barrageImpact(entity,hitNumber);
+        }
+    }
+
+    public float getKickBarrageFinisherStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2F;
+        } else {
+            return 7;
+        }
+    }
+    private float getKickBarrageHitStrength(Entity entity){
+        float barrageLength = this.getKickBarrageLength();
+        float power;
+        if (this.getReducedDamage(entity)){
+            power = 7/barrageLength;
+        } else {
+            power = 15/barrageLength;
+        }
+        /*Barrage hits are incapable of killing their target until the last hit.*/
+        if (entity instanceof LivingEntity){
+            if (power >= ((LivingEntity) entity).getHealth()){
+                if (entity instanceof Player) {
+                    power = 0.00001F;
+                } else {
+                    power = 0F;
+                }
+            }
+        }
+        return power;
+    }
 
     @Override
     public void tickPowerEnd(){
@@ -358,8 +541,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public boolean canInterruptPower(){
-
-        if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
+        if (this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2){
+            return true;
+        } if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 60);
             }

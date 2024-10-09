@@ -2609,7 +2609,7 @@ public class StandAnimations {
                 .addAnimation("kick_barrage", new AnimationChannel(AnimationChannel.Targets.SCALE,
                         new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.3F, 1.0F), AnimationChannel.Interpolations.LINEAR)
                 ))
-                .addAnimation("1", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                .addAnimation("One", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(-30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1389F, KeyframeAnimations.degreeVec(-17.4524F, 14.0365F, 3.8573F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2778F, KeyframeAnimations.degreeVec(-2.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2625,7 +2625,7 @@ public class StandAnimations {
                         new Keyframe(1.1806F, KeyframeAnimations.degreeVec(-2.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.degreeVec(-7.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("1", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                .addAnimation("One", new AnimationChannel(AnimationChannel.Targets.POSITION,
                         new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.625F, 2.275F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1389F, KeyframeAnimations.posVec(0.0397F, -2.1793F, -2.4109F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2778F, KeyframeAnimations.posVec(-2.0F, -17.5F, -3.9F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2640,7 +2640,7 @@ public class StandAnimations {
                         new Keyframe(1.1806F, KeyframeAnimations.posVec(-2.0F, -17.5F, -3.9F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.posVec(0.0F, -19.0F, -0.55F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("1", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                .addAnimation("One", new AnimationChannel(AnimationChannel.Targets.SCALE,
                         new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1389F, KeyframeAnimations.scaleVec(1.0F, 1.48F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2778F, KeyframeAnimations.scaleVec(1.475F, 0.0F, 1.375F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2655,7 +2655,7 @@ public class StandAnimations {
                         new Keyframe(1.1806F, KeyframeAnimations.scaleVec(1.475F, 0.0F, 1.375F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
                 ))
-                .addAnimation("2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                .addAnimation("Two", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(-14.187F, -15.8825F, -18.4282F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1042F, KeyframeAnimations.degreeVec(-2.4276F, -21.0399F, -24.1489F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2083F, KeyframeAnimations.degreeVec(-14.187F, -15.8825F, -18.4282F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2669,7 +2669,7 @@ public class StandAnimations {
                         new Keyframe(1.1458F, KeyframeAnimations.degreeVec(-14.187F, -15.8825F, -18.4282F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.degreeVec(-14.187F, -15.8825F, -18.4282F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("2", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                .addAnimation("Two", new AnimationChannel(AnimationChannel.Targets.POSITION,
                         new Keyframe(0.0F, KeyframeAnimations.posVec(5.9937F, -17.7548F, -1.7259F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1042F, KeyframeAnimations.posVec(0.0F, 0.0F, 1.15F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2083F, KeyframeAnimations.posVec(2.7483F, -2.8656F, -0.4261F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2683,7 +2683,7 @@ public class StandAnimations {
                         new Keyframe(1.1458F, KeyframeAnimations.posVec(2.7483F, -2.8656F, -0.4261F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.posVec(5.9937F, -17.7548F, -1.7259F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("2", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                .addAnimation("Two", new AnimationChannel(AnimationChannel.Targets.SCALE,
                         new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.475F, 0.1F, 1.375F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1042F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2083F, KeyframeAnimations.scaleVec(1.0F, 1.58F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2697,7 +2697,7 @@ public class StandAnimations {
                         new Keyframe(1.1458F, KeyframeAnimations.scaleVec(1.0F, 1.58F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.scaleVec(1.475F, 0.1F, 1.375F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("3", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                .addAnimation("Three", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(-14.8131F, 52.632F, -5.7689F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1042F, KeyframeAnimations.degreeVec(-44.7394F, 59.819F, -23.2895F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1736F, KeyframeAnimations.degreeVec(-14.8131F, 52.632F, -5.7689F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2711,7 +2711,7 @@ public class StandAnimations {
                         new Keyframe(1.1111F, KeyframeAnimations.degreeVec(-14.8131F, 52.632F, -5.7689F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.degreeVec(-14.8131F, 52.632F, -5.7689F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("3", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                .addAnimation("Three", new AnimationChannel(AnimationChannel.Targets.POSITION,
                         new Keyframe(0.0F, KeyframeAnimations.posVec(-5.9937F, -17.2452F, -3.9741F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1042F, KeyframeAnimations.posVec(-4.925F, -4.0F, -0.7F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1736F, KeyframeAnimations.posVec(-5.9937F, -17.2452F, -3.9741F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2725,7 +2725,7 @@ public class StandAnimations {
                         new Keyframe(1.1111F, KeyframeAnimations.posVec(-5.9937F, -17.2452F, -3.9741F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.posVec(-5.9937F, -17.2452F, -3.9741F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("3", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                .addAnimation("Three", new AnimationChannel(AnimationChannel.Targets.SCALE,
                         new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                         new Keyframe(0.1042F, KeyframeAnimations.scaleVec(1.0F, 1.28F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.1736F, KeyframeAnimations.scaleVec(1.475F, 0.0F, 1.375F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2739,7 +2739,7 @@ public class StandAnimations {
                         new Keyframe(1.1111F, KeyframeAnimations.scaleVec(1.475F, 0.0F, 1.375F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
                 ))
-                .addAnimation("4", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                .addAnimation("Four", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(-10.8347F, -1.2966F, -2.8728F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2778F, KeyframeAnimations.degreeVec(-48.6819F, 48.2617F, -40.3257F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.4514F, KeyframeAnimations.degreeVec(13.0689F, -4.3721F, -4.3447F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2750,7 +2750,7 @@ public class StandAnimations {
                         new Keyframe(1.1111F, KeyframeAnimations.degreeVec(-10.8347F, -1.2966F, -2.8728F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.degreeVec(-10.8347F, -1.2966F, -2.8728F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("4", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                .addAnimation("Four", new AnimationChannel(AnimationChannel.Targets.POSITION,
                         new Keyframe(0.0F, KeyframeAnimations.posVec(-0.1753F, -15.0638F, 1.8398F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.2778F, KeyframeAnimations.posVec(-2.525F, 0.0F, 1.15F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.4514F, KeyframeAnimations.posVec(-1.65F, -4.0F, 1.975F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2761,7 +2761,7 @@ public class StandAnimations {
                         new Keyframe(1.1111F, KeyframeAnimations.posVec(0.0F, -19.0F, 1.15F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(1.25F, KeyframeAnimations.posVec(-0.1753F, -15.0638F, 1.8398F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .addAnimation("4", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                .addAnimation("Four", new AnimationChannel(AnimationChannel.Targets.SCALE,
                         new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                         new Keyframe(0.2778F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.4514F, KeyframeAnimations.scaleVec(1.0F, 1.28F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
