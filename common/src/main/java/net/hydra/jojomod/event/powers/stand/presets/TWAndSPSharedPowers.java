@@ -798,9 +798,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 super.tryChargedPower(move, forced, chargeTime);
             } else if (move == PowerIndex.SPECIAL_FINISH) {
                 /*If the server is behind on the client TS time, update it to lower*/
-                if (this.getChargedTSTicks() > chargeTime) {
-                    this.setChargedTSTicks(chargeTime);
-                }
             } else if (move == PowerIndex.MOVEMENT) {
                 this.storedInt = chargeTime;
             }
