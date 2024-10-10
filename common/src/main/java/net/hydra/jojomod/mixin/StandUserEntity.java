@@ -1659,6 +1659,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
+        int air = roundabout$getStandPowers().getAirAmount();
+        if (air > 0 && roundabout$getActive()){
+            int $$1 = EnchantmentHelper.getRespiration(((LivingEntity)(Object)this));
+            air = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? air : air - 1;
+            if (air <= 0){
+                air=0;
+            }
+            roundabout$getStandPowers().setAirAmount(air);
+            cir.setReturnValue($$0);
+            return;
+        }
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1) {
             if (curse == LocacacaCurseIndex.CHEST) {
@@ -1670,6 +1681,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue($$1);
             }
         }
+    }
+    @Inject(method = "increaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$increaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
+        /**
+        int air = roundabout$getStandPowers().getAirAmount();
+        if (air > -1 && air < roundabout$getStandPowers().getMaxAirAmount()) {
+            cir.setReturnValue($$0);
+        }
+         */
+    }
+
+    @Unique
+    @Override
+    public int roundabout$increaseAirSupply(int $$0){
+        return this.increaseAirSupply($$0);
     }
 
     /**When time is stopped by the user, incurs an action penalty if food is eaten*/

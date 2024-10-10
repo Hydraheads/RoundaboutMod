@@ -20,6 +20,8 @@ public interface StandUser {
 
     void roundabout$updateStandOutPosition(StandEntity passenger);
 
+    int roundabout$increaseAirSupply(int $$0);
+
     void roundabout$updateStandOutPosition(StandEntity passenger, Entity.MoveFunction positionUpdater);
     void roundabout$removeStandOut();
     void roundabout$setDI(byte forward, byte strafe);

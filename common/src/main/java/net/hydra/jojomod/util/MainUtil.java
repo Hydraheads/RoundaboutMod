@@ -807,6 +807,8 @@ public class MainUtil {
     public static void handleIntPacketS2C(LocalPlayer player, int data, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(data);
+        } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK){
+            ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         }
     } public static void handleIntPacketS2C(int data, byte context){
         LocalPlayer player = Minecraft.getInstance().player;

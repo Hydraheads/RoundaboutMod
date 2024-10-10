@@ -383,6 +383,16 @@ public class StandPowers {
 
     }
 
+
+    public void setAirAmount(int airAmount){
+    }
+    public int getAirAmount(){
+        return -1;
+    }
+    public int getMaxAirAmount(){
+        return 300;
+    }
+
     public void tickPower(){
         if (this.self.isAlive() && !this.self.isRemoved()) {
             if (this.self.level().isClientSide && !this.kickStarted && this.getAttackTimeDuring() <= -1){

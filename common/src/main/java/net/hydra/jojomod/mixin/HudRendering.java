@@ -16,6 +16,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -178,18 +179,57 @@ public abstract class HudRendering implements IHudAccess {
     @Shadow
     private void renderPlayerHealth(GuiGraphics $$0) {}
 
+    @Shadow
+    private int getVisibleVehicleHeartRows(int $$0) {
+        return 0;
+    }
 
-    /**desaturate hearts when time is stopped*/
+        /**desaturate hearts when time is stopped*/
     @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderHealth(GuiGraphics $$0, CallbackInfo ci){
-        if (minecraft.player != null && minecraft.level != null && !roundabout$Redo) {
-            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
-                roundabout$Redo = true;
-                $$0.setColor(0.7F, 0.7F, 0.7F, 1.0F);
-                renderPlayerHealth($$0);
-                $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                roundabout$Redo = false;
-                ci.cancel();
+        if (minecraft.player != null && minecraft.level != null){
+           if (!roundabout$Redo) {
+                if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
+                    roundabout$Redo = true;
+                    $$0.setColor(0.7F, 0.7F, 0.7F, 1.0F);
+                    renderPlayerHealth($$0);
+                    $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    roundabout$Redo = false;
+                    ci.cancel();
+                    return;
+                }
+           }
+        }
+    }
+    @Inject(method = "renderPlayerHealth", at = @At(value = "TAIL"), cancellable = true)
+    public void roundabout$renderHealth2(GuiGraphics $$0, CallbackInfo ci){
+
+        if (minecraft.player != null && minecraft.level != null){
+            int oxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getAirAmount();
+            int maxOxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getMaxAirAmount();
+            if (oxygenBonus > -1 && ((StandUser)minecraft.player).roundabout$getActive()) {
+                int $$28 = minecraft.player.getMaxAirSupply();
+                int $$29 = Math.min(minecraft.player.getAirSupply(), $$28);
+                if (minecraft.player.isEyeInFluid(FluidTags.WATER) || $$29 < $$28 || oxygenBonus < maxOxygenBonus) {
+                    LivingEntity $$21 = this.getPlayerVehicleWithHealth();
+                    int $$22 = this.getVehicleMaxHearts($$21);
+                    int $$30 = this.getVisibleVehicleHeartRows($$22) - 1;
+                    int $$9 = this.screenWidth / 2 + 6;
+                    int $$10 = this.screenHeight - 39;
+                    int $$16 = $$10 - 10;
+                    $$16 -= $$30 * 10;
+
+                    if ($$22 == 0) {
+                        $$16 -= 10;
+                    }
+
+                    int airWidth = (int) Math.floor(((double) 81 /maxOxygenBonus)*oxygenBonus);
+
+                    if (oxygenBonus > 0) {
+                        $$0.blit(StandIcons.JOJO_ICONS, $$9, $$16 - 3, 165, 171, 4+airWidth, 15);
+                    }
+                    $$0.blit(StandIcons.JOJO_ICONS, $$9, $$16 - 3, 165, 186, 89, 15);
+                }
             }
         }
     }

@@ -34,6 +34,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -660,6 +661,22 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         //Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase()+" MAX:"+this.getActivePowerPhaseMax());
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+            if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && ((StandUser) this.getSelf()).roundabout$getActive()){
+                if (this.getAirAmount() > 0) {
+                    this.getSelf().setAirSupply(((StandUser) this.getSelf()).roundabout$increaseAirSupply(this.getSelf().getAirSupply()));
+                    this.setAirAmount(Math.max(0, Math.min(this.getAirAmount() - 4, this.getMaxAirAmount())));
+                }
+            } else {
+                if (this.getSelf().isEyeInFluid(FluidTags.WATER)
+                        && !this.getSelf().level().getBlockState(BlockPos.containing(
+                        this.getSelf().getX(), this.getSelf().getEyeY(),
+                        this.getSelf().getZ())).is(Blocks.BUBBLE_COLUMN)) {
+                } else {
+                    if (((StandUser) this.getSelf()).roundabout$getActive()) {
+                            this.setAirAmount(Math.min(this.getAirAmount() + 4, this.getMaxAirAmount()));
+                    }
+                }
+            }
         }
     }
 
@@ -956,7 +973,19 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     //public void setSkillIcon(GuiGraphics context, int x, int y, ResourceLocation rl, boolean dull, @Nullable CooldownInstance cooldownInstance){
-
+    public int currentAir = this.getMaxAirAmount();
+    @Override
+    public int getAirAmount(){
+        return currentAir;
+    }
+    @Override
+    public void setAirAmount(int airAmount){
+        currentAir = airAmount;
+        if (this.getSelf() instanceof ServerPlayer) {
+            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                    PacketDataIndex.S2C_INT_OXYGEN_TANK, currentAir);
+        }
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
