@@ -30,6 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -394,6 +395,9 @@ public class StandPowers {
     }
 
     public void tickPower(){
+        if (this.self instanceof Player PE && PE.isSpectator()) {
+            ((StandUser) this.getSelf()).roundabout$setActive(false);
+        }
         if (this.self.isAlive() && !this.self.isRemoved()) {
             if (this.self.level().isClientSide && !this.kickStarted && this.getAttackTimeDuring() <= -1){
                 this.kickStarted = true;

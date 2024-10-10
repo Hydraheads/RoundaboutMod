@@ -34,6 +34,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -49,6 +50,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
@@ -1058,6 +1060,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     /** Code that brings out a user's stand, based on the stand's summon sounds and conditions. */
     public void roundabout$summonStand(Level theWorld, boolean forced, boolean sound){
+        if (((LivingEntity)(Object)this) instanceof Player PE && PE.isSpectator()){
+            return;
+        }
         boolean active;
         if (!this.roundabout$getActive() || forced) {
             //world.getEntity
@@ -1659,28 +1664,31 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
-        int air = roundabout$getStandPowers().getAirAmount();
-        if (air > 0 && roundabout$getActive()){
-            int $$1 = EnchantmentHelper.getRespiration(((LivingEntity)(Object)this));
-            air = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? air : air - 1;
-            if (air <= 0){
-                air=0;
-            }
-            roundabout$getStandPowers().setAirAmount(air);
-            cir.setReturnValue($$0);
-            return;
-        }
-        byte curse = this.roundabout$getLocacacaCurse();
-        if (curse > -1) {
-            if (curse == LocacacaCurseIndex.CHEST) {
-                int $$1 = EnchantmentHelper.getRespiration(((LivingEntity) (Object) this));
-                $$1 = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? $$0 : $$0 - 4;
-                if ($$1 < -20) {
-                    $$1 = -20;
+            int air = roundabout$getStandPowers().getAirAmount();
+            if (air > 0 && roundabout$getActive()) {
+                if (this.isEyeInFluid(FluidTags.WATER)
+                        && !this.level().getBlockState(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ())).is(Blocks.BUBBLE_COLUMN)) {
+                    int $$1 = EnchantmentHelper.getRespiration(((LivingEntity) (Object) this));
+                    air = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? air : air - 1;
+                    if (air <= 0) {
+                        air = 0;
+                    }
+                    roundabout$getStandPowers().setAirAmount(air);
+                    cir.setReturnValue($$0);
+                    return;
                 }
-                cir.setReturnValue($$1);
             }
-        }
+            byte curse = this.roundabout$getLocacacaCurse();
+            if (curse > -1) {
+                if (curse == LocacacaCurseIndex.CHEST) {
+                    int $$1 = EnchantmentHelper.getRespiration(((LivingEntity) (Object) this));
+                    $$1 = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? $$0 : $$0 - 4;
+                    if ($$1 < -20) {
+                        $$1 = -20;
+                    }
+                    cir.setReturnValue($$1);
+                }
+            }
     }
     @Inject(method = "increaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$increaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
