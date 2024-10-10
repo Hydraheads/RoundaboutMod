@@ -1,10 +1,7 @@
 package net.hydra.jojomod.networking.s2c;
 
-import net.hydra.jojomod.event.powers.StandUserClient;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -29,11 +26,7 @@ public class ForgePlaySoundPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
-                Entity User = player.level().getEntity(startPlayerID);
-                ((StandUserClient)User).roundabout$clientQueSound(soundQue);
-            }
+            MainUtil.handlePlaySoundPacket(startPlayerID,soundQue);
         });
         return true;
     }

@@ -134,23 +134,31 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
 
     @Override
     public void roundabout$clientSoundCancel(){
-
-
-        if (!this.roundabout$soundsToCancel.isEmpty()) {
-            List<Byte> $$1 = Lists.newArrayList(this.roundabout$soundsToCancel);
-            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
-            for (int i = $$1.size() - 1; i >= 0; --i) {
-                byte soundByte = $$1.get(i);
-                for (int j = $$2.size() - 1; j >= 0; --j) {
-                    PlayedSoundInstance soundI = $$2.get(j);
-                    if (((StandUser) this).roundabout$getStandPowers().getSoundCancelingGroupByte(soundI.roundaboutSoundByte) == soundByte){
-                        Minecraft.getInstance().getSoundManager().stop(soundI.roundaboutSoundInstance);
-                        $$2.remove(j);
+        if (!this.isAlive() || this.isRemoved()) {
+           List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
+           for (int j = $$2.size() - 1; j >= 0; --j) {
+                PlayedSoundInstance soundI = $$2.get(j);
+                Minecraft.getInstance().getSoundManager().stop(soundI.roundaboutSoundInstance);
+                $$2.remove(j);
+            }
+            this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
+        } else {
+            if (!this.roundabout$soundsToCancel.isEmpty()) {
+                List<Byte> $$1 = Lists.newArrayList(this.roundabout$soundsToCancel);
+                List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    byte soundByte = $$1.get(i);
+                    for (int j = $$2.size() - 1; j >= 0; --j) {
+                        PlayedSoundInstance soundI = $$2.get(j);
+                        if (((StandUser) this).roundabout$getStandPowers().getSoundCancelingGroupByte(soundI.roundaboutSoundByte) == soundByte) {
+                            Minecraft.getInstance().getSoundManager().stop(soundI.roundaboutSoundInstance);
+                            $$2.remove(j);
+                        }
                     }
                 }
+                this.roundabout$soundsToCancel = ImmutableList.of();
+                this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
             }
-            this.roundabout$soundsToCancel = ImmutableList.of();
-            this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
         }
 
         if (!this.roundabout$soundsPlaying.isEmpty()) {

@@ -1,12 +1,8 @@
 package net.hydra.jojomod.networking.s2c;
 
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -29,13 +25,7 @@ public class ForgeBlockEntityResumeTSPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
-                BlockEntity openedBlock = player.level().getBlockEntity(new BlockPos(vec3i.getX(),vec3i.getY(),vec3i.getZ()) );
-                if (openedBlock != null){
-                    ((TimeStop) player.level()).processTSBlockEntityPacket(openedBlock);
-                }
-            }
+            MainUtil.handleEntityResumeTsPacket(vec3i);
         });
         return true;
     }

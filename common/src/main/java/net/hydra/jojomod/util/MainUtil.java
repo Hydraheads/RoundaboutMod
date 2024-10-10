@@ -11,17 +11,14 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.GlaiveItem;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,6 +54,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
@@ -798,12 +796,44 @@ public class MainUtil {
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
             ((StandUser)player).roundabout$setSealedTicks(300);
         }
+    } public static void handleSimpleBytePacketS2C(byte context){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            MainUtil.handleSimpleBytePacketS2C(player,context);
+        }
     }
 
     /**A generalized packet for sending ints to the client. Context is what to do with the data int*/
     public static void handleIntPacketS2C(LocalPlayer player, int data, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(data);
+        }
+    } public static void handleIntPacketS2C(int data, byte context){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            MainUtil.handleIntPacketS2C(player,data,context);
+        }
+    }
+
+    public static void handleStopSoundPacket(int data, byte context){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            Entity User = player.level().getEntity(data);
+            ((StandUserClient)User).roundabout$clientQueSoundCanceling(context);
+        }
+    }
+
+    public static void processTSRemovePacket(int entityID){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((TimeStop) player.level()).processTSRemovePacket(entityID);
+        }
+    }
+
+    public static void handleTimeStoppingEntityPacket(int timeStoppingEntity, double x, double y, double z, double range, int duration, int maxDuration){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((TimeStop) player.level()).processTSPacket(timeStoppingEntity,x,y,z,range,duration,maxDuration);
         }
     }
 
@@ -819,6 +849,34 @@ public class MainUtil {
                 if (SE != null){
                     ((StandUser)SE).roundabout$setBlip(vec);
                 }
+            }
+        }
+    }
+    public static void handleBlipPacketS2C(int data, byte context, Vector3f vec){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            MainUtil.handleBlipPacketS2C(player,data,context,vec);
+        }
+    }
+    public static void updateDazePacket(byte dazeTime){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((StandUser) player).roundabout$setDazeTime(dazeTime);
+        }
+    }
+    public static void clashUpdatePacket(int clashOpID, float progress){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((StandUser) player).roundabout$getStandPowers().setClashOp((LivingEntity) player.level().getEntity(clashOpID));
+            ((StandUser) player).roundabout$getStandPowers().setClashOpProgress(progress);
+        }
+    }
+    public static void handleEntityResumeTsPacket(Vec3i vec3i){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            BlockEntity openedBlock = player.level().getBlockEntity(new BlockPos(vec3i.getX(),vec3i.getY(),vec3i.getZ()) );
+            if (openedBlock != null){
+                ((TimeStop) player.level()).processTSBlockEntityPacket(openedBlock);
             }
         }
     }
@@ -889,5 +947,47 @@ public class MainUtil {
         powers.updateMovesFromPacket(activePower);
         powers.setActivePower(activePower);
         powers.kickStartClient();
+    }
+
+    public static void skillCDSyncPacket(byte power, int cooldown){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
+            powers.setCooldown(power,cooldown);
+        }
+    }
+    public static void CDSyncPacket(int attackTime, int attackTimeMax, int attackTimeDuring,
+                                    byte activePower, byte activePowerPhase){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            MainUtil.syncCooldownsForAttacks(attackTime, attackTimeMax, attackTimeDuring,
+                    activePower, activePowerPhase, player);
+        }
+    }
+    public static void handleGuardUpdate(float guardPoints, boolean guardBroken){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((StandUser) player).roundabout$setGuardPoints(guardPoints);
+            ((StandUser) player).roundabout$setGuardBroken(guardBroken);
+        }
+    }
+    public static void handlePlaySoundPacket(int startPlayerID, byte soundQue){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            Entity User = player.level().getEntity(startPlayerID);
+            ((StandUserClient)User).roundabout$clientQueSound(soundQue);
+        }
+    }
+    public static void handlePowerFloatPacket(byte activePower, float data){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((StandUser) player).roundabout$getStandPowers().updatePowerFloat(activePower,data);
+        }
+    }
+    public static void handlePowerIntPacket(byte activePower, int data){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
+        }
     }
 }

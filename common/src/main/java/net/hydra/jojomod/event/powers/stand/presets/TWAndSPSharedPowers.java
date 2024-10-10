@@ -397,8 +397,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                 //this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
-                Roundabout.LOGGER.info("maxChargedTSTicks: "+this.maxChargedTSTicks+" MaxChargedTSTime: "+this.maxChargeTSTime+
+                /*Roundabout.LOGGER.info("maxChargedTSTicks: "+this.maxChargedTSTicks+" MaxChargedTSTime: "+this.maxChargeTSTime+
                         " chargedtsticks: "+this.getChargedTSTicks()+" maxtst"+this.getMaxTSTime());
+                        */
                 float tsTimeRemaining = (200+((this.maxChargedTSTicks-this.getChargedTSTicks())*5));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
                         this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
@@ -420,6 +421,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                 ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,true);
+                stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,false);
                 if (this.getSelf() instanceof Player) {
                     ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
                 }
@@ -1168,6 +1170,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
             this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100,true);
+            this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100,false);
         }
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);

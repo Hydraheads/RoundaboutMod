@@ -1,8 +1,6 @@
 package net.hydra.jojomod.networking.s2c;
 
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -48,10 +46,7 @@ public class ForgeTimeStoppingEntityPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
-                ((TimeStop) player.level()).processTSPacket(entityID,x,y,z,range,duration,maxDuration);
-            }
+            MainUtil.handleTimeStoppingEntityPacket(entityID,x,y,z,range,duration,maxDuration);
         });
         return true;
     }

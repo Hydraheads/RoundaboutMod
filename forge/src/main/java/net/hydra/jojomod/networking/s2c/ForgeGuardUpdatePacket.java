@@ -1,8 +1,6 @@
 package net.hydra.jojomod.networking.s2c;
 
-import net.hydra.jojomod.event.powers.StandUser;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -28,11 +26,7 @@ public class ForgeGuardUpdatePacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
-                ((StandUser) player).roundabout$setGuardPoints(guardPoints);
-                ((StandUser) player).roundabout$setGuardBroken(guardBroken);
-            }
+            MainUtil.handleGuardUpdate(guardPoints,guardBroken);
         });
         return true;
     }

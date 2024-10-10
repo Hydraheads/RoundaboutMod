@@ -1,9 +1,6 @@
 package net.hydra.jojomod.networking.s2c;
 
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.joml.Vector3f;
@@ -34,10 +31,7 @@ public class ForgeBlipPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
-                MainUtil.handleBlipPacketS2C(player,data,activePower,vec);
-            }
+            MainUtil.handleBlipPacketS2C(data,activePower,vec);
         });
         return true;
     }

@@ -1,8 +1,5 @@
 package net.hydra.jojomod.networking.s2c;
 
-import net.hydra.jojomod.access.IEntityAndData;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -25,9 +22,6 @@ public class ForgeNBTPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
-            }
         });
         return true;
     }

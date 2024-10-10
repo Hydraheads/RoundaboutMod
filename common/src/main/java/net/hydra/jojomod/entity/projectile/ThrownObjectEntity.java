@@ -99,7 +99,6 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide()) {
-            Roundabout.LOGGER.info("1");
             if (superThrowTicks > -1) {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
@@ -107,12 +106,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 } else {
                     if ((this.tickCount+2) % 4 == 0){
                         if (this.getItem().getItem() instanceof BlockItem){
-                            Roundabout.LOGGER.info("2");
                             ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                     this.getX(), this.getY()+0.5F, this.getZ(),
                                     0, 0, 0, 0, 0);
                         } else {
-                            Roundabout.LOGGER.info("3");
                             ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                     this.getX(), this.getY(), this.getZ(),
                                     0, 0, 0, 0, 0);
