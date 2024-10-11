@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -434,7 +435,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
                 if (!(((Mob) (Object) this) instanceof Enemy)
                         && !(((Mob) (Object) this) instanceof NeutralMob) && !this.roundabout$getFightOrFlight()) {
-
                     if (this.getTarget() != null && this.getTarget() instanceof Player PE && PE.isCreative()){
                         this.setTarget(null);
                     }
@@ -553,7 +553,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             }
         }
 
-        if (this instanceof Enemy || (this instanceof NeutralMob && !(((Mob)(Object) this) instanceof TamableAnimal))) {
+        if (this instanceof Enemy || this.getTarget() != null) {
             if (((StandUser) this).roundabout$isRestrained()) {
                 int ticks = ((StandUser) this).roundabout$getRestrainedTicks();
                 if (ticks < 50) {

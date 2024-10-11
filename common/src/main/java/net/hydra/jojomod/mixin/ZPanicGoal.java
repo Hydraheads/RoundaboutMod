@@ -7,6 +7,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.PolarBear;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
@@ -55,10 +57,20 @@ public abstract class ZPanicGoal extends Goal {
     private Class<?>[] roundabout$toIgnoreAlert;
 
 
+    @Unique
+    public boolean roundabout$getPanicGoal(){
+        if (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty() && (!(this.mob instanceof Wolf) &&
+                !(this.mob instanceof PolarBear))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     @Inject(method = "canContinueToUse", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$canContinueToUse(CallbackInfoReturnable<Boolean> cir) {
-        if (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty()) {
+        if (roundabout$getPanicGoal()) {
             cir.setReturnValue(false);
             LivingEntity $$0 = this.mob.getTarget();
             if ($$0 == null) {
@@ -95,7 +107,7 @@ public abstract class ZPanicGoal extends Goal {
     }
     @Inject(method = "canUse", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$canUse(CallbackInfoReturnable<Boolean> cir) {
-        if (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty()){
+        if (roundabout$getPanicGoal()){
             int $$0 = this.mob.getLastHurtByMobTimestamp();
             LivingEntity $$1 = this.mob.getLastHurtByMob();
             if ($$0 != this.roundabout$timestamp && $$1 != null) {
@@ -112,7 +124,7 @@ public abstract class ZPanicGoal extends Goal {
 
     @Inject(method = "start", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$start(CallbackInfo ci) {
-        if (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty()){
+        if (roundabout$getPanicGoal()){
             this.mob.setTarget(this.mob.getLastHurtByMob());
             this.roundabout$targetMob = this.mob.getTarget();
             this.roundabout$timestamp = this.mob.getLastHurtByMobTimestamp();
@@ -127,7 +139,7 @@ public abstract class ZPanicGoal extends Goal {
 
     @Inject(method = "stop", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$stop(CallbackInfo ci) {
-        if (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty()){
+        if (roundabout$getPanicGoal()){
             this.mob.setTarget(null);
             this.roundabout$targetMob = null;
             ci.cancel();
