@@ -1,7 +1,7 @@
 package net.hydra.jojomod.networking.packet.s2c;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -14,7 +14,7 @@ public class GenericS2CPacket {
                                FriendlyByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {
             byte activePower = buf.readByte();
-            MainUtil.handleSimpleBytePacketS2C(client.player,activePower);
+            ClientUtil.handleSimpleBytePacketS2C(client.player,activePower);
         }
     }
 
@@ -23,7 +23,7 @@ public class GenericS2CPacket {
         if (client.player != null) {
             byte activePower = buf.readByte();
             int data = buf.readInt();
-            MainUtil.handleIntPacketS2C(client.player,data,activePower);
+            ClientUtil.handleIntPacketS2C(client.player,data,activePower);
         }
     }
 
@@ -33,7 +33,7 @@ public class GenericS2CPacket {
             byte activePower = buf.readByte();
             int data = buf.readInt();
             Vector3f location = buf.readVector3f();
-            MainUtil.handleBlipPacketS2C(client.player, data, activePower, location);
+            ClientUtil.handleBlipPacketS2C(client.player, data, activePower, location);
         }
     }
 }

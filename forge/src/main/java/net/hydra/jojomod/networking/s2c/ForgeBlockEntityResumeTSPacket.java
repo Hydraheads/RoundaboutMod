@@ -1,5 +1,6 @@
 package net.hydra.jojomod.networking.s2c;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,7 +26,7 @@ public class ForgeBlockEntityResumeTSPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            MainUtil.handleEntityResumeTsPacket(vec3i);
+            ClientUtil.handleEntityResumeTsPacket(vec3i);
         });
         return true;
     }

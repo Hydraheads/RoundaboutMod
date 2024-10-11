@@ -54,6 +54,7 @@ public class FabricSounds {
         addSound(ModSounds.STAND_THEWORLD_MUDA4_SOUND_ID, ModSounds.STAND_THEWORLD_MUDA4_SOUND_EVENT);
         addSound(ModSounds.STAND_THEWORLD_MUDA5_SOUND_ID, ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT);
 
+        addSound(ModSounds.STAR_FINGER_ID, ModSounds.STAR_FINGER_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_ID, ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_RUSH_ID, ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_RUSH_2_ID, ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT);

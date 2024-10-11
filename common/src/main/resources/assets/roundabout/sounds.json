@@ -221,6 +221,12 @@
       "roundabout:stand_theworld_muda5"
     ]
   },
+  "star_finger": {
+    "subtitle": "sounds.roundabout.star_finger",
+    "sounds": [
+      "roundabout:star_finger"
+    ]
+  },
   "star_platinum_ora": {
     "subtitle": "sounds.roundabout.star_platinum_ora",
     "sounds": [

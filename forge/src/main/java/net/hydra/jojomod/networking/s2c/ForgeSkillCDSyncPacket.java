@@ -1,5 +1,6 @@
 package net.hydra.jojomod.networking.s2c;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -26,7 +27,7 @@ public class ForgeSkillCDSyncPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            MainUtil.skillCDSyncPacket(power, cooldown);
+            ClientUtil.skillCDSyncPacket(power, cooldown);
         });
         return true;
     }

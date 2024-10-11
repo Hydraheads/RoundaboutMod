@@ -1,5 +1,6 @@
 package net.hydra.jojomod.networking.s2c;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -46,7 +47,7 @@ public class ForgeTimeStoppingEntityPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
-            MainUtil.handleTimeStoppingEntityPacket(entityID,x,y,z,range,duration,maxDuration);
+            ClientUtil.handleTimeStoppingEntityPacket(entityID,x,y,z,range,duration,maxDuration);
         });
         return true;
     }
