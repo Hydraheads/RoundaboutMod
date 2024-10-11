@@ -5,9 +5,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
-import net.hydra.jojomod.mixin.ZMob;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -123,7 +121,9 @@ public class StandArrowEntity extends AbstractArrow {
                     ((StandUser)$$1).roundabout$setActive(false);
                 }
                 ((StandUser)$$1).roundabout$setStandDisc(ItemStack.EMPTY);
-                ((IMob)$$1).roundabout$setWorthy(false);
+                if ($$1 instanceof Mob mb) {
+                    ((IMob) $$1).roundabout$setWorthy(false);
+                }
                 particleStorm(this.level(),$$1);
                 this.discard();
                 return;

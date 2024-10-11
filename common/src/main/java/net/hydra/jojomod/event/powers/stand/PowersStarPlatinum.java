@@ -3,12 +3,15 @@ package net.hydra.jojomod.event.powers.stand;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
@@ -17,6 +20,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
+
+import java.util.Objects;
 
 public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public PowersStarPlatinum(LivingEntity self) {
@@ -95,24 +100,42 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide && !this.isClashing() && !((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
             if (keyIsDown) {
-                if (this.canScope()) {
-                    if (scopeTicks == -1) {
-                        scopeTicks = 6;
-                        int newLevel = scopeLevel + 1;
-                        if (newLevel > 3) {
-                            scopeLevel = 0;
-                        } else {
-                            this.getSelf().playSound(ModSounds.STAR_PLATINUM_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
-                            scopeLevel = newLevel;
+                    if (this.canScope()) {
+                        if (scopeTicks == -1) {
+                            scopeTicks = 6;
+                            int newLevel = scopeLevel + 1;
+                            if (newLevel > 3) {
+                                scopeLevel = 0;
+                            } else {
+                                this.getSelf().playSound(ModSounds.STAR_PLATINUM_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
+                                scopeLevel = newLevel;
+                            }
+                        }
+                    } else {
+                        if (!hold1) {
+                            hold1 = true;
+                            if (options.keyShift.isDown()) {
+                                super.buttonInput1(keyIsDown, options);
+                            } else {
+                                //Star Finger here
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                            }
                         }
                     }
-                } else {
-                    super.buttonInput1(keyIsDown,options);
-                }
             } else {
                 hold1 = false;
             }
         }
+    }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+
+        if (this.getActivePower() == PowerIndex.POWER_1){
+            stopSoundsIfNearby(STAR_FINGER, 32, false);
+        }
+        return super.tryPower(move,forced);
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
@@ -132,6 +155,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else {
             if (this.getSelf().isShiftKeyDown()){
                 setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
+
             }
         }
 
@@ -198,11 +224,30 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
-
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.POWER_1) {
+            return this.starFinger();
+        }
         return super.setPowerOther(move,lastMove);
     }
+    public static final byte STAR_FINGER = 80;
+
+    public boolean starFinger(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1);
+            playSoundsIfNearby(STAR_FINGER, 32, false);
+            this.animateStand((byte)0);
+            this.poseStand(OffsetIndex.GUARD);
+            //stand.setYRot(this.getSelf().getYHeadRot() % 360);
+            //stand.setXRot(this.getSelf().getXRot());
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= 100){
@@ -256,6 +301,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
             return ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT;
+        } else if (soundChoice == STAR_FINGER){
+            return ModSounds.STAR_FINGER_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {

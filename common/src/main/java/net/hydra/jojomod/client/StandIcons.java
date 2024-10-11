@@ -59,6 +59,8 @@ public class StandIcons {
     public static final ResourceLocation THE_WORLD_GRAB_MOB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/grab_mob.png");
 
+    public static final ResourceLocation STAR_PLATINUM_FINGER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/star_finger.png");
     public static final ResourceLocation STAR_PLATINUM_IMPALE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/impale.png");
     public static final ResourceLocation STAND_LEAP_STAR_PLATINUM = new ResourceLocation(Roundabout.MOD_ID,

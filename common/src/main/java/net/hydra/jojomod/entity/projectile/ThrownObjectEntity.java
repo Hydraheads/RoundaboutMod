@@ -284,7 +284,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         float damage = 1;
         if (this.getItem().getItem() instanceof BlockItem){
             float DT =((BlockItem)this.getItem().getItem()).getBlock().defaultDestroyTime();
-            if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof GlassBlock) {
+            if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof AbstractGlassBlock ||
+                    (((BlockItem) this.getItem().getItem()).getBlock()) instanceof StainedGlassPaneBlock ||
+                    this.getItem().is(Items.GLASS_PANE)) {
                 damage = 12;
             } else if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof CactusBlock) {
                 damage = 10;
@@ -454,8 +456,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
                 if (this.getItem().getItem() instanceof BlockItem && MainUtil.isThrownBlockItem(this.getItem().getItem())) {
                     Block blk = ((BlockItem) this.getItem().getItem()).getBlock();
-                    if (blk instanceof CactusBlock || blk instanceof GlassBlock || blk instanceof BarbedWireBlock
-                            || blk instanceof BarbedWireBundleBlock) {
+                    if (blk instanceof CactusBlock || blk instanceof AbstractGlassBlock ||
+                            blk instanceof StainedGlassPaneBlock || blk instanceof BarbedWireBlock
+                            || blk instanceof BarbedWireBundleBlock || this.getItem().is(Items.GLASS_PANE)) {
                         MainUtil.makeBleed($$1, 0, 300, this);
                     }
 
