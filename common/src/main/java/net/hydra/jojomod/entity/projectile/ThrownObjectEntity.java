@@ -214,6 +214,21 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                             pos.getZ()+0.5));
                         }
                     }
+                } else if (this.getItem().is(Items.BRICK) || this.getItem().is(Items.NETHER_BRICK)) {
+                    Block blkk = this.level().getBlockState($$0.getBlockPos()).getBlock();
+                    if (this.places && blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock
+                            || blkk.defaultBlockState().is(Blocks.GLASS_PANE)){
+                        if (this.level().removeBlock($$0.getBlockPos(),false)){
+                            blockBreakParticles(blkk,
+                                    new Vec3($$0.getBlockPos().getX()+0.5,
+                                            $$0.getBlockPos().getY()+0.5,
+                                            $$0.getBlockPos().getZ()+0.5));
+                            this.playSound(blkk.defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                            return;
+                        }
+                    } else {
+                        dropItem(pos);
+                    }
                 } else if (this.getItem().getItem() instanceof BoneMealItem) {
                     if (this.places && useBonemeal(this.getItem(), $$0)){
                     } else {
@@ -249,7 +264,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
             }
         }
-        this.discard();
+        if (!this.level().isClientSide() || !(this.getItem().is(Items.BRICK) || this.getItem().is(Items.NETHER_BRICK))) {
+            this.discard();
+        }
 
     }
 
