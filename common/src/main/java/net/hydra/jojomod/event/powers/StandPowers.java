@@ -1322,6 +1322,9 @@ public class StandPowers {
 
     public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
         if (DamageHandler.StandDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
             if (target instanceof LivingEntity && knockbackStrength > 0) {
                 ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
             }
