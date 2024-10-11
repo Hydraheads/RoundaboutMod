@@ -102,7 +102,7 @@ public class MainUtil {
         if (mob instanceof AbstractVillager){
             return 0.3;
         }
-        return 0.2;
+        return 0.15;
     }
     public static double getStandUserBreedBonus(Mob mob) {
         if (mob instanceof AbstractVillager){
