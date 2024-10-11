@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +35,9 @@ public abstract class ForgeForgeGui extends Gui {
             if (oxygenBonus > -1 && ((StandUser)minecraft.player).roundabout$getActive()) {
                 int $$28 = minecraft.player.getMaxAirSupply();
                 int $$29 = Math.min(minecraft.player.getAirSupply(), $$28);
-                if (minecraft.player.isEyeInFluid(FluidTags.WATER)  || oxygenBonus < maxOxygenBonus) {
+                boolean $$3 = !minecraft.player.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing(minecraft.player) &&
+                        (!minecraft.player.getAbilities().invulnerable);
+                if ((minecraft.player.isEyeInFluid(FluidTags.WATER) && $$3)  || oxygenBonus < maxOxygenBonus) {
                     LivingEntity $$21 = roundabout$getPlayerVehicleWithHealth();
                     int $$22 = roundabout$getVehicleMaxHearts($$21);
                     int $$30 = roundabout$etVisibleVehicleHeartRows($$22) - 1;

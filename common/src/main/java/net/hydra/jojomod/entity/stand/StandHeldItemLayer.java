@@ -44,9 +44,9 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
     protected void renderArmWithItem(LivingEntity p_117185_, ItemStack p_117186_, ItemDisplayContext p_270970_, HumanoidArm p_117188_, PoseStack p_117189_, MultiBufferSource p_117190_, int p_117191_) {
         if (!p_117186_.isEmpty()) {
             p_117189_.pushPose();
-            float shiftZ = -5;
+            float shiftZ = 1.3F;
             float shiftY = 1;
-            float shiftX = 4.3F;
+            float shiftX = 3F;
             if (MainUtil.isThrownBlockItem((p_117186_.getItem()))){
                 if (((StandEntity)p_117185_).getUser() != null) {
                     shiftZ = 0 - Math.max(0,Math.min(((StandUser)((StandEntity) p_117185_).getUser()).roundabout$getAttackTimeDuring(),10F))*1.4F;
@@ -55,7 +55,11 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
                 }
             }
             this.getParentModel().translateToHand(p_117188_, p_117189_, shiftZ, shiftY, shiftX);
-            p_117189_.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            if (MainUtil.isThrownBlockItem((p_117186_.getItem()))) {
+                p_117189_.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            } else {
+                p_117189_.mulPose(Axis.XP.rotationDegrees(-65.0F));
+            }
             p_117189_.mulPose(Axis.YP.rotationDegrees(180.0F));
             boolean flag = p_117188_ == HumanoidArm.LEFT;
             p_117189_.translate((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);

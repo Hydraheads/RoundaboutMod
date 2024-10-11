@@ -41,6 +41,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Illusioner;
@@ -1660,22 +1661,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Shadow
+    public boolean canBreatheUnderwater() {
+        return false;
+    }
 
     /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
+        boolean $$0P = ((LivingEntity)(Object)this) instanceof Player;
             int air = roundabout$getStandPowers().getAirAmount();
             if (air > 0 && roundabout$getActive()) {
                 if (this.isEyeInFluid(FluidTags.WATER)
                         && !this.level().getBlockState(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ())).is(Blocks.BUBBLE_COLUMN)) {
-                    int $$1 = EnchantmentHelper.getRespiration(((LivingEntity) (Object) this));
-                    air = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? air : air - 1;
-                    if (air <= 0) {
-                        air = 0;
+                    boolean $$3 = !this.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing((LivingEntity) (Object)this) &&
+                            (!$$0P || !((Player)((LivingEntity)(Object)this)).getAbilities().invulnerable);
+                    if ($$3) {
+
+                        int $$1 = EnchantmentHelper.getRespiration(((LivingEntity) (Object) this));
+                        air = $$1 > 0 && this.random.nextInt($$1 + 1) > 0 ? air : air - 1;
+                        if (air <= 0) {
+                            air = 0;
+                        }
+                        roundabout$getStandPowers().setAirAmount(air);
+                        cir.setReturnValue($$0);
+                        return;
                     }
-                    roundabout$getStandPowers().setAirAmount(air);
-                    cir.setReturnValue($$0);
-                    return;
                 }
             }
             byte curse = this.roundabout$getLocacacaCurse();
