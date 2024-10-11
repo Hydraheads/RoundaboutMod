@@ -25,7 +25,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -754,6 +756,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())){
+            boolean water = (this.getSelf() instanceof WaterAnimal || this.getSelf() instanceof Guardian);
             if (this.attackTimeDuring <= -1) {
                 if (!this.getSelf().isPassenger()) {
                     teleportTime = Math.max(0,teleportTime-1);
@@ -767,7 +770,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 p =getLookAtEntityPitch(this.getSelf(), attackTarget);
                                 y = getLookAtEntityYaw(this.getSelf(), attackTarget);
                             }
-                            if (this.teleport()){
+                            if (this.teleport(water)){
                                 if (this.getSelf() instanceof Villager){
                                     for (int i = 0; i< 4; i++) {
                                         KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), ModItems.KNIFE.getDefaultInstance(),pos);
@@ -792,7 +795,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 postTPStall = 8;
                             }
                         } else if (dist < 40) {
-                            if (this.teleportTowards(attackTarget)) {
+                            if (this.teleportTowards(attackTarget,water)) {
                                 if (this.getSelf() instanceof Creeper){
                                     this.teleportTime = 100;
                                 } else {
@@ -815,28 +818,28 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
 
-    protected boolean teleport() {
+    protected boolean teleport(boolean water) {
         if (!this.getSelf().level().isClientSide() && this.getSelf().isAlive()) {
             double $$0 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
             double $$1 = this.getSelf().getY() + (double)(this.getSelf().getRandom().nextInt(16) - 8);
             double $$2 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
-            return this.teleport($$0, $$1, $$2);
+            return this.teleport($$0, $$1, $$2,water);
         } else {
             return false;
         }
     }
 
-    boolean teleportTowards(Entity $$0) {
+    boolean teleportTowards(Entity $$0,boolean water) {
         Vec3 $$1 = new Vec3(this.getSelf().getX() - $$0.getX(), this.getSelf().getY(0.5) - $$0.getEyeY(), this.getSelf().getZ() - $$0.getZ());
         $$1 = $$1.normalize();
         double $$2 = 16.0;
         double $$3 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 8.0 - $$1.x * 16.0;
         double $$4 = this.getSelf().getY() + (double)(this.getSelf().getRandom().nextInt(16) - 8) - $$1.y * 16.0;
         double $$5 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 8.0 - $$1.z * 16.0;
-        return this.teleport($$3, $$4, $$5);
+        return this.teleport($$3, $$4, $$5, water);
     }
 
-    private boolean teleport(double $$0, double $$1, double $$2) {
+    private boolean teleport(double $$0, double $$1, double $$2,boolean water) {
         BlockPos.MutableBlockPos $$3 = new BlockPos.MutableBlockPos($$0, $$1, $$2);
 
         while ($$3.getY() > this.getSelf().level().getMinBuildHeight() && !this.getSelf().level().getBlockState($$3).blocksMotion()) {
@@ -848,7 +851,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         boolean $$6 = $$4.getFluidState().is(FluidTags.WATER);
         if ($$5 && !$$6) {
             Vec3 $$7 = this.getSelf().position();
-            boolean $$8 = randomTeleport($$0, $$1, $$2, true);
+            boolean $$8 = randomTeleport($$0, $$1, $$2, true,water);
             if ($$8) {
                 if (!this.getSelf().isSilent()) {
                     this.getSelf().level().playSound(null, this.getSelf().xo, this.getSelf().yo,
@@ -863,7 +866,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
     }
 
-    public boolean randomTeleport(double $$0, double $$1, double $$2, boolean $$3) {
+    public boolean randomTeleport(double $$0, double $$1, double $$2, boolean $$3,boolean water) {
         double $$4 = this.getSelf().getX();
         double $$5 = this.getSelf().getY();
         double $$6 = this.getSelf().getZ();
@@ -887,7 +890,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
             if ($$11) {
                 AABB bb2 = this.getSelf().getDimensions(this.getSelf().getPose()).makeBoundingBox($$0,$$7,$$2);
-                if ($$10.noCollision(null,bb2) && !$$10.containsAnyLiquid(bb2)) {
+                if ($$10.noCollision(null,bb2) &&
+                        ((!water && !$$10.containsAnyLiquid(bb2)) ||
+                                (water && $$10.containsAnyLiquid(bb2)))) {
                     $$8 = true;
                     packetNearby(new Vector3f((float) $$0, (float) $$7, (float) $$2));
                     this.getSelf().teleportTo($$0, $$7, $$2);

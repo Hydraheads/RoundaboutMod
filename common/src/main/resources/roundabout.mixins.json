@@ -12,6 +12,7 @@
     "TimeStopWorld",
     "WorldTickServer",
     "ZAbstractArrow",
+    "ZAbstractSchoolingFish",
     "ZAnimal",
     "ZBeehiveBlock",
     "ZBlaze",
