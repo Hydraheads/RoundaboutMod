@@ -1156,8 +1156,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
                 if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
                     float rot;
-                    if (OT == OffsetIndex.BENEATH){
+                    if (OT == OffsetIndex.BENEATH) {
                         rot = (roundabout$User.getYRot()) % 360;
+                    } else if (OT == OffsetIndex.GUARD_AND_TRACE){
+                        rot = 0;
+                        //stand.setYRot(roundabout$getStandPowers().getLookAtPlaceYaw(stand,blockCenterPlus));
+                        //stand.setXRot(roundabout$getStandPowers().getLookAtPlacePitch(stand,blockCenterPlus));
                     } else {
                         rot = (float) ((roundabout$User.getYHeadRot() -(stand.getPunchYaw(stand.getAnchorPlace(),
                                 0.36))) % 360);

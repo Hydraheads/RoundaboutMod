@@ -26,6 +26,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
 
@@ -148,22 +151,50 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public void updateStarFinger(){
         if (this.attackTimeDuring > -1) {
+            StandEntity stand = getStandEntity(this.self);
             if (this.attackTimeDuring > 40) {
+                if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
+                    SE.setFingerLength(1F);
+                }
                 this.setAttackTimeDuring(-10);
             } else if (this.attackTimeDuring>=24){
+                float distanceOut = 0;
+                if (this.attackTimeDuring <= 35){
+                    distanceOut = Math.min(3*(this.attackTimeDuring-23),10);
+                } else {
+                    distanceOut = Math.max(3*(40-this.attackTimeDuring),1);
+                }
                 if (this.self instanceof Player){
                     if (isPacketPlayer()){
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(20F, FLOAT_STAR_FINGER_SIZE);
+                        BlockHitResult dd = getAheadVec(distanceOut);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
+                                Math.max(dd.distanceTo(this.getSelf())*16-32,1), FLOAT_STAR_FINGER_SIZE);
                     }
                 } else {
-                    StandEntity stand = getStandEntity(this.self);
+                    BlockHitResult dd = getAheadVec(distanceOut);
                     if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
-                        SE.setFingerLength(20F);
+                        SE.setFingerLength((float) Math.max((dd.distanceTo(this.getSelf())*16-32),1));
                     }
                 }
             }
         }
     }
+
+    public BlockHitResult getAheadVec(float distOut){
+        Vec3 vec3d = this.self.getEyePosition(0);
+        Vec3 vec3d2 = this.self.getViewVector(0);
+        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                this.getSelf()));
+    }
+
+    public Vec3 getAheadVec2(float distOut){
+        Vec3 vec3d = this.self.getEyePosition(0);
+        Vec3 vec3d2 = this.self.getViewVector(0);
+        return vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut);
+    }
+
 
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -276,7 +307,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             this.setActivePower(PowerIndex.POWER_1);
             playSoundsIfNearby(STAR_FINGER, 32, false);
             this.animateStand((byte)82);
-            this.poseStand(OffsetIndex.GUARD);
+            this.poseStand(OffsetIndex.GUARD_AND_TRACE);
             //stand.setYRot(this.getSelf().getYHeadRot() % 360);
             //stand.setXRot(this.getSelf().getXRot());
             return true;

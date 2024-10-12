@@ -5,6 +5,7 @@
   "values": [
     "#minecraft:is_jungle",
     "#minecraft:is_forest",
+    "#minecraft:is_mountain",
     "#minecraft:is_taiga",
     "minecraft:desert",
     "minecraft:plains",

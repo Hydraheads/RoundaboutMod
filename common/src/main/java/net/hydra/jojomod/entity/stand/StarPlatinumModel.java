@@ -43,7 +43,6 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 			if (!mc.isPaused() && !(((TimeStop) entity.level()).CanTimeStopEntity(User))) {
 				float tickDelta = mc.getDeltaFrameTime();
 				entity.fingerInterpolation = MainUtil.controlledLerp(tickDelta, entity.fingerInterpolation, entity.getFingerLength(), 1f);
-				Roundabout.LOGGER.info(""+entity.fingerInterpolation);
 				finger.yScale = entity.fingerInterpolation;
 			}
 		}

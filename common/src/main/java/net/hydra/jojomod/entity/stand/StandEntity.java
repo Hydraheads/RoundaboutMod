@@ -714,7 +714,7 @@ public abstract class StandEntity extends Mob{
             float addXYZ = 0.3F;
             float addXZ = 0.7F;
 
-            if (ot == OffsetIndex.GUARD) {
+            if (ot == OffsetIndex.GUARD || ot == OffsetIndex.GUARD_AND_TRACE) {
                 addXZ-= 0.015F;
                 distanceFront = 1.05F;
             } else {

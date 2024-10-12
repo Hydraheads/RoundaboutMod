@@ -11,6 +11,7 @@ public class OffsetIndex {
     public static final byte FLOAT = 5;
     public static final byte BENEATH = 6;
     public static final byte FOLLOW_NOLEAN = 7;
+    public static final byte GUARD_AND_TRACE = 8;
 
 
 
@@ -21,7 +22,7 @@ public class OffsetIndex {
     public static byte OffsetStyle(byte offsetType){
         if (offsetType == FOLLOW || offsetType == FOLLOW_NOLEAN){
             return FOLLOW_STYLE;
-        } else if (offsetType == ATTACK || offsetType == GUARD || offsetType == BENEATH){
+        } else if (offsetType == ATTACK || offsetType == GUARD || offsetType == BENEATH || offsetType == GUARD_AND_TRACE){
             return FIXED_STYLE;
         } else if (offsetType == LOOSE){
             return LOOSE_STYLE;
