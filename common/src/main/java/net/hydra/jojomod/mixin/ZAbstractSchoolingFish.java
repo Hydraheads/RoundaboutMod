@@ -21,7 +21,7 @@ public abstract class ZAbstractSchoolingFish extends AbstractFish {
     }
 
     @Inject(method = "pathToLeader", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$spawnChildFromBreeding(CallbackInfo ci) {
+    private void roundabout$pathToLeader(CallbackInfo ci) {
         if (!((StandUser)this).roundabout$getStandDisc().isEmpty() && this.getTarget() != null){
             ci.cancel();
         }
