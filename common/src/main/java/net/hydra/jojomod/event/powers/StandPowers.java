@@ -31,10 +31,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
@@ -1267,6 +1264,14 @@ public class StandPowers {
         return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
 
+
+    public BlockHitResult getAheadVec(float distOut){
+        Vec3 vec3d = this.self.getEyePosition(0);
+        Vec3 vec3d2 = this.self.getViewVector(0);
+        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                this.getSelf()));
+    }
     /** This code grabs an entity in front of you at the specified range, raycasting is used*/
     public Entity rayCastEntity(LivingEntity User, float reach){
         float tickDelta = 0;

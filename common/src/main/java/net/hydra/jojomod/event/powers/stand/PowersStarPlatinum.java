@@ -78,6 +78,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void tickPower() {
         super.tickPower();
         if (this.self.isAlive() && !this.self.isRemoved()) {
+            if (this.getActivePower() != PowerIndex.POWER_1){
+                StandEntity stand = getStandEntity(this.self);
+                if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
+                    if (this.getSelf() instanceof Player && isPacketPlayer()) {
+                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                    }
+                        SE.setFingerLength(1F);
+                }
+            }
+
             if (scopeTicks > -1){
                 scopeTicks--;
             }
@@ -129,8 +139,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             } else {
                                 //Star Finger here
                                 hold1 = true;
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                    if (this.activePower != PowerIndex.POWER_1) {
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                    }
+                                }
                             }
                         }
                     }
@@ -154,7 +168,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             StandEntity stand = getStandEntity(this.self);
             if (this.attackTimeDuring > 40) {
                 if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
-                    SE.setFingerLength(1F);
+                    if (this.self instanceof Player) {
+                        if (isPacketPlayer()) {
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                        }
+                    }
                 }
                 this.setAttackTimeDuring(-10);
             } else if (this.attackTimeDuring>=24){
@@ -180,13 +198,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
-    public BlockHitResult getAheadVec(float distOut){
-        Vec3 vec3d = this.self.getEyePosition(0);
-        Vec3 vec3d2 = this.self.getViewVector(0);
-        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
-                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
-                this.getSelf()));
-    }
 
     public Vec3 getAheadVec2(float distOut){
         Vec3 vec3d = this.self.getEyePosition(0);
@@ -201,6 +212,13 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
         if (this.getActivePower() == PowerIndex.POWER_1){
             stopSoundsIfNearby(STAR_FINGER, 32, false);
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
+                if (this.getSelf() instanceof Player && isPacketPlayer()) {
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                }
+                SE.setFingerLength(1F);
+            }
         }
         return super.tryPower(move,forced);
     }

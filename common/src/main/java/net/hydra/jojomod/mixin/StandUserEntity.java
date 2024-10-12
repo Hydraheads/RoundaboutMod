@@ -56,6 +56,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -1159,9 +1160,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (OT == OffsetIndex.BENEATH) {
                         rot = (roundabout$User.getYRot()) % 360;
                     } else if (OT == OffsetIndex.GUARD_AND_TRACE){
-                        rot = 0;
-                        //stand.setYRot(roundabout$getStandPowers().getLookAtPlaceYaw(stand,blockCenterPlus));
-                        //stand.setXRot(roundabout$getStandPowers().getLookAtPlacePitch(stand,blockCenterPlus));
+                        BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
+                        rot = (roundabout$User.getYHeadRot()) % 360;
+                        stand.setXRot(roundabout$getStandPowers().getLookAtPlacePitch(stand,dd.getBlockPos().getCenter()));
                     } else {
                         rot = (float) ((roundabout$User.getYHeadRot() -(stand.getPunchYaw(stand.getAnchorPlace(),
                                 0.36))) % 360);
