@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -41,8 +42,9 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 			LivingEntity User = entity.getUser();
 			if (!mc.isPaused() && !(((TimeStop) entity.level()).CanTimeStopEntity(User))) {
 				float tickDelta = mc.getDeltaFrameTime();
-				finger.yScale = entity.getFingerLength();
-				Roundabout.LOGGER.info(""+entity.getFingerLength());
+				entity.fingerInterpolation = MainUtil.controlledLerp(tickDelta, entity.fingerInterpolation, entity.getFingerLength(), 1f);
+				Roundabout.LOGGER.info(""+entity.fingerInterpolation);
+				finger.yScale = entity.fingerInterpolation;
 			}
 		}
 		super.defaultModifiers(entity);

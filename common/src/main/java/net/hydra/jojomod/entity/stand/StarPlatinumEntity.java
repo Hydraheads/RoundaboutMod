@@ -109,6 +109,7 @@ public class StarPlatinumEntity extends StandEntity {
         }
     }
 
+    public float fingerInterpolation = 1F;
     public final void setFingerLength(float length) {
         this.entityData.set(FINGER_LENGTH, length);
     }
