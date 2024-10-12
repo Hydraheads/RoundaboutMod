@@ -742,6 +742,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             updateImpale();
         }
+        super.updateUniqueMoves();
     }
 
 

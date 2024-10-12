@@ -3,7 +3,10 @@ package net.hydra.jojomod.event.powers.stand;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -16,12 +19,17 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
 import java.util.Objects;
+
+import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
 
 public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public PowersStarPlatinum(LivingEntity self) {
@@ -113,11 +121,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         }
                     } else {
                         if (!hold1) {
-                            hold1 = true;
                             if (options.keyShift.isDown()) {
                                 super.buttonInput1(keyIsDown, options);
                             } else {
                                 //Star Finger here
+                                hold1 = true;
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                             }
@@ -125,6 +133,34 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     }
             } else {
                 hold1 = false;
+            }
+        }
+    }
+
+    @Override
+    public void updateUniqueMoves() {
+        /*Tick through Time Stop Charge*/
+        if (this.getActivePower() == PowerIndex.POWER_1) {
+            this.updateStarFinger();
+        }
+        super.updateUniqueMoves();
+    }
+
+    public void updateStarFinger(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 40) {
+                this.setAttackTimeDuring(-10);
+            } else if (this.attackTimeDuring>=24){
+                if (this.self instanceof Player){
+                    if (isPacketPlayer()){
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(20F, FLOAT_STAR_FINGER_SIZE);
+                    }
+                } else {
+                    StandEntity stand = getStandEntity(this.self);
+                    if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
+                        SE.setFingerLength(20F);
+                    }
+                }
             }
         }
     }
@@ -239,7 +275,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
             playSoundsIfNearby(STAR_FINGER, 32, false);
-            this.animateStand((byte)0);
+            this.animateStand((byte)82);
             this.poseStand(OffsetIndex.GUARD);
             //stand.setYRot(this.getSelf().getYHeadRot() % 360);
             //stand.setXRot(this.getSelf().getXRot());

@@ -1,15 +1,24 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.Unique;
 
 public class StarPlatinumEntity extends StandEntity {
 
     public StarPlatinumEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
+    @Unique
+    private static final EntityDataAccessor<Float> FINGER_LENGTH = SynchedEntityData.defineId(StarPlatinumEntity.class,
+            EntityDataSerializers.FLOAT);
 
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();
@@ -22,6 +31,7 @@ public class StarPlatinumEntity extends StandEntity {
     public final AnimationState entityGrabAnimation = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState impale = new AnimationState();
+    public final AnimationState starFinger = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
@@ -66,16 +76,19 @@ public class StarPlatinumEntity extends StandEntity {
             } else {
                 this.itemThrowAnimation.stop();
             }
+
             if (this.getAnimation() == 36) {
                 this.blockRetractAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockRetractAnimation.stop();
             }
+
             if (this.getAnimation() == 37) {
                 this.itemRetractAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemRetractAnimation.stop();
             }
+
             if (this.getAnimation() == 38) {
                 this.entityGrabAnimation.startIfStopped(this.tickCount);
             } else {
@@ -87,7 +100,26 @@ public class StarPlatinumEntity extends StandEntity {
             } else {
                 this.impale.stop();
             }
+
+            if (this.getAnimation() == 82) {
+                this.starFinger.startIfStopped(this.tickCount);
+            } else {
+                this.starFinger.stop();
+            }
         }
+    }
+
+    public final void setFingerLength(float length) {
+        this.entityData.set(FINGER_LENGTH, length);
+    }
+
+    public final float getFingerLength() {
+        return this.entityData.get(FINGER_LENGTH);
+    }
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(FINGER_LENGTH, 1F);
     }
 
     public int tsReleaseTime = 0;

@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -815,6 +816,10 @@ public class MainUtil {
                 if (player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
                     MainUtil.makeBleed(player,0,200,null);
                 }
+            }
+        } else if (context == PacketDataIndex.FLOAT_STAR_FINGER_SIZE) {
+            if (((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SP){
+                SP.setFingerLength(data);
             }
         }
     }
