@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -30,6 +31,8 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
@@ -163,6 +166,79 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         super.updateUniqueMoves();
     }
 
+    public List<Entity> doFinger(float distance){
+        float halfReach = (float) (distance*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
+        return FingerGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), distance);
+    }
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (this.getActivePower() == PowerIndex.POWER_1){
+            fingerDamage(target);
+        } else {
+            super.handleStandAttack(player,target);
+        }
+    }
+
+    public void doFingerHit(List<Entity> entities){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : hitEntities) {
+            if (this.isPacketPlayer()){
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(value.getId(), PacketDataIndex.INT_STAND_ATTACK);
+            } else {
+                fingerDamage(value);
+            }
+        }
+    }
+    public void fingerDamage(Entity entity){
+        float pow = getFingerDamage(entity);
+        float knockbackStrength = 1F;
+        if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+            this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+            if (entity instanceof LivingEntity LE){
+                MainUtil.makeBleed(LE,0,200,this.self);
+            }
+        } else {
+            knockShield2(entity, 40);
+        }
+    }
+    public float getFingerDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2F;
+        } else {
+            return 5;
+        }
+    }
+    public List<Entity> FingerGrabHitbox(List<Entity> entities, float maxDistance){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if (value.isInvulnerable() || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())
+            || (value instanceof StandEntity SE && SE.getUser().getUUID() == this.self.getUUID())){
+                hitEntities.remove(value);
+            } else {
+                int angle = 10;
+                if (!(angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= angle)){
+                    hitEntities.remove(value);
+                }
+            }
+        }
+        List<Entity> hitEntities2 = new ArrayList<>(hitEntities) {
+        };
+        for (Entity value : hitEntities) {
+            if (value instanceof StandEntity SE && SE.getUser() != null){
+                for (Entity value2 : hitEntities) {
+                    if (value2.is(SE.getUser())) {
+                        hitEntities2.remove(value);
+                    }
+                }
+            }
+        }
+        return hitEntities2;
+    }
+
     public void updateStarFinger(){
         if (this.attackTimeDuring > -1) {
             StandEntity stand = getStandEntity(this.self);
@@ -178,20 +254,35 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } else if (this.attackTimeDuring>=24){
                 float distanceOut = 0;
                 if (this.attackTimeDuring <= 35){
-                    distanceOut = Math.min(3*(this.attackTimeDuring-23),10);
+                    distanceOut = Math.min(2.5F*(this.attackTimeDuring-23),8);
                 } else {
-                    distanceOut = Math.max(3*(40-this.attackTimeDuring),1);
+                    distanceOut = Math.max(2.5F*(40-this.attackTimeDuring),1);
                 }
                 if (this.self instanceof Player){
                     if (isPacketPlayer()){
                         BlockHitResult dd = getAheadVec(distanceOut);
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
-                                Math.max(dd.distanceTo(this.getSelf())*16-32,1), FLOAT_STAR_FINGER_SIZE);
+                                Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1), FLOAT_STAR_FINGER_SIZE);
+                        if (this.attackTimeDuring == 27){
+                            this.setCooldown(PowerIndex.SKILL_1, 60);
+                            List<Entity> fingerTargets = doFinger(8);
+                            if (!fingerTargets.isEmpty()){
+                                doFingerHit(fingerTargets);
+                            }
+                        }
                     }
                 } else {
                     BlockHitResult dd = getAheadVec(distanceOut);
                     if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
-                        SE.setFingerLength((float) Math.max((dd.distanceTo(this.getSelf())*16-32),1));
+                        SE.setFingerLength((float) Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1));
+                        if (this.attackTimeDuring == 27){
+                            this.setCooldown(PowerIndex.SKILL_1, 60);
+
+                            List<Entity> fingerTargets = doFinger(8);
+                            if (!fingerTargets.isEmpty()){
+                                doFingerHit(fingerTargets);
+                            }
+                        }
                     }
                 }
             }
@@ -204,6 +295,25 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         Vec3 vec3d2 = this.self.getViewVector(0);
         return vec3d.add(vec3d2.x * distOut,
                 vec3d2.y * distOut, vec3d2.z * distOut);
+    }
+
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        if (this.getActivePower() == PowerIndex.POWER_1){
+            float distanceOut = 8;
+            BlockHitResult dd = getAheadVec(distanceOut);
+            List<Entity> fingerTargets = doFinger((float) Math.sqrt(dd.distanceTo(this.getSelf())));
+            if (!fingerTargets.isEmpty()){
+                int j = scaledHeight / 2 - 7 - 4;
+                int k = scaledWidth / 2 - 8;
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
     }
 
 
@@ -242,7 +352,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
-
             }
         }
 
