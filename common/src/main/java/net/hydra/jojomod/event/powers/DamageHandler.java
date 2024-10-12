@@ -51,6 +51,9 @@ public class DamageHandler {
     public static boolean PenetratingStandDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.PENETRATING_STAND, attacker), power);
     }
+    public static boolean StarFingerStandDamageEntity(Entity entity, float power, Entity attacker){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAR_FINGER, attacker), power);
+    }
 
 
     public static boolean TimeDamageEntity(Entity entity, float power, Entity attacker){

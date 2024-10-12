@@ -627,6 +627,13 @@ public class MainUtil {
         }
         return id;
     }
+    public static boolean isStandDamage(DamageSource sauce){
+        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)){
+            return true;
+        }
+        return false;
+    }
+
 
     /**Returns the vertical angle between two mobs*/
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {

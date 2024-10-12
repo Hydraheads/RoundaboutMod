@@ -516,7 +516,7 @@ public abstract class StandEntity extends Mob{
 
     /** Stand does not take damage under normal circumstances.*/
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getUser() != null && source.is(ModDamageTypes.STAND)){
+        if (this.getUser() != null && MainUtil.isStandDamage(source)){
             return this.getUser().hurt(source,amount);
         }
         return false;

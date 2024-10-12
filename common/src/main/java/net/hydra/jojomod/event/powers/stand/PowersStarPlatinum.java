@@ -23,6 +23,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -116,6 +117,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (this.scopeLevel > -1){
                 basis *= 0.85f;
             }
+            if (this.activePower == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+                basis *= 0.74f;
+            }
         return super.inputSpeedModifiers(basis);
     }
 
@@ -195,7 +199,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void fingerDamage(Entity entity){
         float pow = getFingerDamage(entity);
         float knockbackStrength = 1F;
-        if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+        if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
             this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             if (entity instanceof LivingEntity LE){
                 MainUtil.makeBleed(LE,0,200,this.self);
@@ -204,11 +208,24 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             knockShield2(entity, 40);
         }
     }
+
+    public boolean StarFingerDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (DamageHandler.StarFingerStandDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
     public float getFingerDamage(Entity entity){
         if (this.getReducedDamage(entity)){
             return 2F;
         } else {
-            return 5;
+            return 7;
         }
     }
     public List<Entity> FingerGrabHitbox(List<Entity> entities, float maxDistance){
@@ -295,6 +312,26 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         Vec3 vec3d2 = this.self.getViewVector(0);
         return vec3d.add(vec3d2.x * distOut,
                 vec3d2.y * distOut, vec3d2.z * distOut);
+    }
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.getActivePower() == PowerIndex.POWER_1  && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
+
+    @Override
+    public boolean canInterruptPower(){
+        if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+            if (this.getSelf() instanceof Player) {
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 80);
+            }
+            this.setCooldown(PowerIndex.SKILL_1, 80);
+            return true;
+        } else {
+            return super.canInterruptPower();
+        }
     }
 
     @Override
