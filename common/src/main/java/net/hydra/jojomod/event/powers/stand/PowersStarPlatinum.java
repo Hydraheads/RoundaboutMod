@@ -530,6 +530,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
             return ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT;
         } else if (soundChoice == STAR_FINGER){
