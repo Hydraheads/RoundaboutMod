@@ -37,6 +37,9 @@ public class StandArrowEntity extends AbstractArrow {
     private static final EntityDataAccessor<ItemStack> STAND_ARROW = SynchedEntityData.defineId(StandArrowEntity.class,
             EntityDataSerializers.ITEM_STACK);
 
+    public StandArrowEntity(Level $$0, LivingEntity $$1) {
+        super(ModEntities.STAND_ARROW, $$1, $$0);
+    }
     public StandArrowEntity(EntityType<? extends StandArrowEntity> $$0, Level $$1) {
         super($$0, $$1);
     }

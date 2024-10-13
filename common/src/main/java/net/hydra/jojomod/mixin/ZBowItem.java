@@ -50,7 +50,7 @@ public class ZBowItem {
                     float $$8 = getPowerForTime($$7);
                     if (!((double)$$8 < 0.1)) {
                         if (!$$1.isClientSide) {
-                            StandArrowEntity $$11 = SI.createArrow($$1, $$6, $$4);
+                            StandArrowEntity $$11 = (StandArrowEntity) SI.createArrow($$1, $$6, $$4);
                             $$11.shootFromRotation($$4, $$4.getXRot(), $$4.getYRot(), 0.0F, $$8 * 3.0F, 1.0F);
                             if ($$8 == 1.0F) {
                                 $$11.setCritArrow(true);

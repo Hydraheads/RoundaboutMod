@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -65,6 +66,14 @@ public class ZItemRenderer implements IItemRenderer {
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BEETLE_BOW);
             } else if ($$2.getProjectile($$0).getItem() == ModItems.WORTHY_ARROW){
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.WORTHY_BOW);
+            }
+        } if ($$0.is(Items.CROSSBOW) && $$2 !=null){
+            if (CrossbowItem.containsChargedProjectile($$0,ModItems.STAND_ARROW)){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_ARROW_CROSSBOW);
+            } else if (CrossbowItem.containsChargedProjectile($$0,ModItems.STAND_BEETLE_ARROW)){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BEETLE_CROSSBOW);
+            } else if (CrossbowItem.containsChargedProjectile($$0,ModItems.WORTHY_ARROW)){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_WORTHY_CROSSBOW);
             }
         }
 
