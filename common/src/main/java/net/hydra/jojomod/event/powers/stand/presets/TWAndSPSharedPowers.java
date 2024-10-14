@@ -187,7 +187,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (keyIsDown){
 
             } else {
-                this.tryChargedPower(PowerIndex.SNEAK_ATTACK_CHARGE, true,this.getAttackTimeDuring());
+                this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true,this.getAttackTimeDuring());
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK);
                 holdDownClick = false;
             }
@@ -1107,7 +1107,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
-            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / 30) * 15));
+            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / 25) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {

@@ -12,10 +12,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.HarpoonItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.item.WorthyArrowItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -158,7 +155,7 @@ public class BlockGrabPreset extends PunchingStand{
                 this.getSelf().level().addFreshEntity($$4);
                 this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
-        } else if (item.getItem() instanceof ArrowItem){
+        } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)){
             ArrowItem $$10 = (ArrowItem) item.getItem();
             AbstractArrow $$11 = $$10.createArrow(this.getSelf().level(), item, this.getSelf());
             $$11.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
