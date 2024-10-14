@@ -46,6 +46,7 @@ public class PowerIndex {
     public static final byte LEAD_IN = 40;
     public static final byte BARRAGE_CHARGE_2 = 41;
     public static final byte BARRAGE_2= 42;
+    public static final byte SNEAK_ATTACK_CHARGE= 43;
 
     /**Even more basic, refers to the buttons for cooldowns*/
     public static final byte NO_CD = -1;

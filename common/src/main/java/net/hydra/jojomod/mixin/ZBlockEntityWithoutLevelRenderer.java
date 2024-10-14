@@ -51,8 +51,10 @@ public class ZBlockEntityWithoutLevelRenderer implements IBlockEntityWithoutLeve
             $$2.pushPose();
 
             $$2.scale(1.0F, -1.0F, -1.0F);
-            VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.HARPOON_MODEL.renderType(ModEntities.HARPOON_TEXTURE), false, $$0.hasFoil());
-            ModItemModels.HARPOON_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
+            if (ModItemModels.HARPOON_MODEL != null) {
+                VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.HARPOON_MODEL.renderType(ModEntities.HARPOON_TEXTURE), false, $$0.hasFoil());
+                ModItemModels.HARPOON_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
             $$2.popPose();
         }
     }

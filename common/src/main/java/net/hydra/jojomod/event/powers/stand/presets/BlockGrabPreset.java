@@ -587,31 +587,33 @@ public class BlockGrabPreset extends PunchingStand{
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
-        if (freezeAttackInput > -1) {
-            this.freezeAttackInput = 1;
-        }
-        if (freezeAttackInput < 0) {
-            if ( hasBlock() || hasEntity()) {
+        if (keyIsDown) {
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+            if (freezeAttackInput > -1) {
                 this.freezeAttackInput = 1;
             }
-            if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
-                    && !standEntity.getHeldItem().isEmpty()) || hasEntity()) {
-
-                if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
-                    if (!standEntity.getHeldItem().isEmpty() &&
-                            (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
-                            && this.getAttackTimeDuring() < 10) {
-                        return;
-                    } else if (standEntity.getFirstPassenger() != null &&
-                            (this.getActivePower() == PowerIndex.POWER_2_EXTRA)
-                            && this.getAttackTimeDuring() < 3) {
-                        return;
-                    }
+            if (freezeAttackInput < 0) {
+                if (hasBlock() || hasEntity()) {
+                    this.freezeAttackInput = 1;
                 }
+                if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
+                        && !standEntity.getHeldItem().isEmpty()) || hasEntity()) {
 
-                this.tryPower(PowerIndex.ATTACK, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+                    if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                        if (!standEntity.getHeldItem().isEmpty() &&
+                                (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
+                                && this.getAttackTimeDuring() < 10) {
+                            return;
+                        } else if (standEntity.getFirstPassenger() != null &&
+                                (this.getActivePower() == PowerIndex.POWER_2_EXTRA)
+                                && this.getAttackTimeDuring() < 3) {
+                            return;
+                        }
+                    }
+
+                    this.tryPower(PowerIndex.ATTACK, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+                }
             }
         }
     }

@@ -519,11 +519,9 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
+                boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
+                        || this.gameMode.isDestroying();
                 if (this.options.keyAttack.isDown() && !player.isUsingItem()) {
-
-                    boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
-                            || this.gameMode.isDestroying();
-
                     if (standComp.roundabout$getStandPowers().isMiningStand()){
                         Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                         if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
@@ -546,13 +544,13 @@ public abstract class InputEvents implements IInputEvents {
                             }
                         }
                     }
-                    if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                        standComp.roundabout$getStandPowers().buttonInputAttack(this.options.keyAttack.isDown(),this.options);
-                    }
+                }
+                if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                    standComp.roundabout$getStandPowers().buttonInputAttack(this.options.keyAttack.isDown(),this.options);
+                }
 
-                    if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
-                        standComp.roundabout$getStandPowers().buttonInputBarrage(this.options.keyAttack.isDown(),this.options);
-                    }
+                if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
+                    standComp.roundabout$getStandPowers().buttonInputBarrage(this.options.keyAttack.isDown(),this.options);
                 }
             }
                 //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());

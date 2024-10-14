@@ -205,17 +205,21 @@ public class StandPowers {
     }
 
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (this.canAttack()) {
-            this.tryPower(PowerIndex.ATTACK, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+        if (keyIsDown) {
+            if (this.canAttack()) {
+                this.tryPower(PowerIndex.ATTACK, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+            }
         }
     }
 
     public void buttonInputBarrage(boolean keyIsDown, Options options){
-        if (this.getAttackTime() >= this.getAttackTimeMax() ||
-                (this.getActivePowerPhase() != this.getActivePowerPhaseMax())){
-            this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
+        if (keyIsDown) {
+            if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
+                this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
+            }
         }
     }
 

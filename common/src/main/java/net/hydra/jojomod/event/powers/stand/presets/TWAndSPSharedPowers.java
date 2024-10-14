@@ -181,6 +181,30 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    public boolean holdDownClick = false;
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (holdDownClick){
+            if (keyIsDown){
+
+            } else {
+                this.tryChargedPower(PowerIndex.SNEAK_ATTACK_CHARGE, true,this.getAttackTimeDuring());
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK);
+                holdDownClick = false;
+            }
+        } else {
+            if (keyIsDown) {
+                if (!options.keyShift.isDown()) {
+                    super.buttonInputAttack(keyIsDown, options);
+                }
+                if (this.canAttack() && options.keyShift.isDown()) {
+                    this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                    holdDownClick = true;
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                }
+            }
+        }
+    }
+
     /**Begin Charging Time Stop, also detects activation via release**/
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
@@ -916,12 +940,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
-        if (options.keyShift.isDown() && (this.getAttackTime() >= this.getAttackTimeMax() ||
-                (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))){
-            this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
-        } else {
-            super.buttonInputBarrage(keyIsDown,options);
+        if (keyIsDown) {
+            if (options.keyShift.isDown() && (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))) {
+                this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+            } else {
+                super.buttonInputBarrage(keyIsDown, options);
+            }
         }
     }
     private int leapEndTicks = -1;
@@ -953,7 +979,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return SoundIndex.TIME_CHARGE_SOUND_GROUP;
         } else if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_ENDING_NOISE_2) {
             return SoundIndex.TIME_SOUND_GROUP;
-        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_2){
+        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_2) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1
+                || soundChoice == KICK_BARRAGE_NOISE_2 || soundChoice == KICK_BARRAGE_NOISE){
             return SoundIndex.BARRAGE_SOUND_GROUP;
         } else {
             return super.getSoundCancelingGroupByte(soundChoice);
@@ -1026,6 +1055,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return this.bounce();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.impale();
+        } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
+            return this.setPowerSuperHitCharge();
+        } else if (move == PowerIndex.SNEAK_ATTACK){
+            return this.setPowerSuperHitCharge();
         } else if (move == PowerIndex.BARRAGE_2) {
             return this.setPowerKickBarrage();
         }
@@ -1071,6 +1104,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / 30) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {
@@ -1383,6 +1420,26 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         return true;
     }
+
+    public boolean setPowerSuperHitCharge() {
+        animateStand((byte) 70);
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
+        this.poseStand(OffsetIndex.GUARD);
+        this.clashDone = false;
+        return true;
+    }
+    public boolean setPowerSuperHit() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.SNEAK_ATTACK);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.setAttackTimeMax(this.getBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        animateStand((byte) 71);
+        //playBarrageCrySound();
+        return true;
+    }
+
 
     /**Barrage During a time stop, and it will cancel when time resumes, but it will also skip the charge*/
     @Override

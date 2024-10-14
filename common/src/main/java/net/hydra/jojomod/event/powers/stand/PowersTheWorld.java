@@ -329,9 +329,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         if (soundChoice == ASSAULT_NOISE) {
             return ASSAULT_NOISE;
-        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1
-        || soundChoice == KICK_BARRAGE_NOISE_2 || soundChoice == KICK_BARRAGE_NOISE){
-                return SoundIndex.BARRAGE_SOUND_GROUP;
         }
         return super.getSoundCancelingGroupByte(soundChoice);
     }
