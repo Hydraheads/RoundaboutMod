@@ -66,7 +66,7 @@ public class ZScreenShaking implements IGameRenderer {
                     } else {
                         f = 0.01F;
                     }
-                } else {
+                } else if (abstractclientplayer != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                     if (SP.scopeLevel == 1) {
                         f = 0.3F;
                     } else if (SP.scopeLevel == 2) {

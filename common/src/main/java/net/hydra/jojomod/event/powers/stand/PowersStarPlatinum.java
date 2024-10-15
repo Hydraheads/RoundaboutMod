@@ -133,10 +133,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             scopeTicks = 6;
                             int newLevel = scopeLevel + 1;
                             if (newLevel > 3) {
-                                scopeLevel = 0;
+                                this.setScopeLevel(0);
                             } else {
                                 this.getSelf().playSound(ModSounds.STAR_PLATINUM_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
-                                scopeLevel = newLevel;
+                                this.setScopeLevel(newLevel);
                             }
                         }
                     } else {
@@ -266,6 +266,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return hitEntities2;
     }
 
+    public boolean glowingEye = false;
+    @Override
+    public boolean glowingEyes(){
+        return glowingEye;
+    }
     public void updateStarFinger(){
         if (this.attackTimeDuring > -1) {
             StandEntity stand = getStandEntity(this.self);

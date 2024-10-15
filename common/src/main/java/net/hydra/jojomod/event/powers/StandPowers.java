@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -224,6 +225,19 @@ public class StandPowers {
     }
 
     public int scopeLevel = 0;
+
+    public void setScopeLevel(int level){
+        if (scopeLevel <= 0 && level > 0){
+            if (this.getSelf().level().isClientSide()){
+                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SCOPE);
+            }
+        } else if (scopeLevel > 0 && level <= 0){
+            if (this.getSelf().level().isClientSide()){
+                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SCOPE_OFF);
+            }
+        }
+        scopeLevel=level;
+    }
     public int scopeTime = -1;
 
     public boolean canScope(){
@@ -356,6 +370,9 @@ public class StandPowers {
         return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
     }
 
+    public boolean glowingEyes(){
+        return false;
+    }
     public boolean fullTSChargeBonus(){
         return false;
     }
@@ -458,7 +475,7 @@ public class StandPowers {
             tickSounds();
         }
         if (this.scopeLevel != 0 && !this.canScope()){
-            this.scopeLevel = 0;
+            setScopeLevel(0);
             this.scopeTime = -1;
         }
     }

@@ -19,6 +19,9 @@ public class StarPlatinumEntity extends StandEntity {
     @Unique
     private static final EntityDataAccessor<Float> FINGER_LENGTH = SynchedEntityData.defineId(StarPlatinumEntity.class,
             EntityDataSerializers.FLOAT);
+    @Unique
+    private static final EntityDataAccessor<Boolean> IS_SCOPING = SynchedEntityData.defineId(StarPlatinumEntity.class,
+            EntityDataSerializers.BOOLEAN);
 
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();
@@ -123,13 +126,21 @@ public class StarPlatinumEntity extends StandEntity {
         this.entityData.set(FINGER_LENGTH, length);
     }
 
+    public final void setScoping(boolean scope) {
+        this.entityData.set(IS_SCOPING, scope);
+    }
+
     public final float getFingerLength() {
         return this.entityData.get(FINGER_LENGTH);
+    }
+    public final boolean getScoping() {
+        return this.entityData.get(IS_SCOPING);
     }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(FINGER_LENGTH, 1F);
+        this.entityData.define(IS_SCOPING, false);
     }
 
     public int tsReleaseTime = 0;

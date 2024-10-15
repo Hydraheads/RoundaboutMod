@@ -809,6 +809,14 @@ public class MainUtil {
             ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.STAND_ARROW_CHARGE, 10, false);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE) {
+            if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
+                SE.setScoping(true);
+            }
+        } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE_OFF) {
+            if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
+                SE.setScoping(false);
+            }
         }
     }
 
