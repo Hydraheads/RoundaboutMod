@@ -311,6 +311,7 @@ public abstract class InputEvents implements IInputEvents {
 
     @Unique
     private void roundabout$startUseOppositeItem() {
+
         if (!this.gameMode.isDestroying()) {
             this.rightClickDelay = 4;
             if (!this.player.isHandsBusy()) {
@@ -494,9 +495,13 @@ public abstract class InputEvents implements IInputEvents {
                             }
                         } else {
                             if (!roundabout$sameKeyUseOverride(KeyInputRegistry.guardKey)) {
-                                roundabout$startUseOppositeItem();
+                                if (this.rightClickDelay == 0 && !this.player.isUsingItem()) {
+                                    roundabout$startUseOppositeItem();
+                                }
                             } else {
-                                startUseItem();
+                                if (this.rightClickDelay == 0 && !this.player.isUsingItem()) {
+                                    startUseItem();
+                                }
                             }
                         }
                     }
