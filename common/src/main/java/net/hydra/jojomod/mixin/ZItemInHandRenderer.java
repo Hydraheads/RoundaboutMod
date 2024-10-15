@@ -3,12 +3,15 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -40,6 +43,15 @@ public class ZItemInHandRenderer {
 
     @Shadow
     public void renderItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext itemDisplayContext, boolean bl, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
+    }
+
+    @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$renderHandsWithItems(float $$0, PoseStack $$1, MultiBufferSource.BufferSource $$2, LocalPlayer $$3, int $$4, CallbackInfo ci) {
+        if ($$3 != null && ((StandUser)$$3).roundabout$getStand() instanceof StarPlatinumEntity SE){
+            if (SE.getScoping() && Minecraft.getInstance().options.getCameraType().isFirstPerson()){
+                ci.cancel();
+            }
+        }
     }
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer, float ff, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
