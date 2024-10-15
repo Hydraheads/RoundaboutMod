@@ -85,6 +85,7 @@
     "ZLightTextue",
     "ZLivingEntityRenderer",
     "ZModelBakery",
+    "ZMouseHandler",
     "ZMultiPlayerGameMode",
     "ZParticle",
     "ZParticleAccess",
