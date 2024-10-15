@@ -360,6 +360,8 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
 		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
 		this.animate(pEntity.starFinger, StandAnimations.STAR_FINGER, pAgeInTicks, 0.55f);
+		this.animate(pEntity.finalPunchWindup, StandAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1f);
+		this.animate(pEntity.finalPunch, StandAnimations.FINAL_PUNCH, pAgeInTicks, 1.5f);
 	}
 
 	@Override

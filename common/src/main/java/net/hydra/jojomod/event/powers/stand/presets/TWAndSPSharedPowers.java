@@ -383,9 +383,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         } else if (this.activePower == PowerIndex.BARRAGE_2) {
             basis *= 0.3f;
         } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
-            float g = 1/f;
-            basis *= g;
+            if (this.getSelf().isCrouching()) {
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1 / f;
+                basis *= g;
+            }
             basis *= 0.3f;
         } else if (this.getActivePower()==PowerIndex.POWER_1_SNEAK){
             if (this.getSelf().isCrouching()){
@@ -1491,7 +1493,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     public boolean setPowerSuperHitCharge() {
-        animateStand((byte) 70);
+        animateStand((byte) 85);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
         this.poseStand(OffsetIndex.GUARD);
@@ -1504,7 +1506,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
         chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
-        animateStand((byte) 71);
+        animateStand((byte) 86);
         //playBarrageCrySound();
         return true;
     }
