@@ -95,6 +95,10 @@ public class ForgeSounds {
             register(ModSounds.STAND_BARRAGE_HIT, ModSounds.STAND_BARRAGE_HIT_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_END_BLOCK_EVENT =
             register(ModSounds.STAND_BARRAGE_END_BLOCK, ModSounds.STAND_BARRAGE_END_BLOCK_ID);
+    public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =
+            register(ModSounds.EXPLOSIVE_PUNCH, ModSounds.EXPLOSIVE_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> FINAL_KICK_EVENT =
+            register(ModSounds.FINAL_KICK, ModSounds.FINAL_KICK_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_HIT2_EVENT =
             register(ModSounds.STAND_BARRAGE_HIT2, ModSounds.STAND_BARRAGE_HIT2_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_END_EVENT =

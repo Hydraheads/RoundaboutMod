@@ -70,6 +70,9 @@ public class FabricSounds {
         addSound(ModSounds.STAND_BARRAGE_HIT2_ID, ModSounds.STAND_BARRAGE_HIT2_EVENT);
         addSound(ModSounds.STAND_BARRAGE_END_ID, ModSounds.STAND_BARRAGE_END_EVENT);
 
+        addSound(ModSounds.EXPLOSIVE_PUNCH_ID, ModSounds.EXPLOSIVE_PUNCH_EVENT);
+        addSound(ModSounds.FINAL_KICK_ID, ModSounds.FINAL_KICK_EVENT);
+
         addSound(ModSounds.TIME_STOP_THE_WORLD_ID, ModSounds.TIME_STOP_THE_WORLD_EVENT);
         addSound(ModSounds.TIME_STOP_RESUME_THE_WORLD_ID, ModSounds.TIME_STOP_RESUME_THE_WORLD_EVENT);
         addSound(ModSounds.TIME_STOP_RESUME_THE_WORLD2_ID, ModSounds.TIME_STOP_RESUME_THE_WORLD2_EVENT);

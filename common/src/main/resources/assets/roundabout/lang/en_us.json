@@ -151,6 +151,8 @@
   "sounds.roundabout.punch_sfx2":  "Air Cracks",
   "sounds.roundabout.punch_sfx3":  "Impact",
   "sounds.roundabout.punch_sfx4":  "Heavy Impact",
+  "sounds.roundabout.explosive_punch":  "Heavy Impact",
+  "sounds.roundabout.final_kick":  "Heavy Impact",
   "sounds.roundabout.stand_guard":  "Blocked",
   "sounds.roundabout.stand_theworld_muda1":  "MUDA",
   "sounds.roundabout.stand_theworld_muda2":  "MUDA",

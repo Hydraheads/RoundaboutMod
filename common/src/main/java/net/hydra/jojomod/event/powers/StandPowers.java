@@ -355,6 +355,10 @@ public class StandPowers {
     public SoundEvent getBarrageChargeSound(){
         return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
     }
+
+    public boolean fullTSChargeBonus(){
+        return false;
+    }
     public ResourceLocation getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
     }

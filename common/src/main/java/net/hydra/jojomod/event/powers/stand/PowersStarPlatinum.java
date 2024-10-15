@@ -201,6 +201,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int getFinalAttackKnockShieldTime(){
         return 80;
     }
+
+    @Override
+    public SoundEvent getFinalAttackSound(){
+        return ModSounds.EXPLOSIVE_PUNCH_EVENT;
+    }
     public void fingerDamage(Entity entity){
         float pow = getFingerDamage(entity);
         float knockbackStrength = 0.3F;
@@ -286,7 +291,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
                                 Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1), FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
-                            this.setCooldown(PowerIndex.SKILL_1, 60);
+                            this.setCooldown(PowerIndex.SKILL_1, 80);
                             List<Entity> fingerTargets = doFinger(8);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);
@@ -298,7 +303,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
                         SE.setFingerLength((float) Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1));
                         if (this.attackTimeDuring == 27){
-                            this.setCooldown(PowerIndex.SKILL_1, 60);
+                            this.setCooldown(PowerIndex.SKILL_1, 80);
 
                             List<Entity> fingerTargets = doFinger(8);
                             if (!fingerTargets.isEmpty()){
@@ -325,14 +330,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         return super.cancelSprintJump();
     }
-
+    /**Makes*/
+    public boolean fullTSChargeBonus(){
+        return this.maxChargedTSTicks >= 100;
+    }
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 80);
             }
-            this.setCooldown(PowerIndex.SKILL_1, 80);
+            this.setCooldown(PowerIndex.SKILL_1, 100);
             return true;
         } else {
             return super.canInterruptPower();

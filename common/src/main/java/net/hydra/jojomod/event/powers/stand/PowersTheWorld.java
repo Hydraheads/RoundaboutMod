@@ -228,7 +228,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return super.getSoundPitchFromByte(soundChoice);
     }
 
-
+    @Override
+    public SoundEvent getFinalAttackSound(){
+        return ModSounds.FINAL_KICK_EVENT;
+    }
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -319,14 +322,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public float getFinalAttackKnockback(){
-        return ((float)  (this.chargedFinal/maxSuperHitTime)*1.5F);
+        return (((float)this.chargedFinal/(float)maxSuperHitTime)*1.5F);
     }
     @Override
     public float getFinalPunchStrength(Entity entity){
         float ret;
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            ret = ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+            ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
             if (this.chargedFinal >= maxChargeTSTime){
                 ret +=1;
             }

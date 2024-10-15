@@ -1535,7 +1535,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 } if (roundaboutTSHurtSound < 2 && ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.PENETRATING_STAND))){
                     roundaboutTSHurtSound = 2;
                 }
-                $$1*=0.66F;
+                if (MainUtil.isStandDamage($$0) && $$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().fullTSChargeBonus()){
+                    if (!this.level().isClientSide()){
+                        ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.74F,0.73F,0.98F), 1f), this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                                1, 0.3, 0.3, 0.3, 0.3);
+                    }
+                } else {
+                    $$1 *= 0.66F;
+                }
                 if ((dmg + $$1) > max) {
                     roundabout$setStoredDamage(max);
                 } else {

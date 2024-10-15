@@ -356,7 +356,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
-
+    public SoundEvent getFinalAttackSound(){
+        return null;
+    }
 
     @Override
     public void updateMovesFromPacket(byte activePower){
@@ -1508,14 +1510,16 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     public float getFinalAttackKnockback(){
-        return ((float)  (this.chargedFinal/maxSuperHitTime)*3);
+        Roundabout.LOGGER.info("CF"+this.chargedFinal);
+        Roundabout.LOGGER.info("KB"+(float)((this.chargedFinal/maxSuperHitTime)*3));
+        return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
     }
     public float getFinalPunchStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            return ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
         } else {
-            return ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
         }
     }
     public int getFinalAttackKnockShieldTime(){
@@ -1555,7 +1559,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         SoundEvent SE;
         float pitch = 1F;
         if (entity != null) {
-            SE = ModSounds.IMPALE_HIT_EVENT;
+            SE = getFinalAttackSound();
             pitch = 1.2F;
         } else {
             SE = ModSounds.PUNCH_2_SOUND_EVENT;

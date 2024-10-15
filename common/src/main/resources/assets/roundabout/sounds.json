@@ -71,6 +71,18 @@
       "roundabout:ball_bearing_shot"
     ]
   },
+  "explosive_punch": {
+    "subtitle": "sounds.roundabout.explosive_punch",
+    "sounds": [
+      "roundabout:explosive_punch"
+    ]
+  },
+  "final_kick": {
+    "subtitle": "sounds.roundabout.final_kick",
+    "sounds": [
+      "roundabout:final_kick"
+    ]
+  },
   "punch_sfx2": {
     "subtitle": "sounds.roundabout.punch_sfx2",
     "sounds": [
