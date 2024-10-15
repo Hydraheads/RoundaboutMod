@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -816,6 +817,11 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE_OFF) {
             if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
                 SE.setScoping(false);
+            }
+        } else if (context == PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE) {
+            if (player != null){
+                ((StandUser)player).roundabout$getStandPowers().forwardBarrage = true;
+                ((StandUser)player).roundabout$getStandPowers().poseStand(OffsetIndex.LOOSE);
             }
         }
     }

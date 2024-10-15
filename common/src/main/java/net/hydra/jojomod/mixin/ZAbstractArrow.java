@@ -17,6 +17,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -52,6 +53,24 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
         roundabout$superThrowTicks = 50;
     }
+
+    @Shadow
+    @Nullable
+    private BlockState lastState;
+
+    @Shadow
+    private void resetPiercedEntities() {
+    }
+
+    @Override
+    public void roundabout$resetPiercedEntities(){
+        resetPiercedEntities();
+    }
+    @Override
+    public void roundabout$setLastState(BlockState last){
+        lastState = last;
+    }
+
     @Unique
     @Override
     public void roundabout$cancelSuperThrow(){

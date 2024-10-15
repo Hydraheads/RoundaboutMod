@@ -197,6 +197,7 @@ public class StandPowers {
         }
     }
 
+    public boolean forwardBarrage = false;
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {

@@ -181,7 +181,21 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             inputDash = false;
         }
     }
+    @Override
+    public void tickPowerEnd() {
 
+        super.tickPowerEnd();
+        if (this.getSelf().isAlive() && !this.getSelf().isRemoved() && this.forwardBarrage && this.attackTimeDuring >= 0) {
+            if (this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_2) {
+                if (!this.getSelf().level().isClientSide()) {
+                    StandEntity stand = getStandEntity(this.self);
+                    if (Objects.nonNull(stand)) {
+                        stand.setDeltaMovement(stand.getForward());
+                    }
+                }
+            }
+        }
+    }
     public boolean holdDownClick = false;
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (holdDownClick){
@@ -624,7 +638,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void tickPower(){
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
-
+            if (this.forwardBarrage && !(this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2)){
+                this.forwardBarrage = false;
+            }
             if (impactSlowdown > -1){
                 impactSlowdown--;
             }
@@ -699,12 +715,16 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+
     /**Assault Ability*/
     public boolean hold1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2){
-            Roundabout.LOGGER.info("BARR");
+            if (keyIsDown && !forwardBarrage) {
+                forwardBarrage = true;
+                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
+            }
         }
 
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
