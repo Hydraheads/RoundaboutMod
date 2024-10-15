@@ -58,10 +58,7 @@ public class BlockGrabPreset extends PunchingStand{
     }
     public BlockPos grabBlock = null;
     public int grabEntity = -1;
-
     public int freezeAttackInput = -1;
-
-
 
     public void throwObject(ItemStack item){
         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 30);

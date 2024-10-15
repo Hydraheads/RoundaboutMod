@@ -692,14 +692,24 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    @Override
+    public void preButtonInput4(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            buttonInput4(keyIsDown, options);
+        }
+    }
+
     /**Assault Ability*/
     public boolean hold1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
+        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2){
+            Roundabout.LOGGER.info("BARR");
+        }
+
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
                 if (options.keyShift.isDown()) {
                     if (keyIsDown) {
                         if (!hold1) {
@@ -718,7 +728,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         hold1 = false;
                     }
                 }
-            }
         }
     }
 

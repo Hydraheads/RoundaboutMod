@@ -190,26 +190,34 @@ public class StandPowers {
     }
 
     public void preButtonInput4(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf())) {
-            buttonInput4(keyIsDown, options);
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                buttonInput4(keyIsDown, options);
+            }
         }
     }
 
     public void preButtonInput3(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf())) {
-            buttonInput3(keyIsDown, options);
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                buttonInput3(keyIsDown, options);
+            }
         }
     }
 
     public void preButtonInput2(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf())) {
-            buttonInput2(keyIsDown, options);
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                buttonInput2(keyIsDown, options);
+            }
         }
     }
 
     public void preButtonInput1(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf())) {
-            buttonInput1(keyIsDown, options);
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                buttonInput1(keyIsDown, options);
+            }
         }
     }
 

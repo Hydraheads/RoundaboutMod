@@ -78,32 +78,35 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     /**Assault Ability*/
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                if (!options.keyShift.isDown()) {
-                    if (keyIsDown) {
-                        if (!hold1) {
-                            hold1 = true;
-                            if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                                } else {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+        if (((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) ||
+                this.getAttackTimeDuring() < 0) && !this.isGuarding()) {
+            if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                    && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                    && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+                if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                    if (!options.keyShift.isDown()) {
+                        if (keyIsDown) {
+                            if (!hold1) {
+                                hold1 = true;
+                                if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                    if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                    } else {
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                    }
+                                    return;
                                 }
-                                return;
                             }
+                        } else {
+                            hold1 = false;
                         }
-                    } else {
-                        hold1 = false;
                     }
                 }
             }
         }
-        super.buttonInput1(keyIsDown,options);
+        super.buttonInput1(keyIsDown, options);
     }
 
     @Override
@@ -720,8 +723,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (this.getSelf().isCrouching()){
-
-            setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_IMPALE, PowerIndex.SKILL_1_SNEAK);
+            if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
+                setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_TRAVEL_BARRAGE, PowerIndex.NO_CD);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_IMPALE, PowerIndex.SKILL_1_SNEAK);
+            }
             setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_ITEM, PowerIndex.SKILL_2);
 
             boolean done = false;
@@ -749,8 +755,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
         } else {
 
-
-            setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
+            if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
+                setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_TRAVEL_BARRAGE, PowerIndex.NO_CD);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
+            }
 
             /*If it can find a mob to grab, it will*/
             Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);

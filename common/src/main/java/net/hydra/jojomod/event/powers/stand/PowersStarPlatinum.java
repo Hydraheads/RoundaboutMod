@@ -126,8 +126,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     /**Assault Ability*/
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing() && !((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-            if (keyIsDown) {
+        if ((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) || this.getAttackTimeDuring() < 0) {
+            if (this.getSelf().level().isClientSide && !this.isClashing() && !((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                if (keyIsDown) {
                     if (this.canScope()) {
                         if (scopeTicks == -1) {
                             scopeTicks = 6;
@@ -140,24 +141,29 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             }
                         }
                     } else {
-                        if (!hold1) {
-                            if (options.keyShift.isDown()) {
-                                super.buttonInput1(keyIsDown, options);
-                            } else {
-                                //Star Finger here
-                                hold1 = true;
-                                if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                    if (this.activePower != PowerIndex.POWER_1) {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                        if (!this.isGuarding()) {
+                            if (!hold1) {
+                                if (options.keyShift.isDown()) {
+                                    super.buttonInput1(keyIsDown, options);
+                                } else {
+                                    //Star Finger here
+                                    hold1 = true;
+                                    if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                        if (this.activePower != PowerIndex.POWER_1) {
+                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-            } else {
-                hold1 = false;
+                } else {
+                    hold1 = false;
+                }
             }
+        } else {
+            super.buttonInput1(keyIsDown, options);
         }
     }
 
@@ -403,10 +409,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE, PowerIndex.NO_CD);
             }
         } else {
-            if (this.getSelf().isShiftKeyDown()){
-                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
+            if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE, PowerIndex.NO_CD);
             } else {
-                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
+                if (this.getSelf().isShiftKeyDown()) {
+                    setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
+                }
             }
         }
 

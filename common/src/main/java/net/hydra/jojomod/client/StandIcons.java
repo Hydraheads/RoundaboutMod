@@ -58,11 +58,15 @@ public class StandIcons {
             "textures/gui/icons/the_world/grab_item.png");
     public static final ResourceLocation THE_WORLD_GRAB_MOB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/grab_mob.png");
+    public static final ResourceLocation THE_WORLD_TRAVEL_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/travel_barrage.png");
 
     public static final ResourceLocation STAR_PLATINUM_FINGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/star_finger.png");
     public static final ResourceLocation STAR_PLATINUM_IMPALE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/impale.png");
+    public static final ResourceLocation STAR_PLATINUM_TRAVEL_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/travel_barrage.png");
     public static final ResourceLocation STAND_LEAP_STAR_PLATINUM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/stand_leap.png");
     public static final ResourceLocation STAND_LEAP_REBOUND_STAR_PLATINUM = new ResourceLocation(Roundabout.MOD_ID,
