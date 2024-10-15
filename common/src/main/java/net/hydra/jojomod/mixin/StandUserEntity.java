@@ -252,6 +252,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$postTSHurtTime = 0;
     @Unique
+    private int roundabout$extraIFrames = 0;
+    @Unique
     private int roundabout$gasolineIFRAMES = 0;
 
 
@@ -391,6 +393,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         } if (roundabout$postTSHurtTime > 0){
             roundabout$postTSHurtTime--;
+        } if (roundabout$extraIFrames > 0){
+            roundabout$extraIFrames--;
         } if (roundabout$gasTicks > -1){
             if (!this.level().isClientSide){
                 if (this.isInWaterOrRain()) {
@@ -1567,10 +1571,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ci.setReturnValue(false);
                 return;
             } if ($$0.is(ModDamageTypes.TIME)){
-                roundabout$postTSHurtTime = 8;
+                roundabout$postTSHurtTime = 17;
             } else {
                 /*Knife and match code*/
-                if (roundabout$postTSHurtTime > 0) {
+                if (roundabout$postTSHurtTime > 0 || roundabout$extraIFrames > 0) {
                     ci.setReturnValue(false);
                     return;
                 } else {
@@ -1584,6 +1588,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 roundabout$knifeDespawnTicks = 300;
                             }
                             roundabout$stackedKnivesAndMatches++;
+                            if (roundabout$stackedKnivesAndMatches >= 12) {
+                                roundabout$extraIFrames = 8;
+                            }
                             if ($$0.is(ModDamageTypes.KNIFE) && entity instanceof Player) {
                                 ((IPlayerEntity) entity).roundabout$addKnife();
                             }

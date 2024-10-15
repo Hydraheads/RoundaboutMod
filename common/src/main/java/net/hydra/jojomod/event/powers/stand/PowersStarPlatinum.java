@@ -196,9 +196,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         }
     }
+
+    @Override
+    public int getFinalAttackKnockShieldTime(){
+        return 80;
+    }
     public void fingerDamage(Entity entity){
         float pow = getFingerDamage(entity);
-        float knockbackStrength = 1F;
+        float knockbackStrength = 0.3F;
         if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
             this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             if (entity instanceof LivingEntity LE){

@@ -318,6 +318,28 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public float getFinalAttackKnockback(){
+        return ((float)  (this.chargedFinal/maxSuperHitTime)*1.5F);
+    }
+    @Override
+    public float getFinalPunchStrength(Entity entity){
+        float ret;
+        float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
+        if (this.getReducedDamage(entity)){
+            ret = ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+            if (this.chargedFinal >= maxChargeTSTime){
+                ret +=1;
+            }
+        } else {
+            ret = ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+            if (this.chargedFinal >= maxChargeTSTime){
+                ret +=2;
+            }
+        }
+        return ret;
+    }
+
+    @Override
     public double getGrabRange(){
         if (this.getActivePower() == PowerIndex.POWER_1_BONUS){
             return 121;

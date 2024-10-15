@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -187,8 +188,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (keyIsDown){
 
             } else {
-                this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true,this.getAttackTimeDuring());
-                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK,this.getAttackTimeDuring());
+                if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                    int atd = this.getAttackTimeDuring();
+                    this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                }
                 holdDownClick = false;
             }
         } else {
@@ -278,7 +282,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void handleStandAttack(Player player, Entity target){
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
-             impaleImpact(target);
+            impaleImpact(target);
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
+            finalAttackImpact(target);
         }
     }
 
@@ -373,6 +379,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
             basis*=0.5f;
         } else if (this.activePower == PowerIndex.BARRAGE_2) {
+            basis *= 0.3f;
+        } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+            float g = 1/f;
+            basis *= g;
             basis *= 0.3f;
         } else if (this.getActivePower()==PowerIndex.POWER_1_SNEAK){
             if (this.getSelf().isCrouching()){
@@ -635,14 +646,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (((StandUser) this.getSelf()).roundabout$getActive()){
                     if (this.getSelf().onGround()) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA_FINISH, true);
-                        if (this.getSelf().level().isClientSide) {
+                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
                         }
                     }else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)){
                         impactSlowdown = -1;
                         impactBrace = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                        if (this.getSelf().level().isClientSide) {
+                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                         }
                     } else {
@@ -661,7 +672,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     impactSlowdown = -1;
                     impactBrace = false;
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    if (this.getSelf().level().isClientSide) {
+                    if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                     }
                 }
@@ -798,20 +809,32 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             updateImpale();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
             updateFinalAttack();
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            updateFinalAttackCharge();
         }
         super.updateUniqueMoves();
     }
 
+
+    public void updateFinalAttackCharge(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring >= 80) {
+                if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide && this.isPacketPlayer()){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                }
+            } else if (this.attackTimeDuring >= maxSuperHitTime && !(this.getSelf() instanceof Player)){
+
+                ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK,maxSuperHitTime);
+            }
+        }
+    }
+
     public void updateFinalAttack(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > this.attackTimeMax) {
-                this.attackTime = -1;
-                this.attackTimeMax = 0;
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
-            } else {
-                if (this.attackTimeDuring == 5) {
-                    this.standFinalPunch();
-                }
+            if (this.attackTimeDuring == 5) {
+                this.standFinalPunch();
             }
         }
     }
@@ -826,12 +849,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (isPacketPlayer()){
                 //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
-                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(), this.activePowerPhase);
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId(), PacketDataIndex.INT_STAND_ATTACK);
             }
         } else {
             /*Caps how far out the punch goes*/
             Entity targetEntity = getTargetEntity(this.self,-1);
-            punchImpact(targetEntity);
+            finalAttackImpact(targetEntity);
         }
     }
 
@@ -1043,7 +1066,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2){
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             return true;
         }
         return super.cancelSprintJump();
@@ -1477,10 +1501,25 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
-        chargedFinal = Math.max(this.chargedFinal,maxSuperHitTime);
+        chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
         animateStand((byte) 71);
         //playBarrageCrySound();
         return true;
+    }
+
+    public float getFinalAttackKnockback(){
+        return ((float)  (this.chargedFinal/maxSuperHitTime)*3);
+    }
+    public float getFinalPunchStrength(Entity entity){
+        float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
+        if (this.getReducedDamage(entity)){
+            return ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+        } else {
+            return ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+        }
+    }
+    public int getFinalAttackKnockShieldTime(){
+        return 20;
     }
 
     public void finalAttackImpact(Entity entity){
@@ -1488,29 +1527,31 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (entity != null) {
             float pow;
             float knockbackStrength;
-            pow = getImpalePunchStrength(entity);
-            knockbackStrength = getImpaleKnockback();
+            pow = getFinalPunchStrength(entity);
+            knockbackStrength = getFinalAttackKnockback();
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity) {
-                    if (MainUtil.getMobBleed(entity)) {
-                        if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                            MainUtil.makeBleed(entity, 2, 100, this.getSelf());
-                        } else {
-                            MainUtil.makeBleed(entity, 2, 200, this.getSelf());
-                        }
-                        MainUtil.makeMobBleed(entity);
-                    }
                 }
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                knockShield2(entity, 100);
+                if (chargedFinal >= maxSuperHitTime) {
+                    knockShield2(entity, getFinalAttackKnockShieldTime());
+                }
+            }
+        } else {
+            // This is less accurate raycasting as it is server sided but it is important for particle effects
+            float distMax = this.getDistanceOut(this.self, this.standReach, false);
+            float halfReach = (float) (distMax * 0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
+            if (!this.self.level().isClientSide) {
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                        1, 0.0, 0.0, 0.0, 1);
             }
         }
 
         if (this.getSelf() instanceof Player) {
             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 60);
         }
-        this.setCooldown(PowerIndex.SKILL_1_SNEAK, 60);
         SoundEvent SE;
         float pitch = 1F;
         if (entity != null) {
