@@ -39,16 +39,16 @@ public class KeyInputs {
     }
 
     public static void MoveKey4(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).roundabout$getStandPowers().buttonInput4(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);
     }
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).roundabout$getStandPowers().buttonInput3(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().preButtonInput3(keyIsDown, option);
     }
     public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).roundabout$getStandPowers().buttonInput2(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().preButtonInput2(keyIsDown, option);
     }
     public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
-        ((StandUser) player).roundabout$getStandPowers().buttonInput1(keyIsDown, option);
+        ((StandUser) player).roundabout$getStandPowers().preButtonInput1(keyIsDown, option);
     }
 
 

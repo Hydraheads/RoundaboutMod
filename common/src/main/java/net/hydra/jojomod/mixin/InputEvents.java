@@ -184,7 +184,7 @@ public abstract class InputEvents implements IInputEvents {
         public boolean roundabout$TryGuard(){
             StandUser standComp = ((StandUser) player);
             if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
-                return standComp.roundabout$getStandPowers().buttonInputGuard(this.options.keyRight.isDown(),this.options);
+                return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyRight.isDown(),this.options);
             }
             return false;
         }
@@ -546,11 +546,11 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
                 if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                    standComp.roundabout$getStandPowers().buttonInputAttack(this.options.keyAttack.isDown(),this.options);
+                    standComp.roundabout$getStandPowers().preCheckButtonInputAttack(this.options.keyAttack.isDown(),this.options);
                 }
 
                 if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
-                    standComp.roundabout$getStandPowers().buttonInputBarrage(this.options.keyAttack.isDown(),this.options);
+                    standComp.roundabout$getStandPowers().preCheckButtonInputBarrage(this.options.keyAttack.isDown(),this.options);
                 }
             }
                 //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());

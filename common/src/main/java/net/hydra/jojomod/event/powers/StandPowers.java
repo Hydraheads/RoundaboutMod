@@ -189,6 +189,30 @@ public class StandPowers {
     public void buttonInput1(boolean keyIsDown, Options options){
     }
 
+    public void preButtonInput4(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf())) {
+            buttonInput4(keyIsDown, options);
+        }
+    }
+
+    public void preButtonInput3(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf())) {
+            buttonInput3(keyIsDown, options);
+        }
+    }
+
+    public void preButtonInput2(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf())) {
+            buttonInput2(keyIsDown, options);
+        }
+    }
+
+    public void preButtonInput1(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf())) {
+            buttonInput1(keyIsDown, options);
+        }
+    }
+
     public boolean cancelItemUse() {
         return false;
     }
@@ -204,7 +228,22 @@ public class StandPowers {
         }
         return false;
     }
-
+    public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            buttonInputAttack(keyIsDown, options);
+        }
+    }
+    public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            buttonInputBarrage(keyIsDown, options);
+        }
+    }
+    public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            return buttonInputGuard(keyIsDown, options);
+        }
+        return false;
+    }
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (this.canAttack()) {
