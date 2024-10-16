@@ -810,6 +810,16 @@ public class StandPowers {
         }
         return id;
     }
+    public int getTargetEntityId2(float distance,LivingEntity userr){
+        Entity targetEntity = getTargetEntity(userr, distance);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
     public void standBarrageHit(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){
@@ -952,7 +962,7 @@ public class StandPowers {
         }
     }
 
-    private float getBarrageHitStrength(Entity entity){
+    public float getBarrageHitStrength(Entity entity){
         float barrageLength = this.getBarrageLength();
         float power;
         if (this.getReducedDamage(entity)){
@@ -1218,21 +1228,22 @@ public class StandPowers {
 
     }
 
-    public Entity getTargetEntity(Entity User, float distMax){
+    public boolean moveStarted = false;
+    public Entity getTargetEntity(LivingEntity User, float distMax){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(this.self, this.standReach, false);
+            distMax = this.getDistanceOut(User, this.standReach, false);
         }
-        Entity targetEntity = this.rayCastEntity(this.self,distMax);
+        Entity targetEntity = this.rayCastEntity(User,distMax);
         /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
         if (targetEntity == null) {
             float halfReach = (float) (distMax*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
-            targetEntity = StandAttackHitboxNear(StandGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y,
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            targetEntity = StandAttackHitboxNear(StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax));
         }
-
         if (targetEntity instanceof StandEntity SE){
+
             if (SE.getUser() != null){
                 targetEntity = SE.getUser();
             }
@@ -1362,18 +1373,20 @@ public class StandPowers {
         EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(User, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
         if (entityHitResult != null){
             Entity hitResult = entityHitResult.getEntity();
-            if (hitResult.isAlive() && !hitResult.isRemoved()) {
+            if (hitResult.isAlive() && !hitResult.isRemoved() && !hitResult.is(User)) {
                 return hitResult;
             }
         }
         return null;
     }
 
-    public List<Entity> StandGrabHitbox(List<Entity> entities, float maxDistance){
+    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())){
+                if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())
+                || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
+                        ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(User))){
                     hitEntities.remove(value);
                 } else {
                     int angle = 25;

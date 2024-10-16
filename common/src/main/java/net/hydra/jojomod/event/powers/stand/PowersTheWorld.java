@@ -305,7 +305,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             }
 
                             if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
-                                    stand.position().distanceTo(this.getSelf().position()) > 10 ||
                                     stand.position().distanceTo(this.getSelf().position()) > 10){
                                 stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
@@ -321,6 +320,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 }
             }
         }
+    }
+
+    @Override
+    public float getFloatOutRange(){
+        return 10F;
     }
 
     @Override

@@ -181,6 +181,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             inputDash = false;
         }
     }
+
+    public float getFloatOutRange(){
+        return 7F;
+    }
+
     @Override
     public void tickPowerEnd() {
 
@@ -190,7 +195,15 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (!this.getSelf().level().isClientSide()) {
                     StandEntity stand = getStandEntity(this.self);
                     if (Objects.nonNull(stand)) {
-                        stand.setDeltaMovement(stand.getForward());
+                        if (moveStarted) {
+                            stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.12)));
+                        } else {
+                            stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.015)));
+                        }
+                        if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
+                                stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                        }
                     }
                 }
             }
@@ -814,6 +827,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return true;
     }
 
+
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
@@ -893,9 +907,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public void standBarrageHit(){
+        StandEntity stand = getStandEntity(this.self);
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
+                if (forwardBarrage && Objects.nonNull(stand)) {
+                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(4F,stand), this.attackTimeDuring);
+                } else {
+                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
+                }
 
                 if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
                     this.attackTimeDuring = -10;
@@ -905,12 +924,27 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         } else {
             /*Caps how far out the barrage hit goes*/
-            Entity targetEntity = getTargetEntity(this.self,-1);
+            Entity targetEntity;
+            if (forwardBarrage && Objects.nonNull(stand)) {
+                targetEntity = getTargetEntity(stand,4F);
+            } else {
+                targetEntity = getTargetEntity(this.self, -1);
+            }
             barrageImpact(targetEntity, this.attackTimeDuring);
         }
     }
     @Override
     public void barrageImpact(Entity entity, int hitNumber){
+        if (entity != null && moveStarted){
+            moveStarted = false;
+
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)){
+                stand.setXRot(getLookAtEntityPitch(stand, entity));
+                stand.setYRot(getLookAtEntityYaw(stand, entity));
+            }
+        }
+
         if (this.activePower == PowerIndex.BARRAGE_2) {
             if (bonusBarrageConditions()) {
                 boolean lastHit = (hitNumber >= this.getKickBarrageLength());
@@ -1680,6 +1714,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (moveStarted){
+            moveStarted = false;
+        }
         if (!this.self.level().isClientSide &&
                 (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2)
                 && (move != PowerIndex.BARRAGE_2)){
@@ -1719,6 +1756,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         return 1F;
     }
+
     @Override
     public int getBarrageWindup(){
         if (timeStopStartedBarrage) {

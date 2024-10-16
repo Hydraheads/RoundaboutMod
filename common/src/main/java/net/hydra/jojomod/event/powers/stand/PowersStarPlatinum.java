@@ -72,6 +72,26 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public int scopeTicks = -1;
 
+
+    @Override
+    public float getBarrageHitStrength(Entity entity){
+        float str = super.getBarrageHitStrength(entity);
+        if (forwardBarrage){
+            str*=0.6F;
+        }
+        return str;
+    }
+    @Override
+    public float getBarrageFinisherStrength(Entity entity){
+        float str = super.getBarrageFinisherStrength(entity);
+        if (forwardBarrage && !(entity instanceof Player)){
+            str*=0.6F;
+        } else if (forwardBarrage){
+            str*=0.8F;
+        }
+        return str;
+    }
+
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {

@@ -106,7 +106,7 @@ public interface StandUser {
     void roundabout$setSummonCD(int summonCD);
     boolean roundabout$getSummonCD();
     int roundabout$getSummonCD2();
-    Entity roundabout$getTargetEntity(Entity User, float distMax);
+    Entity roundabout$getTargetEntity(LivingEntity User, float distMax);
 
     LivingEntity roundabout$getPowerUser();
 

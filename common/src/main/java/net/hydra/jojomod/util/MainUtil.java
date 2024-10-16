@@ -821,7 +821,13 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE) {
             if (player != null){
                 ((StandUser)player).roundabout$getStandPowers().forwardBarrage = true;
+                ((StandUser)player).roundabout$getStandPowers().moveStarted = true;
                 ((StandUser)player).roundabout$getStandPowers().poseStand(OffsetIndex.LOOSE);
+                StandEntity SE = ((StandUser)player).roundabout$getStand();
+                if (SE != null){
+                    SE.setPos(player.getPosition(0).add(player.getForward().scale(2)).add(0,0.2F,0));
+                    SE.setYRot(player.getYHeadRot() % 360);
+                }
             }
         }
     }

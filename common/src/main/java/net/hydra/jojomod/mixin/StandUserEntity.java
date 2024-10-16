@@ -931,7 +931,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public int roundabout$getSummonCD2(){
         return this.roundabout$getStandPowers().getSummonCD2();
     }
-    public Entity roundabout$getTargetEntity(Entity User, float distMax){
+    public Entity roundabout$getTargetEntity(LivingEntity User, float distMax){
         return this.roundabout$getStandPowers().getTargetEntity(User, distMax);
     }
     public boolean roundabout$getSummonCD(){
