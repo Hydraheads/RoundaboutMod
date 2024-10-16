@@ -11,4 +11,5 @@ public class ModParticles {
     public static SimpleParticleType ENDER_BLOOD;
     public static SimpleParticleType AIR_CRACKLE;
     public static SimpleParticleType MENACING;
+    public static SimpleParticleType VACUUM;
 }

@@ -987,7 +987,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return !(this.roundabout$User instanceof Player) || !(((Player) this.roundabout$User).getCooldowns().getCooldownPercent(Items.SHIELD, 0f) > 0);
 
     }
-    public float roundabout$getDistanceOut(Entity entity, float range, boolean offset){
+    public float roundabout$getDistanceOut(LivingEntity entity, float range, boolean offset){
         return this.roundabout$getStandPowers().getDistanceOut(entity,range,offset);
     }
     public void roundabout$setAttackTimeDuring(int attackTimeDuring){

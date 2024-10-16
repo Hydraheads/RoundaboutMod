@@ -911,7 +911,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 if (forwardBarrage && Objects.nonNull(stand)) {
-                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(4F,stand), this.attackTimeDuring);
+                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(3.3F,stand,50), this.attackTimeDuring);
                 } else {
                     ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
                 }
@@ -926,7 +926,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             /*Caps how far out the barrage hit goes*/
             Entity targetEntity;
             if (forwardBarrage && Objects.nonNull(stand)) {
-                targetEntity = getTargetEntity(stand,4F);
+                targetEntity = getTargetEntity(stand,3.3F);
             } else {
                 targetEntity = getTargetEntity(this.self, -1);
             }

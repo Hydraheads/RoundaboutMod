@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -810,8 +811,8 @@ public class StandPowers {
         }
         return id;
     }
-    public int getTargetEntityId2(float distance,LivingEntity userr){
-        Entity targetEntity = getTargetEntity(userr, distance);
+    public int getTargetEntityId2(float distance,LivingEntity userr,float angle){
+        Entity targetEntity = getTargetEntityGenerous(userr, distance,angle);
         int id;
         if (targetEntity != null) {
             id = targetEntity.getId();
@@ -1244,8 +1245,8 @@ public class StandPowers {
         if (targetEntity == null) {
             float halfReach = (float) (distMax*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-            targetEntity = StandAttackHitboxNear(StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax));
+            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax),25);
         }
         if (targetEntity instanceof StandEntity SE){
 
@@ -1257,11 +1258,39 @@ public class StandPowers {
         return targetEntity;
     }
 
+    public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.standReach, false);
+        }
+        Entity targetEntity = this.rayCastEntity(User,distMax);
 
-    public float getDistanceOut(Entity entity, float range, boolean offset){
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+         || (targetEntity != null && targetEntity.is(User))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distMax*0.8);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
+        }
+        if (targetEntity instanceof StandEntity SE){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+
+        return targetEntity;
+    }
+
+    public float getDistanceOut(LivingEntity entity, float range, boolean offset){
         float distanceFront = this.getRayDistance(entity, range);
         if (offset) {
-            Entity targetEntity = this.rayCastEntity(this.self,this.standReach);
+            Entity targetEntity = this.rayCastEntity(entity,this.standReach);
             if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
                 distanceFront = targetEntity.distanceTo(entity);
             }
@@ -1389,13 +1418,13 @@ public class StandPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())
+                if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
                 || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
                         ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(User))){
                     hitEntities.remove(value);
                 } else {
                     int angle = 25;
-                    if (!(angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= angle)){
+                    if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
                         hitEntities.remove(value);
                     }
                 }
@@ -1422,7 +1451,7 @@ public class StandPowers {
                 LE.setLastHurtMob(target);
             }
             if (target instanceof LivingEntity && knockbackStrength > 0) {
-                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
             }
             return true;
         }
@@ -1455,15 +1484,15 @@ public class StandPowers {
                 vec3d2.z);
     }
 
-    public Entity StandAttackHitboxNear(List<Entity> entities){
+    public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
         float nearestDistance = -1;
         Entity nearestMob = null;
 
         if (entities != null){
             for (Entity value : entities) {
-                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != this.self.getUUID()){
-                    if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(this.getSelf()))) {
-                        float distanceTo = value.distanceTo(this.self);
+                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID()){
+                    if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
+                        float distanceTo = value.distanceTo(User);
                         float range = this.standReach;
                         if (value instanceof StandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
                             range /= 2;

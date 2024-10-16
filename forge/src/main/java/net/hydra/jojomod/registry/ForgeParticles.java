@@ -30,4 +30,8 @@ public class ForgeParticles {
             "menacing",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> VACUUM = PARTICLES.register(
+            "vacuum",
+            () -> new SimpleParticleType(true)
+    );
 }

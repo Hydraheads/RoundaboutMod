@@ -58,7 +58,7 @@ public interface StandUser {
     boolean roundabout$getMainhandOverride();
     boolean canAttack();
     float roundabout$getRayDistance(Entity entity, float range);
-    float roundabout$getDistanceOut(Entity entity, float range, boolean offset);
+    float roundabout$getDistanceOut(LivingEntity entity, float range, boolean offset);
     float roundabout$getStandReach();
 
     StandPowers roundabout$getStandPowers();
