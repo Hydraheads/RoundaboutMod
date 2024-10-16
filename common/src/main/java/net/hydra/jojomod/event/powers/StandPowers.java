@@ -1235,6 +1235,11 @@ public class StandPowers {
             distMax = this.getDistanceOut(User, this.standReach, false);
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if (targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity)){
+            targetEntity = null;
+        }
+
         /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
         if (targetEntity == null) {
             float halfReach = (float) (distMax*0.5);
