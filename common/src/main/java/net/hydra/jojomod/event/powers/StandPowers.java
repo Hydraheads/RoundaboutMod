@@ -1272,7 +1272,7 @@ public class StandPowers {
 
         /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
         if (targetEntity == null) {
-            float halfReach = (float) (distMax*0.8);
+            float halfReach = (float) (distMax*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax),angle);

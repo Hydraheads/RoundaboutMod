@@ -89,14 +89,18 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             if (!hold1) {
                                 hold1 = true;
                                 if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                    if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                                    } else {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                    if (!this.isGuarding()) {
+                                        if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
+                                            if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
+                                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                            } else {
+                                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                            }
+                                            return;
+                                        }
                                     }
-                                    return;
                                 }
                             }
                         } else {

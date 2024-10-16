@@ -182,15 +182,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     } else {
                         if (!this.isGuarding()) {
                             if (!hold1) {
-                                if (options.keyShift.isDown()) {
-                                    super.buttonInput1(keyIsDown, options);
-                                } else {
-                                    //Star Finger here
-                                    hold1 = true;
-                                    if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                        if (this.activePower != PowerIndex.POWER_1) {
-                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
+                                    if (options.keyShift.isDown()) {
+                                        super.buttonInput1(keyIsDown, options);
+                                    } else {
+                                        //Star Finger here
+                                        hold1 = true;
+                                        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                            if (this.activePower != PowerIndex.POWER_1) {
+                                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                            }
                                         }
                                     }
                                 }

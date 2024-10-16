@@ -198,7 +198,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if (moveStarted) {
                             stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.12)));
                         } else {
-                            stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.015)));
+                            stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.025)));
                         }
                         if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
                                 stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
@@ -911,7 +911,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 if (forwardBarrage && Objects.nonNull(stand)) {
-                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(3.3F,stand,50), this.attackTimeDuring);
+                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
                 } else {
                     ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
                 }
@@ -926,7 +926,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             /*Caps how far out the barrage hit goes*/
             Entity targetEntity;
             if (forwardBarrage && Objects.nonNull(stand)) {
-                targetEntity = getTargetEntity(stand,3.3F);
+                targetEntity = getTargetEntityGenerous(stand,2.7F,50);
             } else {
                 targetEntity = getTargetEntity(this.self, -1);
             }
