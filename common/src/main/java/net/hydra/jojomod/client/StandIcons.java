@@ -95,6 +95,8 @@ public class StandIcons {
             "textures/gui/icons/star_platinum/scope_2.png");
     public static final ResourceLocation STAR_PLATINUM_SCOPE_3 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/scope_3.png");
+    public static final ResourceLocation STAR_PLATINUM_INHALE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/inhale.png");
 
     public static final ResourceLocation HASTE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/haste.png");

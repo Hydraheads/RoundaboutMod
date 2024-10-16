@@ -66,7 +66,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean canScope(){
-        return (this.getSelf().isBlocking() || this.hasBlock() || this.hasEntity()
+        return (this.isGuarding() || this.hasBlock() || this.hasEntity()
                 || (this.getSelf().isUsingItem() && this.getSelf().getUseItem().is(Items.SPYGLASS)));
     }
 
@@ -143,7 +143,26 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return super.inputSpeedModifiers(basis);
     }
 
-    /**Assault Ability*/
+
+    public void buttonInput3(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (this.getActivePower() != PowerIndex.POWER_3_SNEAK) {
+                if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                        && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                        && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+                    if (this.isGuarding()){
+
+                    } else {
+                        super.buttonInput3(keyIsDown,options);
+                    }
+                }
+            }
+        } else {
+            inputDash = false;
+        }
+    }
+
+    /**Star Finger Ability*/
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if ((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) || this.getAttackTimeDuring() < 0) {
@@ -444,28 +463,29 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
             setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_ITEM, PowerIndex.SKILL_2);
 
-            boolean done = false;
-            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
-
-                if (!this.getSelf().onGround() && canStandRebound()) {
-                    done=true;
-                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
-                }
-
+            if (this.isGuarding()){
+                setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
             } else {
-
-                if (!this.getSelf().onGround()){
-                    if (canVault()){
-                        done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
-                    } else if (this.getSelf().fallDistance > 3){
-                        done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+                boolean done = false;
+                if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
+                    if (!this.getSelf().onGround() && canStandRebound()) {
+                        done = true;
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                    }
+                } else {
+                    if (!this.getSelf().onGround()) {
+                        if (canVault()) {
+                            done = true;
+                            setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                        } else if (this.getSelf().fallDistance > 3) {
+                            done = true;
+                            setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+                        }
                     }
                 }
-            }
-            if (!done){
-                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                if (!done) {
+                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                }
             }
         } else {
 
@@ -480,18 +500,21 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_BLOCK, PowerIndex.SKILL_2);
             }
 
-
-            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
-                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+            if (this.isGuarding()){
+                setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
             } else {
-                if (!(((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
-                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
-                } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3){
-                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
-                } else {
-                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
-                }
-            }
+               if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
+                   setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+               } else {
+                   if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
+                       setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                   } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3) {
+                       setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+                   } else {
+                       setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+                   }
+               }
+           }
         }
 
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
