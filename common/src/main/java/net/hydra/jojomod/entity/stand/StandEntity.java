@@ -715,7 +715,10 @@ public abstract class StandEntity extends Mob{
             float addXZ = 0.7F;
 
             if (ot == OffsetIndex.GUARD || ot == OffsetIndex.GUARD_AND_TRACE) {
-                addXZ-= 0.015F;
+                addXZ -= 0.015F;
+                distanceFront = 1.05F;
+            } else if (ot == OffsetIndex.GUARD_FURTHER_RIGHT) {
+                addXZ+= 0.15F;
                 distanceFront = 1.05F;
             } else {
                 distanceFront = ((StandUser) standUser).roundabout$getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).roundabout$getStandReach(),true);

@@ -151,9 +151,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                         && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
                     if (this.isGuarding()){
-
+                        if (this.activePower != PowerIndex.POWER_3) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                        }
                     } else {
-                        super.buttonInput3(keyIsDown,options);
+                        if (this.activePower != PowerIndex.POWER_3) {
+                            super.buttonInput3(keyIsDown, options);
+                        }
                     }
                 }
             }
@@ -213,8 +218,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         /*Tick through Time Stop Charge*/
         if (this.getActivePower() == PowerIndex.POWER_1) {
             this.updateStarFinger();
+        } else if (this.getActivePower() == PowerIndex.POWER_3) {
+            this.updateStarFinger();
         }
         super.updateUniqueMoves();
+    }
+
+    public void updateInhale(){
+
     }
 
     public List<Entity> doFinger(float distance){
@@ -529,14 +540,43 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public boolean clickRelease(){
+        if (this.getActivePower() == PowerIndex.POWER_3){
+            return true;
+        }
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (this.activePower == PowerIndex.POWER_3) {
+            return false;
+        }
+        return super.buttonInputGuard(keyIsDown,options);
+    }
+
+    @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1) {
             return this.starFinger();
+        } else if (move == PowerIndex.POWER_3) {
+            return this.inhale();
         }
         return super.setPowerOther(move,lastMove);
     }
     public static final byte STAR_FINGER = 80;
 
+    public boolean inhale(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_3);
+            this.animateStand((byte)15);
+            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            return true;
+        }
+        return false;
+    }
     public boolean starFinger(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
