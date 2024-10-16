@@ -444,8 +444,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
                             if (this.tickCount % 4 == 0){
                                 roundabout$targetVillageEnemies();
                             }
-                            if (this.getTarget() instanceof AbstractVillager){
+                            if (this.getTarget() instanceof AbstractVillager || this.getLastHurtByMob()
+                                    instanceof AbstractVillager){
                                 this.setTarget(null);
+                                this.setLastHurtByMob(null);
                             }
                         }
                     }
