@@ -1091,7 +1091,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                     theWorld.addFreshEntity(stand);
 
-                    if (sound) {
+                    if (sound && !((TimeStop)this.level()).CanTimeStopEntity(this)) {
                         this.roundabout$getStandPowers().playSummonSound();
                     }
 
@@ -1760,6 +1760,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$UniversalTick(){
         if (this.roundabout$TSHurtTime > 0){this.roundabout$TSHurtTime--;}
+
+        if (roundabout$getStandPowers().summonCD > 0) {
+            roundabout$getStandPowers().summonCD--;
+        }
     }
 
     /**Use this code to eliminate the sprint jump during certain actions*/

@@ -131,7 +131,7 @@ public class StandPowers {
     }
 
     /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/
-    private int summonCD = 0;
+    public int summonCD = 0;
 
     /**This updates when a punch is thrown, to stop the stand from throwing the same punch twice if the game lags*/
     private byte activePowerPhaseCheck = -1;
@@ -513,9 +513,6 @@ public class StandPowers {
                 if (this.interruptCD > 0) {
                     this.interruptCD--;
                 }
-            }
-            if (this.summonCD > 0) {
-                this.summonCD--;
             }
             this.tickDash();
             this.tickCooldowns();
