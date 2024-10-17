@@ -369,6 +369,7 @@ public class MainUtil {
         Vec3 vec3 = entity.getDeltaMovement();
         Vec3 vec32 = new Vec3(e, 0.0, f).normalize().scale(d);
         entity.setDeltaMovement(vec3.x / 2.0 - vec32.x, entity.onGround() ? Math.min(0.4, vec3.y / 2.0 + d) : vec3.y, vec3.z / 2.0 - vec32.z);
+        entity.hurtMarked = true;
     }
     public static void knockbackWithoutBumpUp(Entity entity, double d, double e, double f) {
         if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
