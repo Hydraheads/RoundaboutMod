@@ -538,7 +538,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public byte roundabout$getStoredDamageByte(){
-        return this.getEntityData().get(ROUNDABOUT_TS_DAMAGE);
+        if (getEntityData().hasItem(ROUNDABOUT_TS_DAMAGE)) {
+            return this.getEntityData().get(ROUNDABOUT_TS_DAMAGE);
+        } else {
+            return 0;
+        }
     }
 
     @Unique
@@ -566,17 +570,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public byte roundabout$getLocacacaCurse() {
-        return this.getEntityData().get(ROUNDABOUT$LOCACACA_CURSE);
+        if (getEntityData().hasItem(ROUNDABOUT$LOCACACA_CURSE)) {
+            return this.getEntityData().get(ROUNDABOUT$LOCACACA_CURSE);
+        } else {
+            return 0;
+        }
     }
     @Unique
     @Override
     public int roundabout$getBleedLevel() {
-        return this.getEntityData().get(ROUNDABOUT$BLEED_LEVEL);
+
+        if (getEntityData().hasItem(ROUNDABOUT$BLEED_LEVEL)) {
+            return this.getEntityData().get(ROUNDABOUT$BLEED_LEVEL);
+        } else {
+            return 0;
+        }
     }
     @Unique
     @Override
     public boolean roundabout$getOnlyBleeding() {
-        return this.getEntityData().get(ROUNDABOUT$ONLY_BLEEDING);
+        if (getEntityData().hasItem(ROUNDABOUT$ONLY_BLEEDING)) {
+            return this.getEntityData().get(ROUNDABOUT$ONLY_BLEEDING);
+        } else {
+            return false;
+        }
     }
     @Unique
     @Override
@@ -605,7 +622,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public ItemStack roundabout$getStandDisc() {
-        return this.getEntityData().get(ROUNDABOUT$STAND_DISC);
+        if (getEntityData().hasItem(ROUNDABOUT$STAND_DISC)) {
+            return this.getEntityData().get(ROUNDABOUT$STAND_DISC);
+        } else {
+            return ItemStack.EMPTY;
+        }
     }
     @Unique
     @Override
@@ -756,7 +777,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public boolean roundabout$getActive() {
-        return ((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ACTIVE);
+        if (((LivingEntity) (Object) this).getEntityData().hasItem(ROUNDABOUT$STAND_ACTIVE) &&
+                ((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ACTIVE) instanceof Boolean) {
+            return ((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ACTIVE);
+        } else {
+            return false;
+        }
     }
     /**If the player currently is stand attacking vs using items*/
     public boolean roundabout$getMainhandOverride() {
@@ -1114,7 +1140,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Nullable
     public StandEntity roundabout$getStand() {
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide && (((LivingEntity) (Object) this).getEntityData().hasItem(ROUNDABOUT$STAND_ID))) {
             return (StandEntity) this.level().getEntity(((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ID));
         } else {
             if (this.roundabout$Stand != null && this.roundabout$Stand.isRemoved()){
