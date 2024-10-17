@@ -604,6 +604,10 @@ public abstract class StandEntity extends Mob{
                                 }
                             }
                         } else {
+                            if (thisStand != null && thisStand.getId() != this.getId() && thisStand instanceof StandEntity SE &&
+                            SE.getFadeOut() >= 1 && this.getFadeOut() > 1){
+                                this.setFadeOut((byte) 1);
+                            }
                             TickDown();
                         }
                     } else {

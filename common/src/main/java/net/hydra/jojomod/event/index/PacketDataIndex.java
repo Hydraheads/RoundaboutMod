@@ -23,6 +23,7 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_SCOPE = 4;
     public static final byte SINGLE_BYTE_SCOPE_OFF = 5;
     public static final byte SINGLE_BYTE_FORWARD_BARRAGE = 6;
+    public static final byte SINGLE_BYTE_SILENT_SUMMON = 7;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;

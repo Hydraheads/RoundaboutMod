@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -38,16 +39,29 @@ public class KeyInputs {
         }
     }
 
+    public static void forceSummon(Player player,boolean keyIsDown){
+        if (keyIsDown) {
+            if (!((StandUser) player).roundabout$getStandDisc().isEmpty() && !((StandUser) player).roundabout$getActive()) {
+                ((StandUser) player).roundabout$setActive(true);
+                ((StandUser) player).roundabout$setSummonCD(2);
+                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON);
+            }
+        }
+    }
     public static void MoveKey4(Player player, Minecraft client, boolean keyIsDown, Options option){
+        forceSummon(player,keyIsDown);
         ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);
     }
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
+        forceSummon(player,keyIsDown);
         ((StandUser) player).roundabout$getStandPowers().preButtonInput3(keyIsDown, option);
     }
     public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
+        forceSummon(player,keyIsDown);
         ((StandUser) player).roundabout$getStandPowers().preButtonInput2(keyIsDown, option);
     }
     public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
+        forceSummon(player,keyIsDown);
         ((StandUser) player).roundabout$getStandPowers().preButtonInput1(keyIsDown, option);
     }
 

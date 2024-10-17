@@ -219,7 +219,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.getActivePower() == PowerIndex.POWER_1) {
             this.updateStarFinger();
         } else if (this.getActivePower() == PowerIndex.POWER_3) {
-            this.updateStarFinger();
+            this.updateInhale();
         }
         super.updateUniqueMoves();
     }
@@ -301,7 +301,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         };
         for (Entity value : entities) {
             if (value.isInvulnerable() || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())
-            || (value instanceof StandEntity SE && SE.getUser().getUUID() == this.self.getUUID())){
+            || (value instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().getUUID() == this.self.getUUID())){
                 hitEntities.remove(value);
             } else {
                 int angle = 10;

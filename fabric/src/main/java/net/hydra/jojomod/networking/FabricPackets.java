@@ -221,7 +221,6 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());
     }
 
-
     @Override
     public void byteToServerPacket(byte value, byte context){
         FriendlyByteBuf buffer = PacketByteBufs.create();

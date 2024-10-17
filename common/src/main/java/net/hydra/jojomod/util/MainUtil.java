@@ -804,7 +804,9 @@ public class MainUtil {
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleSingleBytePacketC2S(Player player, byte context){
-        if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
+        if (context == PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON) {
+            ((StandUser) player).roundabout$summonStand(player.level(), false, false);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
