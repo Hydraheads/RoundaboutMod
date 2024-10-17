@@ -48,6 +48,8 @@ public abstract class EntityAndData implements IEntityAndData {
     public @Nullable ItemStack roundabout$RenderMainHand;
     @Unique
     public @Nullable ItemStack roundabout$RenderOffHand;
+    @Unique
+    public int roundabout$noGravityTicks = 0;
 
     public void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest){
         this.roundabout$RenderChest = chest;
@@ -104,6 +106,16 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     public double roundabout$getRoundaboutPrevZ(){
         return this.roundabout$PrevZ;
+    }
+    @Override
+    @Unique
+    public int roundabout$getNoGravTicks(){
+        return this.roundabout$noGravityTicks;
+    }
+    @Override
+    @Unique
+    public void roundabout$setNoGravTicks(int ticks){
+        this.roundabout$noGravityTicks = ticks;
     }
 
     @Shadow

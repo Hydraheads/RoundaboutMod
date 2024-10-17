@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -20,15 +21,22 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -140,6 +148,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (this.activePower == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
                 basis *= 0.74f;
             }
+        if (this.activePower == PowerIndex.POWER_3){
+            basis *= 0.5f;
+        }
         return super.inputSpeedModifiers(basis);
     }
 
@@ -225,6 +236,60 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     public void updateInhale(){
+        float dist = 8F;
+        Vec3 pointVec = DamageHandler.getRayPoint(self, dist);
+        Vec3 pointVec2 = DamageHandler.getRayPoint(self, Math.max(0.6,dist-1.5));
+        if (!this.self.level().isClientSide) {
+
+            if (this.attackTimeDuring % 7 == 0){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.INHALE_EVENT, SoundSource.PLAYERS, 0.5F, (float) (0.98 + (Math.random() * 0.04)));
+            }
+
+            double random = (Math.random() * 1.8) - 0.9;
+            double random2 = (Math.random() * 1.8) - 0.9;
+            double random3 = (Math.random() * 1.8) - 0.9;
+            ((ServerLevel) this.self.level()).sendParticles(ModParticles.VACUUM, pointVec2.x + random,
+                    pointVec2.y+ random2, pointVec2.z + random3,
+                    0,
+                    (this.getSelf().getX() - pointVec2.x)*1.4F, (this.getSelf().getEyeY() - pointVec2.y)*1.4F, (this.getSelf().getZ() - pointVec2.z)*1.4F,
+                    0.08);
+            float dst = (float) pointVec.distanceTo(this.getSelf().position());
+            float halfReach = (float) (dst*0.5);
+            Vec3 pointVec3 = DamageHandler.getRayPoint(self, halfReach);
+            List<Entity> listEnt = DamageHandler.genHitbox(self, pointVec3.x, pointVec3.y,
+                    pointVec3.z, halfReach, halfReach, halfReach);
+            for (Entity value : listEnt) {
+                if (!(value instanceof StarPlatinumEntity) && !value.isInvulnerable()) {
+                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= 60)) {
+                        double strength = 0.05;
+                        if (value instanceof ItemEntity || value instanceof ExperienceOrb) {
+                            ((IEntityAndData) value).roundabout$setNoGravTicks(2);
+                            strength = 0.7;
+
+                            float degrees = Mth.wrapDegrees(getLookAtEntityYaw(this.getSelf(), value) - 180);
+                            float degreesY = -1 * getLookAtEntityPitch(this.getSelf(), value);
+                            float ybias = (90F - Math.abs(degreesY)) / 90F;
+
+                            MainUtil.takeUnresistableKnockbackWithYBias(value, strength * (0.5 + (ybias / 2)),
+                                    Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                    Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                    -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                    ybias);
+                        } else {
+                            if (value instanceof LivingEntity LE && (strength *= (float) (1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+                                strength = 0;
+                            } else {
+                                float degrees = Mth.wrapDegrees(getLookAtEntityYaw(this.getSelf(), value) - 180);
+
+                                MainUtil.knockbackWithoutBumpUp(value, strength,
+                                        Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                        -Mth.cos((degrees * ((float) Math.PI / 180))));
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
@@ -389,6 +454,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.POWER_1  && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+            return true;
+        } else if (this.getActivePower() == PowerIndex.POWER_3){
             return true;
         }
         return super.cancelSprintJump();

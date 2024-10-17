@@ -23,6 +23,12 @@
       "roundabout:time_snap"
     ]
   },
+  "inhale": {
+    "subtitle": "sounds.roundabout.inhale",
+    "sounds": [
+      "roundabout:inhale"
+    ]
+  },
   "terrier_pass": {
     "subtitle": "sounds.roundabout.terrier_pass",
     "sounds": [

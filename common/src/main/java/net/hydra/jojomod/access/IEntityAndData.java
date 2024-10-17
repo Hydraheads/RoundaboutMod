@@ -8,6 +8,9 @@ public interface IEntityAndData {
 
     float roundabout$getPreTSTick();
 
+    void roundabout$setNoGravTicks(int ticks);
+    int roundabout$getNoGravTicks();
+
     double roundabout$getRoundaboutPrevX();
 
     double roundabout$getRoundaboutPrevY();
