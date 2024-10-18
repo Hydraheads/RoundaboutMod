@@ -182,6 +182,24 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    /**Phase Grab*/
+    public void buttonInput2(boolean keyIsDown, Options options) {
+        if (((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) ||
+                this.getAttackTimeDuring() < 0) && this.isGuarding()) {
+            if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                    && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                    && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+                if ((this.getActivePower() != PowerIndex.POWER_3_BLOCK)) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BLOCK);
+                }
+                return;
+            }
+        }
+        super.buttonInput2(keyIsDown,options);
+    }
+
+
     public float getFloatOutRange(){
         return 7F;
     }

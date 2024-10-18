@@ -60,6 +60,8 @@ public class StandIcons {
             "textures/gui/icons/the_world/grab_mob.png");
     public static final ResourceLocation THE_WORLD_TRAVEL_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/travel_barrage.png");
+    public static final ResourceLocation THE_WORLD_PHASE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/phase_grab.png");
 
     public static final ResourceLocation STAR_PLATINUM_FINGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/star_finger.png");
@@ -97,6 +99,8 @@ public class StandIcons {
             "textures/gui/icons/star_platinum/scope_3.png");
     public static final ResourceLocation STAR_PLATINUM_INHALE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/inhale.png");
+    public static final ResourceLocation STAR_PLATINUM_PHASE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/phase_grab.png");
 
     public static final ResourceLocation HASTE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/haste.png");

@@ -162,7 +162,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                         && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
                     if (this.isGuarding()){
-                        if (this.activePower != PowerIndex.POWER_3) {
+                        if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
                         }
@@ -240,6 +240,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         Vec3 pointVec = DamageHandler.getRayPoint(self, dist);
         Vec3 pointVec2 = DamageHandler.getRayPoint(self, Math.max(0.6,dist-1.5));
         if (!this.self.level().isClientSide) {
+            if (this.getSelf().isUnderWater()){
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                return;
+            }
 
             if (this.attackTimeDuring % 7 == 0){
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.INHALE_EVENT, SoundSource.PLAYERS, 0.5F, (float) (0.98 + (Math.random() * 0.04)));
@@ -541,7 +546,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
         if (this.getSelf().isShiftKeyDown()){
 
-            setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_ITEM, PowerIndex.SKILL_2);
+            if (this.isGuarding()) {
+                setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_PHASE_GRAB, PowerIndex.SKILL_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_ITEM, PowerIndex.SKILL_2);
+            }
 
             if (this.isGuarding()){
                 setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
@@ -573,11 +582,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             //setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
 
             /*If it can find a mob to grab, it will*/
-            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);
-            if (targetEntity != null && canGrab(targetEntity)) {
-                setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_MOB, PowerIndex.SKILL_2);
+            if (this.isGuarding()) {
+                setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_PHASE_GRAB, PowerIndex.SKILL_2);
             } else {
-                setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_BLOCK, PowerIndex.SKILL_2);
+                Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), 2.1F);
+                if (targetEntity != null && canGrab(targetEntity)) {
+                    setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_MOB, PowerIndex.SKILL_2);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_BLOCK, PowerIndex.SKILL_2);
+                }
             }
 
             if (this.isGuarding()){

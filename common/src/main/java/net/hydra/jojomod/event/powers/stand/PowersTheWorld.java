@@ -736,7 +736,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_IMPALE, PowerIndex.SKILL_1_SNEAK);
             }
-            setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_ITEM, PowerIndex.SKILL_2);
+
+            if (this.isGuarding()) {
+                setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_PHASE_GRAB, PowerIndex.SKILL_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_ITEM, PowerIndex.SKILL_2);
+            }
 
             boolean done = false;
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1){
@@ -769,12 +774,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_ASSAULT, PowerIndex.SKILL_1);
             }
 
-            /*If it can find a mob to grab, it will*/
-            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);
-            if (targetEntity != null && canGrab(targetEntity)) {
-                setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_MOB, PowerIndex.SKILL_2);
+            if (this.isGuarding()) {
+                setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_PHASE_GRAB, PowerIndex.SKILL_2);
             } else {
-                setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_BLOCK, PowerIndex.SKILL_2);
+                /*If it can find a mob to grab, it will*/
+                Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), 2.1F);
+                if (targetEntity != null && canGrab(targetEntity)) {
+                    setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_MOB, PowerIndex.SKILL_2);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.THE_WORLD_GRAB_BLOCK, PowerIndex.SKILL_2);
+                }
             }
 
 
