@@ -1417,7 +1417,7 @@ public class StandPowers {
             for (Entity value : entities) {
                 if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
                 || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
-                        ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(User))){
+                        ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value))){
                     hitEntities.remove(value);
                 } else {
                     int angle = 25;
