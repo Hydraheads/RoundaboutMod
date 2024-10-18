@@ -306,7 +306,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         } else {
                             animateStand((byte) 34);
                         }
-                        IE.discard();
+                        IE.getItem().shrink(1);
                         return;
                     }
                 }
