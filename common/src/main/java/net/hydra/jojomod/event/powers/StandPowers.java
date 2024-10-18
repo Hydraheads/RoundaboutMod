@@ -560,6 +560,19 @@ public class StandPowers {
         }
     }
 
+
+    public boolean hasCooldowns(){
+        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+        };
+        for (byte i = 0; i < CDCopy.size(); i++){
+            CooldownInstance ci = CDCopy.get(i);
+            if (ci.time >= 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**The manner in which your powers tick when you are being timestopped. Override this if the stand acts differently.
      * By technicality, you should still tick sounds.*/
     public void timeTick(){

@@ -1064,6 +1064,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public int roundabout$sealedTicks = -1;
+    @Unique
+    public int roundabout$maxSealedTicks = -1;
 
     @Override
     @Unique
@@ -1072,8 +1074,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Override
     @Unique
+    public void roundabout$setMaxSealedTicks(int ticks){
+        roundabout$maxSealedTicks = ticks;
+    }
+    @Override
+    @Unique
     public int roundabout$getSealedTicks(){
         return roundabout$sealedTicks;
+    }
+    @Override
+    @Unique
+    public int roundabout$getMaxSealedTicks(){
+        return roundabout$maxSealedTicks;
     }
 
     /** Sets a stand to a user, and a user to a stand.*/

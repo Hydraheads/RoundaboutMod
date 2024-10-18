@@ -42,9 +42,14 @@ public class KeyInputs {
     public static void forceSummon(Player player,boolean keyIsDown){
         if (keyIsDown) {
             if (!((StandUser) player).roundabout$getStandDisc().isEmpty() && !((StandUser) player).roundabout$getActive()) {
-                ((StandUser) player).roundabout$setActive(true);
-                ((StandUser) player).roundabout$setSummonCD(2);
-                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON);
+                if (((StandUser) player).roundabout$getStandPowers().canSummonStand() && ((StandUser) player).roundabout$getSealedTicks() <= -1) {
+                    if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+                        ((StandUser) player).roundabout$setActive(true);
+                        ((StandUser) player).roundabout$setSummonCD(2);
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON);
+
+                    }
+                }
             }
         }
     }

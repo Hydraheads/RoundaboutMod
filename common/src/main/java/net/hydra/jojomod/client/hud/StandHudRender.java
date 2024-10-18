@@ -161,7 +161,7 @@ public class StandHudRender {
         int v;
         l = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser) playerEntity);
-        k = (int) Math.floor((182/300F)*(300-standUser.roundabout$getSealedTicks()));
+        k = (int) Math.floor(((double) 182 /standUser.roundabout$getMaxSealedTicks())*(standUser.roundabout$getMaxSealedTicks()-standUser.roundabout$getSealedTicks()));
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 90, 182, 5);
         if (k > 0) {
             context.blit(StandIcons.JOJO_ICONS, x, l, 0, 90+5, k, 5);

@@ -158,7 +158,13 @@ public class ClientUtil {
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
-            ((StandUser)player).roundabout$setSealedTicks(300);
+            if (((StandUser)player).roundabout$getStandPowers().hasCooldowns()) {
+                ((StandUser) player).roundabout$setMaxSealedTicks(300);
+                ((StandUser) player).roundabout$setSealedTicks(300);
+            } else {
+                ((StandUser) player).roundabout$setMaxSealedTicks(100);
+                ((StandUser) player).roundabout$setSealedTicks(100);
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;

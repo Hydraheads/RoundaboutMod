@@ -121,7 +121,7 @@
   "death.attack.match": "%1$s met their match in battle with %2$s",
   "death.attack.power_throw": "%1$s struck out whilst fighting %2$s",
   "death.attack.barbed_wire": "%1$s ran into a wire",
-  "death.attack.barbed_wire.player": "%1$s an into a wire whilst fighting %2$s",
+  "death.attack.barbed_wire.player": "%1$s ran into a wire whilst fighting %2$s",
   "death.attack.heart": "%1$s had a change of heart",
   "death.attack.heart.player": "%1$s had a change of heart in battle with %2$s",
   "death.attack.fusion": "%1$s was fused into %2$s",
