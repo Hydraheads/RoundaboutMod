@@ -1,8 +1,10 @@
 package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.renderer.LightTexture;
@@ -36,10 +38,13 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandDisc().isEmpty()){
-            (this.model).setAlpha(0);
+            mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, 0, 0.72f);
         } else {
-            (this.model).setAlpha(getStandOpacity(mobEntity));
+            float opacity = getStandOpacity(mobEntity);
+            opacity *= (mobEntity.getFadePercent()*0.01F);
+            mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, opacity, 0.72f);
         }
+        (this.model).setAlpha(mobEntity.fadePercent);
 
         int plight = i;
         var owner = mobEntity.getUser();
@@ -70,7 +75,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     public float getStandOpacity(T entity){
             int vis = entity.getFadeOut();
             int max = entity.getMaxFade();
-            float tot = (float) ((((float) vis / max) * 1.3) - 0.3);
+            float tot = (float) ((((float) Math.min(vis+ ClientUtil.getDelta(),max) / max) * 1.3) - 0.3);
             if (tot < 0) {
                 tot = 0;
             }

@@ -1322,6 +1322,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (Objects.nonNull(stand)) {
             animateStand((byte) 0);
             this.attackTimeDuring = 0;
+            stand.setFadePercent(50);
             this.setActivePower(PowerIndex.POWER_2_BLOCK);
             this.poseStand(OffsetIndex.LOOSE);
             stand.setYRot(this.getSelf().getYHeadRot() % 360);
@@ -1837,6 +1838,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+
+        StandEntity stand = getStandEntity(this.self);
+        if (move != PowerIndex.POWER_2_BLOCK && Objects.nonNull(stand)) {
+            stand.setFadePercent(100);
+        }
         if (moveStarted){
             moveStarted = false;
         }

@@ -44,6 +44,10 @@ public abstract class StandEntity extends Mob{
     /**MaxFade and FADE_OUT control a stand become less and less transparent as it is
      * summoned. When a stand completely fades out, it despawns.*/
     private final int MaxFade = 8;
+
+    public float fadePercent =0F;
+    protected static final EntityDataAccessor<Integer> FADE_PERCENT = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> FADE_OUT = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Integer> ANCHOR_PLACE = SynchedEntityData.defineId(StandEntity.class,
@@ -268,6 +272,13 @@ public abstract class StandEntity extends Mob{
         return this.entityData.get(FADE_OUT);
     }
 
+    public final void setFadePercent(Integer FadeOut) {
+        this.entityData.set(FADE_PERCENT, FadeOut);
+    } //sets leaning direction
+    public int getFadePercent() {
+        return this.entityData.get(FADE_PERCENT);
+    }
+
     public final int getAnchorPlace() {
         return this.entityData.get(ANCHOR_PLACE);
     }
@@ -408,6 +419,7 @@ public abstract class StandEntity extends Mob{
         super.defineSynchedData();
         this.entityData.define(ANCHOR_PLACE, 55);
         this.entityData.define(FADE_OUT, (byte) 0);
+        this.entityData.define(FADE_PERCENT, 100);
         this.entityData.define(MOVE_FORWARD, (byte) 0);
         this.entityData.define(OFFSET_TYPE, (byte) 0);
         this.entityData.define(USER_ID, -1);
@@ -781,7 +793,8 @@ public abstract class StandEntity extends Mob{
                             !($$2.getBlock() instanceof FenceBlock) &&
                             !($$2.getBlock() instanceof FenceGateBlock) &&
                                     !($$2.getBlock() instanceof SlabBlock) &&
-                                    !($$2.getBlock() instanceof AnvilBlock)&&
+                                    !($$2.getBlock() instanceof AnvilBlock) &&
+                                    !($$2.getBlock() instanceof BellBlock) &&
                                     !($$2.getBlock() instanceof RodBlock)
                                     && $$2.isSuffocating(this.level(), $$1x)
                                     && Shapes.joinIsNotEmpty(
