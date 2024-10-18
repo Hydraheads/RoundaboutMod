@@ -624,7 +624,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.getActivePower() == PowerIndex.POWER_3){
             return true;
         }
-        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+        return super.clickRelease();
     }
 
     @Override

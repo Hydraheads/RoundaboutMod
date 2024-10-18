@@ -28,6 +28,7 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -760,6 +761,28 @@ public abstract class StandEntity extends Mob{
                         $$1x -> {
                             BlockState $$2 = this.level().getBlockState($$1x);
                             return !$$2.isAir()
+                                    && $$2.isSuffocating(this.level(), $$1x)
+                                    && Shapes.joinIsNotEmpty(
+                                    $$2.getCollisionShape(this.level(), $$1x).move((double)$$1x.getX(), (double)$$1x.getY(), (double)$$1x.getZ()),
+                                    Shapes.create($$1),
+                                    BooleanOp.AND
+                            );
+                        }
+                );
+    }
+    public boolean isTechnicallyInImpassableWall() {
+        float $$0 = this.getDimensions(this.getPose()).width * 0.8F;
+        AABB $$1 = AABB.ofSize(this.getEyePosition(), (double)$$0, 1.0E-6, (double)$$0);
+        return BlockPos.betweenClosedStream($$1)
+                .anyMatch(
+                        $$1x -> {
+                            BlockState $$2 = this.level().getBlockState($$1x);
+                            return !$$2.isAir() && !($$2.getBlock() instanceof IronBarsBlock) &&
+                            !($$2.getBlock() instanceof FenceBlock) &&
+                            !($$2.getBlock() instanceof FenceGateBlock) &&
+                                    !($$2.getBlock() instanceof SlabBlock) &&
+                                    !($$2.getBlock() instanceof AnvilBlock)&&
+                                    !($$2.getBlock() instanceof RodBlock)
                                     && $$2.isSuffocating(this.level(), $$1x)
                                     && Shapes.joinIsNotEmpty(
                                     $$2.getCollisionShape(this.level(), $$1x).move((double)$$1x.getX(), (double)$$1x.getY(), (double)$$1x.getZ()),

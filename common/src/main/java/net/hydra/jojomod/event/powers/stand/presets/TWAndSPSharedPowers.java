@@ -29,12 +29,18 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Objects;
 
 public class TWAndSPSharedPowers extends BlockGrabPreset{
@@ -184,19 +190,23 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     /**Phase Grab*/
     public void buttonInput2(boolean keyIsDown, Options options) {
-        if (((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) ||
-                this.getAttackTimeDuring() < 0) && this.isGuarding()) {
-            if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                    && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                    && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                if ((this.getActivePower() != PowerIndex.POWER_3_BLOCK)) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BLOCK);
+        if ((this.getActivePower() != PowerIndex.POWER_2_BLOCK)) {
+            if (keyIsDown) {
+                if (((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) ||
+                        this.getAttackTimeDuring() < 0) && this.isGuarding()) {
+                    if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                            && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                            && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
+                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BLOCK);
+                        }
+                    }
+                    return;
                 }
-                return;
             }
+            super.buttonInput2(keyIsDown, options);
         }
-        super.buttonInput2(keyIsDown,options);
     }
 
 
@@ -204,24 +214,100 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return 7F;
     }
 
+    public Vec3 moveVec = Vec3.ZERO;
     @Override
     public void tickPowerEnd() {
 
         super.tickPowerEnd();
-        if (this.getSelf().isAlive() && !this.getSelf().isRemoved() && this.forwardBarrage && this.attackTimeDuring >= 0) {
-            if (this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_2) {
+        if (this.getSelf().isAlive() && !this.getSelf().isRemoved()){
+            if (this.forwardBarrage && this.attackTimeDuring >= 0) {
+                if (this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_2) {
+                    if (!this.getSelf().level().isClientSide()) {
+                        StandEntity stand = getStandEntity(this.self);
+                        if (Objects.nonNull(stand)) {
+                            if (moveStarted) {
+                                stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.12)));
+                            } else {
+                                stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.025)));
+                            }
+                            if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
+                                    stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                            }
+                        }
+                    }
+                }
+            } else if (this.getActivePower() == PowerIndex.POWER_2_BLOCK) {
                 if (!this.getSelf().level().isClientSide()) {
-                    StandEntity stand = getStandEntity(this.self);
-                    if (Objects.nonNull(stand)) {
-                        if (moveStarted) {
-                            stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.12)));
+                    if (this.attackTimeDuring == 108) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    } else if (this.attackTimeDuring >= 0) {
+                        StandEntity stand = getStandEntity(this.self);
+                        if (Objects.nonNull(stand)) {
+                            AABB BB1 = stand.getBoundingBox();
+                            Vec3 vec3d = this.getSelf().getEyePosition(0);
+                            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                            Vec3 vec3d3 = vec3d.add(vec3d2.x * 20, vec3d2.y * 20, vec3d2.z * 20);
+                            double mag = 0.18F;
+
+                            moveVec = moveVec.add(
+                                    vec3d3.subtract(this.getSelf().position().add(moveVec)).normalize().scale(mag)
+                            );
+                            Vec3 yes = this.getSelf().position().add(moveVec);
+                            double post = stand.position().distanceTo(vec3d3);
+                            if (post< 1.5){
+                                stand.setYRot(this.getSelf().getYHeadRot() % 360);
+                                stand.setXRot(this.getSelf().getXRot());
+                            } else {
+                                stand.setYRot(getLookAtPlaceYaw(stand,vec3d3));
+                                stand.setXRot(getLookAtPlacePitch(stand,vec3d3));
+                            }
+                            if (post < 0.4){
+                                stand.setPos(vec3d3);
+                            } else {
+                                stand.setPos(yes);
+                            }
+
+                            if ((stand.isTechnicallyInImpassableWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
+                                    stand.position().distanceTo(this.getSelf().position()) > 15){
+                                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 7);
+                                this.setCooldown(PowerIndex.SKILL_2, 5);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                            }
+                            AABB BB2 = stand.getBoundingBox();
+                            if (this.attackTimeDuring > 2) {
+                                tryPhaseItemGrab(stand, BB1, BB2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void tryPhaseItemGrab(StandEntity stand, AABB bb1, AABB bb2){
+        bb1 = bb1.inflate(1.6F);
+        bb2 = bb2.inflate(1.6F);
+
+        AABB $$2 = bb1.minmax(bb2);
+        List<Entity> $$3 = stand.level().getEntities(stand, $$2);
+        if (!$$3.isEmpty()) {
+            for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
+                Entity $$5 = $$3.get($$4);
+                if ($$5 instanceof ItemEntity IE && stand.getSensing().hasLineOfSight($$5)){
+                    if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock)){
+                        stand.canAcquireHeldItem = true;
+                        stand.setHeldItem(IE.getItem().copyWithCount(1));
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
+                        this.setActivePower(PowerIndex.POWER_2_SNEAK);
+                        this.setAttackTimeDuring(0);
+                        poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                        if (MainUtil.isThrownBlockItem(IE.getItem().getItem())) {
+                            animateStand((byte) 32);
                         } else {
-                            stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.025)));
+                            animateStand((byte) 34);
                         }
-                        if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
-                                stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                        }
+                        IE.discard();
+                        return;
                     }
                 }
             }
@@ -415,7 +501,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2 || this.activePower == PowerIndex.BARRAGE_2) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2 || this.activePower == PowerIndex.BARRAGE_2 || this.activePower == PowerIndex.POWER_2_BLOCK) {
             return false;
         }
         return super.buttonInputGuard(keyIsDown,options);
@@ -876,6 +962,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             updateFinalAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             updateFinalAttackCharge();
+        } else if (this.getActivePower() == PowerIndex.POWER_2_BLOCK){
         }
         super.updateUniqueMoves();
     }
@@ -1147,7 +1234,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean clickRelease(){
-        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.POWER_2_BLOCK);
     }
     @Override
     public boolean cancelSprintJump(){
@@ -1213,6 +1300,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.BARRAGE_2) {
             return this.setPowerKickBarrage();
+        } else if (move == PowerIndex.POWER_2_BLOCK) {
+            return this.phaseGrab();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -1228,6 +1317,22 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    public boolean phaseGrab() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            animateStand((byte) 0);
+            this.attackTimeDuring = 0;
+            this.setActivePower(PowerIndex.POWER_2_BLOCK);
+            this.poseStand(OffsetIndex.LOOSE);
+            stand.setYRot(this.getSelf().getYHeadRot() % 360);
+            stand.setXRot(this.getSelf().getXRot());
+            moveVec = DamageHandler.getRotationVector(
+                    this.getSelf().getXRot(), (float) (this.getSelf().getYRot())).scale(1.8).add(0, 0.25, 0);
+            stand.setPos(this.getSelf().position().add(moveVec));
+            return true;
+        }
+        return false;
+    }
     public boolean setPowerKickBarrageCharge() {
         animateStand((byte) 11);
         this.attackTimeDuring = 0;
