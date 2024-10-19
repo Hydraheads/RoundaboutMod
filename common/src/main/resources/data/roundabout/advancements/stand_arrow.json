@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "roundabout:stand_arrow_shaped"
+    ]
+  },
+  "criteria": {
+    "has_meteor_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "roundabout:meteorite_ingot"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "roundabout:stand_arrow_shaped"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_meteor_ingot",
+      "has_the_recipe"
+    ]
+  ]
+}
