@@ -1320,7 +1320,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public boolean phaseGrab() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            animateStand((byte) 0);
+            animateStand((byte) 87);
             this.attackTimeDuring = 0;
             stand.setFadePercent(50);
             this.setActivePower(PowerIndex.POWER_2_BLOCK);

@@ -27,6 +27,7 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState impale = new AnimationState();
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
+    public final AnimationState phaseGrab = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
@@ -113,6 +114,11 @@ public class TheWorldEntity extends StandEntity {
                 this.finalKick.startIfStopped(this.tickCount);
             } else {
                 this.finalKick.stop();
+            }
+            if (this.getAnimation() == 87) {
+                this.phaseGrab.startIfStopped(this.tickCount);
+            } else {
+                this.phaseGrab.stop();
             }
         }
     }

@@ -39,6 +39,7 @@ public class StarPlatinumEntity extends StandEntity {
     public final AnimationState starFinger = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
     public final AnimationState finalPunchWindup = new AnimationState();
+    public final AnimationState phaseGrab = new AnimationState();
     @Override
     protected void setupAnimationStates() {
         super.setupAnimationStates();
@@ -130,6 +131,11 @@ public class StarPlatinumEntity extends StandEntity {
                 this.finalPunch.startIfStopped(this.tickCount);
             } else {
                 this.finalPunch.stop();
+            }
+            if (this.getAnimation() == 87) {
+                this.phaseGrab.startIfStopped(this.tickCount);
+            } else {
+                this.phaseGrab.stop();
             }
         }
     }
