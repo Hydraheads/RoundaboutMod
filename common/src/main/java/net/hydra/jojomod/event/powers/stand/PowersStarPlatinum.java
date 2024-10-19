@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -32,8 +34,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
@@ -149,7 +158,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (this.activePower == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
                 basis *= 0.74f;
             }
-        if (this.activePower == PowerIndex.POWER_3){
+        if (this.activePower == PowerIndex.POWER_3 && !(this.getSelf() instanceof Creeper)){
             basis *= 0.5f;
         }
         return super.inputSpeedModifiers(basis);
@@ -504,6 +513,27 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (isCreeper) {
+                double dist = attackTarget.distanceTo(this.getSelf());
+                boolean inhaling = this.getActivePower() == PowerIndex.POWER_3;
+                if (dist <= 8) {
+                    if (!inhaling){
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                    }
+                } else {
+                    if (inhaling){
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+            } else {
+                super.tickMobAI(attackTarget);
+            }
+        }
+    }
 
     @Override
     public boolean tryPower(int move, boolean forced) {
