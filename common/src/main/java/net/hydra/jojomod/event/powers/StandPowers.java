@@ -994,7 +994,7 @@ public class StandPowers {
         return power;
     }
     public boolean getReducedDamage(Entity entity){
-        return (entity instanceof Player ||
+        return (entity instanceof Player || entity instanceof StandEntity ||
                 (entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty())
         );
     }
