@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMinecartItemAccess;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -225,7 +226,8 @@ public class BlockGrabPreset extends PunchingStand{
             acq = true;
         }
         if (acq && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
-                && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
+                && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)
+        && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
             canPlace = true;
         }
         return canPlace;
@@ -903,9 +905,11 @@ public class BlockGrabPreset extends PunchingStand{
                         && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK) {
 
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
-                        if ((this.getSelf() instanceof Player &&
-                                !((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), this.grabBlock, ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer()))
-                                && this.getSelf().level().mayInteract(((Player) this.getSelf()), this.grabBlock)) {
+                        if ((this.getSelf() instanceof ServerPlayer PE &&
+                                this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                                && !(PE).blockActionRestricted(PE.level(), this.grabBlock, PE.gameMode.getGameModeForPlayer()))
+                                && PE.level().mayInteract(PE, this.grabBlock)
+                                && PE.canFreeze()) {
                             /*This is the code where blocks that are removable are grabbed*/
                             boolean $$4 = this.getSelf().level().removeBlock(this.grabBlock, false);
                             if ($$4) {

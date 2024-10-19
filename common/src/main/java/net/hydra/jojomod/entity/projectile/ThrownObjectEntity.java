@@ -208,7 +208,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         }
                     } else {
                         if (this.getItem().getItem() instanceof BlockItem){
-                            blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()),
+                            Block blkk = (((BlockItem) this.getItem().getItem()).getBlock());
+                            this.playSound(blkk.defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                            blockBreakParticles(blkk,
                                     new Vec3(pos.getX()+0.5,
                                             pos.getY()+0.5,
                                             pos.getZ()+0.5));

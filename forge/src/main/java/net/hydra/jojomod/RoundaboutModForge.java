@@ -33,6 +33,7 @@ public class RoundaboutModForge {
         ForgeItems.POTIONS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
         ForgeParticles.PARTICLES.register(bus);
+        ForgeGamerules.registerGamerules();
         //
         BiomeCodec.BIOME_MODIFIER_SERIALIZERS.register(bus);
         ForgeLootModifiers.LOOT_MODIFIERS.register(bus);

@@ -5,6 +5,7 @@ import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.particles.FabricParticles;
 import net.hydra.jojomod.registry.*;
+import net.hydra.jojomod.world.FabricGamerules;
 import net.hydra.jojomod.world.gen.ModWorldGeneration;
 
 public class RoundaboutFabric implements ModInitializer {
@@ -22,6 +23,7 @@ public class RoundaboutFabric implements ModInitializer {
         FabricSounds.register();
         FabricPacketManager.registerC2SPackets();
         FabricParticles.registerParticles();
+        FabricGamerules.registerGamerules();
         CommandRegistryFabric.register();
         ModWorldGeneration.generateWorldGen();
         DispenserRegistry.init();
