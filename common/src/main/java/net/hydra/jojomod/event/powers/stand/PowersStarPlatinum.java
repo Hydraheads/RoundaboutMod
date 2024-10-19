@@ -509,7 +509,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public boolean tryPower(int move, boolean forced) {
 
         if (this.getActivePower() == PowerIndex.POWER_1){
-            stopSoundsIfNearby(STAR_FINGER, 32, false);
+            stopSoundsIfNearby(STAR_FINGER, 100, false);
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                 if (this.getSelf() instanceof Player && isPacketPlayer()) {

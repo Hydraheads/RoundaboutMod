@@ -388,7 +388,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         MainUtil.knockShieldPlusStand($$5,40);
                     }
 
-                    stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
+                    stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
                     stand.setYRot(getLookAtEntityYaw(stand,$$5));
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,

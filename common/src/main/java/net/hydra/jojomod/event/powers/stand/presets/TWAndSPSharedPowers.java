@@ -1849,7 +1849,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.self.level().isClientSide &&
                 (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2)
                 && (move != PowerIndex.BARRAGE_2)){
-            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 32,false);
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
         if (!this.getSelf().level().isClientSide && move == PowerIndex.SNEAK_MOVEMENT && this.isClashing()){
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
