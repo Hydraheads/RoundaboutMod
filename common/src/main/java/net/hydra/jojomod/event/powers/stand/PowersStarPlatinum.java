@@ -138,8 +138,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
-                || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity()) && (slot != 1
-        || (slot == 1 && this.getSelf().isShiftKeyDown()))));
+                || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0) && slot != 1) || ((hasBlock() || hasEntity()) && slot != 1
+       ))));
     }
     public float inputSpeedModifiers(float basis){
             if (this.scopeLevel > -1){
@@ -547,7 +547,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.getSelf().isShiftKeyDown()){
 
             if (this.isGuarding()) {
-                setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_PHASE_GRAB, PowerIndex.SKILL_2);
+                setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_PHASE_GRAB, PowerIndex.SKILL_2);
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_GRAB_ITEM, PowerIndex.SKILL_2);
             }
