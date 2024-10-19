@@ -197,8 +197,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                             && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                             && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
                         if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BLOCK);
                         }
                     }
