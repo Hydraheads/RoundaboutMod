@@ -32,4 +32,5 @@ public class PacketDataIndex {
     /**S2C Int packets*/
     public static final byte S2C_INT_OXYGEN_TANK = 3;
     public static final byte S2C_INT_GRAB_ITEM = 4;
+    public static final byte S2C_INT_ATD = 5;
 }

@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -320,7 +321,7 @@ public class BlockGrabPreset extends PunchingStand{
                                 this.getActivePower() == PowerIndex.POWER_2_SNEAK ||
                                 this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA ||
                                 this.getActivePower() == PowerIndex.POWER_2_BONUS
-                        ) && !hasEntity() && !hasBlock()
+                        ) && !hasEntity() && !hasBlock() && this.getAttackTimeDuring() >= 0
                 ) {
                     ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     animateStand((byte) 0);
@@ -367,6 +368,10 @@ public class BlockGrabPreset extends PunchingStand{
                         }
                         poseStand(OffsetIndex.FOLLOW);
                         standEntity.setHeldItem(ItemStack.EMPTY);
+                        if (this.getSelf() instanceof Player){
+                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    PacketDataIndex.S2C_INT_ATD, -10);
+                        }
                         this.setAttackTimeDuring(-10);
 
                         return true;
@@ -444,12 +449,21 @@ public class BlockGrabPreset extends PunchingStand{
                                             ybias);
                                 }
                                 animateStand((byte) 3);
+
+                                if (this.getSelf() instanceof Player){
+                                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                            PacketDataIndex.S2C_INT_ATD, -15);
+                                }
                                 poseStand(OffsetIndex.ATTACK);
                                 this.setAttackTimeDuring(-15);
                                 this.getSelf().level().playSound(null, ent, ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.18F);
                             } else {
                                 animateStand((byte) 33);
                                 poseStand(OffsetIndex.FOLLOW);
+                                if (this.getSelf() instanceof Player){
+                                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                            PacketDataIndex.S2C_INT_ATD, -10);
+                                }
                                 this.setAttackTimeDuring(-10);
                             }
                         } else {
@@ -481,6 +495,10 @@ public class BlockGrabPreset extends PunchingStand{
                             }
                             animateStand((byte) 33);
                             poseStand(OffsetIndex.FOLLOW);
+                            if (this.getSelf() instanceof Player) {
+                                ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                        PacketDataIndex.S2C_INT_ATD, -10);
+                            }
                             this.setAttackTimeDuring(-10);
                         }
 

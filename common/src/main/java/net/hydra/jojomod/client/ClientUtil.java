@@ -33,6 +33,8 @@ public class ClientUtil {
             if (target instanceof ItemEntity IE) {
                 IE.getItem().shrink(1);
             }
+        } else if (context== PacketDataIndex.S2C_INT_ATD){
+            ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
         }
     }
 
