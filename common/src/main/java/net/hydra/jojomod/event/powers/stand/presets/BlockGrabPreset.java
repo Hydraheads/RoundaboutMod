@@ -589,6 +589,7 @@ public class BlockGrabPreset extends PunchingStand{
             if (freezeAttackInput < 0) {
                 if (hasBlock() || hasEntity()) {
                     this.freezeAttackInput = 1;
+                    consumeClickInput = true;
                 }
                 if (this.canAttack() || ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved())
                         && !standEntity.getHeldItem().isEmpty()) || hasEntity()) {

@@ -46,6 +46,7 @@ public class PunchingStand extends StandPowers {
     public boolean isMiningStand() {
         return true;
     }
+    public boolean consumeClickInput = false;
     @Override
     public float getMiningSpeed() {
         return 5F;

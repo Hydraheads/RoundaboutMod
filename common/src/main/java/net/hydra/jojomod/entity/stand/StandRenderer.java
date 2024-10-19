@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.IllagerModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -16,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
 
 public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandModel<T>> {
@@ -37,7 +39,9 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
 
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandDisc().isEmpty()){
+        LocalPlayer lp = Minecraft.getInstance().player;
+        if (lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
+                !lp.isSpectator())){
             mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, 0, 0.72f);
         } else {
             float opacity = getStandOpacity(mobEntity);

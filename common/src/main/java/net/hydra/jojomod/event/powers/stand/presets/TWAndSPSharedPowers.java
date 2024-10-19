@@ -315,30 +315,36 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     public boolean holdDownClick = false;
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (holdDownClick){
-            if (keyIsDown){
+        if (!consumeClickInput) {
+            if (holdDownClick) {
+                if (keyIsDown) {
 
-            } else {
-                if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-                    int atd = this.getAttackTimeDuring();
-                    this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
-                }
-                holdDownClick = false;
-            }
-        } else {
-            if (keyIsDown) {
-                if (!options.keyShift.isDown()) {
-                    super.buttonInputAttack(keyIsDown, options);
                 } else {
-                    if (this.canAttack() && options.keyShift.isDown()) {
-                        this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
-                        holdDownClick = true;
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
-                    } else {
+                    if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        int atd = this.getAttackTimeDuring();
+                        this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                    }
+                    holdDownClick = false;
+                }
+            } else {
+                if (keyIsDown) {
+                    if (!options.keyShift.isDown()) {
                         super.buttonInputAttack(keyIsDown, options);
+                    } else {
+                        if (this.canAttack() && options.keyShift.isDown()) {
+                            this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                            holdDownClick = true;
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                        } else {
+                            super.buttonInputAttack(keyIsDown, options);
+                        }
                     }
                 }
+            }
+        } else {
+            if (!keyIsDown) {
+                consumeClickInput = false;
             }
         }
     }
