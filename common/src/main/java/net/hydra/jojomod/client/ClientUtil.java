@@ -11,8 +11,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Vector3f;
 
@@ -26,6 +28,11 @@ public class ClientUtil {
             ((StandUser) player).roundabout$setGasolineTime(data);
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
+        } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){
+            Entity target = player.level().getEntity(data);
+            if (target instanceof ItemEntity IE) {
+                IE.getItem().shrink(1);
+            }
         }
     }
 
