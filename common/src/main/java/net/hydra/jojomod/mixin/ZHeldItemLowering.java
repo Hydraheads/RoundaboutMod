@@ -3,6 +3,9 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.GasolineCanItem;
+import net.hydra.jojomod.item.KnifeItem;
+import net.hydra.jojomod.item.MatchItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -46,7 +49,9 @@ public class ZHeldItemLowering {
                     ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
                     ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();
                     //if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)) {
-                    if ((itemStack3.getItem() instanceof Vanishable) && !clientPlayerEntity2.getUseItem().equals(itemStack3) &&
+                    if ((itemStack3.getItem() instanceof Vanishable) && !(itemStack3.getItem() instanceof CrossbowItem)
+                            && !(itemStack3.getItem() instanceof GasolineCanItem)
+                            && !clientPlayerEntity2.getUseItem().equals(itemStack3) &&
                             !(((StandUser)this.minecraft.player).roundabout$getStandPowers().getActivePower() != PowerIndex.MINING &&
                     this.minecraft.gameMode != null && this.minecraft.gameMode.isDestroying())) {
                         if (this.mainHandHeight > 0.6) {
