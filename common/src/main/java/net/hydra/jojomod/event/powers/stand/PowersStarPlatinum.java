@@ -152,12 +152,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
        ))));
     }
     public float inputSpeedModifiers(float basis){
-            if (this.scopeLevel > -1){
-                basis *= 0.85f;
-            }
-            if (this.activePower == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
-                basis *= 0.74f;
-            }
+        if (this.scopeLevel > -1){
+            basis *= 0.85f;
+        }
+        if (this.activePower == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+            basis *= 0.74f;
+        }
         if (this.activePower == PowerIndex.POWER_3 && !(this.getSelf() instanceof Creeper)){
             basis *= 0.5f;
         }

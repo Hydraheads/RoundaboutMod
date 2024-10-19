@@ -286,6 +286,11 @@ public class BlockGrabPreset extends PunchingStand{
                         }
 
                         standEntity.setHeldItem(ItemStack.EMPTY);
+
+                        if (this.getSelf() instanceof Player) {
+                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    PacketDataIndex.S2C_INT_ATD, -10);
+                        }
                         this.setAttackTimeDuring(-10);
                         this.syncCooldowns();
                         return true;
@@ -294,6 +299,13 @@ public class BlockGrabPreset extends PunchingStand{
                 } else if (standEntity.getFirstPassenger() != null){
                     MainUtil.ejectInFront(standEntity);
                     animateStand((byte) 36);
+
+                    if (this.getSelf() instanceof Player) {
+                        if (!this.getSelf().level().isClientSide) {
+                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    PacketDataIndex.S2C_INT_ATD, -10);
+                        }
+                    }
                     this.setAttackTimeDuring(-10);
                     this.setCooldown(PowerIndex.SKILL_2, 10);
                     this.syncCooldowns();
@@ -788,6 +800,10 @@ public class BlockGrabPreset extends PunchingStand{
                     if (standEntity.getFirstPassenger() != null) {
                         MainUtil.ejectInFront(standEntity);
                         animateStand((byte) 36);
+                        if (this.getSelf() instanceof Player) {
+                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    PacketDataIndex.S2C_INT_ATD, -10);
+                        }
                         this.setAttackTimeDuring(-10);
                         this.setCooldown(PowerIndex.SKILL_2, 10);
                         this.syncCooldowns();
