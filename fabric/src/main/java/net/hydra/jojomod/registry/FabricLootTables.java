@@ -39,7 +39,7 @@ public class FabricLootTables {
     public static final ResourceLocation DESERT_HOUSE_ID
             = new ResourceLocation("minecraft", "chests/village/village_desert_house");
     public static final ResourceLocation TAIGA_HOUSE_ID
-            = new ResourceLocation("minecraft", "chests/village/village_taiga_house");
+            = new ResourceLocation("minecraft", "chests/village/village_weaponsmith");
     public static final ResourceLocation BLACKSMITH_ID
             = new ResourceLocation("minecraft", "chests/village/village_blacksmith");
     public static final ResourceLocation NETHER_FORT
