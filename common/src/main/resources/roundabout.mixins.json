@@ -61,7 +61,8 @@
     "ZVillager",
     "ZVillagerMakeLove",
     "ZWarden",
-    "ZWitch"
+    "ZWitch",
+    "ZWitherBoss"
   ],
   "client": [
     "HudRendering",

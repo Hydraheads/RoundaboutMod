@@ -55,9 +55,17 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
     protected void roundabout$findTarget(CallbackInfo ci) {
         if (this.target instanceof StandEntity SE) {
             if(SE.getFollowing() != null && !(SE.getFollowing() instanceof StandEntity)){
-                this.target = SE.getFollowing();
+                if (SE.getFollowing() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){
+                    this.target = PE;
+                } else {
+                    this.target = null;
+                }
             } else if(SE.getUser() != null){
-                this.target = SE.getUser();
+                if (SE.getUser() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){
+                    this.target = PE;
+                } else {
+                    this.target = null;
+                }
             }
         }
     }
