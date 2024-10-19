@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -190,7 +191,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
-        if ($$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))) {
+        if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))) {
             this.roundabout$setWorthy(true);
             this.roundabout$setIsNaturalStandUser(true);
             int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
@@ -198,7 +199,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem){
                 ((StandUser)this).roundabout$setStandDisc(stack);
             }
-        } else if ($$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
+        } else if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
             this.roundabout$setWorthy(true);
         }
     }
