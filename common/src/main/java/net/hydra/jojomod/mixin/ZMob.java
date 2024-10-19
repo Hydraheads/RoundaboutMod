@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
@@ -417,6 +418,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (this.isAlive()) {
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
 
+                Mob mb = ((Mob) (Object) this);
                 if (this.getTarget() != null && !this.roundabout$getFightOrFlight()){
                     if (!((StandUser) this).roundabout$getActive()){
                         ((StandUser)this).roundabout$summonStand(this.level(),true,true);
@@ -439,7 +441,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         this.setTarget(null);
                     }
 
-                    if (((Mob) (Object) this) instanceof AbstractVillager){
+
+                    if (mb instanceof AbstractVillager){
                         if (this.getTarget() == null){
                             if (this.tickCount % 4 == 0){
                                 roundabout$targetVillageEnemies();
@@ -509,6 +512,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     roundabout$standUserAttraction();
                 }
 
+                if (mb instanceof TamableAnimal TA){
+                    if (this.getTarget() instanceof TamableAnimal TT && TT.getOwner() != null
+                            && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                        this.setTarget(null);
+                        this.setLastHurtByMob(null);
+                    }
+                }
             }
         }
     }

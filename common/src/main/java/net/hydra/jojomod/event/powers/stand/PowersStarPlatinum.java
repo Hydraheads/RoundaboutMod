@@ -33,12 +33,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -360,6 +362,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     public boolean StarFingerDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
         if (DamageHandler.StarFingerStandDamageEntity(target,pow, attacker)){
             if (attacker instanceof LivingEntity LE){
                 LE.setLastHurtMob(target);

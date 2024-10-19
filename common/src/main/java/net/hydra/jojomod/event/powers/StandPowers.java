@@ -25,9 +25,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
@@ -1456,6 +1458,16 @@ public class StandPowers {
     }
 
     public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
         if (DamageHandler.StandDamageEntity(target,pow, attacker)){
             if (attacker instanceof LivingEntity LE){
                 LE.setLastHurtMob(target);
