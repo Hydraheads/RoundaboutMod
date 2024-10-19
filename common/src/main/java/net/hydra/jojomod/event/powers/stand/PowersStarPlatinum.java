@@ -157,18 +157,20 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (this.getActivePower() != PowerIndex.POWER_3_SNEAK) {
-                if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                        && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                        && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                    if (this.isGuarding()){
-                        if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
-                        }
-                    } else {
-                        if (this.activePower != PowerIndex.POWER_3) {
-                            super.buttonInput3(keyIsDown, options);
+            if (!inputDash) {
+                if (this.getActivePower() != PowerIndex.POWER_3_SNEAK) {
+                    if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+                            && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                            && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+                        if (this.isGuarding()) {
+                            if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                            }
+                        } else {
+                            if (this.activePower != PowerIndex.POWER_3) {
+                                super.buttonInput3(keyIsDown, options);
+                            }
                         }
                     }
                 }
