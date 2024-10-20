@@ -47,6 +47,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
@@ -95,7 +96,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean canScope(){
         return (this.isGuarding() || this.hasBlock() || this.hasEntity()
-                || (this.getSelf().isUsingItem() && this.getSelf().getUseItem().is(Items.SPYGLASS)));
+                || (this.getSelf().isUsingItem() && this.getSelf().getUseItem().is(Items.SPYGLASS)))
+                || (this.getSelf().isUsingItem() && this.getSelf().getUseItem().getItem() instanceof ProjectileWeaponItem);
     }
 
     public int scopeTicks = -1;
