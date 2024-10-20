@@ -265,7 +265,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (!this.self.level().isClientSide) {
             if (this.getSelf().isUnderWater()){
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                 return;
             }
 
