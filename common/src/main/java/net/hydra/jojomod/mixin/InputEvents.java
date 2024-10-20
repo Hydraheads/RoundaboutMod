@@ -478,7 +478,7 @@ public abstract class InputEvents implements IInputEvents {
                     KeyInputs.MoveKey4(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey),
                             this.options);
 
-                KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.switchRow),
+                KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.switchRow),
                         this.options);
 
                     if (KeyInputRegistry.menuKey.isDown()) {
@@ -580,6 +580,10 @@ public abstract class InputEvents implements IInputEvents {
                 || (key1.same(this.options.keyUse) && this.options.keyUse.isDown()));
     }
 
+    @Unique
+    public boolean roundabout$sameKeyThree(KeyMapping key1){
+        return (key1.isDown() || (key1.same(this.options.keyPickItem) && this.options.keyPickItem.isDown()));
+    }
     @Override
     @Unique
     public boolean roundabout$sameKeyUseOverride(KeyMapping key1){

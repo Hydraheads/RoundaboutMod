@@ -1122,7 +1122,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             kickBarrageImpact2(entity, lastHit, knockbackStrength);
                         } else {
                             if (lastHit) {
-                                knockShield2(entity, 40);
                                 playBarrageBlockEndNoise(0, entity);
                             } else {
                                 entity.setDeltaMovement(prevVelocity);
@@ -1220,7 +1219,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean canInterruptPower(){
 
-        if (this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
             if (this.getSelf() instanceof Player) {
