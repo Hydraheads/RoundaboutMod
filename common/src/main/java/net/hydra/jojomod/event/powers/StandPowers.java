@@ -200,6 +200,12 @@ public class StandPowers {
         }
     }
 
+
+
+    public int getMobRecoilTime(){
+        return -30;
+    }
+
     public boolean forwardBarrage = false;
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {

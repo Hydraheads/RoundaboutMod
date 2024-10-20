@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -25,11 +26,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.WaterAnimal;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Guardian;
-import net.minecraft.world.entity.monster.Phantom;
-import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -402,8 +404,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
-                            PowerIndex.SKILL_1, 40);
+                    if (this.getSelf() instanceof ServerPlayer) {
+                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                                PowerIndex.SKILL_1, 40);
+                    }
                     this.setCooldown(PowerIndex.SKILL_1, 40);
                     this.setAttackTimeDuring(-12);
                     animateStand((byte) 40);
@@ -507,7 +511,22 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())){
+        if (this.attackTimeDuring <= -1) {
+            if (this.getSelf().fallDistance > 4 && !(this.getSelf() instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                    && !(this.getSelf().noPhysics)) {
+                /**Fall Brace AI*/
+                ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
+                if (this.getSelf() instanceof Mob MB){
+                    ((IMob)MB).roundabout$setRetractTicks(140);
+                }
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+                return;
+            }
+        }
+        boolean check = attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf());
+        double dist = 0;
+        if (check){
+            dist = attackTarget.distanceTo(this.getSelf());
             TPTYPE tptype = TPTYPE.GROUND;
             if (this.getSelf() instanceof WaterAnimal || this.getSelf() instanceof Guardian){
                 tptype = TPTYPE.WATER;
@@ -518,7 +537,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (!this.getSelf().isPassenger()) {
                     teleportTime = Math.max(0,teleportTime-1);
                     if (teleportTime == 0 && !(this.getSelf() instanceof Creeper CREEP && CREEP.isIgnited())) {
-                        double dist = attackTarget.distanceTo(this.getSelf());
                         if (dist <= 8 && !(this.getSelf() instanceof Creeper)) {
                             Vec3 pos = this.getSelf().position().add(0,this.getSelf().getEyeHeight(),0);
                             float p = 0;
@@ -569,7 +587,66 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         postTPStall = Math.max(0,postTPStall-1);
         if (postTPStall == 0) {
             if (!(this.getSelf() instanceof Creeper)) {
-                super.tickMobAI(attackTarget);
+                if (check) {
+                    if ((this.getActivePower() != PowerIndex.NONE)
+                            || dist <= 5) {
+                        this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+                        float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                        this.getSelf().setYRot(yrot);
+                        this.getSelf().setYHeadRot(yrot);
+                    }
+
+                    if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
+                        Entity targetEntity = getTargetEntity(this.self, -1);
+                        if (targetEntity != null && targetEntity.is(attackTarget)) {
+                            double RNG = Math.random();
+                            if (RNG < 0.4 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge) {
+                                wentForCharge = true;
+                                if (RNG < 0.1) {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+                                } else {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                                }
+                            } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                                if (RNG < 0.85 && (this.getSelf() instanceof Hoglin || this.getSelf() instanceof Ravager)) {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                                    wentForCharge = false;
+                                } else {
+                                    if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && RNG >= 0.85 && dist <= 3 && !wentForCharge) {
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                        wentForCharge = true;
+                                    } else {
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                                        wentForCharge = false;
+                                    }
+                                }
+                            }
+                        } else if ((this.getSelf().getHealth() > 20 || this.getSelf() instanceof Piglin
+                                || this.getSelf() instanceof AbstractVillager) && dist <= 8 && dist >= 5) {
+                            if (!onCooldown(PowerIndex.SKILL_1)) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            }
+                        } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
+                                || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
+                                || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
+                                this.getSelf().onGround() && dist <= 19 && dist >= 5) {
+                            if (!onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                                if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
+                                    bonusLeapCount = 3;
+                                    this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+                                    float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                                    this.getSelf().setYRot(yrot);
+                                    this.getSelf().setYRot(yrot);
+                                    this.getSelf().setYHeadRot(yrot);
+                                    bigLeap(this.getSelf(), 20, 1);
+                                    ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

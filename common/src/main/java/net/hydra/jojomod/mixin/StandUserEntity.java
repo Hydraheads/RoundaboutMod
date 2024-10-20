@@ -1328,6 +1328,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             } else if (this.roundabout$getStandPowers().canInterruptPower()) {
                 this.roundabout$tryPower(PowerIndex.NONE, true);
+                if (!(((LivingEntity)(Object)this) instanceof Player)){
+                    this.roundabout$setAttackTimeDuring(this.roundabout$getStandPowers().getMobRecoilTime());
+                }
             }
             this.roundabout$setIdleTime(-1);
         }
