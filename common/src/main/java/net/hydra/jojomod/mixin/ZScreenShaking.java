@@ -179,6 +179,14 @@ public class ZScreenShaking implements IGameRenderer {
 
     @Inject(method = "bobView", at = @At(value = "HEAD"), cancellable = true)
     private void RoundaboutBobView(PoseStack $$0, float $$1, CallbackInfo ci) {
+        LivingEntity player = Minecraft.getInstance().player;
+        if (player != null) {
+            StandPowers SP = ((StandUser) player).roundabout$getStandPowers();
+            if (SP.scopeLevel > 0) {
+                ci.cancel();
+            }
+        }
+
         if (!cleared) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).CanTimeStopEntity(minecraft.player)) {
                 if (this.minecraft.getCameraEntity() instanceof Player) {
