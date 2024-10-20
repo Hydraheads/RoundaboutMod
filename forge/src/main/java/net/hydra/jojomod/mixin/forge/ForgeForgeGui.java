@@ -27,8 +27,9 @@ public abstract class ForgeForgeGui extends Gui {
         super(p_232355_, p_232356_);
     }
 
-    @Inject(method = "render", at = @At(value = "TAIL"))
-    public void roundabout$render(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
+    @Inject(method = "renderAir(IILnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE",
+            target="Lcom/mojang/blaze3d/systems/RenderSystem;disableBlend()V",shift = At.Shift.BEFORE), remap = false)
+    public void roundabout$renderAir(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
         if (minecraft.player != null && minecraft.level != null){
             int oxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getAirAmount();
             int maxOxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getMaxAirAmount();
