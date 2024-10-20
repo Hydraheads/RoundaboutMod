@@ -378,6 +378,11 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @Unique
     public int roundabout$retractTicks = 140;
+    @Unique
+    @Override
+    public void roundabout$setRetractTicks(int ticks){
+        roundabout$retractTicks = ticks;
+    }
 
     @Unique
     public void roundabout$standUserAttraction(){

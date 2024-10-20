@@ -299,7 +299,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 if (!state.isAir()) {
                                     Block blk = state.getBlock();
                                     if (((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
-                                            || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock))
+                                            || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock)
+                                            || (blk instanceof FenceGateBlock))
                                             && this.getSelf() instanceof Player PE) {
                                         blk.use(state, this.getSelf().level(), bpos, PE, PE.getUsedItemHand(), blockHit);
                                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
@@ -1039,9 +1040,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                 }
             } else if (this.attackTimeDuring >= maxSuperHitTime && !(this.getSelf() instanceof Player)){
-
                 ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
-                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK,maxSuperHitTime);
             }
         }
     }
