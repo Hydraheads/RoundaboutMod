@@ -9,6 +9,8 @@ public class FabricGamerules {
     public static void registerGamerules(){
         ModGamerules.ROUNDABOUT_STAND_GRIEFING = GameRuleRegistry.register("roundaboutStandGriefing",
                 GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+        ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE = GameRuleRegistry.register("roundaboutStandRedstoneInterference",
+                GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB = GameRuleRegistry.register("roundaboutMobGrabbing",
                 GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS = GameRuleRegistry.register("roundaboutSpawnWorthyMobs",

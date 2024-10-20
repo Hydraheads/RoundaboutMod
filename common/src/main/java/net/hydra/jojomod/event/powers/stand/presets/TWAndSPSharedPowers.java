@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.index.*;
@@ -287,20 +288,23 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                             Vec3 vec3dST = stand.getEyePosition(0);
                             Vec3 vec3d2ST = stand.getViewVector(0);
-                            Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * 2.5, vec3d2ST.y * 2.5, vec3d2ST.z * 2.5);
+                            Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * 3, vec3d2ST.y * 3, vec3d2ST.z * 3);
 
-                            BlockHitResult blockHit = stand.level().clip(new ClipContext(vec3dST, vec3d3ST,
-                                    ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, stand));
-                            BlockPos bpos = blockHit.getBlockPos();
-                            BlockState state = stand.level().getBlockState(bpos);
-                            if (!state.isAir()){
-                                Block blk = state.getBlock();
-                                if (((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
-                                        || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock))
-                                        && this.getSelf() instanceof Player PE){
-                                    blk.use(state, this.getSelf().level(),bpos,PE,PE.getUsedItemHand(),blockHit);
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                    return;
+                            if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE))
+                            {
+                                BlockHitResult blockHit = stand.level().clip(new ClipContext(vec3dST, vec3d3ST,
+                                        ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, stand));
+                                BlockPos bpos = blockHit.getBlockPos();
+                                BlockState state = stand.level().getBlockState(bpos);
+                                if (!state.isAir()) {
+                                    Block blk = state.getBlock();
+                                    if (((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
+                                            || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock))
+                                            && this.getSelf() instanceof Player PE) {
+                                        blk.use(state, this.getSelf().level(), bpos, PE, PE.getUsedItemHand(), blockHit);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                        return;
+                                    }
                                 }
                             }
 
