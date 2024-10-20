@@ -868,8 +868,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2){
             if (keyIsDown && !forwardBarrage) {
+                hold1 = true;
                 forwardBarrage = true;
                 ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
+                return;
             }
         }
 

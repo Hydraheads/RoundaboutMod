@@ -222,7 +222,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
 		this.animate(pEntity.finalKickWindup, StandAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
 		this.animate(pEntity.finalKick, StandAnimations.FINAL_KICK, pAgeInTicks, 0.5f);
-		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.4f);
+		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.6f);
 	}
 
 	@Override

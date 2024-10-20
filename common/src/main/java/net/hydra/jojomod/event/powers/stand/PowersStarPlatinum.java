@@ -221,9 +221,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         if (!this.isGuarding()) {
                             if (!hold1) {
                                 if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
-                                    if (isHoldingSneak()) {
-                                        super.buttonInput1(keyIsDown, options);
-                                    } else {
+                                    if (!isHoldingSneak() && !this.isBarrageAttacking() && (this.getActivePower() != PowerIndex.BARRAGE_2)) {
                                         //Star Finger here
                                         hold1 = true;
                                         if (!this.onCooldown(PowerIndex.SKILL_1)) {
@@ -233,6 +231,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                             }
                                         }
                                     }
+                                    super.buttonInput1(keyIsDown, options);
                                 }
                             }
                         }

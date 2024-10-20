@@ -362,7 +362,7 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		this.animate(pEntity.starFinger, StandAnimations.STAR_FINGER, pAgeInTicks, 0.55f);
 		this.animate(pEntity.finalPunchWindup, StandAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1f);
 		this.animate(pEntity.finalPunch, StandAnimations.FINAL_PUNCH, pAgeInTicks, 1.5f);
-		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.4f);
+		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.6f);
 	}
 
 	@Override
