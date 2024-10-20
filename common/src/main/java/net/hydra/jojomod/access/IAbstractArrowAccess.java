@@ -1,5 +1,6 @@
 package net.hydra.jojomod.access;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -14,6 +15,7 @@ public interface IAbstractArrowAccess {
     void roundaboutSetInGround(boolean inGround);
 
     byte roundaboutGetPierceLevel();
+    ItemStack roundabout$GetPickupItem();
 
     void roundabout$cancelSuperThrow();
     boolean roundabout$getSuperThrow();

@@ -184,7 +184,7 @@ public abstract class InputEvents implements IInputEvents {
         public boolean roundabout$TryGuard(){
             StandUser standComp = ((StandUser) player);
             if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
-                return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyRight.isDown(),this.options);
+                return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(),this.options);
             }
             return false;
         }
@@ -410,6 +410,8 @@ public abstract class InputEvents implements IInputEvents {
         if (player != null) {
 
             if (player.isAlive()) {
+                ((StandUser) player).roundabout$getStandPowers().updateGuard(
+                        roundabout$sameKeyTwo(KeyInputRegistry.guardKey) || options.keyUse.isDown());
                 //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
 
                 /**Time Stop Levitation*/
@@ -463,7 +465,6 @@ public abstract class InputEvents implements IInputEvents {
                         //((IGameRenderer)this.gameRenderer).roundabout$loadEffect(new ResourceLocation("shaders/post/spider.json"));
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
-
 
 
                     KeyInputs.MoveKey1(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),

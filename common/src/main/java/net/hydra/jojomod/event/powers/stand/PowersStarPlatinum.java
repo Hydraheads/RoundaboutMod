@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.StandIcons;
@@ -45,6 +46,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.ClipContext;
@@ -332,6 +334,42 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else {
             super.handleStandAttack(player,target);
         }
+    }
+    @Override
+    public boolean dealWithProjectile(Entity ent){
+        if (!ent.level().isClientSide() && ent instanceof AbstractArrow AA) {
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE) {
+                if (SE.getScoping()) {
+                    if (!hasBlock() && !hasEntity() &&
+                            ((StandUser) this.getSelf()).roundabout$getActivePower() == PowerIndex.GUARD) {
+                        ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
+                        if (!ii.isEmpty()){
+                            ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                    PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
+                            ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
+                                    PE, PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
+                            if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)){
+                                SE.canAcquireHeldItem = true;
+                            } else {
+                                SE.canAcquireHeldItem = false;
+                            }
+                            SE.setHeldItem(ii.copyAndClear());
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.2F);
+                            poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                            if (MainUtil.isThrownBlockItem(SE.getHeldItem().getItem())) {
+                                animateStand((byte) 32);
+                            } else {
+                                animateStand((byte) 34);
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void doFingerHit(List<Entity> entities){
@@ -754,6 +792,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (suspendGuard) {
+            return false;
+        }
         if (this.activePower == PowerIndex.POWER_3) {
             return false;
         }

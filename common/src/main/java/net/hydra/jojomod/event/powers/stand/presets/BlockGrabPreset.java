@@ -547,6 +547,7 @@ public class BlockGrabPreset extends PunchingStand{
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+
         StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
             if (!standEntity.getHeldItem().isEmpty() &&

@@ -231,6 +231,14 @@ public class StandPowers {
         }
     }
 
+    public void updateGuard(boolean yeet){
+        if (suspendGuard) {
+            if (!yeet) {
+                suspendGuard = false;
+            }
+        }
+    }
+    public boolean suspendGuard = false;
     public boolean cancelItemUse() {
         return false;
     }
@@ -1858,7 +1866,9 @@ public class StandPowers {
         }
         return this.getSelf().isCrouching();
     }
-
+    public boolean dealWithProjectile(Entity ent){
+        return false;
+    }
 
     public boolean heldDownSwitch = false;
     public void switchRowsKey(boolean keyIsDown, Options options){

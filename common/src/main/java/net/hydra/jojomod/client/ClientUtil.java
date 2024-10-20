@@ -174,6 +174,8 @@ public class ClientUtil {
                 ((StandUser) player).roundabout$setMaxSealedTicks(100);
                 ((StandUser) player).roundabout$setSealedTicks(100);
             }
+        } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
+            ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;

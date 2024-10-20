@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.TimeMovingProjectile;
 import net.hydra.jojomod.entity.projectile.HarpoonEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -12,9 +13,12 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -103,6 +107,10 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
     public int shakeTime;
 
     @Override
+    public ItemStack roundabout$GetPickupItem(){
+        return this.getPickupItem();
+    }
+    @Override
     public boolean roundaboutGetInGround(){
         return this.inGround;
     }
@@ -129,11 +137,24 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
     protected EntityHitResult findHitEntity(Vec3 $$0, Vec3 $$1){
         return null;
     }
+
+    @Shadow protected abstract ItemStack getPickupItem();
+
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$defineSynchedData(CallbackInfo ci) {
         this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
     }
 
+    @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
+        Entity $$1 = $$0.getEntity();
+        if ($$1 instanceof LivingEntity LE){
+            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this)){
+                ci.cancel();
+                this.discard();
+            }
+        }
+    }
     @Unique
     private Vec3 roundabout$delta = Vec3.ZERO;
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
