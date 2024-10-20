@@ -36,9 +36,11 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -217,12 +219,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     public Vec3 moveVec = Vec3.ZERO;
+    @SuppressWarnings("deprecation")
     @Override
     public void tickPowerEnd() {
 
         super.tickPowerEnd();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()){
             if (this.forwardBarrage && this.attackTimeDuring >= 0) {
+                /**Tick Forward Barrage*/
                 if (this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_2) {
                     if (!this.getSelf().level().isClientSide()) {
                         StandEntity stand = getStandEntity(this.self);
@@ -240,6 +244,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     }
                 }
             } else if (this.getActivePower() == PowerIndex.POWER_2_BLOCK) {
+                /**Tick Phase Grab*/
                 if (!this.getSelf().level().isClientSide()) {
                     if (this.attackTimeDuring == 108) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
@@ -275,7 +280,30 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 7);
                                 this.setCooldown(PowerIndex.SKILL_2, 5);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                return;
                             }
+
+
+
+                            Vec3 vec3dST = stand.getEyePosition(0);
+                            Vec3 vec3d2ST = stand.getViewVector(0);
+                            Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * 2.5, vec3d2ST.y * 2.5, vec3d2ST.z * 2.5);
+
+                            BlockHitResult blockHit = stand.level().clip(new ClipContext(vec3dST, vec3d3ST,
+                                    ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, stand));
+                            BlockPos bpos = blockHit.getBlockPos();
+                            BlockState state = stand.level().getBlockState(bpos);
+                            if (!state.isAir()){
+                                Block blk = state.getBlock();
+                                if (((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
+                                        || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock))
+                                        && this.getSelf() instanceof Player PE){
+                                    blk.use(state, this.getSelf().level(),bpos,PE,PE.getUsedItemHand(),blockHit);
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                    return;
+                                }
+                            }
+
                             AABB BB2 = stand.getBoundingBox();
                             if (this.attackTimeDuring > 2) {
                                 tryPhaseItemGrab(stand, BB1, BB2);
