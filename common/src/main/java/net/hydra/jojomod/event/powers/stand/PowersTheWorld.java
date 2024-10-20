@@ -28,6 +28,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -597,7 +598,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         BlockState $$4 = this.getSelf().level().getBlockState($$3);
         boolean $$5 = $$4.blocksMotion();
         boolean $$6 = $$4.getFluidState().is(FluidTags.WATER);
-        if ($$5 && !$$6) {
+        if (($$5 || tptype.equals(TPTYPE.AIR)) && !$$6) {
             Vec3 $$7 = this.getSelf().position();
             boolean $$8 = randomTeleport($$0, $$1, $$2, true,tptype);
             if ($$8) {
@@ -628,7 +629,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             while (!$$11 && $$9.getY() > $$10.getMinBuildHeight()) {
                 BlockPos $$12 = $$9.below();
                 BlockState $$13 = $$10.getBlockState($$12);
-                if ($$13.blocksMotion()) {
+                if ($$13.blocksMotion() || tptype.equals(TPTYPE.AIR)) {
                     $$11 = true;
                 } else {
                     $$7--;
