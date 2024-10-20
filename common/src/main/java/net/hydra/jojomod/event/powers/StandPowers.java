@@ -1848,7 +1848,7 @@ public class StandPowers {
     public boolean isHoldingSneak(){
         if (this.self.level().isClientSide) {
             Minecraft mc = Minecraft.getInstance();
-            return (mc.options.keyShift.isDown() || (isHoldingSneakToggle && !mc.options.keyShift.isDown()));
+            return ((mc.options.keyShift.isDown() && !isHoldingSneakToggle) || (isHoldingSneakToggle && !mc.options.keyShift.isDown()));
         }
         return this.getSelf().isCrouching();
     }

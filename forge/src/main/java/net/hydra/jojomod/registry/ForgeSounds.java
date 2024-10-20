@@ -63,6 +63,8 @@ public class ForgeSounds {
             register(ModSounds.THE_WORLD_ASSAULT, ModSounds.THE_WORLD_ASSAULT_ID);
     public static final RegistryObject<SoundEvent> THE_WORLD_WRY_EVENT =
             register(ModSounds.THE_WORLD_WRY, ModSounds.THE_WORLD_WRY_ID);
+    public static final RegistryObject<SoundEvent> THE_WORLD_MUDA_EVENT =
+            register(ModSounds.THE_WORLD_MUDA, ModSounds.THE_WORLD_MUDA_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA1_SOUND_EVENT =
             register(ModSounds.STAND_THEWORLD_MUDA1_SOUND, ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAND_THEWORLD_MUDA2_SOUND_EVENT =
@@ -75,6 +77,8 @@ public class ForgeSounds {
             register(ModSounds.STAND_THEWORLD_MUDA5_SOUND, ModSounds.STAND_THEWORLD_MUDA5_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAR_FINGER =
             register(ModSounds.STAR_FINGER, ModSounds.STAR_FINGER_ID);
+    public static final RegistryObject<SoundEvent> STAR_FINGER_2 =
+            register(ModSounds.STAR_FINGER_2, ModSounds.STAR_FINGER_2_ID);
     public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_EVENT =
             register(ModSounds.STAR_PLATINUM_ORA, ModSounds.STAR_PLATINUM_ORA_ID);
     public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_RUSH_EVENT =

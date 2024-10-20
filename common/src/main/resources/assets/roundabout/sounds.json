@@ -209,6 +209,12 @@
       "roundabout:the_world_assault"
     ]
   },
+  "the_world_muda": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:the_world_muda"
+    ]
+  },
   "stand_theworld_muda1": {
     "subtitle": "sounds.roundabout.stand_theworld_muda1",
     "sounds": [
@@ -245,10 +251,28 @@
       "roundabout:star_finger"
     ]
   },
+  "star_finger_2": {
+    "subtitle": "sounds.roundabout.star_finger",
+    "sounds": [
+      "roundabout:star_finger_2"
+    ]
+  },
   "star_platinum_ora": {
     "subtitle": "sounds.roundabout.star_platinum_ora",
     "sounds": [
       "roundabout:star_platinum_ora"
+    ]
+  },
+  "star_platinum_ora_2": {
+    "subtitle": "sounds.roundabout.star_platinum_ora_2",
+    "sounds": [
+      "roundabout:star_platinum_ora_2"
+    ]
+  },
+  "star_platinum_ora_3": {
+    "subtitle": "sounds.roundabout.star_platinum_ora_3",
+    "sounds": [
+      "roundabout:star_platinum_ora_3"
     ]
   },
   "star_platinum_ora_rush": {

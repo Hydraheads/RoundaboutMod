@@ -48,6 +48,7 @@ public class FabricSounds {
 
         addSound(ModSounds.THE_WORLD_ASSAULT_ID, ModSounds.THE_WORLD_ASSAULT_EVENT);
         addSound(ModSounds.THE_WORLD_WRY_ID, ModSounds.THE_WORLD_WRY_EVENT);
+        addSound(ModSounds.THE_WORLD_MUDA_ID, ModSounds.THE_WORLD_MUDA_EVENT);
 
         addSound(ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID, ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT);
         addSound(ModSounds.STAND_THEWORLD_MUDA2_SOUND_ID, ModSounds.STAND_THEWORLD_MUDA2_SOUND_EVENT);
@@ -56,7 +57,10 @@ public class FabricSounds {
         addSound(ModSounds.STAND_THEWORLD_MUDA5_SOUND_ID, ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT);
 
         addSound(ModSounds.STAR_FINGER_ID, ModSounds.STAR_FINGER_EVENT);
+        addSound(ModSounds.STAR_FINGER_2_ID, ModSounds.STAR_FINGER_2_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_ID, ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT);
+        addSound(ModSounds.STAR_PLATINUM_ORA_2_ID, ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT);
+        addSound(ModSounds.STAR_PLATINUM_ORA_3_ID, ModSounds.STAR_PLATINUM_ORA_3_SOUND_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_RUSH_ID, ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_RUSH_2_ID, ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT);
         addSound(ModSounds.STAR_PLATINUM_SCOPE_ID, ModSounds.STAR_PLATINUM_SCOPE_EVENT);

@@ -69,7 +69,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public SoundEvent getLastHitSound(){
-        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+
+        double rand = Math.random();
+        if (rand > 0.66) {
+            return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+        } else if (rand > 0.33) {
+            return ModSounds.STAND_THEWORLD_MUDA2_SOUND_EVENT;
+        } else {
+            return ModSounds.THE_WORLD_MUDA_EVENT;
+        }
     }
     @Override
     public SoundEvent getLastRejectionHitSound(){

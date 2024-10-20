@@ -77,7 +77,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public SoundEvent getLastHitSound(){
-        return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
+
+        double rand = Math.random();
+        if (rand > 0.66) {
+            return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
+        } else if (rand > 0.33) {
+            return ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT;
+        } else {
+            return ModSounds.STAR_PLATINUM_ORA_3_SOUND_EVENT;
+        }
     }
     @Override
     public SoundEvent getLastRejectionHitSound(){
@@ -552,6 +560,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
         if (this.getActivePower() == PowerIndex.POWER_1){
             stopSoundsIfNearby(STAR_FINGER, 100, false);
+            stopSoundsIfNearby(STAR_FINGER_2, 100, false);
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                 if (this.getSelf() instanceof Player && isPacketPlayer()) {
@@ -690,6 +699,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return super.setPowerOther(move,lastMove);
     }
     public static final byte STAR_FINGER = 80;
+    public static final byte STAR_FINGER_2 = 81;
 
     public boolean inhale(){
         StandEntity stand = getStandEntity(this.self);
@@ -707,7 +717,13 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
-            playSoundsIfNearby(STAR_FINGER, 32, false);
+
+            double rand = Math.random();
+            if (rand > 0.5) {
+                playSoundsIfNearby(STAR_FINGER, 32, false);
+            } else {
+                playSoundsIfNearby(STAR_FINGER_2, 32, false);
+            }
             this.animateStand((byte)82);
             this.poseStand(OffsetIndex.GUARD_AND_TRACE);
             //stand.setYRot(this.getSelf().getYHeadRot() % 360);
@@ -774,6 +790,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT;
         } else if (soundChoice == STAR_FINGER){
             return ModSounds.STAR_FINGER_EVENT;
+        } else if (soundChoice == STAR_FINGER_2){
+            return ModSounds.STAR_FINGER_2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
