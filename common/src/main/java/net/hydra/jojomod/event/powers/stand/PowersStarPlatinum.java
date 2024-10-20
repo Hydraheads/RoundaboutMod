@@ -213,7 +213,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         if (!this.isGuarding()) {
                             if (!hold1) {
                                 if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
-                                    if (options.keyShift.isDown()) {
+                                    if (isHoldingSneak()) {
                                         super.buttonInput1(keyIsDown, options);
                                     } else {
                                         //Star Finger here
@@ -581,7 +581,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
                 setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE, PowerIndex.NO_CD);
             } else {
-                if (this.getSelf().isShiftKeyDown()) {
+                if (isHoldingSneak()) {
                     setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
@@ -589,7 +589,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         }
 
-        if (this.getSelf().isShiftKeyDown()){
+        if (isHoldingSneak()){
 
             if (this.isGuarding()) {
                 setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_PHASE_GRAB, PowerIndex.SKILL_2);
@@ -657,7 +657,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
             setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_RESUME, PowerIndex.NO_CD);
-        } else if (this.getSelf().isShiftKeyDown()){
+        } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP, PowerIndex.SKILL_4);

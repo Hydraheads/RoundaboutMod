@@ -30,5 +30,7 @@ public class FabricKeyInputs {
         
         KeyBindingHelper.registerKeyBinding(KeyInputRegistry.guardKey);
 
+        KeyBindingHelper.registerKeyBinding(KeyInputRegistry.switchRow);
+
     }
 }

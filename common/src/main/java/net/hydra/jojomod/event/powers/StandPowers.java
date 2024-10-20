@@ -1844,6 +1844,33 @@ public class StandPowers {
     public void runExtraSoundCode(byte soundChoice) {
     }
 
+    public boolean isHoldingSneakToggle = false;
+    public boolean isHoldingSneak(){
+        if (this.self.level().isClientSide) {
+            Minecraft mc = Minecraft.getInstance();
+            return (mc.options.keyShift.isDown() || (isHoldingSneakToggle && !mc.options.keyShift.isDown()));
+        }
+        return this.getSelf().isCrouching();
+    }
+
+
+    public boolean heldDownSwitch = false;
+    public void switchRowsKey(boolean keyIsDown, Options options){
+        if (!heldDownSwitch){
+            if (keyIsDown){
+                heldDownSwitch = true;
+                if (isHoldingSneakToggle){
+                    isHoldingSneakToggle=false;
+                } else {
+                    isHoldingSneakToggle=true;
+                }
+            }
+        } else {
+            if (!keyIsDown){
+                heldDownSwitch = false;
+            }
+        }
+    }
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
             return SoundIndex.BARRAGE_SOUND_GROUP;

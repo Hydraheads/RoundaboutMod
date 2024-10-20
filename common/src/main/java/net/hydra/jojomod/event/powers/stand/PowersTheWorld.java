@@ -85,7 +85,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                     && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
                 if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                    if (!options.keyShift.isDown()) {
+                    if (!isHoldingSneak()) {
                         if (keyIsDown) {
                             if (!hold1) {
                                 hold1 = true;
@@ -741,7 +741,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
-        if (this.getSelf().isCrouching()){
+        if (isHoldingSneak()){
             if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
                 setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_TRAVEL_BARRAGE, PowerIndex.NO_CD);
             } else {
@@ -813,7 +813,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
             setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_RESUME, PowerIndex.NO_CD);
-        } else if (this.getSelf().isCrouching()){
+        } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4);

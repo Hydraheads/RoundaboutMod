@@ -85,7 +85,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                     && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
                 if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                    if (!options.keyShift.isDown()) {
+                    if (!isHoldingSneak()) {
                         if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
                             /*Stand leap rebounds*/
                             standRebound();
@@ -352,10 +352,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
             } else {
                 if (keyIsDown) {
-                    if (!options.keyShift.isDown()) {
+                    if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
-                        if (this.canAttack() && options.keyShift.isDown()) {
+                        if (this.canAttack() && isHoldingSneak()) {
                             this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                             holdDownClick = true;
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
@@ -390,7 +390,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 sendPacket = true;
                             } else {
                                 KeyInputs.roundaboutClickCount = 2;
-                                if (options.keyShift.isDown()) {
+                                if (isHoldingSneak()) {
                                     this.setChargedTSTicks(20);
                                     this.setMaxChargeTSTime(20);
                                     sendPacket = true;
@@ -876,7 +876,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                if (options.keyShift.isDown()) {
+                if (isHoldingSneak()) {
                     if (keyIsDown) {
                         if (!hold1) {
                             hold1 = true;
@@ -1206,7 +1206,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
         if (keyIsDown) {
-            if (options.keyShift.isDown() && (this.getAttackTime() >= this.getAttackTimeMax() ||
+            if (isHoldingSneak() && (this.getAttackTime() >= this.getAttackTimeMax() ||
                     (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))) {
                 this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);

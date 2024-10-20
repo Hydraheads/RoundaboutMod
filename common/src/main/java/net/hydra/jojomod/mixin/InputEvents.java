@@ -478,6 +478,9 @@ public abstract class InputEvents implements IInputEvents {
                     KeyInputs.MoveKey4(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey),
                             this.options);
 
+                KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.switchRow),
+                        this.options);
+
                     if (KeyInputRegistry.menuKey.isDown()) {
                         KeyInputs.menuKey(player,((Minecraft) (Object) this));
                     }

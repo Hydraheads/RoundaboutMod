@@ -97,6 +97,7 @@
   "key.roundabout.ability.four": "Skill 4",
   "key.roundabout.menu": "Power Inventory",
   "key.roundabout.bonus_guard": "Use Offhand / Easy Block",
+  "key.roundabout.switch_rows": "Toggle Crouch Ability Row",
 
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Iron Sword",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Add to iron sword",

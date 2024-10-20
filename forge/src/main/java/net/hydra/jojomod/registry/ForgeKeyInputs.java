@@ -23,5 +23,6 @@ public final class ForgeKeyInputs {
          event.register(KeyInputRegistry.abilityFourKey);
          event.register(KeyInputRegistry.menuKey);
         event.register(KeyInputRegistry.guardKey);
+        event.register(KeyInputRegistry.switchRow);
         }
 }
