@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_meteor_ingot": {
+    "has_quartz_thing": {
       "conditions": {
         "items": [
           {
             "items": [
-              "roundabout:meteorite_ingot"
+              "minecraft:quartz"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:stand_arrow_shaped"
+        "recipe": "roundabout:stand_disc_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_meteor_ingot",
+      "has_quartz_thing",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "roundabout:stand_arrow_shaped"
+      "roundabout:stand_disc_shaped"
     ]
   },
   "sends_telemetry_event": false

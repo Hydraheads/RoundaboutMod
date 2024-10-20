@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_meteor_ingot": {
+    "has_coal_thing": {
       "conditions": {
         "items": [
           {
             "items": [
-              "roundabout:meteorite_ingot"
+              "minecraft:coal"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:stand_arrow_shaped"
+        "recipe": "roundabout:match_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_meteor_ingot",
+      "has_coal_thing",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "roundabout:stand_arrow_shaped"
+      "roundabout:match_shaped"
     ]
   },
   "sends_telemetry_event": false

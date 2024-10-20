@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_meteor_ingot": {
+    "has_diamond_item": {
       "conditions": {
         "items": [
           {
             "items": [
-              "roundabout:meteorite_ingot"
+              "minecraft:diamond"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:stand_arrow_shaped"
+        "recipe": "roundabout:stereo_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_meteor_ingot",
+      "has_diamond_item",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "roundabout:stand_arrow_shaped"
+      "roundabout:stereo_shaped"
     ]
   },
   "sends_telemetry_event": false

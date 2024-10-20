@@ -1,26 +1,23 @@
 {
   "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "roundabout:meteorite_smelting"
-    ]
-  },
   "criteria": {
     "has_meteorite": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "roundabout:meteorite"
+            "items": [
+              "roundabout:meteorite"
+            ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     },
     "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
       "conditions": {
         "recipe": "roundabout:meteorite_smelting"
-      }
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
@@ -28,5 +25,11 @@
       "has_meteorite",
       "has_the_recipe"
     ]
-  ]
+  ],
+  "rewards": {
+    "recipes": [
+      "roundabout:meteorite_smelting"
+    ]
+  },
+  "sends_telemetry_event": false
 }

@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:stand_arrow_shaped"
+        "recipe": "roundabout:meteor_block_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "roundabout:stand_arrow_shaped"
+      "roundabout:meteor_block_shaped"
     ]
   },
   "sends_telemetry_event": false

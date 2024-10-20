@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_meteor_ingot": {
+    "has_locacaca": {
       "conditions": {
         "items": [
           {
             "items": [
-              "roundabout:meteorite_ingot"
+              "roundabout:locacaca"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:stand_arrow_shaped"
+        "recipe": "roundabout:locacaca_pit_shapeless"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_meteor_ingot",
+      "has_locacaca",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "roundabout:stand_arrow_shaped"
+      "roundabout:locacaca_pit_shapeless"
     ]
   },
   "sends_telemetry_event": false
