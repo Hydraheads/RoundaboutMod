@@ -93,7 +93,8 @@ public class MainUtil {
         return 0.05;
     }
     public static double getStandUserOdds(Mob mob) {
-        if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
+        if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon
+                || mob instanceof Vex){
             return 0;
         } else if (mob instanceof AbstractVillager){
             return 0.02;
