@@ -817,6 +817,8 @@ public class MainUtil {
     public static void handleSingleBytePacketC2S(Player player, byte context){
         if (context == PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON) {
             ((StandUser) player).roundabout$summonStand(player.level(), false, false);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_UPDATE_COOLDOWN) {
+                ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {

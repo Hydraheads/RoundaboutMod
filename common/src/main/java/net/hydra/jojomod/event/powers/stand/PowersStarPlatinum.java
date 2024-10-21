@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -46,9 +47,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
@@ -129,8 +132,23 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             playSoundsIfNearby(BARRAGE_NOISE, 32, false);
         }
     }
+
+    boolean letServerKnowScopeCatchIsReady = false;
     @Override
     public void tickPower() {
+        /**This little excerpt lets the server know you're ready to catch another projectile*/
+        if (this.getSelf().level().isClientSide()) {
+            if (this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                if (!letServerKnowScopeCatchIsReady) {
+                    letServerKnowScopeCatchIsReady = true;
+                }
+            } else {
+                if (letServerKnowScopeCatchIsReady) {
+                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket(PowerIndex.SKILL_EXTRA_2, PacketDataIndex.SINGLE_BYTE_UPDATE_COOLDOWN);
+                    letServerKnowScopeCatchIsReady = false;
+                }
+            }
+        }
         super.tickPower();
         if (this.self.isAlive() && !this.self.isRemoved()) {
             if (this.getActivePower() != PowerIndex.POWER_1){
@@ -337,24 +355,58 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public boolean dealWithProjectile(Entity ent){
-        if (!ent.level().isClientSide() && ent instanceof AbstractArrow AA) {
+        if (!ent.level().isClientSide()) {
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE) {
-                if (SE.getScoping()) {
+                if (SE.getScoping() && !onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                     if (!hasBlock() && !hasEntity() &&
                             ((StandUser) this.getSelf()).roundabout$getActivePower() == PowerIndex.GUARD) {
-                        ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
-                        if (!ii.isEmpty()){
-                            ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
-                                    PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
-                            ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
-                                    PE, PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
-                            if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)){
-                                SE.canAcquireHeldItem = true;
-                            } else {
-                                SE.canAcquireHeldItem = false;
+                        boolean success = false;
+                        if (ent instanceof AbstractArrow AA) {
+                            ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
+                            if (!ii.isEmpty()) {
+                                success = true;
+                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                        PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
+                                if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                                    SE.canAcquireHeldItem = true;
+                                } else {
+                                    SE.canAcquireHeldItem = false;
+                                }
+                                SE.setHeldItem(ii.copyAndClear());
                             }
-                            SE.setHeldItem(ii.copyAndClear());
+                        } else if (ent instanceof ThrownObjectEntity TO) {
+                            ItemStack ii = TO.getItem();
+                            if (!ii.isEmpty()) {
+                                success = true;
+                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                        PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
+                                if (TO.places) {
+                                    SE.canAcquireHeldItem = true;
+                                } else {
+                                    SE.canAcquireHeldItem = false;
+                                }
+                                SE.setHeldItem(ii.copyAndClear());
+                            }
+                        } else if (ent instanceof ThrownPotion TP) {
+                            ItemStack ii = TP.getItem();
+                            if (!ii.isEmpty()) {
+                                success = true;
+                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                        PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
+                                if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
+                                    SE.canAcquireHeldItem = true;
+                                } else {
+                                    SE.canAcquireHeldItem = false;
+                                }
+                                SE.setHeldItem(ii.copyAndClear());
+                            }
+                        }
+
+                        if (success){
+                            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_EXTRA_2, 200);
+                            ((StarPlatinumEntity) stand).setScoping(false);
+                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 200);
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.2F);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -363,6 +415,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             } else {
                                 animateStand((byte) 34);
                             }
+
+                            ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                    ent.getX(), ent.getY(), ent.getZ(),
+                                    0, 0, 0, 0, 0);
                             return true;
                         }
                     }
@@ -687,13 +743,13 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (canScope()){
             rendered1 = true;
             if (scopeLevel == 1){
-                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_1, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_1, PowerIndex.SKILL_EXTRA_2);
             } else if (scopeLevel == 2) {
-                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_2, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_2, PowerIndex.SKILL_EXTRA_2);
             } else if (scopeLevel == 3) {
-                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_3, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_3, PowerIndex.SKILL_EXTRA_2);
             } else {
-                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE, PowerIndex.SKILL_EXTRA_2);
             }
         } else {
             if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {

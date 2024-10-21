@@ -373,8 +373,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        //
         Entity $$1 = $$0.getEntity();
+        if ($$1 instanceof LivingEntity LE){
+            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this)){
+                this.discard();
+                return;
+            }
+        }
 
         Entity $$4 = this.getOwner();
 

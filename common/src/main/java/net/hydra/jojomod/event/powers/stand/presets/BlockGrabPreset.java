@@ -159,6 +159,12 @@ public class BlockGrabPreset extends PunchingStand{
             AbstractArrow $$11 = $$10.createArrow(this.getSelf().level(), item, this.getSelf());
             $$11.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
             $$11.setCritArrow(true);
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+            if (standEntity != null) {
+                if (!standEntity.canAcquireHeldItem){
+                    $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+                }
+            }
             if (this.canSnipe()){
                 ((IAbstractArrowAccess)$$11).roundabout$starThrowInit();
             }
