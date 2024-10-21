@@ -130,6 +130,10 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     }
 
     public void rotateHead(T mobEntity,  ModelPart head, float tickDelta){
+        if (mobEntity.getDisplay()){
+            this.setHeadRotations(0,0);
+            return;
+        }
 
         var animationNumber = mobEntity.getOffsetType();
         var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
@@ -163,6 +167,10 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         mobEntity.setHeadRotationY(rotY);
         this.setHeadRotations(rotX,rotY);
     } public void rotateStand(T mobEntity,  ModelPart stand, float tickDelta){
+        if (mobEntity.getDisplay()){
+            this.setStandRotations(0,0,0);
+            return;
+        }
         var animationNumber = mobEntity.getOffsetType();
         var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
 
@@ -192,6 +200,10 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
 
     }
     public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
+        if (mobEntity.getDisplay()){
+            this.setBodyRotations(0,0);
+            return;
+        }
         var animationNumber = mobEntity.getOffsetType();
         var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
 
