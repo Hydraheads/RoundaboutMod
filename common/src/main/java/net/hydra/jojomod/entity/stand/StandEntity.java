@@ -146,7 +146,7 @@ public abstract class StandEntity extends Mob{
     public final AnimationState standLeapEndAnimationState = new AnimationState();
 
     /**Override this to define animations. Above are animation states defined.*/
-    protected void setupAnimationStates() {
+    public void setupAnimationStates() {
         if (this.getUser() != null) {
             if (this.getAnimation() == 0) {
                 this.idleAnimationState.startIfStopped(this.tickCount);
@@ -222,6 +222,8 @@ public abstract class StandEntity extends Mob{
             }
         }
     }
+
+    public boolean forceVisible = false;
 
 
     public final byte getMoveForward() {
@@ -594,17 +596,19 @@ public abstract class StandEntity extends Mob{
             if (this.level().isClientSide()){
                 setupAnimationStates();
             } else {
-                if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
-                    this.setXRot(pitch);
-                    this.setYRot(yaw);
-                    this.setYBodyRot(yaw);
-                    this.xRotO = pitch;
-                    this.yRotO = yaw;
+                if (!forceVisible) {
+                    if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
+                        this.setXRot(pitch);
+                        this.setYRot(yaw);
+                        this.setYBodyRot(yaw);
+                        this.xRotO = pitch;
+                        this.yRotO = yaw;
+                    }
                 }
             }
 
-            if (this.isAlive() && !this.dead){
-                if (this.getNeedsUser() && !this.isDisplay) {
+            if (this.isAlive() && !this.dead || forceVisible){
+                if (this.getNeedsUser() && !this.forceVisible) {
                     if (this.getUser() != null && !this.getUser().isRemoved()) {
                         boolean userActive = this.getUserData(this.getUser()).roundabout$getActive();
                         LivingEntity thisStand = this.getUserData(this.getUser()).roundabout$getStand();

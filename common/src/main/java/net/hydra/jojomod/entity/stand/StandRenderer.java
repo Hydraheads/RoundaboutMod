@@ -41,7 +41,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         LocalPlayer lp = Minecraft.getInstance().player;
         if (lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
-                !lp.isSpectator())){
+                !lp.isSpectator()) && !mobEntity.forceVisible){
             mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, 0, 0.72f);
         } else {
             float opacity = getStandOpacity(mobEntity);
@@ -77,6 +77,9 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     }
 
     public float getStandOpacity(T entity){
+        if (entity.forceVisible){
+            return entity.getMaxFade();
+        }
             int vis = entity.getFadeOut();
             int max = entity.getMaxFade();
             float tot = (float) ((((float) Math.min(vis+ ClientUtil.getDelta(),max) / max) * 1.3) - 0.3);

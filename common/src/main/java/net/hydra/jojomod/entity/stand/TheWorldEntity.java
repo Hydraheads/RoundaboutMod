@@ -29,7 +29,7 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState finalKickWindup = new AnimationState();
     public final AnimationState phaseGrab = new AnimationState();
     @Override
-    protected void setupAnimationStates() {
+    public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
             if (this.getAnimation() != 12) {
