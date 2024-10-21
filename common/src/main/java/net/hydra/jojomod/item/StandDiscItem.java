@@ -63,14 +63,14 @@ public class StandDiscItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
-        $$2.add(this.getDisplayName().withStyle(ChatFormatting.AQUA));
+        $$2.add(this.getDisplayName2().withStyle(ChatFormatting.AQUA));
     }
 
-    public MutableComponent getDisplayName() {
+    public MutableComponent getDisplayName2() {
         return Component.translatable(this.getDescriptionId() + ".desc");
     }
 
-    public static MutableComponent getDisplayName(StandDiscItem sd) {
+    public static MutableComponent getDisplayName2(StandDiscItem sd) {
         return Component.translatable(sd.getDescriptionId() + ".desc");
     }
 

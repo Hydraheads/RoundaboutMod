@@ -44,9 +44,10 @@ public class PowerInventoryScreen
     private StandEntity stand = null;
 
     public PowerInventoryScreen(Player player) {
-        super(player.inventoryMenu, player.getInventory(), Component.translatable("container.crafting"));
-        this.titleLabelX = 97;
+        super(player.inventoryMenu, player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
+        this.titleLabelX = 80;
     }
+
 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {

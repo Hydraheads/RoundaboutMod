@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -130,6 +131,13 @@ public class StandPowers {
     }
     public float getTimestopRange(){
         return 100;
+    }
+    public Component getStandName(){
+        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
+            return SDI.getDisplayName2();
+        }
+        return Component.empty();
     }
 
     /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/

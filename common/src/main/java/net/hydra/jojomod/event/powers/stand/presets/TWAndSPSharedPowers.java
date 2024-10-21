@@ -1803,9 +1803,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         }
 
-        if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 60);
-        }
         SoundEvent SE;
         float pitch = 1F;
         if (entity != null) {

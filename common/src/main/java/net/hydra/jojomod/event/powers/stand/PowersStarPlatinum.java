@@ -92,6 +92,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_PLATINUM_ORA_3_SOUND_EVENT;
         }
     }
+
     @Override
     public SoundEvent getLastRejectionHitSound(){
         return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;

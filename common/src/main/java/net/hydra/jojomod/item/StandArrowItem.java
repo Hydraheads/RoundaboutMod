@@ -77,7 +77,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 $$1.getY() + $$1.getEyeHeight(), $$1.getZ(),
                 15, 1, 1, 1, 1);
             if (stack.getItem() instanceof StandDiscItem SD){
-                $$1.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName()).withStyle(ChatFormatting.AQUA), true);
+                $$1.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
             }
         }
     }
@@ -241,7 +241,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     );
                 } else if (itemstack.getItem() instanceof StandDiscItem de) {
                     $$2.add(
-                            de.getDisplayName().withStyle(ChatFormatting.AQUA)
+                            de.getDisplayName2().withStyle(ChatFormatting.AQUA)
                     );
                     //Component.translatable("item.roundabout.stand_arrow.reroll", Minecraft.getInstance().options.keyShift.getDefaultKey().getName())
                     $$2.add(
