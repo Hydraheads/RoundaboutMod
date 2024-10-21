@@ -82,6 +82,12 @@ public class StandArrowItem extends RoundaboutArrowItem {
         }
     }
 
+
+    @Override
+    public boolean isEnchantable(ItemStack p_41456_) {
+        return false;
+    }
+
     public static void grantMobStand(ItemStack $$0, Level $$1, LivingEntity live){
         if (!$$1.isClientSide) {
             CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");

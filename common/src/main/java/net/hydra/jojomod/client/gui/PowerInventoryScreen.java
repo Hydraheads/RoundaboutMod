@@ -42,7 +42,8 @@ public class PowerInventoryScreen
                 int i = this.leftPos;
                 int j = this.topPos;
                 context.blit(INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
-                InventoryScreen.renderEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30, (float) (i + 51) - this.mouseX, (float) (j + 75 - 50) - this.mouseY, (LivingEntity) stand);
+                InventoryScreen.renderEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30,
+                        (float) (i + 51) - this.mouseX, (float) (j + 75 - 50) - this.mouseY, (LivingEntity) pl);
             }
         }
     }
