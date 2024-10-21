@@ -53,10 +53,17 @@ public class ZBucketItem extends Item
                         player.swing(hand);
                         if (!level.isClientSide) {
                             level.removeBlock(blockPos, false);
-                            player.setItemInHand(hand, stack);
+                            itemStack.shrink(1);
+                            if (itemStack.isEmpty()) {
+                                cir.setReturnValue(InteractionResultHolder.sidedSuccess(stack, level.isClientSide()));
+                                return;
+                            } else {
+                                if (!player.getInventory().add(stack)) {
+                                    player.drop(stack, false);
+                                }
+                            }
                             SoundEvent $$6 = SoundEvents.BUCKET_FILL;
                             level.playSound(player, blockPos, $$6, SoundSource.BLOCKS, 1F, 1.5F);
-                            cir.setReturnValue(InteractionResultHolder.pass(stack));
                         }
                         cir.setReturnValue(InteractionResultHolder.pass(itemStack));
                     }
