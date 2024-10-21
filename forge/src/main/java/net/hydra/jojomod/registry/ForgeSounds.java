@@ -171,6 +171,8 @@ public class ForgeSounds {
             register(ModSounds.BLOCK_GRAB, ModSounds.BLOCK_GRAB_ID);
     public static final RegistryObject<SoundEvent> BLOCK_THROW =
             register(ModSounds.BLOCK_THROW, ModSounds.BLOCK_THROW_ID);
+    public static final RegistryObject<SoundEvent> ITEM_CATCH =
+            register(ModSounds.ITEM_CATCH, ModSounds.ITEM_CATCH_ID);
     public static final RegistryObject<SoundEvent> BALL_BEARING_SHOT =
             register(ModSounds.BALL_BEARING_SHOT, ModSounds.BALL_BEARING_SHOT_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =

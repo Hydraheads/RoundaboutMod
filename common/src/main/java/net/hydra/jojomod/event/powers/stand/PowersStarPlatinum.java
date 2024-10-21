@@ -408,7 +408,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ((StarPlatinumEntity) stand).setScoping(false);
                             this.setCooldown(PowerIndex.SKILL_EXTRA_2, 200);
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.2F);
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
                             if (MainUtil.isThrownBlockItem(SE.getHeldItem().getItem())) {
                                 animateStand((byte) 32);

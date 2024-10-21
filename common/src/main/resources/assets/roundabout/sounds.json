@@ -17,6 +17,12 @@
       "roundabout:stand_arrow_use"
     ]
   },
+  "star_platinum_catch": {
+    "subtitle": "sounds.roundabout.star_platinum_catch",
+    "sounds": [
+      "roundabout:star_platinum_catch"
+    ]
+  },
   "time_snap": {
     "subtitle": "sounds.roundabout.time_snap",
     "sounds": [
