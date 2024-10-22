@@ -43,9 +43,10 @@ public class KeyInputs {
         if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
             roundaboutClickCount = 2;
 
-            PowerInventoryMenu powa = new PowerInventoryMenu(player.getInventory(), true, player);
+            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY);
+            PowerInventoryMenu powa = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             player.containerMenu = powa;
-            client.setScreen(new PowerInventoryScreen(player));
+            client.setScreen(new PowerInventoryScreen(player,powa));
         }
     }
 

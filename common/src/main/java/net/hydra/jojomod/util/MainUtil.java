@@ -4,8 +4,11 @@ package net.hydra.jojomod.util;
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -48,6 +51,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.inventory.HorseInventoryMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -820,6 +824,11 @@ public class MainUtil {
             ((StandUser) player).roundabout$summonStand(player.level(), false, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_UPDATE_COOLDOWN) {
                 ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
+            ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
+
+            player.containerMenu = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
+            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
