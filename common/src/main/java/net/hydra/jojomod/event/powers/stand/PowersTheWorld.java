@@ -70,17 +70,18 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
-    public SoundEvent getLastHitSound(){
+    public Byte getLastHitSound(){
 
         double rand = Math.random();
         if (rand > 0.66) {
-            return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+            return LAST_HIT_1_NOISE;
         } else if (rand > 0.33) {
-            return ModSounds.STAND_THEWORLD_MUDA2_SOUND_EVENT;
+            return LAST_HIT_2_NOISE;
         } else {
-            return ModSounds.THE_WORLD_MUDA_EVENT;
+            return LAST_HIT_3_NOISE;
         }
     }
+
     @Override
     public SoundEvent getLastRejectionHitSound(){
         return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
@@ -231,15 +232,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
             super.updateUniqueMoves();
-    }
-
-    public void playBarrageCrySound(){
-        if (!this.self.level().isClientSide()) {
-            byte barrageCrySound = this.chooseBarrageSound();
-            if (barrageCrySound != SoundIndex.NO_SOUND) {
-                playSoundsIfNearby(barrageCrySound, 32, false);
-            }
-        }
     }
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
@@ -770,6 +762,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
+        } else if (soundChoice == LAST_HIT_1_NOISE) {
+            return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
+        } else if (soundChoice == LAST_HIT_2_NOISE) {
+            return ModSounds.THE_WORLD_MUDA_EVENT;
+        } else if (soundChoice == LAST_HIT_3_NOISE) {
+            return ModSounds.STAND_THEWORLD_MUDA2_SOUND_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == KICK_BARRAGE_NOISE) {
@@ -915,5 +913,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     public static final byte DODGE_NOISE = 19;
+
+    public static final byte LAST_HIT_1_NOISE = 120;
+    public static final  byte LAST_HIT_2_NOISE = 121;
+    public static final  byte LAST_HIT_3_NOISE = 122;
 
 }

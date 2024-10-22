@@ -163,11 +163,9 @@ public class PunchingStand extends StandPowers {
         if (this.activePowerPhase >= this.activePowerPhaseMax) {
 
             if (!this.self.level().isClientSide()) {
-                SoundEvent LastHitSound = this.getLastHitSound();
-                if (LastHitSound != null) {
-                    this.self.level().playSound(null, this.self.blockPosition(), LastHitSound,
-                            SoundSource.PLAYERS, 1F, 1);
-                }
+                Byte LastHitSound = this.getLastHitSound();
+                    this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
+                            true);
             }
 
             if (entity != null) {
@@ -245,10 +243,10 @@ public class PunchingStand extends StandPowers {
                 throwPunch = true;
                 SE = ModSounds.PUNCH_4_SOUND_EVENT;
                 pitch = 1.2F;
-                SoundEvent LastHitSound = this.getLastHitSound();
-                if (LastHitSound != null) {
-                    this.self.level().playSound(null, this.self.blockPosition(), LastHitSound,
-                            SoundSource.PLAYERS, 1F, 1);
+                if (!this.self.level().isClientSide()) {
+                    Byte LastHitSound = this.getLastHitSound();
+                    this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
+                            true);
                 }
             }
 

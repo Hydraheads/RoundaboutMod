@@ -1470,7 +1470,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             } else {
                 barrageCrySound = KICK_BARRAGE_NOISE_2;
             }
-            playSoundsIfNearby(barrageCrySound, 32, false);
+            playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
         }
     }
     public boolean setPowerKickBarrage() {

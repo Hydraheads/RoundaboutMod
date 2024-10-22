@@ -2,12 +2,15 @@ package net.hydra.jojomod.event.powers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -452,8 +455,8 @@ public class StandPowers {
     public ResourceLocation getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
     }
-    public SoundEvent getLastHitSound(){
-        return null;
+    public Byte getLastHitSound(){
+        return SoundIndex.NO_SOUND;
     }
 
     public ResourceLocation getLastHitID(){
@@ -1634,6 +1637,35 @@ public class StandPowers {
 
     /**The Sound Event to cancel when your barrage is canceled*/
 
+    public final void playStandUserOnlySoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
+        if (isVoice && this.getSelf() instanceof Player PE &&
+                ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
+            return;
+        }
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
+                    if (onSelf) {
+                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else {
+                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                    }
+                }
+            }
+        }
+    }
+
+    /**The Sound Event to cancel when your barrage is canceled*/
+
     public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
@@ -1661,7 +1693,7 @@ public class StandPowers {
         if (!this.self.level().isClientSide()) {
             byte barrageCrySound = this.chooseBarrageSound();
             if (barrageCrySound != SoundIndex.NO_SOUND) {
-                playSoundsIfNearby(barrageCrySound, 32, false);
+                playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
             }
         }
     }

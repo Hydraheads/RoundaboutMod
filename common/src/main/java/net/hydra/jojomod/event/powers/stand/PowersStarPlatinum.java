@@ -81,15 +81,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return ModEntities.STAR_PLATINUM.create(this.getSelf().level());
     }
     @Override
-    public SoundEvent getLastHitSound(){
+    public Byte getLastHitSound(){
 
         double rand = Math.random();
         if (rand > 0.66) {
-            return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
+            return LAST_HIT_1_NOISE;
         } else if (rand > 0.33) {
-            return ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT;
+            return LAST_HIT_2_NOISE;
         } else {
-            return ModSounds.STAR_PLATINUM_ORA_3_SOUND_EVENT;
+            return LAST_HIT_3_NOISE;
         }
     }
 
@@ -892,9 +892,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
             double rand = Math.random();
             if (rand > 0.5) {
-                playSoundsIfNearby(STAR_FINGER, 32, false);
+                playStandUserOnlySoundsIfNearby(STAR_FINGER, 32, false,true);
             } else {
-                playSoundsIfNearby(STAR_FINGER_2, 32, false);
+                playStandUserOnlySoundsIfNearby(STAR_FINGER_2, 32, false,true);
             }
             this.animateStand((byte)82);
             this.poseStand(OffsetIndex.GUARD_AND_TRACE);
@@ -956,6 +956,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
+        } else if (soundChoice == LAST_HIT_1_NOISE) {
+            return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
+        } else if (soundChoice == LAST_HIT_2_NOISE) {
+            return ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT;
+        } else if (soundChoice == LAST_HIT_3_NOISE) {
+            return ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
@@ -993,4 +999,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         return super.getSoundFromByte(soundChoice);
     }
+
+
+    public static final byte LAST_HIT_1_NOISE = 120;
+    public static final  byte LAST_HIT_2_NOISE = 121;
+    public static final  byte LAST_HIT_3_NOISE = 122;
 }
