@@ -24,6 +24,7 @@ public interface IPlayerEntity {
     ItemStack roundabout$getMaskVoiceSlot();
     void roundabout$setMaskSlot(ItemStack stack);
     void roundabout$setMaskVoiceSlot(ItemStack stack);
-    PlayerMaskSlots roundabout$getmaskInventory();
+    PlayerMaskSlots roundabout$getMaskInventory();
+    void roundabout$setMaskInventory(PlayerMaskSlots pm);
 
 }

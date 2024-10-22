@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.authlib.GameProfile;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -60,6 +61,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Inject(method = "restoreFrom(Lnet/minecraft/server/level/ServerPlayer;Z)V", at = @At(value = "TAIL"))
     public void roundabout$restoreFrom(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
         ((StandUser)this).roundabout$setStandDisc(((StandUser)$$0).roundabout$getStandDisc());
+        ((IPlayerEntity)this).roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
     }
 
 }

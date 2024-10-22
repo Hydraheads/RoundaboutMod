@@ -432,8 +432,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Override
     @Unique
-    public PlayerMaskSlots roundabout$getmaskInventory() {
+    public PlayerMaskSlots roundabout$getMaskInventory() {
         return roundabout$maskInventory;
+    }
+    @Override
+    @Unique
+    public void roundabout$setMaskInventory(PlayerMaskSlots pm) {
+        this.roundabout$maskInventory = pm;
     }
     @Override
     @Unique

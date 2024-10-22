@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -42,10 +43,12 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
     public @Nullable ItemStack roundabout$RenderBoots;
     @Unique
     public @Nullable ItemStack roundabout$RenderHead;
-    @Inject(method = "render", at = @At(value = "HEAD"))
+    @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+            at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         roundabout$ArmorPhase = 0;
-        if ($$3 instanceof Player) {
+        if ($$3 instanceof Player PE) {
+
             roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
             if (roundabout$ModifyEntity) {
                 if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderChest() == null){
@@ -78,11 +81,15 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
                     ((IEntityAndData) $$3).roundabout$setRoundaboutRenderHead(null);
                 }
             }
+
+            if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()){
+                ci.cancel();
+            }
+
         } else {
             roundabout$ModifyEntity = false;
         }
     }
-
     @ModifyVariable(method = "renderArmorPiece", at = @At(value = "STORE"), ordinal = 0)
     private ItemStack roundabout$renderArmorPiece(ItemStack $$0) {
         if (roundabout$ModifyEntity) {
