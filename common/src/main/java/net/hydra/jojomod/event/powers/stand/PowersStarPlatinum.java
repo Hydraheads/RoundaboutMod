@@ -348,10 +348,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public void handleStandAttack(Player player, Entity target){
+            super.handleStandAttack(player,target);
+    }
+    @Override
+    public void handleStandAttack2(Player player, Entity target){
         if (this.getActivePower() == PowerIndex.POWER_1){
             fingerDamage(target);
-        } else {
-            super.handleStandAttack(player,target);
         }
     }
     @Override
@@ -435,7 +437,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         };
         for (Entity value : hitEntities) {
             if (this.isPacketPlayer()){
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(value.getId(), PacketDataIndex.INT_STAND_ATTACK);
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(value.getId(), PacketDataIndex.INT_STAND_ATTACK_2);
             } else {
                 fingerDamage(value);
             }
@@ -488,9 +490,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     public float getFingerDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2F;
+            return 1.5F;
         } else {
-            return 7;
+            return 6.5F;
         }
     }
     public List<Entity> FingerGrabHitbox(List<Entity> entities, float maxDistance){
@@ -551,7 +553,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
                                 Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1), FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
-                            this.setCooldown(PowerIndex.SKILL_1, 80);
+                            this.setCooldown(PowerIndex.SKILL_1, 100);
                             List<Entity> fingerTargets = doFinger(8);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);

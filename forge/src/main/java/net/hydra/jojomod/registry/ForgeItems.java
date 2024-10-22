@@ -166,6 +166,12 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties())));
+    public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
+            () -> new MaskItem(new Item.Properties())));
+    public static final RegistryObject<Item> JOTARO_MASK = ITEMS.register("jotaro_mask",
+            () -> new MaskItem(new Item.Properties()));
+    public static final RegistryObject<Item> DIO_MASK = ITEMS.register("dio_mask",
+            () -> new MaskItem(new Item.Properties()));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

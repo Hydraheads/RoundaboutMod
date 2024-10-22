@@ -99,6 +99,9 @@ public class ForgeEvents {
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
+        ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
+        ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
+        ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();

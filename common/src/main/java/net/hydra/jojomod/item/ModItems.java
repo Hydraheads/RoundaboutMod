@@ -46,6 +46,9 @@ public class ModItems {
 
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
+    public static Item BLANK_MASK;
+    public static Item JOTARO_MASK;
+    public static Item DIO_MASK;
 
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();

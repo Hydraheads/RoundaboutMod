@@ -38,6 +38,13 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
 
+  "item.roundabout.blank_mask": "Glass Visage",
+  "item.roundabout.blank_mask.desc": "Hides Armor",
+  "item.roundabout.jotaro_mask": "Jotaro Visage",
+  "item.roundabout.jotaro_mask.desc": "Jotaro Kujo (Part 3)",
+  "item.roundabout.dio_mask": "DIO Visage",
+  "item.roundabout.dio_mask.desc": "DIO (Part 3)",
+
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
   "item.roundabout.stand_arrow.roll": "???",

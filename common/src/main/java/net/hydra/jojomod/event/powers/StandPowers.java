@@ -1682,6 +1682,8 @@ public class StandPowers {
     public void handleStandAttack(Player player, Entity target){
     }
 
+    public void handleStandAttack2(Player player, Entity target){
+    }
 
     /**This is called fourth by the server, it sends a packet to cancel the sound.*/
     public final void stopSoundsIfNearby(byte soundNumber, double range, boolean onSelf) {

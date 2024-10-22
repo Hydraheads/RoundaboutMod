@@ -889,6 +889,9 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_STAND_ATTACK){
             Entity target = player.level().getEntity(data);
             ((StandUser)player).roundabout$getStandPowers().handleStandAttack(player,target);
+        } else if (context == PacketDataIndex.INT_STAND_ATTACK_2){
+            Entity target = player.level().getEntity(data);
+            ((StandUser)player).roundabout$getStandPowers().handleStandAttack2(player,target);
         }
     }
 
