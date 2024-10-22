@@ -417,15 +417,15 @@ public class StandPowers {
     public float getSoundVolumeFromByte(byte soundChoice){
         return 1F;
     }
-    protected SoundEvent getSummonSound() {
-        return ModSounds.SUMMON_SOUND_EVENT;
+    protected Byte getSummonSound() {
+        return -1;
     }
 
     public void playSummonSound() {
         if (this.self.isCrouching()){
             return;
         }
-        this.self.level().playSound(null, this.self.blockPosition(), getSummonSound(), SoundSource.PLAYERS, 1F, 1F);
+        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
 
@@ -1693,7 +1693,7 @@ public class StandPowers {
         if (!this.self.level().isClientSide()) {
             byte barrageCrySound = this.chooseBarrageSound();
             if (barrageCrySound != SoundIndex.NO_SOUND) {
-                playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
+                playStandUserOnlySoundsIfNearby(barrageCrySound, 27, false,true);
             }
         }
     }
@@ -1706,7 +1706,7 @@ public class StandPowers {
         if (!this.self.level().isClientSide()) {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();
             if (barrageChargeSound != null) {
-                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 32, false);
+                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 27, false);
             }
         }
     }

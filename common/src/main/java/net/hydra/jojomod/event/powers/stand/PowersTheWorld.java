@@ -55,8 +55,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
-    protected SoundEvent getSummonSound() {
-        return ModSounds.WORLD_SUMMON_SOUND_EVENT;
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
     }
 
     @Override
@@ -152,7 +152,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
-            playSoundsIfNearby(BARRAGE_NOISE_2, 32, false);
+            playSoundsIfNearby(BARRAGE_NOISE_2, 27, false);
         }
     }
     @Override
@@ -160,7 +160,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
             if (move != PowerIndex.POWER_1_BONUS) {
-                stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
+                stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
             }
         }
         return super.tryPower(move,forced);
@@ -214,7 +214,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
-            playSoundsIfNearby(ASSAULT_NOISE, 32, false);
+            playSoundsIfNearby(ASSAULT_NOISE, 27, false);
             this.animateStand((byte)39);
             this.poseStand(OffsetIndex.LOOSE);
             stand.setYRot(this.getSelf().getYHeadRot() % 360);
@@ -762,6 +762,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
+        } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.WORLD_SUMMON_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_1_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_2_NOISE) {

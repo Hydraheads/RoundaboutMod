@@ -73,8 +73,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
-    protected SoundEvent getSummonSound() {
-        return ModSounds.STAR_SUMMON_SOUND_EVENT;
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
     }
     @Override
     public StandEntity getNewStandEntity(){
@@ -130,7 +130,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
-            playSoundsIfNearby(BARRAGE_NOISE, 32, false);
+            playSoundsIfNearby(BARRAGE_NOISE, 27, false);
         }
     }
 
@@ -956,6 +956,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
+        } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.STAR_SUMMON_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_1_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_2_NOISE) {

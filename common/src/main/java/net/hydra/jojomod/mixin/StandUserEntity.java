@@ -1113,8 +1113,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         boolean active;
         if (!this.roundabout$getActive() || forced) {
             //world.getEntity
-            if (this.roundabout$getStandPowers().canSummonStand()) {
-                StandEntity stand = this.roundabout$getStandPowers().getNewStandEntity();
+            StandPowers thispowers = this.roundabout$getStandPowers();
+            if (thispowers.canSummonStand()) {
+                StandEntity stand = thispowers.getNewStandEntity();
                 if (stand != null) {
                     InteractionHand hand = roundabout$User.getUsedItemHand();
                     if (hand == InteractionHand.OFF_HAND) {
@@ -1130,7 +1131,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     theWorld.addFreshEntity(stand);
 
                     if (sound && !((TimeStop)this.level()).CanTimeStopEntity(this)) {
-                        this.roundabout$getStandPowers().playSummonSound();
+                        thispowers.playSummonSound();
                     }
 
                     this.roundabout$standMount(stand);

@@ -1372,7 +1372,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (!this.self.level().isClientSide()) {
                 SoundEvent barrageChargeSound = this.getBarrageChargeSound();
                 if (barrageChargeSound != null) {
-                    playSoundsIfNearby(SoundIndex.ALT_CHARGE_SOUND_1, 32, false);
+                    playSoundsIfNearby(SoundIndex.ALT_CHARGE_SOUND_1, 27, false);
                 }
             }
         }
@@ -1504,7 +1504,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1_SNEAK);
-            playSoundsIfNearby(IMPALE_NOISE, 32, false);
+            playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand((byte)81);
             this.poseStand(OffsetIndex.GUARD);
 
