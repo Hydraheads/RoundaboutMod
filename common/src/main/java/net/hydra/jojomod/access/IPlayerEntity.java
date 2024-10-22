@@ -1,6 +1,8 @@
 package net.hydra.jojomod.access;
 
+import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public interface IPlayerEntity {
     Inventory roundabout$GetInventory();
@@ -18,4 +20,10 @@ public interface IPlayerEntity {
     void roundabout$addKnife();
     void roundabout$setKnife(byte knives);
     int roundabout$getKnifeCount();
+    ItemStack roundabout$getMaskSlot();
+    ItemStack roundabout$getMaskVoiceSlot();
+    void roundabout$setMaskSlot(ItemStack stack);
+    void roundabout$setMaskVoiceSlot(ItemStack stack);
+    PlayerMaskSlots roundabout$getmaskInventory();
+
 }

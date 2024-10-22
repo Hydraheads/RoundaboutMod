@@ -7,9 +7,12 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -64,6 +67,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$CAMERA_HITS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<ItemStack> ROUNDABOUT$MASK_SLOT = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.ITEM_STACK);
+    @Unique
+    private static final EntityDataAccessor<ItemStack> ROUNDABOUT$MASK_VOICE_SLOT = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.ITEM_STACK);
     @Shadow
     @Final
     private Inventory inventory;
@@ -73,6 +82,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private int roundabout$airTime = 0;
     @Unique
     private int roundabout$clientDodgeTime = 0;
+    private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
 
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -259,11 +269,35 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putByte("roundabout.LocacacaCurse", ((StandUser)this).roundabout$getLocacacaCurse());
+        ItemStack m1 = this.roundabout$maskInventory.getItem(0);
+        ItemStack m2 = this.roundabout$maskInventory.getItem(1);
+        if (!m1.isEmpty() || $$0.contains("roundabout.Mask", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("roundabout.Mask",m1.save(compoundtag));
+        }
+        if (!m2.isEmpty() || $$0.contains("roundabout.VoiceMask", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("roundabout.VoiceMask",m2.save(compoundtag));
+        }
         return $$0;
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         ((StandUser)this).roundabout$setLocacacaCurse($$0.getByte("roundabout.LocacacaCurse"));
+        if ($$0.contains("roundabout.Mask", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("roundabout.Mask");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof MaskItem SD){
+                this.roundabout$maskInventory.setItem(0,itemstack);
+            }
+        }if ($$0.contains("roundabout.VoiceMask", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("roundabout.VoiceMask");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof MaskItem SD){
+                this.roundabout$maskInventory.setItem(1,itemstack);
+            }
+        }
+        //roundabout$maskInventory.addItem()
     }
 
     /**your shield does not take damage if the stand blocks it*/
@@ -396,12 +430,41 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knives);
     }
 
+    @Override
+    @Unique
+    public PlayerMaskSlots roundabout$getmaskInventory() {
+        return roundabout$maskInventory;
+    }
+    @Override
+    @Unique
+    public final ItemStack roundabout$getMaskSlot() {
+        return this.entityData.get(ROUNDABOUT$MASK_SLOT);
+    }
+    @Override
+    @Unique
+    public final ItemStack roundabout$getMaskVoiceSlot() {
+        return this.entityData.get(ROUNDABOUT$MASK_VOICE_SLOT);
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setMaskSlot(ItemStack stack) {
+        ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$MASK_SLOT, stack);
+    }
+    @Override
+    @Unique
+    public void roundabout$setMaskVoiceSlot(ItemStack stack) {
+        ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$MASK_SLOT, stack);
+    }
+
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_SLOT, ItemStack.EMPTY);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_VOICE_SLOT, ItemStack.EMPTY);
     }
 
     @Shadow

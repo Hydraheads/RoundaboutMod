@@ -2,8 +2,10 @@ package net.hydra.jojomod.client.gui;
 
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModItemBonusTextures;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -50,8 +52,9 @@ public class PowerInventoryMenu extends AbstractContainerMenu {
         this.active = $$1;
         this.owner = $$2;
         //this.addSlot(new ResultSlot($$0.player, this.craftSlots, this.resultSlots, 0, 154, 28));
-
-        this.addSlot(new Slot($$0, 0, 8, 8) {
+        IPlayerEntity play = ((IPlayerEntity)this.owner);
+        PlayerMaskSlots plm = play.roundabout$getmaskInventory();
+        this.addSlot(new Slot(plm, 0, 8, 8) {
             @Override
             public int getMaxStackSize() {
                 return 1;
@@ -64,7 +67,7 @@ public class PowerInventoryMenu extends AbstractContainerMenu {
 
         });
 
-        this.addSlot(new Slot($$0, 1, 8, 26) {
+        this.addSlot(new Slot(plm, 1, 8, 26) {
             @Override
             public int getMaxStackSize() {
                 return 1;
