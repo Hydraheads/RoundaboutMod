@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -30,21 +31,22 @@ import javax.annotation.Nullable;
 
 
 public class PowerInventoryScreen
-        extends EffectRenderingInventoryScreen<InventoryMenu> {
+        extends EffectRenderingInventoryScreen<PowerInventoryMenu> {
     /**Currently unfinished, this is when you press the stand power inventory key.
      * It should render your current stand, as well as its moves and stuff.*/
+    public static final ResourceLocation POWER_INVENTORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/power_inventory.png");
 
     private static final ResourceLocation RECIPE_BUTTON_LOCATION = new ResourceLocation("textures/gui/recipe_button.png");
     private float xMouse;
     private float yMouse;
-    private final RecipeBookComponent recipeBookComponent = new RecipeBookComponent();
+    //private final RecipeBookComponent recipeBookComponent = new RecipeBookComponent();
     private boolean widthTooNarrow;
     private boolean buttonClicked;
-
     private StandEntity stand = null;
 
     public PowerInventoryScreen(Player player) {
-        super(player.inventoryMenu, player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
+        super(new PowerInventoryMenu(player.getInventory(),!player.level().isClientSide,player), player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
         this.titleLabelX = 80;
     }
 
@@ -52,12 +54,12 @@ public class PowerInventoryScreen
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
         Player pl = Minecraft.getInstance().player;
+        int i = this.leftPos;
+        int j = this.topPos;
+        context.blit(POWER_INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
         if (pl != null) {
             stand = ((StandUser)pl).roundabout$getStand();
             if (stand != null) {
-                int i = this.leftPos;
-                int j = this.topPos;
-                context.blit(INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
                 renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30,
                         (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand,pl);
             }
@@ -98,17 +100,18 @@ public class PowerInventoryScreen
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
 
         this.renderBackground(context);
-        if (this.recipeBookComponent.isVisible() && this.widthTooNarrow) {
+
+        if (this.widthTooNarrow) {
             this.renderBg(context, delta, mouseX, mouseY);
-            this.recipeBookComponent.render(context, mouseX, mouseY, delta);
+            //this.recipeBookComponent.render(context, mouseX, mouseY, delta);
         } else {
-            this.recipeBookComponent.render(context, mouseX, mouseY, delta);
+            //this.recipeBookComponent.render(context, mouseX, mouseY, delta);
             super.render(context, mouseX, mouseY, delta);
-            this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, false, delta);
+            //this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, false, delta);
         }
 
         this.renderTooltip(context, mouseX, mouseY);
-        this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
+        //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
         this.xMouse = (float)mouseX;
         this.yMouse = (float)mouseY;
     }
@@ -117,41 +120,22 @@ public class PowerInventoryScreen
 
     @Override
     public void containerTick() {
-        if (this.minecraft.gameMode.hasInfiniteItems()) {
-            this.minecraft
-                    .setScreen(
-                            new CreativeModeInventoryScreen(
-                                    this.minecraft.player, this.minecraft.player.connection.enabledFeatures(), this.minecraft.options.operatorItemsTab().get()
-                            )
-                    );
-        } else {
-            this.recipeBookComponent.tick();
-        }
     }
 
     @Override
     protected void init() {
-        if (this.minecraft.gameMode.hasInfiniteItems()) {
-            this.minecraft
-                    .setScreen(
-                            new CreativeModeInventoryScreen(
-                                    this.minecraft.player, this.minecraft.player.connection.enabledFeatures(), this.minecraft.options.operatorItemsTab().get()
-                            )
-                    );
-        } else {
             super.init();
             this.widthTooNarrow = this.width < 379;
-            this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
-            this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
-            this.addRenderableWidget(new ImageButton(this.leftPos + 104, this.height / 2 - 22, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, $$0 -> {
-                this.recipeBookComponent.toggleVisibility();
-                this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
-                $$0.setPosition(this.leftPos + 104, this.height / 2 - 22);
-                this.buttonClicked = true;
-            }));
-            this.addWidget(this.recipeBookComponent);
-            this.setInitialFocus(this.recipeBookComponent);
-        }
+            //this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
+            //this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
+            //this.addRenderableWidget(new ImageButton(this.leftPos + 104, this.height / 2 - 22, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, $$0 -> {
+                //this.recipeBookComponent.toggleVisibility();
+                //this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
+                //$$0.setPosition(this.leftPos + 104, this.height / 2 - 22);
+                //this.buttonClicked = true;
+            //}));
+            //this.addWidget(this.recipeBookComponent);
+            //this.setInitialFocus(this.recipeBookComponent);
     }
 
     @Override
@@ -206,17 +190,19 @@ public class PowerInventoryScreen
 
     @Override
     protected boolean isHovering(int $$0, int $$1, int $$2, int $$3, double $$4, double $$5) {
-        return (!this.widthTooNarrow || !this.recipeBookComponent.isVisible()) && super.isHovering($$0, $$1, $$2, $$3, $$4, $$5);
+        return (!this.widthTooNarrow) && super.isHovering($$0, $$1, $$2, $$3, $$4, $$5);
     }
 
     @Override
     public boolean mouseClicked(double $$0, double $$1, int $$2) {
+        /**
         if (this.recipeBookComponent.mouseClicked($$0, $$1, $$2)) {
             this.setFocused(this.recipeBookComponent);
             return true;
         } else {
-            return this.widthTooNarrow && this.recipeBookComponent.isVisible() ? false : super.mouseClicked($$0, $$1, $$2);
-        }
+         **/
+            return this.widthTooNarrow ? false : super.mouseClicked($$0, $$1, $$2);
+        //}
     }
 
     @Override
@@ -230,15 +216,8 @@ public class PowerInventoryScreen
     }
 
     @Override
-    protected boolean hasClickedOutside(double $$0, double $$1, int $$2, int $$3, int $$4) {
-        boolean $$5 = $$0 < (double)$$2 || $$1 < (double)$$3 || $$0 >= (double)($$2 + this.imageWidth) || $$1 >= (double)($$3 + this.imageHeight);
-        return this.recipeBookComponent.hasClickedOutside($$0, $$1, this.leftPos, this.topPos, this.imageWidth, this.imageHeight, $$4) && $$5;
-    }
-
-    @Override
     protected void slotClicked(Slot $$0, int $$1, int $$2, ClickType $$3) {
-        super.slotClicked($$0, $$1, $$2, $$3);
-        this.recipeBookComponent.slotClicked($$0);
+        super.slotClicked($$0,$$1,$$2,$$3);
     }
 
 }

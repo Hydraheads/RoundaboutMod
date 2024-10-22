@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -7,8 +8,13 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.inventory.HorseInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.HorseInventoryMenu;
 
 public class KeyInputs {
 
@@ -35,8 +41,11 @@ public class KeyInputs {
 
     public static void menuKey(Player player, Minecraft client){
         if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
-            client.setScreen(new PowerInventoryScreen(player));
             roundaboutClickCount = 2;
+
+            PowerInventoryMenu powa = new PowerInventoryMenu(player.getInventory(), true, player);
+            player.containerMenu = powa;
+            client.setScreen(new PowerInventoryScreen(player));
         }
     }
 
