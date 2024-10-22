@@ -43,7 +43,7 @@
   "item.roundabout.stand_arrow.roll": "???",
   "item.roundabout.stand_arrow.usedUp": "Sin poder, fabrica con meteorito.",
   "item.roundabout.stand_arrow.haveStand": "Ya tienes un Stand, para removerlo usa el disco de Stand",
-  "item.roundabout.stand_arrow.acquireStand": "Stand obtenido! Presiona la tecla de convocación!",
+  "item.roundabout.stand_arrow.acquireStand": "¡Stand obtenido! Presiona la tecla de convocación!",
   "item.roundabout.stand_arrow.bowTip": "En el inventario, el arco la usa como munición.",
   "item.roundabout.stand_arrow.reroll": "¡Agachate para usar 1 nivel de",
   "item.roundabout.stand_arrow.reroll2": "experiencia para un Stand diferente!",
@@ -97,6 +97,7 @@
   "key.roundabout.ability.four": "Habilidad 4",
   "key.roundabout.menu": "Inventario de poder",
   "key.roundabout.bonus_guard": "Uso en la otra mano / Bloqueo facil",
+  "key.roundabout.switch_rows": "Alternar fila de habilidad agachandose",
 
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Espada de hierro",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Añade a una espada de hierro",
@@ -188,7 +189,7 @@
   "sounds.roundabout.hit_sfx1":  "Golpe fuerte",
   "sounds.roundabout.terrier_pass": "Pedo de terrier",
   "sounds.roundabout.the_world_assault":  "Fuerza empujante",
-  "sounds.roundabout.the_world_wry":  "WRY!",
+  "sounds.roundabout.the_world_wry":  "¡WRY!",
   "sounds.roundabout.timestop_the_world":  "¡Tiempo detenido!",
   "sounds.roundabout.timestop_the_world2":  "¡Tiempo detenido!",
   "sounds.roundabout.timestop_the_world3":  "¡Tiempo detenido!",
@@ -215,6 +216,10 @@
   "sounds.roundabout.time_snap":  "¿Tiempo detenido?",
   "sounds.roundabout.impale_charge":  "Preparando ataque",
   "sounds.roundabout.impale_hit":  "Empalado",
+
+  "sounds.roundabout.star_platinum_ora_2":  "ORA",
+  "sounds.roundabout.star_platinum_ora_3":  "ORA",
+  "sounds.roundabout.the_world_muda":  "MUDA",
 
   "sounds.roundabout.hallelujah":  "Hallelujah",
   "sounds.roundabout.torture_dance":  "Torture Dance",

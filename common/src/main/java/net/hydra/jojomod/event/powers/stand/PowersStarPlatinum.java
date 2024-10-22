@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -730,6 +731,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.getActivePower() == PowerIndex.POWER_1){
             stopSoundsIfNearby(STAR_FINGER, 100, false);
             stopSoundsIfNearby(STAR_FINGER_2, 100, false);
+            stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                 if (this.getSelf() instanceof Player && isPacketPlayer()) {
@@ -872,6 +874,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     public static final byte STAR_FINGER = 80;
     public static final byte STAR_FINGER_2 = 81;
+    public static final byte STAR_FINGER_SILENT = 82;
 
     public boolean inhale(){
         StandEntity stand = getStandEntity(this.self);
@@ -891,10 +894,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             this.setActivePower(PowerIndex.POWER_1);
 
             double rand = Math.random();
-            if (rand > 0.5) {
-                playStandUserOnlySoundsIfNearby(STAR_FINGER, 32, false,true);
-            } else {
-                playStandUserOnlySoundsIfNearby(STAR_FINGER_2, 32, false,true);
+            if (this.getSelf() instanceof Player PE &&
+                    ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
+
+                playStandUserOnlySoundsIfNearby(STAR_FINGER_SILENT, 32, false, false);
+            } else{
+                if (rand > 0.5) {
+                    playStandUserOnlySoundsIfNearby(STAR_FINGER, 32, false, true);
+                } else {
+                    playStandUserOnlySoundsIfNearby(STAR_FINGER_2, 32, false, true);
+                }
             }
             this.animateStand((byte)82);
             this.poseStand(OffsetIndex.GUARD_AND_TRACE);
@@ -972,6 +981,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_FINGER_EVENT;
         } else if (soundChoice == STAR_FINGER_2){
             return ModSounds.STAR_FINGER_2_EVENT;
+        } else if (soundChoice == STAR_FINGER_SILENT){
+            return ModSounds.STAR_FINGER_SILENT_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {

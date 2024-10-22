@@ -79,6 +79,8 @@ public class ForgeSounds {
             register(ModSounds.STAR_FINGER, ModSounds.STAR_FINGER_ID);
     public static final RegistryObject<SoundEvent> STAR_FINGER_2 =
             register(ModSounds.STAR_FINGER_2, ModSounds.STAR_FINGER_2_ID);
+    public static final RegistryObject<SoundEvent> STAR_FINGER_SILENT =
+            register(ModSounds.STAR_FINGER_SILENT, ModSounds.STAR_FINGER_SILENT_ID);
     public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_EVENT =
             register(ModSounds.STAR_PLATINUM_ORA, ModSounds.STAR_PLATINUM_ORA_ID);
     public static final RegistryObject<SoundEvent> STAR_PLATINUM_ORA_RUSH_EVENT =

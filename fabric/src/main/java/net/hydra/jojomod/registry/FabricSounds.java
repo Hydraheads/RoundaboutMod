@@ -58,6 +58,7 @@ public class FabricSounds {
 
         addSound(ModSounds.STAR_FINGER_ID, ModSounds.STAR_FINGER_EVENT);
         addSound(ModSounds.STAR_FINGER_2_ID, ModSounds.STAR_FINGER_2_EVENT);
+        addSound(ModSounds.STAR_FINGER_SILENT_ID, ModSounds.STAR_FINGER_SILENT_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_ID, ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_2_ID, ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT);
         addSound(ModSounds.STAR_PLATINUM_ORA_3_ID, ModSounds.STAR_PLATINUM_ORA_3_SOUND_EVENT);

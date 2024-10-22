@@ -263,6 +263,12 @@
       "roundabout:star_finger_2"
     ]
   },
+  "star_finger_silent": {
+    "subtitle": "sounds.roundabout.star_finger_silent",
+    "sounds": [
+      "roundabout:star_finger_silent"
+    ]
+  },
   "star_platinum_ora": {
     "subtitle": "sounds.roundabout.star_platinum_ora",
     "sounds": [

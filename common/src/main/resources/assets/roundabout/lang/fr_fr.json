@@ -135,6 +135,13 @@
   "death.attack.stand_virus": "%1$s a été transformé(e) en sauce tomate",
 
   "item.glaive.charge_power": "Attaque chargée",
+  
+  "item.roundabout.blank_mask": "Visage de verre",
+  "item.roundabout.blank_mask.desc": "Caches l'armure",
+  "item.roundabout.jotaro_mask": "Visage de Jotaro",
+  "item.roundabout.jotaro_mask.desc": "Jotaro Kujo (Partie 3)",
+  "item.roundabout.dio_mask": "Visage de DIO",
+  "item.roundabout.dio_mask.desc": "DIO (Partie 3)",
 
   "commands.roundabout.force_summon.multiple": "Stand données à %s entitées",
   "commands.roundabout.force_summon.single": "Stand donné à %s",
