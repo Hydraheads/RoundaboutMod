@@ -63,6 +63,10 @@ public class StandIcons {
     public static final ResourceLocation THE_WORLD_PHASE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/phase_grab.png");
 
+    public static final ResourceLocation STAR_PLATINUM_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/punch.png");
+    public static final ResourceLocation STAR_PLATINUM_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/barrage.png");
     public static final ResourceLocation STAR_PLATINUM_FINGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/star_finger.png");
     public static final ResourceLocation STAR_PLATINUM_IMPALE = new ResourceLocation(Roundabout.MOD_ID,

@@ -748,20 +748,24 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+30,topPos+80,0, "ability.roundabout.punch",
-                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_FINGER,0));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+30,topPos+99,0, "ability.roundabout.guard",
-                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_FINGER,0));
-        context.blit(StandIcons.SQUARE_ICON, leftPos+30, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+49, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+49, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+49, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+68, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+68, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+68, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+87, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+87, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
-        context.blit(StandIcons.SQUARE_ICON, leftPos+87, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.punch",
+                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.guard",
+                "instruction.roundabout.press_block", StandIcons.STAR_PLATINUM_PUNCH,0));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.final_punch",
+                "instruction.roundabout.hold_attack_crouch", StandIcons.STAR_PLATINUM_PUNCH,0));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.kick_barrage",
+                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_BARRAGE,0));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
+                "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1));
+        context.blit(StandIcons.SQUARE_ICON, leftPos+58, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+58, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+58, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+77, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+77, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+77, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
         return $$1;
     }
 

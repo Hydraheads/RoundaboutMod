@@ -373,7 +373,13 @@ public class StandPowers {
         context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
         context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-3, size-3, size-3, size-3);
         Component name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
-        Component instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+        Component instruction;
+        if (extra <= 0) {
+            instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+        } else {
+            instruction = Component.translatable(instructionStr,""+extra).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+
+        }
         Component description = Component.translatable(nameSTR+".desc");
         return new AbilityIconInstance(size,startingLeft,startingTop,levelToUnlock,
                 name,instruction,description,extra);
