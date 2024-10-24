@@ -65,8 +65,14 @@ public class StandIcons {
 
     public static final ResourceLocation STAR_PLATINUM_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/punch.png");
+    public static final ResourceLocation STAR_PLATINUM_FINAL_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/final_punch.png");
+    public static final ResourceLocation STAR_PLATINUM_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/guard.png");
     public static final ResourceLocation STAR_PLATINUM_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/barrage.png");
+    public static final ResourceLocation STAR_PLATINUM_KICK_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/kick_barrage.png");
     public static final ResourceLocation STAR_PLATINUM_FINGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/star_finger.png");
     public static final ResourceLocation STAR_PLATINUM_IMPALE = new ResourceLocation(Roundabout.MOD_ID,

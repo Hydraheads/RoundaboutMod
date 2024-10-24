@@ -150,14 +150,7 @@ public class PowerInventoryScreen
 
         this.renderBackground(context);
 
-        if (this.widthTooNarrow) {
-            this.renderBg(context, delta, mouseX, mouseY);
-            //this.recipeBookComponent.render(context, mouseX, mouseY, delta);
-        } else {
-            //this.recipeBookComponent.render(context, mouseX, mouseY, delta);
-            super.render(context, mouseX, mouseY, delta);
-            //this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, false, delta);
-        }
+         super.render(context, mouseX, mouseY, delta);
 
 
         this.renderTooltip(context, mouseX, mouseY);

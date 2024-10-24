@@ -371,7 +371,7 @@ public class StandPowers {
     public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
                                                  String nameSTR, String instructionStr, ResourceLocation draw, int extra){
         context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-        context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-3, size-3, size-3, size-3);
+        context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
         Component name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
         Component instruction;
         if (extra <= 0) {
