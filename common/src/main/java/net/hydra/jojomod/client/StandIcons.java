@@ -62,6 +62,18 @@ public class StandIcons {
             "textures/gui/icons/the_world/travel_barrage.png");
     public static final ResourceLocation THE_WORLD_PHASE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/phase_grab.png");
+    public static final ResourceLocation THE_WORLD_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/guard.png");
+    public static final ResourceLocation THE_WORLD_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/punch.png");
+    public static final ResourceLocation THE_WORLD_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/barrage.png");
+    public static final ResourceLocation THE_WORLD_KICK_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/kick_barrage.png");
+    public static final ResourceLocation THE_WORLD_FINAL_KICK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/final_kick.png");
+    public static final ResourceLocation THE_WORLD_AIR_TANKS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/air_tanks.png");
 
     public static final ResourceLocation STAR_PLATINUM_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/punch.png");
