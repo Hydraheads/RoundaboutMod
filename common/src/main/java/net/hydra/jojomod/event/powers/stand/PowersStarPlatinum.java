@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -742,6 +744,27 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         return super.tryPower(move,forced);
     }
+
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+30,topPos+80,0, "ability.roundabout.punch",
+                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_FINGER,0));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+30,topPos+99,0, "ability.roundabout.guard",
+                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_FINGER,0));
+        context.blit(StandIcons.SQUARE_ICON, leftPos+30, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+49, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+49, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+49, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+68, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+68, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+68, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+87, topPos+80, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+87, topPos+99, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        context.blit(StandIcons.SQUARE_ICON, leftPos+87, topPos+118, 0, 0,iconSize, iconSize, iconSize, iconSize);
+        return $$1;
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
 

@@ -1,15 +1,20 @@
 package net.hydra.jojomod.client.gui;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +25,9 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
+import java.util.StringTokenizer;
 
 
 public class PowerInventoryScreen
@@ -36,6 +44,7 @@ public class PowerInventoryScreen
     private boolean widthTooNarrow;
     private boolean buttonClicked;
     private StandEntity stand = null;
+    public List<AbilityIconInstance> abilityList = ImmutableList.of();
 
     public PowerInventoryScreen(Player player, PowerInventoryMenu pim) {
         super(pim, player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
@@ -50,7 +59,26 @@ public class PowerInventoryScreen
         int j = this.topPos;
         context.blit(POWER_INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
         if (pl != null) {
-            stand = ((StandUser)pl).roundabout$getStand();
+        StandUser standUser = ((StandUser)pl);
+            abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j);
+
+            if (!this.abilityList.isEmpty()){
+                AbilityIconInstance aii;
+                for (int g = abilityList.size() - 1; g >= 0; --g) {
+                    aii = abilityList.get(g);
+                    if (isSurelyHovering(aii.startingLeft,aii.startingTop,aii.size,aii.size,mouseX,mouseY)){
+                        List<Component> compList = Lists.newArrayList();
+                        compList.add(aii.name);
+                        compList.add(aii.instruction);
+                        String [] strung2 = splitIntoLine(aii.description.getString(),30);
+                        for (String s : strung2) {
+                            compList.add(Component.literal(s));
+                        }
+                        context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
+                    }
+                }
+            }
+            stand = standUser.roundabout$getStand();
             if (stand != null) {
                 renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30,
                         (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand,pl);
@@ -58,6 +86,35 @@ public class PowerInventoryScreen
         }
     }
 
+    public String[] splitIntoLine(String input, int maxCharInLine){
+
+        StringTokenizer tok = new StringTokenizer(input, " ");
+        StringBuilder output = new StringBuilder(input.length());
+        int lineLen = 0;
+        while (tok.hasMoreTokens()) {
+            String word = tok.nextToken();
+
+            while(word.length() > maxCharInLine){
+                output.append(word.substring(0, maxCharInLine-lineLen) + "\n");
+                word = word.substring(maxCharInLine-lineLen);
+                lineLen = 0;
+            }
+
+            if (lineLen + word.length() > maxCharInLine) {
+                output.append("\n");
+                lineLen = 0;
+            }
+            output.append(word + " ");
+
+            lineLen += word.length() + 1;
+        }
+        // output.split();
+        // return output.toString();
+        return output.toString().split("\n");
+    }
+    protected boolean isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
+        return p_97772_ >= (double)(p_97768_) && p_97772_ < (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ < (double)(p_97769_ + p_97771_);
+    }
 
     public static void renderStandEntityInInventoryFollowsMouse(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, StandEntity $$6, Player user) {
         float $$7 = (float)Math.atan((double)($$4 / 40.0F));
@@ -101,6 +158,7 @@ public class PowerInventoryScreen
             super.render(context, mouseX, mouseY, delta);
             //this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, false, delta);
         }
+
 
         this.renderTooltip(context, mouseX, mouseY);
         //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);

@@ -1,19 +1,21 @@
 package net.hydra.jojomod.event.powers;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -38,7 +40,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -352,6 +353,8 @@ public class StandPowers {
         return false;
     }
 
+    public int iconSize = 18;
+    public int iconSize2 = 16;
     /**Override this to render stand icons*/
     public void renderIcons(GuiGraphics context, int x, int y){
     }
@@ -360,6 +363,22 @@ public class StandPowers {
                                 float flashAlpha, float otherFlashAlpha){
 
     }
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        return $$1;
+    }
+
+    public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
+                                                 String nameSTR, String instructionStr, ResourceLocation draw, int extra){
+        context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+        context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-3, size-3, size-3, size-3);
+        Component name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+        Component instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+        Component description = Component.translatable(nameSTR+".desc");
+        return new AbilityIconInstance(size,startingLeft,startingTop,levelToUnlock,
+                name,instruction,description,extra);
+    }
+
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
         CooldownInstance cd = null;
         if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
