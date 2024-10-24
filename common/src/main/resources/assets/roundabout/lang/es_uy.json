@@ -38,6 +38,13 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
 
+  "item.roundabout.blank_mask": "Rostro cristalino",
+  "item.roundabout.blank_mask.desc": "Esconde la armadura",
+  "item.roundabout.jotaro_mask": "Rostro de Jotaro",
+  "item.roundabout.jotaro_mask.desc": "Jotaro Kujo (Parte 3)",
+  "item.roundabout.dio_mask": "Rostro de DIO",
+  "item.roundabout.dio_mask.desc": "DIO (Parte 3)",
+
   "item.roundabout.stand_arrow.fail": "¡Necesitas más experiencia!",
 
   "item.roundabout.stand_arrow.roll": "???",
@@ -161,6 +168,9 @@
   "sounds.roundabout.stand_theworld_muda4":  "MUDA",
   "sounds.roundabout.stand_theworld_muda5":  "MUDA",
   "sounds.roundabout.star_finger":  "Star Finger",
+
+  "sounds.roundabout.star_finger_silent":  "Star Finger",
+
   "sounds.roundabout.star_platinum_ora_rush":  "ORA",
   "sounds.roundabout.star_platinum_ora_rush_2":  "ORA",
   "sounds.roundabout.star_platinum_ora":  "ORA",
@@ -220,6 +230,7 @@
   "sounds.roundabout.star_platinum_ora_2":  "ORA",
   "sounds.roundabout.star_platinum_ora_3":  "ORA",
   "sounds.roundabout.the_world_muda":  "MUDA",
+  "sounds.roundabout.star_platinum_catch":  "Objeto atrapado",
   
   "sounds.roundabout.hallelujah":  "Hallelujah",
   "sounds.roundabout.torture_dance":  "Torture Dance",
