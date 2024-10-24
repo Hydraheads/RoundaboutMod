@@ -785,7 +785,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.stand_leap",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_STAR_PLATINUM,3));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.stand_leap_rebound",
-                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM,2));
+                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM,3));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,0, "ability.roundabout.inhale",
                 "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_INHALE,3));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,0, "ability.roundabout.time_stop",

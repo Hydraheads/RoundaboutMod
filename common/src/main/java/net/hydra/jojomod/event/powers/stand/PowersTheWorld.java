@@ -207,7 +207,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.stand_leap",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_WORLD,3));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.stand_leap_rebound",
-                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_WORLD,2));
+                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_WORLD,3));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,0, "ability.roundabout.time_stop",
                 "instruction.roundabout.press_skill", StandIcons.THE_WORLD_TIME_STOP,4));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,0,"ability.roundabout.time_stop_impulse",

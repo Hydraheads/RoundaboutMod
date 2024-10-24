@@ -569,6 +569,15 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return super.buttonInputGuard(keyIsDown,options);
     }
 
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        return currentLevel*100;
+    }
+    @Override
+    public int getMaxLevel(){
+        return 7;
+    }
+
     /**Stand related things that slow you down or speed you up*/
     public float inputSpeedModifiers(float basis){
         if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {

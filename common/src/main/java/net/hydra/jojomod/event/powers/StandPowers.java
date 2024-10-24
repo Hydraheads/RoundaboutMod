@@ -1507,6 +1507,13 @@ public class StandPowers {
         return hitSomething;
     }
 
+    public int getExpForLevelUp(int currentLevel){
+        return 100;
+    }
+    public int getMaxLevel(){
+        return 1;
+    }
+
     public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
