@@ -374,6 +374,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 success = true;
                                 ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
                                     SE.canAcquireHeldItem = true;
                                 } else {
@@ -387,6 +388,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 success = true;
                                 ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (TO.places) {
                                     SE.canAcquireHeldItem = true;
                                 } else {
@@ -400,6 +402,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 success = true;
                                 ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
                                     SE.canAcquireHeldItem = true;
                                 } else {
@@ -413,7 +416,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_EXTRA_2, 200);
                             ((StarPlatinumEntity) stand).setScoping(false);
                             this.setCooldown(PowerIndex.SKILL_EXTRA_2, 200);
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
