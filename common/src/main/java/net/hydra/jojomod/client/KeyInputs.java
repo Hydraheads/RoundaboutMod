@@ -41,8 +41,8 @@ public class KeyInputs {
 
     public static void menuKey(Player player, Minecraft client){
         if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+            forceSummon(player,true);
             roundaboutClickCount = 2;
-
             ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY);
             PowerInventoryMenu powa = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             player.containerMenu = powa;

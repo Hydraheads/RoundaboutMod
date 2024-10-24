@@ -60,24 +60,7 @@ public class PowerInventoryScreen
         context.blit(POWER_INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
         if (pl != null) {
         StandUser standUser = ((StandUser)pl);
-            abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j);
 
-            if (!this.abilityList.isEmpty()){
-                AbilityIconInstance aii;
-                for (int g = abilityList.size() - 1; g >= 0; --g) {
-                    aii = abilityList.get(g);
-                    if (isSurelyHovering(aii.startingLeft,aii.startingTop,aii.size,aii.size,mouseX,mouseY)){
-                        List<Component> compList = Lists.newArrayList();
-                        compList.add(aii.name);
-                        compList.add(aii.instruction);
-                        String [] strung2 = splitIntoLine(aii.description.getString(),30);
-                        for (String s : strung2) {
-                            compList.add(Component.literal(s));
-                        }
-                        context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
-                    }
-                }
-            }
             stand = standUser.roundabout$getStand();
             if (stand != null) {
                 renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30,
@@ -154,6 +137,32 @@ public class PowerInventoryScreen
 
 
         this.renderTooltip(context, mouseX, mouseY);
+
+        Player pl = Minecraft.getInstance().player;
+        int i = this.leftPos;
+        int j = this.topPos;
+        if (pl != null) {
+            StandUser standUser = ((StandUser) pl);
+            abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j);
+
+            if (!this.abilityList.isEmpty()) {
+                AbilityIconInstance aii;
+                for (int g = abilityList.size() - 1; g >= 0; --g) {
+                    aii = abilityList.get(g);
+                    if (isSurelyHovering(aii.startingLeft, aii.startingTop, aii.size, aii.size, mouseX, mouseY)) {
+                        List<Component> compList = Lists.newArrayList();
+                        compList.add(aii.name);
+                        compList.add(aii.instruction);
+                        String[] strung2 = splitIntoLine(aii.description.getString(), 30);
+                        for (String s : strung2) {
+                            compList.add(Component.literal(s));
+                        }
+                        context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
+                    }
+                }
+            }
+        }
+
         //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
         this.xMouse = (float)mouseX;
         this.yMouse = (float)mouseY;
