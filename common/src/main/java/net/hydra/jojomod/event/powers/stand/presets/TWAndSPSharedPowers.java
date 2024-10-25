@@ -416,7 +416,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if (keyIsDown) {
                             if (this.isStoppingTime()) {
                                 KeyInputs.roundaboutClickCount = 2;
-                                this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
                             } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
@@ -574,7 +573,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return currentLevel*100;
     }
     @Override
-    public int getMaxLevel(){
+    public byte getMaxLevel(){
         return 7;
     }
 

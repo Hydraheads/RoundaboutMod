@@ -58,10 +58,12 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     }
 
     /**Make NBT save on death*/
+    /** respawn */
     @Inject(method = "restoreFrom(Lnet/minecraft/server/level/ServerPlayer;Z)V", at = @At(value = "TAIL"))
-    public void roundabout$restoreFrom(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
+    public void roundabout$respawn(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
         ((StandUser)this).roundabout$setStandDisc(((StandUser)$$0).roundabout$getStandDisc());
         ((IPlayerEntity)this).roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
+        ((IPlayerEntity)this).roundabout$getMaskInventory().update();
     }
 
 }

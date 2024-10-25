@@ -4,6 +4,7 @@ import net.minecraft.world.level.GameRules;
 
 public class ModGamerules {
     public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_STAND_GRIEFING;
+    public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_STAND_LEVELING;
     public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_STAND_REDSTONE_INTERFERENCE;
     public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_ALLOW_ENTITY_GRAB;
     public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_WORTHY_MOB_SPAWNS;

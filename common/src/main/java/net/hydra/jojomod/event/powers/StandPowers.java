@@ -1510,7 +1510,7 @@ public class StandPowers {
     public int getExpForLevelUp(int currentLevel){
         return 100;
     }
-    public int getMaxLevel(){
+    public byte getMaxLevel(){
         return 1;
     }
 

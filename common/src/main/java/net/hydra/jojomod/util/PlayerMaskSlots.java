@@ -22,4 +22,14 @@ public class PlayerMaskSlots extends SimpleContainer {
         }
         super.setChanged();
     }
+    public void update(){
+        IPlayerEntity play = ((IPlayerEntity)this.player);
+        if (!this.getItem(0).equals(play.roundabout$getMaskSlot())){
+            play.roundabout$setMaskSlot(this.getItem(0));
+        }
+        if (!this.getItem(1).equals(play.roundabout$getMaskVoiceSlot())){
+            play.roundabout$setMaskVoiceSlot(this.getItem(1));
+        }
+        super.setChanged();
+    }
 }

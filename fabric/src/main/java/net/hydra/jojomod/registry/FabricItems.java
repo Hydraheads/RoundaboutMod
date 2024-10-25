@@ -26,8 +26,12 @@ public class FabricItems {
     public static Item WORTHY_ARROW = registerItem("worthy_arrow", new WorthyArrowItem(new Item.Properties()));
     public static Item STAND_DISC_STAR_PLATINUM = registerItem("star_platinum_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
+    public static Item MAX_STAND_DISC_STAR_PLATINUM = registerItem("max_star_platinum_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
     public static Item STAND_DISC_THE_WORLD = registerItem("the_world_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
+    public static Item MAX_STAND_DISC_THE_WORLD = registerItem("max_the_world_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -143,6 +147,18 @@ public class FabricItems {
 
                     }).build());
 
+    public static void putDiscNBT(Item IT, CreativeModeTab.Output entries){
+        if (IT instanceof StandDiscItem SE){
+            ItemStack baseDisc = IT.getDefaultInstance();
+            baseDisc.getOrCreateTagElement("Memory").putByte("Level", (byte) 0);
+            entries.accept(baseDisc);
+            if (SE.standPowers.getMaxLevel() > 1) {
+                ItemStack baseDisc2 = IT.getDefaultInstance();
+                baseDisc2.getOrCreateTagElement("Memory").putByte("Level", (byte) SE.standPowers.getMaxLevel());
+                entries.accept(baseDisc2);
+            }
+        }
+    }
 
     public static final CreativeModeTab STAND_DISC_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "jojo_discs"),
@@ -151,7 +167,9 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
 
                         entries.accept(STAND_DISC_STAR_PLATINUM);
+                        entries.accept(MAX_STAND_DISC_STAR_PLATINUM);
                         entries.accept(STAND_DISC_THE_WORLD);
+                        entries.accept(MAX_STAND_DISC_THE_WORLD);
 
                     }).build());
 
@@ -161,7 +179,11 @@ public class FabricItems {
         ModItems.STAND_BEETLE_ARROW = STAND_BEETLE_ARROW;
         ModItems.WORTHY_ARROW = WORTHY_ARROW;
         ModItems.STAND_DISC_STAR_PLATINUM = STAND_DISC_STAR_PLATINUM;
+        ((MaxStandDiscItem)MAX_STAND_DISC_STAR_PLATINUM).baseDisc = ((StandDiscItem)STAND_DISC_STAR_PLATINUM);
+        ModItems.MAX_STAND_DISC_STAR_PLATINUM = MAX_STAND_DISC_STAR_PLATINUM;
         ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
+        ((MaxStandDiscItem)MAX_STAND_DISC_THE_WORLD).baseDisc = ((StandDiscItem)STAND_DISC_THE_WORLD);
+        ModItems.MAX_STAND_DISC_THE_WORLD = MAX_STAND_DISC_THE_WORLD;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;

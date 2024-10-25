@@ -35,6 +35,8 @@
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
+  "item.roundabout.max_star_platinum_disc": "Deluxe Disc",
+  "item.roundabout.max_the_world_disc": "Deluxe Disc",
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
 
@@ -310,5 +312,10 @@
   "ability.roundabout.assault": "Assault",
   "ability.roundabout.assault.desc": "The World floats forwards in front of you, attacking whatever it touches and inflicting bleed! Pressing grab while this moves is active allows it to pick up blocks instead.",
   "ability.roundabout.air_tanks": "Oxygen Tanks",
-  "ability.roundabout.air_tanks.desc": "The tanks on The World's back provide you with extra air, so you can swim underwater for much longer."
+  "ability.roundabout.air_tanks.desc": "The tanks on The World's back provide you with extra air, so you can swim underwater for much longer.",
+
+  "ability.roundabout.": "Oxygen Tanks",
+
+  "leveling.roundabout.disc_development_potential_level": "Development: %s",
+  "leveling.roundabout.disc_maxed": "Complete"
 }

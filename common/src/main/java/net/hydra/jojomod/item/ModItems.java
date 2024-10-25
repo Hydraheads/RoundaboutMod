@@ -16,7 +16,9 @@ public class ModItems {
     public static Item STAND_BEETLE_ARROW;
     public static Item WORTHY_ARROW;
     public static Item STAND_DISC_STAR_PLATINUM;
+    public static Item MAX_STAND_DISC_STAR_PLATINUM;
     public static Item STAND_DISC_THE_WORLD;
+    public static Item MAX_STAND_DISC_THE_WORLD;
     public static Item STAND_DISC;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;

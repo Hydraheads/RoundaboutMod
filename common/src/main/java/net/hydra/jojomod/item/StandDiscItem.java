@@ -1,10 +1,12 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -64,6 +66,20 @@ public class StandDiscItem extends Item {
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         $$2.add(this.getDisplayName2().withStyle(ChatFormatting.AQUA));
+        CompoundTag $$4 = $$0.getTagElement("Memory");
+        // && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)
+        if ($$4 != null && $$1 != null) {
+            if ($$4.contains("Level")) {
+                byte lvl =  (byte)($$4.getByte("Level")+1);
+                if (lvl < standPowers.getMaxLevel()){
+                    $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level",lvl).withStyle(ChatFormatting.GRAY));
+                } else {
+                    $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.LIGHT_PURPLE));
+                }
+            }
+        } else {
+            $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level",1).withStyle(ChatFormatting.GRAY));
+        }
     }
 
     public MutableComponent getDisplayName2() {
