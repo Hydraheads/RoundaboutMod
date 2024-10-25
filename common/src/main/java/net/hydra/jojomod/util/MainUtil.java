@@ -141,7 +141,7 @@ public class MainUtil {
     public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack){
         if (ent instanceof Player PE && !(stack.getItem() instanceof MaxStandDiscItem)) {
             IPlayerEntity IPE = ((IPlayerEntity) PE);
-            stack.getOrCreateTagElement("Memory").putByte("Level",IPE.roundabout$getStandLevel());
+            stack.getOrCreateTagElement("Memory").putByte("Level", (byte) Math.min(IPE.roundabout$getStandLevel()-1,0));
             stack.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
