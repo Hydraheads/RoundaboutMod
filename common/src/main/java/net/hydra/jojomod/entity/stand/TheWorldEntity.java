@@ -20,6 +20,7 @@ public class TheWorldEntity extends StandEntity {
             OVER_HEAVEN = 7,
             PART_7_BLUE = 8;
 
+    @Override
     public Component getSkinName(byte skinId){
         if (skinId == PART_3_SKIN){
             return Component.translatable(  "skins.roundabout.the_world.base");

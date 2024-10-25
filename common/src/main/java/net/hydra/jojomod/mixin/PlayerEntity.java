@@ -171,6 +171,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$STAND_EXP);
     }
 
+    @Unique
+    public boolean roundabout$unlockedBonusSkin = false;
+    @Override
+    @Unique
+    public void roundabout$setUnlockedBonusSkin(boolean bl){
+        roundabout$unlockedBonusSkin = bl;
+    }
+    @Override
+    @Unique
+    public boolean roundabout$getUnlockedBonusSkin(){
+        return roundabout$unlockedBonusSkin;
+    }
+
     /**Attack Speed Decreases when your hand is stone*/
     @Inject(method = "getCurrentItemAttackStrengthDelay", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getCurrentItemAttackStrengthDelay(CallbackInfoReturnable<Float> cir) {

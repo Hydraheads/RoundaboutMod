@@ -34,6 +34,7 @@ public class StarPlatinumEntity extends StandEntity {
             PART_6_SKIN = 7,
             ATOMIC_SKIN = 8;
 
+    @Override
     public Component getSkinName(byte skinId){
         if (skinId == PART_3_SKIN){
             return Component.translatable(  "skins.roundabout.star_platinum.base");

@@ -65,6 +65,8 @@ public class PowerInventoryScreen
             if (stand != null) {
                 renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30,
                         (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand,pl);
+                  context.drawString(this.font, stand.getSkinName(stand.getSkin()), this.titleLabelX+11+leftPos, this.titleLabelY+18+topPos, 16777215, false);
+                context.drawString(this.font, stand.getPosName(stand.getIdleAnimation()), this.titleLabelX+11+leftPos, this.titleLabelY+36+topPos, 16777215, false);
             }
         }
     }

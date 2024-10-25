@@ -143,6 +143,7 @@ public class MainUtil {
             IPlayerEntity IPE = ((IPlayerEntity) PE);
             stack.getOrCreateTagElement("Memory").putByte("Level", (byte) Math.min(IPE.roundabout$getStandLevel()-1,0));
             stack.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
+            stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
         return stack;
@@ -158,8 +159,8 @@ public class MainUtil {
                 }
             } else {
                 if (ent instanceof Player PE) {
+                    IPlayerEntity IPE = ((IPlayerEntity) PE);
                     if ($$4.contains("Level")) {
-                        IPlayerEntity IPE = ((IPlayerEntity) PE);
                         byte lvl = (byte) ($$4.getByte("Level") + 1);
                         lvl = (byte) Mth.clamp(lvl, 1, SD.standPowers.getMaxLevel());
                         IPE.roundabout$setStandLevel(lvl);
@@ -170,8 +171,10 @@ public class MainUtil {
                             IPE.roundabout$setStandExp(exp);
                         }
                     }
+                    if ($$4.contains("BonusSkin")) {
+                        IPE.roundabout$setUnlockedBonusSkin($$4.getBoolean("BonusSkin"));
+                    }
                 }
-
             }
 
             if ($$4.contains("Skin")) {

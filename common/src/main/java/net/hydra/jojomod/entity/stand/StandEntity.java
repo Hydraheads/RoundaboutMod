@@ -9,6 +9,7 @@ import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -75,6 +76,8 @@ public abstract class StandEntity extends Mob{
     /**The animation number playing on the entity. The number is technically arbitrary,
      * as this file defines what each value plays on a per stand basis and can be overridden.*/
     protected static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Byte> IDLE_ANIMATION = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
 
     /**When stands grab and throw items, for instance, they hold this*/
@@ -242,10 +245,25 @@ public abstract class StandEntity extends Mob{
     public final void setAnimation(byte animation) {
         this.entityData.set(ANIMATION, animation);
     }
+
+    public final void setIdleAnimation(byte animation) {
+        this.entityData.set(IDLE_ANIMATION, animation);
+    }
+
+    public byte idlePos = 0;
+    public final void setIdlePos(byte pos) {
+        idlePos = pos;
+    }
     public final void setSkin(byte skin) {
         this.entityData.set(SKIN, skin);
     }
 
+    public Component getSkinName(byte skinId){
+        return null;
+    }
+    public Component getPosName(byte posID){
+        return Component.translatable(  "idle.roundabout.passive");
+    }
     public boolean dismountOnHit(){
         return true;
     }
@@ -296,6 +314,10 @@ public abstract class StandEntity extends Mob{
 
     public final byte getAnimation() {
         return this.entityData.get(ANIMATION);
+    }
+
+    public final byte getIdleAnimation() {
+        return this.entityData.get(IDLE_ANIMATION);
     }
 
     public final ItemStack getHeldItem() {
@@ -436,6 +458,7 @@ public abstract class StandEntity extends Mob{
         this.entityData.define(USER_ID, -1);
         this.entityData.define(FOLLOWING_ID, -1);
         this.entityData.define(ANIMATION, (byte) 0);
+        this.entityData.define(IDLE_ANIMATION, (byte) 0);
         this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
         this.entityData.define(SKIN, (byte) 0);
     }

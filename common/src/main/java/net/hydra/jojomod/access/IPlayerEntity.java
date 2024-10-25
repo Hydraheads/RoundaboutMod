@@ -30,5 +30,7 @@ public interface IPlayerEntity {
     byte roundabout$getStandLevel();
     void roundabout$setStandExp(int level);
     int roundabout$getStandExp();
+    boolean roundabout$getUnlockedBonusSkin();
+    void roundabout$setUnlockedBonusSkin(boolean unlock);
 
 }
