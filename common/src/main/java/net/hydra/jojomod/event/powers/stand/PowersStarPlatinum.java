@@ -1025,7 +1025,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else if (soundChoice == LAST_HIT_2_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_3_NOISE) {
-            return ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT;
+            return ModSounds.STAR_PLATINUM_ORA_3_SOUND_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
