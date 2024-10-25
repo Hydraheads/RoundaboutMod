@@ -1147,6 +1147,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     Vec3 spos = stand.getStandOffsetVector(roundabout$User);
                     stand.absMoveTo(spos.x(), spos.y(), spos.z());
 
+                    stand.setSkin(roundabout$getStandSkin());
+
                     theWorld.addFreshEntity(stand);
 
                     if (sound && !((TimeStop)this.level()).CanTimeStopEntity(this)) {

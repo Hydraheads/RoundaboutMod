@@ -11,14 +11,39 @@ import org.jetbrains.annotations.Nullable;
 
 public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
 
-    private static final ResourceLocation SKIN_1 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world.png");
+    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world.png");
+    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_manga.png");
+    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_ova.png");
+    private static final ResourceLocation HERITAGE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_heritage.png");
+    private static final ResourceLocation BLACK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_black.png");
+    private static final ResourceLocation PART_7_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_part_7.png");
+    private static final ResourceLocation PART_7_BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_part_7_blue.png");
+    private static final ResourceLocation OVER_HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_over_heaven.png");
     public TheWorldRenderer(EntityRendererProvider.Context context) {
         super(context, new TheWorldModel<>(context.bakeLayer(ModEntityRendererClient.THE_WORLD_LAYER)),0f);
     }
 
     @Override
     public ResourceLocation getTextureLocation(TheWorldEntity entity) {
-        return SKIN_1;
+        byte BT = entity.getSkin();
+        if (BT == TheWorldEntity.PART_3_SKIN){
+            return PART_3_SKIN;
+        } else if (BT == TheWorldEntity.MANGA_SKIN){
+            return PART_3_MANGA_SKIN;
+        } else if (BT == TheWorldEntity.OVA_SKIN){
+            return OVA_SKIN;
+        } else if (BT == TheWorldEntity.HERITAGE_SKIN){
+            return HERITAGE_SKIN;
+        } else if (BT == TheWorldEntity.BLACK_SKIN){
+            return BLACK_SKIN;
+        } else if (BT == TheWorldEntity.PART_7_SKIN){
+            return PART_7_SKIN;
+        } else if (BT == TheWorldEntity.PART_7_BLUE){
+            return PART_7_BLUE;
+        } else if (BT == TheWorldEntity.OVER_HEAVEN){
+            return OVER_HEAVEN;
+        }
+        return PART_3_SKIN;
     }
 
     @Override

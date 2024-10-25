@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -9,7 +10,36 @@ public class TheWorldEntity extends StandEntity {
     public TheWorldEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
+    public static final byte
+            PART_3_SKIN = 1,
+            MANGA_SKIN = 2,
+            HERITAGE_SKIN = 3,
+            OVA_SKIN = 4,
+            PART_7_SKIN = 5,
+            BLACK_SKIN = 6,
+            OVER_HEAVEN = 7,
+            PART_7_BLUE = 8;
 
+    public Component getSkinName(byte skinId){
+        if (skinId == PART_3_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.base");
+        } else if (skinId == MANGA_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.manga");
+        } else if (skinId == HERITAGE_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.heritage");
+        } else if (skinId == OVA_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.ova");
+        } else if (skinId == PART_7_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.part_7");
+        } else if (skinId == BLACK_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.black");
+        } else if (skinId == PART_7_BLUE){
+            return Component.translatable(  "skins.roundabout.the_world.blue_part_7");
+        } else if (skinId == OVER_HEAVEN){
+            return Component.translatable(  "skins.roundabout.the_world.over_heaven");
+        }
+        return Component.translatable(  "skins.roundabout.the_world.base");
+    }
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();
     public final AnimationState blockGrabAnimation = new AnimationState();

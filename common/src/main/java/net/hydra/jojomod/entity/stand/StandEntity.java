@@ -80,6 +80,8 @@ public abstract class StandEntity extends Mob{
     /**When stands grab and throw items, for instance, they hold this*/
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.BYTE);
 
     public boolean canAcquireHeldItem = false;
 
@@ -240,6 +242,9 @@ public abstract class StandEntity extends Mob{
     public final void setAnimation(byte animation) {
         this.entityData.set(ANIMATION, animation);
     }
+    public final void setSkin(byte skin) {
+        this.entityData.set(SKIN, skin);
+    }
 
     public boolean dismountOnHit(){
         return true;
@@ -295,6 +300,10 @@ public abstract class StandEntity extends Mob{
 
     public final ItemStack getHeldItem() {
         return this.entityData.get(HELD_ITEM);
+    }
+
+    public final byte getSkin() {
+        return this.entityData.get(SKIN);
     }
 
     public final boolean getNeedsUser() {
@@ -428,6 +437,7 @@ public abstract class StandEntity extends Mob{
         this.entityData.define(FOLLOWING_ID, -1);
         this.entityData.define(ANIMATION, (byte) 0);
         this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
+        this.entityData.define(SKIN, (byte) 0);
     }
 
 

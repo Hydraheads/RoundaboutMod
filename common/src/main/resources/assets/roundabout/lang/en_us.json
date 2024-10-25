@@ -317,5 +317,23 @@
   "ability.roundabout.": "Oxygen Tanks",
 
   "leveling.roundabout.disc_development_potential_level": "Development: %s",
-  "leveling.roundabout.disc_maxed": "Complete"
+  "leveling.roundabout.disc_maxed": "Complete",
+
+  "skins.roundabout.star_platinum.base": "Part 3",
+  "skins.roundabout.star_platinum.manga": "Manga",
+  "skins.roundabout.star_platinum.ova": "OVA",
+  "skins.roundabout.star_platinum.green": "Green",
+  "skins.roundabout.star_platinum.baseball": "Baseball",
+  "skins.roundabout.star_platinum.part_4": "Part 4",
+  "skins.roundabout.star_platinum.part_6": "Part 6",
+  "skins.roundabout.star_platinum.atomic": "Atomic",
+
+  "skins.roundabout.the_world.base": "Part 3",
+  "skins.roundabout.the_world.manga": "Manga",
+  "skins.roundabout.the_world.heritage": "Shadow",
+  "skins.roundabout.the_world.ova": "OVA",
+  "skins.roundabout.the_world.black": "Dark",
+  "skins.roundabout.the_world.part_7": "THE WORLD",
+  "skins.roundabout.the_world.blue_part_7": "Blue THE WORLD",
+  "skins.roundabout.the_world.over_heaven": "Over Heaven"
 }

@@ -13,7 +13,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class StarPlatinumRenderer<T extends StandEntity> extends StandRenderer<StarPlatinumEntity> {
 
-    private static final ResourceLocation SKIN_1 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum.png");
+    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum.png");
+    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_purple.png");
+    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_ova.png");
+    private static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_green.png");
+    private static final ResourceLocation BASEBALL_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_baseball.png");
+    private static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_part_4.png");
+    private static final ResourceLocation PART_6_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_part_6.png");
+    private static final ResourceLocation ATOMIC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_atomic.png");
     public StarPlatinumRenderer(EntityRendererProvider.Context context) {
         super(context, new StarPlatinumModel<>(context.bakeLayer(ModEntityRendererClient.STAR_PLATINUM_LAYER)),0f);
         this.addLayer(new StarPlatinumEyeLayer<>(this));
@@ -21,7 +28,25 @@ public class StarPlatinumRenderer<T extends StandEntity> extends StandRenderer<S
 
     @Override
     public ResourceLocation getTextureLocation(StarPlatinumEntity entity) {
-        return SKIN_1;
+        byte BT = entity.getSkin();
+        if (BT == StarPlatinumEntity.PART_3_SKIN){
+            return PART_3_SKIN;
+        } else if (BT == StarPlatinumEntity.PART_3_MANGA_SKIN){
+            return PART_3_MANGA_SKIN;
+        } else if (BT == StarPlatinumEntity.OVA_SKIN){
+            return OVA_SKIN;
+        } else if (BT == StarPlatinumEntity.GREEN_SKIN){
+            return GREEN_SKIN;
+        } else if (BT == StarPlatinumEntity.BASEBALL_SKIN){
+            return BASEBALL_SKIN;
+        } else if (BT == StarPlatinumEntity.PART_4_SKIN){
+            return PART_4_SKIN;
+        } else if (BT == StarPlatinumEntity.PART_6_SKIN){
+            return PART_6_SKIN;
+        } else if (BT == StarPlatinumEntity.ATOMIC_SKIN){
+            return ATOMIC_SKIN;
+        }
+        return PART_3_SKIN;
     }
 
     @Override

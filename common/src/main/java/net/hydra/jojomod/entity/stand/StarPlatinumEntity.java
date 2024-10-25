@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,6 +23,37 @@ public class StarPlatinumEntity extends StandEntity {
     @Unique
     private static final EntityDataAccessor<Boolean> IS_SCOPING = SynchedEntityData.defineId(StarPlatinumEntity.class,
             EntityDataSerializers.BOOLEAN);
+
+    public static final byte
+            PART_3_SKIN = 1,
+            PART_3_MANGA_SKIN = 2,
+            OVA_SKIN = 3,
+            GREEN_SKIN = 4,
+            BASEBALL_SKIN = 5,
+            PART_4_SKIN = 6,
+            PART_6_SKIN = 7,
+            ATOMIC_SKIN = 8;
+
+    public Component getSkinName(byte skinId){
+        if (skinId == PART_3_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.base");
+        } else if (skinId == PART_3_MANGA_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.manga");
+        } else if (skinId == OVA_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.ova");
+        } else if (skinId == GREEN_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.green");
+        } else if (skinId == BASEBALL_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.baseball");
+        } else if (skinId == PART_4_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.part_4");
+        } else if (skinId == PART_6_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.part_6");
+        } else if (skinId == ATOMIC_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.atomic");
+        }
+        return Component.translatable(  "skins.roundabout.star_platinum.base");
+    }
 
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();
