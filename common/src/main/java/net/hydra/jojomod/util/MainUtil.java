@@ -4,6 +4,7 @@ package net.hydra.jojomod.util;
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientUtil;
@@ -18,11 +19,13 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -133,6 +136,40 @@ public class MainUtil {
             }
         }
         return mm;
+    }
+    public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){
+        StandUser user = ((StandUser)ent);
+        CompoundTag $$4 = stack.getTagElement("Memory");
+        if ($$4 != null) {
+            if (SD instanceof MaxStandDiscItem) {
+                if (ent instanceof Player PE) {
+                    IPlayerEntity IPE = ((IPlayerEntity) PE);
+                    IPE.roundabout$setStandLevel(SD.standPowers.getMaxLevel());
+                }
+            } else {
+                if (ent instanceof Player PE) {
+                    if ($$4.contains("Level")) {
+                        IPlayerEntity IPE = ((IPlayerEntity) PE);
+                        byte lvl = (byte) ($$4.getByte("Level") + 1);
+                        lvl = (byte) Mth.clamp(lvl, 1, SD.standPowers.getMaxLevel());
+                        IPE.roundabout$setStandLevel(lvl);
+
+                        if ($$4.contains("Experience")) {
+                            int exp = (byte) ($$4.getInt("Experience"));
+                            exp = (byte) Mth.clamp(lvl, 0, SD.standPowers.getExpForLevelUp(exp));
+                            IPE.roundabout$setStandExp(exp);
+                        }
+                    }
+                }
+
+            }
+
+            if ($$4.contains("Skin")) {
+                byte skn = (user.roundabout$getStandSkin());
+                user.roundabout$setStandSkin(skn);
+            }
+        }
+
     }
     public static LivingEntity homeOnFlier(Level level, Vec3 vec3, double range, Entity owner) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,

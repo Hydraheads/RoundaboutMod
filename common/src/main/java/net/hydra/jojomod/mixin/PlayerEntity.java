@@ -12,6 +12,7 @@ import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -73,6 +74,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<ItemStack> ROUNDABOUT$MASK_VOICE_SLOT = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.ITEM_STACK);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_LEVEL = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$STAND_EXP = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.INT);
+
     @Shadow
     @Final
     private Inventory inventory;
@@ -142,6 +150,26 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return false;
     }
 
+    @Override
+    @Unique
+    public void roundabout$setStandLevel(byte level){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_LEVEL, level);
+    }
+    @Override
+    @Unique
+    public byte roundabout$getStandLevel(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$STAND_LEVEL);
+    }
+    @Override
+    @Unique
+    public void roundabout$setStandExp(int level){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, level);
+    }
+    @Override
+    @Unique
+    public int roundabout$getStandExp(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$STAND_EXP);
+    }
 
     /**Attack Speed Decreases when your hand is stone*/
     @Inject(method = "getCurrentItemAttackStrengthDelay", at = @At(value = "HEAD"), cancellable = true)
@@ -265,7 +293,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
-    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"),
+    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"),
             ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putByte("roundabout.LocacacaCurse", ((StandUser)this).roundabout$getLocacacaCurse());
@@ -281,8 +309,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         return $$0;
     }
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
+
         ((StandUser)this).roundabout$setLocacacaCurse($$0.getByte("roundabout.LocacacaCurse"));
         if ($$0.contains("roundabout.Mask", 10)) {
             CompoundTag compoundtag = $$0.getCompound("roundabout.Mask");
@@ -470,6 +499,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_SLOT, ItemStack.EMPTY);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_VOICE_SLOT, ItemStack.EMPTY);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_LEVEL, (byte)0);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
     }
 
     @Shadow

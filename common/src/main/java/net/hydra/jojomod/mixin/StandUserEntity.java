@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -466,6 +467,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+
+    @Unique
+    public byte roundabout$standSkin;
+    @Unique
+    @Override
+    public byte roundabout$getStandSkin(){
+        return this.roundabout$standSkin;
+    }
+    @Unique
+    @Override
+    public void roundabout$setStandSkin(byte skin){
+        this.roundabout$standSkin = skin;
+    }
     @Unique
     public int roundabout$getGasolineTime(){
         return this.roundabout$gasTicks;
@@ -695,8 +709,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {
+            ItemStack discy = this.roundabout$getStandDisc();
+            if (((LivingEntity)(Object)this) instanceof Player PE && !(discy.getItem() instanceof MaxStandDiscItem)) {
+                IPlayerEntity IPE = ((IPlayerEntity) PE);
+                discy.getOrCreateTagElement("Memory").putByte("Level",IPE.roundabout$getStandLevel());
+                discy.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
+            }
+            discy.getOrCreateTagElement("Memory").putByte("Skin",this.roundabout$getStandSkin());
+
             CompoundTag compoundtag = new CompoundTag();
-            $$0.put("roundabout.StandDisc",this.roundabout$getStandDisc().save(compoundtag));
+            $$0.put("roundabout.StandDisc",discy.save(compoundtag));
         }
         if ((this.roundabout$getRejectionStandDisc() != null && !this.roundabout$getRejectionStandDisc().isEmpty()) || $$0.contains("roundabout.StandRejectionDisc", 10)) {
             CompoundTag compoundtag = new CompoundTag();
@@ -716,6 +738,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD){
                 this.roundabout$setStandDisc(itemstack);
                 SD.generateStandPowers((LivingEntity)(Object)this);
+                MainUtil.extractDiscData(((LivingEntity)(Object)this),SD,itemstack);
             }
         }if ($$0.contains("roundabout.StandRejectionDisc", 10)) {
             CompoundTag compoundtag = $$0.getCompound("roundabout.StandRejectionDisc");

@@ -157,5 +157,7 @@ public interface StandUser {
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
 
+    byte roundabout$getStandSkin();
+    void roundabout$setStandSkin(byte skin);
 
 }
