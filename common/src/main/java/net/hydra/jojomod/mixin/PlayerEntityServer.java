@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,7 +62,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     /** respawn */
     @Inject(method = "restoreFrom(Lnet/minecraft/server/level/ServerPlayer;Z)V", at = @At(value = "TAIL"))
     public void roundabout$respawn(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
-        ((StandUser)this).roundabout$setStandDisc(((StandUser)$$0).roundabout$getStandDisc());
+        ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
         ((IPlayerEntity)this).roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
         ((IPlayerEntity)this).roundabout$getMaskInventory().update();
     }

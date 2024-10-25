@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,7 +47,7 @@ public class StandDiscItem extends Item {
         if (!$$0.isClientSide) {
             ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
             if (!currentDisc.isEmpty()) {
-                addItem($$1, currentDisc.copy());
+                addItem($$1, MainUtil.saveToDiscData($$1,currentDisc.copy()));
                 if (!$$1.isCreative()){
                     ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
                             ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);

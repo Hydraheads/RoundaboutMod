@@ -647,6 +647,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setStandDisc(ItemStack stack) {
         if (!(this.level().isClientSide)) {
             this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
+            if (stack.getItem() instanceof StandDiscItem SD){
+                MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
+            }
         }
     }
     @Unique
@@ -710,15 +713,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {
             ItemStack discy = this.roundabout$getStandDisc();
-            if (((LivingEntity)(Object)this) instanceof Player PE && !(discy.getItem() instanceof MaxStandDiscItem)) {
-                IPlayerEntity IPE = ((IPlayerEntity) PE);
-                discy.getOrCreateTagElement("Memory").putByte("Level",IPE.roundabout$getStandLevel());
-                discy.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
-            }
-            discy.getOrCreateTagElement("Memory").putByte("Skin",this.roundabout$getStandSkin());
-
             CompoundTag compoundtag = new CompoundTag();
-            $$0.put("roundabout.StandDisc",discy.save(compoundtag));
+            $$0.put("roundabout.StandDisc",MainUtil.saveToDiscData(((LivingEntity)(Object)this), discy).save(compoundtag));
         }
         if ((this.roundabout$getRejectionStandDisc() != null && !this.roundabout$getRejectionStandDisc().isEmpty()) || $$0.contains("roundabout.StandRejectionDisc", 10)) {
             CompoundTag compoundtag = new CompoundTag();

@@ -137,6 +137,16 @@ public class MainUtil {
         }
         return mm;
     }
+
+    public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack){
+        if (ent instanceof Player PE && !(stack.getItem() instanceof MaxStandDiscItem)) {
+            IPlayerEntity IPE = ((IPlayerEntity) PE);
+            stack.getOrCreateTagElement("Memory").putByte("Level",IPE.roundabout$getStandLevel());
+            stack.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
+        }
+        stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
+        return stack;
+    }
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){
         StandUser user = ((StandUser)ent);
         CompoundTag $$4 = stack.getTagElement("Memory");

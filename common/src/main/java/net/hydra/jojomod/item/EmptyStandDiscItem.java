@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -35,7 +36,7 @@ public class EmptyStandDiscItem extends Item {
                 }
                 ((StandUser) $$1).roundabout$setStand(null);
                 ((StandUser) $$1).roundabout$setActive(false);
-                addItem($$1, currentDisc.copy());
+                addItem($$1, MainUtil.saveToDiscData($$1,currentDisc.copy()));
                 ((StandUser) $$1).roundabout$setStandDisc(ItemStack.EMPTY);
                 this.generateStandPowers($$1);
             }
