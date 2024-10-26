@@ -2,6 +2,7 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -176,7 +177,7 @@ public class MainUtil {
             }
 
             if ($$4.contains("Skin")) {
-                byte skn = (user.roundabout$getStandSkin());
+                byte skn = ($$4.getByte("Skin"));
                 user.roundabout$setStandSkin(skn);
             }
         }
@@ -913,17 +914,22 @@ public class MainUtil {
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleBytePacketC2S(Player player, byte data, byte context){
-        if (context == PacketDataIndex.S2C_SIMPLE_GENERATE_POWERS) {
-            ItemStack itemStack = ((StandUser) player).roundabout$getStandDisc();
-            if (!itemStack.isEmpty() && itemStack.getItem() instanceof StandDiscItem SD){
-                SD.generateStandPowers(player);
-            }
-        }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleSingleBytePacketC2S(Player player, byte context){
         if (context == PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON) {
             ((StandUser) player).roundabout$summonStand(player.level(), false, false);
+
+        } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_LEFT) {
+                StandUser user = ((StandUser) player);
+                user.roundabout$getStandPowers().getSkinInDirection(false);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT) {
+            StandUser user = ((StandUser) player);
+            user.roundabout$getStandPowers().getSkinInDirection(true);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_LEFT) {
+            StandUser user = ((StandUser) player);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT){
+            StandUser user = ((StandUser) player);
         } else if (context == PacketDataIndex.SINGLE_BYTE_UPDATE_COOLDOWN) {
                 ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {

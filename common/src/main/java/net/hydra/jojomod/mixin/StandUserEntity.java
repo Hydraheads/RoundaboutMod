@@ -479,6 +479,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setStandSkin(byte skin){
         this.roundabout$standSkin = skin;
+        if (((LivingEntity)(Object)this) instanceof Player PE){
+            ((IPlayerEntity)PE).roundabout$setStandSkin(skin);
+        }
+        StandEntity stand = roundabout$getStand();
+        if (stand != null){
+            stand.setSkin(skin);
+        }
     }
     @Unique
     public int roundabout$getGasolineTime(){

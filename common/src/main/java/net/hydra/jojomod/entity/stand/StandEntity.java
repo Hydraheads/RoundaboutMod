@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;

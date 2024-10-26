@@ -5,17 +5,21 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -65,7 +69,7 @@ public class PowerInventoryScreen
             if (stand != null) {
                 renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30,
                         (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand,pl);
-                  context.drawString(this.font, stand.getSkinName(stand.getSkin()), this.titleLabelX+11+leftPos, this.titleLabelY+18+topPos, 16777215, false);
+                  context.drawString(this.font, stand.getSkinName(((IPlayerEntity)pl).roundabout$getStandSkin()), this.titleLabelX+11+leftPos, this.titleLabelY+18+topPos, 16777215, false);
                 context.drawString(this.font, stand.getPosName(stand.getIdleAnimation()), this.titleLabelX+11+leftPos, this.titleLabelY+36+topPos, 16777215, false);
                 int lefXPos = leftPos+77;
                 int rightXPos = leftPos+164;
@@ -287,27 +291,35 @@ public class PowerInventoryScreen
             int rightXPos = leftPos + 164;
             int topYPos = topPos + 22;
             int bottomYPos = topPos + 40;
-            if (pl.isCreative()) {
-                if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
-                    Roundabout.LOGGER.info("1");
-                    return true;
+            StandUser standUser = ((StandUser) pl);
+            stand = standUser.roundabout$getStand();
+            if ((stand != null && stand.getFadeOut() >= stand.getMaxFade())) {
+                if (pl.isCreative()) {
+                    if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
+                        Roundabout.LOGGER.info("1");
+                        return true;
+                    }
+
+                    if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
+                        Roundabout.LOGGER.info("2");
+                        return true;
+                    }
                 }
 
-                if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
-                    Roundabout.LOGGER.info("2");
-                    return true;
-                }
-            }
+                if (pl.isCreative()) {
+                    if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
+                        Roundabout.LOGGER.info("3");
+                        return true;
+                    }
 
-            if (pl.isCreative()) {
-                if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                    Roundabout.LOGGER.info("3");
-                    return true;
-                }
-
-                if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                    Roundabout.LOGGER.info("4");
-                    return true;
+                    if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
+                        Roundabout.LOGGER.info("4");
+                        return true;
+                    }
                 }
             }
         }

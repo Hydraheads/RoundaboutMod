@@ -28,7 +28,6 @@ public class UtilC2S {
             MainUtil.handleBytePacketC2S(player, data, context);
         });
 
-
     }
 
     /**A generalized packet for sending only a byte to the server.*/

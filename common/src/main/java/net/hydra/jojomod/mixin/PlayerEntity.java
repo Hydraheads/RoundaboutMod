@@ -78,6 +78,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_LEVEL = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
     @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_SKIN = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
+    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$STAND_EXP = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.INT);
 
@@ -159,6 +162,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public byte roundabout$getStandLevel(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$STAND_LEVEL);
+    }
+    @Override
+    @Unique
+    public void roundabout$setStandSkin(byte level){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_SKIN, level);
+    }
+    @Override
+    @Unique
+    public byte roundabout$getStandSkin(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$STAND_SKIN);
     }
     @Override
     @Unique
@@ -513,6 +526,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_SLOT, ItemStack.EMPTY);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_VOICE_SLOT, ItemStack.EMPTY);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_LEVEL, (byte)0);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte)0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
     }
 

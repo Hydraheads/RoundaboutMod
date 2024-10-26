@@ -1320,6 +1320,17 @@ public class StandPowers {
         return targetEntity;
     }
 
+    public void getSkinInDirection(boolean right){
+        StandUser SE = ((StandUser)this.getSelf());
+        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (right){
+            SE.roundabout$setStandSkin((byte) (currentSkin+1));
+        } else {
+            SE.roundabout$setStandSkin((byte) (currentSkin-1));
+        }
+        SE.roundabout$summonStand(this.getSelf().level(),true,false);
+    }
+
     public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
