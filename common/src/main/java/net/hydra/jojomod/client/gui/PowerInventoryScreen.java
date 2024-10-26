@@ -72,28 +72,32 @@ public class PowerInventoryScreen
                 int topYPos = topPos+22;
                 int bottomYPos = topPos+40;
 
-                if (isSurelyHovering(rightXPos,topYPos,7,13,mouseX,mouseY)){
-                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 19, 7, 11);
+                if (pl.isCreative()) {
+                    if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 19, 7, 11);
+                    }
+
+                    if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 19, 7, 11);
+                    }
                 }
 
-                if (isSurelyHovering(lefXPos,topYPos,7,13,mouseX,mouseY)){
-                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 31, 7, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 19, 7, 11);
-                }
+                if (pl.isCreative()) {
+                    if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 19, 7, 11);
+                    }
 
-                if (isSurelyHovering(rightXPos,bottomYPos,7,13,mouseX,mouseY)){
-                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 31, 7, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 19, 7, 11);
-                }
-
-                if (isSurelyHovering(lefXPos,bottomYPos,7,13,mouseX,mouseY)){
-                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 31, 7, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
+                    if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
+                    }
                 }
             }
         }
@@ -277,6 +281,36 @@ public class PowerInventoryScreen
 
     @Override
     public boolean mouseClicked(double $$0, double $$1, int $$2) {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            int lefXPos = leftPos + 77;
+            int rightXPos = leftPos + 164;
+            int topYPos = topPos + 22;
+            int bottomYPos = topPos + 40;
+            if (pl.isCreative()) {
+                if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
+                    Roundabout.LOGGER.info("1");
+                    return true;
+                }
+
+                if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
+                    Roundabout.LOGGER.info("2");
+                    return true;
+                }
+            }
+
+            if (pl.isCreative()) {
+                if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
+                    Roundabout.LOGGER.info("3");
+                    return true;
+                }
+
+                if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
+                    Roundabout.LOGGER.info("4");
+                    return true;
+                }
+            }
+        }
         /**
         if (this.recipeBookComponent.mouseClicked($$0, $$1, $$2)) {
             this.setFocused(this.recipeBookComponent);

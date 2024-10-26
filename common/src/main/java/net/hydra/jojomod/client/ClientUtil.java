@@ -1,5 +1,8 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -11,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -141,6 +145,12 @@ public class ClientUtil {
              handleBlipPacketS2C(player,data,context,vec);
         }
     }
+    public static void handleBundlePacketS2C(byte context, byte one, byte two, byte three){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            handleBundlePacketS2C(player,context,one,two,three);
+        }
+    }
 
     public static void handleTimeStoppingEntityPacket(int timeStoppingEntity, double x, double y, double z, double range, int duration, int maxDuration){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -160,6 +170,22 @@ public class ClientUtil {
         if (player != null) {
             Entity User = player.level().getEntity(data);
             ((StandUserClient)User).roundabout$clientQueSoundCanceling(context);
+        }
+    }
+
+
+    /**A generalized packet for sending bytes to the client. Only a context is provided.*/
+    public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2, byte byte3){
+        if (context == PacketDataIndex.S2C_BUNDLE_POWER_INV){
+            IPlayerEntity ple = ((IPlayerEntity) player);
+            StandUser se = ((StandUser) player);
+            if (byte2 > 0) {
+                ple.roundabout$setUnlockedBonusSkin(true);
+            } else {
+                ple.roundabout$setUnlockedBonusSkin(false);
+            }
+            se.roundabout$setStandSkin(byte1);
+
         }
     }
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/

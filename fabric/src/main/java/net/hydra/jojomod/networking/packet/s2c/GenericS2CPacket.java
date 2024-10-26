@@ -18,6 +18,17 @@ public class GenericS2CPacket {
         }
     }
 
+    public static void sendBundle(Minecraft client, ClientPacketListener handler,
+                                      FriendlyByteBuf buf, PacketSender responseSender) {
+        if (client.player != null) {
+            byte context = buf.readByte();
+            byte firstByte = buf.readByte();
+            byte secondByte = buf.readByte();
+            byte thirdByte = buf.readByte();
+            ClientUtil.handleBundlePacketS2C(client.player,context,firstByte,secondByte,thirdByte);
+        }
+    }
+
     public static void sendInt(Minecraft client, ClientPacketListener handler,
                                     FriendlyByteBuf buf, PacketSender responseSender) {
         if (client.player != null) {

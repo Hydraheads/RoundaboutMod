@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -44,9 +45,11 @@ public class KeyInputs {
             forceSummon(player,true);
             roundaboutClickCount = 2;
             ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY);
+            ((IPlayerEntity)player).roundabout$setUnlockedBonusSkin(false);
+
             PowerInventoryMenu powa = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             player.containerMenu = powa;
-            client.setScreen(new PowerInventoryScreen(player,powa));
+            Minecraft.getInstance().setScreen(new PowerInventoryScreen(player,powa));
         }
     }
 

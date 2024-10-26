@@ -21,6 +21,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -926,8 +927,16 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_UPDATE_COOLDOWN) {
                 ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
-            ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
+            StandUser standUser = ((StandUser) player);
+            standUser.roundabout$getStandPowers().setCooldown(context,-1);
+            IPlayerEntity iplay = ((IPlayerEntity) player);
+            byte unlocked = 0;
+            if (iplay.roundabout$getUnlockedBonusSkin()){
+                unlocked = 1;
+            }
 
+            ModPacketHandler.PACKET_ACCESS.sendBundlePacket(((ServerPlayer) player), PacketDataIndex.S2C_BUNDLE_POWER_INV,
+                    standUser.roundabout$getStandSkin(), unlocked, (byte) 0);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {

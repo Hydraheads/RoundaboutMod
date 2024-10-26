@@ -69,6 +69,10 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgePowerIntPacket(activePower,data), sp);
     }
     @Override
+    public void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three) {
+        ForgePacketHandler.sendToClient(new ForgeBundlePacket(context,one,two,three), sp);
+    }
+    @Override
     public void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f blip){
         ForgePacketHandler.sendToClient(new ForgeBlipPacket(activePower,data, blip), sp);
     }

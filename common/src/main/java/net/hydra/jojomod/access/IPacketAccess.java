@@ -22,6 +22,8 @@ public interface IPacketAccess {
 
     void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
+    void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three);
+
     void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration);
     void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
