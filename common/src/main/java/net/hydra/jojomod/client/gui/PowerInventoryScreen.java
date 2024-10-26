@@ -67,11 +67,34 @@ public class PowerInventoryScreen
                         (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand,pl);
                   context.drawString(this.font, stand.getSkinName(stand.getSkin()), this.titleLabelX+11+leftPos, this.titleLabelY+18+topPos, 16777215, false);
                 context.drawString(this.font, stand.getPosName(stand.getIdleAnimation()), this.titleLabelX+11+leftPos, this.titleLabelY+36+topPos, 16777215, false);
-                context.blit(POWER_INVENTORY_LOCATION, leftPos+164, topPos+22, 177, 19, 7, 11);
-                context.blit(POWER_INVENTORY_LOCATION, leftPos+77, topPos+22, 185, 19, 7, 11);
+                int lefXPos = leftPos+77;
+                int rightXPos = leftPos+164;
+                int topYPos = topPos+22;
+                int bottomYPos = topPos+40;
 
-                context.blit(POWER_INVENTORY_LOCATION, leftPos+164, topPos+40, 177, 19, 7, 11);
-                context.blit(POWER_INVENTORY_LOCATION, leftPos+77, topPos+40, 185, 19, 7, 11);
+                if (isSurelyHovering(rightXPos,topYPos,7,13,mouseX,mouseY)){
+                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 19, 7, 11);
+                }
+
+                if (isSurelyHovering(lefXPos,topYPos,7,13,mouseX,mouseY)){
+                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 31, 7, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 19, 7, 11);
+                }
+
+                if (isSurelyHovering(rightXPos,bottomYPos,7,13,mouseX,mouseY)){
+                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 31, 7, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 19, 7, 11);
+                }
+
+                if (isSurelyHovering(lefXPos,bottomYPos,7,13,mouseX,mouseY)){
+                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 31, 7, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
+                }
             }
         }
     }

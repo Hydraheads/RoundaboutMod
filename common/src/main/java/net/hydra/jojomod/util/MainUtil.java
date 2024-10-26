@@ -35,10 +35,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityEvent;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
@@ -301,7 +298,9 @@ public class MainUtil {
                 }
 
                 Vec3 $$11 = entity.position();
-                if (entity.randomTeleport($$8, $$9, $$10, true)) {
+                if (randomTeleport(entity,$$8, $$9, $$10, true)) {
+                    entity.hurtMarked = true;
+                    entity.hasImpulse = true;
                     $$1.gameEvent(GameEvent.TELEPORT, $$11, GameEvent.Context.of(entity));
                     SoundEvent $$12 = entity instanceof Fox ? SoundEvents.FOX_TELEPORT : SoundEvents.CHORUS_FRUIT_TELEPORT;
                     $$1.playSound(null, $$4, $$5, $$6, $$12, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -309,6 +308,58 @@ public class MainUtil {
                     break;
                 }
             }
+        }
+    }
+
+    public static boolean randomTeleport(LivingEntity ent, double $$0, double $$1, double $$2, boolean $$3) {
+        double $$4 = ent.getX();
+        double $$5 = ent.getY();
+        double $$6 = ent.getZ();
+        double $$7 = $$1;
+        boolean $$8 = false;
+        BlockPos $$9 = BlockPos.containing($$0, $$1, $$2);
+        Level $$10 = ent.level();
+        if ($$10.hasChunkAt($$9)) {
+            boolean $$11 = false;
+
+            while (!$$11 && $$9.getY() > $$10.getMinBuildHeight()) {
+                BlockPos $$12 = $$9.below();
+                BlockState $$13 = $$10.getBlockState($$12);
+                if ($$13.blocksMotion()) {
+                    $$11 = true;
+                } else {
+                    $$7--;
+                    $$9 = $$12;
+                }
+            }
+
+            if ($$11) {
+                ent.teleportTo($$0, $$7, $$2);
+                if (ent instanceof Player){
+                    ((IEntityAndData)ent).roundabout$setQVec2Params(new Vec3($$0, $$7, $$2));
+                }
+                if ($$10.noCollision(ent) && !$$10.containsAnyLiquid(ent.getBoundingBox())) {
+                    $$8 = true;
+                }
+            }
+        }
+
+        if (!$$8) {
+            ent.teleportTo($$4, $$5, $$6);
+            if (ent instanceof Player){
+                ((IEntityAndData)ent).roundabout$setQVec2Params(new Vec3($$0, $$7, $$2));
+            }
+            return false;
+        } else {
+            if ($$3) {
+                $$10.broadcastEntityEvent(ent, (byte)46);
+            }
+
+            if (ent instanceof PathfinderMob) {
+                ((PathfinderMob)ent).getNavigation().stop();
+            }
+
+            return true;
         }
     }
 
