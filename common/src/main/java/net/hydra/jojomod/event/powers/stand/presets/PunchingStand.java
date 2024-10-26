@@ -95,9 +95,9 @@ public class PunchingStand extends StandPowers {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
-                this.attackTimeMax= 40;
+                this.attackTimeMax= 37;
             } else {
-                this.attackTimeMax= 30;
+                this.attackTimeMax= 27;
             }
 
         }

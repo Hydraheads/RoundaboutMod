@@ -162,7 +162,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     } else {
                         if (this.getSelf().onGround()) {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
+                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 280);
                                 bonusLeapCount = 3;
                                 bigLeap(this.getSelf(), 20, 1);
                                 ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
@@ -531,9 +531,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 60);
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 40);
         }
-        this.setCooldown(PowerIndex.SKILL_1_SNEAK, 60);
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
         SoundEvent SE;
         float pitch = 1F;
             if (entity != null) {
@@ -1270,9 +1270,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 60);
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 40);
             }
-            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 60);
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
             return true;
         } else {
             return super.canInterruptPower();

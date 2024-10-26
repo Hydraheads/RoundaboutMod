@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -331,6 +332,9 @@ public class StandPowers {
         return Cooldowns;
     }
 
+    public List<Byte> getSkinList(){
+        return null;
+    }
 
     public void setCooldown(byte power, int cooldown){
         if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
@@ -1318,6 +1322,15 @@ public class StandPowers {
         }
 
         return targetEntity;
+    }
+    public boolean hasMoreThanOneSkin(){
+        return this.getSelf() instanceof Player PE && (((IPlayerEntity) PE).roundabout$getStandLevel() > 1 ||
+                PE.isCreative() || hasGoldenDisc());
+    }
+
+    public boolean hasGoldenDisc(){
+        ItemStack stack = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;
     }
 
     public void getSkinInDirection(boolean right){

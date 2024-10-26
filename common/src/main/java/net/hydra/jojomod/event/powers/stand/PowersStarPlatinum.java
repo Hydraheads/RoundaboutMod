@@ -558,7 +558,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
                                 Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1), FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
-                            this.setCooldown(PowerIndex.SKILL_1, 100);
+                            this.setCooldown(PowerIndex.SKILL_1, 90);
                             List<Entity> fingerTargets = doFinger(8);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);
@@ -609,9 +609,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 80);
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 90);
             }
-            this.setCooldown(PowerIndex.SKILL_1, 100);
+            this.setCooldown(PowerIndex.SKILL_1, 90);
             return true;
         } else {
             return super.canInterruptPower();

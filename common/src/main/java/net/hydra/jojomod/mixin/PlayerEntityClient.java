@@ -31,6 +31,8 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     /**When time is stopped, it would be OP if you could place some blocks down*/
     @Unique
     private int roundabout$NoPlaceTSTicks = -1;
+    @Unique
+    private int roundabout$menuTicks = -1;
 
     @Unique
     private long roundabout$clashDisplayExtraTimestamp = -100;
@@ -38,25 +40,40 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     private float roundabout$lastClashPower = -1;
 
     @Unique
+    @Override
     public int roundabout$getRoundaboutNoPlaceTSTicks(){
         return this.roundabout$NoPlaceTSTicks;
     }
 
     @Unique
+    @Override
     public long roundabout$getClashDisplayExtraTimestamp(){
         return this.roundabout$clashDisplayExtraTimestamp;
     }
 
+    @Unique
+    @Override
+    public void roundabout$setMenuTicks(int menuTicks){
+        this.roundabout$menuTicks = menuTicks;
+    }
 
     @Unique
+    @Override
+    public int roundabout$getMenuTicks(){
+        return this.roundabout$menuTicks;
+    }
+    @Unique
+    @Override
     public float roundabout$getLastClashPower(){
         return this.roundabout$lastClashPower;
     }
     @Unique
+    @Override
     public void roundabout$setClashDisplayExtraTimestamp(long set){
         this.roundabout$clashDisplayExtraTimestamp = set;
     }
     @Unique
+    @Override
     public void roundabout$setLastClashPower(float set){
         this.roundabout$lastClashPower = set;
     }
@@ -119,6 +136,9 @@ public class PlayerEntityClient implements StandUserClientPlayer {
             if (this.roundabout$NoPlaceTSTicks > -1){
                 this.roundabout$NoPlaceTSTicks--;
             }
+        }
+        if (this.roundabout$menuTicks > -1){
+            this.roundabout$menuTicks--;
         }
     }
 

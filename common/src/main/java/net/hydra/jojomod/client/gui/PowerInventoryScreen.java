@@ -11,7 +11,9 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -76,7 +78,8 @@ public class PowerInventoryScreen
                 int topYPos = topPos+22;
                 int bottomYPos = topPos+40;
 
-                if (pl.isCreative()) {
+                StandPowers sp = standUser.roundabout$getStandPowers();
+                if (sp.hasMoreThanOneSkin()){
                     if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
                         context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
                     } else {
@@ -292,36 +295,45 @@ public class PowerInventoryScreen
             int topYPos = topPos + 22;
             int bottomYPos = topPos + 40;
             StandUser standUser = ((StandUser) pl);
+            StandPowers sp = standUser.roundabout$getStandPowers();
+            StandUserClientPlayer scp = ((StandUserClientPlayer)pl);
+            int menuTicks = scp.roundabout$getMenuTicks();
             stand = standUser.roundabout$getStand();
-            if ((stand != null && stand.getFadeOut() >= stand.getMaxFade())) {
-                if (pl.isCreative()) {
+                if (sp.hasMoreThanOneSkin()) {
                     if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
-                        Roundabout.LOGGER.info("1");
+                        if (menuTicks <= -1) {
+                            scp.roundabout$setMenuTicks(5);
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
+                        }
                         return true;
                     }
 
                     if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
-                        Roundabout.LOGGER.info("2");
+                        if (menuTicks <= -1) {
+                            scp.roundabout$setMenuTicks(5);
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
+                        }
                         return true;
                     }
                 }
 
                 if (pl.isCreative()) {
                     if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
-                        Roundabout.LOGGER.info("3");
+                        if (menuTicks <= -1) {
+                            scp.roundabout$setMenuTicks(5);
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
+                        }
                         return true;
                     }
 
                     if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
-                        Roundabout.LOGGER.info("4");
+                        if (menuTicks <= -1) {
+                            scp.roundabout$setMenuTicks(5);
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
+                        }
                         return true;
                     }
                 }
-            }
         }
         /**
         if (this.recipeBookComponent.mouseClicked($$0, $$1, $$2)) {
