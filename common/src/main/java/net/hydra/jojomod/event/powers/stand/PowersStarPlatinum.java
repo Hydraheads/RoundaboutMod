@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -635,6 +636,33 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
+    }
+
+    @Override
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(StarPlatinumEntity.PART_3_SKIN);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(StarPlatinumEntity.PART_3_MANGA_SKIN);
+            } if (Level > 2 || bypass){
+                $$1.add(StarPlatinumEntity.OVA_SKIN);
+            } if (Level > 3 || bypass){
+                $$1.add(StarPlatinumEntity.GREEN_SKIN);
+            } if (Level > 4 || bypass){
+                $$1.add(StarPlatinumEntity.BASEBALL_SKIN);
+            } if (Level > 5 || bypass){
+                $$1.add(StarPlatinumEntity.PART_4_SKIN);
+            } if (Level > 5 || bypass){
+                $$1.add(StarPlatinumEntity.PART_6_SKIN);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(StarPlatinumEntity.ATOMIC_SKIN);
+            }
+        }
+        return $$1;
     }
 
     @Override

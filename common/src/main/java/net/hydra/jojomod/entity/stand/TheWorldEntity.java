@@ -15,10 +15,10 @@ public class TheWorldEntity extends StandEntity {
             MANGA_SKIN = 2,
             HERITAGE_SKIN = 3,
             OVA_SKIN = 4,
-            PART_7_SKIN = 5,
-            BLACK_SKIN = 6,
-            OVER_HEAVEN = 7,
-            PART_7_BLUE = 8;
+            BLACK_SKIN = 5,
+            PART_7_SKIN = 6,
+            PART_7_BLUE = 8,
+            OVER_HEAVEN = 7;
 
     @Override
     public Component getSkinName(byte skinId){

@@ -7,10 +7,13 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -38,6 +41,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -167,7 +171,32 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return super.tryPower(move,forced);
     }
-
+    @Override
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(TheWorldEntity.PART_3_SKIN);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(TheWorldEntity.MANGA_SKIN);
+            } if (Level > 2 || bypass){
+                $$1.add(TheWorldEntity.HERITAGE_SKIN);
+            } if (Level > 3 || bypass){
+                $$1.add(TheWorldEntity.OVA_SKIN);
+            } if (Level > 4 || bypass){
+                $$1.add(TheWorldEntity.BLACK_SKIN);
+            } if (Level > 5 || bypass){
+                $$1.add(TheWorldEntity.PART_7_SKIN);
+            } if (Level > 5 || bypass){
+                $$1.add(TheWorldEntity.PART_7_BLUE);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(TheWorldEntity.OVER_HEAVEN);
+            }
+        }
+        return $$1;
+    }
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos){

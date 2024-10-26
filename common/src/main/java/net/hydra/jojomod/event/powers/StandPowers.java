@@ -333,7 +333,9 @@ public class StandPowers {
     }
 
     public List<Byte> getSkinList(){
-        return null;
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte) 0);
+        return $$1;
     }
 
     public void setCooldown(byte power, int cooldown){
@@ -1336,12 +1338,29 @@ public class StandPowers {
     public void getSkinInDirection(boolean right){
         StandUser SE = ((StandUser)this.getSelf());
         byte currentSkin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (right){
-            SE.roundabout$setStandSkin((byte) (currentSkin+1));
-        } else {
-            SE.roundabout$setStandSkin((byte) (currentSkin-1));
+        List<Byte> skins = getSkinList();
+        if (!skins.isEmpty() && skins.size() > 1) {
+            int skinind = 0;
+            for (int i = 0; i<skins.size(); i++){
+                if (skins.get(i) == currentSkin){
+                    skinind = i;
+                }
+            }
+            if (right) {
+                skinind+=1;
+                if (skinind >= skins.size()){
+                    skinind =0;
+                }
+                SE.roundabout$setStandSkin((skins.get(skinind)));
+            } else {
+                skinind-=1;
+                if (skinind < 0){
+                    skinind =skins.size()-1;
+                }
+                SE.roundabout$setStandSkin((skins.get(skinind)));
+            }
+            SE.roundabout$summonStand(this.getSelf().level(), true, false);
         }
-        SE.roundabout$summonStand(this.getSelf().level(),true,false);
     }
 
     public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
