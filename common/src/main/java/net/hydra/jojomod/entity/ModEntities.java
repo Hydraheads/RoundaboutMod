@@ -4,6 +4,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.StarPlatinumBaseballEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +16,7 @@ public class ModEntities {
     public static EntityType<TerrierEntity> TERRIER_DOG;
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
+    public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;

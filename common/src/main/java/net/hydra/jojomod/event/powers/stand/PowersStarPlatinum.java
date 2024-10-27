@@ -82,6 +82,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public StandEntity getNewStandEntity(){
+            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.BASEBALL_SKIN){
+                return ModEntities.STAR_PLATINUM_BASEBALL.create(this.getSelf().level());
+            }
         return ModEntities.STAR_PLATINUM.create(this.getSelf().level());
     }
     @Override
