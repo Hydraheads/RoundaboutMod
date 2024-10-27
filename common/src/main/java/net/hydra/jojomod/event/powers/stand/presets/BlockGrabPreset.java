@@ -175,7 +175,7 @@ public class BlockGrabPreset extends PunchingStand{
                 ThrownTrident $$7 = new ThrownTrident(this.getSelf().level(), this.getSelf(), item);
                 $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
                 if (this.canSnipe()){
-                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
+                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
                 }
                 this.getSelf().level().addFreshEntity($$7);
                 this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -185,7 +185,7 @@ public class BlockGrabPreset extends PunchingStand{
                 HarpoonEntity $$7 = new HarpoonEntity(this.getSelf().level(), this.getSelf(), item);
                 $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
                 if (this.canSnipe()){
-                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
+                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
                 }
                 this.getSelf().level().addFreshEntity($$7);
                 this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);

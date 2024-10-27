@@ -57,6 +57,12 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
         roundabout$superThrowTicks = 50;
     }
+    @Unique
+    @Override
+    public void roundabout$starThrowInit2(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        roundabout$superThrowTicks = 20;
+    }
 
     @Shadow
     @Nullable

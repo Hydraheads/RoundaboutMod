@@ -21,6 +21,7 @@ public interface IAbstractArrowAccess {
     boolean roundabout$getSuperThrow();
     int roundabout$getSuperThrowTicks();
     void roundabout$starThrowInit();
+    void roundabout$starThrowInit2();
     void roundabout$setSuperThrowTicks(int sTHrow);
     @Nullable
     EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1);
