@@ -245,6 +245,8 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow public abstract void moveTo(double $$0, double $$1, double $$2);
 
+    @Shadow public abstract Vec3 getPosition(float $$0);
+
     @Unique
     private Vec3 roundabout$DeltaBuildupTS = new Vec3(0,0,0);
 
@@ -296,12 +298,14 @@ public abstract class EntityAndData implements IEntityAndData {
     @Override
     public void roundabout$tickQVec(){
         if (!roundabout$qknockback2params.equals(Vec3.ZERO)){
-            if (((Entity)(Object)this) instanceof LivingEntity le){
-                le.teleportTo(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
-            } else {
-                this.moveTo(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
+            if (roundabout$qknockback2params.distanceTo(this.getPosition(0)) < 50) {
+                if (((Entity) (Object) this) instanceof LivingEntity le) {
+                    le.teleportTo(roundabout$qknockback2params.x, roundabout$qknockback2params.y, roundabout$qknockback2params.z);
+                } else {
+                    this.moveTo(roundabout$qknockback2params.x, roundabout$qknockback2params.y, roundabout$qknockback2params.z);
+                }
+                roundabout$qknockback2params = Vec3.ZERO;
             }
-            roundabout$qknockback2params =Vec3.ZERO;
         }
         if (!roundabout$qknockback.equals(Vec3.ZERO)){
             MainUtil.takeUnresistableKnockbackWithYBias(((Entity)(Object)this), roundabout$qknockbackparams.x,

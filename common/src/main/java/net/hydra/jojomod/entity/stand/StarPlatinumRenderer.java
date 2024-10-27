@@ -20,6 +20,7 @@ public class StarPlatinumRenderer<T extends StandEntity> extends StandRenderer<S
     private static final ResourceLocation BASEBALL_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_baseball.png");
     private static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_part_4.png");
     private static final ResourceLocation PART_6_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_part_6.png");
+    private static final ResourceLocation PART_6_ALT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_part_6_alt.png");
     private static final ResourceLocation ATOMIC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_atomic.png");
     public StarPlatinumRenderer(EntityRendererProvider.Context context) {
         super(context, new StarPlatinumModel<>(context.bakeLayer(ModEntityRendererClient.STAR_PLATINUM_LAYER)),0f);
@@ -43,6 +44,8 @@ public class StarPlatinumRenderer<T extends StandEntity> extends StandRenderer<S
             return PART_4_SKIN;
         } else if (BT == StarPlatinumEntity.PART_6_SKIN){
             return PART_6_SKIN;
+        } else if (BT == StarPlatinumEntity.PART_6_ALT_SKIN){
+            return PART_6_ALT_SKIN;
         } else if (BT == StarPlatinumEntity.ATOMIC_SKIN){
             return ATOMIC_SKIN;
         }
