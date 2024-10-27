@@ -1089,7 +1089,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (forwardBarrage && Objects.nonNull(stand)) {
                     ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
                 } else {
-                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
+                    List<Entity> listE = getTargetEntityList(this.self,-1);
+                    if (storeEnt != null){
+                        ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(storeEnt.getId(), this.attackTimeDuring);
+                    }
+                    if (!listE.isEmpty()){
+                        for (int i = 0; i< listE.size(); i++){
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                            }
+                        }
+                    }
                 }
 
                 if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
@@ -1103,10 +1113,20 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             Entity targetEntity;
             if (forwardBarrage && Objects.nonNull(stand)) {
                 targetEntity = getTargetEntityGenerous(stand,2.7F,50);
+                barrageImpact(targetEntity, this.attackTimeDuring);
             } else {
-                targetEntity = getTargetEntity(this.self, -1);
+                List<Entity> listE = getTargetEntityList(this.self,-1);
+                if (storeEnt != null){
+                    barrageImpact(storeEnt, this.attackTimeDuring);
+                }
+                if (!listE.isEmpty()){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                            barrageImpact(listE.get(i), this.attackTimeDuring+1000);
+                        }
+                    }
+                }
             }
-            barrageImpact(targetEntity, this.attackTimeDuring);
         }
     }
     @Override
@@ -1123,6 +1143,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
         if (this.activePower == PowerIndex.BARRAGE_2) {
             if (bonusBarrageConditions()) {
+                boolean sideHit = false;
+                if (hitNumber > 1000){
+                    hitNumber-=1000;
+                    sideHit = true;
+                }
                 boolean lastHit = (hitNumber >= this.getKickBarrageLength());
                 if (entity != null) {
                     if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
@@ -1147,31 +1172,47 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             }
                             knockbackStrength = 0.014F - mn;
                         }
+
+                        if (sideHit){
+                            pow/=3;
+                            knockbackStrength/=3;
+                        }
+
                         if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                             if (entity instanceof LivingEntity) {
                                 if (lastHit) {
                                     if (entity instanceof Player PE){
                                         ((IPlayerEntity) PE).roundabout$setCameraHits(-1);
                                     }
-                                    playBarrageEndNoise(0, entity);
+                                    if (!sideHit) {
+                                        playBarrageEndNoise(0, entity);
+                                    }
                                 } else {
                                     if (entity instanceof Player PE){
                                         ((IPlayerEntity) PE).roundabout$setCameraHits(2);
                                     }
-                                    playKickBarrageNoise(hitNumber, entity);
+                                    if (!sideHit) {
+                                        playKickBarrageNoise(hitNumber, entity);
+                                    }
                                 }
                             }
                             kickBarrageImpact2(entity, lastHit, knockbackStrength);
                         } else {
                             if (lastHit) {
-                                playBarrageBlockEndNoise(0, entity);
+
+                                if (!sideHit) {
+                                    playBarrageBlockEndNoise(0, entity);
+                                }
                             } else {
                                 entity.setDeltaMovement(prevVelocity);
                             }
                         }
                     }
                 } else {
-                    playBarrageMissNoise(hitNumber);
+
+                    if (!sideHit) {
+                        playBarrageMissNoise(hitNumber);
+                    }
                 }
 
                 if (lastHit) {

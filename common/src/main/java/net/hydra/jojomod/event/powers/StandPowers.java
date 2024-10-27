@@ -892,7 +892,17 @@ public class StandPowers {
     public void standBarrageHit(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId(), this.attackTimeDuring);
+                List<Entity> listE = getTargetEntityList(this.self,-1);
+                if (storeEnt != null){
+                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(storeEnt.getId(), this.attackTimeDuring);
+                }
+                if (!listE.isEmpty()){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                            ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                        }
+                    }
+                }
 
                 if (this.attackTimeDuring == this.getBarrageLength()){
                     this.attackTimeDuring = -10;
@@ -901,7 +911,18 @@ public class StandPowers {
         } else {
             /*Caps how far out the barrage hit goes*/
             Entity targetEntity = getTargetEntity(this.self,-1);
-            barrageImpact(targetEntity, this.attackTimeDuring);
+
+            List<Entity> listE = getTargetEntityList(this.self,-1);
+            if (storeEnt != null){
+                barrageImpact(storeEnt, this.attackTimeDuring);
+            }
+            if (!listE.isEmpty()){
+                for (int i = 0; i< listE.size(); i++){
+                    if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                        barrageImpact(listE.get(i), this.attackTimeDuring+1000);
+                    }
+                }
+            }
         }
     }
 
@@ -1115,6 +1136,11 @@ public class StandPowers {
     public void barrageImpact(Entity entity, int hitNumber){
         if (this.isBarrageAttacking()) {
             if (bonusBarrageConditions()) {
+                boolean sideHit = false;
+                if (hitNumber > 1000){
+                    hitNumber-=1000;
+                    sideHit = true;
+                }
                 boolean lastHit = (hitNumber >= this.getBarrageLength());
                 if (entity != null) {
                     if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
@@ -1139,28 +1165,43 @@ public class StandPowers {
                             }
                             knockbackStrength = 0.014F - mn;
                         }
+
+                        if (sideHit){
+                            pow/=3;
+                            knockbackStrength/=3;
+                        }
+
                         if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                             if (entity instanceof LivingEntity) {
                                 if (lastHit) {
                                     setDazed((LivingEntity) entity, (byte) 0);
-                                    playBarrageEndNoise(0, entity);
+
+                                    if (!sideHit) {
+                                        playBarrageEndNoise(0, entity);
+                                    }
                                 } else {
                                     setDazed((LivingEntity) entity, (byte) 3);
+                                    if (!sideHit) {
                                         playBarrageNoise(hitNumber, entity);
+                                    }
                                 }
                             }
                             barrageImpact2(entity, lastHit, knockbackStrength);
                         } else {
                             if (lastHit) {
                                 knockShield2(entity, 200);
-                                playBarrageBlockEndNoise(0, entity);
+                                if (!sideHit) {
+                                    playBarrageBlockEndNoise(0, entity);
+                                }
                             } else {
                                 entity.setDeltaMovement(prevVelocity);
                             }
                         }
                     }
                 } else {
-                    playBarrageMissNoise(hitNumber);
+                    if (!sideHit) {
+                        playBarrageMissNoise(hitNumber);
+                    }
                 }
 
                 if (lastHit) {
@@ -1298,6 +1339,38 @@ public class StandPowers {
     }
 
     public boolean moveStarted = false;
+
+    public Entity storeEnt = null;
+    public List<Entity> getTargetEntityList(LivingEntity User, float distMax){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.standReach, false);
+        }
+        Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if (targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity)){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+            float halfReach = (float) (distMax*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax);
+        if (targetEntity == null) {
+            targetEntity = StandAttackHitboxNear(User,listE,25);
+        }
+        if (targetEntity instanceof StandEntity SE){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+
+        storeEnt = targetEntity;
+
+        return listE;
+    }
     public Entity getTargetEntity(LivingEntity User, float distMax){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
