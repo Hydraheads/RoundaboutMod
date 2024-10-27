@@ -21,6 +21,7 @@ public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
     private static final ResourceLocation OVER_HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_over_heaven.png");
     public TheWorldRenderer(EntityRendererProvider.Context context) {
         super(context, new TheWorldModel<>(context.bakeLayer(ModEntityRendererClient.THE_WORLD_LAYER)),0f);
+        this.addLayer(new TheWorldOverHeavenEyeLayer<>(this));
     }
 
     @Override

@@ -510,7 +510,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 }
             }
-            this.dropItem($$1.getOnPos());
+            if (this.getItem().getItem() instanceof BlockItem) {
+                if (this.places) {
+                    this.dropItem($$1.getOnPos());
+                }
+            } else {
+                this.dropItem($$1.getOnPos());
+            }
         }
         this.discard();
 
