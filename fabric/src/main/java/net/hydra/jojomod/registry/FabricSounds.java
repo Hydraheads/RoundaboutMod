@@ -77,6 +77,8 @@ public class FabricSounds {
         addSound(ModSounds.STAND_BARRAGE_END_ID, ModSounds.STAND_BARRAGE_END_EVENT);
 
         addSound(ModSounds.EXPLOSIVE_PUNCH_ID, ModSounds.EXPLOSIVE_PUNCH_EVENT);
+        addSound(ModSounds.EXPLOSIVE_BAT_ID, ModSounds.EXPLOSIVE_BAT_EVENT);
+        addSound(ModSounds.OVA_SUMMON_ID, ModSounds.OVA_SUMMON_EVENT);
         addSound(ModSounds.FINAL_KICK_ID, ModSounds.FINAL_KICK_EVENT);
 
         addSound(ModSounds.TIME_STOP_THE_WORLD_ID, ModSounds.TIME_STOP_THE_WORLD_EVENT);

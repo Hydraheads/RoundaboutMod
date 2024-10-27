@@ -5,6 +5,12 @@
       "roundabout:summon_stand"
     ]
   },
+  "ova_summon": {
+    "subtitle": "sounds.roundabout.ova_summon",
+    "sounds": [
+      "roundabout:ova_summon"
+    ]
+  },
   "stand_arrow_charge": {
     "subtitle": "sounds.roundabout.stand_arrow_charge",
     "sounds": [
@@ -87,6 +93,12 @@
     "subtitle": "sounds.roundabout.explosive_punch",
     "sounds": [
       "roundabout:explosive_punch"
+    ]
+  },
+  "explosive_bat": {
+    "subtitle": "sounds.roundabout.explosive_bat",
+    "sounds": [
+      "roundabout:explosive_bat"
     ]
   },
   "final_kick": {

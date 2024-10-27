@@ -842,7 +842,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.WORLD_SUMMON_SOUND_EVENT;
+            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == TheWorldEntity.OVA_SKIN){
+                return ModSounds.OVA_SUMMON_EVENT;
+            } else {
+                return ModSounds.WORLD_SUMMON_SOUND_EVENT;
+            }
         } else if (soundChoice == LAST_HIT_1_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_2_NOISE) {

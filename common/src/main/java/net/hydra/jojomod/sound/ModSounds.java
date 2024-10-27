@@ -197,6 +197,12 @@ public class ModSounds {
     public static final String EXPLOSIVE_PUNCH = "explosive_punch";
     public static final ResourceLocation EXPLOSIVE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_PUNCH);
     public static SoundEvent EXPLOSIVE_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_PUNCH_ID);
+    public static final String EXPLOSIVE_BAT = "explosive_bat";
+    public static final ResourceLocation EXPLOSIVE_BAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BAT);
+    public static SoundEvent EXPLOSIVE_BAT_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BAT_ID);
+    public static final String OVA_SUMMON = "ova_summon";
+    public static final ResourceLocation OVA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_SUMMON);
+    public static SoundEvent OVA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(OVA_SUMMON_ID);
 
     public static final String FINAL_KICK = "final_kick";
     public static final ResourceLocation FINAL_KICK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FINAL_KICK);

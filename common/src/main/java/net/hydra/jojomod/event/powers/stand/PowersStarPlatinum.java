@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -460,6 +461,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public SoundEvent getFinalAttackSound(){
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.BASEBALL_SKIN){
+            return ModSounds.EXPLOSIVE_BAT_EVENT;
+        }
         return ModSounds.EXPLOSIVE_PUNCH_EVENT;
     }
     public void fingerDamage(Entity entity){
@@ -1050,7 +1054,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.STAR_SUMMON_SOUND_EVENT;
+            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN){
+                return ModSounds.OVA_SUMMON_EVENT;
+            } else {
+                return ModSounds.STAR_SUMMON_SOUND_EVENT;
+            }
         } else if (soundChoice == LAST_HIT_1_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_2_NOISE) {

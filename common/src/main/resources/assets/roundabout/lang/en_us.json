@@ -157,6 +157,7 @@
   "sounds.roundabout.stand_arrow_use":  "Stand acquired!",
   "sounds.roundabout.summon_star":  "Stand summoned",
   "sounds.roundabout.summon_world":  "Stand summoned",
+  "sounds.roundabout.ova_summon":  "Stand summoned",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",
   "sounds.roundabout.punch_sfx3":  "Impact",
@@ -228,6 +229,7 @@
   "sounds.roundabout.time_snap":  "Time Stopped?",
   "sounds.roundabout.impale_charge":  "Preparing strike",
   "sounds.roundabout.impale_hit":  "Impaled",
+  "sounds.roundabout.explosive_bat":  "Home Run",
 
   "sounds.roundabout.star_platinum_ora_2":  "ORA",
   "sounds.roundabout.star_platinum_ora_3":  "ORA",

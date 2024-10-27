@@ -31,8 +31,8 @@ import javax.annotation.Nullable;
 /**The specs of the Stereo are almost identical to MC jukebox code, out of need to function the same way*/
 public class StereoBlock extends JukeboxBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    protected static final VoxelShape SHAPEA = Block.box(5.0, 0.01, 1.0, 11.0, 6.0, 15.0);
-    protected static final VoxelShape SHAPEB = Block.box(1.0, 0.01, 5.0, 15.0, 6.0, 11.0);
+    protected static final VoxelShape SHAPEA = Block.box(5.0, 0.1, 1.0, 11.0, 6.0, 15.0);
+    protected static final VoxelShape SHAPEB = Block.box(1.0, 0.1, 5.0, 15.0, 6.0, 11.0);
     protected StereoBlock(Properties $$0) {
         super($$0);
     }
