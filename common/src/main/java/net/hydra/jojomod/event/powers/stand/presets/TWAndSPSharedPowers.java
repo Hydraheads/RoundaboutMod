@@ -1826,7 +1826,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getReducedDamage(entity)){
             return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
         } else {
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
         }
     }
     public int getFinalAttackKnockShieldTime(){

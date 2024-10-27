@@ -425,13 +425,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (this.chargedFinal >= maxChargeTSTime){
                 ret +=1;
             }
+            return ret;
         } else {
-            ret = ((float)(this.chargedFinal/maxSuperHitTime)*punchD);
+            ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
             if (this.chargedFinal >= maxChargeTSTime){
                 ret +=2;
             }
+            return ret;
         }
-        return ret;
     }
 
     @Override
