@@ -838,6 +838,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
     }
     @Override
+    public void playSPandTWTSSounds(){
+        playSoundsIfNearby(TIME_STOP_NOISE_4, 100, true);
+
+    }
+
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;

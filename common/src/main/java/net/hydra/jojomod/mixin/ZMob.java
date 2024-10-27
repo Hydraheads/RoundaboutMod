@@ -90,7 +90,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((Mob)(Object)this) instanceof Enemy) {
+                if (((Mob)(Object)this) instanceof Enemy && !((StandUser)this).roundabout$getStandDisc().isEmpty()) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
                             ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);

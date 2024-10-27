@@ -143,8 +143,12 @@ public class MainUtil {
             stack.getOrCreateTagElement("Memory").putByte("Level", (byte) Math.min(IPE.roundabout$getStandLevel()-1,0));
             stack.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
             stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
+            IPE.roundabout$setStandLevel((byte) 0);
+            IPE.roundabout$setStandExp(0);
+            IPE.roundabout$setUnlockedBonusSkin(false);
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
+        ((StandUser)ent).roundabout$setStandSkin((byte)0);
         return stack;
     }
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){
@@ -168,10 +172,17 @@ public class MainUtil {
                             int exp = (byte) ($$4.getInt("Experience"));
                             exp = (byte) Mth.clamp(lvl, 0, SD.standPowers.getExpForLevelUp(exp));
                             IPE.roundabout$setStandExp(exp);
+                        } else {
+                            IPE.roundabout$setStandExp(0);
                         }
+                    } else {
+                        IPE.roundabout$setStandLevel((byte)0);
+                        IPE.roundabout$setStandExp(0);
                     }
                     if ($$4.contains("BonusSkin")) {
                         IPE.roundabout$setUnlockedBonusSkin($$4.getBoolean("BonusSkin"));
+                    } else {
+                        IPE.roundabout$setUnlockedBonusSkin(false);
                     }
                 }
             }
@@ -179,6 +190,8 @@ public class MainUtil {
             if ($$4.contains("Skin")) {
                 byte skn = ($$4.getByte("Skin"));
                 user.roundabout$setStandSkin(skn);
+            } else {
+                user.roundabout$setStandSkin((byte) 0);
             }
         }
 

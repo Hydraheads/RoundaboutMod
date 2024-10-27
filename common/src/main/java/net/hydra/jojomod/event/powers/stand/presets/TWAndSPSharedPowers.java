@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -1634,6 +1635,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.maxChargeTSTime = chargedTSTicks;
     }
 
+    public void playSPandTWTSSounds(){
+        playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
+
+    }
+
     /*Activate Time Stop**/
 
     public boolean stopTime() {
@@ -1648,7 +1654,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                             /*Charged Sound*/
                             animate = true;
-                            playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
+                            playSPandTWTSSounds();
                         } else {
                             /*No Charged Sound*/
                             playSoundsIfNearby(TIME_STOP_NOISE_2, 100, true);
@@ -1991,14 +1997,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public float getSoundVolumeFromByte(byte soundChoice){
-        if (soundChoice == TIME_STOP_NOISE) {
-            return 0.7f;
-        } else if (soundChoice == TIME_RESUME_NOISE) {
+        if (soundChoice == TIME_RESUME_NOISE) {
             return 0.8f;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
             return 0.6f;
         }
-        return 1F;
+        return super.getSoundVolumeFromByte(soundChoice);
     }
 
     @Override
@@ -2032,12 +2036,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public static final byte TIME_STOP_VOICE = TIME_STOP_CHARGE+1;
     public static final byte TIME_STOP_VOICE_2 = TIME_STOP_CHARGE+2;
     public static final byte TIME_STOP_VOICE_3 = TIME_STOP_CHARGE+3;
-    public static final byte TIME_STOP_NOISE = 40;
-    public static final byte TIME_STOP_NOISE_2 = TIME_STOP_NOISE+1;
-    public static final byte TIME_STOP_NOISE_3 = TIME_STOP_NOISE+2;
-    public static final byte TIME_STOP_NOISE_4 = TIME_STOP_NOISE+3;
-    public static final byte TIME_STOP_NOISE_5 = TIME_STOP_NOISE+4;
-    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+9;
     public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+10;
     public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+11;
     public static final byte TIME_RESUME_NOISE = 60;
