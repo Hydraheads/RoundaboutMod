@@ -14,7 +14,6 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -35,16 +34,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Objects;
@@ -1058,12 +1054,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void updateFinalAttack(){
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring == 5) {
-                this.standFinalPunch();
+                this.standFinalAttack();
             }
         }
     }
 
-    public void standFinalPunch(){
+    public void standFinalAttack(){
 
         this.setAttackTimeMax(20 + chargedFinal);
         this.setAttackTime(0);
@@ -1414,7 +1410,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.impale();
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
-            return this.setPowerSuperHitCharge();
+            return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.BARRAGE_2) {
@@ -1803,8 +1799,16 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return true;
     }
 
-    public boolean setPowerSuperHitCharge() {
+    public void animateFinalAttack(){
         animateStand((byte) 85);
+    }
+
+    public void animateFinalAttackHit(){
+        animateStand((byte) 86);
+    }
+
+    public boolean setPowerFinalAttack() {
+        animateFinalAttack();
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
         this.poseStand(OffsetIndex.GUARD);
@@ -1817,7 +1821,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
         chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
-        animateStand((byte) 86);
+        animateFinalAttackHit();
         //playBarrageCrySound();
         return true;
     }

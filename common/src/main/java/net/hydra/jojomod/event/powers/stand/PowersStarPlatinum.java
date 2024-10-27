@@ -1049,6 +1049,24 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return BARRAGE_NOISE_2;
         }
     }
+
+
+    @Override
+    public void animateFinalAttack(){
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.BASEBALL_SKIN){
+            animateStand((byte) 50);
+        } else {
+            super.animateFinalAttack();
+        }
+    }
+    @Override
+    public void animateFinalAttackHit(){
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.BASEBALL_SKIN){
+            animateStand((byte) 51);
+        } else {
+            super.animateFinalAttackHit();
+        }
+    }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {

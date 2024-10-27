@@ -143,9 +143,6 @@ public class MainUtil {
             stack.getOrCreateTagElement("Memory").putByte("Level", (byte) Math.min(IPE.roundabout$getStandLevel()-1,0));
             stack.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
             stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
-            IPE.roundabout$setStandLevel((byte) 0);
-            IPE.roundabout$setStandExp(0);
-            IPE.roundabout$setUnlockedBonusSkin(false);
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
         ((StandUser)ent).roundabout$setStandSkin((byte)0);

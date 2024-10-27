@@ -38,8 +38,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart right_arm;
 	private final ModelPart upper_right_arm;
 	private final ModelPart right_shoulder_pad;
-	private final ModelPart bat;
 	private final ModelPart lower_right_arm;
+	private final ModelPart bat;
 	private final ModelPart left_arm;
 	private final ModelPart upper_left_arm;
 	private final ModelPart left_shoulder_pad;
@@ -101,8 +101,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.right_arm = this.upper_chest.getChild("right_arm");
 		this.upper_right_arm = this.right_arm.getChild("upper_right_arm");
 		this.right_shoulder_pad = this.upper_right_arm.getChild("right_shoulder_pad");
-		this.bat = this.upper_right_arm.getChild("bat");
 		this.lower_right_arm = this.right_arm.getChild("lower_right_arm");
+		this.bat = this.lower_right_arm.getChild("bat");
 		this.left_arm = this.upper_chest.getChild("left_arm");
 		this.upper_left_arm = this.left_arm.getChild("upper_left_arm");
 		this.left_shoulder_pad = this.upper_left_arm.getChild("left_shoulder_pad");
@@ -259,11 +259,11 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition right_shoulder_pad = upper_right_arm.addOrReplaceChild("right_shoulder_pad", CubeListBuilder.create().texOffs(99, 66).addBox(-5.1F, -2.0F, -3.0F, 6.0F, 3.0F, 6.0F, new CubeDeformation(-0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition bat = upper_right_arm.addOrReplaceChild("bat", CubeListBuilder.create().texOffs(118, 25).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(124, 16).addBox(-0.5F, -11.0F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(120, 0).addBox(-1.0F, -25.0F, -1.0F, 2.0F, 14.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.075F, 10.15F, 4.9F, 1.5708F, 0.0F, 0.0F));
-
 		PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(69, 16).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
+
+		PartDefinition bat = lower_right_arm.addOrReplaceChild("bat", CubeListBuilder.create().texOffs(118, 25).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+		.texOffs(124, 16).addBox(-0.5F, -11.0F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
+		.texOffs(120, 0).addBox(-1.0F, -25.0F, -1.0F, 2.0F, 14.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.925F, 4.75F, 4.9F, 1.5708F, 0.0F, 0.0F));
 
 		PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
