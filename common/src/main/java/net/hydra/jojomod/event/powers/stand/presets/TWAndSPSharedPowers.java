@@ -1090,9 +1090,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
                 } else {
                     List<Entity> listE = getTargetEntityList(this.self,-1);
+                    int id = -1;
                     if (storeEnt != null){
-                        ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(storeEnt.getId(), this.attackTimeDuring);
+                        id = storeEnt.getId();
                     }
+                        ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
                     if (!listE.isEmpty()){
                         for (int i = 0; i< listE.size(); i++){
                             if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
@@ -1118,9 +1120,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 barrageImpact(targetEntity, this.attackTimeDuring);
             } else {
                 List<Entity> listE = getTargetEntityList(this.self,-1);
-                if (storeEnt != null){
                     barrageImpact(storeEnt, this.attackTimeDuring);
-                }
                 if (!listE.isEmpty()){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
