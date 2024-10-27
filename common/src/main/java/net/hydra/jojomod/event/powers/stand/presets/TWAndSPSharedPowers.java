@@ -1149,6 +1149,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
                 if (hitNumber > 1000){
+                    if (!(entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_AOE_BARRAGE))){
+                        return;
+                    }
                     hitNumber-=1000;
                     sideHit = true;
                 }
