@@ -261,7 +261,7 @@ public abstract class InputEvents implements IInputEvents {
                 if (!this.player.isHandsBusy() && ((StandUser)player).roundabout$getActivePower() <= PowerIndex.NONE) {
                     if (this.hitResult != null) {
                         if (this.rightClickDelay == 0) {
-
+                            this.rightClickDelay = 5;
                             for (InteractionHand $$0 : InteractionHand.values()) {
                                 ItemStack $$1 = this.player.getItemInHand($$0);
                                 if (!$$1.isItemEnabled(this.level.enabledFeatures())) {

@@ -189,6 +189,14 @@ public class MainUtil {
             } else {
                 user.roundabout$setStandSkin((byte) 0);
             }
+        } else {
+            if (ent instanceof Player PE) {
+                IPlayerEntity IPE = ((IPlayerEntity) PE);
+                IPE.roundabout$setStandLevel((byte) 0);
+                IPE.roundabout$setStandExp(0);
+                IPE.roundabout$setUnlockedBonusSkin(false);
+            };
+            user.roundabout$setStandSkin((byte) 0);
         }
 
     }
