@@ -657,6 +657,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    public byte getTimeResumeNoise(){
+        return TIME_RESUME_NOISE;
+    }
     public boolean resumeTime() {
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
@@ -693,7 +696,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                 if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
                     if (this.getMaxChargeTSTime() > 20) {
-                        this.playSoundsIfNearby(TIME_RESUME_NOISE, 100, true);
+                        this.playSoundsIfNearby(getTimeResumeNoise(), 100, true);
                     }
                 }
             }
@@ -1642,6 +1645,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     /*Activate Time Stop**/
 
+    public byte getTimeStopShortNoise(){
+        return TIME_STOP_NOISE_2;
+    }
     public boolean stopTime() {
         /*Time Stop*/
         if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && ((Player)this.getSelf()).isCreative()) || this.getChargedTSTicks() <= 20) {
@@ -1657,7 +1663,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             playSPandTWTSSounds();
                         } else {
                             /*No Charged Sound*/
-                            playSoundsIfNearby(TIME_STOP_NOISE_2, 100, true);
+                            playSoundsIfNearby(getTimeStopShortNoise(), 100, true);
                         }
                     }
                     ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
@@ -2009,6 +2015,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return 0.8f;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
             return 0.6f;
+        } else if (soundChoice == TIME_RESUME_NOISE_2) {
+            return 0.6f;
         }
         return super.getSoundVolumeFromByte(soundChoice);
     }
@@ -2024,7 +2032,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public void runExtraSoundCode(byte soundChoice) {
-        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_5) {
+        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_9) {
             if (this.getSelf().level().isClientSide) {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
@@ -2052,6 +2060,5 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public static final byte TIME_STOP_VOICE_3 = TIME_STOP_CHARGE+3;
     public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+10;
     public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+11;
-    public static final byte TIME_RESUME_NOISE = 60;
     public static final byte IMPALE_NOISE = 105;
 }

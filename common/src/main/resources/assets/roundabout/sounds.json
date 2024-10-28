@@ -563,6 +563,36 @@
       "roundabout:ova_the_world_2"
     ]
   },
+  "ova_summon_the_world": {
+    "subtitle": "sounds.roundabout.ova_summon_the_world",
+    "sounds": [
+      "roundabout:ova_summon_the_world"
+    ]
+  },
+  "ova_short_ts": {
+    "subtitle": "sounds.roundabout.ova_short_ts",
+    "sounds": [
+      "roundabout:ova_short_ts"
+    ]
+  },
+  "ova_long_ts": {
+    "subtitle": "sounds.roundabout.ova_long_ts",
+    "sounds": [
+      "roundabout:ova_long_ts"
+    ]
+  },
+  "ova_sp_ts": {
+    "subtitle": "sounds.roundabout.ova_sp_ts",
+    "sounds": [
+      "roundabout:ova_sp_ts"
+    ]
+  },
+  "ova_time_resume": {
+    "subtitle": "sounds.roundabout.ova_time_resume",
+    "sounds": [
+      "roundabout:ova_time_resume"
+    ]
+  },
   "harpoon_hit": {
     "subtitle": "sounds.roundabout.harpoon_hit",
     "sounds": [

@@ -443,10 +443,22 @@ public class StandPowers {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_5) {
             return ModSounds.TWAU_TIMESTOP_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_7) {
+            return ModSounds.OVA_LONG_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_8) {
+            return ModSounds.OVA_SP_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_9) {
+            return ModSounds.OVA_SHORT_TS_EVENT;
+        } else if (soundChoice == TIME_RESUME_NOISE){
+            return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {
             return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
             return ModSounds.TIME_STOP_THE_WORLD3_EVENT;
+        } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
+            return ModSounds.TIME_RESUME_EVENT;
+        } else if (soundChoice == TIME_RESUME_NOISE_2) {
+            return ModSounds.OVA_TIME_RESUME_EVENT;
         } else if (soundChoice == SoundIndex.STAND_ARROW_CHARGE) {
             return ModSounds.STAND_ARROW_CHARGE_EVENT;
         }
@@ -463,7 +475,10 @@ public class StandPowers {
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE) {
             return 0.7f;
-        } else if (soundChoice == TIME_STOP_NOISE_4 || soundChoice == TIME_STOP_NOISE_5) {
+        } else if (soundChoice == TIME_STOP_NOISE_4 || soundChoice == TIME_STOP_NOISE_5
+                || soundChoice == TIME_STOP_NOISE_7
+                || soundChoice == TIME_STOP_NOISE_8
+                || soundChoice == TIME_STOP_NOISE_9) {
             return 0.7f;
         }
         return 1F;
@@ -502,7 +517,13 @@ public class StandPowers {
     public static final byte TIME_STOP_NOISE_3 = TIME_STOP_NOISE+2;
     public static final byte TIME_STOP_NOISE_4 = TIME_STOP_NOISE+3;
     public static final byte TIME_STOP_NOISE_5 = TIME_STOP_NOISE+4;
-    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+9;
+    public static final byte TIME_STOP_NOISE_6 = TIME_STOP_NOISE+5;
+    public static final byte TIME_STOP_NOISE_7 = TIME_STOP_NOISE+6;
+    public static final byte TIME_STOP_NOISE_8 = TIME_STOP_NOISE+7;
+    public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
+    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+13;
+    public static final byte TIME_RESUME_NOISE = 60;
+    public static final byte TIME_RESUME_NOISE_2 = 61;
     public boolean glowingEyes(){
         return false;
     }

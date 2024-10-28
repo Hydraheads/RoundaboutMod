@@ -7,7 +7,6 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
@@ -874,18 +873,38 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void playSPandTWTSSounds(){
 
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
+        if (bt == TheWorldEntity.OVA_SKIN) {
+            playSoundsIfNearby(TIME_STOP_NOISE_7, 100, true);
+        } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
             playSoundsIfNearby(TIME_STOP_NOISE_5, 100, true);
         } else {
             playSoundsIfNearby(TIME_STOP_NOISE_4, 100, true);
         }
     }
 
-
+    @Override
+    public byte getTimeStopShortNoise(){
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (bt == TheWorldEntity.OVA_SKIN) {
+            return TIME_STOP_NOISE_9;
+        }
+        return TIME_STOP_NOISE_2;
+    }
+    @Override
+    public byte getTimeResumeNoise(){
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (bt == TheWorldEntity.OVA_SKIN) {
+            return TIME_RESUME_NOISE_2;
+        }
+        return TIME_RESUME_NOISE;
+    }
     @Override
     public void playKickBarrageCrySound(){
         if (!this.self.level().isClientSide()) {
             byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (bt == TheWorldEntity.OVA_SKIN){
+                return;
+            }
             if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
                 playStandUserOnlySoundsIfNearby(KICK_BARRAGE_NOISE_3, 32, false,true);
             } else {
@@ -909,7 +928,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.OVA_BARRAGE_2_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
             if (bt == TheWorldEntity.OVA_SKIN){
-                return ModSounds.OVA_SUMMON_EVENT;
+                return ModSounds.OVA_SUMMON_THE_WORLD_EVENT;
             } else {
                 return ModSounds.WORLD_SUMMON_SOUND_EVENT;
             }
@@ -949,8 +968,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
             return ModSounds.TIME_STOP_THE_WORLD3_EVENT;
-        } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
-            return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_STOP_CHARGE){
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
@@ -975,8 +992,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.TIME_STOP_RESUME_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_ENDING_NOISE_2){
             return ModSounds.TIME_STOP_RESUME_THE_WORLD2_EVENT;
-        } else if (soundChoice == TIME_RESUME_NOISE){
-            return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_STOP_TICKING){
             return ModSounds.TIME_STOP_TICKING_EVENT;
         }

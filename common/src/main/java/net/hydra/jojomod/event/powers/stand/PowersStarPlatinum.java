@@ -8,11 +8,9 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -31,8 +29,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -41,24 +37,18 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Rabbit;
-import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.SplashPotionItem;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -141,7 +131,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             playSoundsIfNearby(BARRAGE_NOISE, 27, false);
         }
     }
+    @Override
+    public void playSPandTWTSSounds(){
 
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (bt == StarPlatinumEntity.OVA_SKIN) {
+            playSoundsIfNearby(TIME_STOP_NOISE_8, 100, true);
+        } else {
+            playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
+        }
+    }
     boolean letServerKnowScopeCatchIsReady = false;
     @Override
     public void tickPower() {
@@ -1068,6 +1067,23 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
     @Override
+    public byte getTimeResumeNoise(){
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (bt == StarPlatinumEntity.OVA_SKIN) {
+            return TIME_RESUME_NOISE_2;
+        }
+        return TIME_RESUME_NOISE;
+    }
+
+    @Override
+    public byte getTimeStopShortNoise(){
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (bt == StarPlatinumEntity.OVA_SKIN ) {
+            return TIME_STOP_NOISE_9;
+        }
+        return TIME_STOP_NOISE_2;
+    }
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
@@ -1095,8 +1111,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_FINGER_SILENT_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
-        } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
-            return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_STOP_CHARGE){
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
@@ -1109,8 +1123,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.TIME_STOP_RESUME_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_ENDING_NOISE_2){
             return ModSounds.TIME_STOP_RESUME_THE_WORLD2_EVENT;
-        } else if (soundChoice == TIME_RESUME_NOISE){
-            return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_STOP_TICKING){
             return ModSounds.TIME_STOP_TICKING_EVENT;
         }
