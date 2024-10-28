@@ -79,6 +79,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public Byte getLastHitSound(){
 
         double rand = Math.random();
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
+            if (rand > 0.66) {
+                return LAST_HIT_4_NOISE;
+            } else if (rand > 0.33) {
+                return LAST_HIT_5_NOISE;
+            } else {
+                return LAST_HIT_6_NOISE;
+            }
+        }
         if (rand > 0.66) {
             return LAST_HIT_1_NOISE;
         } else if (rand > 0.33) {
@@ -564,6 +574,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public byte chooseBarrageSound(){
         double rand = Math.random();
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
+            if (rand > 0.5) {
+                return BARRAGE_NOISE_3;
+            } else {
+                return BARRAGE_NOISE_4;
+            }
+        }
+
         if (rand > 0.5) {
             return BARRAGE_NOISE;
         } else {
@@ -839,16 +858,39 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public void playSPandTWTSSounds(){
-        playSoundsIfNearby(TIME_STOP_NOISE_4, 100, true);
 
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
+            playSoundsIfNearby(TIME_STOP_NOISE_5, 100, true);
+        } else {
+            playSoundsIfNearby(TIME_STOP_NOISE_4, 100, true);
+        }
+    }
+
+
+    @Override
+    public void playKickBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
+                playStandUserOnlySoundsIfNearby(KICK_BARRAGE_NOISE_3, 32, false,true);
+            } else {
+                super.playKickBarrageCrySound();
+            }
+        }
     }
 
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA5_SOUND_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_3) {
+                return ModSounds.TWAU_USHA_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_4) {
+            return ModSounds.TWAU_BARRAGE_2_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == TheWorldEntity.OVA_SKIN){
+            if (bt == TheWorldEntity.OVA_SKIN){
                 return ModSounds.OVA_SUMMON_EVENT;
             } else {
                 return ModSounds.WORLD_SUMMON_SOUND_EVENT;
@@ -859,12 +901,20 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.THE_WORLD_MUDA_EVENT;
         } else if (soundChoice == LAST_HIT_3_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA2_SOUND_EVENT;
+        } else if (soundChoice == LAST_HIT_4_NOISE) {
+            return ModSounds.TWAU_MUDA_EVENT;
+        } else if (soundChoice == LAST_HIT_5_NOISE) {
+            return ModSounds.TWAU_MUDA_2_EVENT;
+        } else if (soundChoice == LAST_HIT_6_NOISE) {
+            return ModSounds.TWAU_HEY_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == KICK_BARRAGE_NOISE) {
             return ModSounds.STAND_THEWORLD_MUDA4_SOUND_EVENT;
         } else if (soundChoice == KICK_BARRAGE_NOISE_2) {
             return ModSounds.THE_WORLD_WRY_EVENT;
+        } else if (soundChoice == KICK_BARRAGE_NOISE_3) {
+            return ModSounds.TWAU_WRY_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
             return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
         } else if (soundChoice == ASSAULT_NOISE){
@@ -882,9 +932,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_CHARGE){
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
-            return ModSounds.TIME_STOP_VOICE_THE_WORLD_EVENT;
+            if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
+                return ModSounds.TWAU_THE_WORLD_EVENT;
+            } else {
+                return ModSounds.TIME_STOP_VOICE_THE_WORLD_EVENT;
+            }
         } else if (soundChoice == TIME_STOP_VOICE_2){
-            return ModSounds.TIME_STOP_VOICE_THE_WORLD2_EVENT;
+            if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
+                return ModSounds.TWAU_TIMESTOP_2_EVENT;
+            } else {
+                return ModSounds.TIME_STOP_VOICE_THE_WORLD2_EVENT;
+            }
         } else if (soundChoice == TIME_STOP_VOICE_3){
             return ModSounds.TIME_STOP_VOICE_THE_WORLD3_EVENT;
         } else if (soundChoice == TIME_STOP_ENDING_NOISE){
@@ -1008,5 +1066,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public static final byte LAST_HIT_1_NOISE = 120;
     public static final  byte LAST_HIT_2_NOISE = 121;
     public static final  byte LAST_HIT_3_NOISE = 122;
+    public static final  byte LAST_HIT_4_NOISE = 123;
+    public static final  byte LAST_HIT_5_NOISE = 124;
+    public static final  byte LAST_HIT_6_NOISE = 125;
 
 }

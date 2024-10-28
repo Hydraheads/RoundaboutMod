@@ -29,6 +29,17 @@ public class FabricSounds {
         addSound(ModSounds.HIT_1_SOUND_ID, ModSounds.HIT_1_SOUND_EVENT);
         addSound(ModSounds.INHALE_ID, ModSounds.INHALE_EVENT);
 
+        addSound(ModSounds.TWAU_BARRAGE_ID, ModSounds.TWAU_BARRAGE_EVENT);
+        addSound(ModSounds.TWAU_BARRAGE_2_ID, ModSounds.TWAU_BARRAGE_2_EVENT);
+        addSound(ModSounds.TWAU_MUDA_ID, ModSounds.TWAU_MUDA_EVENT);
+        addSound(ModSounds.TWAU_MUDA_2_ID, ModSounds.TWAU_MUDA_2_EVENT);
+        addSound(ModSounds.TWAU_WRY_ID, ModSounds.TWAU_WRY_EVENT);
+        addSound(ModSounds.TWAU_HEY_ID, ModSounds.TWAU_HEY_EVENT);
+        addSound(ModSounds.TWAU_TIMESTOP_ID, ModSounds.TWAU_TIMESTOP_EVENT);
+        addSound(ModSounds.TWAU_TIMESTOP_2_ID, ModSounds.TWAU_TIMESTOP_2_EVENT);
+        addSound(ModSounds.TWAU_USHA_ID, ModSounds.TWAU_USHA_EVENT);
+        addSound(ModSounds.TWAU_THE_WORLD_ID, ModSounds.TWAU_THE_WORLD_EVENT);
+
         addSound(ModSounds.KNIFE_THROW_SOUND_ID, ModSounds.KNIFE_THROW_SOUND_EVENT);
         addSound(ModSounds.KNIFE_BUNDLE_THROW_SOUND_ID, ModSounds.KNIFE_BUNDLE_THROW_SOUND_EVENT);
         addSound(ModSounds.KNIFE_IMPACT_ID, ModSounds.KNIFE_IMPACT_EVENT);

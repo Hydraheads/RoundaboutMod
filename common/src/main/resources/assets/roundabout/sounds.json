@@ -467,6 +467,66 @@
       "roundabout:timestop_ticking"
     ]
   },
+  "twau_hey": {
+    "subtitle": "sounds.roundabout.twau_hey",
+    "sounds": [
+      "roundabout:twau_hey"
+    ]
+  },
+  "twau_the_world": {
+    "subtitle": "sounds.roundabout.twau_the_world",
+    "sounds": [
+      "roundabout:twau_the_world"
+    ]
+  },
+  "twau_barrage_2": {
+    "subtitle": "sounds.roundabout.twau_barrage_2",
+    "sounds": [
+      "roundabout:twau_barrage_2"
+    ]
+  },
+  "twau_barrage": {
+    "subtitle": "sounds.roundabout.twau_barrage",
+    "sounds": [
+      "roundabout:twau_barrage"
+    ]
+  },
+  "twau_timestop_2": {
+    "subtitle": "sounds.roundabout.twau_timestop_2",
+    "sounds": [
+      "roundabout:twau_timestop_2"
+    ]
+  },
+  "twau_timestop": {
+    "subtitle": "sounds.roundabout.twau_timestop",
+    "sounds": [
+      "roundabout:twau_timestop"
+    ]
+  },
+  "twau_wry": {
+    "subtitle": "sounds.roundabout.twau_wry",
+    "sounds": [
+      "roundabout:twau_wry"
+    ]
+  },
+  "twau_muda": {
+    "subtitle": "sounds.roundabout.twau_muda",
+    "sounds": [
+      "roundabout:twau_muda"
+    ]
+  },
+  "twau_muda_2": {
+    "subtitle": "sounds.roundabout.twau_muda_2",
+    "sounds": [
+      "roundabout:twau_muda_2"
+    ]
+  },
+  "twau_usha": {
+    "subtitle": "sounds.roundabout.twau_usha",
+    "sounds": [
+      "roundabout:twau_usha"
+    ]
+  },
   "harpoon_hit": {
     "subtitle": "sounds.roundabout.harpoon_hit",
     "sounds": [

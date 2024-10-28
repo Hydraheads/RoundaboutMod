@@ -105,6 +105,26 @@ public class ForgeSounds {
             register(ModSounds.STAND_BARRAGE_END_BLOCK, ModSounds.STAND_BARRAGE_END_BLOCK_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =
             register(ModSounds.EXPLOSIVE_PUNCH, ModSounds.EXPLOSIVE_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> TWAU_BARRAGE_EVENT =
+            register(ModSounds.TWAU_BARRAGE, ModSounds.TWAU_BARRAGE_ID);
+    public static final RegistryObject<SoundEvent> TWAU_BARRAGE_2_EVENT =
+            register(ModSounds.TWAU_BARRAGE_2, ModSounds.TWAU_BARRAGE_2_ID);
+    public static final RegistryObject<SoundEvent> TWAU_MUDA_EVENT =
+            register(ModSounds.TWAU_MUDA, ModSounds.TWAU_MUDA_ID);
+    public static final RegistryObject<SoundEvent> TWAU_MUDA_2_EVENT =
+            register(ModSounds.TWAU_MUDA_2, ModSounds.TWAU_MUDA_2_ID);
+    public static final RegistryObject<SoundEvent> TWAU_WRY_EVENT =
+            register(ModSounds.TWAU_WRY, ModSounds.TWAU_WRY_ID);
+    public static final RegistryObject<SoundEvent> TWAU_THE_WORLD_EVENT =
+            register(ModSounds.TWAU_THE_WORLD, ModSounds.TWAU_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> TWAU_HEY_EVENT =
+            register(ModSounds.TWAU_HEY, ModSounds.TWAU_HEY_ID);
+    public static final RegistryObject<SoundEvent> TWAU_TIMESTOP_EVENT =
+            register(ModSounds.TWAU_TIMESTOP, ModSounds.TWAU_TIMESTOP_ID);
+    public static final RegistryObject<SoundEvent> TWAU_TIMESTOP_2_EVENT =
+            register(ModSounds.TWAU_TIMESTOP_2, ModSounds.TWAU_TIMESTOP_2_ID);
+    public static final RegistryObject<SoundEvent> TWAU_USHA_EVENT =
+            register(ModSounds.TWAU_USHA, ModSounds.TWAU_USHA_ID);
     public static final RegistryObject<SoundEvent> OVA_SUMMON_EVENT =
             register(ModSounds.OVA_SUMMON, ModSounds.OVA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BAT_EVENT =

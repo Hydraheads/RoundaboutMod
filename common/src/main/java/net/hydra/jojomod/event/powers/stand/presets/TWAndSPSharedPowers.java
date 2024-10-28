@@ -1330,10 +1330,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return SoundIndex.TIME_CHARGE_SOUND_GROUP;
         } else if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_ENDING_NOISE_2) {
             return SoundIndex.TIME_SOUND_GROUP;
-        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_2) {
+        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_4) {
             return SoundIndex.BARRAGE_SOUND_GROUP;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1
-                || soundChoice == KICK_BARRAGE_NOISE_2 || soundChoice == KICK_BARRAGE_NOISE){
+                || soundChoice == KICK_BARRAGE_NOISE_2 || soundChoice == KICK_BARRAGE_NOISE
+                || soundChoice == KICK_BARRAGE_NOISE_3|| soundChoice == KICK_BARRAGE_NOISE_4){
             return SoundIndex.BARRAGE_SOUND_GROUP;
         } else {
             return super.getSoundCancelingGroupByte(soundChoice);
@@ -1513,6 +1514,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public static final byte KICK_BARRAGE_NOISE = 106;
     public static final byte KICK_BARRAGE_NOISE_2 = KICK_BARRAGE_NOISE+1;
+    public static final byte KICK_BARRAGE_NOISE_3 = KICK_BARRAGE_NOISE+2;
+    public static final byte KICK_BARRAGE_NOISE_4 = KICK_BARRAGE_NOISE+3;
 
     /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
     public void playKickBarrageCrySound(){
@@ -2036,6 +2039,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public static final byte BARRAGE_NOISE = 20;
     public static final byte BARRAGE_NOISE_2 = BARRAGE_NOISE+1;
+    public static final byte BARRAGE_NOISE_3 = BARRAGE_NOISE+2;
+    public static final byte BARRAGE_NOISE_4 = BARRAGE_NOISE+3;
     public static final byte TIME_STOP_CHARGE = 30;
     public static final byte TIME_STOP_VOICE = TIME_STOP_CHARGE+1;
     public static final byte TIME_STOP_VOICE_2 = TIME_STOP_CHARGE+2;

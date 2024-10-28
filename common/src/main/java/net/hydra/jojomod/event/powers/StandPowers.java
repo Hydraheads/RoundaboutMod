@@ -435,6 +435,8 @@ public class StandPowers {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_4) {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_5) {
+            return ModSounds.TWAU_TIMESTOP_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {
             return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_3) {
@@ -455,7 +457,7 @@ public class StandPowers {
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE) {
             return 0.7f;
-        } else if (soundChoice == TIME_STOP_NOISE_4) {
+        } else if (soundChoice == TIME_STOP_NOISE_4 || soundChoice == TIME_STOP_NOISE_5) {
             return 0.7f;
         }
         return 1F;
