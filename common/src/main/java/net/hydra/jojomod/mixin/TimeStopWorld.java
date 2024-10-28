@@ -12,6 +12,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -22,8 +23,11 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -36,6 +40,10 @@ public class TimeStopWorld implements TimeStop {
      * Use that list to determine if a block or entity SHOULD be ticked.*/
     private ImmutableList<LivingEntity> timeStoppingEntities = ImmutableList.of();
     private ImmutableList<TimeStopInstance> timeStoppingEntitiesClient = ImmutableList.of();
+
+    @Shadow
+    @Final
+    private ResourceKey<DimensionType> dimensionTypeId;
 
     /**Adds an entity to the list of time stopping entities*/
     @Override
@@ -177,7 +185,7 @@ public class TimeStopWorld implements TimeStop {
         if (!this.timeStoppingEntities.isEmpty()) {
             List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
             for (int i = $$1.size() - 1; i >= 0; --i) {
-                if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive()){
+                if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId){
                     removeTimeStoppingEntity($$1.get(i));
                 } else if (!((Level) (Object) this).isClientSide) {
                     ((StandUser)$$1.get(i)).roundabout$getStandPowers().timeTickStopPower();
