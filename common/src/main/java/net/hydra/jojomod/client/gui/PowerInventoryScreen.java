@@ -93,7 +93,6 @@ public class PowerInventoryScreen
                     }
                 }
 
-                if (pl.isCreative()) {
                     if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
                         context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 31, 7, 11);
                     } else {
@@ -105,7 +104,6 @@ public class PowerInventoryScreen
                     } else {
                         context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
                     }
-                }
             }
         }
     }
@@ -317,9 +315,9 @@ public class PowerInventoryScreen
                     }
                 }
 
-                if (pl.isCreative()) {
                     if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
                         if (menuTicks <= -1) {
+                            Roundabout.LOGGER.info("1");
                             scp.roundabout$setMenuTicks(5);
                             ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
                         }
@@ -328,12 +326,12 @@ public class PowerInventoryScreen
 
                     if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
                         if (menuTicks <= -1) {
+                            Roundabout.LOGGER.info("2");
                             scp.roundabout$setMenuTicks(5);
                             ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
                         }
                         return true;
                     }
-                }
         }
         /**
         if (this.recipeBookComponent.mouseClicked($$0, $$1, $$2)) {

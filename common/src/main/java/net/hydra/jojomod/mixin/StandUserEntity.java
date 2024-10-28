@@ -469,7 +469,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
-    public byte roundabout$standSkin;
+    public byte roundabout$idlePos = 0;
+    @Unique
+    @Override
+    public byte roundabout$getIdlePos(){
+        return this.roundabout$idlePos;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setIdlePosX(byte pos){
+        this.roundabout$idlePos = pos;
+        Roundabout.LOGGER.info("Potato");
+        if (((LivingEntity)(Object)this) instanceof Player PE){
+            Roundabout.LOGGER.info("Potato2");
+            ((IPlayerEntity)PE).roundabout$setIdlePos(pos);
+        }
+        StandEntity stand = roundabout$getStand();
+        if (stand != null){
+            Roundabout.LOGGER.info("Potato3");
+            stand.setIdleAnimation(pos);
+        }
+    }
+    @Unique
+    public byte roundabout$standSkin = 0;
     @Unique
     @Override
     public byte roundabout$getStandSkin(){
@@ -1155,6 +1178,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     stand.absMoveTo(spos.x(), spos.y(), spos.z());
 
                     stand.setSkin(roundabout$getStandSkin());
+                    stand.setIdleAnimation(roundabout$getIdlePos());
 
                     theWorld.addFreshEntity(stand);
 

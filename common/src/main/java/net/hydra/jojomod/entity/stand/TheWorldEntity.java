@@ -55,6 +55,8 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState assault = new AnimationState();
     public final AnimationState assault_punch = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
+    public final AnimationState kick_barrage_end = new AnimationState();
+    public final AnimationState kick_barrage_windup = new AnimationState();
     public final AnimationState impale = new AnimationState();
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
@@ -134,6 +136,16 @@ public class TheWorldEntity extends StandEntity {
                 this.assault_punch.startIfStopped(this.tickCount);
             } else {
                 this.assault_punch.stop();
+            }
+            if (this.getAnimation() == 42) {
+                this.kick_barrage_windup.startIfStopped(this.tickCount);
+            } else {
+                this.kick_barrage_windup.stop();
+            }
+            if (this.getAnimation() == 43) {
+                this.kick_barrage_end.startIfStopped(this.tickCount);
+            } else {
+                this.kick_barrage_end.stop();
             }
 
             if (this.getAnimation() == 85) {

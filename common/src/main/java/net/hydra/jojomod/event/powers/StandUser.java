@@ -158,6 +158,8 @@ public interface StandUser {
     byte roundabout$getLocacacaCurse();
 
     byte roundabout$getStandSkin();
+    byte roundabout$getIdlePos();
+    void roundabout$setIdlePosX(byte pos);
     void roundabout$setStandSkin(byte skin);
 
 }

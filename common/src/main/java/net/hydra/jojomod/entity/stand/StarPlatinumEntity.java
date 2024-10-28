@@ -68,6 +68,8 @@ public class StarPlatinumEntity extends StandEntity {
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
+    public final AnimationState kick_barrage_end = new AnimationState();
+    public final AnimationState kick_barrage_windup = new AnimationState();
     public final AnimationState impale = new AnimationState();
     public final AnimationState starFinger = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
@@ -141,6 +143,19 @@ public class StarPlatinumEntity extends StandEntity {
                 this.entityGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.entityGrabAnimation.stop();
+            }
+
+
+            if (this.getAnimation() == 42) {
+                this.kick_barrage_windup.startIfStopped(this.tickCount);
+            } else {
+                this.kick_barrage_windup.stop();
+            }
+
+            if (this.getAnimation() == 43) {
+                this.kick_barrage_end.startIfStopped(this.tickCount);
+            } else {
+                this.kick_barrage_end.stop();
             }
 
             if (this.getAnimation() == 81) {

@@ -145,6 +145,7 @@ public class MainUtil {
             stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
+        stack.getOrCreateTagElement("Memory").putByte("Pose",((StandUser)ent).roundabout$getIdlePos());
         return stack;
     }
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){
@@ -189,6 +190,12 @@ public class MainUtil {
             } else {
                 user.roundabout$setStandSkin((byte) 0);
             }
+            if ($$4.contains("Pose")) {
+                byte skn = ($$4.getByte("Pose"));
+                user.roundabout$setIdlePosX(skn);
+            } else {
+                user.roundabout$setIdlePosX((byte) 0);
+            }
         } else {
             if (ent instanceof Player PE) {
                 IPlayerEntity IPE = ((IPlayerEntity) PE);
@@ -197,6 +204,7 @@ public class MainUtil {
                 IPE.roundabout$setUnlockedBonusSkin(false);
             };
             user.roundabout$setStandSkin((byte) 0);
+            user.roundabout$setIdlePosX((byte) 0);
         }
 
     }
@@ -945,8 +953,10 @@ public class MainUtil {
             user.roundabout$getStandPowers().getSkinInDirection(true);
         } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_LEFT) {
             StandUser user = ((StandUser) player);
+            user.roundabout$getStandPowers().getPoseInDirection(false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT){
             StandUser user = ((StandUser) player);
+            user.roundabout$getStandPowers().getPoseInDirection(true);
         } else if (context == PacketDataIndex.SINGLE_BYTE_UPDATE_COOLDOWN) {
                 ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {

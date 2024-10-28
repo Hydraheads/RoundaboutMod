@@ -137,6 +137,7 @@ public abstract class StandEntity extends Mob{
     }
 
     public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState idleAnimationState2 = new AnimationState();
     public final AnimationState punchState1 = new AnimationState();
     public final AnimationState punchState2 = new AnimationState();
     public final AnimationState punchState3 = new AnimationState();
@@ -154,7 +155,12 @@ public abstract class StandEntity extends Mob{
     /**Override this to define animations. Above are animation states defined.*/
     public void setupAnimationStates() {
         if (this.getUser() != null) {
-            if (this.getAnimation() == 0) {
+            if (this.getAnimation() == 0 && this.getIdleAnimation() == 1) {
+                this.idleAnimationState2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationState2.stop();
+            }
+            if (this.getAnimation() == 0 && this.getIdleAnimation() == 0) {
                 this.idleAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState.stop();
@@ -248,13 +254,10 @@ public abstract class StandEntity extends Mob{
     }
 
     public final void setIdleAnimation(byte animation) {
+        Roundabout.LOGGER.info("Potato4");
         this.entityData.set(IDLE_ANIMATION, animation);
     }
 
-    public byte idlePos = 0;
-    public final void setIdlePos(byte pos) {
-        idlePos = pos;
-    }
     public final void setSkin(byte skin) {
         this.entityData.set(SKIN, skin);
     }
@@ -263,7 +266,11 @@ public abstract class StandEntity extends Mob{
         return null;
     }
     public Component getPosName(byte posID){
-        return Component.translatable(  "idle.roundabout.passive");
+        if (posID == 1){
+            return Component.translatable(  "idle.roundabout.battle");
+        } else {
+            return Component.translatable(  "idle.roundabout.passive");
+        }
     }
     public boolean dismountOnHit(){
         return true;

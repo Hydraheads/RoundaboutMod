@@ -1220,7 +1220,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
 
                 if (lastHit) {
-                    animateStand((byte) 13);
+                    animateStand((byte) 43);
                     this.attackTimeDuring = -10;
                 }
             } else {
@@ -1451,7 +1451,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return false;
     }
     public boolean setPowerKickBarrageCharge() {
-        animateStand((byte) 11);
+        animateStand((byte) 42);
         this.attackTimeDuring = 0;
         playKickBarrageChargeSound();
         this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
@@ -1548,6 +1548,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE_2, true);
         }
     }
+    @Override
     public int getKickBarrageWindup(){
         return 20;
     }

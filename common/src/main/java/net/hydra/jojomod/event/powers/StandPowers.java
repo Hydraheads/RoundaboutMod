@@ -336,6 +336,12 @@ public class StandPowers {
         $$1.add((byte) 0);
         return $$1;
     }
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte) 0);
+        $$1.add((byte) 1);
+        return $$1;
+    }
 
     public void setCooldown(byte power, int cooldown){
         if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
@@ -1463,6 +1469,39 @@ public class StandPowers {
         }
     }
 
+
+    public void getPoseInDirection(boolean right){
+        Roundabout.LOGGER.info("3");
+        StandUser SE = ((StandUser)this.getSelf());
+        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getIdlePos();
+        List<Byte> poses = getPosList();
+        if (!poses.isEmpty() && poses.size() > 1) {
+            Roundabout.LOGGER.info("4");
+            int skinind = 0;
+            for (int i = 0; i<poses.size(); i++){
+                if (poses.get(i) == currentSkin){
+                    skinind = i;
+                }
+            }
+            Roundabout.LOGGER.info("5");
+            if (right) {
+                skinind+=1;
+                if (skinind >= poses.size()){
+                    skinind =0;
+                }
+                SE.roundabout$setIdlePosX(poses.get(skinind));
+                Roundabout.LOGGER.info(""+poses.get(skinind));
+            } else {
+                skinind-=1;
+                if (skinind < 0){
+                    skinind =poses.size()-1;
+                }
+                SE.roundabout$setIdlePosX(poses.get(skinind));
+                Roundabout.LOGGER.info(""+poses.get(skinind));
+            }
+        }
+    }
+
     public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
@@ -2048,6 +2087,9 @@ public class StandPowers {
 
     /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
     public void tickMobAI(LivingEntity attackTarget){
+    }
+    public int getKickBarrageWindup(){
+        return 29;
     }
     public int getBarrageWindup(){
         return 29;
