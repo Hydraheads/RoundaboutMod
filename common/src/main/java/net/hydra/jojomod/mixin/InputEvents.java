@@ -260,41 +260,43 @@ public abstract class InputEvents implements IInputEvents {
             if (level != null && ((TimeStop) level).isTimeStoppingEntity(player)) {
                 if (!this.player.isHandsBusy() && ((StandUser)player).roundabout$getActivePower() <= PowerIndex.NONE) {
                     if (this.hitResult != null) {
+                        if (this.rightClickDelay == 0) {
 
-                        for (InteractionHand $$0 : InteractionHand.values()) {
-                            ItemStack $$1 = this.player.getItemInHand($$0);
-                            if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
-                                return;
-                            }
+                            for (InteractionHand $$0 : InteractionHand.values()) {
+                                ItemStack $$1 = this.player.getItemInHand($$0);
+                                if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
+                                    return;
+                                }
 
-                            if (this.hitResult != null) {
-                                switch (this.hitResult.getType()) {
-                                    case ENTITY:
-                                        EntityHitResult $$2 = (EntityHitResult) this.hitResult;
-                                        Entity $$3 = $$2.getEntity();
-                                        if ($$3 instanceof LivingEntity){
-                                            roundabout$TryGuard();
-                                            ci.cancel();
+                                if (this.hitResult != null) {
+                                    switch (this.hitResult.getType()) {
+                                        case ENTITY:
+                                            EntityHitResult $$2 = (EntityHitResult) this.hitResult;
+                                            Entity $$3 = $$2.getEntity();
+                                            if ($$3 instanceof LivingEntity) {
+                                                roundabout$TryGuard();
+                                                ci.cancel();
 
-                                            if ((((IPlayerEntity)player).roundabout$getDodgeTime() > -1 ||
-                                                    ((StandUser)player).roundabout$getLeapTicks() > -1) &&
-                                                    ($$1.getItem().isEdible()
-                                                            || ($$1.getItem() instanceof PotionItem))){
-                                                return;
-                                            }
-
-                                            if (!$$1.isEmpty()) {
-                                                InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);
-                                                if ($$8.consumesAction()) {
-                                                    if ($$8.shouldSwing()) {
-                                                        this.player.swing($$0);
-                                                    }
-
-                                                    this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                                if ((((IPlayerEntity) player).roundabout$getDodgeTime() > -1 ||
+                                                        ((StandUser) player).roundabout$getLeapTicks() > -1) &&
+                                                        ($$1.getItem().isEdible()
+                                                                || ($$1.getItem() instanceof PotionItem))) {
                                                     return;
                                                 }
+
+                                                if (!$$1.isEmpty()) {
+                                                    InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);
+                                                    if ($$8.consumesAction()) {
+                                                        if ($$8.shouldSwing()) {
+                                                            this.player.swing($$0);
+                                                        }
+
+                                                        this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                                        return;
+                                                    }
+                                                }
                                             }
-                                        }
+                                    }
                                 }
                             }
                         }
