@@ -434,6 +434,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ci.setReturnValue(null);
         }
     }
+
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
 

@@ -186,6 +186,7 @@
 
   "sounds.roundabout.star_finger_silent":  "Star Finger",
 
+  "sounds.roundabout.unlock_skin":  "Skin Unlocked!",
   "sounds.roundabout.star_platinum_ora_rush":  "ORA",
   "sounds.roundabout.star_platinum_ora_rush_2":  "ORA",
   "sounds.roundabout.star_platinum_ora":  "ORA",
@@ -360,5 +361,8 @@
   "skins.roundabout.the_world.black": "Stand Stats",
   "skins.roundabout.the_world.part_7": "THE WORLD",
   "skins.roundabout.the_world.blue_part_7": "Blue",
-  "skins.roundabout.the_world.over_heaven": "Over Heaven"
+  "skins.roundabout.the_world.over_heaven": "Over Heaven",
+
+  "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
+  "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!"
 }

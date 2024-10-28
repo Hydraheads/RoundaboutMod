@@ -599,6 +599,12 @@
       "roundabout:the_world_over_heaven"
     ]
   },
+  "unlock_skin": {
+    "subtitle": "sounds.roundabout.unlock_skin",
+    "sounds": [
+      "roundabout:unlock_skin"
+    ]
+  },
   "harpoon_hit": {
     "subtitle": "sounds.roundabout.harpoon_hit",
     "sounds": [

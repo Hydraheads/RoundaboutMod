@@ -1,15 +1,25 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -247,6 +257,7 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow public abstract Vec3 getPosition(float $$0);
 
+    @Shadow private Level level;
     @Unique
     private Vec3 roundabout$DeltaBuildupTS = new Vec3(0,0,0);
 
@@ -289,11 +300,46 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+
+
+    @Shadow
+    @Final
+    public final float getEyeHeight() {
+        return 0;
+    }
+    @Shadow
+    public SoundSource getSoundSource() {
+        return SoundSource.NEUTRAL;
+    }
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
         roundabout$tickQVec();
     }
-
+    @Inject(method = "thunderHit", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$thunderHit(CallbackInfo ci) {
+        if (((Entity)(Object)this) instanceof Player PE){
+            StandUser user = ((StandUser)PE);
+            ItemStack stack = user.roundabout$getStandDisc();
+            if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_THE_WORLD)){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                if (!ipe.roundabout$getUnlockedBonusSkin()){
+                    ci.cancel();
+                    if (!level.isClientSide()) {
+                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        level().playSound(null, getX(), getY(),
+                                getZ(), ModSounds.UNLOCK_SKIN_EVENT, this.getSoundSource(), 2.0F, 1.0F);
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.END_ROD, this.getX(),
+                                this.getY()+this.getEyeHeight(), this.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        user.roundabout$setStandSkin(TheWorldEntity.OVER_HEAVEN);
+                        ((ServerPlayer) ipe).displayClientMessage(
+                                Component.translatable("unlock_skin.roundabout.the_world.over_heaven"), true);
+                        user.roundabout$summonStand(level, true, false);
+                    }
+                }
+            }
+        }
+    }
     @Unique
     @Override
     public void roundabout$tickQVec(){

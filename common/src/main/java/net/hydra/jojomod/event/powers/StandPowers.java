@@ -1453,7 +1453,8 @@ public class StandPowers {
         return targetEntity;
     }
     public boolean hasMoreThanOneSkin(){
-        return this.getSelf() instanceof Player PE && (((IPlayerEntity) PE).roundabout$getStandLevel() > 1 ||
+        return this.getSelf() instanceof Player PE && ((((IPlayerEntity) PE).roundabout$getStandLevel() > 1 ||
+                ((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin()) ||
                 PE.isCreative() || hasGoldenDisc());
     }
 

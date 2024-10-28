@@ -149,6 +149,8 @@ public class ForgeSounds {
             register(ModSounds.OVA_SUMMON, ModSounds.OVA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> OVA_SUMMON_THE_WORLD_EVENT =
             register(ModSounds.OVA_SUMMON_THE_WORLD, ModSounds.OVA_SUMMON_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> UNLOCK_SKIN_EVENT =
+            register(ModSounds.UNLOCK_SKIN, ModSounds.UNLOCK_SKIN_ID);
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =
             register(ModSounds.THE_WORLD_OVER_HEAVEN, ModSounds.THE_WORLD_OVER_HEAVEN_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BAT_EVENT =
