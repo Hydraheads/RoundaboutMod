@@ -232,7 +232,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             if (moveStarted) {
                                 stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.12)));
                             } else {
-                                stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.025)));
+                                stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.0075)));
                             }
                             if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
                                     stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
