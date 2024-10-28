@@ -1330,7 +1330,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return SoundIndex.TIME_CHARGE_SOUND_GROUP;
         } else if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_ENDING_NOISE_2) {
             return SoundIndex.TIME_SOUND_GROUP;
-        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_4) {
+        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_8) {
             return SoundIndex.BARRAGE_SOUND_GROUP;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1
                 || soundChoice == KICK_BARRAGE_NOISE_2 || soundChoice == KICK_BARRAGE_NOISE
@@ -2042,6 +2042,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public static final byte BARRAGE_NOISE_2 = BARRAGE_NOISE+1;
     public static final byte BARRAGE_NOISE_3 = BARRAGE_NOISE+2;
     public static final byte BARRAGE_NOISE_4 = BARRAGE_NOISE+3;
+    public static final byte BARRAGE_NOISE_5 = BARRAGE_NOISE+4;
+    public static final byte BARRAGE_NOISE_6 = BARRAGE_NOISE+5;
+    public static final byte BARRAGE_NOISE_7 = BARRAGE_NOISE+7;
+    public static final byte BARRAGE_NOISE_8 = BARRAGE_NOISE+8;
     public static final byte TIME_STOP_CHARGE = 30;
     public static final byte TIME_STOP_VOICE = TIME_STOP_CHARGE+1;
     public static final byte TIME_STOP_VOICE_2 = TIME_STOP_CHARGE+2;

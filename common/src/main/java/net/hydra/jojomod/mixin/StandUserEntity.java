@@ -480,14 +480,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setIdlePosX(byte pos){
         this.roundabout$idlePos = pos;
-        Roundabout.LOGGER.info("Potato");
         if (((LivingEntity)(Object)this) instanceof Player PE){
-            Roundabout.LOGGER.info("Potato2");
             ((IPlayerEntity)PE).roundabout$setIdlePos(pos);
         }
         StandEntity stand = roundabout$getStand();
         if (stand != null){
-            Roundabout.LOGGER.info("Potato3");
             stand.setIdleAnimation(pos);
         }
     }

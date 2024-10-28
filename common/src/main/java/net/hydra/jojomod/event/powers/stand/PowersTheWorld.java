@@ -80,6 +80,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
         double rand = Math.random();
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == TheWorldEntity.OVA_SKIN) {
+            if (rand > 0.5) {
+                return LAST_HIT_7_NOISE;
+            } else {
+                return LAST_HIT_8_NOISE;
+            }
+        }
         if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
             if (rand > 0.66) {
                 return LAST_HIT_4_NOISE;
@@ -575,6 +582,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public byte chooseBarrageSound(){
         double rand = Math.random();
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == TheWorldEntity.OVA_SKIN){
+            if (rand > 0.5) {
+                return BARRAGE_NOISE_5;
+            } else {
+                return BARRAGE_NOISE_6;
+            }
+        }
         if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
             if (rand > 0.5) {
                 return BARRAGE_NOISE_3;
@@ -889,6 +903,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 return ModSounds.TWAU_USHA_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_4) {
             return ModSounds.TWAU_BARRAGE_2_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_5) {
+            return ModSounds.OVA_BARRAGE_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_6) {
+            return ModSounds.OVA_BARRAGE_2_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
             if (bt == TheWorldEntity.OVA_SKIN){
                 return ModSounds.OVA_SUMMON_EVENT;
@@ -907,6 +925,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.TWAU_MUDA_2_EVENT;
         } else if (soundChoice == LAST_HIT_6_NOISE) {
             return ModSounds.TWAU_HEY_EVENT;
+        } else if (soundChoice == LAST_HIT_7_NOISE) {
+            return ModSounds.OVA_MUDA_EVENT;
+        } else if (soundChoice == LAST_HIT_8_NOISE) {
+            return ModSounds.OVA_MUDA_2_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == KICK_BARRAGE_NOISE) {
@@ -932,13 +954,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_CHARGE){
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
-            if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
+            if (bt == TheWorldEntity.OVA_SKIN) {
+                return ModSounds.OVA_THE_WORLD_EVENT;
+            } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
                 return ModSounds.TWAU_THE_WORLD_EVENT;
             } else {
                 return ModSounds.TIME_STOP_VOICE_THE_WORLD_EVENT;
             }
         } else if (soundChoice == TIME_STOP_VOICE_2){
-            if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
+            if (bt == TheWorldEntity.OVA_SKIN) {
+                return ModSounds.OVA_THE_WORLD_2_EVENT;
+            } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
                 return ModSounds.TWAU_TIMESTOP_2_EVENT;
             } else {
                 return ModSounds.TIME_STOP_VOICE_THE_WORLD2_EVENT;
@@ -1064,10 +1090,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public static final byte DODGE_NOISE = 19;
 
     public static final byte LAST_HIT_1_NOISE = 120;
-    public static final  byte LAST_HIT_2_NOISE = 121;
-    public static final  byte LAST_HIT_3_NOISE = 122;
-    public static final  byte LAST_HIT_4_NOISE = 123;
-    public static final  byte LAST_HIT_5_NOISE = 124;
-    public static final  byte LAST_HIT_6_NOISE = 125;
+    public static final byte LAST_HIT_2_NOISE = 121;
+    public static final byte LAST_HIT_3_NOISE = 122;
+    public static final byte LAST_HIT_4_NOISE = 123;
+    public static final byte LAST_HIT_5_NOISE = 124;
+    public static final byte LAST_HIT_6_NOISE = 125;
+    public static final byte LAST_HIT_7_NOISE = 126;
+    public static final byte LAST_HIT_8_NOISE = 127;
 
 }

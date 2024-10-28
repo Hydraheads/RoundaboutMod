@@ -527,6 +527,42 @@
       "roundabout:twau_usha"
     ]
   },
+  "ova_muda": {
+    "subtitle": "sounds.roundabout.ova_muda",
+    "sounds": [
+      "roundabout:ova_muda"
+    ]
+  },
+  "ova_muda_2": {
+    "subtitle": "sounds.roundabout.ova_muda_2",
+    "sounds": [
+      "roundabout:ova_muda_2"
+    ]
+  },
+  "ova_barrage": {
+    "subtitle": "sounds.roundabout.ova_barrage",
+    "sounds": [
+      "roundabout:ova_barrage"
+    ]
+  },
+  "ova_barrage_2": {
+    "subtitle": "sounds.roundabout.ova_barrage_2",
+    "sounds": [
+      "roundabout:ova_barrage_2"
+    ]
+  },
+  "ova_the_world": {
+    "subtitle": "sounds.roundabout.ova_the_world",
+    "sounds": [
+      "roundabout:ova_the_world"
+    ]
+  },
+  "ova_the_world_2": {
+    "subtitle": "sounds.roundabout.ova_the_world_2",
+    "sounds": [
+      "roundabout:ova_the_world_2"
+    ]
+  },
   "harpoon_hit": {
     "subtitle": "sounds.roundabout.harpoon_hit",
     "sounds": [

@@ -254,7 +254,6 @@ public abstract class StandEntity extends Mob{
     }
 
     public final void setIdleAnimation(byte animation) {
-        Roundabout.LOGGER.info("Potato4");
         this.entityData.set(IDLE_ANIMATION, animation);
     }
 

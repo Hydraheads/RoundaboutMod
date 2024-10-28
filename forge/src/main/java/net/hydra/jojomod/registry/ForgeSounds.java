@@ -125,6 +125,18 @@ public class ForgeSounds {
             register(ModSounds.TWAU_TIMESTOP_2, ModSounds.TWAU_TIMESTOP_2_ID);
     public static final RegistryObject<SoundEvent> TWAU_USHA_EVENT =
             register(ModSounds.TWAU_USHA, ModSounds.TWAU_USHA_ID);
+    public static final RegistryObject<SoundEvent> OVA_MUDA_EVENT =
+            register(ModSounds.OVA_MUDA, ModSounds.OVA_MUDA_ID);
+    public static final RegistryObject<SoundEvent> OVA_MUDA_2_EVENT =
+            register(ModSounds.OVA_MUDA_2, ModSounds.OVA_MUDA_2_ID);
+    public static final RegistryObject<SoundEvent> OVA_BARRAGE_EVENT =
+            register(ModSounds.OVA_BARRAGE, ModSounds.OVA_BARRAGE_ID);
+    public static final RegistryObject<SoundEvent> OVA_BARRAGE_2_EVENT =
+            register(ModSounds.OVA_BARRAGE_2, ModSounds.OVA_BARRAGE_2_ID);
+    public static final RegistryObject<SoundEvent> OVA_THE_WORLD_EVENT =
+            register(ModSounds.OVA_THE_WORLD, ModSounds.OVA_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> OVA_THE_WORLD_2_EVENT =
+            register(ModSounds.OVA_THE_WORLD_2, ModSounds.OVA_THE_WORLD_2_ID);
     public static final RegistryObject<SoundEvent> OVA_SUMMON_EVENT =
             register(ModSounds.OVA_SUMMON, ModSounds.OVA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BAT_EVENT =

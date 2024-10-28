@@ -40,6 +40,15 @@ public class FabricSounds {
         addSound(ModSounds.TWAU_USHA_ID, ModSounds.TWAU_USHA_EVENT);
         addSound(ModSounds.TWAU_THE_WORLD_ID, ModSounds.TWAU_THE_WORLD_EVENT);
 
+        addSound(ModSounds.OVA_BARRAGE_ID, ModSounds.OVA_BARRAGE_EVENT);
+        addSound(ModSounds.OVA_BARRAGE_2_ID, ModSounds.OVA_BARRAGE_2_EVENT);
+
+        addSound(ModSounds.OVA_MUDA_ID, ModSounds.OVA_MUDA_EVENT);
+        addSound(ModSounds.OVA_MUDA_2_ID, ModSounds.OVA_MUDA_2_EVENT);
+
+        addSound(ModSounds.OVA_THE_WORLD_ID, ModSounds.OVA_THE_WORLD_EVENT);
+        addSound(ModSounds.OVA_THE_WORLD_2_ID, ModSounds.OVA_THE_WORLD_2_EVENT);
+
         addSound(ModSounds.KNIFE_THROW_SOUND_ID, ModSounds.KNIFE_THROW_SOUND_EVENT);
         addSound(ModSounds.KNIFE_BUNDLE_THROW_SOUND_ID, ModSounds.KNIFE_BUNDLE_THROW_SOUND_EVENT);
         addSound(ModSounds.KNIFE_IMPACT_ID, ModSounds.KNIFE_IMPACT_EVENT);

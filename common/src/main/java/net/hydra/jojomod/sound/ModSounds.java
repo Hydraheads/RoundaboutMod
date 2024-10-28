@@ -27,6 +27,24 @@ public class ModSounds {
     public static final ResourceLocation TERRIER_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TERRIER_SOUND);
     public static SoundEvent TERRIER_SOUND_EVENT = SoundEvent.createVariableRangeEvent(TERRIER_SOUND_ID);
 
+    public static final String OVA_THE_WORLD = "ova_the_world";
+    public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);
+    public static SoundEvent OVA_THE_WORLD_EVENT = SoundEvent.createVariableRangeEvent(OVA_THE_WORLD_ID);
+    public static final String OVA_THE_WORLD_2 = "ova_the_world_2";
+    public static final ResourceLocation OVA_THE_WORLD_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD_2);
+    public static SoundEvent OVA_THE_WORLD_2_EVENT = SoundEvent.createVariableRangeEvent(OVA_THE_WORLD_2_ID);
+    public static final String OVA_BARRAGE = "ova_barrage";
+    public static final ResourceLocation OVA_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_BARRAGE);
+    public static SoundEvent OVA_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(OVA_BARRAGE_ID);
+    public static final String OVA_BARRAGE_2 = "ova_barrage_2";
+    public static final ResourceLocation OVA_BARRAGE_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_BARRAGE_2);
+    public static SoundEvent OVA_BARRAGE_2_EVENT = SoundEvent.createVariableRangeEvent(OVA_BARRAGE_2_ID);
+    public static final String OVA_MUDA = "ova_muda";
+    public static final ResourceLocation OVA_MUDA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_MUDA);
+    public static SoundEvent OVA_MUDA_EVENT = SoundEvent.createVariableRangeEvent(OVA_MUDA_ID);
+    public static final String OVA_MUDA_2 = "ova_muda_2";
+    public static final ResourceLocation OVA_MUDA_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_MUDA_2);
+    public static SoundEvent OVA_MUDA_2_EVENT = SoundEvent.createVariableRangeEvent(OVA_MUDA_2_ID);
     public static final String TWAU_HEY = "twau_hey";
     public static final ResourceLocation TWAU_HEY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TWAU_HEY);
     public static SoundEvent TWAU_HEY_EVENT = SoundEvent.createVariableRangeEvent(TWAU_HEY_ID);
