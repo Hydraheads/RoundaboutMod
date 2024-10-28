@@ -181,6 +181,8 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
         if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
             if (!this.isNoPhysics() && !this.inGround) {
                 this.setDeltaMovement(roundabout$delta);
+            } else if (this.inGround){
+                this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
             }
         }
         if (!this.level().isClientSide) {
