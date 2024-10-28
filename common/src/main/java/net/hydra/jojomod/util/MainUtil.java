@@ -145,7 +145,6 @@ public class MainUtil {
             stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
-        ((StandUser)ent).roundabout$setStandSkin((byte)0);
         return stack;
     }
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){

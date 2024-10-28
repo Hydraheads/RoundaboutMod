@@ -6,6 +6,5 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 public class StarPlatinumRenderer<T extends StandEntity> extends StarPlatinumBaseRenderer<StarPlatinumEntity> {
     public StarPlatinumRenderer(EntityRendererProvider.Context context) {
         super(context, new StarPlatinumModel<>(context.bakeLayer(ModEntityRendererClient.STAR_PLATINUM_LAYER)),0f);
-        this.addLayer(new StarPlatinumEyeLayer<>(this));
     }
 }
