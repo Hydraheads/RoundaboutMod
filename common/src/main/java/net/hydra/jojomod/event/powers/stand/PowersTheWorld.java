@@ -981,6 +981,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_VOICE_2){
             if (bt == TheWorldEntity.OVA_SKIN) {
                 return ModSounds.OVA_THE_WORLD_2_EVENT;
+            } else if (bt == TheWorldEntity.OVER_HEAVEN){
+                return ModSounds.THE_WORLD_OVER_HEAVEN_EVENT;
             } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
                 return ModSounds.TWAU_TIMESTOP_2_EVENT;
             } else {

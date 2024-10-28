@@ -593,6 +593,12 @@
       "roundabout:ova_time_resume"
     ]
   },
+  "the_world_over_heaven": {
+    "subtitle": "sounds.roundabout.the_world_over_heaven",
+    "sounds": [
+      "roundabout:the_world_over_heaven"
+    ]
+  },
   "harpoon_hit": {
     "subtitle": "sounds.roundabout.harpoon_hit",
     "sounds": [
