@@ -687,8 +687,9 @@ public class BlockGrabPreset extends PunchingStand{
                             if (!this.onCooldown(PowerIndex.SKILL_2)) {
                                 if (!isHoldingSneak()) {
                                     Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);
-                                    if (targetEntity != null) {
-                                        if (canGrab(targetEntity)) {
+                                    Entity targetEntity2 = MainUtil.getTargetEntity(this.getSelf(),5F);
+                                    if (targetEntity2 != null) {
+                                        if (targetEntity != null && canGrab(targetEntity)) {
                                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
                                             ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
                                         }
