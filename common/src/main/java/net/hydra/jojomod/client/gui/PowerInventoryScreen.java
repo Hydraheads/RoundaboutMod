@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -93,17 +94,36 @@ public class PowerInventoryScreen
                     }
                 }
 
-                    if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
-                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 31, 7, 11);
-                    } else {
-                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 19, 7, 11);
-                    }
+                if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 31, 7, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 19, 7, 11);
+                }
 
-                    if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
-                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 31, 7, 11);
-                    } else {
-                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
-                    }
+                if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 31, 7, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
+                }
+                int ss = this.leftPos+78;
+                int sss = this.topPos+57;
+                byte level = ((IPlayerEntity)pl).roundabout$getStandLevel();
+                int exp = ((IPlayerEntity)pl).roundabout$getStandExp();
+                int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
+                Component display;
+                if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
+                        (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
+                        instanceof MaxStandDiscItem)){
+                    exp = maxXP;
+                    display = Component.translatable(  "leveling.roundabout.disc_maxed");
+                } else {
+                    display = Component.translatable(  "leveling.roundabout.disc_development_potential_level",
+                            level);
+                }
+                context.drawString(this.font, display, this.titleLabelX+ss-78, this.titleLabelY+sss+2, 4210752, false);
+                int blt = (int) Math.floor(((double) 92 /maxXP)*(exp));
+                context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 244, 92, 4);
+                context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
             }
         }
     }
