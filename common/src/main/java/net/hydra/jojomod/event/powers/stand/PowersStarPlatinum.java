@@ -31,15 +31,18 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -358,6 +361,33 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             if (value instanceof LivingEntity LE && (strength *= (float) (1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
                                 strength = 0;
                             } else {
+                                if (value instanceof PrimedTnt && this.getSelf() instanceof Player PE){
+                                    StandUser user = ((StandUser)PE);
+                                    ItemStack stack = user.roundabout$getStandDisc();
+                                    if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_STAR_PLATINUM)) {
+                                        IPlayerEntity ipe = ((IPlayerEntity) PE);
+                                        if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                                            if (value.distanceTo(this.getSelf()) < 1){
+                                                if (!this.getSelf().level().isClientSide()) {
+                                                    ipe.roundabout$setUnlockedBonusSkin(true);
+                                                    this.getSelf().level().playSound(null, this.getSelf().getX(), this.getSelf().getY(),
+                                                            this.getSelf().getZ(), ModSounds.UNLOCK_SKIN_EVENT, this.getSelf().getSoundSource(), 2.0F, 1.0F);
+                                                    this.getSelf().level().playSound(null, this.getSelf().getX(), this.getSelf().getY(),
+                                                            this.getSelf().getZ(), SoundEvents.GENERIC_EXPLODE, this.getSelf().getSoundSource(), 2.0F, 1.0F);
+                                                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.EXPLOSION, this.getSelf().getX(),
+                                                            this.getSelf().getY()+this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                                                            20, 0.7, 0.7, 0.7, 0.2);
+                                                    user.roundabout$setStandSkin(StarPlatinumEntity.ATOMIC_SKIN);
+                                                    ((ServerPlayer) ipe).displayClientMessage(
+                                                            Component.translatable("unlock_skin.roundabout.star_platinum.atomic"), true);
+                                                    user.roundabout$summonStand(this.getSelf().level(), true, false);
+                                                    value.discard();
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                                 float degrees = Mth.wrapDegrees(getLookAtEntityYaw(this.getSelf(), value) - 180);
 
                                 MainUtil.knockbackWithoutBumpUp(value, strength,
