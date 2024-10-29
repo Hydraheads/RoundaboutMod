@@ -507,7 +507,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     @Unique
     public void roundabout$setMaskInventory(PlayerMaskSlots pm) {
-        this.roundabout$maskInventory = pm;
+        this.roundabout$maskInventory.replaceWith(pm);;
     }
     @Override
     @Unique
@@ -525,10 +525,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setMaskSlot(ItemStack stack) {
         ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$MASK_SLOT, stack);
     }
+
     @Override
     @Unique
     public void roundabout$setMaskVoiceSlot(ItemStack stack) {
-        ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$MASK_SLOT, stack);
+        ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$MASK_VOICE_SLOT, stack);
     }
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))

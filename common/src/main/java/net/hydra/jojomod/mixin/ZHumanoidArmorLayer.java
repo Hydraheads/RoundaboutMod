@@ -1,9 +1,12 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaskItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -48,7 +51,6 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         roundabout$ArmorPhase = 0;
         if ($$3 instanceof Player PE) {
-
             roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
             if (roundabout$ModifyEntity) {
                 if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderChest() == null){
@@ -82,7 +84,8 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
                 }
             }
 
-            if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()){
+            if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
+                    && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem){
                 ci.cancel();
             }
 

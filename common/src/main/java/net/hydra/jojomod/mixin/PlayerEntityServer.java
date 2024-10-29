@@ -41,6 +41,13 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     public void roundabout$initMenu(AbstractContainerMenu $$0){
         initMenu($$0);
     }
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    public void roundabout$teleportTo(CallbackInfo ci) {
+        if (!this.level().isClientSide) {
+            ((IPlayerEntity) this).roundabout$getMaskInventory().update();
+        }
+    }
+
 
     @Inject(method = "teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDFF)V", at = @At(value = "TAIL"))
     public void roundabout$teleportTo(ServerLevel p_9000_, double p_9001_, double p_9002_, double p_9003_, float p_9004_, float p_9005_, CallbackInfo info) {
@@ -64,7 +71,10 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     public void roundabout$respawn(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
         ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
         ((IPlayerEntity)this).roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
-        ((IPlayerEntity)this).roundabout$getMaskInventory().update();
+        if (!this.level().isClientSide) {
+            ((IPlayerEntity) this).roundabout$setMaskSlot(((IPlayerEntity) $$0).roundabout$getMaskSlot());
+            ((IPlayerEntity) this).roundabout$setMaskVoiceSlot(((IPlayerEntity) $$0).roundabout$getMaskVoiceSlot());
+        }
     }
 
 }
