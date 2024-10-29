@@ -52,6 +52,7 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState entityGrabAnimation = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
+    public final AnimationState hideLegEntirely = new AnimationState();
     public final AnimationState assault = new AnimationState();
     public final AnimationState assault_punch = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
@@ -74,6 +75,11 @@ public class TheWorldEntity extends StandEntity {
                 this.impale.startIfStopped(this.tickCount);
             } else {
                 this.impale.stop();
+            }
+            if (this.getSkin() == TheWorldEntity.HERITAGE_SKIN && this.getAnimation() != 80 && this.getAnimation() != 42 && this.getAnimation() != 43) {
+                this.hideLegEntirely.startIfStopped(this.tickCount);
+            } else {
+                this.hideLegEntirely.stop();
             }
             if (this.getAnimation() != 80) {
                 this.hideLeg.startIfStopped(this.tickCount);

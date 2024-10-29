@@ -506,6 +506,13 @@ public class StandAnimations {
                 ))
                 .build();
 
+
+        public static final AnimationDefinition HIDE_LEGS_ENTIRELY = AnimationDefinition.Builder.withLength(0.0F)
+                .addAnimation("legs", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                        new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                ))
+                .build();
+
         public static final AnimationDefinition KICK_BARRAGE_END = AnimationDefinition.Builder.withLength(0.3546F)
                 .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(5.9647F, -3.4509F, 15.4859F), AnimationChannel.Interpolations.CATMULLROM)
