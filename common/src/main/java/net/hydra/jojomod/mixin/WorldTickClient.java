@@ -198,7 +198,7 @@ public abstract class WorldTickClient extends Level {
     private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof StandEntity SE) {
-                if (SE.getFollowing() != null){
+                if (SE.getFollowing() != null && ((StandUser)SE.getFollowing()).roundabout$getFollowers().contains(SE)){
                     ci.cancel();
                 }
             }

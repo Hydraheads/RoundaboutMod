@@ -650,9 +650,10 @@ public abstract class StandEntity extends Mob{
             if (this.isAlive() && !this.dead || forceVisible){
                 if (this.getNeedsUser() && !this.forceVisible) {
                     if (this.getUser() != null && !this.getUser().isRemoved()) {
-                        boolean userActive = this.getUserData(this.getUser()).roundabout$getActive();
-                        LivingEntity thisStand = this.getUserData(this.getUser()).roundabout$getStand();
-                        if (this.getUser().isAlive() && userActive && (thisStand != null && thisStand.getId() == this.getId())) {
+                        StandUser user = this.getUserData(this.getUser());
+                        boolean userActive = user.roundabout$getActive();
+                        LivingEntity thisStand = user.roundabout$getStand();
+                        if (this.getUser().isAlive() && userActive && (thisStand != null && thisStand.is(this))) {
 
                             //Make it fade in
                             if (this.getFadeOut() < MaxFade) {
@@ -661,7 +662,7 @@ public abstract class StandEntity extends Mob{
                                 }
                             }
                         } else {
-                            if (thisStand != null && thisStand.getId() != this.getId() && thisStand instanceof StandEntity SE &&
+                            if (thisStand != null && !thisStand.is(this) && thisStand instanceof StandEntity SE &&
                             SE.getFadeOut() >= 1 && this.getFadeOut() > 1){
                                 this.setFadeOut((byte) 1);
                             }
@@ -673,6 +674,8 @@ public abstract class StandEntity extends Mob{
                 } else {
                     this.setFadeOut(this.getMaxFade());
                 }
+            } else {
+                TickDown();
             }
         //this.noClip = false;
         this.setNoGravity(true);
@@ -704,6 +707,7 @@ public abstract class StandEntity extends Mob{
             this.remove(RemovalReason.DISCARDED);
         }
     }
+
 
     @Override
     @javax.annotation.Nullable
