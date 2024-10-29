@@ -113,6 +113,8 @@ public class ForgeSounds {
             register(ModSounds.TWAU_MUDA, ModSounds.TWAU_MUDA_ID);
     public static final RegistryObject<SoundEvent> TWAU_MUDA_2_EVENT =
             register(ModSounds.TWAU_MUDA_2, ModSounds.TWAU_MUDA_2_ID);
+    public static final RegistryObject<SoundEvent> TWAU_MUDA_3_EVENT =
+            register(ModSounds.TWAU_MUDA_3, ModSounds.TWAU_MUDA_3_ID);
     public static final RegistryObject<SoundEvent> TWAU_WRY_EVENT =
             register(ModSounds.TWAU_WRY, ModSounds.TWAU_WRY_ID);
     public static final RegistryObject<SoundEvent> TWAU_THE_WORLD_EVENT =

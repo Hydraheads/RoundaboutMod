@@ -33,6 +33,7 @@ public class FabricSounds {
         addSound(ModSounds.TWAU_BARRAGE_2_ID, ModSounds.TWAU_BARRAGE_2_EVENT);
         addSound(ModSounds.TWAU_MUDA_ID, ModSounds.TWAU_MUDA_EVENT);
         addSound(ModSounds.TWAU_MUDA_2_ID, ModSounds.TWAU_MUDA_2_EVENT);
+        addSound(ModSounds.TWAU_MUDA_3_ID, ModSounds.TWAU_MUDA_3_EVENT);
         addSound(ModSounds.TWAU_WRY_ID, ModSounds.TWAU_WRY_EVENT);
         addSound(ModSounds.TWAU_HEY_ID, ModSounds.TWAU_HEY_EVENT);
         addSound(ModSounds.TWAU_TIMESTOP_ID, ModSounds.TWAU_TIMESTOP_EVENT);

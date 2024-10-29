@@ -81,6 +81,9 @@ public class ModSounds {
     public static final String TWAU_MUDA_2 = "twau_muda_2";
     public static final ResourceLocation TWAU_MUDA_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TWAU_MUDA_2);
     public static SoundEvent TWAU_MUDA_2_EVENT = SoundEvent.createVariableRangeEvent(TWAU_MUDA_2_ID);
+    public static final String TWAU_MUDA_3 = "twau_muda_3";
+    public static final ResourceLocation TWAU_MUDA_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TWAU_MUDA_3);
+    public static SoundEvent TWAU_MUDA_3_EVENT = SoundEvent.createVariableRangeEvent(TWAU_MUDA_3_ID);
     public static final String TWAU_BARRAGE = "twau_barrage";
     public static final ResourceLocation TWAU_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TWAU_BARRAGE);
     public static SoundEvent TWAU_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(TWAU_BARRAGE_ID);

@@ -521,6 +521,12 @@
       "roundabout:twau_muda_2"
     ]
   },
+  "twau_muda_3": {
+    "subtitle": "sounds.roundabout.twau_muda_3",
+    "sounds": [
+      "roundabout:twau_muda_3"
+    ]
+  },
   "twau_usha": {
     "subtitle": "sounds.roundabout.twau_usha",
     "sounds": [

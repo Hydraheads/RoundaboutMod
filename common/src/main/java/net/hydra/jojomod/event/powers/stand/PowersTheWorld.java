@@ -943,7 +943,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (soundChoice == LAST_HIT_5_NOISE) {
             return ModSounds.TWAU_MUDA_2_EVENT;
         } else if (soundChoice == LAST_HIT_6_NOISE) {
-            return ModSounds.TWAU_HEY_EVENT;
+            return ModSounds.TWAU_MUDA_3_EVENT;
         } else if (soundChoice == LAST_HIT_7_NOISE) {
             return ModSounds.OVA_MUDA_EVENT;
         } else if (soundChoice == LAST_HIT_8_NOISE) {
