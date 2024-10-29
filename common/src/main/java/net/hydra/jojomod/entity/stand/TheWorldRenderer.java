@@ -19,6 +19,7 @@ public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
     private static final ResourceLocation PART_7_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_part_7.png");
     private static final ResourceLocation PART_7_BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_part_7_blue.png");
     private static final ResourceLocation OVER_HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_over_heaven.png");
+    private static final ResourceLocation DARK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_dark.png");
     public TheWorldRenderer(EntityRendererProvider.Context context) {
         super(context, new TheWorldModel<>(context.bakeLayer(ModEntityRendererClient.THE_WORLD_LAYER)),0f);
         this.addLayer(new TheWorldOverHeavenEyeLayer<>(this));
@@ -37,6 +38,8 @@ public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
             return HERITAGE_SKIN;
         } else if (BT == TheWorldEntity.BLACK_SKIN){
             return BLACK_SKIN;
+        } else if (BT == TheWorldEntity.DARK_SKIN){
+            return DARK_SKIN;
         } else if (BT == TheWorldEntity.PART_7_SKIN){
             return PART_7_SKIN;
         } else if (BT == TheWorldEntity.PART_7_BLUE){
