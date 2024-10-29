@@ -127,6 +127,18 @@ public class ForgeSounds {
             register(ModSounds.TWAU_TIMESTOP_2, ModSounds.TWAU_TIMESTOP_2_ID);
     public static final RegistryObject<SoundEvent> TWAU_USHA_EVENT =
             register(ModSounds.TWAU_USHA, ModSounds.TWAU_USHA_ID);
+    public static final RegistryObject<SoundEvent> DSP_SUMMON_EVENT =
+            register(ModSounds.DSP_SUMMON, ModSounds.DSP_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> OVA_PLATINUM_BARRAGE_EVENT =
+            register(ModSounds.OVA_PLATINUM_BARRAGE, ModSounds.OVA_PLATINUM_BARRAGE_ID);
+    public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA =
+            register(ModSounds.OVA_PLATINUM_ORA, ModSounds.OVA_PLATINUM_ORA_ID);
+    public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA_2 =
+            register(ModSounds.OVA_PLATINUM_ORA_2, ModSounds.OVA_PLATINUM_ORA_2_ID);
+    public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA_3 =
+            register(ModSounds.OVA_PLATINUM_ORA_3, ModSounds.OVA_PLATINUM_ORA_3_ID);
+    public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA_4 =
+            register(ModSounds.OVA_PLATINUM_ORA_4, ModSounds.OVA_PLATINUM_ORA_4_ID);
     public static final RegistryObject<SoundEvent> OVA_MUDA_EVENT =
             register(ModSounds.OVA_MUDA, ModSounds.OVA_MUDA_ID);
     public static final RegistryObject<SoundEvent> OVA_MUDA_2_EVENT =

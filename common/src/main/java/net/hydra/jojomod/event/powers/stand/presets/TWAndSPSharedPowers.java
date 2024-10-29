@@ -1853,6 +1853,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return 20;
     }
 
+
+    public void dspStuff(Entity ent){
+        
+    }
+
     public void finalAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
@@ -1860,6 +1865,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             float knockbackStrength;
             pow = getFinalPunchStrength(entity);
             knockbackStrength = getFinalAttackKnockback();
+            dspStuff(entity);
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity) {
                 }

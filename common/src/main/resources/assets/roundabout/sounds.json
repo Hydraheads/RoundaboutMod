@@ -539,6 +539,42 @@
       "roundabout:ova_muda"
     ]
   },
+  "ova_platinum_barrage": {
+    "subtitle": "sounds.roundabout.ova_platinum_barrage",
+    "sounds": [
+      "roundabout:ova_platinum_barrage"
+    ]
+  },
+  "ova_platinum_ora": {
+    "subtitle": "sounds.roundabout.ova_platinum_ora",
+    "sounds": [
+      "roundabout:ova_platinum_ora"
+    ]
+  },
+  "ova_platinum_ora_2": {
+    "subtitle": "sounds.roundabout.ova_platinum_ora_2",
+    "sounds": [
+      "roundabout:ova_platinum_ora_2"
+    ]
+  },
+  "ova_platinum_ora_3": {
+    "subtitle": "sounds.roundabout.ova_platinum_ora_3",
+    "sounds": [
+      "roundabout:ova_platinum_ora_3"
+    ]
+  },
+  "ova_platinum_ora_4": {
+    "subtitle": "sounds.roundabout.ova_platinum_ora_4",
+    "sounds": [
+      "roundabout:ova_platinum_ora_4"
+    ]
+  },
+  "dsp_summon": {
+    "subtitle": "sounds.roundabout.dsp_summon",
+    "sounds": [
+      "roundabout:dsp_summon"
+    ]
+  },
   "ova_muda_2": {
     "subtitle": "sounds.roundabout.ova_muda_2",
     "sounds": [

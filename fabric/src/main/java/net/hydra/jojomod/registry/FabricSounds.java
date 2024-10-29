@@ -40,6 +40,12 @@ public class FabricSounds {
         addSound(ModSounds.TWAU_TIMESTOP_2_ID, ModSounds.TWAU_TIMESTOP_2_EVENT);
         addSound(ModSounds.TWAU_USHA_ID, ModSounds.TWAU_USHA_EVENT);
         addSound(ModSounds.TWAU_THE_WORLD_ID, ModSounds.TWAU_THE_WORLD_EVENT);
+        addSound(ModSounds.OVA_PLATINUM_BARRAGE_ID, ModSounds.OVA_PLATINUM_BARRAGE_EVENT);
+        addSound(ModSounds.OVA_PLATINUM_ORA_ID, ModSounds.OVA_PLATINUM_ORA_EVENT);
+        addSound(ModSounds.OVA_PLATINUM_ORA_2_ID, ModSounds.OVA_PLATINUM_ORA_2_EVENT);
+        addSound(ModSounds.OVA_PLATINUM_ORA_3_ID, ModSounds.OVA_PLATINUM_ORA_3_EVENT);
+        addSound(ModSounds.OVA_PLATINUM_ORA_4_ID, ModSounds.OVA_PLATINUM_ORA_4_EVENT);
+        addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
 
         addSound(ModSounds.OVA_BARRAGE_ID, ModSounds.OVA_BARRAGE_EVENT);
         addSound(ModSounds.OVA_BARRAGE_2_ID, ModSounds.OVA_BARRAGE_2_EVENT);

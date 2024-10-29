@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -29,6 +30,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -78,16 +80,39 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         return ModEntities.STAR_PLATINUM.create(this.getSelf().level());
     }
+
+    @Override
+    public void playSummonEffects(boolean forced){
+        if (!forced) {
+            if (((StandUser) this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ATOMIC_SKIN) {
+                if (!this.getSelf().level().isClientSide()) {
+                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION,
+                            this.getSelf().getX(), this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                            5, 0.4, 0.4, 0.4, 0.4);
+                }
+            }
+        }
+    }
     @Override
     public Byte getLastHitSound(){
 
         double rand = Math.random();
-        if (rand > 0.66) {
-            return LAST_HIT_1_NOISE;
-        } else if (rand > 0.33) {
-            return LAST_HIT_2_NOISE;
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN){
+            if (rand > 0.66) {
+                return LAST_HIT_4_NOISE;
+            } else if (rand > 0.33) {
+                return LAST_HIT_5_NOISE;
+            } else {
+                return LAST_HIT_6_NOISE;
+            }
         } else {
-            return LAST_HIT_3_NOISE;
+            if (rand > 0.66) {
+                return LAST_HIT_1_NOISE;
+            } else if (rand > 0.33) {
+                return LAST_HIT_2_NOISE;
+            } else {
+                return LAST_HIT_3_NOISE;
+            }
         }
     }
 
@@ -458,6 +483,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return 80;
     }
 
+    @Override
+    public void dspStuff(Entity ent){
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ATOMIC_SKIN) {
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION,
+                    ent.getX(), ent.getY() + ent.getEyeHeight(), ent.getZ(),
+                    5, 0.6, 0.6, 0.6, 0.4);
+        }
+    }
     @Override
     public SoundEvent getFinalAttackSound(){
         if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.BASEBALL_SKIN){
@@ -1042,10 +1075,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public byte chooseBarrageSound(){
         double rand = Math.random();
-        if (rand > 0.5) {
-            return BARRAGE_NOISE;
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == StarPlatinumEntity.OVA_SKIN) {
+            return BARRAGE_NOISE_3;
         } else {
-            return BARRAGE_NOISE_2;
+            if (rand > 0.5) {
+                return BARRAGE_NOISE;
+            } else {
+                return BARRAGE_NOISE_2;
+            }
         }
     }
 
@@ -1088,8 +1126,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_RUSH_2_SOUND_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN){
+            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN) {
                 return ModSounds.OVA_SUMMON_EVENT;
+            } else if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ATOMIC_SKIN){
+                    return ModSounds.DSP_SUMMON_EVENT;
             } else {
                 return ModSounds.STAR_SUMMON_SOUND_EVENT;
             }
@@ -1099,10 +1139,18 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_PLATINUM_ORA_2_SOUND_EVENT;
         } else if (soundChoice == LAST_HIT_3_NOISE) {
             return ModSounds.STAR_PLATINUM_ORA_3_SOUND_EVENT;
+        } else if (soundChoice == LAST_HIT_4_NOISE) {
+            return ModSounds.OVA_PLATINUM_ORA_3_EVENT;
+        } else if (soundChoice == LAST_HIT_5_NOISE) {
+            return ModSounds.OVA_PLATINUM_ORA_2_EVENT;
+        } else if (soundChoice == LAST_HIT_6_NOISE) {
+            return ModSounds.OVA_PLATINUM_ORA_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2){
             return ModSounds.STAR_PLATINUM_ORA_RUSH_SOUND_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_3){
+            return ModSounds.OVA_PLATINUM_BARRAGE_EVENT;
         } else if (soundChoice == STAR_FINGER){
             return ModSounds.STAR_FINGER_EVENT;
         } else if (soundChoice == STAR_FINGER_2){
@@ -1114,9 +1162,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_CHARGE){
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
-            return ModSounds.STAR_PLATINUM_TIMESTOP_SOUND_EVENT;
+            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN){
+                return ModSounds.OVA_PLATINUM_ORA_4_EVENT;
+            } else {
+                return ModSounds.STAR_PLATINUM_TIMESTOP_SOUND_EVENT;
+            }
         } else if (soundChoice == TIME_STOP_VOICE_2){
-            return ModSounds.STAR_PLATINUM_TIMESTOP_2_SOUND_EVENT;
+            if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN){
+                return ModSounds.OVA_PLATINUM_ORA_4_EVENT;
+            } else {
+                return ModSounds.STAR_PLATINUM_TIMESTOP_2_SOUND_EVENT;
+            }
         } else if (soundChoice == TIME_STOP_VOICE_3){
             return ModSounds.TIME_STOP_VOICE_THE_WORLD3_EVENT;
         } else if (soundChoice == TIME_STOP_ENDING_NOISE){
@@ -1133,4 +1189,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public static final byte LAST_HIT_1_NOISE = 120;
     public static final  byte LAST_HIT_2_NOISE = 121;
     public static final  byte LAST_HIT_3_NOISE = 122;
+    public static final  byte LAST_HIT_4_NOISE = 123;
+    public static final  byte LAST_HIT_5_NOISE = 124;
+    public static final  byte LAST_HIT_6_NOISE = 125;
 }

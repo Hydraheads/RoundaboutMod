@@ -1870,7 +1870,8 @@ public class StandPowers {
     public StandEntity getNewStandEntity(){
         return null;
     }
-
+    public void playSummonEffects(boolean forced){
+    }
     /**The Sound Event to cancel when your barrage is canceled*/
 
     public final void playStandUserOnlySoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {

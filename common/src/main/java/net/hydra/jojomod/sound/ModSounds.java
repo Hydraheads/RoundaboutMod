@@ -93,9 +93,27 @@ public class ModSounds {
     public static final String TWAU_WRY = "twau_wry";
     public static final ResourceLocation TWAU_WRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TWAU_WRY);
     public static SoundEvent TWAU_WRY_EVENT = SoundEvent.createVariableRangeEvent(TWAU_WRY_ID);
+    public static final String OVA_PLATINUM_BARRAGE = "ova_platinum_barrage";
+    public static final ResourceLocation OVA_PLATINUM_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_PLATINUM_BARRAGE);
+    public static SoundEvent OVA_PLATINUM_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(OVA_PLATINUM_BARRAGE_ID);
+    public static final String OVA_PLATINUM_ORA = "ova_platinum_ora";
+    public static final ResourceLocation OVA_PLATINUM_ORA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_PLATINUM_ORA);
+    public static SoundEvent OVA_PLATINUM_ORA_EVENT = SoundEvent.createVariableRangeEvent(OVA_PLATINUM_ORA_ID);
+    public static final String OVA_PLATINUM_ORA_2 = "ova_platinum_ora_2";
+    public static final ResourceLocation OVA_PLATINUM_ORA_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_PLATINUM_ORA_2);
+    public static SoundEvent OVA_PLATINUM_ORA_2_EVENT = SoundEvent.createVariableRangeEvent(OVA_PLATINUM_ORA_2_ID);
+    public static final String OVA_PLATINUM_ORA_3 = "ova_platinum_ora_3";
+    public static final ResourceLocation OVA_PLATINUM_ORA_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_PLATINUM_ORA_3);
+    public static SoundEvent OVA_PLATINUM_ORA_3_EVENT = SoundEvent.createVariableRangeEvent(OVA_PLATINUM_ORA_3_ID);
+    public static final String OVA_PLATINUM_ORA_4 = "ova_platinum_ora_4";
+    public static final ResourceLocation OVA_PLATINUM_ORA_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_PLATINUM_ORA_4);
+    public static SoundEvent OVA_PLATINUM_ORA_4_EVENT = SoundEvent.createVariableRangeEvent(OVA_PLATINUM_ORA_4_ID);
     public static final String WORLD_SUMMON_SOUND = "summon_world";
     public static final ResourceLocation WORLD_SUMMON_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WORLD_SUMMON_SOUND);
     public static SoundEvent WORLD_SUMMON_SOUND_EVENT = SoundEvent.createVariableRangeEvent(WORLD_SUMMON_SOUND_ID);
+    public static final String DSP_SUMMON = "dsp_summon";
+    public static final ResourceLocation DSP_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DSP_SUMMON);
+    public static SoundEvent DSP_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(DSP_SUMMON_ID);
 
     public static final String STAR_SUMMON_SOUND = "summon_star";
     public static final ResourceLocation STAR_SUMMON_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAR_SUMMON_SOUND);

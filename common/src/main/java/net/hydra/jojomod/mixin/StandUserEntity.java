@@ -1162,6 +1162,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             StandPowers thispowers = this.roundabout$getStandPowers();
             if (thispowers.canSummonStand()) {
                 StandEntity stand = thispowers.getNewStandEntity();
+                thispowers.playSummonEffects(forced);
                 if (stand != null) {
                     InteractionHand hand = roundabout$User.getUsedItemHand();
                     if (hand == InteractionHand.OFF_HAND) {

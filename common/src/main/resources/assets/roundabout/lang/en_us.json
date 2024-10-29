@@ -122,6 +122,7 @@
 
   "key.category.roundabout.jojo": "Roundabout Controls",
   "hud.roundabout.standout": "Stand Summoned",
+  "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.star_finger": "%1$s was turned into sashimi whilst fighting %2$s",
@@ -188,6 +189,11 @@
   "sounds.roundabout.star_finger_silent":  "Star Finger",
 
   "sounds.roundabout.unlock_skin":  "Skin Unlocked!",
+  "sounds.roundabout.ova_platinum_barrage":  "ORA",
+  "sounds.roundabout.ova_platinum_ora":  "ORA",
+  "sounds.roundabout.ova_platinum_ora_2":  "ORA",
+  "sounds.roundabout.ova_platinum_ora_3":  "ORA",
+  "sounds.roundabout.ova_platinum_ora_4":  "ORA",
   "sounds.roundabout.star_platinum_ora_rush":  "ORA",
   "sounds.roundabout.star_platinum_ora_rush_2":  "ORA",
   "sounds.roundabout.star_platinum_ora":  "ORA",
