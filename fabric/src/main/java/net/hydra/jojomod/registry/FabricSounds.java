@@ -59,6 +59,8 @@ public class FabricSounds {
         addSound(ModSounds.OVA_LONG_TS_ID, ModSounds.OVA_LONG_TS_EVENT);
         addSound(ModSounds.OVA_SP_TS_ID, ModSounds.OVA_SP_TS_EVENT);
 
+        addSound(ModSounds.LEVELUP_ID, ModSounds.LEVELUP_EVENT);
+
         addSound(ModSounds.KNIFE_THROW_SOUND_ID, ModSounds.KNIFE_THROW_SOUND_EVENT);
         addSound(ModSounds.KNIFE_BUNDLE_THROW_SOUND_ID, ModSounds.KNIFE_BUNDLE_THROW_SOUND_EVENT);
         addSound(ModSounds.KNIFE_IMPACT_ID, ModSounds.KNIFE_IMPACT_EVENT);

@@ -11,6 +11,12 @@
       "roundabout:ova_summon"
     ]
   },
+  "levelup": {
+    "subtitle": "sounds.roundabout.levelup",
+    "sounds": [
+      "roundabout:levelup"
+    ]
+  },
   "stand_arrow_charge": {
     "subtitle": "sounds.roundabout.stand_arrow_charge",
     "sounds": [

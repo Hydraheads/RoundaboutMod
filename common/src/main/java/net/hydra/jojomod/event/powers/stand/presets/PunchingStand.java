@@ -132,15 +132,19 @@ public class PunchingStand extends StandPowers {
         if (entity != null) {
             float pow;
             float knockbackStrength;
+            boolean lasthit = false;
             if (this.getActivePowerPhase() >= this.getActivePowerPhaseMax()) {
                 /*The last hit in a string has more power and knockback if you commit to it*/
                 pow = getHeavyPunchStrength(entity);
                 knockbackStrength = 1F;
+                lasthit = true;
             } else {
                 pow = getPunchStrength(entity);
                 knockbackStrength = 0.2F;
             }
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                if (lasthit){addEXP(2);} else {addEXP(1);}
+
                 this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {

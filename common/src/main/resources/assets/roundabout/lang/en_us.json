@@ -278,6 +278,8 @@
   "sounds.roundabout.gas_can_throw": "Gasoline can thrown",
   "sounds.roundabout.match_throw": "Match thrown",
 
+  "sounds.roundabout.levelup": "Development Level Up!",
+
   "instruction.roundabout.press_attack": "Click Attack",
   "instruction.roundabout.hold_attack": "Hold Attack",
   "instruction.roundabout.hold_attack_crouch": "Hold Attack While Crouching",
@@ -359,6 +361,9 @@
   "leveling.roundabout.levelup.skins": "Stand Development! Skin Unlock!",
   "leveling.roundabout.levelup.moves": "Stand Development! Ability Unlock!",
   "leveling.roundabout.levelup.both": "Stand Development! Ability + Skin Unlock!",
+  "leveling.roundabout.levelup.max.skins": "Max Development! Skin Unlock!",
+  "leveling.roundabout.levelup.max.moves": "Max Development! Ability Unlock!",
+  "leveling.roundabout.levelup.max.both": "Max Development! Ability + Skin Unlock!",
 
   "idle.roundabout.passive": "Idle Pose",
   "idle.roundabout.battle": "Battle Ready",

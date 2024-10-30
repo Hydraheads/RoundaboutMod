@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
@@ -221,6 +222,23 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public void roundabout$setStandExp(int level){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, level);
+    }
+
+    @Override
+    @Unique
+    public void roundabout$addStandExp(int amt){
+        int currentExp = roundabout$getStandExp();
+        currentExp+=amt;
+        byte level = this.roundabout$getStandLevel();
+        StandPowers powers = ((StandUser)this).roundabout$getStandPowers();
+        int maxLevel = powers.getMaxLevel();
+        if (currentExp >= powers.getExpForLevelUp(level) && level < maxLevel){
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, 0);
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_LEVEL, (byte)(level+1));
+            powers.levelUp();
+        } else {
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, currentExp);
+        }
     }
     @Override
     @Unique

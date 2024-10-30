@@ -23,6 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -33,8 +34,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -298,6 +301,31 @@ public class StandPowers {
                 this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
             }
+        }
+    }
+    public void addEXP(int amt, LivingEntity ent){
+        if (!((StandUser)ent).roundabout$getStandDisc().isEmpty() && (ent instanceof Monster ||
+                ent instanceof NeutralMob)){
+            addEXP(amt*5);
+        }
+    }
+    public void addEXP(int amt){
+        if (this.getSelf() instanceof Player PE){
+            StandUser user = ((StandUser) PE);
+            ItemStack stack = ((StandUser) PE).roundabout$getStandDisc();
+            if (!stack.isEmpty() && !(stack.getItem() instanceof MaxStandDiscItem)){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                ipe.roundabout$addStandExp(amt);
+            }
+        }
+    }
+
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide()){
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
+                    this.getSelf().getX(), this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                    20, 0.4, 0.4, 0.4, 0.4);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
         }
     }
 
@@ -1281,6 +1309,7 @@ public class StandPowers {
                                     setDazed((LivingEntity) entity, (byte) 0);
 
                                     if (!sideHit) {
+                                        addEXP(10);
                                         playBarrageEndNoise(0, entity);
                                     }
                                 } else {

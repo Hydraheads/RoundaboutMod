@@ -96,6 +96,24 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         }
     }
+
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 7){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins"), true);
+            } else if (level == 3 || level == 5){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins"), true);
+            } else if (level == 2 || level == 4 || level == 6){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both"), true);
+            }
+        }
+        super.levelUp();
+    }
+
+
     @Override
     public Byte getLastHitSound(){
 
@@ -536,6 +554,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
             this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             if (entity instanceof LivingEntity LE){
+                addEXP(1);
                 MainUtil.makeBleed(LE,0,200,this.self);
             }
         } else {

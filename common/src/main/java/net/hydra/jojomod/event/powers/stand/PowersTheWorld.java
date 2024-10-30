@@ -396,7 +396,21 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
 
-
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 7){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins"), true);
+            } else if (level == 4 || level == 5){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins"), true);
+            } else if (level == 2 || level == 3 || level == 6){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both"), true);
+            }
+        }
+        super.levelUp();
+    }
 
 
     @Override
@@ -528,6 +542,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
 
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
+                        addEXP(3);
                         MainUtil.makeBleed($$5,0,200,null);
                     } else if (((LivingEntity) $$5).isBlocking()) {
                         MainUtil.knockShieldPlusStand($$5,40);
