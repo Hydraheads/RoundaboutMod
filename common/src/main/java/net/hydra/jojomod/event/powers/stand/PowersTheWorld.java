@@ -237,7 +237,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 "instruction.roundabout.hold_attack_crouch", StandIcons.THE_WORLD_FINAL_KICK,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.THE_WORLD_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,4, "ability.roundabout.kick_barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.kick_barrage",
                 "instruction.roundabout.kick_barrage", StandIcons.THE_WORLD_KICK_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
                 "instruction.roundabout.forward_barrage", StandIcons.THE_WORLD_TRAVEL_BARRAGE,1,level,bypas));
@@ -1037,7 +1037,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
                 setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_TRAVEL_BARRAGE, PowerIndex.NO_CD);
             } else {
-                    setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
+                    setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_IMPALE, PowerIndex.SKILL_1_SNEAK);
             }
 
             if (this.isGuarding()) {
@@ -1067,7 +1067,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 }
             }
             if (!done){
-                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
+                if (canExecuteMoveWithLevel(getLeapLevel())) {
+                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             }
         } else {
 
@@ -1111,13 +1115,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (exImpTS) {
                 setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
         } else {
             if (exTS) {
                 setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4);
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
         }
     }

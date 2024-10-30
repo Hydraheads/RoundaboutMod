@@ -675,7 +675,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     /**Makes*/
     public boolean fullTSChargeBonus(){
-        return this.maxChargedTSTicks >= 100;
+        if (canExecuteMoveWithLevel(getMaxTSFactorLevel())){
+            return this.maxChargedTSTicks >= 100;
+        } else {
+            return false;
+        }
     }
     @Override
     public boolean canInterruptPower(){
@@ -857,7 +861,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 "instruction.roundabout.hold_attack_crouch", StandIcons.STAR_PLATINUM_FINAL_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,3, "ability.roundabout.kick_barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.kick_barrage",
                 "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
                 "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
@@ -961,7 +965,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
                 if (!done) {
                     if (canExecuteMoveWithLevel(getLeapLevel())) {
-                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
                     } else {
                         setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                     }
@@ -1010,15 +1014,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_RESUME, PowerIndex.NO_CD);
         } else if (isHoldingSneak()){
             if (exImpTS) {
-                setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
         } else {
             if (exTS) {
-                setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP, PowerIndex.SKILL_4);
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
         }
     }
