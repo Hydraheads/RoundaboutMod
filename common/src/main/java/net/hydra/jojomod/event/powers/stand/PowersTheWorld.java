@@ -187,6 +187,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return super.tryPower(move,forced);
     }
+
+    @Override
+    public int getImpulseTSLevel(){
+        return 2;
+    }
+    @Override
+    public int getTSLevel(){
+        return 3;
+    }
     @Override
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
@@ -256,9 +265,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_WORLD,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,getLeapLevel(), "ability.roundabout.stand_leap_rebound",
                 "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_WORLD,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,3, "ability.roundabout.time_stop",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getTSLevel(), "ability.roundabout.time_stop",
                 "instruction.roundabout.press_skill", StandIcons.THE_WORLD_TIME_STOP,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,2,"ability.roundabout.time_stop_impulse",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,getImpulseTSLevel(),"ability.roundabout.time_stop_impulse",
                 "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_TIME_STOP_IMPULSE,4,level,bypas));
         return $$1;
     }
@@ -1094,12 +1103,22 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
         }
 
+        boolean exTS = canExecuteMoveWithLevel(getTSLevel());
+        boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
         if (((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
             setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_RESUME, PowerIndex.NO_CD);
-        } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
+        } else if (isHoldingSneak() || (!exTS && exImpTS)){
+            if (exImpTS) {
+                setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+            }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4);
+            if (exTS) {
+                setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+            }
         }
     }
 

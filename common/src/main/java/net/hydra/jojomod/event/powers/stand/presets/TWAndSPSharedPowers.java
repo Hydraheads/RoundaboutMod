@@ -422,7 +422,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 sendPacket = true;
                             } else {
                                 KeyInputs.roundaboutClickCount = 2;
-                                if (isHoldingSneak()) {
+                                if (isHoldingSneak() || (!canExecuteMoveWithLevel(getTSLevel())) &&
+                                        canExecuteMoveWithLevel(getImpulseTSLevel())) {
                                     this.setChargedTSTicks(20);
                                     this.setMaxChargeTSTime(20);
                                     sendPacket = true;
@@ -944,6 +945,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     public int getLeapLevel(){
         return 2;
+    }
+    public int getImpulseTSLevel(){
+        return 6;
+    }
+    public int getTSLevel(){
+        return 6;
     }
 
     public boolean bounce() {
