@@ -346,6 +346,10 @@
   "ability.roundabout.air_tanks": "Oxygen Tanks",
   "ability.roundabout.air_tanks.desc": "The tanks on The World's back provide you with extra air, so you can swim underwater for much longer.",
 
+  "ability.roundabout.locked": "???",
+  "ability.roundabout.locked.ctrl": "Locked",
+  "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
+
   "leveling.roundabout.disc_development_potential_level": "Development: %s",
   "leveling.roundabout.disc_maxed": "Complete",
 
@@ -370,6 +374,8 @@
   "skins.roundabout.the_world.blue_part_7": "Blue",
   "skins.roundabout.the_world.over_heaven": "Over Heaven",
   "skins.roundabout.the_world.dark": "Dark",
+  "skins.roundabout.the_world.aqua": "Aqua",
+  "skins.roundabout.the_world.arcade": "Arcade",
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!"

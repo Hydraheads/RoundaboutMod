@@ -32,8 +32,6 @@ public class StandHudRender {
             int textureWidth = guiSize;
             int textureHeight = 30;
 
-            int squareHeight = 24;
-            int squareWidth = 24;
 
             int iconHeight = 18;
             int iconWidth = 18;
@@ -56,10 +54,6 @@ public class StandHudRender {
                 context.setColor(1.0f, 1.0f, 1.0f, 0.9f);
                 //Draws the empty bar
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
-                context.blit(StandIcons.SQUARE_ICON,x+21,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.blit(StandIcons.SQUARE_ICON,x+47,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.blit(StandIcons.SQUARE_ICON,x+72,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-                context.blit(StandIcons.SQUARE_ICON,x+97,y-4,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
 
 
 

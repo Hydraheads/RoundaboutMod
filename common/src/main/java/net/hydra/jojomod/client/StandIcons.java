@@ -9,6 +9,8 @@ public class StandIcons {
             "textures/gui/jojo_icons.png");
     public static final ResourceLocation SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square2.png");
+    public static final ResourceLocation LOCKED_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square3.png");
     public static final ResourceLocation COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_cooldown.png");
     public static final ResourceLocation GASOLINE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
@@ -75,6 +77,8 @@ public class StandIcons {
     public static final ResourceLocation THE_WORLD_AIR_TANKS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/air_tanks.png");
 
+    public static final ResourceLocation LOCKED = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/locked_2.png");
     public static final ResourceLocation STAR_PLATINUM_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/punch.png");
     public static final ResourceLocation STAR_PLATINUM_FINAL_PUNCH = new ResourceLocation(Roundabout.MOD_ID,

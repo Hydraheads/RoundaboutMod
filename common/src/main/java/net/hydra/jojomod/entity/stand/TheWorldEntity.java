@@ -19,7 +19,9 @@ public class TheWorldEntity extends StandEntity {
             PART_7_SKIN = 6,
             PART_7_BLUE = 8,
             OVER_HEAVEN = 7,
-            DARK_SKIN = 9;
+            DARK_SKIN = 9,
+            AQUA_SKIN = 10,
+            ARCADE_SKIN = 11;
 
     @Override
     public Component getSkinName(byte skinId){
@@ -41,6 +43,10 @@ public class TheWorldEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.the_world.over_heaven");
         } else if (skinId == DARK_SKIN){
             return Component.translatable(  "skins.roundabout.the_world.dark");
+        } else if (skinId == AQUA_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.aqua");
+        } else if (skinId == ARCADE_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.arcade");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
@@ -79,7 +85,8 @@ public class TheWorldEntity extends StandEntity {
             } else {
                 this.impale.stop();
             }
-            if (this.getSkin() == TheWorldEntity.HERITAGE_SKIN && this.getAnimation() != 80 && this.getAnimation() != 42 && this.getAnimation() != 43) {
+            if (((this.getSkin() == TheWorldEntity.HERITAGE_SKIN) || (this.getSkin() == TheWorldEntity.ARCADE_SKIN))
+                    && this.getAnimation() != 80 && this.getAnimation() != 42 && this.getAnimation() != 43) {
                 this.hideLegEntirely.startIfStopped(this.tickCount);
             } else {
                 this.hideLegEntirely.stop();

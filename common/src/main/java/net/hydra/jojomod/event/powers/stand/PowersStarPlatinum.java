@@ -241,8 +241,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
                         if (this.isGuarding()) {
                             if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                                if (canExecuteMoveWithLevel(getInhaleLevel())) {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                                }
                             }
                         } else {
                             if (this.activePower != PowerIndex.POWER_3) {
@@ -808,16 +810,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             this.getSelf().onGround() && dist <= 19 && dist >= 5) {
                         if (!onCooldown(PowerIndex.SKILL_3_SNEAK)){
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
-                                bonusLeapCount = 3;
-                                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                                this.getSelf().setYRot(yrot);
-                                this.getSelf().setYRot(yrot);
-                                this.getSelf().setYHeadRot(yrot);
-                                bigLeap(this.getSelf(), 20, 1);
-                                ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
+                                    bonusLeapCount = 3;
+                                    this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+                                    float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                                    this.getSelf().setYRot(yrot);
+                                    this.getSelf().setYRot(yrot);
+                                    this.getSelf().setYHeadRot(yrot);
+                                    bigLeap(this.getSelf(), 20, 1);
+                                    ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
                             }
                         }
                     }
@@ -845,53 +847,55 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
-    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos){
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level,boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.punch",
-                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0));
+                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
-                "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0));
+                "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.final_punch",
-                "instruction.roundabout.hold_attack_crouch", StandIcons.STAR_PLATINUM_FINAL_PUNCH,0));
+                "instruction.roundabout.hold_attack_crouch", StandIcons.STAR_PLATINUM_FINAL_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
-                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.kick_barrage",
-                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,0));
+                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,3, "ability.roundabout.kick_barrage",
+                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
-                "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1));
+                "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.star_finger",
-                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_FINGER,1));
+                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_FINGER,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.impale",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_IMPALE,1));
+                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_IMPALE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.scope",
-                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_SCOPE,1));
+                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_SCOPE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.block_grab",
-                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_GRAB_BLOCK,2));
+                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_GRAB_BLOCK,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.item_grab",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_GRAB_ITEM,2));
+                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_GRAB_ITEM,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.mob_grab",
-                "instruction.roundabout.press_skill_near_mob", StandIcons.STAR_PLATINUM_GRAB_MOB,2));
+                "instruction.roundabout.press_skill_near_mob", StandIcons.STAR_PLATINUM_GRAB_MOB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.phase_grab",
-                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_PHASE_GRAB,2));
+                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_PHASE_GRAB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3));
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.fall_brace",
-                "instruction.roundabout.press_skill_falling", StandIcons.STAR_PLATINUM_FALL_CATCH,3));
+                "instruction.roundabout.press_skill_falling", StandIcons.STAR_PLATINUM_FALL_CATCH,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
-                "instruction.roundabout.press_skill_air", StandIcons.STAR_PLATINUM_LEDGE_GRAB,3));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.stand_leap",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_STAR_PLATINUM,3));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.stand_leap_rebound",
-                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM,3));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,0, "ability.roundabout.inhale",
-                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_INHALE,3));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,0, "ability.roundabout.time_stop",
-                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_TIME_STOP,4));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.roundabout.time_stop_impulse",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE,4));
+                "instruction.roundabout.press_skill_air", StandIcons.STAR_PLATINUM_LEDGE_GRAB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,getLeapLevel(), "ability.roundabout.stand_leap",
+                "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_STAR_PLATINUM,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,getLeapLevel(), "ability.roundabout.stand_leap_rebound",
+                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getInhaleLevel(), "ability.roundabout.inhale",
+                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_INHALE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,6, "ability.roundabout.time_stop",
+                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_TIME_STOP,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,6, "ability.roundabout.time_stop_impulse",
+                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE,4,level,bypas));
         return $$1;
     }
-
+    public int getInhaleLevel(){
+        return 4;
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
 
@@ -912,7 +916,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE, PowerIndex.NO_CD);
             } else {
                 if (isHoldingSneak()) {
-                    setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
+                        setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
                 }
@@ -928,13 +932,21 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
 
             if (this.isGuarding()){
-                setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
+                    if (canExecuteMoveWithLevel(getInhaleLevel())) {
+                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
+                    } else {
+                        setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                    }
             } else {
                 boolean done = false;
                 if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
                     if (!this.getSelf().onGround() && canStandRebound()) {
                         done = true;
-                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                            if (canExecuteMoveWithLevel(getLeapLevel())) {
+                                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                            } else {
+                                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                            }
                     }
                 } else {
                     if (!this.getSelf().onGround()) {
@@ -948,7 +960,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     }
                 }
                 if (!done) {
-                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                    if (canExecuteMoveWithLevel(getLeapLevel())) {
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                    } else {
+                        setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                    }
                 }
             }
         } else {
@@ -969,7 +985,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
 
             if (this.isGuarding()){
-                setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
+                if (canExecuteMoveWithLevel(getInhaleLevel())) {
+                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
                if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);

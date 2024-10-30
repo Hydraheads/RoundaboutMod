@@ -202,7 +202,14 @@ public class PowerInventoryScreen
         int j = this.topPos;
         if (pl != null) {
             StandUser standUser = ((StandUser) pl);
-            abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j);
+            boolean bypass = false;
+            if ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
+                    ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+            pl.isCreative()){
+                bypass = true;
+            }
+            abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j,
+                    ((IPlayerEntity)pl).roundabout$getStandLevel(),bypass);
 
             if (!this.abilityList.isEmpty()) {
                 AbilityIconInstance aii;

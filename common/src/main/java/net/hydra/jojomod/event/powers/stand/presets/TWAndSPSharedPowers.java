@@ -159,12 +159,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     } else {
                         if (this.getSelf().onGround()) {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 280);
-                                bonusLeapCount = 3;
-                                bigLeap(this.getSelf(), 20, 1);
-                                ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
+                                if (canExecuteMoveWithLevel(getLeapLevel())) {
+                                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, 280);
+                                    bonusLeapCount = 3;
+                                    bigLeap(this.getSelf(), 20, 1);
+                                    ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
+                                }
                             }
                         } else {
                             if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
@@ -939,6 +941,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     }
                 }
         }
+    }
+    public int getLeapLevel(){
+        return 2;
     }
 
     public boolean bounce() {
@@ -1722,17 +1727,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
                 && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                /*Stand vaulting*/
-                this.setCooldown(PowerIndex.SKILL_3_SNEAK, 80);
-                double mag = this.getSelf().getPosition(0).distanceTo(
-                        new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
-                MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                        (blockHit.getLocation().x - this.getSelf().getX()) / mag,
-                        0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
-                        (blockHit.getLocation().z - this.getSelf().getZ()) / mag
-                );
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
+                    /*Stand vaulting*/
+                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, 80);
+                    double mag = this.getSelf().getPosition(0).distanceTo(
+                            new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
+                    MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                            (blockHit.getLocation().x - this.getSelf().getX()) / mag,
+                            0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
+                            (blockHit.getLocation().z - this.getSelf().getZ()) / mag
+                    );
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
                 return true;
             }
             return true;

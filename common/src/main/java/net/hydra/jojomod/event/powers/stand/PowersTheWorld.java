@@ -199,15 +199,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 $$1.add(TheWorldEntity.MANGA_SKIN);
             } if (Level > 2 || bypass){
                 $$1.add(TheWorldEntity.HERITAGE_SKIN);
+                $$1.add(TheWorldEntity.ARCADE_SKIN);
             } if (Level > 3 || bypass){
                 $$1.add(TheWorldEntity.OVA_SKIN);
             } if (Level > 4 || bypass){
-                $$1.add(TheWorldEntity.BLACK_SKIN);
+                $$1.add(TheWorldEntity.DARK_SKIN);
             } if (Level > 5 || bypass){
                 $$1.add(TheWorldEntity.PART_7_SKIN);
                 $$1.add(TheWorldEntity.PART_7_BLUE);
             } if (Level > 5 || bypass){
-                $$1.add(TheWorldEntity.DARK_SKIN);
+                $$1.add(TheWorldEntity.BLACK_SKIN);
+                $$1.add(TheWorldEntity.AQUA_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(TheWorldEntity.OVER_HEAVEN);
             }
@@ -216,48 +218,48 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
-    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos){
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos,byte level,boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.punch",
-                "instruction.roundabout.press_attack", StandIcons.THE_WORLD_PUNCH,0));
+                "instruction.roundabout.press_attack", StandIcons.THE_WORLD_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
-                "instruction.roundabout.hold_block", StandIcons.THE_WORLD_GUARD,0));
+                "instruction.roundabout.hold_block", StandIcons.THE_WORLD_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.final_kick",
-                "instruction.roundabout.hold_attack_crouch", StandIcons.THE_WORLD_FINAL_KICK,0));
+                "instruction.roundabout.hold_attack_crouch", StandIcons.THE_WORLD_FINAL_KICK,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
-                "instruction.roundabout.barrage", StandIcons.THE_WORLD_BARRAGE,0));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.kick_barrage",
-                "instruction.roundabout.kick_barrage", StandIcons.THE_WORLD_KICK_BARRAGE,0));
+                "instruction.roundabout.barrage", StandIcons.THE_WORLD_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,4, "ability.roundabout.kick_barrage",
+                "instruction.roundabout.kick_barrage", StandIcons.THE_WORLD_KICK_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
-                "instruction.roundabout.forward_barrage", StandIcons.THE_WORLD_TRAVEL_BARRAGE,1));
+                "instruction.roundabout.forward_barrage", StandIcons.THE_WORLD_TRAVEL_BARRAGE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.assault",
-                "instruction.roundabout.press_skill", StandIcons.THE_WORLD_ASSAULT,1));
+                "instruction.roundabout.press_skill", StandIcons.THE_WORLD_ASSAULT,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.impale",
-                "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_IMPALE,1));
+                "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_IMPALE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.air_tanks",
-                "instruction.roundabout.passive", StandIcons.THE_WORLD_AIR_TANKS,1));
+                "instruction.roundabout.passive", StandIcons.THE_WORLD_AIR_TANKS,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.block_grab",
-                "instruction.roundabout.press_skill", StandIcons.THE_WORLD_GRAB_BLOCK,2));
+                "instruction.roundabout.press_skill", StandIcons.THE_WORLD_GRAB_BLOCK,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.item_grab",
-                "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_GRAB_ITEM,2));
+                "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_GRAB_ITEM,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.mob_grab",
-                "instruction.roundabout.press_skill_near_mob", StandIcons.THE_WORLD_GRAB_MOB,2));
+                "instruction.roundabout.press_skill_near_mob", StandIcons.THE_WORLD_GRAB_MOB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.phase_grab",
-                "instruction.roundabout.press_skill_block", StandIcons.THE_WORLD_PHASE_GRAB,2));
+                "instruction.roundabout.press_skill_block", StandIcons.THE_WORLD_PHASE_GRAB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3));
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.fall_brace",
-                "instruction.roundabout.press_skill_falling", StandIcons.THE_WORLD_FALL_CATCH,3));
+                "instruction.roundabout.press_skill_falling", StandIcons.THE_WORLD_FALL_CATCH,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
-                "instruction.roundabout.press_skill_air", StandIcons.THE_WORLD_LEDGE_GRAB,3));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.stand_leap",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_WORLD,3));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.stand_leap_rebound",
-                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_WORLD,3));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,0, "ability.roundabout.time_stop",
-                "instruction.roundabout.press_skill", StandIcons.THE_WORLD_TIME_STOP,4));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,0,"ability.roundabout.time_stop_impulse",
-                "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_TIME_STOP_IMPULSE,4));
+                "instruction.roundabout.press_skill_air", StandIcons.THE_WORLD_LEDGE_GRAB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,getLeapLevel(), "ability.roundabout.stand_leap",
+                "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_WORLD,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,getLeapLevel(), "ability.roundabout.stand_leap_rebound",
+                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_WORLD,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,3, "ability.roundabout.time_stop",
+                "instruction.roundabout.press_skill", StandIcons.THE_WORLD_TIME_STOP,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,2,"ability.roundabout.time_stop_impulse",
+                "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_TIME_STOP_IMPULSE,4,level,bypas));
         return $$1;
     }
 
@@ -1015,13 +1017,18 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     PacketDataIndex.S2C_INT_OXYGEN_TANK, currentAir);
         }
     }
+
+    @Override
+    public int getLeapLevel(){
+        return 6;
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y){
         if (isHoldingSneak()){
             if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
                 setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_TRAVEL_BARRAGE, PowerIndex.NO_CD);
             } else {
-                setSkillIcon(context, x, y, 1, StandIcons.THE_WORLD_IMPALE, PowerIndex.SKILL_1_SNEAK);
+                    setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
             }
 
             if (this.isGuarding()) {

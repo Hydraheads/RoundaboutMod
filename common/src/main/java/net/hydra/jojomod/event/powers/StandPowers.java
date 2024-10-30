@@ -374,29 +374,67 @@ public class StandPowers {
                                 float flashAlpha, float otherFlashAlpha){
 
     }
-    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos){
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos,byte level,boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         return $$1;
     }
 
-    public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
-                                                 String nameSTR, String instructionStr, ResourceLocation draw, int extra){
-        context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-        context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
-        Component name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
-        Component instruction;
-        if (extra <= 0) {
-            instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
-        } else {
-            instruction = Component.translatable(instructionStr,""+extra).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
-
+    public boolean canExecuteMoveWithLevel(int minLevel){
+        if (this.getSelf() instanceof Player pl){
+            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || (!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
+                    ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+                    pl.isCreative()){
+                return true;
+            }
+            return false;
         }
-        Component description = Component.translatable(nameSTR+".desc");
+        return true;
+    }
+
+    public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
+                                                 String nameSTR, String instructionStr, ResourceLocation draw, int extra, byte level, boolean bypass){
+        Component name;
+        if (level < levelToUnlock && !bypass) {
+            context.blit(StandIcons.LOCKED_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+            context.blit(StandIcons.LOCKED, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
+            name = Component.translatable("ability.roundabout.locked").withStyle(ChatFormatting.BOLD).
+                    withStyle(ChatFormatting.DARK_GRAY);
+        } else {
+            context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+            context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
+            name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).
+                    withStyle(ChatFormatting.DARK_PURPLE);
+        }
+        Component instruction;
+        if (level < levelToUnlock && !bypass){
+            instruction = Component.translatable("ability.roundabout.locked.ctrl").
+                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
+        } else {
+            if (extra <= 0) {
+                instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+            } else {
+                instruction = Component.translatable(instructionStr, "" + extra).withStyle(ChatFormatting.ITALIC).
+                        withStyle(ChatFormatting.BLUE);
+
+            }
+        }
+        Component description;
+        if (level < levelToUnlock && !bypass){
+            description = Component.translatable("ability.roundabout.locked.desc", "" + levelToUnlock).
+                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
+        } else {
+            description = Component.translatable(nameSTR+".desc");
+        }
         return new AbilityIconInstance(size,startingLeft,startingTop,levelToUnlock,
                 name,instruction,description,extra);
     }
 
+    int squareHeight = 24;
+    int squareWidth = 24;
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
+        setSkillIcon(context,x,y,slot,rl,CDI,false);
+    }
+    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI, boolean locked){
         CooldownInstance cd = null;
         if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
             cd = StandCooldowns.get(CDI);
@@ -406,6 +444,14 @@ public class StandPowers {
         else if (slot==2){x+=50;}
         else if (slot==1){x+=25;}
         y-=1;
+
+        if (locked){
+            context.blit(StandIcons.LOCKED_SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else {
+            context.blit(StandIcons.SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        }
+
+
         if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI,slot)){
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
