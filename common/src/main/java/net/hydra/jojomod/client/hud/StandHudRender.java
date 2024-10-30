@@ -1,11 +1,15 @@
 package net.hydra.jojomod.client.hud;
 
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -165,6 +169,44 @@ public class StandHudRender {
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
         context.blit(StandIcons.JOJO_ICONS, k, l, u, 60, 9, 9);
+    }
+
+    public static void renderExpHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                           int scaledWidth, int scaledHeight, int ticks, int x,
+                                           float flashAlpha, float otherFlashAlpha) {
+        int l;
+        int k;
+        int v;
+        StandUser standUser = ((StandUser)playerEntity);
+        byte level = ((IPlayerEntity)playerEntity).roundabout$getStandLevel();
+        int exp = ((IPlayerEntity)playerEntity).roundabout$getStandExp();
+        int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
+        if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
+                (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
+                        instanceof MaxStandDiscItem)) {
+            exp = maxXP;
+        }
+        int blt = (int) Math.floor(((double) 182 /maxXP)*(exp));
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 100, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 105, blt, 5);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int y = 6141337;
+        Font renderer = client.font;
+        String $$6 = level + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
     public static void renderGuardHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,

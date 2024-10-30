@@ -28,6 +28,8 @@ public interface IPlayerEntity {
     void roundabout$setMaskInventory(PlayerMaskSlots pm);
     void roundabout$setStandLevel(byte level);
     byte roundabout$getStandLevel();
+    void roundabout$showExp(boolean keyIsDown);
+    boolean roundabout$getDisplayExp();
     void roundabout$setStandExp(int level);
     int roundabout$getStandExp();
     boolean roundabout$getUnlockedBonusSkin();

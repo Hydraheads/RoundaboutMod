@@ -70,6 +70,9 @@ public class KeyInputs {
     public static void switchRowsKey(Player player, Minecraft client, boolean keyIsDown, Options option){
         ((StandUser) player).roundabout$getStandPowers().switchRowsKey(keyIsDown, option);
     }
+    public static void showEXPKey(Player player, Minecraft client, boolean keyIsDown, Options option){
+        ((IPlayerEntity) player).roundabout$showExp(keyIsDown);
+    }
     public static void MoveKey4(Player player, Minecraft client, boolean keyIsDown, Options option){
         forceSummon(player,keyIsDown);
         ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);

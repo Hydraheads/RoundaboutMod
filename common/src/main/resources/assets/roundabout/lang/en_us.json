@@ -107,6 +107,7 @@
   "key.roundabout.menu": "Power Inventory",
   "key.roundabout.bonus_guard": "Use Offhand / Easy Block",
   "key.roundabout.switch_rows": "Toggle Crouch Ability Row",
+  "key.roundabout.show_exp": "Toggle Stand EXP Display",
 
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Iron Sword",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Add to iron sword",
@@ -354,6 +355,9 @@
 
   "leveling.roundabout.disc_development_potential_level": "Development: %s",
   "leveling.roundabout.disc_maxed": "Complete",
+  "leveling.roundabout.levelup.skins": "Stand Development! Skin Unlock!",
+  "leveling.roundabout.levelup.moves": "Stand Development! Ability Unlock!",
+  "leveling.roundabout.levelup.both": "Stand Development! Ability + Skin Unlock!",
 
   "idle.roundabout.passive": "Idle Pose",
   "idle.roundabout.battle": "Battle Ready",

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHudAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -293,6 +294,10 @@ public abstract class HudRendering implements IHudAccess {
             } else if (((StandUser)minecraft.player).roundabout$getSealedTicks() > -1){
 
                 StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
+                return true;
+            } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp()){
+
+                StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             }
         }

@@ -156,6 +156,35 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return false;
     }
 
+    @Unique
+    public boolean roundabout$heldDownSwitchExp = false;
+    @Unique
+    public boolean roundabout$displayExp = false;
+    @Override
+    @Unique
+    public void roundabout$showExp(boolean keyIsDown){
+        if (!roundabout$heldDownSwitchExp){
+            if (keyIsDown){
+                roundabout$heldDownSwitchExp = true;
+                if (roundabout$displayExp){
+                    roundabout$displayExp=false;
+                } else {
+                    roundabout$displayExp=true;
+                }
+            }
+        } else {
+            if (!keyIsDown){
+                roundabout$heldDownSwitchExp = false;
+            }
+        }
+    }
+
+    @Override
+    @Unique
+    public boolean roundabout$getDisplayExp(){
+        return roundabout$displayExp;
+    }
+
     @Override
     @Unique
     public void roundabout$setStandLevel(byte level){
