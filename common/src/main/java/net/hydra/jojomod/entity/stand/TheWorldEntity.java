@@ -86,7 +86,8 @@ public class TheWorldEntity extends StandEntity {
                 this.impale.stop();
             }
             if (((this.getSkin() == TheWorldEntity.HERITAGE_SKIN) || (this.getSkin() == TheWorldEntity.ARCADE_SKIN))
-                    && this.getAnimation() != 80 && this.getAnimation() != 42 && this.getAnimation() != 43) {
+                    && this.getAnimation() != 80 && this.getAnimation() != 42 && this.getAnimation() != 43
+            &&  this.getAnimation() != 86 &&  this.getAnimation() != 85) {
                 this.hideLegEntirely.startIfStopped(this.tickCount);
             } else {
                 this.hideLegEntirely.stop();
