@@ -537,12 +537,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (!$$3.isEmpty()) {
             for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                 Entity $$5 = $$3.get($$4);
-                if ($$5 instanceof LivingEntity && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
+                if ($$5 instanceof LivingEntity LE && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
 
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
-                        addEXP(3);
+                        addEXP(3,LE);
                         MainUtil.makeBleed($$5,0,200,null);
                     } else if (((LivingEntity) $$5).isBlocking()) {
                         MainUtil.knockShieldPlusStand($$5,40);

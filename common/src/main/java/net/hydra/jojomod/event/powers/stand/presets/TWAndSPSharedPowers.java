@@ -521,8 +521,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             pow = getImpalePunchStrength(entity);
             knockbackStrength = getImpaleKnockback();
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                if (entity instanceof LivingEntity) {
-                    addEXP(5);
+                if (entity instanceof LivingEntity LE) {
+                    addEXP(5, LE);
                     if (MainUtil.getMobBleed(entity)) {
                         if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                             MainUtil.makeBleed(entity, 2, 100, this.getSelf());
@@ -578,7 +578,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public int getExpForLevelUp(int currentLevel){
-        return currentLevel*100;
+        return (75+((currentLevel-1)*25));
     }
     @Override
     public byte getMaxLevel(){
@@ -790,6 +790,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         }
         if (!this.getSelf().level().isClientSide()) {
+            if (Math.random() > 0.8){
+                addEXP(1);
+            }
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
@@ -807,6 +810,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             cancelConsumableItem(this.getSelf());
         }
         if (!this.getSelf().level().isClientSide()) {
+            if (Math.random() > 0.5){
+                addEXP(1);
+            }
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
         }
@@ -999,6 +1005,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
+            if (Math.random() > 0.85){
+                addEXP(1);
+            }
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
 
         }
@@ -1893,9 +1902,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             knockbackStrength = getFinalAttackKnockback();
             dspStuff(entity);
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                if (entity instanceof LivingEntity) {
+                if (entity instanceof LivingEntity LE) {
                     if (chargedFinal >= maxSuperHitTime) {
-                        addEXP(5);
+                        addEXP(5, LE);
                     }
                 }
                 this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);

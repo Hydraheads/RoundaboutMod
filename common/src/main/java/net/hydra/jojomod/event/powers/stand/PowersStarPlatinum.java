@@ -554,7 +554,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
             this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             if (entity instanceof LivingEntity LE){
-                addEXP(1);
+                addEXP(2, LE);
                 MainUtil.makeBleed(LE,0,200,this.self);
             }
         } else {

@@ -307,6 +307,8 @@ public class StandPowers {
         if (!((StandUser)ent).roundabout$getStandDisc().isEmpty() && (ent instanceof Monster ||
                 ent instanceof NeutralMob)){
             addEXP(amt*5);
+        } else {
+            addEXP(amt);
         }
     }
     public void addEXP(int amt){
@@ -1304,12 +1306,12 @@ public class StandPowers {
                         }
 
                         if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                            if (entity instanceof LivingEntity) {
+                            if (entity instanceof LivingEntity LE) {
                                 if (lastHit) {
                                     setDazed((LivingEntity) entity, (byte) 0);
 
                                     if (!sideHit) {
-                                        addEXP(10);
+                                        addEXP(8,LE);
                                         playBarrageEndNoise(0, entity);
                                     }
                                 } else {

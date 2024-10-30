@@ -143,7 +143,10 @@ public class PunchingStand extends StandPowers {
                 knockbackStrength = 0.2F;
             }
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                if (lasthit){addEXP(2);} else {addEXP(1);}
+                if (entity instanceof LivingEntity LE){
+
+                    if (lasthit){addEXP(2,LE);} else {addEXP(1,LE);}
+                }
 
                 this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
