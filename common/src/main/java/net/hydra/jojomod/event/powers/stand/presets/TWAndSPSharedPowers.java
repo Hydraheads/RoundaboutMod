@@ -577,10 +577,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     @Override
-    public int getExpForLevelUp(int currentLevel){
-        return (75+((currentLevel-1)*25));
-    }
-    @Override
     public byte getMaxLevel(){
         return 7;
     }
@@ -941,12 +937,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if (!hold1) {
                             hold1 = true;
                             if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                                if (this.activePower == PowerIndex.POWER_1_SNEAK) {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                                } else {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_SNEAK);
+                                if (canExecuteMoveWithLevel(getImpaleLevel())) {
+                                    if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                    } else {
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_SNEAK);
+                                    }
                                 }
                             }
                         }
@@ -956,8 +954,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
         }
     }
+    public int getImpaleLevel(){
+        return 5;
+    }
     public int getLeapLevel(){
-        return 2;
+        return 3;
     }
     public int getImpulseTSLevel(){
         return 6;

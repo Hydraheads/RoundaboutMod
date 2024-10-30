@@ -1,6 +1,8 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -217,6 +219,11 @@ public class StandArrowItem extends RoundaboutArrowItem {
 
     public static boolean grantStand(ItemStack discStack, LivingEntity target){
         if (discStack.getItem() instanceof StandDiscItem de){
+            if (!target.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)){
+                discStack.getOrCreateTagElement("Memory").putByte("Level",de.standPowers.getMaxLevel());
+                Roundabout.LOGGER.info("Sanity");
+            }
+
             ((StandUser) target).roundabout$setStand(null);
             ((StandUser) target).roundabout$setActive(false);
             ((StandUser) target).roundabout$setStandDisc(discStack.copy());

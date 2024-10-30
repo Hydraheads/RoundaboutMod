@@ -106,10 +106,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (level == 7){
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins").
                         withStyle(ChatFormatting.AQUA), true);
-            } else if (level == 3 || level == 5){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
-                        withStyle(ChatFormatting.AQUA), true);
-            } else if (level == 2 || level == 4 || level == 6){
+            } else if (level == 2 || level == 3 || level == 4 || level == 6 || level == 5){
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
             }
@@ -300,15 +297,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         }
                     } else {
                         if (!this.isGuarding()) {
-                            if (!hold1) {
+                            if (!hold1 && !forwardBarrage) {
                                 if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
                                     if (!isHoldingSneak() && !this.isBarrageAttacking() && (this.getActivePower() != PowerIndex.BARRAGE_2)) {
                                         //Star Finger here
                                         hold1 = true;
                                         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                            if (this.activePower != PowerIndex.POWER_1) {
-                                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                            if (canExecuteMoveWithLevel(getFingerLevel())) {
+                                                if (this.activePower != PowerIndex.POWER_1) {
+                                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                                }
                                             }
                                         }
                                     }
@@ -326,6 +325,13 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        if (currentLevel == 1){
+            return 25;
+        }
+        return (75+((currentLevel-1)*20));
+    }
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
@@ -894,9 +900,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
                 "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.star_finger",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, getFingerLevel(), "ability.roundabout.star_finger",
                 "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_FINGER,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.impale",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, getImpaleLevel(), "ability.roundabout.impale",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_IMPALE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.scope",
                 "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_SCOPE,1,level,bypas));
@@ -926,6 +932,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE,4,level,bypas));
         return $$1;
     }
+    public int getFingerLevel(){
+        return 2;
+    }
     public int getInhaleLevel(){
         return 4;
     }
@@ -949,9 +958,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE, PowerIndex.NO_CD);
             } else {
                 if (isHoldingSneak()) {
+                    if (canExecuteMoveWithLevel(getImpaleLevel())) {
                         setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_1_SNEAK);
+                    } else {
+                        setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                    }
                 } else {
-                    setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
+                    if (canExecuteMoveWithLevel(getFingerLevel())) {
+                        setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_FINGER, PowerIndex.SKILL_1);
+                    } else {
+                        setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                    }
                 }
             }
         }
