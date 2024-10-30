@@ -354,6 +354,7 @@
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
 
   "leveling.roundabout.disc_development_potential_level": "Development: %s",
+  "leveling.roundabout.disc_skin": "Style: ",
   "leveling.roundabout.disc_maxed": "Complete",
   "leveling.roundabout.levelup.skins": "Stand Development! Skin Unlock!",
   "leveling.roundabout.levelup.moves": "Stand Development! Ability Unlock!",

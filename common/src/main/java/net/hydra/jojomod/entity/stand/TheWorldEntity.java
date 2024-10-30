@@ -24,7 +24,10 @@ public class TheWorldEntity extends StandEntity {
             ARCADE_SKIN = 11;
 
     @Override
-    public Component getSkinName(byte skinId){
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+    public static Component getSkinNameT(byte skinId){
         if (skinId == PART_3_SKIN){
             return Component.translatable(  "skins.roundabout.the_world.base");
         } else if (skinId == MANGA_SKIN){

@@ -35,7 +35,10 @@ public class StarPlatinumEntity extends StandEntity {
             ATOMIC_SKIN = 10;
 
     @Override
-    public Component getSkinName(byte skinId){
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+    public static Component getSkinNameT(byte skinId){
         if (skinId == PART_3_SKIN){
             return Component.translatable(  "skins.roundabout.star_platinum.base");
         } else if (skinId == PART_3_MANGA_SKIN){
@@ -55,6 +58,8 @@ public class StarPlatinumEntity extends StandEntity {
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }
+
+
 
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();

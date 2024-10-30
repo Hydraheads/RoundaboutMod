@@ -27,6 +27,13 @@ public class MaxStandDiscItem extends StandDiscItem{
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         $$2.add(this.getDisplayName2().withStyle(ChatFormatting.AQUA));
-        $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.LIGHT_PURPLE));
+        $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
+        CompoundTag $$4 = $$0.getTagElement("Memory");
+        if ($$4 != null && $$1 != null) {
+            if ($$4.contains("Skin")) {
+                byte skin = ($$4.getByte("Skin"));
+                $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
+            }
+        }
     }
 }

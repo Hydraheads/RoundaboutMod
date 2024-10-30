@@ -336,6 +336,10 @@ public class StandPowers {
         $$1.add((byte) 0);
         return $$1;
     }
+
+    public Component getSkinName(byte skinId){
+        return null;
+    }
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte) 0);

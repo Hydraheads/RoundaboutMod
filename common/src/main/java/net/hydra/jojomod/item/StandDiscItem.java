@@ -75,8 +75,11 @@ public class StandDiscItem extends Item {
                 if (lvl < standPowers.getMaxLevel()){
                     $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level",lvl).withStyle(ChatFormatting.GRAY));
                 } else {
-                    $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.LIGHT_PURPLE));
+                    $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
                 }
+            } if ($$4.contains("Skin")) {
+                byte skin = ($$4.getByte("Skin"));
+                $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
             }
         } else {
             $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level",1).withStyle(ChatFormatting.GRAY));

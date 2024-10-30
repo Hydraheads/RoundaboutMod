@@ -681,6 +681,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return false;
         }
     }
+
+
+    @Override
+    public Component getSkinName(byte skinId){
+        return StarPlatinumEntity.getSkinNameT(skinId);
+    }
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){

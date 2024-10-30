@@ -264,6 +264,7 @@ public abstract class StandEntity extends Mob{
     public Component getSkinName(byte skinId){
         return null;
     }
+
     public Component getPosName(byte posID){
         if (posID == 1){
             return Component.translatable(  "idle.roundabout.battle");
