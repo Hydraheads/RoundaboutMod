@@ -19,6 +19,13 @@ public class CommandRegistryFabric {
                         EntityArgument.getEntities(context, "targets")))))).createBuilder()));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+                dispatcher.register(dispatcher.register((((Commands.literal("roundaboutLevelUpStand").requires(source
+                        -> source.hasPermission(2))).executes(context -> RoundaboutCommands.levelup((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))).then(Commands.argument("targets",
+                        EntityArgument.entities()).executes(context -> RoundaboutCommands.levelup((CommandSourceStack)context.getSource(),
+                        EntityArgument.getEntities(context, "targets")))))).createBuilder()));
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(dispatcher.register((((Commands.literal("drSummon").requires(source
                         -> source.hasPermission(2))).executes(context -> RoundaboutCommands.executeDebugSummon((CommandSourceStack)context.getSource(),
                         ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))).then(Commands.argument("targets",

@@ -152,6 +152,8 @@
 
   "commands.roundabout.heal.multiple": "Healed %s entities",
   "commands.roundabout.heal.single": "Healed %s",
+  "commands.roundabout.levelup.multiple": "Leveled up %s entities",
+  "commands.roundabout.levelup.single": "Leveled up %s",
 
   "sounds.roundabout.stand_arrow_charge":  "Stand Arrow Magnetizes",
   "sounds.roundabout.stand_arrow_use":  "Stand acquired!",

@@ -288,9 +288,33 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else {
             this.maxChargeTSTime = 100;
         }
+
+        if (!canExecuteMoveWithLevel(4)){
+            if (this.maxChargeTSTime > 40){
+                this.maxChargeTSTime = 40;
+            }
+        } else if (!canExecuteMoveWithLevel(5)){
+            if (this.maxChargeTSTime > 60){
+                this.maxChargeTSTime = 60;
+            }
+        } else if (!canExecuteMoveWithLevel(6)){
+            if (this.maxChargeTSTime > 80){
+                this.maxChargeTSTime = 80;
+            }
+        }
         return 0;
     }
-
+    @Override
+    public int getMaxTSTime (){
+        if (canExecuteMoveWithLevel(6)){
+            return 100;
+        } else if (canExecuteMoveWithLevel(5)){
+            return 80;
+        } else if (canExecuteMoveWithLevel(4)){
+            return 60;
+        }
+        return 40;
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1) {

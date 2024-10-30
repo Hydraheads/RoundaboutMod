@@ -165,7 +165,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public byte roundabout$getStandLevel(){
         byte levl = ((Player) (Object) this).getEntityData().get(ROUNDABOUT$STAND_LEVEL);
-        levl = (byte) Math.min(levl,1);
+        levl = (byte) Math.max(levl,1);
         return levl;
     }
     @Override

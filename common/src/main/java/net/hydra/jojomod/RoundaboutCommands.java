@@ -1,14 +1,19 @@
 package net.hydra.jojomod;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+
 import java.util.Collection;
 
 public class RoundaboutCommands {
@@ -23,6 +28,27 @@ public class RoundaboutCommands {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.heal.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
         } else {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.heal.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+    static int levelup(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof Player PE) {
+                IPlayerEntity ipe = ((IPlayerEntity)PE);
+                StandUser user = ((StandUser) PE);
+                ItemStack standDisc = user.roundabout$getStandDisc();
+                int standLevel = ipe.roundabout$getStandLevel();
+                if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem) &&
+                        standLevel < user.roundabout$getStandPowers().getMaxLevel()){
+                    ipe.roundabout$setStandExp(0);
+                    ipe.roundabout$setStandLevel((byte) (standLevel+1));
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup.multiple", targets.size()), true);
         }
         return targets.size();
     }

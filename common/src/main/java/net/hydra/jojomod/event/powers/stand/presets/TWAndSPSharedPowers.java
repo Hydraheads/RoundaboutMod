@@ -726,7 +726,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setActivePower(PowerIndex.SPECIAL);
         poseStand(OffsetIndex.GUARD);
         animateStand((byte) 30);
-        if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+        if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) && this.getMaxChargeTSTime() >= 100) {
             playSoundsIfNearby(getTSVoice(), 100, false);
         }
         playSoundsIfNearby(TIME_STOP_CHARGE, 100, true);
@@ -1030,22 +1030,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
         if (this.getActivePower() == PowerIndex.SPECIAL) {
-            int TSChargeSeconds = this.getChargedTSTicks();
-            TSChargeSeconds += ((this.getMaxChargeTSTime() - 20) / 40);
-            if (TSChargeSeconds >= this.getMaxChargeTSTime()) {
-                TSChargeSeconds = this.getMaxChargeTSTime();
-                this.setChargedTSTicks(TSChargeSeconds);
-                if (this.getSelf().level().isClientSide) {
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
-                } else {
-                    if (this.getSelf() instanceof ServerPlayer) {
-                        ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
-                    }
-                }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
-            } else {
-                this.setChargedTSTicks(TSChargeSeconds);
-            }
+            updateTSCharge();
         } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
                 updateKickBarrageCharge();
         } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
@@ -1059,6 +1044,25 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         } else if (this.getActivePower() == PowerIndex.POWER_2_BLOCK){
         }
         super.updateUniqueMoves();
+    }
+
+    public void updateTSCharge(){
+        int TSChargeSeconds = this.getChargedTSTicks();
+        TSChargeSeconds += 2;
+        if (TSChargeSeconds >= this.getMaxChargeTSTime()) {
+            TSChargeSeconds = this.getMaxChargeTSTime();
+            this.setChargedTSTicks(TSChargeSeconds);
+            if (this.getSelf().level().isClientSide) {
+                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
+            } else {
+                if (this.getSelf() instanceof ServerPlayer) {
+                    ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
+                }
+            }
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
+        } else {
+            this.setChargedTSTicks(TSChargeSeconds);
+        }
     }
 
 
