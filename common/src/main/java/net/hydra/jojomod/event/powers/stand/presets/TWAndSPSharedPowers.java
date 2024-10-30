@@ -1702,6 +1702,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             playSoundsIfNearby(getTimeStopShortNoise(), 100, true);
                         }
                     }
+                    addEXP(3+(Math.max(1,(int)(this.getChargedTSTicks()/10))));
                     ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
                     if (this.getSelf() instanceof Player) {
                         ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);

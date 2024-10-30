@@ -5,6 +5,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
@@ -438,6 +439,11 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (!this.getItem().isEmpty()) {
 
                 if ($$1 instanceof LivingEntity L){
+
+                    if (this.getOwner() instanceof Player PE){
+                        ((StandUser)PE).roundabout$getStandPowers().addEXP(1);
+                    }
+
                     if (this.getItem().is(Items.COBWEB)) {
                         L.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0), this);
                     }
