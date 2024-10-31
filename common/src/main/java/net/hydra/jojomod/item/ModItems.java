@@ -1,12 +1,7 @@
 package net.hydra.jojomod.item;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 
@@ -19,6 +14,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_STAR_PLATINUM;
     public static Item STAND_DISC_THE_WORLD;
     public static Item MAX_STAND_DISC_THE_WORLD;
+    public static Item STAND_DISC_JUSTICE;
+    public static Item MAX_STAND_DISC_JUSTICE;
     public static Item STAND_DISC;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;

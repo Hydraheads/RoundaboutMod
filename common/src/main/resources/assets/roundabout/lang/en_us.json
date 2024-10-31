@@ -35,10 +35,13 @@
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
+  "item.roundabout.justice_disc": "Stand Disc",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.max_the_world_disc": "Stand Disc+",
+  "item.roundabout.max_justice_disc": "Stand Disc+",
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
+  "item.roundabout.justice_disc.desc": "Justice",
 
   "item.roundabout.blank_mask": "Glass Visage",
   "item.roundabout.blank_mask.desc": "Hides Armor",
