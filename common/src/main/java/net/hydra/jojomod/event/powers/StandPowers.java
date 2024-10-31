@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -489,6 +491,28 @@ public class StandPowers {
             context.blit(StandIcons.LOCKED_SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
         } else {
             context.blit(StandIcons.SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+            Font renderer = Minecraft.getInstance().font;
+            if (slot==4){
+                Component special4Key = KeyInputRegistry.abilityFourKey.getTranslatedKeyMessage();
+                special4Key = fixKey(special4Key);
+                context.drawString(renderer, special4Key,x-1,y+11,0xffffff,true);
+            }
+            else if (slot==3){
+                Component special3Key = KeyInputRegistry.abilityThreeKey.getTranslatedKeyMessage();
+                special3Key = fixKey(special3Key);
+                context.drawString(renderer, special3Key,x-1,y+11,0xffffff,true);
+            }
+            else if (slot==2){
+                Component special2Key = KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage();
+                special2Key = fixKey(special2Key);
+                context.drawString(renderer, special2Key,x-1,y+11,0xffffff,true);
+            }
+            else if (slot==1){
+                Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
+                special1Key = fixKey(special1Key);
+                context.drawString(renderer, special1Key,x-1,y+11,0xffffff,true);
+            }
+            Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
         }
 
 
@@ -514,7 +538,24 @@ public class StandPowers {
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
         }
     }
+    public static Component fixKey(Component textIn){
 
+        String X = textIn.getString();
+        if (X.length() > 1){
+            String[] split = X.split("\\s");
+            if (split.length > 1){
+                return Component.nullToEmpty(""+split[0].charAt(0)+split[1].charAt(0));
+            } else {
+                if (split[0].length() > 1){
+                    return Component.nullToEmpty(""+split[0].charAt(0)+split[0].charAt(1));
+                } else {
+                    return Component.nullToEmpty(""+split[0].charAt(0));
+                }
+            }
+        } else {
+            return textIn;
+        }
+    }
 
     /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
      * the client level. */
