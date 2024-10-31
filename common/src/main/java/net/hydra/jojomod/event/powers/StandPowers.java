@@ -306,6 +306,9 @@ public class StandPowers {
     public void addEXP(int amt, LivingEntity ent){
         if (!((StandUser)ent).roundabout$getStandDisc().isEmpty() && (ent instanceof Monster ||
                 ent instanceof NeutralMob)){
+            if (ent.getMaxHealth() >= 100){
+                amt = (int)( amt*0.5);
+            }
             addEXP(amt*5);
         } else {
             if (ent.getMaxHealth() >= 100){
