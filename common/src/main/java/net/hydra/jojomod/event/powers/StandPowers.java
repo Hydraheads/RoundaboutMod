@@ -308,6 +308,9 @@ public class StandPowers {
                 ent instanceof NeutralMob)){
             addEXP(amt*5);
         } else {
+            if (ent.getMaxHealth() > 100){
+                amt = (int)( amt*0.5);
+            }
             addEXP(amt);
         }
     }
