@@ -642,7 +642,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (currentLevel == 1){
             return 50;
         }
-        return (75+((currentLevel-1)*20));
+        return (75+((currentLevel-1)*30));
     }
 
     /**Charge up Time Stop*/

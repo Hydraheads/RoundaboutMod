@@ -20,7 +20,7 @@ public class ZItemStack {
         StandPowers powers = ((StandUser) $$3).roundabout$getStandPowers();
         if (((StandUser) $$3).roundabout$getActive() && powers.canUseMiningStand()) {
 
-            if (Math.random() > 0.75){
+            if (Math.random() > 0.85){
                 powers.addEXP(1);
             }
             ci.cancel();

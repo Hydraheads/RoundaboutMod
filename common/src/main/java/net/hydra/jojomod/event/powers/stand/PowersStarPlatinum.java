@@ -330,7 +330,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (currentLevel == 1){
             return 25;
         }
-        return (75+((currentLevel-1)*20));
+        return (75+((currentLevel-1)*30));
     }
     @Override
     public void updateUniqueMoves() {
