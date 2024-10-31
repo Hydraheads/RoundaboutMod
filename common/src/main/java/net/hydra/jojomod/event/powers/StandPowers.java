@@ -1162,7 +1162,7 @@ public class StandPowers {
         if (this.getReducedDamage(entity)){
             return 2.5F;
         } else {
-            return 7;
+            return 6;
         }
     } public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){

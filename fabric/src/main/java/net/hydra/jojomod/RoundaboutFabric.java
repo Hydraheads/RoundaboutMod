@@ -1,6 +1,8 @@
 package net.hydra.jojomod;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.hydra.jojomod.event.commands.RoundaboutCom;
 import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.particles.FabricParticles;
@@ -25,6 +27,9 @@ public class RoundaboutFabric implements ModInitializer {
         FabricParticles.registerParticles();
         FabricGamerules.registerGamerules();
         CommandRegistryFabric.register();
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            RoundaboutCom.register(dispatcher);
+        });
         ModWorldGeneration.generateWorldGen();
         DispenserRegistry.init();
         Roundabout.init();

@@ -141,6 +141,9 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         bounces--;
+        if (this.getSuperThrow()){
+            this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,false);
+        }
         if (bounces < 0 || !$$0.getDirection().equals(Direction.UP)) {
             super.onHitBlock($$0);
 

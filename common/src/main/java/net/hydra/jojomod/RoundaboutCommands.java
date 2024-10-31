@@ -18,7 +18,29 @@ import java.util.Collection;
 
 public class RoundaboutCommands {
 
-    static int executeHeal(CommandSourceStack source, Collection<? extends Entity> targets) {
+    public static int roundaboutSetStandLevel(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                if (entity instanceof Player PE) {
+                    IPlayerEntity ipe = ((IPlayerEntity)PE);
+                    StandUser user = ((StandUser) PE);
+                    ItemStack standDisc = user.roundabout$getStandDisc();
+                    int standLevel = ipe.roundabout$getStandLevel();
+                    if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
+                        ipe.roundabout$setStandExp(0);
+                        ipe.roundabout$setStandLevel((byte) level);
+                    }
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+    public static int executeHeal(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
                 ((LivingEntity) entity).setHealth(((LivingEntity) entity).getMaxHealth());
