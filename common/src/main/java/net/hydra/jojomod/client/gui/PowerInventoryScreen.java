@@ -19,6 +19,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookTabButton;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +44,8 @@ public class PowerInventoryScreen
      * It should render your current stand, as well as its moves and stuff.*/
     public static final ResourceLocation POWER_INVENTORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/power_inventory.png");
+    public static final ResourceLocation POWER_INVENTORY_GEAR_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/stand_user_settings.png");
 
     private static final ResourceLocation RECIPE_BUTTON_LOCATION = new ResourceLocation("textures/gui/recipe_button.png");
     private float xMouse;
@@ -50,6 +53,8 @@ public class PowerInventoryScreen
     //private final RecipeBookComponent recipeBookComponent = new RecipeBookComponent();
     private boolean widthTooNarrow;
     private boolean buttonClicked;
+
+    public boolean isOptionsOut;
     private StandEntity stand = null;
     public List<AbilityIconInstance> abilityList = ImmutableList.of();
 
@@ -105,6 +110,15 @@ public class PowerInventoryScreen
                 } else {
                     context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
                 }
+
+                int leftGearPos = leftPos+5;
+                int topGearPos = topPos+60;
+                if (isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 198, 0, 19, 18);
+                } else {
+                    context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
+                }
+
                 int ss = this.leftPos+78;
                 int sss = this.topPos+57;
                 byte level = ((IPlayerEntity)pl).roundabout$getStandLevel();
@@ -187,13 +201,17 @@ public class PowerInventoryScreen
         $$6.setOffsetType(OT);
     }
 
+    public int leftposModifier = 50;
+
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+
+
+        //leftPos+=leftposModifier;
 
         this.renderBackground(context);
 
          super.render(context, mouseX, mouseY, delta);
-
 
         this.renderTooltip(context, mouseX, mouseY);
 
@@ -201,6 +219,10 @@ public class PowerInventoryScreen
         int i = this.leftPos;
         int j = this.topPos;
         if (pl != null) {
+
+            if (isOptionsOut){
+                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-150, j, 0, 0, 148, 167);
+            }
             StandUser standUser = ((StandUser) pl);
             boolean bypass = false;
             if ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
@@ -232,6 +254,7 @@ public class PowerInventoryScreen
         //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
         this.xMouse = (float)mouseX;
         this.yMouse = (float)mouseY;
+        //leftPos-=leftposModifier;
     }
 
 
@@ -242,8 +265,9 @@ public class PowerInventoryScreen
 
     @Override
     protected void init() {
-            super.init();
-            this.widthTooNarrow = this.width < 379;
+        super.init();
+        this.widthTooNarrow = this.width < 379;
+        isOptionsOut = false;
             //this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
             //this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
             //this.addRenderableWidget(new ImageButton(this.leftPos + 104, this.height / 2 - 22, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, $$0 -> {
@@ -315,6 +339,16 @@ public class PowerInventoryScreen
     public boolean mouseClicked(double $$0, double $$1, int $$2) {
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
+
+
+
+            int leftGearPos = leftPos+6;
+            int topGearPos = topPos+60;
+            if (isSurelyHovering(leftGearPos, topGearPos, 18, 18, $$0, $$1)) {
+                gearChange();
+                return true;
+            }
+
             int lefXPos = leftPos + 77;
             int rightXPos = leftPos + 164;
             int topYPos = topPos + 22;
@@ -342,9 +376,11 @@ public class PowerInventoryScreen
                     }
                 }
 
-                    if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
+
+
+
+            if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
                         if (menuTicks <= -1) {
-                            Roundabout.LOGGER.info("1");
                             scp.roundabout$setMenuTicks(5);
                             ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
                         }
@@ -353,7 +389,6 @@ public class PowerInventoryScreen
 
                     if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
                         if (menuTicks <= -1) {
-                            Roundabout.LOGGER.info("2");
                             scp.roundabout$setMenuTicks(5);
                             ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
                         }
@@ -368,6 +403,16 @@ public class PowerInventoryScreen
          **/
             return this.widthTooNarrow ? false : super.mouseClicked($$0, $$1, $$2);
         //}
+    }
+
+    public void gearChange(){
+        if (this.isOptionsOut){
+            this.isOptionsOut = false;
+            this.leftPos -= leftposModifier;
+        } else {
+            this.isOptionsOut = true;
+            this.leftPos += leftposModifier;
+        }
     }
 
     @Override

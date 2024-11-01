@@ -410,5 +410,12 @@
   "skins.roundabout.the_world.arcade": "Arcade",
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
-  "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!"
+  "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",
+
+  "power_inventory.roundabout.settings.general": "Stand User Settings",
+  "power_inventory.roundabout.settings.offset": "Following Position",
+  "power_inventory.roundabout.settings.distance": "Following Distance",
+  "power_inventory.roundabout.settings.opacity": "Transparency",
+  "power_inventory.roundabout.settings.attack_opacity": "Combat Transparency",
+  "power_inventory.roundabout.settings.enemy_opacity": "Transparency of Others"
 }

@@ -376,7 +376,7 @@ public class StandPowers {
     }
 
     public Component getSkinName(byte skinId){
-        return null;
+        return Component.empty();
     }
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();

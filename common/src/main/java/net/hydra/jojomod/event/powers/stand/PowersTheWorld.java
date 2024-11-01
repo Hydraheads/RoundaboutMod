@@ -223,7 +223,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             } if (Level > 5 || bypass){
                 $$1.add(TheWorldEntity.PART_7_SKIN);
                 $$1.add(TheWorldEntity.PART_7_BLUE);
-            } if (Level > 5 || bypass){
+            } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.BLACK_SKIN);
                 $$1.add(TheWorldEntity.AQUA_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
