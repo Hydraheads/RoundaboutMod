@@ -5,10 +5,12 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -41,8 +43,22 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     public void roundabout$initMenu(AbstractContainerMenu $$0){
         initMenu($$0);
     }
+    @Unique
+    private boolean roundabout$initializeDataOnClient = false;
+    @Shadow
+    public ServerGamePacketListenerImpl connection;
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$teleportTo(CallbackInfo ci) {
+
+        if (!this.level().isClientSide() && !roundabout$initializeDataOnClient && connection !=null){
+            IPlayerEntity ipe = ((IPlayerEntity)this);
+            ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+                    ((ServerPlayer)((Player)(Object)this)), ipe.roundabout$getAnchorPlace(),
+                    ipe.roundabout$getDistanceOut(),
+                    ipe.roundabout$getIdleOpacity(),ipe.roundabout$getCombatOpacity(),
+                    ipe.roundabout$getEnemyOpacity());
+            roundabout$initializeDataOnClient = true;
+        }
         if (!this.level().isClientSide) {
             ((IPlayerEntity) this).roundabout$getMaskInventory().update();
         }
@@ -74,6 +90,20 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         if (!this.level().isClientSide) {
             ((IPlayerEntity) this).roundabout$setMaskSlot(((IPlayerEntity) $$0).roundabout$getMaskSlot());
             ((IPlayerEntity) this).roundabout$setMaskVoiceSlot(((IPlayerEntity) $$0).roundabout$getMaskVoiceSlot());
+
+            int anchorPlace = ((IPlayerEntity) $$0).roundabout$getAnchorPlace();
+            float distanceOut = ((IPlayerEntity) $$0).roundabout$getDistanceOut();
+            float idleOpacity = ((IPlayerEntity) $$0).roundabout$getIdleOpacity();
+            float combatOpacity = ((IPlayerEntity) $$0).roundabout$getCombatOpacity();
+            float enemyOpacity = ((IPlayerEntity) $$0).roundabout$getEnemyOpacity();
+            ((IPlayerEntity) this).roundabout$setAnchorPlace(anchorPlace);
+            ((IPlayerEntity) this).roundabout$setDistanceOut(distanceOut);
+            ((IPlayerEntity) this).roundabout$setIdleOpacity(idleOpacity);
+            ((IPlayerEntity) this).roundabout$setCombatOpacity(combatOpacity);
+            ((IPlayerEntity) this).roundabout$setEnemyOpacity(enemyOpacity);
+            ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+                        ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
+                    idleOpacity,combatOpacity,enemyOpacity);
         }
     }
 

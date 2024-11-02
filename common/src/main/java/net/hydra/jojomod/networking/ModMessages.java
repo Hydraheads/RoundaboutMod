@@ -39,6 +39,7 @@ public class ModMessages {
     public static final ResourceLocation SEND_INT_DATA_PACKET = new ResourceLocation(Roundabout.MOD_ID,"int_s2c_packet");
     public static final ResourceLocation BLIP_PACKET = new ResourceLocation(Roundabout.MOD_ID,"blip_s2c_packet");
     public static final ResourceLocation SEND_SIMPLE_BYTE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"simple_s2c_packet");
+    public static final ResourceLocation SEND_S2C_POWER_INVENTORY_OPTIONS = new ResourceLocation(Roundabout.MOD_ID,"s2c_inventory_packet");
     public static final ResourceLocation SEND_BUNDLE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"bundle_s2c_packet");
 
 }

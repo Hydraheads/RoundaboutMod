@@ -32,6 +32,8 @@ public interface IPacketAccess {
     void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f blip);
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);
     void sendSimpleByte(ServerPlayer sp, byte context);
+    void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,
+                                   float combatOpacity, float enemyOpacity);
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();

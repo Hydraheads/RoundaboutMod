@@ -47,4 +47,18 @@ public class GenericS2CPacket {
             ClientUtil.handleBlipPacketS2C(client.player, data, activePower, location);
         }
     }
+
+
+    public static void sendPowerInventorySettings(Minecraft client, ClientPacketListener handler,
+                                  FriendlyByteBuf buf, PacketSender responseSender) {
+        if (client.player != null) {
+            int anchorPlace = buf.readInt();
+            float distanceOut = buf.readFloat();
+            float idleOpacity = buf.readFloat();
+            float combatOpacity = buf.readFloat();
+            float enemyOpacity = buf.readFloat();
+            ClientUtil.handlePowerInventoryOptionsPacketS2C(client.player,anchorPlace,distanceOut,idleOpacity,combatOpacity,
+                    enemyOpacity);
+        }
+    }
 }

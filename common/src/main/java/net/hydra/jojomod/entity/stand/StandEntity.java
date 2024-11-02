@@ -87,6 +87,9 @@ public abstract class StandEntity extends Mob{
     protected static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
 
+    protected static final EntityDataAccessor<Float> DISTANCE_OUT = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.FLOAT);
+
     public boolean canAcquireHeldItem = false;
 
     /**This rotation data is for the model rotating when you look certain directions,
@@ -396,6 +399,12 @@ public abstract class StandEntity extends Mob{
         this.entityData.set(ANCHOR_PLACE, degrees);
     }
 
+    public final void setDistanceOut(float blocks) {
+        this.entityData.set(DISTANCE_OUT, blocks);
+    }
+    public final float getDistanceOut() {
+        return this.entityData.get(DISTANCE_OUT);
+    }
 
     /**
      * These functions tell the game if the stand's user is Swimming, Crawling, or Elytra Flying.
@@ -459,6 +468,7 @@ public abstract class StandEntity extends Mob{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANCHOR_PLACE, 55);
+        this.entityData.define(DISTANCE_OUT, 1.07F);
         this.entityData.define(FADE_OUT, (byte) 0);
         this.entityData.define(FADE_PERCENT, 100);
         this.entityData.define(MOVE_FORWARD, (byte) 0);
@@ -880,7 +890,7 @@ public abstract class StandEntity extends Mob{
     /**This is the way a stand looks when it is passively floating by you*/
     public Vec3 getIdleOffset(LivingEntity standUser) {
         int vis = this.getFadeOut();
-        double r = (((double) vis / MaxFade) * 1.37);
+        double r = (((double) vis / MaxFade) * ((standUser.getBbWidth()/2)+this.getDistanceOut()));
         if (r < 0.5) {
             r = 0.5;
         }

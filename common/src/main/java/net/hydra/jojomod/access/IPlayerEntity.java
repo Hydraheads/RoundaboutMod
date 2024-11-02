@@ -39,5 +39,15 @@ public interface IPlayerEntity {
     void roundabout$setIdlePos(byte level);
     byte roundabout$getIdlePos();
     void roundabout$setUnlockedBonusSkin(boolean unlock);
+    int roundabout$getAnchorPlace();
+    void roundabout$setAnchorPlace(int anchorPlace);
+    float roundabout$getDistanceOut();
+    void roundabout$setDistanceOut(float distanceOut);
+    float roundabout$getIdleOpacity();
+    void roundabout$setIdleOpacity(float idleOpacity);
+    float roundabout$getCombatOpacity();
+    void roundabout$setCombatOpacity(float combatOpacity);
+    float roundabout$getEnemyOpacity();
+    void roundabout$setEnemyOpacity(float enemyOpacity);
 
 }

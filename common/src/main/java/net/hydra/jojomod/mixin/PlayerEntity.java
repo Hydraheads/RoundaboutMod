@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -97,6 +99,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private int roundabout$airTime = 0;
     @Unique
     private int roundabout$clientDodgeTime = 0;
+    @Unique
+    private int roundabout$anchorPlace = 55;
+    @Unique
+    private float roundabout$distanceOut = 1.07F;
+    @Unique
+    private float roundabout$idleOpacity = 100;
+    @Unique
+    private float roundabout$combatOpacity = 100;
+    @Unique
+    private float roundabout$enemyOpacity = 100;
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
 
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
@@ -114,6 +126,56 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     public byte roundabout$GetPos(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS);
+    }
+    @Unique
+    @Override
+    public void roundabout$setAnchorPlace(int anchorPlace){
+        this.roundabout$anchorPlace = anchorPlace;
+    }
+    @Unique
+    @Override
+    public int roundabout$getAnchorPlace(){
+        return this.roundabout$anchorPlace;
+    }
+    @Unique
+    @Override
+    public void roundabout$setDistanceOut(float distanceOut){
+        this.roundabout$distanceOut = distanceOut;
+    }
+    @Unique
+    @Override
+    public float roundabout$getDistanceOut(){
+        return this.roundabout$distanceOut;
+    }
+    @Unique
+    @Override
+    public void roundabout$setIdleOpacity(float idleOpacity){
+        this.roundabout$idleOpacity = idleOpacity;
+    }
+    @Unique
+    @Override
+    public float roundabout$getIdleOpacity(){
+        return this.roundabout$idleOpacity;
+    }
+    @Unique
+    @Override
+    public void roundabout$setCombatOpacity(float combatOpacity){
+        this.roundabout$combatOpacity = combatOpacity;
+    }
+    @Unique
+    @Override
+    public float roundabout$getCombatOpacity(){
+        return this.roundabout$combatOpacity;
+    }
+    @Unique
+    @Override
+    public void roundabout$setEnemyOpacity(float enemyOpacity){
+        this.roundabout$enemyOpacity = enemyOpacity;
+    }
+    @Unique
+    @Override
+    public float roundabout$getEnemyOpacity(){
+        return this.roundabout$enemyOpacity;
     }
     @Unique
     @Override
@@ -395,6 +457,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             CompoundTag compoundtag = new CompoundTag();
             $$0.put("roundabout.VoiceMask",m2.save(compoundtag));
         }
+        $$0.getCompound("roundabout").putInt("anchorPlace",roundabout$anchorPlace);
+        $$0.getCompound("roundabout").putFloat("distanceOut",roundabout$distanceOut);
+        $$0.getCompound("roundabout").putFloat("idleOpacity",roundabout$idleOpacity);
+        $$0.getCompound("roundabout").putFloat("combatOpacity",roundabout$combatOpacity);
+        $$0.getCompound("roundabout").putFloat("enemyOpacity",roundabout$enemyOpacity);
         return $$0;
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
@@ -414,6 +481,23 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 this.roundabout$maskInventory.setItem(1,itemstack);
             }
         }
+        CompoundTag compoundtag2 = $$0.getCompound("roundabout");
+        if (compoundtag2.contains("anchorPlace")) {
+            roundabout$anchorPlace = compoundtag2.getInt("anchorPlace");
+        }
+        if (compoundtag2.contains("distanceOut")) {
+            roundabout$distanceOut = compoundtag2.getFloat("distanceOut");
+        }
+        if (compoundtag2.contains("idleOpacity")) {
+            roundabout$idleOpacity = compoundtag2.getFloat("idleOpacity");
+        }
+        if (compoundtag2.contains("combatOpacity")) {
+            roundabout$combatOpacity = compoundtag2.getFloat("combatOpacity");
+        }
+        if (compoundtag2.contains("enemyOpacity")) {
+            roundabout$enemyOpacity = compoundtag2.getFloat("enemyOpacity");
+        }
+
         //roundabout$maskInventory.addItem()
     }
 

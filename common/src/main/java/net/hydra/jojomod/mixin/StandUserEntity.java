@@ -1178,6 +1178,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     stand.setSkin(roundabout$getStandSkin());
                     stand.setIdleAnimation(roundabout$getIdlePos());
 
+                    if (((LivingEntity)(Object)this) instanceof Player PE){
+                        stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
+                        stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                    }
+
                     theWorld.addFreshEntity(stand);
 
                     if (sound && !((TimeStop)this.level()).CanTimeStopEntity(this)) {

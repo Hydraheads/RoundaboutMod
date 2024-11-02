@@ -84,6 +84,12 @@ public class ForgePackets implements IPacketAccess {
     public void sendSimpleByte(ServerPlayer sp, byte context) {
         ForgePacketHandler.sendToClient(new ForgeSimpleBytePacket(context), sp);
     }
+    @Override
+    public void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,
+                                          float combatOpacity, float enemyOpacity) {
+        ForgePacketHandler.sendToClient(new ForgeS2CPowerInventorySettingsPacket(anchorPlace,
+                distanceOut, idleOpacity, combatOpacity, enemyOpacity), sp);
+    }
 
     @Override
     public void StandGuardCancelClientPacket() {
