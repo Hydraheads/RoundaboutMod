@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -130,7 +131,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     @Override
     public void roundabout$setAnchorPlace(int anchorPlace){
+        anchorPlace = Mth.clamp(anchorPlace,0,360);
         this.roundabout$anchorPlace = anchorPlace;
+        StandEntity ent = ((StandUser)this).roundabout$getStand();
+        if (ent != null){
+            ent.setAnchorPlace(anchorPlace);
+        }
     }
     @Unique
     @Override
@@ -140,7 +146,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     @Override
     public void roundabout$setDistanceOut(float distanceOut){
+        distanceOut = Mth.clamp(distanceOut,0,2F);
         this.roundabout$distanceOut = distanceOut;
+        StandEntity ent = ((StandUser)this).roundabout$getStand();
+        if (ent != null){
+            ent.setDistanceOut(distanceOut);
+        }
     }
     @Unique
     @Override
@@ -150,7 +161,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     @Override
     public void roundabout$setIdleOpacity(float idleOpacity){
-        this.roundabout$idleOpacity = idleOpacity;
+        this.roundabout$idleOpacity = Mth.clamp(idleOpacity,0,100);
     }
     @Unique
     @Override
@@ -160,7 +171,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     @Override
     public void roundabout$setCombatOpacity(float combatOpacity){
-        this.roundabout$combatOpacity = combatOpacity;
+        this.roundabout$combatOpacity = Mth.clamp(combatOpacity,0,100);
     }
     @Unique
     @Override
@@ -170,7 +181,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     @Override
     public void roundabout$setEnemyOpacity(float enemyOpacity){
-        this.roundabout$enemyOpacity = enemyOpacity;
+        this.roundabout$enemyOpacity = Mth.clamp(enemyOpacity,0,100);
     }
     @Unique
     @Override

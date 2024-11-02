@@ -1016,6 +1016,18 @@ public class MainUtil {
             if (((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SP){
                 SP.setFingerLength(data);
             }
+        } else if (context == PacketDataIndex.FLOAT_DISTANCE_OUT) {
+            IPlayerEntity ple = (IPlayerEntity) player;
+            ple.roundabout$setDistanceOut(data);
+        } else if (context == PacketDataIndex.FLOAT_IDLE_OPACITY) {
+            IPlayerEntity ple = (IPlayerEntity) player;
+            ple.roundabout$setIdleOpacity(data);
+        } else if (context == PacketDataIndex.FLOAT_COMBAT_OPACITY) {
+            IPlayerEntity ple = (IPlayerEntity) player;
+            ple.roundabout$setCombatOpacity(data);
+        } else if (context == PacketDataIndex.FLOAT_ENEMY_OPACITY) {
+            IPlayerEntity ple = (IPlayerEntity) player;
+            ple.roundabout$setEnemyOpacity(data);
         }
     }
     public static void handleIntPacketC2S(Player player, int data, byte context){
@@ -1035,6 +1047,9 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_STAND_ATTACK_2){
             Entity target = player.level().getEntity(data);
             ((StandUser)player).roundabout$getStandPowers().handleStandAttack2(player,target);
+        } else if (context == PacketDataIndex.INT_ANCHOR_PLACE){
+            IPlayerEntity ple = (IPlayerEntity) player;
+            ple.roundabout$setAnchorPlace(data);
         }
     }
 

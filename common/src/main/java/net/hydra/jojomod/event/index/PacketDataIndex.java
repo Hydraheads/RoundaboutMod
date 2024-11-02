@@ -9,6 +9,12 @@ public class PacketDataIndex {
 
     public static final byte FLOAT_VELOCITY_BARBED_WIRE = 1;
     public static final byte FLOAT_STAR_FINGER_SIZE = 2;
+    public static final byte FLOAT_DISTANCE_OUT = 3;
+    public static final byte FLOAT_IDLE_OPACITY = 4;
+    public static final byte FLOAT_COMBAT_OPACITY = 5;
+    public static final byte FLOAT_ENEMY_OPACITY = 6;
+
+
     public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
     public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;
     public static final byte SINGLE_BYTE_IDLE_LEFT = 12;
@@ -20,6 +26,7 @@ public class PacketDataIndex {
     public static final byte INT_RIDE_TICKS = 3;
     public static final byte INT_STAND_ATTACK = 4;
     public static final byte INT_STAND_ATTACK_2 = 5;
+    public static final byte INT_ANCHOR_PLACE = 6;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
