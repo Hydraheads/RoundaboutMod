@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -222,6 +223,47 @@ public class PowerInventoryScreen
 
             if (isOptionsOut){
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-150, j, 0, 0, 148, 167);
+                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.general").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE), i- 135, j+25, 4210752, false);
+
+                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.offset").withStyle(ChatFormatting.GRAY), i- 135, j+37, 4210752, false);
+                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+46, 11, 173, 118, 11);
+                if (isSurelyHovering(i-136, j+46, 118, 11, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+46, 5, 185, 5, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+46, 5, 173, 5, 11);
+                }
+
+                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.distance").withStyle(ChatFormatting.GRAY), i- 135, j+59, 4210752, false);
+                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+68, 11, 173, 118, 11);
+                if (isSurelyHovering(i-136, j+68, 118, 11, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+68, 5, 185, 5, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+68, 5, 173, 5, 11);
+                }
+
+                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.opacity").withStyle(ChatFormatting.GRAY), i- 135, j+81, 4210752, false);
+                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+90, 11, 173, 118, 11);
+                if (isSurelyHovering(i-136, j+90, 118, 11, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+90, 5, 185, 5, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+90, 5, 173, 5, 11);
+                }
+
+                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.attack_opacity").withStyle(ChatFormatting.GRAY), i- 135, j+103, 4210752, false);
+                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+112, 11, 173, 118, 11);
+                if (isSurelyHovering(i-136, j+112, 118, 11, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+112, 5, 185, 5, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+112, 5, 173, 5, 11);
+                }
+
+                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.enemy_opacity").withStyle(ChatFormatting.GRAY), i- 135, j+125, 4210752, false);
+                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+135, 11, 173, 118, 11);
+                if (isSurelyHovering(i-136, j+135, 118, 11, mouseX, mouseY)) {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+135, 5, 185, 5, 11);
+                } else {
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+135, 5, 173, 5, 11);
+                }
             }
             StandUser standUser = ((StandUser) pl);
             boolean bypass = false;
