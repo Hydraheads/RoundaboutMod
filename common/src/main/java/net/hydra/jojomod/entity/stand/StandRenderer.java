@@ -1,8 +1,10 @@
 package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.StoneLayer;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -40,13 +42,27 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         LocalPlayer lp = Minecraft.getInstance().player;
+        float maxfade = 100;
+        if (lp !=null) {
+            IPlayerEntity ipe = ((IPlayerEntity) lp);
+            if (mobEntity.getUser() != null && mobEntity.getUser().is(lp)) {
+                if (((StandUser)lp).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
+                    maxfade = ipe.roundabout$getIdleOpacity();
+                } else {
+                    maxfade = ipe.roundabout$getCombatOpacity();
+                }
+            } else {
+                maxfade = ipe.roundabout$getEnemyOpacity();
+            }
+        }
+        maxfade*= 0.01F;
         if (lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
                 !lp.isSpectator()) && !mobEntity.forceVisible){
-            mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, 0, 0.72f);
+            mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), (mobEntity.fadePercent), 0, 0.72f);
         } else {
             float opacity = getStandOpacity(mobEntity);
             opacity *= (mobEntity.getFadePercent()*0.01F);
-            mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, opacity, 0.72f);
+            mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, opacity*maxfade, 0.72f);
         }
         (this.model).setAlpha(mobEntity.fadePercent);
 

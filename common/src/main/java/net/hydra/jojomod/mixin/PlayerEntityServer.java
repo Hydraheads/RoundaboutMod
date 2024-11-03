@@ -50,7 +50,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$teleportTo(CallbackInfo ci) {
 
-        if (!this.level().isClientSide() && !roundabout$initializeDataOnClient && connection !=null){
+        if (!this.level().isClientSide() && !roundabout$initializeDataOnClient && connection !=null && connection.isAcceptingMessages()){
             IPlayerEntity ipe = ((IPlayerEntity)this);
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                     ((ServerPlayer)((Player)(Object)this)), ipe.roundabout$getAnchorPlace(),

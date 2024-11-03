@@ -1181,6 +1181,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (((LivingEntity)(Object)this) instanceof Player PE){
                         stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
                         stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                        if (!this.level().isClientSide()) {
+                            IPlayerEntity ipe = ((IPlayerEntity) this);
+                            ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+                                    ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
+                                    ipe.roundabout$getDistanceOut(),
+                                    ipe.roundabout$getIdleOpacity(), ipe.roundabout$getCombatOpacity(),
+                                    ipe.roundabout$getEnemyOpacity());
+                        }
                     }
 
                     theWorld.addFreshEntity(stand);

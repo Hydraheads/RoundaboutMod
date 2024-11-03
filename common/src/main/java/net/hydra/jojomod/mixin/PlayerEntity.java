@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -468,11 +470,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             CompoundTag compoundtag = new CompoundTag();
             $$0.put("roundabout.VoiceMask",m2.save(compoundtag));
         }
-        $$0.getCompound("roundabout").putInt("anchorPlace",roundabout$anchorPlace);
-        $$0.getCompound("roundabout").putFloat("distanceOut",roundabout$distanceOut);
-        $$0.getCompound("roundabout").putFloat("idleOpacity",roundabout$idleOpacity);
-        $$0.getCompound("roundabout").putFloat("combatOpacity",roundabout$combatOpacity);
-        $$0.getCompound("roundabout").putFloat("enemyOpacity",roundabout$enemyOpacity);
+        CompoundTag compoundtag = new CompoundTag();
+        compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
+        compoundtag.putFloat("distanceOut",roundabout$distanceOut);
+        compoundtag.putFloat("idleOpacity",roundabout$idleOpacity);
+        compoundtag.putFloat("combatOpacity",roundabout$combatOpacity);
+        compoundtag.putFloat("enemyOpacity",roundabout$enemyOpacity);
+        $$0.put("roundabout",compoundtag);
+
         return $$0;
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
@@ -493,6 +498,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
         }
         CompoundTag compoundtag2 = $$0.getCompound("roundabout");
+        Roundabout.LOGGER.info(""+compoundtag2.contains("anchorPlace")+" "+compoundtag2.getInt("anchorPlace"));
         if (compoundtag2.contains("anchorPlace")) {
             roundabout$anchorPlace = compoundtag2.getInt("anchorPlace");
         }

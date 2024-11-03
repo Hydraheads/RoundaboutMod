@@ -222,47 +222,60 @@ public class PowerInventoryScreen
         if (pl != null) {
 
             if (isOptionsOut){
+                IPlayerEntity ipe = ((IPlayerEntity) pl);
+                int anchorPlace = ipe.roundabout$getAnchorPlace();
+                float distanceOut = ipe.roundabout$getDistanceOut();
+                float idleOpacity = ipe.roundabout$getIdleOpacity();
+                float combatOpacity = ipe.roundabout$getCombatOpacity();
+                float enemyOpacity = ipe.roundabout$getEnemyOpacity();
+
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-150, j, 0, 0, 148, 167);
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.general").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE), i- 135, j+25, 4210752, false);
 
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.offset").withStyle(ChatFormatting.GRAY), i- 135, j+37, 4210752, false);
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+46, 11, 173, 118, 11);
+                int renderSpot1 = (int) Math.floor(((double) 114/359)*(anchorPlace));
                 if (isSurelyHovering(i-136, j+46, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+46, 5, 185, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot1, j+46, 5, 185, 5, 11);
                 } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+46, 5, 173, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot1, j+46, 5, 173, 5, 11);
                 }
 
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.distance").withStyle(ChatFormatting.GRAY), i- 135, j+59, 4210752, false);
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+68, 11, 173, 118, 11);
+
+                int renderSpot2 = (int) Math.floor(((double) 114/2)*(distanceOut));
                 if (isSurelyHovering(i-136, j+68, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+68, 5, 185, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot2, j+68, 5, 185, 5, 11);
                 } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+68, 5, 173, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot2, j+68, 5, 173, 5, 11);
                 }
 
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.opacity").withStyle(ChatFormatting.GRAY), i- 135, j+81, 4210752, false);
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+90, 11, 173, 118, 11);
+                int renderSpot3 = (int) Math.floor(((double) 114/100)*(idleOpacity));
                 if (isSurelyHovering(i-136, j+90, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+90, 5, 185, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot3, j+90, 5, 185, 5, 11);
                 } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+90, 5, 173, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot3, j+90, 5, 173, 5, 11);
                 }
 
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.attack_opacity").withStyle(ChatFormatting.GRAY), i- 135, j+103, 4210752, false);
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+112, 11, 173, 118, 11);
+                int renderSpot4 = (int) Math.floor(((double) 114/100)*(combatOpacity));
                 if (isSurelyHovering(i-136, j+112, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+112, 5, 185, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot4, j+112, 5, 185, 5, 11);
                 } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+112, 5, 173, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot4, j+112, 5, 173, 5, 11);
                 }
 
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.enemy_opacity").withStyle(ChatFormatting.GRAY), i- 135, j+125, 4210752, false);
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+135, 11, 173, 118, 11);
+                int renderSpot5 = (int) Math.floor(((double) 114/100)*(enemyOpacity));
                 if (isSurelyHovering(i-136, j+135, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+135, 5, 185, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot5, j+135, 5, 185, 5, 11);
                 } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+135, 5, 173, 5, 11);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot5, j+135, 5, 173, 5, 11);
                 }
             }
             StandUser standUser = ((StandUser) pl);
@@ -383,6 +396,57 @@ public class PowerInventoryScreen
         if (pl != null) {
 
 
+            if (isOptionsOut){
+                int i = this.leftPos;
+                int j = this.topPos;
+                IPlayerEntity ipe = ((IPlayerEntity) pl);
+                int anchorPlace = ipe.roundabout$getAnchorPlace();
+                float distanceOut = ipe.roundabout$getDistanceOut();
+                float idleOpacity = ipe.roundabout$getIdleOpacity();
+                float combatOpacity = ipe.roundabout$getCombatOpacity();
+                float enemyOpacity = ipe.roundabout$getEnemyOpacity();
+                int renderSpot1 = (int) Math.floor(((double) 114/359)*(anchorPlace));
+                int jump = i-136;
+                if (isSurelyHovering(jump, j+46, 118, 11, $$0, $$1)) {
+                    int initialX = ((int)$$0) - jump;
+                    initialX = (int)((float) 359 /118)*initialX;
+                    ipe.roundabout$setAnchorPlace(initialX);
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                    return true;
+                }
+                int renderSpot2 = (int) Math.floor(((double) 114/2)*(distanceOut));
+                if (isSurelyHovering(jump, j+68, 118, 11, $$0, $$1)) {
+                    float initialX = (float) ($$0 - jump);
+                    initialX = ((float) 2 /118)*initialX;
+                    ipe.roundabout$setDistanceOut(initialX);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                    return true;
+                }
+                int renderSpot3 = (int) Math.floor(((double) 114/100)*(idleOpacity));
+                if (isSurelyHovering(jump, j+90, 118, 11, $$0, $$1)) {
+                    float initialX = (float) ($$0 - jump);
+                    initialX = ((float) 100 /118)*initialX;
+                    ipe.roundabout$setIdleOpacity(initialX);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_OPACITY);
+                    return true;
+                }
+                int renderSpot4 = (int) Math.floor(((double) 114/100)*(combatOpacity));
+                if (isSurelyHovering(jump, j+112, 118, 11, $$0, $$1)) {
+                    float initialX = (float) ($$0 - jump);
+                    initialX = ((float) 100 /118)*initialX;
+                    ipe.roundabout$setCombatOpacity(initialX);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_COMBAT_OPACITY);
+                    return true;
+                }
+                int renderSpot5 = (int) Math.floor(((double) 114/100)*(enemyOpacity));
+                if (isSurelyHovering(i-136, j+135, 118, 11, $$0, $$1)) {
+                    float initialX = (float) ($$0 - jump);
+                    initialX = ((float) 100 /118)*initialX;
+                    ipe.roundabout$setEnemyOpacity(initialX);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_ENEMY_OPACITY);
+                    return true;
+                }
+            }
 
             int leftGearPos = leftPos+6;
             int topGearPos = topPos+60;
