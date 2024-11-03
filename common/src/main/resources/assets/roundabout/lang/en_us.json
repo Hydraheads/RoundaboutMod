@@ -417,5 +417,6 @@
   "power_inventory.roundabout.settings.distance": "Following Distance",
   "power_inventory.roundabout.settings.opacity": "Opacity (Idle)",
   "power_inventory.roundabout.settings.attack_opacity": "Opacity (Fight)",
-  "power_inventory.roundabout.settings.enemy_opacity": "Opacity (of Others)"
+  "power_inventory.roundabout.settings.enemy_opacity": "Opacity (of Others)",
+  "power_inventory.roundabout.settings.reset": "Reset"
 }

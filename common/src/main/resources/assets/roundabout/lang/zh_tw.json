@@ -107,6 +107,7 @@
   "key.roundabout.menu": "能力欄",
   "key.roundabout.bonus_guard": "使用副手物品/一鍵防禦",
   "key.roundabout.switch_rows": "切換潛行技能欄",
+  "key.roundabout.show_exp": "切換替身經驗顯示",
 
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "鐵劍",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Add to iron sword",
@@ -122,6 +123,7 @@
 
   "key.category.roundabout.jojo": "Roundabout操控",
   "hud.roundabout.standout": "替身已召喚",
+  "sounds.roundabout.dsp_summon": "炸裂的替身召喚",
 
   "death.attack.stand": "%1$s在與%2$s戰鬥時死於神秘的力量",
   "death.attack.star_finger": "%1$s在與%2$s戰鬥時被變成了生魚片",
@@ -146,11 +148,15 @@
 
   "item.glaive.charge_power": "蓄力攻擊",
 
-  "commands.roundabout.force_summon.multiple": "於 %s 實體強製召喚替身",
+  "commands.roundabout.force_summon.multiple": "於實體 %s 強製召喚替身",
   "commands.roundabout.force_summon.single": "於%s強製召喚替身",
 
-  "commands.roundabout.heal.multiple": "治療 %s 實體",
+  "commands.roundabout.heal.multiple": "治療實體 %s",
   "commands.roundabout.heal.single": "治療%s",
+  "commands.roundabout.levelup.multiple": "升級實體 %s",
+  "commands.roundabout.levelup.single": "升級%s",
+  "commands.roundabout.levelup_specific.multiple": "設置實體%s等級",
+  "commands.roundabout.levelup_specific.single": "設置%s等級",
 
   "sounds.roundabout.summon_stand":  "替身已召喚！",
   "sounds.roundabout.stand_arrow_charge":  "替身箭已瞄準目標！",
@@ -188,6 +194,11 @@
   "sounds.roundabout.star_finger_silent":  "流星指刺",
 
   "sounds.roundabout.unlock_skin":  "皮膚解鎖！",
+  "sounds.roundabout.ova_platinum_barrage":  "歐拉",
+  "sounds.roundabout.ova_platinum_ora":  "歐拉",
+  "sounds.roundabout.ova_platinum_ora_2":  "歐拉",
+  "sounds.roundabout.ova_platinum_ora_3":  "歐拉",
+  "sounds.roundabout.ova_platinum_ora_4":  "歐拉",
   "sounds.roundabout.star_platinum_ora_rush":  "歐拉",
   "sounds.roundabout.star_platinum_ora_rush_2":  "歐拉",
   "sounds.roundabout.star_platinum_ora":  "歐拉",
@@ -269,6 +280,8 @@
   "sounds.roundabout.gas_can_throw": "汽油桶投擲",
   "sounds.roundabout.match_throw": "火柴投擲",
 
+  "sounds.roundabout.levelup": "替身已成長！",
+
   "instruction.roundabout.press_attack": "按下攻擊鍵",
   "instruction.roundabout.hold_attack": "長按攻擊鍵",
   "instruction.roundabout.hold_attack_crouch": "潛行時長按攻擊鍵",
@@ -339,10 +352,36 @@
   "ability.roundabout.assault.desc": "世界向前方飛去，對觸碰的目標造成傷害並使其流血。使用期間按下抓取將使其轉換模式以撿起方塊",
   "ability.roundabout.air_tanks": "氧氣罐",
   "ability.roundabout.air_tanks.desc": "[世界]背上的氧氣罐為你提供了額外的氧氣，你現在可以在水下待更久的時間。",
+
+  "ability.roundabout.locked": "???",
+  "ability.roundabout.locked.ctrl": "鎖定",
+  "ability.roundabout.locked.desc": "於成長階段%1$s解鎖",
   
   "leveling.roundabout.disc_development_potential_level": "成長度: %s",
+  "leveling.roundabout.disc_skin": "風格：",
   "leveling.roundabout.disc_maxed": "成長完成",
+  "leveling.roundabout.levelup.skins": "替身成長！已解鎖皮膚！",
+  "leveling.roundabout.levelup.moves": "替身成長！已解鎖能力！",
+  "leveling.roundabout.levelup.both": "替身成長！已解鎖皮膚與能力！",
+  "leveling.roundabout.levelup.max.skins": "成長完成：新皮膚解鎖！",
+  "leveling.roundabout.levelup.max.moves": "成長完成：新能力解鎖！",
+  "leveling.roundabout.levelup.max.both": "成長完成：新皮膚與能力解鎖！",
 
+  "gamerule.roundaboutStandGriefing": "替身破壞",
+  "gamerule.roundaboutStandGriefing.description": "替身是否可以在抓取時破壞原方塊",
+  "gamerule.roundaboutStandLeveling": "替身升級",
+  "gamerule.roundaboutStandLeveling.description": "獲得替身時是否已經滿級",
+  "gamerule.roundaboutStandRedstoneInterference": "替身紅石交互",
+  "gamerule.roundaboutStandRedstoneInterference.description": "替身是否可以與紅石、拉桿等交互",
+  "gamerule.roundaboutMobGrabbing": "生物抓取",
+  "gamerule.roundaboutMobGrabbing.description": "替身是否可以抓取、運送生物",
+  "gamerule.roundaboutSpawnWorthyMobs": "高價值生物生成",
+  "gamerule.roundaboutSpawnWorthyMobs.description": "是否能生成有資格獲取替身的高價值生物",
+  "gamerule.roundaboutSpawnStandUserMobs": "替身使者生成",
+  "gamerule.roundaboutSpawnStandUserMobs.description": "是否能生成自帶替身的生物",
+  "gamerule.roundaboutAOEBarrage": "連打範圍攻擊",
+  "gamerule.roundaboutAOEBarrage.description": "連打是否可以一次攻擊多個目標",
+  
   "idle.roundabout.passive": "閑置姿勢",
   "idle.roundabout.battle": "準備作戰",
 
@@ -357,12 +396,15 @@
 
   "skins.roundabout.the_world.base": "第三部",
   "skins.roundabout.the_world.manga": "漫畫",
-  "skins.roundabout.the_world.heritage": "影世界",
+  "skins.roundabout.the_world.heritage": "未來遺產",
   "skins.roundabout.the_world.ova": "OVA",
-  "skins.roundabout.the_world.black": "暗色",
+  "skins.roundabout.the_world.black": "High世界",
   "skins.roundabout.the_world.part_7": "THE WORLD",
   "skins.roundabout.the_world.blue_part_7": "藍色THE WORLD",
   "skins.roundabout.the_world.over_heaven": "超越天堂",
+  "skins.roundabout.the_world.dark": "暗色",
+  "skins.roundabout.the_world.aqua": "水色",
+  "skins.roundabout.the_world.arcade": "街機（未來遺產）",
 
   "unlock_skin.roundabout.the_world.over_heaven": "世界：超越天堂皮膚解鎖！",
   "unlock_skin.roundabout.star_platinum.atomic": "白金之星：原子皮膚解鎖！"

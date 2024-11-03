@@ -35,10 +35,13 @@
 
   "item.roundabout.star_platinum_disc": "Disco de Stand",
   "item.roundabout.the_world_disc": "Disco de Stand",
+  "item.roundabout.justice_disc": "Disco de Stand",
   "item.roundabout.max_star_platinum_disc": "Disco de Stand+",
   "item.roundabout.max_the_world_disc": "Disco de Stand+",
+  "item.roundabout.max_justice_disc": "Disco de Stand+",
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
+  "item.roundabout.justice_disc.desc": "Justice",
 
   "item.roundabout.blank_mask": "Rostro cristalino",
   "item.roundabout.blank_mask.desc": "Esconde la armadura",
@@ -107,6 +110,7 @@
   "key.roundabout.menu": "Inventario de poder",
   "key.roundabout.bonus_guard": "Uso en la otra mano / Bloqueo facil",
   "key.roundabout.switch_rows": "Alternar fila de habilidad agachandose",
+  "key.roundabout.show_exp": "Alternar visualizador de EXP Stand",
 
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Espada de hierro",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Añade a una espada de hierro",
@@ -122,6 +126,7 @@
 
   "key.category.roundabout.jojo": "Roundabout controles",
   "hud.roundabout.standout": "Stand convocado",
+  "sounds.roundabout.dsp_summon": "Stand convocado explosivamente",
 
   "death.attack.stand": "%1$s murió por un poder misterioso mientras peleaba contra %2$s",
   "death.attack.star_finger": "%1$s fue convertido en picadillo mientras peleaba contra %2$s",
@@ -151,13 +156,18 @@
 
   "commands.roundabout.heal.multiple": "Curadas %s entidades",
   "commands.roundabout.heal.single": "Curado %s",
+  "commands.roundabout.levelup.multiple": "Se ha subido de nivel a %s entidades",
+  "commands.roundabout.levelup.single": "Se subió de nivel %s",
+  "commands.roundabout.levelup_specific.multiple": "Se ha cambiado el nivel de %s entidades",
+  "commands.roundabout.levelup_specific.single": "Se ha cambiado el nivel de %s",
 
-  "sounds.roundabout.summon_stand":  "Stand convocado",
   "sounds.roundabout.stand_arrow_charge":  "Flecha de Stand magnetizada",
   "sounds.roundabout.stand_arrow_use":  "¡Stand obtenido!",
+  "sounds.roundabout.summon_stand":  "Stand convocado",
   "sounds.roundabout.summon_star":  "Stand convocado",
   "sounds.roundabout.summon_world":  "Stand convocado",
   "sounds.roundabout.ova_summon":  "Stand convocado",
+  "sounds.roundabout.ova_summon_the_world":  "Stand invocado",
   "sounds.roundabout.punch_sfx1":  "Golpe al aire",
   "sounds.roundabout.punch_sfx2":  "Golpe al aire",
   "sounds.roundabout.punch_sfx3":  "Impacto",
@@ -174,6 +184,7 @@
   "sounds.roundabout.ova_muda_2":  "MUDA",
   "sounds.roundabout.twau_muda":  "MUDA",
   "sounds.roundabout.twau_muda_2":  "MUDA",
+  "sounds.roundabout.twau_muda_3":  "MUDA",
   "sounds.roundabout.twau_barrage":  "MUDA",
   "sounds.roundabout.twau_barrage_2":  "MUDA",
   "sounds.roundabout.ova_barrage":  "MUDA",
@@ -185,6 +196,12 @@
 
   "sounds.roundabout.star_finger_silent":  "Star Finger",
 
+  "sounds.roundabout.unlock_skin":  "¡Aspecto desbloqueado!",
+  "sounds.roundabout.ova_platinum_barrage":  "ORA",
+  "sounds.roundabout.ova_platinum_ora":  "ORA",
+  "sounds.roundabout.ova_platinum_ora_2":  "ORA",
+  "sounds.roundabout.ova_platinum_ora_3":  "ORA",
+  "sounds.roundabout.ova_platinum_ora_4":  "ORA",
   "sounds.roundabout.star_platinum_ora_rush":  "ORA",
   "sounds.roundabout.star_platinum_ora_rush_2":  "ORA",
   "sounds.roundabout.star_platinum_ora":  "ORA",
@@ -219,11 +236,15 @@
   "sounds.roundabout.timestop_the_world2":  "¡Tiempo detenido!",
   "sounds.roundabout.timestop_the_world3":  "¡Tiempo detenido!",
   "sounds.roundabout.timestop_star_platinum":  "¡Tiempo detenido!",
+  "sounds.roundabout.ova_sp_ts":  "¡Tiempo detenido!",
+  "sounds.roundabout.ova_long_ts":  "¡Tiempo detenido!",
+  "sounds.roundabout.ova_short_ts":  "¡Tiempo detenido!",
   "sounds.roundabout.timestop_charge_theworld":  "Preparando pausa del tiempo",
   "sounds.roundabout.twau_timestop_2":  "Preparando pausa del tiempo",
   "sounds.roundabout.twau_the_world":  "¡THE WORLD!",
   "sounds.roundabout.timestop_resume_theworld":  "¡El tiempo se resume!",
   "sounds.roundabout.timestop_resume_theworld2":  "¡El tiempo se resume!",
+  "sounds.roundabout.ova_time_resume":  "¡El tiempo se resume!",
   "sounds.roundabout.timestop_voice_theworld":  "Para, el tiempo",
   "sounds.roundabout.timestop_voice_theworld2":  "¡The World!",
   "sounds.roundabout.timestop_voice_theworld3":  "¡The World!",
@@ -261,6 +282,8 @@
   "sounds.roundabout.gasoline_explosion": "Gasolina explota",
   "sounds.roundabout.gas_can_throw": "Tanque de gasolina lanzado",
   "sounds.roundabout.match_throw": "Fósforo lanzado",
+
+  "sounds.roundabout.levelup": "¡Desarrollo subió de nivel!",
   
   "instruction.roundabout.press_attack": "Presiona ataque",
   "instruction.roundabout.hold_attack": "Mantén ataque",
@@ -333,8 +356,34 @@
   "ability.roundabout.air_tanks": "Tanques de oxígeno",
   "ability.roundabout.air_tanks.desc": "El tanque en la espalda de The World te provee con aire extra, así que puedes nadar bajo el agua por mucho más tiempo.",
 
+  "ability.roundabout.locked": "???",
+  "ability.roundabout.locked.ctrl": "Bloqueado",
+  "ability.roundabout.locked.desc": "Desbloquea en la etapa de desarrollo %1$s",
+
   "leveling.roundabout.disc_development_potential_level": "Desarrollo: %s",
+  "leveling.roundabout.disc_skin": "Estilo: ",
   "leveling.roundabout.disc_maxed": "Completo",
+  "leveling.roundabout.levelup.skins": "¡Desarrollo de Stand: Nuevo aspecto!",
+  "leveling.roundabout.levelup.moves": "¡Desarrollo de Stand: Nueva habilidad!",
+  "leveling.roundabout.levelup.both": "¡Desarrollo de Stand: Nueva habilidad y aspecto!",
+  "leveling.roundabout.levelup.max.skins": "¡Desarrollo máximo: Nuevo aspecto!",
+  "leveling.roundabout.levelup.max.moves": "¡Desarrollo máximo: Nueva habilidad!",
+  "leveling.roundabout.levelup.max.both": "¡Desarrollo máximo: Nueva habilidad y aspecto!",
+
+  "gamerule.roundaboutStandGriefing": "Permitir que los Stands destruyan",
+  "gamerule.roundaboutStandGriefing.description": "Controla si los Stands pueden o no interactuar con bloques",
+  "gamerule.roundaboutStandLeveling": "Niveles de Stand",
+  "gamerule.roundaboutStandLeveling.description": "Controla si los Stands inician o no con nivel máximo",
+  "gamerule.roundaboutStandRedstoneInterference": "Interacciones de Stand con redstone",
+  "gamerule.roundaboutStandRedstoneInterference.description": "Controla si los Stands pueden o no interactuar con palancas, redstone, etc.",
+  "gamerule.roundaboutMobGrabbing": "Agarre de criaturas",
+  "gamerule.roundaboutMobGrabbing.description": "Controla si los Stands pueden o no cargar criaturas",
+  "gamerule.roundaboutSpawnWorthyMobs": "Generar criaturas dignas",
+  "gamerule.roundaboutSpawnWorthyMobs.description": "Controla si se pueden generar o no criaturas dignas de obtener Stands",
+  "gamerule.roundaboutSpawnStandUserMobs": "Generar usuarios de Stand",
+  "gamerule.roundaboutSpawnStandUserMobs.description": "Controla si se pueden generar o no criaturas con Stand",
+  "gamerule.roundaboutAOEBarrage": "Bombardeo en área",
+  "gamerule.roundaboutAOEBarrage.description": "Controla si el bombarde Stand puede golpear a múltiples objetivos",
   
   "idle.roundabout.passive": "Pose inactiva",
   "idle.roundabout.battle": "Listo para pelear",
@@ -355,5 +404,11 @@
   "skins.roundabout.the_world.black": "Stand Stats",
   "skins.roundabout.the_world.part_7": "THE WORLD",
   "skins.roundabout.the_world.blue_part_7": "Azul",
-  "skins.roundabout.the_world.over_heaven": "Over Heaven"
+  "skins.roundabout.the_world.over_heaven": "Over Heaven",
+  "skins.roundabout.the_world.dark": "Dark",
+  "skins.roundabout.the_world.aqua": "The Earth",
+  "skins.roundabout.the_world.arcade": "Arcade",
+
+  "unlock_skin.roundabout.the_world.over_heaven": "¡Aspecto The World: Over Heaven desbloqueado!",
+  "unlock_skin.roundabout.star_platinum.atomic": "¡Aspecto Star Platinum: Atomic Skin desbloqueado!"
 }
