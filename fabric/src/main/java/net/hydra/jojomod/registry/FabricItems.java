@@ -174,8 +174,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_STAR_PLATINUM);
                         entries.accept(STAND_DISC_THE_WORLD);
                         entries.accept(MAX_STAND_DISC_THE_WORLD);
-                        entries.accept(STAND_DISC_JUSTICE);
-                        entries.accept(MAX_STAND_DISC_JUSTICE);
+                        //entries.accept(STAND_DISC_JUSTICE);
+                        //entries.accept(MAX_STAND_DISC_JUSTICE);
 
                     }).build());
 
