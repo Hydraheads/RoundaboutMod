@@ -172,7 +172,7 @@ public class ForgeItems {
     ;
 
     public static final RegistryObject<Item> MAX_STAND_DISC_JUSTICE = //addToDiscTab(
-            ITEMS.register("justice_disc",
+            ITEMS.register("max_justice_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)))
             //)
             ;
