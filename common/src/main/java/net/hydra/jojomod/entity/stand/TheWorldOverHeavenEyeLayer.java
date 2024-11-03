@@ -22,8 +22,8 @@ public class TheWorldOverHeavenEyeLayer <T extends TheWorldEntity, M extends Sta
     @Override
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
         if ($$3.getSkin()== TheWorldEntity.OVER_HEAVEN && Minecraft.getInstance().player != null &&
-                !((StandUser)Minecraft.getInstance().player).roundabout$getStandDisc().isEmpty() ||
-                Minecraft.getInstance().player.isSpectator()){
+                !(((StandUser)Minecraft.getInstance().player).roundabout$getStandDisc().isEmpty() ||
+                Minecraft.getInstance().player.isSpectator())){
             VertexConsumer $$10 = $$1.getBuffer(this.renderType());
             this.getParentModel().renderToBuffer($$0, $$10, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
