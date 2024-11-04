@@ -11,6 +11,12 @@
       "roundabout:ova_summon"
     ]
   },
+  "summon_justice": {
+    "subtitle": "sounds.roundabout.summon_justice",
+    "sounds": [
+      "roundabout:summon_justice"
+    ]
+  },
   "levelup": {
     "subtitle": "sounds.roundabout.levelup",
     "sounds": [

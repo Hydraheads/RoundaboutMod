@@ -1,14 +1,28 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 public class PowersJustice extends StandPowers {
     public PowersJustice(LivingEntity self) {
@@ -21,7 +35,7 @@ public class PowersJustice extends StandPowers {
     }
     @Override
     public boolean canSummonStand(){
-        return false;
+        return true;
     }
     @Override
     public boolean interceptAttack(){
@@ -37,6 +51,23 @@ public class PowersJustice extends StandPowers {
         return false;
     }
 
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+    @Override
+    public StandEntity getNewStandEntity(){
+        return ModEntities.JUSTICE.create(this.getSelf().level());
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.SUMMON_JUSTICE_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -48,5 +79,33 @@ public class PowersJustice extends StandPowers {
         setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
 
         setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
+    }
+
+    @Override
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(TheWorldEntity.PART_3_SKIN);
+        $$1.add(JusticeEntity.SKELETON_SKIN);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(JusticeEntity.MANGA_SKIN);
+            } if (Level > 2 || bypass){
+                $$1.add(JusticeEntity.OVA_SKIN);
+            } if (Level > 3 || bypass){
+                $$1.add(JusticeEntity.STRAY_SKIN);
+            } if (Level > 4 || bypass){
+                $$1.add(JusticeEntity.BOGGED);
+            } if (Level > 5 || bypass){
+                $$1.add(JusticeEntity.WITHER);
+            } if (Level > 6 || bypass){
+                $$1.add(JusticeEntity.TAROT);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(JusticeEntity.FLAMED);
+            }
+        }
+        return $$1;
     }
 }

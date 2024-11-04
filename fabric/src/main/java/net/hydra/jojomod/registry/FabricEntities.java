@@ -7,10 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumBaseballEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -54,6 +51,13 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"),
                         EntityType.Builder.of(StarPlatinumBaseballEntity::new, MobCategory.MISC).
                                 sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":star_platinum_baseball")
+                );
+        public static final EntityType<JusticeEntity> JUSTICE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "justice"),
+                        EntityType.Builder.of(JusticeEntity::new, MobCategory.MISC).
+                                sized(1.0F, 3.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":justice")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
@@ -111,6 +115,7 @@ public class FabricEntities {
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
                 ModEntities.STAR_PLATINUM_BASEBALL = STAR_PLATINUM_BASEBALL;
+                ModEntities.JUSTICE = JUSTICE;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
@@ -125,6 +130,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,

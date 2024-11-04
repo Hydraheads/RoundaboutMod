@@ -38,6 +38,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.THE_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.JUSTICE.get(), StandEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -143,6 +144,7 @@ public class ForgeEvents {
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
+        ModEntities.JUSTICE = ForgeEntities.JUSTICE.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();

@@ -3,8 +3,10 @@ package net.hydra.jojomod.entity.stand;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class JusticeEntity extends StandEntity {
     public JusticeEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -68,6 +70,41 @@ public class JusticeEntity extends StandEntity {
             }
         }
         super.tick();
+    }
+
+    @Override
+    public Vec3 getIdleOffset(LivingEntity standUser) {
+        int vis = this.getFadeOut();
+        double r = (((double) vis / MaxFade) * ((standUser.getBbWidth()/2)+this.getDistanceOut()));
+        if (r < 0.5) {
+            r = 0.5;
+        }
+        double yawfix = standUser.getYRot();
+        yawfix += this.getAnchorPlace()+125;
+        if (yawfix > 360) {
+            yawfix -= 360;
+        } else if (yawfix < 0) {
+            yawfix += 360;
+        }
+        double ang = (yawfix - 180) * Math.PI;
+
+        double mcap = 0.3;
+        Vec3 xyz = standUser.getDeltaMovement();
+        double yy = xyz.y() * 0.3;
+        if (yy > mcap) {
+            yy = mcap;
+        } else if (yy < -mcap) {
+            yy = -mcap;
+        }
+        if (isSwimming() || isVisuallyCrawling() || isFallFlying()) {
+            yy += 1;
+        }
+
+        double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
+        double y1 = standUser.getY() + 0.1 - yy;
+        double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
+
+        return new Vec3(x1, y1, z1);
     }
 
 }

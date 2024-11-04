@@ -11,6 +11,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum"), "main");
+    public static final ModelLayerLocation JUSTICE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     public static final ModelLayerLocation KNIFE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "knife"), "main");

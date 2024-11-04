@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumBaseballEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -36,6 +37,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "star_platinum").toString())
+            );
+    public static final RegistryObject<EntityType<JusticeEntity>> JUSTICE =
+            ENTITY_TYPES.register("justice", () ->
+                    EntityType.Builder.of(JusticeEntity::new, MobCategory.MISC).sized(1.0F, 3.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "justice").toString())
             );
     public static final RegistryObject<EntityType<StarPlatinumBaseballEntity>> STAR_PLATINUM_BASEBALL =
             ENTITY_TYPES.register("star_platinum_baseball", () ->

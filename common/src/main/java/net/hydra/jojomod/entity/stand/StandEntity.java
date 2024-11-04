@@ -45,7 +45,7 @@ public abstract class StandEntity extends Mob{
 
     /**MaxFade and FADE_OUT control a stand become less and less transparent as it is
      * summoned. When a stand completely fades out, it despawns.*/
-    private final int MaxFade = 8;
+    public final int MaxFade = 8;
 
     public float fadePercent =0F;
     protected static final EntityDataAccessor<Integer> FADE_PERCENT = SynchedEntityData.defineId(StandEntity.class,

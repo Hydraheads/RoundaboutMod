@@ -30,6 +30,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StarPlatinumBaseballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_MATCH.get(), ThrownItemRenderer::new);
@@ -45,6 +46,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_LAYER, JusticeModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
