@@ -338,11 +338,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "getCurrentItemAttackStrengthDelay", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getCurrentItemAttackStrengthDelay(CallbackInfoReturnable<Float> cir) {
         byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
+        float modifier = 1;
         if (curse > -1) {
             if ((curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
             || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
-                cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*0.6) * 20.0D));
+                modifier = 0.6F;
             }
+        }
+        boolean standActive = ((StandUser) this).roundabout$getActive();
+        if (standActive){
+            modifier*= ((StandUser)this).roundabout$getStandPowers().getBonusAttackSpeed();
+        }
+        if (modifier != 1){
+            cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*modifier) * 20.0D));
         }
     }
     /**Block Breaking Speed Decreases when your hand is stone*/

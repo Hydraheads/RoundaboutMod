@@ -80,6 +80,10 @@ public class PowersJustice extends StandPowers {
 
         setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
     }
+    @Override
+    public float getBonusAttackSpeed() {
+        return 1.25F;
+    }
 
     @Override
     public float getBonusPassiveMiningSpeed(){

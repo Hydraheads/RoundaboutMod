@@ -2195,6 +2195,9 @@ public class StandPowers {
     }
 
 
+    public float getBonusAttackSpeed() {
+        return 1F;
+    }
     public float getPickMiningSpeed() {
         return 5F;
     }
