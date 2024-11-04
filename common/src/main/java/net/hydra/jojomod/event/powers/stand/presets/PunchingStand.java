@@ -47,10 +47,6 @@ public class PunchingStand extends StandPowers {
         return true;
     }
     public boolean consumeClickInput = false;
-    @Override
-    public float getMiningSpeed() {
-        return 5F;
-    }
 
     public SoundEvent getLastRejectionHitSound(){
         return null;

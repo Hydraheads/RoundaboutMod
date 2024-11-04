@@ -69,8 +69,21 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return maxChargeTSTime;
     }
 
+
     @Override
-    public float getMiningSpeed() {
+    public float getPickMiningSpeed() {
+        return 12F;
+    }
+    @Override
+    public float getAxeMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getSwordMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getShovelMiningSpeed() {
         return 8F;
     }
 

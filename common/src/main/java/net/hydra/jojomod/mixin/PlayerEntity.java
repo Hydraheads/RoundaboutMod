@@ -351,14 +351,20 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "getDestroySpeed", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getDestroySpeed(BlockState $$0, CallbackInfoReturnable<Float> cir) {
         byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
-        if (curse > -1 && !roundabout$destroySpeedRecursion) {
-            if ((curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
+        if (!roundabout$destroySpeedRecursion) {
+            roundabout$destroySpeedRecursion = true;
+            float dSpeed = this.getDestroySpeed($$0);
+            roundabout$destroySpeedRecursion = false;
+            if (curse > -1 && (curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
                     || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
-                roundabout$destroySpeedRecursion = true;
-                float dSpeed = this.getDestroySpeed($$0);
-                roundabout$destroySpeedRecursion = false;
-                cir.setReturnValue((float)(dSpeed*0.6));
+                dSpeed *= 6;
             }
+
+            boolean standActive = ((StandUser) this).roundabout$getActive();
+            if (standActive){
+                dSpeed*= ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
+            }
+            cir.setReturnValue(dSpeed);
         }
     }
 
@@ -545,16 +551,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
+        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
         if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
-            float mspeed = ((StandUser) this).roundabout$getStandPowers().getMiningSpeed();
+            float mspeed;
             if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
-                if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL) || $$0.is(BlockTags.MINEABLE_WITH_AXE)){
-                    mspeed/=2;
+                if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
+                    mspeed = powers.getShovelMiningSpeed() / 2;
+                } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
+                    mspeed = powers.getAxeMiningSpeed() / 2;
                 } else {
-                    mspeed/=4;
+                    mspeed= powers.getSwordMiningSpeed()/4;
                 }
             } else {
-                mspeed*=3;
+                mspeed= powers.getPickMiningSpeed()*3;
             }
 
 

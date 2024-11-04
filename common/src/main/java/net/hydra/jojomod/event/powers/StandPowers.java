@@ -859,6 +859,9 @@ public class StandPowers {
         }
     }
 
+    public float getBonusPassiveMiningSpeed(){
+        return 1F;
+    }
     public void breakClash(LivingEntity winner, LivingEntity loser){
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
             ((StandUser)winner).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
@@ -2192,10 +2195,18 @@ public class StandPowers {
     }
 
 
-    public float getMiningSpeed() {
-        return 3F;
+    public float getPickMiningSpeed() {
+        return 5F;
     }
-
+    public float getAxeMiningSpeed() {
+        return 5F;
+    }
+    public float getSwordMiningSpeed() {
+        return 5F;
+    }
+    public float getShovelMiningSpeed() {
+        return 5F;
+    }
     public boolean setPowerClash() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CLASH);

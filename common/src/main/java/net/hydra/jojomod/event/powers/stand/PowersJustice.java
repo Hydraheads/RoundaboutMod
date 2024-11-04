@@ -82,6 +82,11 @@ public class PowersJustice extends StandPowers {
     }
 
     @Override
+    public float getBonusPassiveMiningSpeed(){
+        return 1.25F;
+    }
+
+    @Override
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(TheWorldEntity.PART_3_SKIN);

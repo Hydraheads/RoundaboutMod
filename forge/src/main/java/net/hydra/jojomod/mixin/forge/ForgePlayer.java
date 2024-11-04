@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.forge;
 
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -99,6 +100,13 @@ public abstract class ForgePlayer extends LivingEntity {
                     }
 
                     f = net.minecraftforge.event.ForgeEventFactory.getBreakSpeed(((Player)(Object)this), $$0, f, pos);
+
+
+                    boolean standActive = ((StandUser) this).roundabout$getActive();
+                    if (standActive){
+                        f*= ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
+                    }
+
                     cir.setReturnValue((float)(f*0.6));
                 }
             }
@@ -107,31 +115,38 @@ public abstract class ForgePlayer extends LivingEntity {
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
-            float mspeed = ((StandUser) this).roundabout$getStandPowers().getMiningSpeed();
-            if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
-                if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL) || $$0.is(BlockTags.MINEABLE_WITH_AXE)){
-                    mspeed/=2;
+        boolean standActive = ((StandUser) this).roundabout$getActive();
+        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+        if (standActive) {
+            if (((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
+                float mspeed;
+                if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
+                    if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
+                        mspeed = powers.getShovelMiningSpeed() / 2;
+
+                    } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
+                            mspeed= powers.getAxeMiningSpeed()/2;
+                    } else {
+                        mspeed= powers.getSwordMiningSpeed()/4;
+                    }
                 } else {
-                    mspeed/=4;
+                    mspeed= powers.getPickMiningSpeed()*3;
                 }
-            } else {
-                mspeed*=3;
-            }
 
 
-            if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
-                mspeed /= 5.0F;
-            }
+                if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+                    mspeed /= 5.0F;
+                }
 
-            if (!this.onGround()) {
-                mspeed /= 5.0F;
-            }
+                if (!this.onGround()) {
+                    mspeed /= 5.0F;
+                }
 
-            if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock) {
-                mspeed = 0.0F;
+                if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock) {
+                    mspeed = 0.0F;
+                }
+                cir.setReturnValue(mspeed);
             }
-            cir.setReturnValue(mspeed);
         }
     }
 
