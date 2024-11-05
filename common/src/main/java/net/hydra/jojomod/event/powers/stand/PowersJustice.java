@@ -65,6 +65,9 @@ public class PowersJustice extends DashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice) {
         byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            if (bt == JusticeEntity.FLAMED){
+                return ModSounds.SUMMON_JUSTICE_2_EVENT;
+            }
             return ModSounds.SUMMON_JUSTICE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);

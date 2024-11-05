@@ -17,6 +17,12 @@
       "roundabout:summon_justice"
     ]
   },
+  "summon_justice_2": {
+    "subtitle": "sounds.roundabout.summon_justice_2",
+    "sounds": [
+      "roundabout:summon_justice_2"
+    ]
+  },
   "levelup": {
     "subtitle": "sounds.roundabout.levelup",
     "sounds": [
