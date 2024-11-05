@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -58,6 +59,9 @@ public class PowersJustice extends DashPreset {
     }
     @Override
     public StandEntity getNewStandEntity(){
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == JusticeEntity.PIRATE){
+            return ModEntities.JUSTICE_PIRATE.create(this.getSelf().level());
+        }
         return ModEntities.JUSTICE.create(this.getSelf().level());
     }
 
@@ -111,11 +115,12 @@ public class PowersJustice extends DashPreset {
                 $$1.add(JusticeEntity.STRAY_SKIN);
                 $$1.add(JusticeEntity.BOGGED);
             } if (Level > 4 || bypass){
+                $$1.add(JusticeEntity.WITHER);
                 $$1.add(JusticeEntity.TWILIGHT);
             } if (Level > 5 || bypass){
-                $$1.add(JusticeEntity.WITHER);
-            } if (Level > 6 || bypass){
                 $$1.add(JusticeEntity.TAROT);
+            } if (Level > 6 || bypass){
+                $$1.add(JusticeEntity.PIRATE);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(JusticeEntity.FLAMED);
             }
