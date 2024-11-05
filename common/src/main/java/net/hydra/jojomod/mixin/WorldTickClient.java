@@ -85,11 +85,15 @@ public abstract class WorldTickClient extends Level {
     @Unique
     private void roundabout$tickStandIn(LivingEntity entity, StandEntity stand) {
         if (stand == null || stand.isRemoved()) {
-            ((StandUser)entity).roundabout$removeFollower(stand);
+            if (entity !=null) {
+                ((StandUser) entity).roundabout$removeFollower(stand);
+            }
             return;
         }
         if (stand.getFollowing() != null && stand.getFollowing().getId() != entity.getId()) {
-            ((StandUser)entity).roundabout$removeFollower(stand);
+            if (entity !=null) {
+                ((StandUser) entity).roundabout$removeFollower(stand);
+            }
             return;
         }
         byte ot = stand.getOffsetType();
@@ -304,11 +308,14 @@ public abstract class WorldTickClient extends Level {
         }
         this.tickingEntities.forEach($$0x -> {
             if ($$0x instanceof StandEntity standEntity) {
-                if (standEntity.getFollowing() != null){
+                if (standEntity.getFollowing() != null && !standEntity.getFollowing().isRemoved()){
                     LivingEntity LE = standEntity.getFollowing();
                     if (!((StandUser)LE).roundabout$hasFollower(standEntity)){
                         ((StandUser)LE).roundabout$addFollower(standEntity);
                     }
+
+                } else {
+                    roundabout$tickStandIn(null,standEntity);
                 }
             }
         });
