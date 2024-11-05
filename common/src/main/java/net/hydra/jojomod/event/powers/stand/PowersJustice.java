@@ -109,8 +109,9 @@ public class PowersJustice extends DashPreset {
                 $$1.add(JusticeEntity.OVA_SKIN);
             } if (Level > 3 || bypass){
                 $$1.add(JusticeEntity.STRAY_SKIN);
-            } if (Level > 4 || bypass){
                 $$1.add(JusticeEntity.BOGGED);
+            } if (Level > 4 || bypass){
+                $$1.add(JusticeEntity.TWILIGHT);
             } if (Level > 5 || bypass){
                 $$1.add(JusticeEntity.WITHER);
             } if (Level > 6 || bypass){

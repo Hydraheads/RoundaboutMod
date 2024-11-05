@@ -22,7 +22,8 @@ public class JusticeEntity extends StandEntity {
             STRAY_SKIN = 6,
             TAROT = 8,
             FLAMED = 7,
-            WITHER = 9;
+            WITHER = 9,
+            TWILIGHT = 10;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -47,6 +48,8 @@ public class JusticeEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.justice.wither");
         } else if (skinId == FLAMED){
             return Component.translatable(  "skins.roundabout.justice.flamed");
+        } else if (skinId == TWILIGHT){
+            return Component.translatable(  "skins.roundabout.justice.twilight");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }

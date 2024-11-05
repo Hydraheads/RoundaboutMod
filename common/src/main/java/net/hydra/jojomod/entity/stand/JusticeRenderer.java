@@ -26,6 +26,7 @@ public class JusticeRenderer<T extends StandEntity> extends StandRenderer<Justic
     private static final ResourceLocation WITHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_wither.png");
     private static final ResourceLocation TAROT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_tarot.png");
     private static final ResourceLocation FLAMED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_flamed.png");
+    private static final ResourceLocation TWILIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_twilight.png");
 
 
     @Override
@@ -49,6 +50,8 @@ public class JusticeRenderer<T extends StandEntity> extends StandRenderer<Justic
             return WITHER;
         } else if (BT == JusticeEntity.TAROT){
             return TAROT;
+        } else if (BT == JusticeEntity.TWILIGHT){
+            return TWILIGHT;
         }
         return PART_3_SKIN;
     }
