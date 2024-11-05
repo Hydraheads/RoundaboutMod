@@ -178,6 +178,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
+
+            byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (skn == TheWorldEntity.OVA_SKIN){
+                playSoundsIfNearby(BARRAGE_NOISE_5, 27, false);
+                return;
+            }
+            if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
+                playSoundsIfNearby(BARRAGE_NOISE_3, 27, false);
+                return;
+            }
             playSoundsIfNearby(BARRAGE_NOISE_2, 27, false);
         }
     }

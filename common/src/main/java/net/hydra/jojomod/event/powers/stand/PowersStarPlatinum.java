@@ -175,6 +175,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
+
+            byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (skn == StarPlatinumEntity.OVA_SKIN) {
+                playSoundsIfNearby(BARRAGE_NOISE_3, 27, false);
+                return;
+            }
             playSoundsIfNearby(BARRAGE_NOISE, 27, false);
         }
     }
