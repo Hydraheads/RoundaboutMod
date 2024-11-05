@@ -640,41 +640,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return false;
     }
     /**Tick through dash*/
-    @Override
-    public void tickDash(){
-        if (this.getSelf() instanceof Player) {
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0) {
-                cancelConsumableItem(this.getSelf());
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
-                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
-                if (!this.getSelf().level().isClientSide){
-                    ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                    byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                    if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                    }
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 0){
-                ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getClientDodgeTime()+1);
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
-
-                ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
-                if (this.getSelf().level().isClientSide){
-                    ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
-                }
-            }
-        }
-    }
 
     public byte getTimeResumeNoise(){
         return TIME_RESUME_NOISE;
@@ -742,70 +707,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         playSoundsIfNearby(TIME_STOP_CHARGE, 100, true);
         return true;
     }
-    @Override
-    public boolean setPowerMovement(int lastMove) {
-        if (this.getSelf() instanceof Player) {
-            cancelConsumableItem(this.getSelf());
-            this.setPowerNone();
-            if (!this.getSelf().level().isClientSide()) {
-                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
-                ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
-                if (storedInt < 0) {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
-                } else {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
-                }
 
-                int degrees = (int) (this.getSelf().getYRot() % 360);
-                if (storedInt == 1) {
-                    degrees -= 90;
-                    degrees = degrees % 360;
-                } else if (storedInt == 2) {
-                    degrees -= 45;
-                    degrees = degrees % 360;
-                } else if (storedInt == -1) {
-                    degrees -= 135;
-                    degrees = degrees % 360;
-                } else if (storedInt == 3) {
-                    degrees += 90;
-                    degrees = degrees % 360;
-                } else if (storedInt == 4) {
-                    degrees += 45;
-                    degrees = degrees % 360;
-                } else if (storedInt == -2) {
-                    degrees += 135;
-                    degrees = degrees % 360;
-                } else if (storedInt == -3) {
-                    degrees += 180;
-                    degrees = degrees % 360;
-                }
-                for (int i = 0; i < 3; i++){
-                    float j = 0.1F;
-                    if (i == 1){
-                        degrees -= 20;
-                    } else if (i == 2){
-                        degrees += 40;
-                    } else {
-                        j = 0.2F;
-                    }
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
-                            this.getSelf().getX(), this.getSelf().getY()+0.1, this.getSelf().getZ(),
-                            0,
-                            Mth.sin(degrees * ((float) Math.PI / 180))*0.3,
-                            Mth.sin(-20 * ((float) Math.PI / 180))*-j,
-                            -Mth.cos(degrees * ((float) Math.PI / 180))*0.3,
-                            0.8);
-                }
-            }
-        }
-        if (!this.getSelf().level().isClientSide()) {
-            if (Math.random() > 0.8){
-                addEXP(1);
-            }
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
-        }
-        return true;
-    }
 
 
     @Override
@@ -1434,8 +1336,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 super.tryChargedPower(move, forced, chargeTime);
             } else if (move == PowerIndex.SPECIAL_FINISH) {
                 /*If the server is behind on the client TS time, update it to lower*/
-            } else if (move == PowerIndex.MOVEMENT) {
-                this.storedInt = chargeTime;
             }else if (move == PowerIndex.SNEAK_ATTACK) {
                 this.chargedFinal = chargeTime;
             }

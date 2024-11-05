@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-public class PunchingStand extends StandPowers {
+public class PunchingStand extends DashPreset {
     public PunchingStand(LivingEntity self) {
         super(self);
     }

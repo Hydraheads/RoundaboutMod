@@ -9,10 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -761,8 +758,40 @@ public class StandPowers {
     public void tickMobAi(){
 
     }
-    public void tickDash(){
 
+    public void tickDash(){
+        if (this.getSelf() instanceof Player) {
+
+            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0) {
+                cancelConsumableItem(this.getSelf());
+            }
+
+            if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
+                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
+                if (!this.getSelf().level().isClientSide){
+                    ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
+                    byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
+                    if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
+                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
+                    }
+                }
+            } else if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 0){
+                ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getClientDodgeTime()+1);
+            }
+
+            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
+
+                ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
+                byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
+                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
+                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
+                }
+            } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
+                if (this.getSelf().level().isClientSide){
+                    ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
+                }
+            }
+        }
     }
     public void tickCooldowns(){
         int amt = 1;

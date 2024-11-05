@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -24,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public class PowersJustice extends StandPowers {
+public class PowersJustice extends DashPreset {
     public PowersJustice(LivingEntity self) {
         super(self);
     }
@@ -76,7 +77,7 @@ public class PowersJustice extends StandPowers {
 
         setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_PHASE_GRAB, PowerIndex.SKILL_2);
 
-        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.NONE);
 
         setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
     }
