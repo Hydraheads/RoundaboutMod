@@ -116,7 +116,7 @@ public class JusticeModel<T extends JusticeEntity> extends StandModel<T> {
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
-        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
+        this.animate(pEntity.idleAnimation, JusticeAnimations.IDLE_JUSTICE, pAgeInTicks, 0.3f);
     }
 
     @Override

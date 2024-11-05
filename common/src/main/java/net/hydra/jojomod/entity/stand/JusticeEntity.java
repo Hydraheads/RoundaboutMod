@@ -56,11 +56,15 @@ public class JusticeEntity extends StandEntity {
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
-    public final AnimationState timeStopAnimationState = new AnimationState();
+    public final AnimationState idleAnimation = new AnimationState();
     @Override
     public void setupAnimationStates() {
-        super.setupAnimationStates();
         if (this.getUser() != null) {
+            if (this.getAnimation() == 0) {
+                this.idleAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimation.stop();
+            }
         }
     }
 
