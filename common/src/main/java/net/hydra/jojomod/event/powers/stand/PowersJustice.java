@@ -82,12 +82,12 @@ public class PowersJustice extends StandPowers {
     }
     @Override
     public float getBonusAttackSpeed() {
-        return 1.25F;
+        return 1.3F;
     }
 
     @Override
     public float getBonusPassiveMiningSpeed(){
-        return 1.25F;
+        return 1.3F;
     }
 
     @Override

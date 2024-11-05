@@ -12,4 +12,5 @@ public class ModParticles {
     public static SimpleParticleType AIR_CRACKLE;
     public static SimpleParticleType MENACING;
     public static SimpleParticleType VACUUM;
+    public static SimpleParticleType FOG_CHAIN;
 }

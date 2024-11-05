@@ -8,10 +8,7 @@ import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
-import net.hydra.jojomod.particles.AirCrackleParticle;
-import net.hydra.jojomod.particles.BloodParticle;
-import net.hydra.jojomod.particles.MenacingParticle;
-import net.hydra.jojomod.particles.VacuumParticle;
+import net.hydra.jojomod.particles.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -60,5 +57,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MENACING.get(), MenacingParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VACUUM.get(), VacuumParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.FOG_CHAIN.get(), FogChainParticle.Provider::new);
     }
 }

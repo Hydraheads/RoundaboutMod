@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -67,6 +68,20 @@ public class JusticeEntity extends StandEntity {
                     this.setAnimation((byte) 0);
                     tsReleaseTime = 0;
                 }
+            }
+        } else {
+
+            for (int i = 0; i < 5; i++){
+                this.level()
+                        .addParticle(
+                                ModParticles.FOG_CHAIN,
+                                this.getRandomX(1.1),
+                                this.getRandomY(),
+                                this.getRandomZ(1.1),
+                                0,
+                                0.1,
+                                0
+                        );
             }
         }
         super.tick();

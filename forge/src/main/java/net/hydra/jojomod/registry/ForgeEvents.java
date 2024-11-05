@@ -133,6 +133,7 @@ public class ForgeEvents {
         ModParticles.AIR_CRACKLE = ForgeParticles.AIR_CRACKLE.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
+        ModParticles.FOG_CHAIN = ForgeParticles.FOG_CHAIN.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

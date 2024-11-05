@@ -34,4 +34,8 @@ public class ForgeParticles {
             "vacuum",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> FOG_CHAIN = PARTICLES.register(
+            "fog_chain",
+            () -> new SimpleParticleType(true)
+    );
 }
