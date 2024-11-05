@@ -951,8 +951,7 @@ public class BlockGrabPreset extends PunchingStand{
                         if ((this.getSelf() instanceof ServerPlayer PE &&
                                 this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
                                 && !(PE).blockActionRestricted(PE.level(), this.grabBlock, PE.gameMode.getGameModeForPlayer()))
-                                && PE.level().mayInteract(PE, this.grabBlock)
-                                && PE.canFreeze()) {
+                                && PE.level().mayInteract(PE, this.grabBlock)) {
                             /*This is the code where blocks that are removable are grabbed*/
                             boolean $$4 = this.getSelf().level().removeBlock(this.grabBlock, false);
                             if ($$4) {
