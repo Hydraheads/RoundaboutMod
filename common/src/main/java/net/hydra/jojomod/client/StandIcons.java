@@ -128,6 +128,6 @@ public class StandIcons {
     public static final ResourceLocation STAR_PLATINUM_PHASE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/phase_grab.png");
 
-    public static final ResourceLocation HASTE_ICON = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_world/haste.png");
+    public static final ResourceLocation JUSTICE_FOG_SWORD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/fog_sword.png");
 }

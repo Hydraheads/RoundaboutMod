@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.hud;
 
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
@@ -61,7 +62,9 @@ public class StandHudRender {
 
 
 
+                RenderSystem.enableBlend();
                 ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                RenderSystem.disableBlend();
 
 
                 context.setColor(1.0f, 1.0f, 1.0f, 1f);
