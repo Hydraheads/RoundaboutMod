@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.item.*;
@@ -167,13 +168,13 @@ public class ForgeItems {
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null))));
     public static final RegistryObject<Item> STAND_DISC_JUSTICE = addToDiscTab(
             ITEMS.register("justice_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)))
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)))
     )
     ;
 
     public static final RegistryObject<Item> MAX_STAND_DISC_JUSTICE = addToDiscTab(
             ITEMS.register("max_justice_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)))
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)))
             )
             ;
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
