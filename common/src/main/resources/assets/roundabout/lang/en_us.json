@@ -389,6 +389,8 @@
 
   "idle.roundabout.passive": "Idle Pose",
   "idle.roundabout.battle": "Battle Ready",
+  "idle.roundabout.passive_justice": "Idle Pose",
+  "idle.roundabout.battle_justice": "Menace",
 
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",

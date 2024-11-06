@@ -1650,19 +1650,16 @@ public class StandPowers {
 
 
     public void getPoseInDirection(boolean right){
-        Roundabout.LOGGER.info("3");
         StandUser SE = ((StandUser)this.getSelf());
         byte currentSkin = ((StandUser)this.getSelf()).roundabout$getIdlePos();
         List<Byte> poses = getPosList();
         if (!poses.isEmpty() && poses.size() > 1) {
-            Roundabout.LOGGER.info("4");
             int skinind = 0;
             for (int i = 0; i<poses.size(); i++){
                 if (poses.get(i) == currentSkin){
                     skinind = i;
                 }
             }
-            Roundabout.LOGGER.info("5");
             if (right) {
                 skinind+=1;
                 if (skinind >= poses.size()){

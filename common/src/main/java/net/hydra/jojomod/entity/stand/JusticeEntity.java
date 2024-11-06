@@ -57,14 +57,29 @@ public class JusticeEntity extends StandEntity {
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
     public final AnimationState idleAnimation = new AnimationState();
+    public final AnimationState idleAnimation2 = new AnimationState();
     @Override
     public void setupAnimationStates() {
         if (this.getUser() != null) {
-            if (this.getAnimation() == 0) {
+            if (this.getAnimation() == 0 && this.getIdleAnimation() == 1) {
+                this.idleAnimation2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimation2.stop();
+            }
+            if (this.getAnimation() == 0 && this.getIdleAnimation() == 0) {
                 this.idleAnimation.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimation.stop();
             }
+        }
+    }
+
+    @Override
+    public Component getPosName(byte posID){
+        if (posID == 1){
+            return Component.translatable(  "idle.roundabout.battle_justice");
+        } else {
+            return Component.translatable(  "idle.roundabout.passive_justice");
         }
     }
 
