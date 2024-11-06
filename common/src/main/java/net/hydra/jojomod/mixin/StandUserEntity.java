@@ -1566,7 +1566,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
-    @SuppressWarnings("deprecation")
+    @Inject(method = "die", at = @At("HEAD"))
+    protected void roundabout$die(DamageSource $$0, CallbackInfo ci){
+        StandEntity stnd = roundabout$getStand();
+        if (stnd != null){
+            roundabout$setStand(null);
+        }
+    }
+
+        @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
 

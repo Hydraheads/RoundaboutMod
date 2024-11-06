@@ -35,10 +35,13 @@
 
   "item.roundabout.star_platinum_disc": "替身光碟",
   "item.roundabout.the_world_disc": "替身光碟",
-  "item.roundabout.max_star_platinum_disc": "滿級替身碟",
-  "item.roundabout.max_the_world_disc": "滿級替身碟",
+  "item.roundabout.max_star_platinum_disc": "滿級替身光碟",
+  "item.roundabout.max_the_world_disc": "滿級替身光碟",
   "item.roundabout.star_platinum_disc.desc": "白金之星",
   "item.roundabout.the_world_disc.desc": "世界",
+  "item.roundabout.justice_disc": "替身光碟",
+  "item.roundabout.max_justice_disc": "滿級替身光碟",
+  "item.roundabout.justice_disc.desc": "正義",
 
   "item.roundabout.blank_mask": "玻璃面容",
   "item.roundabout.blank_mask.desc": "隱藏盔甲",
@@ -396,16 +399,24 @@
 
   "skins.roundabout.the_world.base": "第三部",
   "skins.roundabout.the_world.manga": "漫畫",
-  "skins.roundabout.the_world.heritage": "未來遺產",
+  "skins.roundabout.the_world.heritage": "暗影世界",
   "skins.roundabout.the_world.ova": "OVA",
-  "skins.roundabout.the_world.black": "High世界",
+  "skins.roundabout.the_world.black": "暗色",
   "skins.roundabout.the_world.part_7": "THE WORLD",
   "skins.roundabout.the_world.blue_part_7": "藍色THE WORLD",
   "skins.roundabout.the_world.over_heaven": "超越天堂",
-  "skins.roundabout.the_world.dark": "暗色",
-  "skins.roundabout.the_world.aqua": "水色",
+  "skins.roundabout.the_world.dark": "High世界",
+  "skins.roundabout.the_world.aqua": "地球世界",
   "skins.roundabout.the_world.arcade": "街機（未來遺產）",
-
+  
   "unlock_skin.roundabout.the_world.over_heaven": "世界：超越天堂皮膚解鎖！",
-  "unlock_skin.roundabout.star_platinum.atomic": "白金之星：原子皮膚解鎖！"
+  "unlock_skin.roundabout.star_platinum.atomic": "白金之星：原子皮膚解鎖！",
+
+  "power_inventory.roundabout.settings.general": "替身使者設置",
+  "power_inventory.roundabout.settings.offset": "跟隨位置",
+  "power_inventory.roundabout.settings.distance": "跟隨距離",
+  "power_inventory.roundabout.settings.opacity": "替身透明度",
+  "power_inventory.roundabout.settings.attack_opacity": "戰鬥透明度",
+  "power_inventory.roundabout.settings.enemy_opacity": "他人替身透明度",
+  "power_inventory.roundabout.settings.reset": "重置設置"
 }

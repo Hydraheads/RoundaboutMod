@@ -66,7 +66,7 @@ public class WorldTickServer {
         if (stand == null || stand.isRemoved()) {
             return;
         }
-        if (entity !=null && stand.getFollowing().getId() != entity.getId()) {
+        if (entity !=null && stand.getFollowing() != null && stand.getFollowing().getId() != entity.getId()) {
             ((StandUser)entity).roundabout$removeFollower(stand);
             return;
         }

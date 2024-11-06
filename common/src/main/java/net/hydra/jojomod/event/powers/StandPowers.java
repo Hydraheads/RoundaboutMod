@@ -753,6 +753,12 @@ public class StandPowers {
             }
             this.tickDash();
             this.tickCooldowns();
+        } else {
+            StandUser user = ((StandUser)this.getSelf());
+            StandEntity stnd = user.roundabout$getStand();
+            if (stnd != null){
+                user.roundabout$setStand(null);
+            }
         }
         if (this.self.level().isClientSide) {
             tickSounds();

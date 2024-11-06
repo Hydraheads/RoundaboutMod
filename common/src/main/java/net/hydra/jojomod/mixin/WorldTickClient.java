@@ -90,10 +90,8 @@ public abstract class WorldTickClient extends Level {
             }
             return;
         }
-        if (stand.getFollowing() != null && stand.getFollowing().getId() != entity.getId()) {
-            if (entity !=null) {
-                ((StandUser) entity).roundabout$removeFollower(stand);
-            }
+        if (stand.getFollowing() != null && entity != null && stand.getFollowing().getId() != entity.getId()) {
+            ((StandUser) entity).roundabout$removeFollower(stand);
             return;
         }
         byte ot = stand.getOffsetType();
