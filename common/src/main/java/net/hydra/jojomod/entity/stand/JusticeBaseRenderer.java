@@ -25,6 +25,7 @@ public class JusticeBaseRenderer<T extends StandEntity> extends StandRenderer<Ju
     private static final ResourceLocation FLAMED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_flamed.png");
     private static final ResourceLocation TWILIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_twilight.png");
     private static final ResourceLocation PIRATE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_pirate.png");
+    private static final ResourceLocation BLUE_FLAME = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_flamed_blue.png");
 
 
     @Override
@@ -52,6 +53,8 @@ public class JusticeBaseRenderer<T extends StandEntity> extends StandRenderer<Ju
             return TWILIGHT;
         } else if (BT == JusticeEntity.PIRATE){
             return PIRATE;
+        } else if (BT == JusticeEntity.BLUE_FLAMED){
+            return BLUE_FLAME;
         }
         return PART_3_SKIN;
     }

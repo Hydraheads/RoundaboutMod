@@ -25,7 +25,8 @@ public class JusticeEntity extends StandEntity {
             FLAMED = 7,
             WITHER = 9,
             TWILIGHT = 10,
-            PIRATE = 11;
+            PIRATE = 11,
+            BLUE_FLAMED = 12;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -50,6 +51,8 @@ public class JusticeEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.justice.wither");
         } else if (skinId == FLAMED){
             return Component.translatable(  "skins.roundabout.justice.flamed");
+        } else if (skinId == BLUE_FLAMED){
+            return Component.translatable(  "skins.roundabout.justice.flamed_blue");
         } else if (skinId == TWILIGHT){
             return Component.translatable(  "skins.roundabout.justice.twilight");
         } else if (skinId == PIRATE){
@@ -111,6 +114,22 @@ public class JusticeEntity extends StandEntity {
                             );
                 }
             }
+
+            if (this.getSkin() == BLUE_FLAMED) {
+                for (int i = 0; i < 3; i++) {
+                    this.level()
+                            .addParticle(
+                                    ParticleTypes.SOUL_FIRE_FLAME,
+                                    this.getRandomX(1.1),
+                                    this.getRandomY(),
+                                    this.getRandomZ(1.1),
+                                    0,
+                                    0.1,
+                                    0
+                            );
+                }
+            }
+
             for (int i = 0; i < 5; i++){
                 this.level()
                         .addParticle(

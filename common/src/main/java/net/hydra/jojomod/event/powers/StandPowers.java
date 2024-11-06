@@ -172,6 +172,14 @@ public class StandPowers {
     public boolean getIsTsCharging(){
         return false;
     }
+
+
+    public int getDisplayPowerInventoryScale(){
+        return 30;
+    }
+    public int getDisplayPowerInventoryYOffset(){
+        return 0;
+    }
     public boolean getSummonCD(){
         return this.summonCD <= 0;
     } public void setSummonCD(int summonCD){

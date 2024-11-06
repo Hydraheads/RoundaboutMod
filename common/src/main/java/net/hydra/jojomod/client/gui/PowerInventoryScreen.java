@@ -79,7 +79,8 @@ public class PowerInventoryScreen
 
             stand = standUser.roundabout$getStand();
             if (stand != null) {
-                renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75, 30,
+                StandPowers sp = standUser.roundabout$getStandPowers();
+                renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75 - sp.getDisplayPowerInventoryYOffset(), sp.getDisplayPowerInventoryScale(),
                         (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand,pl);
                   context.drawString(this.font, stand.getSkinName(((IPlayerEntity)pl).roundabout$getStandSkin()), this.titleLabelX+11+leftPos, this.titleLabelY+18+topPos, 16777215, false);
                 context.drawString(this.font, stand.getPosName(stand.getIdleAnimation()), this.titleLabelX+11+leftPos, this.titleLabelY+36+topPos, 16777215, false);
@@ -88,7 +89,6 @@ public class PowerInventoryScreen
                 int topYPos = topPos+22;
                 int bottomYPos = topPos+40;
 
-                StandPowers sp = standUser.roundabout$getStandPowers();
                 if (sp.hasMoreThanOneSkin()){
                     if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
                         context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
@@ -351,30 +351,6 @@ public class PowerInventoryScreen
         $$0.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
     }
 
-
-    public static void renderEntityInInventoryFollowsMouse(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, LivingEntity $$6) {
-        float $$7 = (float)Math.atan((double)($$4 / 40.0F));
-        float $$8 = (float)Math.atan((double)($$5 / 40.0F));
-        Quaternionf $$9 = new Quaternionf().rotateZ((float) Math.PI);
-        Quaternionf $$10 = new Quaternionf().rotateX($$8 * 20.0F * (float) (Math.PI / 180.0));
-        $$9.mul($$10);
-        float $$11 = $$6.yBodyRot;
-        float $$12 = $$6.getYRot();
-        float $$13 = $$6.getXRot();
-        float $$14 = $$6.yHeadRotO;
-        float $$15 = $$6.yHeadRot;
-        $$6.yBodyRot = 180.0F + $$7 * 20.0F;
-        $$6.setYRot(180.0F + $$7 * 40.0F);
-        $$6.setXRot(-$$8 * 20.0F);
-        $$6.yHeadRot = $$6.getYRot();
-        $$6.yHeadRotO = $$6.getYRot();
-        renderEntityInInventory($$0, $$1, $$2, $$3, $$9, $$10, $$6);
-        $$6.yBodyRot = $$11;
-        $$6.setYRot($$12);
-        $$6.setXRot($$13);
-        $$6.yHeadRotO = $$14;
-        $$6.yHeadRot = $$15;
-    }
 
     public static void renderEntityInInventory(GuiGraphics $$0, int $$1, int $$2, int $$3, Quaternionf $$4, @Nullable Quaternionf $$5, LivingEntity $$6) {
         $$0.pose().pushPose();

@@ -16,14 +16,21 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 
 import java.util.List;
 
@@ -70,12 +77,49 @@ public class PowersJustice extends DashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice) {
         byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            if (bt == JusticeEntity.FLAMED){
+            if (bt == JusticeEntity.FLAMED || bt == JusticeEntity.BLUE_FLAMED){
                 return ModSounds.SUMMON_JUSTICE_2_EVENT;
             }
             return ModSounds.SUMMON_JUSTICE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+
+    @Override
+    public void playSummonEffects(boolean forced){
+        if (!forced) {
+            Level lv = this.getSelf().level();
+            if ((this.getSelf()) instanceof Player PE && lv.getBiome(this.getSelf().getOnPos()).is(Biomes.BASALT_DELTAS)){
+                StandUser user = ((StandUser)PE);
+                ItemStack stack = user.roundabout$getStandDisc();
+                if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_JUSTICE)){
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    if (!ipe.roundabout$getUnlockedBonusSkin()){
+                        if (!lv.isClientSide()) {
+                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            lv.playSound(null, PE.getX(), PE.getY(),
+                                    PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                            ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                                    PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                                    10, 0.5, 0.5, 0.5, 0.2);
+                            user.roundabout$setStandSkin(JusticeEntity.FLAMED);
+                            ((ServerPlayer) ipe).displayClientMessage(
+                                    Component.translatable("unlock_skin.roundabout.justice.bad_bone"), true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public int getDisplayPowerInventoryScale(){
+        return 14;
+    }
+    @Override
+    public int getDisplayPowerInventoryYOffset(){
+        return -7;
     }
 
     @Override
@@ -132,6 +176,7 @@ public class PowersJustice extends DashPreset {
                 $$1.add(JusticeEntity.PIRATE);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(JusticeEntity.FLAMED);
+                $$1.add(JusticeEntity.BLUE_FLAMED);
             }
         }
         return $$1;
