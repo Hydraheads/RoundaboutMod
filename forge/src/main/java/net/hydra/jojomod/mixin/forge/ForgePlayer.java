@@ -62,6 +62,7 @@ public abstract class ForgePlayer extends LivingEntity {
                         ItemStack itemstack = this.getMainHandItem();
                         if (i > 0 && !itemstack.isEmpty()) {
                             f += (float) (i * i + 1);
+                            f*= 0.6F;
                         }
                     }
                 }
