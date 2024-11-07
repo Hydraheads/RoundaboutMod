@@ -6,7 +6,7 @@
   "item.roundabout.worthy_arrow": "Strzała Godności",
   "item.roundabout.luck_sword": "Miecz Luck",
   "item.roundabout.luck_upgrade": "Szablon Kowalski",
-  "item.roundabout.scissors": "Nożyce",
+  "item.roundabout.scissors": "Nożyczki",
   "item.roundabout.wooden_glaive": "Drewniana Glewia",
   "item.roundabout.stone_glaive": "Kamienna Glewia",
   "item.roundabout.golden_glaive": "Złota Glewia",
@@ -166,6 +166,8 @@
   "sounds.roundabout.summon_stand": "Stand Przywołany",
   "sounds.roundabout.summon_star": "Stand Przywołany",
   "sounds.roundabout.summon_world": "Stand Przywołany",
+  "sounds.roundabout.summon_justice":  "Stand Przywołany",
+  "sounds.roundabout.summon_justice_2":  "Stand Przywołany",
   "sounds.roundabout.ova_summon": "Stand Przywołany",
   "sounds.roundabout.ova_summon_the_world": "Stand Przywołany",
   "sounds.roundabout.punch_sfx1": "Powietrze Pęka",
@@ -356,6 +358,9 @@
   "ability.roundabout.air_tanks": "Butle z Tlenem",
   "ability.roundabout.air_tanks.desc": "Butle na plecach The World zapewniają dodatkowe powietrze, aby móc pływać pod wodą znacznie dłużej.",
 
+  "ability.roundabout.fog_sword": "Mgliste Wzmocnienie",
+  "ability.roundabout.fog_sword.desc": "Ataki twoich broni szybciej się ładują, i kopiesz bloki szybciej podczas gdy Justice jest aktywny.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Zablokowane",
   "ability.roundabout.locked.desc": "Odblokuj na poziomie rozwoju %1$s",
@@ -387,6 +392,8 @@
 
   "idle.roundabout.passive": "Poza Domyślna",
   "idle.roundabout.battle": "Gotowy Do Walki",
+  "idle.roundabout.passive_justice": "Poza Domyślna",
+  "idle.roundabout.battle_justice": "Groźba",
 
   "skins.roundabout.star_platinum.base": "Część 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -409,8 +416,22 @@
   "skins.roundabout.the_world.aqua": "The Earth",
   "skins.roundabout.the_world.arcade": "Automat Do Gry",
 
+  "skins.roundabout.justice.base": "Część 3",
+  "skins.roundabout.justice.skeleton": "Szkielet",
+  "skins.roundabout.justice.manga": "Manga",
+  "skins.roundabout.justice.ova": "OVA",
+  "skins.roundabout.justice.tarot": "Tarot",
+  "skins.roundabout.justice.stray": "Tułacz",
+  "skins.roundabout.justice.bogged": "Bagniak",
+  "skins.roundabout.justice.wither": "Wither",
+  "skins.roundabout.justice.flamed": "Płomień",
+  "skins.roundabout.justice.flamed_blue": "Niebieski Płomień",
+  "skins.roundabout.justice.twilight": "Zmierzch",
+  "skins.roundabout.justice.pirate": "Pirat",
+
   "unlock_skin.roundabout.the_world.over_heaven": "Odblokowano skórkę The World: Over Heaven!",
   "unlock_skin.roundabout.star_platinum.atomic": "Odblokowano skórkę Star Platinum: Atomowy!",
+  "unlock_skin.roundabout.justice.bad_bone": "Odblokowano skórkę Justice: Bad to The Bone!",
 
   "power_inventory.roundabout.settings.general": "Standu Opcje",
   "power_inventory.roundabout.settings.offset": "Pozycja Podążania",
@@ -418,5 +439,5 @@
   "power_inventory.roundabout.settings.opacity": "Nieprzezroczystość (Domyślnie)",
   "power_inventory.roundabout.settings.attack_opacity": "Nieprzezroczystość (W Walce)",
   "power_inventory.roundabout.settings.enemy_opacity": "Nieprzezroczystość (Innych Standów)",
-  "power_inventory.roundabout.settings.reset": "Reset",
+  "power_inventory.roundabout.settings.reset": "Reset"
 }
