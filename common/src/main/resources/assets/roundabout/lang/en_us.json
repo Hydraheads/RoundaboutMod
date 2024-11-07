@@ -436,6 +436,12 @@
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",
   "unlock_skin.roundabout.justice.bad_bone": "Justice: Bad to The Bone Skin Unlocked!",
 
+  "justice.morph.player": "Player",
+  "justice.morph.villager": "Villager",
+  "justice.morph.ova": "Disguise",
+  "justice.morph.zombie": "Zombie",
+  "justice.morph.skeleton": "Skeleton",
+
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
   "power_inventory.roundabout.settings.distance": "Following Distance",

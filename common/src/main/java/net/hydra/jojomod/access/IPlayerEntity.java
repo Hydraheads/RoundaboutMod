@@ -17,6 +17,8 @@ public interface IPlayerEntity {
     void roundabout$setClientDodgeTime(int dodgeTime);
     void roundabout$setDodgeTime(int dodgeTime);
     void roundabout$setAirTime(int airTime);
+    void roundabout$setShapeShift(byte level);
+    byte roundabout$getShapeShift();
     byte roundabout$GetPos();
     void roundabout$addKnife();
     void roundabout$setKnife(byte knives);

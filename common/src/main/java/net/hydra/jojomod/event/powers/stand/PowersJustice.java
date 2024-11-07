@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
@@ -24,6 +25,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.debug.GameModeSwitcherScreen;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -209,6 +211,16 @@ public class PowersJustice extends DashPreset {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                         }
                     } else {
+                        hold1 = false;
+                    }
+                } else {
+                    if (keyIsDown) {
+                        if (!hold1) {
+                            hold1 = true;
+                            ClientUtil.setJusticeScreen();
+                        }
+                    } else {
+
                         hold1 = false;
                     }
                 }

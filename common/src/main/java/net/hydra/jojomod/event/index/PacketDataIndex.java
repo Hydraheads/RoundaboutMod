@@ -36,8 +36,10 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_SCOPE_OFF = 5;
     public static final byte SINGLE_BYTE_FORWARD_BARRAGE = 6;
     public static final byte SINGLE_BYTE_SILENT_SUMMON = 7;
-    public static final byte SINGLE_BYTE_UPDATE_COOLDOWN = 8;
     public static final byte SINGLE_BYTE_OPEN_POWER_INVENTORY = 9;
+    /**Byte packets*/
+    public static final byte BYTE_CHANGE_MORPH = 8;
+    public static final byte BYTE_UPDATE_COOLDOWN = 8;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;

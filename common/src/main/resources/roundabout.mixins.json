@@ -89,6 +89,7 @@
     "ZItemInHandLayer",
     "ZItemInHandRenderer",
     "ZItemRenderer",
+    "ZKeyMapping",
     "ZLightTextue",
     "ZLivingEntityRenderer",
     "ZModelBakery",

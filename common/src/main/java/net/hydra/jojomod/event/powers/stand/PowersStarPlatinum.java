@@ -1,7 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
@@ -11,7 +10,6 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -205,7 +203,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             } else {
                 if (letServerKnowScopeCatchIsReady) {
-                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket(PowerIndex.SKILL_EXTRA_2, PacketDataIndex.SINGLE_BYTE_UPDATE_COOLDOWN);
+                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket(PowerIndex.SKILL_EXTRA_2, PacketDataIndex.BYTE_UPDATE_COOLDOWN);
                     letServerKnowScopeCatchIsReady = false;
                 }
             }

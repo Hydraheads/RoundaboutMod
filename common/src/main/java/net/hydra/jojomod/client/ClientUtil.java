@@ -2,6 +2,7 @@ package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.gui.JusticeMobSwitcherScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -84,6 +85,10 @@ public class ClientUtil {
         }
     }
 
+    public static void setJusticeScreen() {
+        Minecraft mc = Minecraft.getInstance();
+        mc.setScreen(new JusticeMobSwitcherScreen());
+    }
     public static float getDelta() {
         Minecraft mc = Minecraft.getInstance();
         return mc.getDeltaFrameTime();
