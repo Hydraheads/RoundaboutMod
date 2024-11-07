@@ -398,10 +398,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             } else {
                 if (keyIsDown) {
                     Minecraft mc = Minecraft.getInstance();
-                    if (!mc.options.keyShift.isDown()) {
+                    if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
-                        if (this.canAttack() && mc.options.keyShift.isDown()) {
+                        if (this.canAttack()) {
                             this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                             holdDownClick = true;
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);

@@ -129,13 +129,22 @@ public class PowersJustice extends DashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NONE);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
+
+        }
 
         setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
 
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+        } else {
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.NONE);
+        }
 
-        setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
