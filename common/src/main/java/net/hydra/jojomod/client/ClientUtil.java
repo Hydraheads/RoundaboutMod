@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
@@ -163,6 +164,19 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             ((TimeStop) player.level()).processTSRemovePacket(entityID);
+        }
+    }
+
+    public static void handlePermaCastingEntityPacket(int timeStoppingEntity, double x, double y, double z, double range, byte context){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((IPermaCasting) player.level()).roundabout$processPermaCastPacket(timeStoppingEntity,x,y,z,range,context);
+        }
+    }
+    public static void handlePermaCastingRemovePacket(int entityID){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ((IPermaCasting) player.level()).roundabout$processPermaCastRemovePacket(entityID);
         }
     }
     public static void handleStopSoundPacket(int data, byte context){

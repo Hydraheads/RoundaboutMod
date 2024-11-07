@@ -194,6 +194,16 @@ public class ForgePacketHandler {
                 .encoder(ForgeS2CPowerInventorySettingsPacket::toBytes)
                 .consumerMainThread(ForgeS2CPowerInventorySettingsPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgePermaCastingEntityPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgePermaCastingEntityPacket::new)
+                .encoder(ForgePermaCastingEntityPacket::toBytes)
+                .consumerMainThread(ForgePermaCastingEntityPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(ForgePermaCastingEntityRemovalPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgePermaCastingEntityRemovalPacket::new)
+                .encoder(ForgePermaCastingEntityRemovalPacket::toBytes)
+                .consumerMainThread(ForgePermaCastingEntityRemovalPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message){

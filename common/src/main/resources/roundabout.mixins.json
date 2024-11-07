@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntityAndData",
+    "PermaCastWorld",
     "PlayerEntity",
     "PlayerEntityServer",
     "StandUserEntity",
@@ -80,6 +81,7 @@
     "ZCamera",
     "ZClientLevelData",
     "ZEntityRenderDispatcher",
+    "ZFogRenderer",
     "ZHeldItemLowering",
     "ZHumanoidArmorLayer",
     "ZHumanoidMobRenderer",

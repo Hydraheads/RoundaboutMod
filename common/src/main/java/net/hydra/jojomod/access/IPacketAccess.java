@@ -26,6 +26,8 @@ public interface IPacketAccess {
 
     void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration);
     void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID);
+    void permaCastingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, byte context);
+    void permaCastingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);

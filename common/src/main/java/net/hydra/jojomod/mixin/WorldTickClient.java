@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -11,6 +12,8 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.CubicSampler;
+import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +25,7 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.storage.WritableLevelData;
@@ -33,11 +37,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Supplier;
 
 @Mixin(ClientLevel.class)
-public abstract class WorldTickClient extends Level {
+public abstract class WorldTickClient extends Level implements IClientLevel {
 
     /** Called every tick on the Client. Checks if a mob has a stand out, and updates the position of the stand.
      * @see StandEntity#tickStandOut */
@@ -297,9 +302,101 @@ public abstract class WorldTickClient extends Level {
         }
     }
 
+    @Shadow
+    public int getSkyFlashTime() {
+        return 0;
+    }
+
+    @Unique
+    @Override
+    public float roundabout$getSkyLerp(){
+        return roundabout$skyLerp;
+    }
+    @Unique
+    @Override
+    public float roundabout$getMaxSkyLerp(){
+        return roundabout$maxSkyLerp;
+    }
+
+    @Unique
+    public float roundabout$skyLerp = 0;
+    @Unique
+    public float roundabout$maxSkyLerp = 30;
+    @Unique
+    public Vec3 roundabout$fogSky = new Vec3(220,220,220);
+
+    @Inject(method = "getSkyColor", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$getSkyColor(Vec3 $$0, float $$1, CallbackInfoReturnable<Vec3> cir) {
+        if (minecraft.player != null){
+            if (roundabout$skyLerp >= 1) {
+                float lerp = $$1;
+                if (!((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
+                    lerp*=-1;
+                }
+                if (roundabout$skyLerp >= roundabout$maxSkyLerp){
+                    lerp=0;
+                }
+                float f = this.getTimeOfDay($$1);
+                Vec3 vec3 = $$0.subtract(2.0D, 2.0D, 2.0D).scale(0.25D);
+                BiomeManager biomemanager = this.getBiomeManager();
+                Vec3 vec31 = CubicSampler.gaussianSampleVec3(vec3, (p_194161_, p_194162_, p_194163_) -> {
+                    return Vec3.fromRGB24(biomemanager.getNoiseBiomeAtQuart(p_194161_, p_194162_, p_194163_).value().getSkyColor());
+                });
+                float f1 = Mth.cos(f * ((float) Math.PI * 2F)) * 2.0F + 0.5F;
+                f1 = Mth.clamp(f1, 0.0F, 1.0F);
+                float f2 = (float) vec31.x * f1;
+                float f3 = (float) vec31.y * f1;
+                float f4 = (float) vec31.z * f1;
+                float f5 = this.getRainLevel($$1);
+                if (f5 > 0.0F) {
+                    float f6 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.6F;
+                    float f7 = 1.0F - f5 * 0.75F;
+                    f2 = f2 * f7 + f6 * (1.0F - f7);
+                    f3 = f3 * f7 + f6 * (1.0F - f7);
+                    f4 = f4 * f7 + f6 * (1.0F - f7);
+                }
+
+                float f9 = this.getThunderLevel($$1);
+                if (f9 > 0.0F) {
+                    float f10 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.2F;
+                    float f8 = 1.0F - f9 * 0.75F;
+                    f2 = f2 * f8 + f10 * (1.0F - f8);
+                    f3 = f3 * f8 + f10 * (1.0F - f8);
+                    f4 = f4 * f8 + f10 * (1.0F - f8);
+                }
+
+                int i = this.getSkyFlashTime();
+                if (i > 0) {
+                    float f11 = (float) i - $$1;
+                    if (f11 > 1.0F) {
+                        f11 = 1.0F;
+                    }
+
+                    f11 *= 0.45F;
+                    f2 = f2 * (1.0F - f11) + 0.8F * f11;
+                    f3 = f3 * (1.0F - f11) + 0.8F * f11;
+                    f4 = f4 * (1.0F - f11) + 1.0F * f11;
+                }
+                Vec3 interp = new Vec3((double) f2, (double) f3, (double) f4).lerp(roundabout$fogSky,
+                        ((((roundabout$skyLerp+lerp)/roundabout$maxSkyLerp))/100)*0.95);
+                cir.setReturnValue(interp);
+            }
+        }
+    }
     @Inject(method = "tickEntities", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity3(CallbackInfo ci) {
+
         if (minecraft.player != null){
+            if (((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
+                if (roundabout$skyLerp < roundabout$maxSkyLerp){
+                    roundabout$skyLerp++;
+                }
+            } else {
+                if (roundabout$skyLerp > 0){
+                    roundabout$skyLerp--;
+                }
+            }
+
             if (((TimeStop) this).isTimeStoppingEntity(minecraft.player)) {
                 ((StandUser) minecraft.player).roundabout$getStandPowers().timeTickStopPower();
             }

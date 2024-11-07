@@ -138,6 +138,15 @@ public class StandPowers {
     public float getTimestopRange(){
         return 100;
     }
+    public float getPermaCastRange(){
+        return 100;
+    }
+    public byte getPermaCastContext(){
+        return -1;
+    }
+    public boolean canSeeThroughFog(){
+        return false;
+    }
     public Component getStandName(){
         ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
         if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
@@ -858,6 +867,9 @@ public class StandPowers {
 
     /**Ticks through your own timestop. This value exists in the general stand powers in case you switch stands.*/
     public void timeTickStopPower(){
+    }
+
+    public void tickPermaCast(){
     }
 
     /**A generic function which sends a float corresponding with an active power via packets to the client from the

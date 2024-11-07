@@ -54,6 +54,14 @@ public class ForgePackets implements IPacketAccess {
     public void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID) {
         ForgePacketHandler.sendToClient(new ForgeTimeStoppingEntityRemovalPacket(entityID), sp);
     }
+    @Override
+    public void permaCastingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, byte context) {
+        ForgePacketHandler.sendToClient(new ForgePermaCastingEntityPacket(entityID, x,y,z, range, context), sp);
+    }
+    @Override
+    public void permaCastingEntityRemovalPacket(ServerPlayer sp, int entityID) {
+        ForgePacketHandler.sendToClient(new ForgePermaCastingEntityRemovalPacket(entityID), sp);
+    }
 
     @Override
     public void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i) {

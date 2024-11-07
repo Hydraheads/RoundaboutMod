@@ -361,6 +361,9 @@
   "ability.roundabout.fog_sword": "Fog Enhancement",
   "ability.roundabout.fog_sword.desc": "Your weapon attacks charge up faster, and you mine at a faster speed while Justice is active.",
 
+  "ability.roundabout.cast_fog": "Fog Field",
+  "ability.roundabout.cast_fog.desc": "Casts fog over a large area, exposing illusionary blocks and animating corpses for you to control. Players without Justice see less.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",

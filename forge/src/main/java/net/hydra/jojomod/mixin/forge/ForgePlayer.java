@@ -51,65 +51,76 @@ public abstract class ForgePlayer extends LivingEntity {
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
             byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
+        float f = this.inventory.getDestroySpeed($$0);
+        boolean overwrite = false;
             if (curse > -1) {
                 if ((curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
                         || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
-                    float f = this.inventory.getDestroySpeed($$0);
                     if (f > 1.0F) {
+                        overwrite = true;
                         int i = EnchantmentHelper.getBlockEfficiency(this);
                         ItemStack itemstack = this.getMainHandItem();
                         if (i > 0 && !itemstack.isEmpty()) {
-                            f += (float)(i * i + 1);
+                            f += (float) (i * i + 1);
                         }
                     }
-
-                    if (MobEffectUtil.hasDigSpeed(this)) {
-                        f *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this) + 1) * 0.2F;
-                    }
-
-                    if (this.hasEffect(MobEffects.DIG_SLOWDOWN)) {
-                        float f1;
-                        switch (this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
-                            case 0:
-                                f1 = 0.3F;
-                                break;
-                            case 1:
-                                f1 = 0.09F;
-                                break;
-                            case 2:
-                                f1 = 0.0027F;
-                                break;
-                            case 3:
-                            default:
-                                f1 = 8.1E-4F;
-                        }
-
-                        f *= f1;
-                    }
-
-                    if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
-                        f /= 5.0F;
-                    }
-
-                    if (!this.onGround()) {
-                        f /= 5.0F;
-                    }
-
-                    if ($$0.is(Blocks.COBWEB)){
-                        f *= 5.0F;
-                    }
-
-                    f = net.minecraftforge.event.ForgeEventFactory.getBreakSpeed(((Player)(Object)this), $$0, f, pos);
-
-
-                    boolean standActive = ((StandUser) this).roundabout$getActive();
-                    if (standActive){
-                        f*= ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
-                    }
-
-                    cir.setReturnValue((float)(f*0.6));
                 }
             }
+
+
+
+        boolean standActive = ((StandUser) this).roundabout$getActive();
+        if (standActive){
+            float bpow = ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
+                    if (bpow != 1){
+                        f*= bpow;
+                        overwrite = true;
+                    }
+
+        }
+
+        if (overwrite){
+            if (MobEffectUtil.hasDigSpeed(this)) {
+                f *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this) + 1) * 0.2F;
+            }
+
+            if (this.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+                float f1;
+                switch (this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
+                    case 0:
+                        f1 = 0.3F;
+                        break;
+                    case 1:
+                        f1 = 0.09F;
+                        break;
+                    case 2:
+                        f1 = 0.0027F;
+                        break;
+                    case 3:
+                    default:
+                        f1 = 8.1E-4F;
+                }
+
+                f *= f1;
+            }
+
+            if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+                f /= 5.0F;
+            }
+
+            if (!this.onGround()) {
+                f /= 5.0F;
+            }
+
+            if ($$0.is(Blocks.COBWEB)){
+                f *= 5.0F;
+            }
+
+            f = net.minecraftforge.event.ForgeEventFactory.getBreakSpeed(((Player)(Object)this), $$0, f, pos);
+
+
+            cir.setReturnValue((float)(f));
+        }
     }
 
     /**stand mining intercepts mining speed as well*/

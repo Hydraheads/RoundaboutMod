@@ -45,6 +45,7 @@ public class WorldTickServer {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickAllTimeStops();
+        ((IPermaCasting) this).roundabout$tickAllPermaCasts();
 
         this.entityTickList.forEach($$0x -> {
             if ($$0x instanceof StandEntity standEntity) {
@@ -193,6 +194,7 @@ public class WorldTickServer {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$TickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickTimeStoppingEntity();
+        ((IPermaCasting) this).roundabut$tickPermaCastingEntity();
     }
     @Inject(method = "tickChunk", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickChunk(LevelChunk $$0, int $$1, CallbackInfo ci) {

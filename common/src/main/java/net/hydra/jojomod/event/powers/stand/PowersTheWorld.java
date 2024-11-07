@@ -349,6 +349,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
 
+    @Override
+    public boolean canSeeThroughFog(){
+        return this.scopeLevel > 0;
+    }
 
     public Vec3 assultVec = Vec3.ZERO;
     public boolean assaultGrab(){

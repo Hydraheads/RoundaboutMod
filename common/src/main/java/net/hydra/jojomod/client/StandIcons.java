@@ -7,6 +7,8 @@ public class StandIcons {
 
     public static final ResourceLocation JOJO_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons.png");
+    public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/none.png");
     public static final ResourceLocation SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square2.png");
     public static final ResourceLocation LOCKED_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -130,4 +132,6 @@ public class StandIcons {
 
     public static final ResourceLocation JUSTICE_FOG_SWORD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/fog_sword.png");
+    public static final ResourceLocation JUSTICE_CAST_FOG = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/cast_fog.png");
 }

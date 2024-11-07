@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -17,8 +19,10 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -125,19 +129,21 @@ public class PowersJustice extends DashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        setSkillIcon(context, x, y, 1, StandIcons.STAR_PLATINUM_SCOPE_1, PowerIndex.SKILL_EXTRA_2);
+        setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
 
-        setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_PHASE_GRAB, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
 
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.NONE);
 
-        setSkillIcon(context, x, y, 4, StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.fog_sword",
                 "instruction.roundabout.passive", StandIcons.JUSTICE_FOG_SWORD, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.cast_fog",
+                "instruction.roundabout.press_skill", StandIcons.JUSTICE_CAST_FOG,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         return $$1;
     }
@@ -180,5 +186,52 @@ public class PowersJustice extends DashPreset {
             }
         }
         return $$1;
+    }
+
+    public boolean hold1 = false;
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+            if (this.getSelf().level().isClientSide) {
+                if (!isHoldingSneak()) {
+                    if (keyIsDown) {
+                        if (!hold1) {
+                            hold1 = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                        }
+                    } else {
+                        hold1 = false;
+                    }
+                }
+            }
+        super.buttonInput1(keyIsDown, options);
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.POWER_1) {
+            return this. castFog();
+        }
+        return super.setPowerOther(move,lastMove);
+    }
+
+    @Override
+    public byte getPermaCastContext(){
+        return PermanentZoneCastInstance.FOG_FIELD;
+    }
+    @Override
+    public boolean canSeeThroughFog(){
+        return true;
+    }
+    public boolean castFog(){
+        if (!this.getSelf().level().isClientSide()) {
+            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+            if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+                icast.roundabout$addPermaCaster(this.getSelf());
+            } else {
+                icast.roundabout$removePermaCastingEntity(this.getSelf());
+            }
+        }
+        return true;
     }
 }
