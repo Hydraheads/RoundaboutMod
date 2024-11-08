@@ -63,6 +63,7 @@
     "ZTripWireBlock",
     "ZVillager",
     "ZVillagerMakeLove",
+    "ZWalkAnimationState",
     "ZWarden",
     "ZWitch",
     "ZWitherBoss"

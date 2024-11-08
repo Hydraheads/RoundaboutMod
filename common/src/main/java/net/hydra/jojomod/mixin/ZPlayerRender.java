@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IWalkAnimationState;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
@@ -31,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -151,10 +153,20 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         $$6.xRotO = user.xRotO;
         $$6.yRotO = user.yRotO;
         $$6.tickCount = user.tickCount;
+
+        $$6.walkAnimation.setSpeed(user.walkAnimation.speed());
+        IWalkAnimationState iwalk = ((IWalkAnimationState) $$6.walkAnimation);
+        IWalkAnimationState uwalk = ((IWalkAnimationState) user.walkAnimation);
+        iwalk.roundabout$setPosition(uwalk.roundabout$getPosition());
+        iwalk.roundabout$setSpeedOld(uwalk.roundabout$getSpeedOld());
+
         ILivingEntityAccess ilive = ((ILivingEntityAccess)$$6);
         ILivingEntityAccess ulive = ((ILivingEntityAccess)user);
         ilive.roundabout$setAnimStep(ulive.roundabout$getAnimStep());
         ilive.roundabout$setAnimStepO(ulive.roundabout$getAnimStepO());
+        $$6.setSpeed(user.getSpeed());
+
+
         roundabout$renderEntityForce2(f1,f2,$$3,$$4,$$6);
     }
 
