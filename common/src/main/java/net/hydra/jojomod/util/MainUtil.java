@@ -2,6 +2,7 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -936,6 +937,11 @@ public class MainUtil {
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleBytePacketC2S(Player player, byte data, byte context){
+        if (context == PacketDataIndex.BYTE_UPDATE_COOLDOWN) {
+            ((StandUser) player).roundabout$getStandPowers().setCooldown(data, -1);
+        } if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
+            ((IPlayerEntity) player).roundabout$setShapeShift(data);
+        }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleSingleBytePacketC2S(Player player, byte context){
@@ -954,9 +960,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT){
             StandUser user = ((StandUser) player);
             user.roundabout$getStandPowers().getPoseInDirection(true);
-        } else if (context == PacketDataIndex.BYTE_UPDATE_COOLDOWN) {
-                ((StandUser) player).roundabout$getStandPowers().setCooldown(context,-1);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
+        } if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
             StandUser standUser = ((StandUser) player);
             standUser.roundabout$getStandPowers().setCooldown(context,-1);
             IPlayerEntity iplay = ((IPlayerEntity) player);

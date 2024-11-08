@@ -134,4 +134,6 @@ public class StandIcons {
             "textures/gui/icons/justice/fog_sword.png");
     public static final ResourceLocation JUSTICE_CAST_FOG = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/cast_fog.png");
+    public static final ResourceLocation JUSTICE_DISGUISE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/disguise_icon.png");
 }

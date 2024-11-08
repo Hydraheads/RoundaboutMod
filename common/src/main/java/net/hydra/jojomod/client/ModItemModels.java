@@ -2,6 +2,10 @@ package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.HarpoonModel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.ZombieModel;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ModItemModels {
@@ -17,4 +21,5 @@ public class ModItemModels {
             new ModelResourceLocation(Roundabout.MOD_ID, "crossbow_worthy_arrow", "inventory");
 
     public static HarpoonModel HARPOON_MODEL;
+
 }

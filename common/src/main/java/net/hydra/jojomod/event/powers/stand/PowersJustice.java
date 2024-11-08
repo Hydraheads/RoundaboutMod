@@ -132,7 +132,7 @@ public class PowersJustice extends DashPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
 

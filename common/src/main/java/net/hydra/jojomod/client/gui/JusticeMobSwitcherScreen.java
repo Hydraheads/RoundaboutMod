@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class JusticeMobSwitcherScreen extends Screen {
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
+    public boolean zHeld;
 
     public static boolean hasOVASkin = false;
     private final List<JusticeMobSwitcherScreen.MobSlot> slots = Lists.newArrayList();
@@ -50,7 +52,6 @@ public class JusticeMobSwitcherScreen extends Screen {
     public JusticeMobSwitcherScreen() {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = this.previousHovered = JusticeMobSwitcherScreen.MobIcon.getFromGameType(this.getDefaultSelected());
-        init();
     }
 
     private ShapeShifts getDefaultSelected() {
@@ -64,6 +65,7 @@ public class JusticeMobSwitcherScreen extends Screen {
     @Override
     protected void init() {
         super.init();
+        zHeld = true;
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
             if (((IPlayerEntity)pl).roundabout$getStandSkin() == JusticeEntity.OVA_SKIN){
@@ -88,6 +90,14 @@ public class JusticeMobSwitcherScreen extends Screen {
                 this.slots.add(new JusticeMobSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS_WIDTH / 2 + i * 31, this.height / 2 - 31));
             }
         }
+    }
+
+
+    @Override
+    public boolean mouseReleased(double $$0, double $$1, int $$2) {
+        this.switchToHoveredGameMode();
+        this.minecraft.setScreen(null);
+        return true;
     }
 
     @Override
@@ -131,7 +141,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                         ShapeShifts.getShiftFromByte(((IPlayerEntity)minecraft.player).roundabout$getShapeShift()));
         JusticeMobSwitcherScreen.MobIcon MobIcon3 = MobIcon;
         if (MobIcon3 != MobIcon2) {
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(MobIcon2.id, PacketDataIndex.BYTE_CHANGE_MORPH);
+            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(MobIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
            // minecraft.player.connection.sendUnsignedCommand(MobIcon3.getCommand());
         }
     }
@@ -140,23 +150,34 @@ public class JusticeMobSwitcherScreen extends Screen {
                 || (key1.same(options.keySaveHotbarActivator) && options.keySaveHotbarActivator.isDown())
         );
     }
+    public boolean sameKeyOneX(KeyMapping key1, Options options){
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        );
+    }
     private boolean checkToClose() {
+        if (minecraft != null) {
+            if (!sameKeyOneX(KeyInputRegistry.abilityOneKey, this.minecraft.options)) {
+                zHeld = false;
+            } else {
+                if (!zHeld) {
+                    this.setFirstMousePos = false;
+                    this.currentlyHovered = this.currentlyHovered.getNext();
+                    zHeld = true;
+                }
+            }
+            if (sameKeyOneX(KeyInputRegistry.abilityTwoKey, this.minecraft.options)) {
+                this.switchToHoveredGameMode();
+                this.minecraft.setScreen(null);
+                return true;
+            }
+        }
         Options options = Minecraft.getInstance().options;
         return false;
     }
     @Override
     public boolean keyPressed(int i, int j, int k) {
-        if (i == ((IKeyMapping)KeyInputRegistry.abilityTwoKey).roundabout$justTellMeTheKey().getValue()) {
-            this.setFirstMousePos = false;
-            this.currentlyHovered = this.currentlyHovered.getNext();
-            return true;
-        } if (i == ((IKeyMapping)KeyInputRegistry.abilityThreeKey).roundabout$justTellMeTheKey().getValue()) {
-            this.switchToHoveredGameMode();
-            if (this.minecraft != null) {
-                this.minecraft.setScreen(null);
-            }
-            return true;
-        }
         return super.keyPressed(i, j, k);
     }
 
@@ -207,6 +228,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                 return switch (this) {
                     default -> throw new IncompatibleClassChangeError();
                     case PLAYER -> OVA;
+                    case VILLAGER -> ZOMBIE;
                     case OVA -> ZOMBIE;
                     case ZOMBIE -> SKELETON;
                     case SKELETON -> PLAYER;
@@ -215,6 +237,7 @@ public class JusticeMobSwitcherScreen extends Screen {
             return switch (this) {
                 default -> throw new IncompatibleClassChangeError();
                 case PLAYER -> VILLAGER;
+                case OVA -> ZOMBIE;
                 case VILLAGER -> ZOMBIE;
                 case ZOMBIE -> SKELETON;
                 case SKELETON -> PLAYER;
