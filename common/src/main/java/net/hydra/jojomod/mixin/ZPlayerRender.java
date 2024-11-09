@@ -106,38 +106,25 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
-        byte shape = ((IPlayerEntity) $$3).roundabout$getShapeShift();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-        if (shift != ShapeShifts.PLAYER) {
-            if (shift == ShapeShifts.ZOMBIE) {
-                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || (roundabout$shapeShift instanceof Zombie))) {
-                    roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
-                }
-            }
-            EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
-            EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
-            if (ER instanceof LivingEntityRenderer){
-                Model ml = ((LivingEntityRenderer<?, ?>)ER).getModel();
-
-                if (shift == ShapeShifts.ZOMBIE) {
-                    if (ml instanceof ZombieModel<?> zm){
-                        if (ER instanceof ZombieRenderer zr && roundabout$shapeShift instanceof Zombie zmb) {
-                            this.setModelProperties($$3);
-                            zm.attackTime = 0.0F;
-                            zm.crouching = false;
-                            zm.swimAmount = 0.0F;
-                            roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.rightArm,null, ml,zr.getTextureLocation(zmb));
-                        }
-                    }
-                }
-                ci.cancel();
-            }
+        if (roundabout$renderHandX($$0,$$1,$$2,$$3,true)){
+            ci.cancel();
         }
     }
 
 
     @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
     private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+        if (roundabout$renderHandX($$0,$$1,$$2,$$3,false)){
+            ci.cancel();
+        }
+    }
+
+    @Unique
+    private <T extends LivingEntity, M extends EntityModel<T>>boolean roundabout$renderHandX(PoseStack $$0,
+                                                                                          MultiBufferSource $$1,
+                                                                                          int $$2,
+                                                                                          AbstractClientPlayer $$3,
+                                                                                          boolean right) {
 
         byte shape = ((IPlayerEntity) $$3).roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
@@ -159,16 +146,21 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                             zm.attackTime = 0.0F;
                             zm.crouching = false;
                             zm.swimAmount = 0.0F;
-                            roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.leftArm,null, ml,zr.getTextureLocation(zmb));
+                            if (right){
+                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.rightArm,null, ml,zr.getTextureLocation(zmb));
+                            } else {
+                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.leftArm,null, ml,zr.getTextureLocation(zmb));
+                            }
                         }
                     }
                 }
-                ci.cancel();
+                return true;
             }
         }
+        return false;
     }
 
-    @Unique
+        @Unique
     private void roundabout$renderOtherHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3,
                                             ModelPart $$4, @Nullable ModelPart $$5, Model ML, ResourceLocation texture){
 
