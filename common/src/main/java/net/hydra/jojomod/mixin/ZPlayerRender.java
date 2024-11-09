@@ -33,6 +33,7 @@ import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
@@ -172,8 +173,12 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Unique
     public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
-        $$3.pushPose();
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+        Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);
+        $$3.pushPose();
+        if (!renderoffset.equals(Vec3.ZERO)){
+            $$3.translate(-1*renderoffset.x,-1*renderoffset.y,-1*renderoffset.z);
+        }
 
         if (light == 15728880) {
             ((IEntityAndData) $$6).roundabout$setShadow(false);
