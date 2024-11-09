@@ -82,6 +82,7 @@
     "ZCamera",
     "ZClientLevelData",
     "ZEntityRenderDispatcher",
+    "ZEntityRenderer",
     "ZFogRenderer",
     "ZHeldItemLowering",
     "ZHumanoidArmorLayer",

@@ -22,6 +22,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -36,6 +37,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public abstract class EntityAndData implements IEntityAndData {
 
+    @Shadow
+    private AABB bb;
     @Unique
     private float roundabout$PrevTick = 0;
 
@@ -80,6 +83,11 @@ public abstract class EntityAndData implements IEntityAndData {
         this.roundabout$RenderOffHand = offhand;
     }
 
+    @Override
+    @Unique
+    public void roundabout$setNoAAB(){
+        bb = new AABB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    }
     public @Nullable ItemStack roundabout$getRoundaboutRenderChest(){
         return this.roundabout$RenderChest;
     }
@@ -148,6 +156,18 @@ public abstract class EntityAndData implements IEntityAndData {
         return 0;
     }
 
+    @Unique
+    public boolean roundabout$shadow = true;
+    @Unique
+    @Override
+    public boolean roundabout$getShadow(){
+        return roundabout$shadow;
+    }
+    @Unique
+    @Override
+    public void roundabout$setShadow(boolean shadow){
+        roundabout$shadow = shadow;
+    }
     @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
     public void roundabout$Turn(double $$0, double $$1, CallbackInfo ci){
         if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){

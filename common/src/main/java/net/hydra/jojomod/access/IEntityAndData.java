@@ -11,6 +11,11 @@ public interface IEntityAndData {
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
 
+    void roundabout$setNoAAB();
+
+    boolean roundabout$getShadow();
+    void roundabout$setShadow(boolean shadow);
+
     double roundabout$getRoundaboutPrevX();
 
     double roundabout$getRoundaboutPrevY();

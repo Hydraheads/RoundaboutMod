@@ -3,10 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IWalkAnimationState;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
@@ -121,21 +118,22 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     public void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         ShapeShifts shift = ShapeShifts.getShiftFromByte(((IPlayerEntity) $$0).roundabout$getShapeShift());
         if (shift != ShapeShifts.PLAYER){
-
             if (shift == ShapeShifts.ZOMBIE){
                 if (Minecraft.getInstance().level != null && roundabout$zombie == null){
                     roundabout$zombie = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
                 }
                 if (roundabout$zombie != null) {
-                    roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$zombie, $$0);
+                    roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$zombie, $$0, $$5);
                     ci.cancel();
                 }
+            } else if (shift == ShapeShifts.SKELETON){
+                ci.cancel();
             }
         }
     }
 
     @Unique
-    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user) {
+    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user, int light) {
 
         $$6.xOld = user.xOld;
         $$6.yOld = user.yOld;
@@ -153,6 +151,8 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         $$6.xRotO = user.xRotO;
         $$6.yRotO = user.yRotO;
         $$6.tickCount = user.tickCount;
+        $$6.attackAnim = user.attackAnim;
+        $$6.oAttackAnim = user.oAttackAnim;
 
         $$6.walkAnimation.setSpeed(user.walkAnimation.speed());
         IWalkAnimationState iwalk = ((IWalkAnimationState) $$6.walkAnimation);
@@ -165,19 +165,26 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         ilive.roundabout$setAnimStep(ulive.roundabout$getAnimStep());
         ilive.roundabout$setAnimStepO(ulive.roundabout$getAnimStepO());
         $$6.setSpeed(user.getSpeed());
+        ((IEntityAndData)$$6).roundabout$setNoAAB();
 
-
-        roundabout$renderEntityForce2(f1,f2,$$3,$$4,$$6);
+        roundabout$renderEntityForce2(f1,f2,$$3,$$4,$$6, light, user);
     }
 
     @Unique
-    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6) {
-        $$3.pushPose();;
+    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
+        $$3.pushPose();
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
 
+        if (light == 15728880) {
+            ((IEntityAndData) $$6).roundabout$setShadow(false);
+            ((IEntityAndData) user).roundabout$setShadow(false);
+        }
         $$7.setRenderShadow(false);
-        RenderSystem.runAsFancy(() -> $$7.render($$6, 0.0, 0.0, 0.0, f1, f2, $$3,$$4, 15728880));
+        boolean hb = $$7.shouldRenderHitBoxes();
+        $$7.setRenderHitBoxes(false);
+        RenderSystem.runAsFancy(() -> $$7.render($$6, 0.0, 0.0, 0.0, f1, f2, $$3,$$4, light));
         $$7.setRenderShadow(true);
+        $$7.setRenderHitBoxes(hb);
         $$3.popPose();
     }
 
