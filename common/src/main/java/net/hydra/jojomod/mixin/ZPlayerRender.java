@@ -1,41 +1,32 @@
 package net.hydra.jojomod.mixin;
 
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.projectile.KnifeLayer;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.*;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -45,13 +36,11 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
-
 @Mixin(PlayerRenderer.class)
 public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
     @Unique
-    Zombie roundabout$zombie = null;
+    LivingEntity roundabout$shapeShift = null;
     public ZPlayerRender(EntityRendererProvider.Context $$0, PlayerModel<AbstractClientPlayer> $$1, float $$2) {
         super($$0, $$1, $$2);
     }
@@ -114,17 +103,94 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         return $$0;
     }
 
+
+    @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
+    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+        byte shape = ((IPlayerEntity) $$3).roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift != ShapeShifts.PLAYER) {
+            if (shift == ShapeShifts.ZOMBIE) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || (roundabout$shapeShift instanceof Zombie))) {
+                    roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
+                }
+            }
+            EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
+            if (ER instanceof LivingEntityRenderer){
+                Model ml = ((LivingEntityRenderer<?, ?>)ER).getModel();
+
+                if (shift == ShapeShifts.ZOMBIE) {
+                    if (ml instanceof ZombieModel<?> zm){
+                        if (ER instanceof ZombieRenderer zr && roundabout$shapeShift instanceof Zombie zmb) {
+                            this.setModelProperties($$3);
+                            zm.attackTime = 0.0F;
+                            zm.crouching = false;
+                            zm.swimAmount = 0.0F;
+                            roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.rightArm,null, ml,zr.getTextureLocation(zmb));
+                        }
+                    }
+                }
+                ci.cancel();
+            }
+        }
+    }
+
+
+    @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
+    private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+
+        byte shape = ((IPlayerEntity) $$3).roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift != ShapeShifts.PLAYER) {
+            if (shift == ShapeShifts.ZOMBIE) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || (roundabout$shapeShift instanceof Zombie))) {
+                    roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
+                }
+            }
+            EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
+            if (ER instanceof LivingEntityRenderer){
+                Model ml = ((LivingEntityRenderer<?, ?>)ER).getModel();
+
+                if (shift == ShapeShifts.ZOMBIE) {
+                    if (ml instanceof ZombieModel<?> zm){
+                        if (ER instanceof ZombieRenderer zr && roundabout$shapeShift instanceof Zombie zmb) {
+                            this.setModelProperties($$3);
+                            zm.attackTime = 0.0F;
+                            zm.crouching = false;
+                            zm.swimAmount = 0.0F;
+                            roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.leftArm,null, ml,zr.getTextureLocation(zmb));
+                        }
+                    }
+                }
+                ci.cancel();
+            }
+        }
+    }
+
+    @Unique
+    private void roundabout$renderOtherHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3,
+                                            ModelPart $$4, @Nullable ModelPart $$5, Model ML, ResourceLocation texture){
+
+        $$4.xRot = 0.0F;
+        $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
+        if ($$5 != null) {
+            $$5.xRot = 0.0F;
+            $$5.render($$0, $$1.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
+        }
+    }
+
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         ShapeShifts shift = ShapeShifts.getShiftFromByte(((IPlayerEntity) $$0).roundabout$getShapeShift());
         if (shift != ShapeShifts.PLAYER){
             if (shift == ShapeShifts.ZOMBIE){
-                if (Minecraft.getInstance().level != null && roundabout$zombie == null){
-                    roundabout$zombie = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || (roundabout$shapeShift instanceof Zombie))){
+                    roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
                 }
-                if (roundabout$zombie != null) {
-                    roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$zombie, $$0, $$5);
+                if (roundabout$shapeShift != null) {
+                    roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$shapeShift, $$0, $$5);
                     ci.cancel();
                 }
             } else if (shift == ShapeShifts.SKELETON){
