@@ -143,8 +143,9 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                                                                                           int $$2,
                                                                                           AbstractClientPlayer $$3,
                                                                                           boolean right) {
+        IPlayerEntity ipe = ((IPlayerEntity) $$3);
 
-        byte shape = ((IPlayerEntity) $$3).roundabout$getShapeShift();
+        byte shape = ipe.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             if (shift == ShapeShifts.ZOMBIE) {
@@ -153,7 +154,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 }
             } else if (shift == ShapeShifts.VILLAGER) {
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Villager))) {
-                    roundabout$shapeShift = roundabout$getVillager(Minecraft.getInstance().level);
+                    roundabout$shapeShift = roundabout$getVillager(Minecraft.getInstance().level,ipe);
                 }
             }
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
@@ -204,7 +205,8 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(((IPlayerEntity) $$0).roundabout$getShapeShift());
+        IPlayerEntity ipe = ((IPlayerEntity) $$0);
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
         if (shift != ShapeShifts.PLAYER){
             if (shift == ShapeShifts.ZOMBIE) {
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Zombie))) {
@@ -216,7 +218,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 }
             } else if (shift == ShapeShifts.VILLAGER){
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Villager))){
-                    roundabout$shapeShift = roundabout$getVillager(Minecraft.getInstance().level);
+                    roundabout$shapeShift = roundabout$getVillager(Minecraft.getInstance().level,ipe);
                 }
                 if (roundabout$shapeShift != null) {
                     if (roundabout$shapeShift instanceof Villager ve) {
@@ -239,8 +241,13 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     }
 
     @Unique
-    public Villager roundabout$getVillager(ClientLevel lev){
+    public Villager roundabout$getVillager(ClientLevel lev, IPlayerEntity ipe){
         Villager vil = EntityType.VILLAGER.create(lev);
+        if (vil != null) {
+            byte BT = ipe.roundabout$getShapeShiftExtraData();
+            vil.setVillagerData(vil.getVillagerData().setType(ShapeShifts.getTypeFromByte(BT)));
+            vil.setVillagerData(vil.getVillagerData().setProfession(ShapeShifts.getProfessionFromByte(BT)));
+        }
         return vil;
     }
 

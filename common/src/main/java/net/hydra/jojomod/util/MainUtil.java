@@ -14,10 +14,7 @@ import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -50,6 +47,8 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
@@ -934,12 +933,27 @@ public class MainUtil {
             level.setBlockAndUpdate(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), state);
         }
     }
+    private static final TargetingConditions OFFER_TARGER_CONTEXT = TargetingConditions.forNonCombat().range(64.0D);
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
     public static void handleBytePacketC2S(Player player, byte data, byte context){
         if (context == PacketDataIndex.BYTE_UPDATE_COOLDOWN) {
             ((StandUser) player).roundabout$getStandPowers().setCooldown(data, -1);
         } if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
+            if (ShapeShifts.getShiftFromByte(data) == ShapeShifts.VILLAGER){
+                byte totalMorph = 0;
+                int dist = 640;
+                Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(64.0D, 2.0D, 64.0D));
+                if (ent != null){
+                    VillagerType VT = ent.getVillagerData().getType();
+                    VillagerProfession VP = ent.getVillagerData().getProfession();
+                    totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + ShapeShifts.getByteFromProfession(VP));
+                } else {
+                    VillagerType VT = VillagerType.byBiome(player.level().getBiome(player.blockPosition()));
+                    totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + 1);
+                }
+                ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
+            }
             ((IPlayerEntity) player).roundabout$setShapeShift(data);
         }
     }
