@@ -223,6 +223,8 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         $$6.tickCount = user.tickCount;
         $$6.attackAnim = user.attackAnim;
         $$6.oAttackAnim = user.oAttackAnim;
+        $$6.hurtDuration = user.hurtDuration;
+        $$6.hurtTime = user.hurtTime;
 
         $$6.walkAnimation.setSpeed(user.walkAnimation.speed());
         IWalkAnimationState iwalk = ((IWalkAnimationState) $$6.walkAnimation);
