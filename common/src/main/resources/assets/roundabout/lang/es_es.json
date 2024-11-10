@@ -166,6 +166,8 @@
   "sounds.roundabout.summon_stand":  "Stand invocado",
   "sounds.roundabout.summon_star":  "Stand invocado",
   "sounds.roundabout.summon_world":  "Stand invocado",
+  "sounds.roundabout.summon_justice":  "Stand invocado",
+  "sounds.roundabout.summon_justice_2":  "Stand invocado",
   "sounds.roundabout.ova_summon":  "Stand invocado",
   "sounds.roundabout.ova_summon_the_world":  "Stand invocado",
   "sounds.roundabout.punch_sfx1":  "Golpe al aire",
@@ -356,6 +358,12 @@
   "ability.roundabout.air_tanks": "Tanques de oxígeno",
   "ability.roundabout.air_tanks.desc": "El tanque en la espalda de The World te provee con aire extra, así que puedes nadar bajo el agua por mucho más tiempo.",
 
+  "ability.roundabout.fog_sword": "Realce de niebla",
+  "ability.roundabout.fog_sword.desc": "Los ataques de tu arma cargan más rápido y minas a una mayor velocidad cuando Justice está convocado",
+
+  "ability.roundabout.cast_fog": "Campo de niebla",
+  "ability.roundabout.cast_fog.desc": "Lanza niebla sobre una gran área, exponiendo bloques ilusorios y animando cadáveres que puedes controlar. Jugadores sin Justice ven menos.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Bloqueado",
   "ability.roundabout.locked.desc": "Desbloquea en la etapa de desarrollo %1$s",
@@ -386,7 +394,9 @@
   "gamerule.roundaboutAOEBarrage.description": "Controla si el bombarde Stand puede golpear a múltiples objetivos",
 
   "idle.roundabout.passive": "Pose inactiva",
-  "idle.roundabout.battle": "Listo para luchar",
+  "idle.roundabout.battle": "Pose pelea",
+  "idle.roundabout.passive_justice": "Pose inactiva",
+  "idle.roundabout.battle_justice": "Amenazante",
 
   "skins.roundabout.star_platinum.base": "Parte 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -399,7 +409,7 @@
 
   "skins.roundabout.the_world.base": "Parte 3",
   "skins.roundabout.the_world.manga": "Manga",
-  "skins.roundabout.the_world.heritage": "Shadow",
+  "skins.roundabout.the_world.heritage": "Heritage",
   "skins.roundabout.the_world.ova": "OVA",
   "skins.roundabout.the_world.black": "Stand Stats",
   "skins.roundabout.the_world.part_7": "THE WORLD",
@@ -409,6 +419,34 @@
   "skins.roundabout.the_world.aqua": "The Earth",
   "skins.roundabout.the_world.arcade": "Arcade",
 
+  "skins.roundabout.justice.base": "Parte 3",
+  "skins.roundabout.justice.skeleton": "Esqueleto",
+  "skins.roundabout.justice.manga": "Manga",
+  "skins.roundabout.justice.ova": "OVA",
+  "skins.roundabout.justice.tarot": "Tarot",
+  "skins.roundabout.justice.stray": "Errante",
+  "skins.roundabout.justice.bogged": "Ciénago",
+  "skins.roundabout.justice.wither": "Wither",
+  "skins.roundabout.justice.flamed": "Flama",
+  "skins.roundabout.justice.flamed_blue": "Flama azul",
+  "skins.roundabout.justice.twilight": "Twilight",
+  "skins.roundabout.justice.pirate": "Pirata",
+
   "unlock_skin.roundabout.the_world.over_heaven": "¡Aspecto The World: Over Heaven desbloqueado!",
-  "unlock_skin.roundabout.star_platinum.atomic": "¡Aspecto Star Platinum: Atomic Skin desbloqueado!"
+  "unlock_skin.roundabout.star_platinum.atomic": "¡Aspecto Star Platinum: Atomic desbloqueado!",
+  "unlock_skin.roundabout.justice.bad_bone": "¡Aspecto Justice: Bad to The Bone desbloqueado!",
+
+  "justice.morph.player": "Jugador",
+  "justice.morph.villager": "Aldeano",
+  "justice.morph.ova": "Disfraz",
+  "justice.morph.zombie": "Zombi",
+  "justice.morph.skeleton": "Esqueleto",
+
+  "power_inventory.roundabout.settings.general": "Ajustes de Stand",
+  "power_inventory.roundabout.settings.offset": "Posición al seguir",
+  "power_inventory.roundabout.settings.distance": "Distancia al seguir",
+  "power_inventory.roundabout.settings.opacity": "Opacidad (Quieto)",
+  "power_inventory.roundabout.settings.attack_opacity": "Opacidad (Lucha)",
+  "power_inventory.roundabout.settings.enemy_opacity": "Opacidad (De otros)",
+  "power_inventory.roundabout.settings.reset": "Reiniciar"
 }

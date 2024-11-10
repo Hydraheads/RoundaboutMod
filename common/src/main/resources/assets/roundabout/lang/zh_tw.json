@@ -161,13 +161,15 @@
   "commands.roundabout.levelup_specific.multiple": "設置實體%s等級",
   "commands.roundabout.levelup_specific.single": "設置%s等級",
 
-  "sounds.roundabout.summon_stand":  "替身已召喚！",
+  "sounds.roundabout.summon_stand":  "替身被召喚！",
   "sounds.roundabout.stand_arrow_charge":  "替身箭已瞄準目標！",
   "sounds.roundabout.stand_arrow_use":  "替身獲得！",
-  "sounds.roundabout.summon_star":  "替身已召喚！",
-  "sounds.roundabout.summon_world":  "替身已召喚！",
-  "sounds.roundabout.ova_summon":  "替身已召喚！",
-  "sounds.roundabout.ova_summon_the_world":  "替身已召喚！",
+  "sounds.roundabout.summon_star":  "替身被召喚！",
+  "sounds.roundabout.summon_world":  "替身被召喚！",
+  "sounds.roundabout.summon_justice":  "替身被召喚！",
+  "sounds.roundabout.summon_justice_2":  "替身被召喚！",
+  "sounds.roundabout.ova_summon":  "替身被召喚！",
+  "sounds.roundabout.ova_summon_the_world":  "替身被召喚！",
   "sounds.roundabout.punch_sfx1":  "空爆",
   "sounds.roundabout.punch_sfx2":  "空爆",
   "sounds.roundabout.punch_sfx3":  "攻擊",
@@ -356,6 +358,13 @@
   "ability.roundabout.air_tanks": "氧氣罐",
   "ability.roundabout.air_tanks.desc": "[世界]背上的氧氣罐為你提供了額外的氧氣，你現在可以在水下待更久的時間。",
 
+  "ability.roundabout.fog_sword": "濃霧附著",
+  "ability.roundabout.fog_sword.desc": "當正義被召喚時，你的攻擊速度和挖掘速度將得到提升。",
+
+  "ability.roundabout.cast_fog": "濃霧之域",
+  "ability.roundabout.cast_fog.desc": "在大片區域內召喚濃霧，揭露隱藏方塊並用濃霧操控屍體。替身不為正義的玩家可見度降低。",
+
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "鎖定",
   "ability.roundabout.locked.desc": "於成長階段%1$s解鎖",
@@ -409,8 +418,21 @@
   "skins.roundabout.the_world.aqua": "地球世界",
   "skins.roundabout.the_world.arcade": "街機（未來遺產）",
   
+  "skins.roundabout.justice.base": "第三部",
+  "skins.roundabout.justice.skeleton": "骷髏",
+  "skins.roundabout.justice.manga": "漫畫",
+  "skins.roundabout.justice.ova": "OVA",
+  "skins.roundabout.justice.tarot": "塔羅牌",
+  "skins.roundabout.justice.stray": "流髑",
+  "skins.roundabout.justice.bogged": "爛泥",
+  "skins.roundabout.justice.wither": "雕零",
+  "skins.roundabout.justice.flamed": "燃燒",
+  "skins.roundabout.justice.twilight": "暮色森林",
+  "skins.roundabout.justice.pirate": "海盜",
+  
   "unlock_skin.roundabout.the_world.over_heaven": "世界：超越天堂皮膚解鎖！",
   "unlock_skin.roundabout.star_platinum.atomic": "白金之星：原子皮膚解鎖！",
+  "unlock_skin.roundabout.justice.bad_bone": "正義：壞入骨髓皮膚解鎖！",
 
   "power_inventory.roundabout.settings.general": "替身使者設置",
   "power_inventory.roundabout.settings.offset": "跟隨位置",
