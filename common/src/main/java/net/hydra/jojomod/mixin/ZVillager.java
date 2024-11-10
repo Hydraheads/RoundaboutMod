@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ReputationEventHandler;
 import net.minecraft.world.entity.ai.Brain;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.VillagerGoalPackages;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.village.ReputationEventType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
@@ -71,8 +73,21 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         byte shape = ple.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
-            if (shift == ShapeShifts.ZOMBIE || shift == ShapeShifts.SKELETON) {
-                //cir.setReturnValue(-200);
+            if (shift == ShapeShifts.VILLAGER || shift == ShapeShifts.OVA) {
+                cir.setReturnValue(50);
+            }
+        }
+    }
+    @Inject(method = "onReputationEventFrom", at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$onReputationEventFrom(ReputationEventType $$0, Entity $$1, CallbackInfo ci) {
+        if ($$1 instanceof Player PL) {
+            IPlayerEntity ple = ((IPlayerEntity) PL);
+            byte shape = ple.roundabout$getShapeShift();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+            if (shift != ShapeShifts.PLAYER) {
+                if (shift == ShapeShifts.VILLAGER || shift == ShapeShifts.OVA) {
+                    ci.cancel();
+                }
             }
         }
     }

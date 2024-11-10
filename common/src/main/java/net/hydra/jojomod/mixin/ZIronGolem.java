@@ -64,6 +64,16 @@ public abstract class ZIronGolem extends AbstractGolem implements NeutralMob, II
                 }
                 roundabout$lastSeenAsMorph = shift;
             }
+
+            if (shift == ShapeShifts.OVA ||
+                    shift == ShapeShifts.VILLAGER){
+                setLastHurtByPlayer(null);
+                setLastHurtByMob(null);
+                setPersistentAngerTarget(null);
+                setTarget(null);
+                setRemainingPersistentAngerTime(0);
+                roundabout$setNegation(true);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.client.StoneLayer;
@@ -12,18 +13,21 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -36,6 +40,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
+import java.util.logging.Level;
 
 @Mixin(PlayerRenderer.class)
 public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
@@ -141,8 +148,12 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             if (shift == ShapeShifts.ZOMBIE) {
-                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || (roundabout$shapeShift instanceof Zombie))) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Zombie))) {
                     roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
+                }
+            } else if (shift == ShapeShifts.VILLAGER) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Villager))) {
+                    roundabout$shapeShift = roundabout$getVillager(Minecraft.getInstance().level);
                 }
             }
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
@@ -162,6 +173,13 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                             } else {
                                 roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.leftArm,null, ml,zr.getTextureLocation(zmb));
                             }
+                        }
+                    }
+                } else if (shift == ShapeShifts.VILLAGER) {
+                    if (ml instanceof VillagerModel<?> zm){
+                        if (ER instanceof VillagerRenderer zr && roundabout$shapeShift instanceof Villager zmb) {
+                            this.setModelProperties($$3);
+                            zm.attackTime = 0.0F;
                         }
                     }
                 }
@@ -188,18 +206,42 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     public void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         ShapeShifts shift = ShapeShifts.getShiftFromByte(((IPlayerEntity) $$0).roundabout$getShapeShift());
         if (shift != ShapeShifts.PLAYER){
-            if (shift == ShapeShifts.ZOMBIE){
-                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || (roundabout$shapeShift instanceof Zombie))){
+            if (shift == ShapeShifts.ZOMBIE) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Zombie))) {
                     roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
                 }
                 if (roundabout$shapeShift != null) {
+                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
+                    ci.cancel();
+                }
+            } else if (shift == ShapeShifts.VILLAGER){
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Villager))){
+                    roundabout$shapeShift = roundabout$getVillager(Minecraft.getInstance().level);
+                }
+                if (roundabout$shapeShift != null) {
+                    if (roundabout$shapeShift instanceof Villager ve) {
+                        if ($$0.isSleeping() && !ve.isSleeping()) {
+                            Optional<BlockPos> blk = $$0.getSleepingPos();
+                            blk.ifPresent(ve::startSleeping);
+                        } else {
+                            if (!$$0.isSleeping()){
+                                ve.stopSleeping();
+                            }
+                        }
+                    }
                     roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$shapeShift, $$0, $$5);
                     ci.cancel();
                 }
-            } else if (shift == ShapeShifts.SKELETON){
+            }else if (shift == ShapeShifts.SKELETON){
                 ci.cancel();
             }
         }
+    }
+
+    @Unique
+    public Villager roundabout$getVillager(ClientLevel lev){
+        Villager vil = EntityType.VILLAGER.create(lev);
+        return vil;
     }
 
     @Unique
