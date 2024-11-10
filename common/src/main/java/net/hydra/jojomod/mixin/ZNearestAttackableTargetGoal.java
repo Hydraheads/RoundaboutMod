@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -63,6 +64,18 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (shift == ShapeShifts.ZOMBIE) {
+                    target = null;
+                    ZE.setLastHurtByPlayer(null);
+                    ZE.setLastHurtByMob(null);
+                    ZE.setTarget(null);
+                }
+            }
+        } else if (this.mob instanceof Skeleton ZE && target instanceof Player $$0){
+            IPlayerEntity ple = ((IPlayerEntity) $$0);
+            byte shape = ple.roundabout$getShapeShift();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+            if (shift != ShapeShifts.PLAYER) {
+                if (shift == ShapeShifts.SKELETON) {
                     target = null;
                     ZE.setLastHurtByPlayer(null);
                     ZE.setLastHurtByMob(null);

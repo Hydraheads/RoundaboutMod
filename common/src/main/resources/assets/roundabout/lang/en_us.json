@@ -365,7 +365,7 @@
   "ability.roundabout.cast_fog.desc": "Casts fog over a large area, exposing illusionary blocks and animating corpses for you to control. Players without Justice see less.",
 
   "ability.roundabout.fog_morph": "Illusion Morph",
-  "ability.roundabout.fog_morph.desc": "Appear to others as a mob. Villager and disguise have decent trades at fixed rates, and are respected by golems. Zombie is ignored by other zombies, but feared by villages. Skeleton is ignored by other skeletons, but hated by wolves and dogs.",
+  "ability.roundabout.fog_morph.desc": "Appear to others as a mob. Villager and Disguise have decent trades at fixed rates, and are respected by golems. Zombie is ignored by other zombies, but feared by villages. Skeleton is ignored by other skeletons, but hated by wolves and dogs.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",

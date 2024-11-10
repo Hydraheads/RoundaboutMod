@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
@@ -47,6 +48,18 @@ public class ZTargetGoal {
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (shift == ShapeShifts.VILLAGER || shift == ShapeShifts.OVA) {
+                    targetMob = null;
+                    mob.setTarget(null);
+                    mob.setLastHurtByPlayer(null);
+                    mob.setLastHurtByMob(null);
+                }
+            }
+        } else if (mob instanceof Skeleton ZE && targetMob instanceof Player $$0){
+            IPlayerEntity ple = ((IPlayerEntity) $$0);
+            byte shape = ple.roundabout$getShapeShift();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+            if (shift != ShapeShifts.PLAYER) {
+                if (shift == ShapeShifts.SKELETON) {
                     targetMob = null;
                     mob.setTarget(null);
                     mob.setLastHurtByPlayer(null);
