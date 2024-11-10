@@ -38,7 +38,9 @@ public class JusticeMobSwitcherScreen extends Screen {
     private static final int HELP_TIPS_OFFSET_Y = 5;
     private static final int ALL_SLOTS_WIDTH = MobIcon.VALUES.length * 31 - 5;
     private static final int ALL_SLOTS2_WIDTH = JusticeMobSwitcherScreen.MobIcon.VALUES2.length * 31 - 5;
-    private static final Component SELECT_KEY = Component.translatable("debug.gamemodes.select_next", Component.translatable("debug.gamemodes.press_f4").withStyle(ChatFormatting.AQUA));
+    private static final Component SELECT_KEY = Component.translatable("justice.morph.select_next",
+            KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage(),
+            KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage());
     private final JusticeMobSwitcherScreen.MobIcon previousHovered;
     private JusticeMobSwitcherScreen.MobIcon currentlyHovered;
     private int firstMouseX;

@@ -59,6 +59,7 @@
     "ZSlime",
     "ZSmithingTemplateItem",
     "ZSnowGolem",
+    "ZTargetGoal",
     "ZThrowableProjectile",
     "ZThrownPotion",
     "ZTridentEntity",
@@ -69,7 +70,8 @@
     "ZWalkAnimationState",
     "ZWarden",
     "ZWitch",
-    "ZWitherBoss"
+    "ZWitherBoss",
+    "ZZombie"
   ],
   "client": [
     "HudRendering",

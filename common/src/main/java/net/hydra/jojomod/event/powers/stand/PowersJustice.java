@@ -154,7 +154,9 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.passive", StandIcons.JUSTICE_FOG_SWORD, 0, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.cast_fog",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_CAST_FOG,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.fog_morph",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         return $$1;
     }

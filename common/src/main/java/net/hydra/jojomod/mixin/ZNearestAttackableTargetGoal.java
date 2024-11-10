@@ -1,13 +1,17 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Final;
@@ -51,6 +55,22 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
         return null;
     }
 
+    @Inject(method = "start", at = @At(value = "HEAD"),cancellable = true)
+    protected void roundabout$start(CallbackInfo ci) {
+        if (this.mob instanceof Zombie ZE && target instanceof Player $$0){
+            IPlayerEntity ple = ((IPlayerEntity) $$0);
+            byte shape = ple.roundabout$getShapeShift();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+            if (shift != ShapeShifts.PLAYER) {
+                if (shift == ShapeShifts.ZOMBIE) {
+                    target = null;
+                    ZE.setLastHurtByPlayer(null);
+                    ZE.setLastHurtByMob(null);
+                    ZE.setTarget(null);
+                }
+            }
+        }
+    }
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
     protected void roundabout$findTarget(CallbackInfo ci) {
         if (this.target instanceof StandEntity SE) {
