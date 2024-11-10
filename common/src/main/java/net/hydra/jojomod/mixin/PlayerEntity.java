@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,6 +26,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -625,9 +628,35 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected void roundabout$GetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
         if (((StandUser) this).roundabout$isDazed()) {
             ci.setReturnValue(null);
+        } else {
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(roundabout$getShapeShift());
+            if (shift != ShapeShifts.PLAYER) {
+                if (shift == ShapeShifts.ZOMBIE) {
+                    ci.setReturnValue(SoundEvents.ZOMBIE_HURT);
+                } else if (shift == ShapeShifts.SKELETON) {
+                    ci.setReturnValue(SoundEvents.SKELETON_HURT);
+                } else if (shift == ShapeShifts.VILLAGER) {
+                    ci.setReturnValue(SoundEvents.VILLAGER_HURT);
+                }
+            }
         }
     }
-
+    @Inject(method = "playStepSound", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$playStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci) {
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(roundabout$getShapeShift());
+        if (shift != ShapeShifts.PLAYER) {
+            if (shift == ShapeShifts.ZOMBIE) {
+                this.playSound(SoundEvents.ZOMBIE_STEP, 0.15F, 1.0F);
+                ci.cancel();
+            } else if (shift == ShapeShifts.SKELETON) {
+                this.playSound(SoundEvents.SKELETON_STEP, 0.15F, 1.0F);
+                ci.cancel();
+            } else if (shift == ShapeShifts.VILLAGER) {
+                super.playStepSound($$0,$$1);
+                ci.cancel();
+            }
+        }
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
 

@@ -26,10 +26,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,7 +51,7 @@ import java.util.logging.Level;
 public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
     @Unique
-    LivingEntity roundabout$shapeShift = null;
+    Mob roundabout$shapeShift = null;
     public ZPlayerRender(EntityRendererProvider.Context $$0, PlayerModel<AbstractClientPlayer> $$1, float $$2) {
         super($$0, $$1, $$2);
     }
@@ -156,6 +159,10 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Villager))) {
                     roundabout$shapeShift = roundabout$getVillager(Minecraft.getInstance().level,ipe);
                 }
+            } else if (shift == ShapeShifts.SKELETON) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Skeleton))) {
+                    roundabout$shapeShift = roundabout$getSkeleton(Minecraft.getInstance().level,ipe);
+                }
             }
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
             EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
@@ -181,6 +188,20 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         if (ER instanceof VillagerRenderer zr && roundabout$shapeShift instanceof Villager zmb) {
                             this.setModelProperties($$3);
                             zm.attackTime = 0.0F;
+                        }
+                    }
+                } else if (shift == ShapeShifts.SKELETON) {
+                    if (ml instanceof SkeletonModel<?> sm){
+                        if (ER instanceof SkeletonRenderer zr && roundabout$shapeShift instanceof Skeleton skl) {
+                            this.setModelProperties($$3);
+                            sm.attackTime = 0.0F;
+                            sm.crouching = false;
+                            sm.swimAmount = 0.0F;
+                            if (right){
+                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.rightArm,null, ml,zr.getTextureLocation(skl));
+                            } else {
+                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.leftArm,null, ml,zr.getTextureLocation(skl));
+                            }
                         }
                     }
                 }
@@ -213,6 +234,8 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
                 }
                 if (roundabout$shapeShift != null) {
+                    ItemStack tem = $$0.getMainHandItem();
+                    roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
                     roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
                     ci.cancel();
                 }
@@ -235,7 +258,15 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     ci.cancel();
                 }
             }else if (shift == ShapeShifts.SKELETON){
-                ci.cancel();
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Skeleton))) {
+                    roundabout$shapeShift = roundabout$getSkeleton(Minecraft.getInstance().level,ipe);
+                }
+                if (roundabout$shapeShift != null) {
+                    ItemStack tem = $$0.getMainHandItem();
+                    roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
+                    ci.cancel();
+                }
             }
         }
     }
@@ -247,6 +278,14 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
             byte BT = ipe.roundabout$getShapeShiftExtraData();
             vil.setVillagerData(vil.getVillagerData().setType(ShapeShifts.getTypeFromByte(BT)));
             vil.setVillagerData(vil.getVillagerData().setProfession(ShapeShifts.getProfessionFromByte(BT)));
+        }
+        return vil;
+    }
+    @Unique
+    public Skeleton roundabout$getSkeleton(ClientLevel lev, IPlayerEntity ipe){
+        Skeleton vil = EntityType.SKELETON.create(lev);
+        if (vil != null) {
+            vil.setItemInHand(InteractionHand.MAIN_HAND, Items.BOW.getDefaultInstance());
         }
         return vil;
     }
