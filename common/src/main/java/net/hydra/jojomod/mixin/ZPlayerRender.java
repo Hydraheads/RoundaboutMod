@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -115,6 +116,16 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
     private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,false)){
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$getPlayerRep(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
+        IPlayerEntity ple = ((IPlayerEntity) $$0);
+        byte shape = ple.roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift != ShapeShifts.PLAYER) {
             ci.cancel();
         }
     }
