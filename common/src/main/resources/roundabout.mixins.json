@@ -62,6 +62,7 @@
     "ZTridentEntity",
     "ZTripWireBlock",
     "ZVillager",
+    "ZVillagerHostilesSensor",
     "ZVillagerMakeLove",
     "ZWalkAnimationState",
     "ZWarden",

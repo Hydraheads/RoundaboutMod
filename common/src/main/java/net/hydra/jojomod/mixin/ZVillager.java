@@ -3,6 +3,8 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
 import net.minecraft.world.level.Level;
@@ -26,6 +29,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 import java.util.Set;
@@ -56,6 +60,17 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             }
 
             if (!((IMob)this).roundabout$getFightOrFlight()){
+            }
+        }
+    }
+    @Inject(method = "getPlayerReputation", at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$getPlayerRep(Player $$0, CallbackInfoReturnable<Integer> cir) {
+        IPlayerEntity ple = ((IPlayerEntity) $$0);
+        byte shape = ple.roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift != ShapeShifts.PLAYER) {
+            if (shift == ShapeShifts.ZOMBIE || shift == ShapeShifts.SKELETON) {
+                cir.setReturnValue(-200);
             }
         }
     }

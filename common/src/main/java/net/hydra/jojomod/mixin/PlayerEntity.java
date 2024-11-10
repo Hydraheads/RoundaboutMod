@@ -378,7 +378,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$destroySpeedRecursion = false;
             if (curse > -1 && (curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
                     || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
-                dSpeed *= 6;
+                dSpeed *= 0.6F;
             }
 
             boolean standActive = ((StandUser) this).roundabout$getActive();
