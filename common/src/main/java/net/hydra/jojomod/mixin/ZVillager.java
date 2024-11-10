@@ -7,6 +7,8 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ReputationEventHandler;
 import net.minecraft.world.entity.ai.Brain;
@@ -71,6 +73,18 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if (shift != ShapeShifts.PLAYER) {
             if (shift == ShapeShifts.ZOMBIE || shift == ShapeShifts.SKELETON) {
                 //cir.setReturnValue(-200);
+            }
+        }
+    }
+    @Inject(method = "mobInteract(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$mobInteract(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+
+        IPlayerEntity ple = ((IPlayerEntity) $$0);
+        byte shape = ple.roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift != ShapeShifts.PLAYER) {
+            if (shift == ShapeShifts.ZOMBIE || shift == ShapeShifts.SKELETON) {
+                cir.setReturnValue(InteractionResult.sidedSuccess(this.level().isClientSide));
             }
         }
     }
