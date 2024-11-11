@@ -128,10 +128,13 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
             if ($$2 == HumanoidArm.LEFT) {
                 this.body.yRot *= -1.0F;
             }
+            float negativeRot = this.body.yRot*=-1;
 
-            this.rightArm.yRot = this.rightArm.yRot + this.body.yRot;
-            this.leftArm.yRot = this.leftArm.yRot + this.body.yRot;
-            this.leftArm.xRot = this.leftArm.xRot + this.body.yRot;
+            this.rightArm.z = Mth.sin(negativeRot) * 5.0F;
+            this.leftArm.z = -Mth.sin(negativeRot) * 5.0F;
+            this.rightArm.yRot = this.rightArm.yRot + negativeRot;
+            this.leftArm.yRot = this.leftArm.yRot + negativeRot;
+            this.leftArm.xRot = this.leftArm.xRot + negativeRot;
             $$4 = 1.0F - this.attackTime;
             $$4 *= $$4;
             $$4 *= $$4;
