@@ -29,6 +29,12 @@
       "roundabout:levelup"
     ]
   },
+  "fog_morph": {
+    "subtitle": "sounds.roundabout.fog_morph",
+    "sounds": [
+      "roundabout:fog_morph"
+    ]
+  },
   "stand_arrow_charge": {
     "subtitle": "sounds.roundabout.stand_arrow_charge",
     "sounds": [

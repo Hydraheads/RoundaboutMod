@@ -942,8 +942,7 @@ public class MainUtil {
         } if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
             if (ShapeShifts.getShiftFromByte(data) == ShapeShifts.VILLAGER){
                 byte totalMorph = 0;
-                int dist = 640;
-                Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(64.0D, 2.0D, 64.0D));
+                Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
                 if (ent != null){
                     VillagerType VT = ent.getVillagerData().getType();
                     VillagerProfession VP = ent.getVillagerData().getProfession();
@@ -954,6 +953,7 @@ public class MainUtil {
                 }
                 ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
             }
+            ((IPlayerEntity) player).roundabout$shapeShift();
             ((IPlayerEntity) player).roundabout$setShapeShift(data);
         }
     }

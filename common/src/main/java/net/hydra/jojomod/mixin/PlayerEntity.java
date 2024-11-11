@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.core.BlockPos;
@@ -24,9 +26,11 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -296,6 +300,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public void roundabout$setShapeShift(byte level){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT, level);
+    }
+    @Override
+    @Unique
+    public void roundabout$shapeShift(){
+        if (!this.level().isClientSide()){
+            for (int i = 0; i < 30; i++){
+                this.level().playSound(null, this, ModSounds.FOG_MORPH_EVENT, SoundSource.PLAYERS, 0.36F, 1.0F);
+                ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
+                        this.getY()+(this.getBbWidth()*0.6), this.getZ(),
+                        14, 0.4, 0.2, 0.4, 0.35);
+            }
+        }
     }
     @Override
     @Unique

@@ -35,6 +35,8 @@ public class ForgeSounds {
             register(ModSounds.KNIFE_IMPACT, ModSounds.KNIFE_IMPACT_ID);
     public static final RegistryObject<SoundEvent> KNIFE_IMPACT_GROUND_EVENT =
             register(ModSounds.KNIFE_IMPACT_GROUND, ModSounds.KNIFE_IMPACT_GROUND_ID);
+    public static final RegistryObject<SoundEvent> FOG_MORPH_EVENT =
+            register(ModSounds.FOG_MORPH, ModSounds.FOG_MORPH_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_PETRIFY_EVENT =
             register(ModSounds.LOCACACA_PETRIFY, ModSounds.LOCACACA_PETRIFY_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_FUSION_EVENT =
