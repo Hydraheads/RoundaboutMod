@@ -8,7 +8,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -27,6 +27,13 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "terrier"),
                         EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).
                                 sized(0.6f, 0.55f).clientTrackingRange(10).build(Roundabout.MOD_ID+":terrier")
+                );
+        public static final EntityType<OVAEnyaNPC> OVA_ENYA =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jnpc_ova_enya"),
+                        EntityType.Builder.of(OVAEnyaNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_ova_enya")
                 );
 
         public static final EntityType<TheWorldEntity> THE_WORLD =
@@ -133,8 +140,11 @@ public class FabricEntities {
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
 
+                ModEntities.OVA_ENYA = OVA_ENYA;
+
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
+                FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());

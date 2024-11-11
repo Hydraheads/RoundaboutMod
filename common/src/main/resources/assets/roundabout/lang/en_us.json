@@ -76,6 +76,7 @@
   "entity.roundabout.terrier": "Terrier",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
+  "entity.roundabout.justice": "Justice",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
   "entity.roundabout.knife": "Knife",
@@ -83,6 +84,7 @@
   "entity.roundabout.gasoline_splatter": "Gasoline Splatter",
   "entity.roundabout.stand_arrow": "Stand Arrow",
   "entity.roundabout.worthy_arrow": "Worthiness Arrow",
+  "entity.roundabout.jnpc_ova_enya": "Enya",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.ancient_meteor": "Ancient Meteor",

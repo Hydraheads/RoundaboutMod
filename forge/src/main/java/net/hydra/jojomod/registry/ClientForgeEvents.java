@@ -8,6 +8,8 @@ import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaModel;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaRenderer;
 import net.hydra.jojomod.particles.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ExplodeParticle;
@@ -36,6 +38,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAND_ARROW.get(), StandArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), OVAEnyaRenderer::new);
     }
 
     @SubscribeEvent
@@ -49,6 +52,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.OVA_ENYA_LAYER, OVAEnyaModel::getTexturedModelData);
     }
     @SubscribeEvent
     public static void registerParticleStuff(RegisterParticleProvidersEvent event) {

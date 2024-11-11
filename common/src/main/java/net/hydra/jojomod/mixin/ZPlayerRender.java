@@ -5,8 +5,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.projectile.KnifeLayer;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaModel;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaRenderer;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -163,6 +167,10 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Skeleton))) {
                     roundabout$shapeShift = roundabout$getSkeleton(Minecraft.getInstance().level,ipe);
                 }
+            } else if (shift == ShapeShifts.OVA) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof OVAEnyaNPC))) {
+                    roundabout$shapeShift = ModEntities.OVA_ENYA.create(Minecraft.getInstance().level);
+                }
             }
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
             EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
@@ -193,6 +201,20 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 } else if (shift == ShapeShifts.SKELETON) {
                     if (ml instanceof SkeletonModel<?> sm){
                         if (ER instanceof SkeletonRenderer zr && roundabout$shapeShift instanceof Skeleton skl) {
+                            this.setModelProperties($$3);
+                            sm.attackTime = 0.0F;
+                            sm.crouching = false;
+                            sm.swimAmount = 0.0F;
+                            if (right){
+                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.rightArm,null, ml,zr.getTextureLocation(skl));
+                            } else {
+                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.leftArm,null, ml,zr.getTextureLocation(skl));
+                            }
+                        }
+                    }
+                } else if (shift == ShapeShifts.OVA) {
+                    if (ml instanceof OVAEnyaModel<?> sm){
+                        if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$shapeShift instanceof OVAEnyaNPC skl) {
                             this.setModelProperties($$3);
                             sm.attackTime = 0.0F;
                             sm.crouching = false;
@@ -264,6 +286,25 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 if (roundabout$shapeShift != null) {
                     ItemStack tem = $$0.getMainHandItem();
                     roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
+                    ci.cancel();
+                }
+            } else if (shift == ShapeShifts.OVA){
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof OVAEnyaNPC))) {
+                    roundabout$shapeShift = ModEntities.OVA_ENYA.create(Minecraft.getInstance().level);
+                }
+                if (roundabout$shapeShift != null) {
+                    ItemStack tem = $$0.getMainHandItem();
+                    if (roundabout$shapeShift instanceof OVAEnyaNPC ve) {
+                        if ($$0.isSleeping() && !ve.isSleeping()) {
+                            Optional<BlockPos> blk = $$0.getSleepingPos();
+                            blk.ifPresent(ve::startSleeping);
+                        } else {
+                            if (!$$0.isSleeping()){
+                                ve.stopSleeping();
+                            }
+                        }
+                    }
                     roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
                     ci.cancel();
                 }

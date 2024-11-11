@@ -1,10 +1,10 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -22,6 +22,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "terrier").toString())
+            );
+    public static final RegistryObject<EntityType<OVAEnyaNPC>> OVA_ENYA =
+            ENTITY_TYPES.register("jnpc_ova_enya", () ->
+                    EntityType.Builder.of(OVAEnyaNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_ova_enya").toString())
             );
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
             ENTITY_TYPES.register("the_world", () ->

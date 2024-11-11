@@ -364,6 +364,8 @@
   "ability.roundabout.cast_fog": "浓雾之域",
   "ability.roundabout.cast_fog.desc": "在大片区域内召唤浓雾，揭露隐藏方块并用浓雾操控尸体。替身不为正义的玩家可见度降低。",
 
+  "ability.roundabout.fog_morph": "浓雾拟态",
+  "ability.roundabout.fog_morph.desc": "将外表转换为其他生物。村民和普通伪装将会在村民交易中获得一定折扣同时将会被傀儡尊敬。 僵尸伪装使你被僵尸忽视，但会吓跑村民。 骷髅伪装使你被其他骷髅忽视，但会被狗和狼主动攻击。",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "锁定",
@@ -396,6 +398,8 @@
   
   "idle.roundabout.passive": "闲置姿势",
   "idle.roundabout.battle": "准备作战",
+  "idle.roundabout.passive_justice": "闲置姿势",
+  "idle.roundabout.battle_justice": "恐吓姿势",
 
   "skins.roundabout.star_platinum.base": "第三部",
   "skins.roundabout.star_platinum.manga": "漫画",
@@ -433,6 +437,13 @@
   "unlock_skin.roundabout.the_world.over_heaven": "世界：超越天堂皮肤解锁！",
   "unlock_skin.roundabout.star_platinum.atomic": "白金之星：原子皮肤解锁！",
   "unlock_skin.roundabout.justice.bad_bone": "正义：坏入骨髓皮肤解锁！",
+  
+  "justice.morph.player": "玩家",
+  "justice.morph.villager": "村民",
+  "justice.morph.ova": "伪装",
+  "justice.morph.zombie": "僵尸",
+  "justice.morph.skeleton": "骷髅",
+  "justice.morph.select_next": "%1$s: 下一个, %2$s: 选中",
 
   "power_inventory.roundabout.settings.general": "替身使者设置",
   "power_inventory.roundabout.settings.offset": "跟随位置",

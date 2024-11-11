@@ -6,11 +6,13 @@ import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Mixin(NearestAttackableTargetGoal.class)
 public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> extends TargetGoal {
@@ -81,6 +84,36 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
                     ZE.setLastHurtByMob(null);
                     ZE.setTarget(null);
                 }
+            }
+        }
+    }
+
+    @Unique
+    boolean roundabout$isAngryAt(LivingEntity $$0) {
+        if ($$0 instanceof Player PE){
+            if (this.mob.canAttack($$0)) {
+                IPlayerEntity ple = ((IPlayerEntity) $$0);
+                byte shape = ple.roundabout$getShapeShift();
+                ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+                if (shift != ShapeShifts.PLAYER) {
+                    if (shift == ShapeShifts.SKELETON) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    @Inject(method = "findTarget", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$findTarget2(CallbackInfo ci) {
+        if (this.mob instanceof Wolf WE){
+            Predicate<LivingEntity> newCond = this::roundabout$isAngryAt;
+
+            TargetingConditions targetConditionsX = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(newCond);
+            LivingEntity TG = this.mob.level().getNearestPlayer(targetConditionsX, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+            if (TG != null){
+                this.target = TG;
+                ci.cancel();
             }
         }
     }
