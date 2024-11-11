@@ -52,8 +52,8 @@ public abstract class ZIronGolem extends AbstractGolem implements NeutralMob, II
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (roundabout$lastSeenAsMorph != shift){
-                if (roundabout$lastSeenAsMorph == ShapeShifts.ZOMBIE || roundabout$lastSeenAsMorph == ShapeShifts.SKELETON) {
-                    if (shift != ShapeShifts.ZOMBIE && shift != ShapeShifts.SKELETON){
+                if (ShapeShifts.isZombie(roundabout$lastSeenAsMorph) || ShapeShifts.isSkeleton(roundabout$lastSeenAsMorph)) {
+                    if (!ShapeShifts.isZombie(shift) && !ShapeShifts.isSkeleton(shift)){
                         setLastHurtByPlayer(null);
                         setLastHurtByMob(null);
                         setPersistentAngerTarget(null);
@@ -65,8 +65,7 @@ public abstract class ZIronGolem extends AbstractGolem implements NeutralMob, II
                 roundabout$lastSeenAsMorph = shift;
             }
 
-            if (shift == ShapeShifts.OVA ||
-                    shift == ShapeShifts.VILLAGER){
+            if (ShapeShifts.isVillager(shift)){
                 setLastHurtByPlayer(null);
                 setLastHurtByMob(null);
                 setPersistentAngerTarget(null);

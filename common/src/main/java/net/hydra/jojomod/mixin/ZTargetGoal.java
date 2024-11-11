@@ -48,7 +48,7 @@ public class ZTargetGoal {
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
-                if (shift == ShapeShifts.VILLAGER || shift == ShapeShifts.OVA) {
+                if (ShapeShifts.isVillager(shift)) {
                     targetMob = null;
                     mob.setTarget(null);
                     mob.setLastHurtByPlayer(null);

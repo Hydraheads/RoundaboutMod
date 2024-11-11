@@ -364,7 +364,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
                 if (shift != ShapeShifts.PLAYER) {
-                    if (shift == ShapeShifts.ZOMBIE) {
+                    if (ShapeShifts.isZombie(shift)) {
                         ipe.roundabout$shapeShiftSilent();
                         ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
                     }
@@ -375,7 +375,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
                 if (shift != ShapeShifts.PLAYER) {
-                    if (shift == ShapeShifts.VILLAGER || shift == ShapeShifts.OVA) {
+                    if (ShapeShifts.isVillager(shift)) {
                         ipe.roundabout$shapeShiftSilent();
                         ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
                     }

@@ -218,7 +218,9 @@ public class JusticeMobSwitcherScreen extends Screen {
         WITHER_SKELETON(Component.translatable("justice.morph.wither_skeleton"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/icons/justice/disguise_wither.png"),ShapeShifts.WITHER_SKELETON.id),
         STRAY(Component.translatable("justice.morph.stray"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_stray.png"),ShapeShifts.STRAY.id);
+                "textures/gui/icons/justice/disguise_stray.png"),ShapeShifts.STRAY.id),
+        EERIE(Component.translatable("justice.morph.eerie"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/icons/justice/disguise_eerie.png"),ShapeShifts.EERIE.id);
 
         protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES;
         protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES2;
@@ -250,7 +252,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                 return switch (this) {
                     default -> throw new IncompatibleClassChangeError();
                     case PLAYER -> OVA;
-                    case VILLAGER, OVA -> ZOMBIE;
+                    case VILLAGER, OVA, EERIE -> ZOMBIE;
                     case ZOMBIE -> SKELETON;
                     case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
                 };
@@ -258,7 +260,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                 return switch (this) {
                     default -> throw new IncompatibleClassChangeError();
                     case PLAYER -> VILLAGER;
-                    case VILLAGER, OVA -> ZOMBIE;
+                    case VILLAGER, OVA, EERIE  -> ZOMBIE;
                     case ZOMBIE -> WITHER_SKELETON;
                     case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
                 };
@@ -266,7 +268,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                 return switch (this) {
                     default -> throw new IncompatibleClassChangeError();
                     case PLAYER -> VILLAGER;
-                    case VILLAGER, OVA -> ZOMBIE;
+                    case VILLAGER, OVA, EERIE  -> ZOMBIE;
                     case ZOMBIE -> STRAY;
                     case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
                 };
@@ -274,7 +276,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                 return switch (this) {
                 default -> throw new IncompatibleClassChangeError();
                 case PLAYER -> VILLAGER;
-                case OVA, VILLAGER -> ZOMBIE;
+                case OVA, VILLAGER, EERIE  -> ZOMBIE;
                 case ZOMBIE -> SKELETON;
                 case SKELETON, WITHER_SKELETON, STRAY -> PLAYER;
                 };
@@ -289,6 +291,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                 case SKELETON -> SKELETON;
                 case WITHER_SKELETON -> WITHER_SKELETON;
                 case STRAY -> STRAY;
+                case EERIE -> EERIE;
             };
         }
 
@@ -296,7 +299,7 @@ public class JusticeMobSwitcherScreen extends Screen {
             VALUES = new MobIcon[]{PLAYER,VILLAGER,ZOMBIE,SKELETON};
             VALUES2 = new MobIcon[]{PLAYER,OVA,ZOMBIE,SKELETON};
             VALUES3 = new MobIcon[]{PLAYER,VILLAGER,ZOMBIE, WITHER_SKELETON};
-            VALUES4 = new MobIcon[]{PLAYER,VILLAGER,ZOMBIE, STRAY};
+            VALUES4 = new MobIcon[]{PLAYER,EERIE,ZOMBIE, STRAY};
         }
     }
 

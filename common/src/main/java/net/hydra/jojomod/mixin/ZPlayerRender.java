@@ -157,6 +157,21 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         byte shape = ipe.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
+            if (shift == ShapeShifts.EERIE) {
+                ResourceLocation sauce;
+
+                if (((IPlayerModel)this.model).roundabout$getSlim()){
+                    sauce = StandIcons.EERIE_SKIN_ALEX;
+                } else {
+                    sauce = StandIcons.EERIE_SKIN;
+                }
+                if (right) {
+                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, this.model.rightArm, null, this.model, sauce);
+                } else {
+                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, this.model.leftArm, null, this.model, sauce);
+                }
+                return true;
+            } else {
             if (shift == ShapeShifts.ZOMBIE) {
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Zombie))) {
                     roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
@@ -269,6 +284,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     return true;
                 }
             }
+            }
         }
         return false;
     }
@@ -292,7 +308,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     public void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        if (shift != ShapeShifts.PLAYER){
+        if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE){
             if (shift == ShapeShifts.ZOMBIE) {
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Zombie))) {
                     roundabout$shapeShift = EntityType.ZOMBIE.create(Minecraft.getInstance().level);
@@ -471,7 +487,24 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         $$7.setRenderHitBoxes(hb);
         $$3.popPose();
     }
+    @Inject(method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;",
+            at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$render(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
+        IPlayerEntity ple = ((IPlayerEntity) $$0);
+        byte shape = ple.roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift == ShapeShifts.EERIE) {
 
+            ResourceLocation sauce;
+
+            if (((IPlayerModel)this.model).roundabout$getSlim()){
+                sauce = StandIcons.EERIE_SKIN_ALEX;
+            } else {
+                sauce = StandIcons.EERIE_SKIN;
+            }
+            cir.setReturnValue(sauce);
+        }
+    }
     @Shadow
     public ResourceLocation getTextureLocation(AbstractClientPlayer var1) {
         return null;

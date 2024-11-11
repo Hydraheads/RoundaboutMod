@@ -105,6 +105,7 @@
     "ZParticle",
     "ZParticleAccess",
     "ZParticleEngine",
+    "ZPlayerModel",
     "ZPlayerRender",
     "ZScreenShaking",
     "ZTimeStopTextureFreeze",

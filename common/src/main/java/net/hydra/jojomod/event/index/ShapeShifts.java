@@ -7,11 +7,14 @@ import net.minecraft.world.entity.npc.VillagerType;
 public enum ShapeShifts {
     PLAYER((byte) 0),
     VILLAGER((byte) 1),
+
     OVA((byte) 2),
+
     ZOMBIE((byte) 3),
     SKELETON((byte) 4),
     WITHER_SKELETON((byte) 5),
-    STRAY((byte) 6);
+    STRAY((byte) 6),
+    EERIE((byte) 7);
 
     public final byte id;
     private ShapeShifts(byte $$0) {
@@ -31,12 +34,20 @@ public enum ShapeShifts {
             return WITHER_SKELETON;
         } if (bt== STRAY.id){
             return STRAY;
+        } if (bt== EERIE.id){
+            return EERIE;
         }
         return PLAYER;
     }
 
+    public static boolean isVillager(ShapeShifts shape){
+        return shape == ShapeShifts.OVA || shape == ShapeShifts.VILLAGER || shape == ShapeShifts.EERIE;
+    }
     public static boolean isSkeleton(ShapeShifts shape){
         return shape == ShapeShifts.SKELETON || shape == ShapeShifts.WITHER_SKELETON || shape == ShapeShifts.STRAY;
+    }
+    public static boolean isZombie(ShapeShifts shape){
+        return shape == ShapeShifts.ZOMBIE;
     }
 
     public static byte getByteFromType(VillagerType VT){

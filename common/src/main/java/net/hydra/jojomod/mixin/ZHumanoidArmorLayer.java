@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.Minecraft;
@@ -51,6 +52,12 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         roundabout$ArmorPhase = 0;
         if ($$3 instanceof Player PE) {
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            if (ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift()) == ShapeShifts.EERIE){
+                ci.cancel();
+                return;
+            }
+
             roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
             if (roundabout$ModifyEntity) {
                 if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderChest() == null){
