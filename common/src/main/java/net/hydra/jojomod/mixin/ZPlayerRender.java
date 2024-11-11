@@ -172,62 +172,64 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$shapeShift = ModEntities.OVA_ENYA.create(Minecraft.getInstance().level);
                 }
             }
-            EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
-            EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
-            if (ER instanceof LivingEntityRenderer){
-                Model ml = ((LivingEntityRenderer<?, ?>)ER).getModel();
+            if (roundabout$shapeShift != null) {
+                EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
+                if (ER instanceof LivingEntityRenderer) {
+                    Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
 
-                if (shift == ShapeShifts.ZOMBIE) {
-                    if (ml instanceof ZombieModel<?> zm){
-                        if (ER instanceof ZombieRenderer zr && roundabout$shapeShift instanceof Zombie zmb) {
-                            this.setModelProperties($$3);
-                            zm.attackTime = 0.0F;
-                            zm.crouching = false;
-                            zm.swimAmount = 0.0F;
-                            if (right){
-                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.rightArm,null, ml,zr.getTextureLocation(zmb));
-                            } else {
-                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,zm.leftArm,null, ml,zr.getTextureLocation(zmb));
+                    if (shift == ShapeShifts.ZOMBIE) {
+                        if (ml instanceof ZombieModel<?> zm) {
+                            if (ER instanceof ZombieRenderer zr && roundabout$shapeShift instanceof Zombie zmb) {
+                                this.setModelProperties($$3);
+                                zm.attackTime = 0.0F;
+                                zm.crouching = false;
+                                zm.swimAmount = 0.0F;
+                                if (right) {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, zm.rightArm, null, ml, zr.getTextureLocation(zmb));
+                                } else {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, zm.leftArm, null, ml, zr.getTextureLocation(zmb));
+                                }
+                            }
+                        }
+                    } else if (shift == ShapeShifts.VILLAGER) {
+                        if (ml instanceof VillagerModel<?> zm) {
+                            if (ER instanceof VillagerRenderer zr && roundabout$shapeShift instanceof Villager zmb) {
+                                this.setModelProperties($$3);
+                                zm.attackTime = 0.0F;
+                            }
+                        }
+                    } else if (shift == ShapeShifts.SKELETON) {
+                        if (ml instanceof SkeletonModel<?> sm) {
+                            if (ER instanceof SkeletonRenderer zr && roundabout$shapeShift instanceof Skeleton skl) {
+                                this.setModelProperties($$3);
+                                sm.attackTime = 0.0F;
+                                sm.crouching = false;
+                                sm.swimAmount = 0.0F;
+                                if (right) {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                } else {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                }
+                            }
+                        }
+                    } else if (shift == ShapeShifts.OVA) {
+                        if (ml instanceof OVAEnyaModel<?> sm) {
+                            if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$shapeShift instanceof OVAEnyaNPC skl) {
+                                this.setModelProperties($$3);
+                                sm.attackTime = 0.0F;
+                                sm.crouching = false;
+                                sm.swimAmount = 0.0F;
+                                if (right) {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                } else {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                }
                             }
                         }
                     }
-                } else if (shift == ShapeShifts.VILLAGER) {
-                    if (ml instanceof VillagerModel<?> zm){
-                        if (ER instanceof VillagerRenderer zr && roundabout$shapeShift instanceof Villager zmb) {
-                            this.setModelProperties($$3);
-                            zm.attackTime = 0.0F;
-                        }
-                    }
-                } else if (shift == ShapeShifts.SKELETON) {
-                    if (ml instanceof SkeletonModel<?> sm){
-                        if (ER instanceof SkeletonRenderer zr && roundabout$shapeShift instanceof Skeleton skl) {
-                            this.setModelProperties($$3);
-                            sm.attackTime = 0.0F;
-                            sm.crouching = false;
-                            sm.swimAmount = 0.0F;
-                            if (right){
-                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.rightArm,null, ml,zr.getTextureLocation(skl));
-                            } else {
-                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.leftArm,null, ml,zr.getTextureLocation(skl));
-                            }
-                        }
-                    }
-                } else if (shift == ShapeShifts.OVA) {
-                    if (ml instanceof OVAEnyaModel<?> sm){
-                        if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$shapeShift instanceof OVAEnyaNPC skl) {
-                            this.setModelProperties($$3);
-                            sm.attackTime = 0.0F;
-                            sm.crouching = false;
-                            sm.swimAmount = 0.0F;
-                            if (right){
-                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.rightArm,null, ml,zr.getTextureLocation(skl));
-                            } else {
-                                roundabout$renderOtherHand($$0,$$1,$$2,$$3,sm.leftArm,null, ml,zr.getTextureLocation(skl));
-                            }
-                        }
-                    }
+                    return true;
                 }
-                return true;
             }
         }
         return false;
@@ -237,8 +239,10 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     private void roundabout$renderOtherHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3,
                                             ModelPart $$4, @Nullable ModelPart $$5, Model ML, ResourceLocation texture){
 
-        $$4.xRot = 0.0F;
-        $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
+        if ($$4 != null) {
+            $$4.xRot = 0.0F;
+            $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
+        }
         if ($$5 != null) {
             $$5.xRot = 0.0F;
             $$5.render($$0, $$1.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
