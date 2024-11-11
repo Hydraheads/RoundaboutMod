@@ -12,10 +12,7 @@ import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -46,7 +43,10 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
@@ -343,6 +343,45 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**Break free from stand grab*/
+    @Inject(method = "setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$setLastHurtByMob(LivingEntity $$0, CallbackInfo ci) {
+        LivingEntity liv = ((LivingEntity) (Object) this);
+        if (liv instanceof Skeleton){
+            if ($$0 instanceof Player PE){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+                if (shift != ShapeShifts.PLAYER) {
+                    if (shift == ShapeShifts.SKELETON) {
+                        ipe.roundabout$shapeShiftSilent();
+                        ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
+                    }
+                }
+            }
+        } else if (liv instanceof Zombie){
+            if ($$0 instanceof Player PE){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+                if (shift != ShapeShifts.PLAYER) {
+                    if (shift == ShapeShifts.ZOMBIE) {
+                        ipe.roundabout$shapeShiftSilent();
+                        ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
+                    }
+                }
+            }
+        } else if (liv instanceof Villager){
+            if ($$0 instanceof Player PE){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+                if (shift != ShapeShifts.PLAYER) {
+                    if (shift == ShapeShifts.VILLAGER || shift == ShapeShifts.OVA) {
+                        ipe.roundabout$shapeShiftSilent();
+                        ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
+                    }
+                }
+            }
+        }
+    }
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$endTick(CallbackInfo ci) {
         if (!(((LivingEntity)(Object)this) instanceof Player)) {

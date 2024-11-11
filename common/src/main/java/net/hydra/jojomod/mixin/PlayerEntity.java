@@ -5,10 +5,7 @@ import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -310,6 +307,24 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
                         this.getY()+(this.getBbWidth()*0.6), this.getZ(),
                         14, 0.4, 0.2, 0.4, 0.35);
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) ((Player)(Object)this)),
+                        PowerIndex.SKILL_1_SNEAK, 20);
+                ((StandUser)this).roundabout$getStandPowers().setCooldown(PowerIndex.SKILL_1_SNEAK, 20);
+            }
+        }
+    }
+    @Override
+    @Unique
+    public void roundabout$shapeShiftSilent(){
+        if (!this.level().isClientSide()){
+            for (int i = 0; i < 30; i++){
+                ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
+                        this.getY()+(this.getBbWidth()*0.6), this.getZ(),
+                        14, 0.4, 0.2, 0.4, 0.35);
+
+                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) ((Player)(Object)this)),
+                            PowerIndex.SKILL_1_SNEAK, 100);
+                ((StandUser)this).roundabout$getStandPowers().setCooldown(PowerIndex.SKILL_1_SNEAK, 100);
             }
         }
     }

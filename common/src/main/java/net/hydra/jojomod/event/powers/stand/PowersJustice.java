@@ -143,7 +143,7 @@ public class PowersJustice extends DashPreset {
         if (isHoldingSneak()){
             setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
         } else {
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.NONE);
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
 
             setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
@@ -218,8 +218,10 @@ public class PowersJustice extends DashPreset {
                 } else {
                     if (keyIsDown) {
                         if (!hold1) {
-                            hold1 = true;
-                            ClientUtil.setJusticeScreen();
+                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
+                                hold1 = true;
+                                ClientUtil.setJusticeScreen();
+                            }
                         }
                     } else {
 
