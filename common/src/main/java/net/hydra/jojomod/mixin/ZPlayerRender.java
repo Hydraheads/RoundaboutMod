@@ -32,6 +32,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Stray;
+import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -167,6 +169,14 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Skeleton))) {
                     roundabout$shapeShift = roundabout$getSkeleton(Minecraft.getInstance().level,ipe);
                 }
+            } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof WitherSkeleton))) {
+                    roundabout$shapeShift = roundabout$getWither(Minecraft.getInstance().level,ipe);
+                }
+            } else if (shift == ShapeShifts.STRAY) {
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Stray))) {
+                    roundabout$shapeShift = roundabout$getStray(Minecraft.getInstance().level,ipe);
+                }
             } else if (shift == ShapeShifts.OVA) {
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof OVAEnyaNPC))) {
                     roundabout$shapeShift = ModEntities.OVA_ENYA.create(Minecraft.getInstance().level);
@@ -202,6 +212,34 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     } else if (shift == ShapeShifts.SKELETON) {
                         if (ml instanceof SkeletonModel<?> sm) {
                             if (ER instanceof SkeletonRenderer zr && roundabout$shapeShift instanceof Skeleton skl) {
+                                this.setModelProperties($$3);
+                                sm.attackTime = 0.0F;
+                                sm.crouching = false;
+                                sm.swimAmount = 0.0F;
+                                if (right) {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                } else {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                }
+                            }
+                        }
+                    } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                        if (ml instanceof SkeletonModel<?> sm) {
+                            if (ER instanceof WitherSkeletonRenderer zr && roundabout$shapeShift instanceof WitherSkeleton skl) {
+                                this.setModelProperties($$3);
+                                sm.attackTime = 0.0F;
+                                sm.crouching = false;
+                                sm.swimAmount = 0.0F;
+                                if (right) {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                } else {
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                }
+                            }
+                        }
+                    } else if (shift == ShapeShifts.STRAY) {
+                        if (ml instanceof SkeletonModel<?> sm) {
+                            if (ER instanceof StrayRenderer zr && roundabout$shapeShift instanceof Stray skl) {
                                 this.setModelProperties($$3);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
@@ -283,9 +321,29 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$shapeShift, $$0, $$5);
                     ci.cancel();
                 }
-            }else if (shift == ShapeShifts.SKELETON){
+            } else if (shift == ShapeShifts.SKELETON){
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Skeleton))) {
                     roundabout$shapeShift = roundabout$getSkeleton(Minecraft.getInstance().level,ipe);
+                }
+                if (roundabout$shapeShift != null) {
+                    ItemStack tem = $$0.getMainHandItem();
+                    roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
+                    ci.cancel();
+                }
+            } else if (shift == ShapeShifts.WITHER_SKELETON){
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof WitherSkeleton))) {
+                    roundabout$shapeShift = roundabout$getWither(Minecraft.getInstance().level,ipe);
+                }
+                if (roundabout$shapeShift != null) {
+                    ItemStack tem = $$0.getMainHandItem();
+                    roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
+                    ci.cancel();
+                }
+            } else if (shift == ShapeShifts.STRAY){
+                if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Stray))) {
+                    roundabout$shapeShift = roundabout$getStray(Minecraft.getInstance().level,ipe);
                 }
                 if (roundabout$shapeShift != null) {
                     ItemStack tem = $$0.getMainHandItem();
@@ -334,6 +392,23 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         }
         return vil;
     }
+    @Unique
+    public Stray roundabout$getStray(ClientLevel lev, IPlayerEntity ipe){
+        Stray vil = EntityType.STRAY.create(lev);
+        if (vil != null) {
+            vil.setItemInHand(InteractionHand.MAIN_HAND, Items.BOW.getDefaultInstance());
+        }
+        return vil;
+    }
+    @Unique
+    public WitherSkeleton roundabout$getWither(ClientLevel lev, IPlayerEntity ipe){
+        WitherSkeleton vil = EntityType.WITHER_SKELETON.create(lev);
+        if (vil != null) {
+            vil.setItemInHand(InteractionHand.MAIN_HAND, Items.STONE_SWORD.getDefaultInstance());
+        }
+        return vil;
+    }
+
 
     @Unique
     public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user, int light) {

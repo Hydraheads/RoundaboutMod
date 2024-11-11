@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
@@ -73,12 +74,12 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
                     ZE.setTarget(null);
                 }
             }
-        } else if (this.mob instanceof Skeleton ZE && target instanceof Player $$0){
+        } else if (this.mob instanceof AbstractSkeleton ZE && target instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
-                if (shift == ShapeShifts.SKELETON) {
+                if (ShapeShifts.isSkeleton(shift)) {
                     target = null;
                     ZE.setLastHurtByPlayer(null);
                     ZE.setLastHurtByMob(null);
@@ -96,7 +97,7 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
                 byte shape = ple.roundabout$getShapeShift();
                 ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
                 if (shift != ShapeShifts.PLAYER) {
-                    if (shift == ShapeShifts.SKELETON) {
+                    if (ShapeShifts.isSkeleton(shift)) {
                         return true;
                     }
                 }

@@ -447,6 +447,8 @@
   "justice.morph.ova": "Disguise",
   "justice.morph.zombie": "Zombie",
   "justice.morph.skeleton": "Skeleton",
+  "justice.morph.wither_skeleton": "Wither Skeleton",
+  "justice.morph.stray": "Stray",
   "justice.morph.select_next": "%1$s: Next, %2$s: Select",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",

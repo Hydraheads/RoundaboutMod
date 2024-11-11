@@ -42,6 +42,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
@@ -347,12 +348,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$setLastHurtByMob(LivingEntity $$0, CallbackInfo ci) {
         LivingEntity liv = ((LivingEntity) (Object) this);
-        if (liv instanceof Skeleton){
+        if (liv instanceof AbstractSkeleton){
             if ($$0 instanceof Player PE){
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
                 if (shift != ShapeShifts.PLAYER) {
-                    if (shift == ShapeShifts.SKELETON) {
+                    if (ShapeShifts.isSkeleton(shift)) {
                         ipe.roundabout$shapeShiftSilent();
                         ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
                     }

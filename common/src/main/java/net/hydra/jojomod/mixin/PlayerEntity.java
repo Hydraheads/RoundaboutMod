@@ -666,6 +666,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     ci.setReturnValue(SoundEvents.ZOMBIE_HURT);
                 } else if (shift == ShapeShifts.SKELETON) {
                     ci.setReturnValue(SoundEvents.SKELETON_HURT);
+                } else if (shift == ShapeShifts.STRAY) {
+                    ci.setReturnValue(SoundEvents.STRAY_HURT);
+                } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                    ci.setReturnValue(SoundEvents.WITHER_SKELETON_HURT);
                 } else if (shift == ShapeShifts.VILLAGER) {
                     ci.setReturnValue(SoundEvents.VILLAGER_HURT);
                 }
@@ -681,6 +685,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ci.cancel();
             } else if (shift == ShapeShifts.SKELETON) {
                 this.playSound(SoundEvents.SKELETON_STEP, 0.15F, 1.0F);
+                ci.cancel();
+            } else if (shift == ShapeShifts.STRAY) {
+                this.playSound(SoundEvents.STRAY_STEP, 0.15F, 1.0F);
+            } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                this.playSound(SoundEvents.WITHER_SKELETON_STEP, 0.15F, 1.0F);
                 ci.cancel();
             } else if (shift == ShapeShifts.VILLAGER) {
                 super.playStepSound($$0,$$1);

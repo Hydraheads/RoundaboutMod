@@ -24,6 +24,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
 
 public class JusticeMobSwitcherScreen extends Screen {
@@ -49,6 +50,8 @@ public class JusticeMobSwitcherScreen extends Screen {
     public boolean zHeld;
 
     public static boolean hasOVASkin = false;
+    public static boolean hasWitherSkin = false;
+    public static boolean hasStraySkin = false;
     private final List<JusticeMobSwitcherScreen.MobSlot> slots = Lists.newArrayList();
 
     public JusticeMobSwitcherScreen() {
@@ -70,20 +73,31 @@ public class JusticeMobSwitcherScreen extends Screen {
         zHeld = true;
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
-            if (((IPlayerEntity)pl).roundabout$getStandSkin() == JusticeEntity.OVA_SKIN){
-                hasOVASkin = true;
-            } else {
-                hasOVASkin = false;
-            }
+            byte standSkin = ((IPlayerEntity)pl).roundabout$getStandSkin();
+            hasOVASkin = standSkin == JusticeEntity.OVA_SKIN;
+            hasWitherSkin = standSkin == JusticeEntity.WITHER;
+            hasStraySkin = standSkin == JusticeEntity.STRAY_SKIN;
         } else {
             hasOVASkin = false;
+            hasWitherSkin = false;
+            hasStraySkin = false;
         }
 
 
         this.currentlyHovered = this.previousHovered;
-        if (hasOVASkin){
+        if (hasOVASkin) {
             for (int i = 0; i < JusticeMobSwitcherScreen.MobIcon.VALUES2.length; ++i) {
                 JusticeMobSwitcherScreen.MobIcon MobIcon = JusticeMobSwitcherScreen.MobIcon.VALUES2[i];
+                this.slots.add(new JusticeMobSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS2_WIDTH / 2 + i * 31, this.height / 2 - 31));
+            }
+        } else if (hasWitherSkin){
+            for (int i = 0; i < JusticeMobSwitcherScreen.MobIcon.VALUES3.length; ++i) {
+                JusticeMobSwitcherScreen.MobIcon MobIcon = JusticeMobSwitcherScreen.MobIcon.VALUES3[i];
+                this.slots.add(new JusticeMobSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS2_WIDTH / 2 + i * 31, this.height / 2 - 31));
+            }
+        } else if (hasStraySkin){
+            for (int i = 0; i < JusticeMobSwitcherScreen.MobIcon.VALUES4.length; ++i) {
+                JusticeMobSwitcherScreen.MobIcon MobIcon = JusticeMobSwitcherScreen.MobIcon.VALUES4[i];
                 this.slots.add(new JusticeMobSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS2_WIDTH / 2 + i * 31, this.height / 2 - 31));
             }
         } else {
@@ -198,11 +212,18 @@ public class JusticeMobSwitcherScreen extends Screen {
                         "textures/gui/icons/justice/disguise_ova.png"),ShapeShifts.OVA.id),
         ZOMBIE(Component.translatable("justice.morph.zombie"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/icons/justice/disguise_3.png"),ShapeShifts.ZOMBIE.id),
+
         SKELETON(Component.translatable("justice.morph.skeleton"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_4.png"),ShapeShifts.SKELETON.id);
+                "textures/gui/icons/justice/disguise_4.png"),ShapeShifts.SKELETON.id),
+        WITHER_SKELETON(Component.translatable("justice.morph.wither_skeleton"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/icons/justice/disguise_wither.png"),ShapeShifts.WITHER_SKELETON.id),
+        STRAY(Component.translatable("justice.morph.stray"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/icons/justice/disguise_stray.png"),ShapeShifts.STRAY.id);
 
         protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES;
         protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES2;
+        protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES3;
+        protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES4;
         private static final int ICON_AREA = 16;
         protected static final int ICON_TOP_LEFT = 5;
         final Component name;
@@ -226,24 +247,37 @@ public class JusticeMobSwitcherScreen extends Screen {
 
         JusticeMobSwitcherScreen.MobIcon getNext() {
             if (JusticeMobSwitcherScreen.hasOVASkin){
-
                 return switch (this) {
                     default -> throw new IncompatibleClassChangeError();
                     case PLAYER -> OVA;
-                    case VILLAGER -> ZOMBIE;
-                    case OVA -> ZOMBIE;
+                    case VILLAGER, OVA -> ZOMBIE;
                     case ZOMBIE -> SKELETON;
-                    case SKELETON -> PLAYER;
+                    case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
+                };
+            } else if (JusticeMobSwitcherScreen.hasWitherSkin){
+                return switch (this) {
+                    default -> throw new IncompatibleClassChangeError();
+                    case PLAYER -> VILLAGER;
+                    case VILLAGER, OVA -> ZOMBIE;
+                    case ZOMBIE -> WITHER_SKELETON;
+                    case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
+                };
+            } else if (JusticeMobSwitcherScreen.hasStraySkin){
+                return switch (this) {
+                    default -> throw new IncompatibleClassChangeError();
+                    case PLAYER -> VILLAGER;
+                    case VILLAGER, OVA -> ZOMBIE;
+                    case ZOMBIE -> STRAY;
+                    case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
                 };
             }
-            return switch (this) {
+                return switch (this) {
                 default -> throw new IncompatibleClassChangeError();
                 case PLAYER -> VILLAGER;
-                case OVA -> ZOMBIE;
-                case VILLAGER -> ZOMBIE;
+                case OVA, VILLAGER -> ZOMBIE;
                 case ZOMBIE -> SKELETON;
-                case SKELETON -> PLAYER;
-            };
+                case SKELETON, WITHER_SKELETON, STRAY -> PLAYER;
+                };
         }
         static JusticeMobSwitcherScreen.MobIcon getFromGameType(ShapeShifts shift) {
             return switch (shift) {
@@ -253,12 +287,16 @@ public class JusticeMobSwitcherScreen extends Screen {
                 case OVA -> OVA;
                 case ZOMBIE -> ZOMBIE;
                 case SKELETON -> SKELETON;
+                case WITHER_SKELETON -> WITHER_SKELETON;
+                case STRAY -> STRAY;
             };
         }
 
         static {
             VALUES = new MobIcon[]{PLAYER,VILLAGER,ZOMBIE,SKELETON};
             VALUES2 = new MobIcon[]{PLAYER,OVA,ZOMBIE,SKELETON};
+            VALUES3 = new MobIcon[]{PLAYER,VILLAGER,ZOMBIE, WITHER_SKELETON};
+            VALUES4 = new MobIcon[]{PLAYER,VILLAGER,ZOMBIE, STRAY};
         }
     }
 
