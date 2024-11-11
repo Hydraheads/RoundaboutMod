@@ -76,6 +76,23 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
     }
 
 
+    public void setAllVisible(boolean $$0) {
+        this.head.visible = $$0;
+        this.hat.visible = $$0;
+        this.body.visible = $$0;
+        this.rightArm.visible = $$0;
+        this.leftArm.visible = $$0;
+        this.rightLeg.visible = $$0;
+        this.leftLeg.visible = $$0;
+        this.leftSleeve.visible = $$0;
+        this.rightSleeve.visible = $$0;
+        this.leftPants.visible = $$0;
+        this.rightPants.visible = $$0;
+        this.jacket.visible = $$0;
+        this.cloak.visible = $$0;
+    }
+
+
     private void poseRightArm(T $$0) {
         switch (this.rightArmPose) {
             case EMPTY:
@@ -225,6 +242,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
         this.setupAttackAnimation($$0, $$3);
         if (this.crouching) {
             this.body.xRot = 0.5F;
+            this.body.z = 5.2F;
             this.rightArm.xRot += 0.4F;
             this.leftArm.xRot += 0.4F;
             this.rightLeg.z = 4.0F;
@@ -232,7 +250,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
             this.rightLeg.y = 0.2F;
             this.leftLeg.y = 0.2F;
             this.head.y = 4.2F;
-            this.body.y = 3.2F;
+            this.body.y = 2.0F;
             this.leftArm.y = 3.2F;
             this.rightArm.y = 3.2F;
         } else {

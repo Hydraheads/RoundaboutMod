@@ -48,6 +48,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
@@ -92,6 +93,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     private long lastRestockCheckDayTime;
     private boolean assignProfessionWhenSpawned;
     protected Vec3 deltaMovementOnPreviousTick = Vec3.ZERO;
+
 
     public CompoundTag getShoulderEntityLeft() {
         return this.entityData.get(DATA_SHOULDER_LEFT);

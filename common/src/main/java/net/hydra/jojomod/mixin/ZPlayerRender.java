@@ -29,6 +29,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Skeleton;
@@ -270,9 +271,9 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         if (ml instanceof OVAEnyaModel<?> sm) {
                             if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$shapeShift instanceof OVAEnyaNPC skl) {
                                 this.setModelProperties($$3);
-                                sm.attackTime = 0.0F;
-                                sm.crouching = false;
-                                sm.swimAmount = 0.0F;
+                                sm.attackTime = this.model.attackTime;
+                                sm.crouching = this.model.crouching;
+                                sm.swimAmount = this.model.swimAmount;
                                 if (right) {
                                     roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
@@ -305,7 +306,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
         if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE){
@@ -372,13 +373,30 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$shapeShift = ModEntities.OVA_ENYA.create(Minecraft.getInstance().level);
                 }
                 if (roundabout$shapeShift != null) {
-                    ItemStack tem = $$0.getMainHandItem();
                     if (roundabout$shapeShift instanceof OVAEnyaNPC ve) {
+
+                        roundabout$shapeShift.setSwimming($$0.isSwimming());
+                        roundabout$shapeShift.setItemInHand(InteractionHand.MAIN_HAND,$$0.getMainHandItem());
+                        roundabout$shapeShift.setItemInHand(InteractionHand.OFF_HAND,$$0.getOffhandItem());
+                        roundabout$shapeShift.setPose($$0.getPose());
+                        ve.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
+                        EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+                        EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
+                        Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
+                        if (ml instanceof OVAEnyaModel<?> sm) {
+                            if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$shapeShift instanceof OVAEnyaNPC skl) {
+                                sm.attackTime = this.model.attackTime;
+                                sm.crouching = this.model.crouching;
+                                sm.swimAmount = this.model.swimAmount;
+                            }
+                        }
+
+
                         if ($$0.isSleeping() && !ve.isSleeping()) {
                             Optional<BlockPos> blk = $$0.getSleepingPos();
                             blk.ifPresent(ve::startSleeping);
                         } else {
-                            if (!$$0.isSleeping()){
+                            if (!$$0.isSleeping() && ve.isSleeping()){
                                 ve.stopSleeping();
                             }
                         }
