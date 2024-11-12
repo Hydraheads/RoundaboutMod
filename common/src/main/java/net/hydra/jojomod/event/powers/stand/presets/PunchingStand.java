@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -53,6 +54,16 @@ public class PunchingStand extends DashPreset {
     }
 
     public boolean wentForCharge = false;
+
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
+            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
+            return true;
+        }
+        return false;
+    }
 
 
     /**Punching stands only go for barrages when facing players, because barrages will be interrupted 100% of the time

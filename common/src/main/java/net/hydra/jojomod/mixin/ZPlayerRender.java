@@ -271,11 +271,12 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                                 sm.attackTime = this.model.attackTime;
                                 sm.crouching = this.model.crouching;
                                 sm.swimAmount = this.model.swimAmount;
-                                //$$0.translate(2F,2F,0F);
+                                float $$5 = right ? 1.0F : -1.0F;
+                                $$0.translate($$5 * -0.3F, 0F, 0F);
                                 if (right) {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }

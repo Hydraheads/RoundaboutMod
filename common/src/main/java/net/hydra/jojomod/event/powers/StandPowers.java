@@ -280,11 +280,6 @@ public class StandPowers {
     }
 
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
-            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
-            return true;
-        }
         return false;
     }
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
