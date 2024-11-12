@@ -386,6 +386,21 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         ila2.roundabout$setSwimAmountO(ila.roundabout$getSwimAmountO());
                         ila2.roundabout$setWasTouchingWater(ila.roundabout$getWasTouchingWater());
                         ila2.roundabout$setFallFlyingTicks($$0.getFallFlyingTicks());
+                        ila2.roundabout$setSharedFlag(1, ila.roundabout$getSharedFlag(1));
+                        ila2.roundabout$setSharedFlag(2, ila.roundabout$getSharedFlag(2));
+                        ila2.roundabout$setSharedFlag(3, ila.roundabout$getSharedFlag(3));
+                        ila2.roundabout$setSharedFlag(4, ila.roundabout$getSharedFlag(4));
+                        ila2.roundabout$setSharedFlag(5, ila.roundabout$getSharedFlag(5));
+                        ila2.roundabout$setSharedFlag(6, ila.roundabout$getSharedFlag(6));
+
+                        ve.roundabout$setDodgeTime(ipe.roundabout$getDodgeTime());
+                        ve.roundabout$setClientDodgeTime(ipe.roundabout$getClientDodgeTime());
+                        ve.roundabout$SetPos(ipe.roundabout$GetPos());
+                        ila2.roundabout$setUseItem($$0.getUseItem());
+                        ila2.roundabout$setUseItemTicks($$0.getUseItemRemainingTicks());
+                        ve.host = $$0;
+
+
                         if ($$0.isFallFlying()){
                             if (!ila2.roundabout$getSharedFlag(7)) {
                                 ila2.roundabout$setSharedFlag(7, true);

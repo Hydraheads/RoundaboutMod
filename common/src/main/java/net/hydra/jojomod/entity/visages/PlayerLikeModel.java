@@ -5,7 +5,9 @@ import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -317,7 +319,58 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
             this.leftLeg.xRot = Mth.lerp(this.swimAmount, this.leftLeg.xRot, 0.3F * Mth.cos($$1 * 0.33333334F + (float) Math.PI));
             this.rightLeg.xRot = Mth.lerp(this.swimAmount, this.rightLeg.xRot, 0.3F * Mth.cos($$1 * 0.33333334F));
         }
+        byte pos = $$0.roundabout$GetPos();
+        if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD){
+            //this.body.xRot = -20.0F;
+            int dodgeTime = $$0.roundabout$getDodgeTime();
+            float fl;
+            if (dodgeTime > -1) {
+                if (dodgeTime > 5) {
+                    fl = ((11 - ((float) dodgeTime + 1 + $$2 - 1.0F)) / 20.0F * 1.6F);
+                } else {
+                    fl = ((float) dodgeTime + 1 + $$2 - 1.0F) / 20.0F * 1.6F;
+                }
+                if (fl != 0) {
+                    fl = Mth.sqrt(fl);
+                }
+                if (fl > 1.0F) {
+                    fl = 1.0F;
+                }
 
+                if (pos == PlayerPosIndex.DODGE_BACKWARD){
+                    fl*=-1;
+                    this.leftLeg.xRot = (float) (-fl*1.2);
+                } else {
+                    this.leftLeg.xRot = -fl;
+                }
+                this.rightLeg.xRot = fl;
+                this.leftArm.xRot = -fl;
+                this.rightArm.xRot = fl;
+                this.head.xRot += (float) (-fl*0.3);
+                this.setupAttackAnimation($$0, $$3);
+
+
+                boolean JJ = $$0.getMainArm() == HumanoidArm.RIGHT;
+                if ($$0.isUsingItem()) {
+                    boolean $$10 = $$0.getUsedItemHand() == InteractionHand.MAIN_HAND;
+                    if ($$10 == JJ) {
+                        this.poseRightArm($$0);
+                    } else {
+                        this.poseLeftArm($$0);
+                    }
+                } else {
+                    boolean $$11 = JJ ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
+                    if (JJ != $$11) {
+                        this.poseLeftArm($$0);
+                        this.poseRightArm($$0);
+                    } else {
+                        this.poseRightArm($$0);
+                        this.poseLeftArm($$0);
+                    }
+                }
+
+            }
+        }
         this.hat.copyFrom(this.head);
 
 

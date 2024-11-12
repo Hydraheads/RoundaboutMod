@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,6 +41,8 @@ public abstract class ZLivingEntity extends Entity implements ILivingEntityAcces
     private float swimAmountO;
     @Shadow
     protected int fallFlyTicks;
+    @Shadow
+    protected ItemStack useItem = ItemStack.EMPTY;
 
     public ZLivingEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -71,6 +74,11 @@ public abstract class ZLivingEntity extends Entity implements ILivingEntityAcces
     @Override
     public boolean roundabout$getSharedFlag(int $$0) {
         return getSharedFlag($$0);
+    }
+    @Unique
+    @Override
+    public void roundabout$setUseItem(ItemStack stack) {
+        useItem = stack;
     }
     @Unique
     @Override
@@ -158,9 +166,15 @@ public abstract class ZLivingEntity extends Entity implements ILivingEntityAcces
     @Shadow
     protected void pushEntities(){
     }
+    @Override
+    public void roundabout$setUseItemTicks(int ticks) {
+        useItemRemaining = ticks;
+    }
 
     @Shadow
     protected abstract int decreaseAirSupply(int $$0);
+
+    @Shadow protected int useItemRemaining;
 
     @Override
     public void roundabout$PushEntities(){

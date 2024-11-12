@@ -1,5 +1,7 @@
 package net.hydra.jojomod.access;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
 public interface ILivingEntityAccess {
@@ -18,10 +20,12 @@ public interface ILivingEntityAccess {
     boolean roundabout$getSharedFlag(int $$0);
     void roundabout$setSharedFlag(int $$0, boolean $$1);
     boolean roundabout$getWasTouchingWater();
+    void roundabout$setUseItemTicks(int ticks);
 
     void roundabout$setAnimStep(float animStep);
 
     void roundabout$setAnimStepO(float animStepO);
+    void roundabout$setUseItem(ItemStack stack);
 
     float roundabout$getAnimStep();
 

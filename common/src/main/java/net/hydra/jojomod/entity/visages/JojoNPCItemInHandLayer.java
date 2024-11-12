@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.visages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
@@ -12,16 +13,21 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.Nullable;
 
 public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel<T> & ArmedModel & HeadedModel> extends ItemInHandLayer<T, M> {
     private final ItemInHandRenderer itemInHandRenderer;
     private static final float X_ROT_MIN = (float) (-Math.PI / 6);
     private static final float X_ROT_MAX = (float) (Math.PI / 2);
+
+    @Nullable Player play;
 
     public JojoNPCItemInHandLayer(RenderLayerParent<T, M> $$0, ItemInHandRenderer $$1) {
         super($$0, $$1);
@@ -30,6 +36,7 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
 
     @Override
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
+        play = $$3.host;
         boolean $$10 = $$3.getMainArm() == HumanoidArm.RIGHT;
         ItemStack $$11 = $$10 ? $$3.getOffhandItem() : $$3.getMainHandItem();
         ItemStack $$12 = $$10 ? $$3.getMainHandItem() : $$3.getOffhandItem();
@@ -58,7 +65,13 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
                 $$4.mulPose(Axis.YP.rotationDegrees(180.0F));
                 boolean $$7 = $$3 == HumanoidArm.LEFT;
                 $$4.translate((float)($$7 ? -1 : 1) / 16.0F, 0.125F, -0.625F);
-                this.itemInHandRenderer.renderItem($$0, $$1, $$2, $$7, $$4, $$5, $$6);
+                //Roundabout.LOGGER.info("1: "+$$0.getName()+" 2: "+($$0.getItemInHand(InteractionHand.MAIN_HAND) ==
+                        //$$0.getUseItem())+" 3: "+($$1==$$0.getUseItem()));
+                if (play != null){
+                    this.itemInHandRenderer.renderItem(play, $$1, $$2, $$7, $$4, $$5, $$6);
+                } else {
+                    this.itemInHandRenderer.renderItem($$0, $$1, $$2, $$7, $$4, $$5, $$6);
+                }
                 $$4.popPose();
             }
         }
@@ -74,7 +87,11 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
         CustomHeadLayer.translateToHead($$3, false);
         boolean $$8 = $$2 == HumanoidArm.LEFT;
         $$3.translate(($$8 ? -2.5F : 2.5F) / 16.0F, -0.0625F, 0.0F);
-        this.itemInHandRenderer.renderItem($$0, $$1, ItemDisplayContext.HEAD, false, $$3, $$4, $$5);
+        if (play != null) {
+            this.itemInHandRenderer.renderItem(play, $$1, ItemDisplayContext.HEAD, false, $$3, $$4, $$5);
+        } else {
+            this.itemInHandRenderer.renderItem($$0, $$1, ItemDisplayContext.HEAD, false, $$3, $$4, $$5);
+        }
         $$3.popPose();
     }
 }

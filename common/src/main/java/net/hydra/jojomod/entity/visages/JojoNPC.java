@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -48,7 +49,6 @@ import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
@@ -94,6 +94,52 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     private boolean assignProfessionWhenSpawned;
     protected Vec3 deltaMovementOnPreviousTick = Vec3.ZERO;
 
+    public Player host = null;
+
+
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(JojoNPC.class,
+            EntityDataSerializers.BYTE);
+
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(JojoNPC.class,
+            EntityDataSerializers.INT);
+
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(JojoNPC.class,
+            EntityDataSerializers.BYTE);
+    public void roundabout$SetPos(byte Pos){
+        this.getEntityData().set(ROUNDABOUT$POS, Pos);
+    }
+    public byte roundabout$GetPos(){
+        return this.getEntityData().get(ROUNDABOUT$POS);
+    }
+    public final int roundabout$getKnifeCount() {
+        return this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
+    }
+
+    public void roundabout$addKnife() {
+        byte knifeCount = this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
+
+        knifeCount++;
+        if (knifeCount <= 12){
+            ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knifeCount);
+        }
+    }
+
+    private int roundabout$clientDodgeTime = 0;
+    public int roundabout$getDodgeTime(){
+        return this.getEntityData().get(ROUNDABOUT$DODGE_TIME);
+    }
+    public int roundabout$getClientDodgeTime(){
+        return roundabout$clientDodgeTime;
+    }
+    public void roundabout$setClientDodgeTime(int dodgeTime){
+        roundabout$clientDodgeTime = dodgeTime;
+    }
+    public void roundabout$setDodgeTime(int dodgeTime){
+        this.getEntityData().set(ROUNDABOUT$DODGE_TIME, dodgeTime);
+    }
+    public void roundabout$setKnife(byte knives) {
+        this.getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knives);
+    }
 
     public CompoundTag getShoulderEntityLeft() {
         return this.entityData.get(DATA_SHOULDER_LEFT);
@@ -246,9 +292,12 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_UNHAPPY_COUNTER, 0);
+        this.entityData.define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
         this.entityData.define(DATA_PLAYER_ABSORPTION_ID, 0.0F);
         this.entityData.define(DATA_SCORE_ID, 0);
         this.entityData.define(DATA_PLAYER_MODE_CUSTOMISATION, (byte)0);
+        this.entityData.define(ROUNDABOUT$DODGE_TIME, -1);
+        this.entityData.define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);
         this.entityData.define(DATA_PLAYER_MAIN_HAND, (byte)1);
         this.entityData.define(DATA_SHOULDER_LEFT, new CompoundTag());
         this.entityData.define(DATA_SHOULDER_RIGHT, new CompoundTag());

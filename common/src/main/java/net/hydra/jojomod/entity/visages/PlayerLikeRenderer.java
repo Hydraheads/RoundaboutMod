@@ -2,10 +2,8 @@ package net.hydra.jojomod.entity.visages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -17,7 +15,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -66,6 +63,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
         }
         return entity.level().getBrightness(LightLayer.BLOCK, pos);
     }
+
     private void setModelProperties(T $$0) {
         PlayerLikeModel<T> $$1 = this.getModel();
         if ($$0.isSpectator()) {
@@ -172,6 +170,34 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
         } else {
             super.setupRotations($$0, $$1, $$2, $$3, $$4);
         }
+
+
+
+        byte playerP = $$0.roundabout$GetPos();
+
+        /*Dodge makes you lean forward visually*/
+        if (playerP == PlayerPosIndex.DODGE_FORWARD || playerP == PlayerPosIndex.DODGE_BACKWARD) {
+            int dodgeTime = $$0.roundabout$getDodgeTime();
+            float FL;
+            if (dodgeTime > -1) {
+                if (dodgeTime > 5) {
+                    FL = ((11 - ((float) dodgeTime + 1 + $$4 - 1.0F)) / 20.0F * 1.6F);
+                } else {
+                    FL = ((float) dodgeTime + 1 + $$4 - 1.0F) / 20.0F * 1.6F;
+                }
+                FL = Mth.sqrt(FL);
+                if (FL > 1.0F) {
+                    FL = 1.0F;
+                }
+
+                if (playerP == PlayerPosIndex.DODGE_FORWARD) {
+                    FL *= -1;
+                }
+
+                $$1.mulPose(Axis.XP.rotationDegrees(FL * 45));
+            }
+        }
+
     }
 
 }
