@@ -28,10 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Stray;
 import net.minecraft.world.entity.monster.WitherSkeleton;
@@ -274,6 +271,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                                 sm.attackTime = this.model.attackTime;
                                 sm.crouching = this.model.crouching;
                                 sm.swimAmount = this.model.swimAmount;
+                                //$$0.translate(2F,2F,0F);
                                 if (right) {
                                     roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
@@ -393,6 +391,12 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         ila2.roundabout$setSharedFlag(5, ila.roundabout$getSharedFlag(5));
                         ila2.roundabout$setSharedFlag(6, ila.roundabout$getSharedFlag(6));
 
+                        ItemStack stack = $$0.getItemBySlot(EquipmentSlot.CHEST);
+                        if (stack.is(Items.ELYTRA)){
+                            ve.setItemSlot(EquipmentSlot.CHEST, stack);
+                        } else {
+                            ve.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+                        }
                         ve.roundabout$setDodgeTime(ipe.roundabout$getDodgeTime());
                         ve.roundabout$setClientDodgeTime(ipe.roundabout$getClientDodgeTime());
                         ve.roundabout$SetPos(ipe.roundabout$GetPos());

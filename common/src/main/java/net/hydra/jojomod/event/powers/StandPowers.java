@@ -147,6 +147,8 @@ public class StandPowers {
     public boolean canSeeThroughFog(){
         return false;
     }
+    public void onStandSwitch(){
+    }
     public Component getStandName(){
         ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
         if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){

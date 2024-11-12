@@ -71,6 +71,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
 
     @Override
+    public void onStandSwitch(){
+        this.resumeTime();
+    }
+
+    @Override
     public float getPickMiningSpeed() {
         return 12F;
     }

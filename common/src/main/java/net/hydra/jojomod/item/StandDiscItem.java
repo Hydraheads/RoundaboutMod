@@ -48,6 +48,7 @@ public class StandDiscItem extends Item {
             ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
             if (!currentDisc.isEmpty()) {
                 addItem($$1, MainUtil.saveToDiscData($$1,currentDisc.copy()));
+                ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
                 if (!$$1.isCreative()){
                     ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
                             ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);

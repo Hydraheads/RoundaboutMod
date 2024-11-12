@@ -30,6 +30,7 @@ public class EmptyStandDiscItem extends Item {
             ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
             if (!currentDisc.isEmpty()) {
                 $$3.shrink(1);
+                ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
                 if (!$$1.isCreative()){
                     ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
                             ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);

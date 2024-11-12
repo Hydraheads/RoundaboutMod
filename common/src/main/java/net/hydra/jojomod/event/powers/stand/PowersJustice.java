@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -66,6 +67,19 @@ public class PowersJustice extends DashPreset {
     public boolean isMiningStand() {
         return false;
     }
+
+    @Override
+    public void onStandSwitch(){
+        if (this.getSelf() instanceof  Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity)PE);
+            byte morph = ipe.roundabout$getShapeShift();
+            if (!ShapeShifts.getShiftFromByte(morph).equals(ShapeShifts.PLAYER)){
+                ipe.roundabout$shapeShift();
+                ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
+            }
+        }
+    }
+
 
     @Override
     protected Byte getSummonSound() {
