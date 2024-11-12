@@ -9,6 +9,15 @@ public interface ILivingEntityAccess {
     public void roundabout$setLerp(Vector3f lerp);
     public double roundabout$getLerpXRot();
     public double roundabout$getLerpYRot();
+    float roundabout$getSwimAmount();
+    float roundabout$getSwimAmountO();
+    void roundabout$setSwimAmount(float sa);
+    void roundabout$setSwimAmountO(float sa);
+    void roundabout$setWasTouchingWater(boolean set);
+    void roundabout$setFallFlyingTicks(int set);
+    boolean roundabout$getSharedFlag(int $$0);
+    void roundabout$setSharedFlag(int $$0, boolean $$1);
+    boolean roundabout$getWasTouchingWater();
 
     void roundabout$setAnimStep(float animStep);
 

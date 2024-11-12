@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.visages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
@@ -27,13 +28,39 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
         this.itemInHandRenderer = $$1;
     }
 
+    @Override
+    public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
+        boolean $$10 = $$3.getMainArm() == HumanoidArm.RIGHT;
+        ItemStack $$11 = $$10 ? $$3.getOffhandItem() : $$3.getMainHandItem();
+        ItemStack $$12 = $$10 ? $$3.getMainHandItem() : $$3.getOffhandItem();
+        if (!$$11.isEmpty() || !$$12.isEmpty()) {
+            $$0.pushPose();
+            if (this.getParentModel().young) {
+                float $$13 = 0.5F;
+                $$0.translate(0.0F, 0.75F, 0.0F);
+                $$0.scale(0.5F, 0.5F, 0.5F);
+            }
 
+            this.renderArmWithItem($$3, $$12, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, $$0, $$1, $$2);
+            this.renderArmWithItem($$3, $$11, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, $$0, $$1, $$2);
+            $$0.popPose();
+        }
+    }
     @Override
     protected void renderArmWithItem(LivingEntity $$0, ItemStack $$1, ItemDisplayContext $$2, HumanoidArm $$3, PoseStack $$4, MultiBufferSource $$5, int $$6) {
         if ($$1.is(Items.SPYGLASS) && $$0.getUseItem() == $$1 && $$0.swingTime == 0) {
             this.renderArmWithSpyglass($$0, $$1, $$3, $$4, $$5, $$6);
         } else {
-            super.renderArmWithItem($$0, $$1, $$2, $$3, $$4, $$5, $$6);
+            if (!$$1.isEmpty()) {
+                $$4.pushPose();
+                this.getParentModel().translateToHand($$3, $$4);
+                $$4.mulPose(Axis.XP.rotationDegrees(-90.0F));
+                $$4.mulPose(Axis.YP.rotationDegrees(180.0F));
+                boolean $$7 = $$3 == HumanoidArm.LEFT;
+                $$4.translate((float)($$7 ? -1 : 1) / 16.0F, 0.125F, -0.625F);
+                this.itemInHandRenderer.renderItem($$0, $$1, $$2, $$7, $$4, $$5, $$6);
+                $$4.popPose();
+            }
         }
     }
 

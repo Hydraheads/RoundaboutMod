@@ -1,13 +1,17 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin (LivingEntity.class)
-public abstract class ZLivingEntity implements ILivingEntityAccess {
+public abstract class ZLivingEntity extends Entity implements ILivingEntityAccess {
     /**We're using this to access protected server variables in the
      * LivingEntity class, primarily to get more up to date location tracking
      * for TS and whatnot
@@ -29,6 +33,68 @@ public abstract class ZLivingEntity implements ILivingEntityAccess {
     protected float animStep;
     @Shadow
     protected float animStepO;
+
+    @Shadow
+    private float swimAmount;
+    @Shadow
+    private float swimAmountO;
+    @Shadow
+    protected int fallFlyTicks;
+
+    public ZLivingEntity(EntityType<?> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
+    @Unique
+    @Override
+    public float roundabout$getSwimAmount(){
+        return swimAmount;
+    }
+
+    @Unique
+    @Override
+    public float roundabout$getSwimAmountO(){
+        return swimAmountO;
+    }
+    @Unique
+    @Override
+    public void roundabout$setWasTouchingWater(boolean set){
+        wasTouchingWater = set;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setSharedFlag(int $$0, boolean $$1) {
+        setSharedFlag($$0,$$1);
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getSharedFlag(int $$0) {
+        return getSharedFlag($$0);
+    }
+    @Unique
+    @Override
+    public void roundabout$setFallFlyingTicks(int set){
+        fallFlyTicks = set;
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getWasTouchingWater(){
+        return wasTouchingWater;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setSwimAmount(float sa){
+        swimAmount = sa;
+    }
+    @Unique
+    @Override
+    public void roundabout$setSwimAmountO(float sa){
+        swimAmountO = sa;
+    }
+
+
 
     @Override
     public double roundabout$getLerpX() {

@@ -5,8 +5,10 @@ import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -169,6 +171,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
         boolean $$6 = $$0.getFallFlyingTicks() > 4;
         boolean $$7 = $$0.isVisuallySwimming();
         this.head.yRot = $$4 * (float) (Math.PI / 180.0);
+        this.swimAmount = $$0.getSwimAmount(ClientUtil.getFrameTime());
         if ($$6) {
             this.head.xRot = (float) (-Math.PI / 4);
         } else if (this.swimAmount > 0.0F) {
@@ -275,7 +278,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
 
         if (this.swimAmount > 0.0F) {
             float $$12 = $$1 % 26.0F;
-            HumanoidArm $$13 = this.getAttackArm($$0);
+            HumanoidArm $$13 = this.getAttackArm($$0).getOpposite();
             float $$14 = $$13 == HumanoidArm.RIGHT && this.attackTime > 0.0F ? 0.0F : this.swimAmount;
             float $$15 = $$13 == HumanoidArm.LEFT && this.attackTime > 0.0F ? 0.0F : this.swimAmount;
             if (!$$0.isUsingItem()) {
@@ -428,14 +431,21 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
 
     @Override
     public void translateToHand(HumanoidArm var1, PoseStack var2) {
-        ModelPart $$2 = this.getArm(var1);
+        ModelPart $$2 = this.getArm(var1.getOpposite());
         if (this.getSlim()) {
-            float $$3 = 0.5F * (float)(var1 == HumanoidArm.RIGHT ? 1 : -1);
+            float $$3 = (4.5F * (float)(var1 == HumanoidArm.RIGHT ? 1 : -1))*-1;
             $$2.x += $$3;
+            $$2.y += 2F;
             $$2.translateAndRotate(var2);
             $$2.x -= $$3;
+            $$2.y -= 2F;
         } else {
+            float $$3 = (4F * (float)(var1 == HumanoidArm.RIGHT ? 1 : -1))*-1;
+            $$2.x += $$3;
+            $$2.y += 2F;
             $$2.translateAndRotate(var2);
+            $$2.x -= $$3;
+            $$2.y -= 2F;
         }
     }
 

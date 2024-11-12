@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.visages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -27,7 +28,7 @@ import net.minecraft.world.phys.Vec3;
 public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, PlayerLikeModel<T>> {
     public PlayerLikeRenderer(EntityRendererProvider.Context context, PlayerLikeModel<T> entityModel, float f) {
         super(context, entityModel, f);
-        //this.addLayer(new JojoNPCItemInHandLayer<>(this,context.getItemInHandRenderer()));
+        this.addLayer(new JojoNPCItemInHandLayer<>(this,context.getItemInHandRenderer()));
         this.addLayer(new PlayerLikeArrowLayer<>(context, this));
         this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
         this.addLayer(new ElytraLayer<>(this, context.getModelSet()));
@@ -161,7 +162,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
                 $$1.mulPose(Axis.YP.rotation((float)(Math.signum($$13) * Math.acos($$12))));
             }
         } else if ($$5 > 0.0F) {
-            super.setupRotations((T) $$0, $$1, $$2, $$3, $$4);
+            super.setupRotations($$0, $$1, $$2, $$3, $$4);
             float $$14 = $$0.isInWater() ? -90.0F - $$0.getXRot() : -90.0F;
             float $$15 = Mth.lerp($$5, 0.0F, $$14);
             $$1.mulPose(Axis.XP.rotationDegrees($$15));

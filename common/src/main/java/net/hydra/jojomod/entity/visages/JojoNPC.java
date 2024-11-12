@@ -355,6 +355,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         }
 
     }
+
     public boolean removeWhenFarAway(double p_35535_) {
         return false;
     }

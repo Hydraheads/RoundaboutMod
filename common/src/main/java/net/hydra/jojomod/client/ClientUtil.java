@@ -93,6 +93,10 @@ public class ClientUtil {
         Minecraft mc = Minecraft.getInstance();
         return mc.getDeltaFrameTime();
     }
+    public static float getFrameTime() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.getFrameTime();
+    }
     public static void handlePowerFloatPacket(byte activePower, float data){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

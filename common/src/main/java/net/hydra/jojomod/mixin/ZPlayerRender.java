@@ -380,17 +380,21 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         roundabout$shapeShift.setItemInHand(InteractionHand.OFF_HAND,$$0.getOffhandItem());
                         roundabout$shapeShift.setPose($$0.getPose());
                         ve.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
-                        EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
-                        EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$shapeShift);
-                        Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
-                        if (ml instanceof OVAEnyaModel<?> sm) {
-                            if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$shapeShift instanceof OVAEnyaNPC skl) {
-                                sm.attackTime = this.model.attackTime;
-                                sm.crouching = this.model.crouching;
-                                sm.swimAmount = this.model.swimAmount;
+                        ILivingEntityAccess ila = ((ILivingEntityAccess) $$0);
+                        ILivingEntityAccess ila2 = ((ILivingEntityAccess) roundabout$shapeShift);
+                        ila2.roundabout$setSwimAmount(ila.roundabout$getSwimAmount());
+                        ila2.roundabout$setSwimAmountO(ila.roundabout$getSwimAmountO());
+                        ila2.roundabout$setWasTouchingWater(ila.roundabout$getWasTouchingWater());
+                        ila2.roundabout$setFallFlyingTicks($$0.getFallFlyingTicks());
+                        if ($$0.isFallFlying()){
+                            if (!ila2.roundabout$getSharedFlag(7)) {
+                                ila2.roundabout$setSharedFlag(7, true);
+                            }
+                        } else {
+                            if (ila2.roundabout$getSharedFlag(7)){
+                                ila2.roundabout$setSharedFlag(7,false);
                             }
                         }
-
 
                         if ($$0.isSleeping() && !ve.isSleeping()) {
                             Optional<BlockPos> blk = $$0.getSleepingPos();
