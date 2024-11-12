@@ -23,4 +23,5 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class ModFeatures {
     public static final ResourceLocation LOCACACA_PLACED = new ResourceLocation(Roundabout.MOD_ID, "placed_locacaca");
+    public static final ResourceLocation METEORITE_PLACED = new ResourceLocation(Roundabout.MOD_ID, "placed_meteorite");
 }
