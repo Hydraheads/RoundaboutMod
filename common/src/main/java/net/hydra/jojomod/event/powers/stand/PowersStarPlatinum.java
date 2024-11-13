@@ -660,11 +660,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (this.self instanceof Player){
                     if (isPacketPlayer()){
                         BlockHitResult dd = getAheadVec(distanceOut);
+                        double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
-                                Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1), FLOAT_STAR_FINGER_SIZE);
+                                maxDist, FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
                             this.setCooldown(PowerIndex.SKILL_1, 90);
-                            List<Entity> fingerTargets = doFinger(8);
+                            List<Entity> fingerTargets = doFinger((float) maxDist);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);
                             }
@@ -679,7 +680,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         if (this.attackTimeDuring == 27){
                             this.setCooldown(PowerIndex.SKILL_1, 80);
 
-                            List<Entity> fingerTargets = doFinger(8);
+                            double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
+                            List<Entity> fingerTargets = doFinger((float) maxDist);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);
                             }
