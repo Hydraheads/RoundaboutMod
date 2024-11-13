@@ -67,6 +67,9 @@ public class KeyInputs {
             }
         }
     }
+    public static void strikePose(Player player, Minecraft client, boolean keyIsDown, Options option){
+        ClientUtil.strikePose(player,client,keyIsDown,option);
+    }
     public static void switchRowsKey(Player player, Minecraft client, boolean keyIsDown, Options option){
         ((StandUser) player).roundabout$getStandPowers().switchRowsKey(keyIsDown, option);
     }

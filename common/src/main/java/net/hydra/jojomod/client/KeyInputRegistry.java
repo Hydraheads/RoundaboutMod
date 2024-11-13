@@ -18,6 +18,7 @@ public class KeyInputRegistry {
     public static final String KEY_GUARD = "key.roundabout.bonus_guard";
     public static final String KEY_SWITCH_ROWS = "key.roundabout.switch_rows";
     public static final String KEY_SHOW_EXP = "key.roundabout.show_exp";
+    public static final String KEY_POSE = "key.roundabout.pose";
 
     public static final KeyMapping summonKey = new KeyMapping(
             KeyInputRegistry.KEY_SUMMON_STAND,
@@ -63,6 +64,11 @@ public class KeyInputRegistry {
     );
     public static KeyMapping showExp = new KeyMapping(
             KeyInputRegistry.KEY_SHOW_EXP,
+            -1,
+            KeyInputRegistry.KEY_CATEGORY_JOJO
+    );
+    public static KeyMapping pose = new KeyMapping(
+            KeyInputRegistry.KEY_POSE,
             -1,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );

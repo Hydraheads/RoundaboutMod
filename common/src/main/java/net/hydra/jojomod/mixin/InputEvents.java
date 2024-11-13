@@ -1,9 +1,11 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
+import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,6 +15,8 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.Overlay;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.particle.ParticleEngine;
@@ -407,6 +411,31 @@ public abstract class InputEvents implements IInputEvents {
         ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
     }
 
+    @javax.annotation.Nullable
+    @Shadow
+    public Screen screen;
+    @javax.annotation.Nullable
+    @Shadow
+    private Overlay overlay;
+
+    @Shadow
+    private void handleKeybinds() {
+    }
+
+    @Shadow private static Minecraft instance;
+
+    @Unique
+    private static boolean roundabout$hasHandledBinds = false;
+
+    @Inject(method = "tick", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screens/Screen;wrapScreenError(Ljava/lang/Runnable;Ljava/lang/String;Ljava/lang/String;)V",shift = At.Shift.BEFORE), cancellable = true)
+    public void roundabout$forceGUI(CallbackInfo ci){
+        if (this.screen instanceof NoCancelInputScreen) {
+            this.handleKeybinds();
+            if (this.missTime > 0) {
+                this.missTime--;
+            }
+        }
+    }
     @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
     public void roundabout$Input(CallbackInfo ci){
         if (player != null) {
@@ -484,6 +513,8 @@ public abstract class InputEvents implements IInputEvents {
                 KeyInputs.showEXPKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.showExp),
                         this.options);
                 KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.switchRow),
+                        this.options);
+                KeyInputs.strikePose(player,((Minecraft) (Object) this), KeyInputRegistry.pose.isDown(),
                         this.options);
 
                     if (KeyInputRegistry.menuKey.isDown()) {

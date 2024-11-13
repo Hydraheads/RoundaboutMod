@@ -96,6 +96,7 @@
     "ZItemInHandLayer",
     "ZItemInHandRenderer",
     "ZItemRenderer",
+    "ZKeyboardHandler",
     "ZKeyMapping",
     "ZLightTextue",
     "ZLivingEntityRenderer",

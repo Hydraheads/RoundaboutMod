@@ -1,8 +1,10 @@
 package net.hydra.jojomod.client;
 
+import com.google.common.collect.Maps;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.JusticeMobSwitcherScreen;
+import net.hydra.jojomod.client.gui.PoseSwitcherScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -12,7 +14,9 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -21,8 +25,13 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.Map;
 
 public class ClientUtil {
 
@@ -41,6 +50,20 @@ public class ClientUtil {
             }
         } else if (context== PacketDataIndex.S2C_INT_ATD){
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
+        }
+    }
+
+    public static boolean poseHeld = false;
+    public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (keyIsDown){
+            if (!poseHeld){
+                C.setScreen(new PoseSwitcherScreen());
+            }
+            poseHeld = true;
+        } else {
+            if (poseHeld){
+                poseHeld = false;
+            }
         }
     }
 
