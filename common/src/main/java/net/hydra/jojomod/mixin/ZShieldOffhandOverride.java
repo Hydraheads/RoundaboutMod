@@ -18,7 +18,9 @@ public class ZShieldOffhandOverride {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void roundabout$useRoundabout(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> ci) {
-        if (((StandUser) $$1).roundabout$getActive() && $$2 == InteractionHand.OFF_HAND){
+        StandUser user = ((StandUser) $$1);
+
+        if (user.roundabout$getActive() && user.roundabout$getStandPowers().interceptGuard() && $$2 == InteractionHand.OFF_HAND){
             ci.setReturnValue(InteractionResultHolder.fail($$1.getItemInHand($$2)));
         } else {
             ItemStack itemStack = $$1.getItemInHand($$2);

@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -38,6 +39,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.JUSTICE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.JUSTICE_PIRATE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
+        event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -157,6 +159,7 @@ public class ForgeEvents {
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
+        ModEntities.JOTARO = ForgeEntities.JOTARO.get();
 
         ForgeItems.assignStupidForge();
     }
