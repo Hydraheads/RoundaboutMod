@@ -20,7 +20,7 @@ public class ModWorldGeneration {
 
         BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), GenerationStep.Decoration.VEGETAL_DECORATION,
                 ResourceKey.create(Registries.PLACED_FEATURE, ModFeatures.LOCACACA_PLACED));
-        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Decoration.SURFACE_STRUCTURES,
+        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Decoration.RAW_GENERATION,
                 ResourceKey.create(Registries.PLACED_FEATURE, ModFeatures.METEORITE_PLACED));
     }
 }
