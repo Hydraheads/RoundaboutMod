@@ -10,6 +10,8 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
+import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
+import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +44,20 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "jnpc_jotaro"),
                         EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_jotaro")
+                );
+        public static final EntityType<PlayerSteveNPC> STEVE_NPC =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jnpc_steve"),
+                        EntityType.Builder.of(PlayerSteveNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_steve")
+                );
+        public static final EntityType<PlayerAlexNPC> ALEX_NPC =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jnpc_alex"),
+                        EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_alex")
                 );
 
         public static final EntityType<TheWorldEntity> THE_WORLD =
@@ -150,11 +166,17 @@ public class FabricEntities {
 
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.JOTARO = JOTARO;
+                ModEntities.STEVE_NPC = STEVE_NPC;
+                ModEntities.ALEX_NPC = ALEX_NPC;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
+
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
+
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());

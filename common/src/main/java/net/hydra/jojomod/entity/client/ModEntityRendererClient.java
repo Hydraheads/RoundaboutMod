@@ -19,6 +19,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation GASOLINE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can"), "main");
     public static final ModelLayerLocation OVA_ENYA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jnpc_ova_enya"), "main");
     public static final ModelLayerLocation JOTARO_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jnpc_jotaro"), "main");
+    public static final ModelLayerLocation STEVE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jnpc_steve"), "main");
+    public static final ModelLayerLocation ALEX_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jnpc_alex"), "main");
 
 
 }

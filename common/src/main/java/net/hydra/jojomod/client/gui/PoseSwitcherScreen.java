@@ -7,10 +7,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
-import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -25,36 +23,28 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 
-public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
+public class PoseSwitcherScreen extends Screen {
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/mob_switcher.png");
-    private static final int SPRITE_SHEET_WIDTH = 128;
-    private static final int SPRITE_SHEET_HEIGHT = 128;
+            "textures/gui/pose_switcher.png");
+    private static final int SPRITE_SHEET_WIDTH = 256;
+    private static final int SPRITE_SHEET_HEIGHT = 256;
     private static final int SLOT_AREA = 26;
     private static final int SLOT_PADDING = 5;
     private static final int SLOT_AREA_PADDED = 31;
     private static final int HELP_TIPS_OFFSET_Y = 5;
-    private static final int ALL_SLOTS_WIDTH = PoseSwitcherScreen.MobIcon.VALUES.length * 31 - 5;
-    private static final int ALL_SLOTS2_WIDTH = PoseSwitcherScreen.MobIcon.VALUES2.length * 31 - 5;
-    private static final Component SELECT_KEY = Component.translatable("justice.morph.select_next",
-            KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage(),
-            KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage());
-    private final PoseSwitcherScreen.MobIcon previousHovered;
-    private PoseSwitcherScreen.MobIcon currentlyHovered;
+    private static final int ALL_SLOTS_WIDTH = posIcon.VALUES.length * 31 - 5;
+    private posIcon currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
     public boolean zHeld;
 
-    public static boolean hasOVASkin = false;
-    public static boolean hasWitherSkin = false;
-    public static boolean hasStraySkin = false;
-    private final List<PoseSwitcherScreen.MobSlot> slots = Lists.newArrayList();
+    private final List<PoseSlot> slots = Lists.newArrayList();
 
     public PoseSwitcherScreen() {
         super(GameNarrator.NO_TITLE);
-        this.currentlyHovered = this.previousHovered = PoseSwitcherScreen.MobIcon.getFromGameType(this.getDefaultSelected());
+        this.currentlyHovered = null;
     }
 
     private ShapeShifts getDefaultSelected() {
@@ -70,40 +60,13 @@ public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
         super.init();
         zHeld = true;
         Player pl = Minecraft.getInstance().player;
-        if (pl != null){
-            byte standSkin = ((IPlayerEntity)pl).roundabout$getStandSkin();
-            hasOVASkin = standSkin == JusticeEntity.OVA_SKIN;
-            hasWitherSkin = standSkin == JusticeEntity.WITHER;
-            hasStraySkin = standSkin == JusticeEntity.STRAY_SKIN;
-        } else {
-            hasOVASkin = false;
-            hasWitherSkin = false;
-            hasStraySkin = false;
-        }
 
 
-        this.currentlyHovered = this.previousHovered;
-        if (hasOVASkin) {
-            for (int i = 0; i < PoseSwitcherScreen.MobIcon.VALUES2.length; ++i) {
-                PoseSwitcherScreen.MobIcon MobIcon = PoseSwitcherScreen.MobIcon.VALUES2[i];
-                this.slots.add(new PoseSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS2_WIDTH / 2 + i * 31, this.height / 2 - 31));
+        this.currentlyHovered = posIcon.NONE;
+            for (int i = 0; i < posIcon.VALUES.length; ++i) {
+                posIcon pIcon = posIcon.VALUES[i];
+                this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
             }
-        } else if (hasWitherSkin){
-            for (int i = 0; i < PoseSwitcherScreen.MobIcon.VALUES3.length; ++i) {
-                PoseSwitcherScreen.MobIcon MobIcon = PoseSwitcherScreen.MobIcon.VALUES3[i];
-                this.slots.add(new PoseSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS2_WIDTH / 2 + i * 31, this.height / 2 - 31));
-            }
-        } else if (hasStraySkin){
-            for (int i = 0; i < PoseSwitcherScreen.MobIcon.VALUES4.length; ++i) {
-                PoseSwitcherScreen.MobIcon MobIcon = PoseSwitcherScreen.MobIcon.VALUES4[i];
-                this.slots.add(new PoseSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS2_WIDTH / 2 + i * 31, this.height / 2 - 31));
-            }
-        } else {
-            for (int i = 0; i < PoseSwitcherScreen.MobIcon.VALUES.length; ++i) {
-                PoseSwitcherScreen.MobIcon MobIcon = PoseSwitcherScreen.MobIcon.VALUES[i];
-                this.slots.add(new PoseSwitcherScreen.MobSlot(MobIcon, this.width / 2 - ALL_SLOTS_WIDTH / 2 + i * 31, this.height / 2 - 31));
-            }
-        }
     }
 
 
@@ -122,19 +85,20 @@ public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 62;
-        int l = this.height / 2 - 31 - 27;
-        guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 0.0f, 125, 75, 128, 128);
+        int l = this.height / 2 - 31 - 39;
+        guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 0.0f, 125, 63, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
-        guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, this.height / 2 - 31 - 20, -1);
-        guiGraphics.drawCenteredString(this.font, SELECT_KEY, this.width / 2, this.height / 2 + 5, 0xFFFFFF);
+        if (this.currentlyHovered != null) {
+            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, this.height / 2 - 31 - 32, -1);
+        }
         if (!this.setFirstMousePos) {
             this.firstMouseX = i;
             this.firstMouseY = j;
             this.setFirstMousePos = true;
         }
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
-        for (PoseSwitcherScreen.MobSlot MobSlot : this.slots) {
+        for (PoseSlot MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
@@ -146,18 +110,11 @@ public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
         PoseSwitcherScreen.switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
     }
 
-    private static void switchToHoveredGameMode(Minecraft minecraft, PoseSwitcherScreen.MobIcon MobIcon) {
+    private static void switchToHoveredGameMode(Minecraft minecraft, posIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
         }
-        PoseSwitcherScreen.MobIcon MobIcon2 = PoseSwitcherScreen.MobIcon.
-                getFromGameType(
-                        ShapeShifts.getShiftFromByte(((IPlayerEntity)minecraft.player).roundabout$getShapeShift()));
-        PoseSwitcherScreen.MobIcon MobIcon3 = MobIcon;
-        if (MobIcon3 != MobIcon2) {
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(MobIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
-            // minecraft.player.connection.sendUnsignedCommand(MobIcon3.getCommand());
-        }
+            //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
         return (key1.isDown() || (key1.same(options.keyLoadHotbarActivator) && options.keyLoadHotbarActivator.isDown())
@@ -172,15 +129,6 @@ public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
     }
     private boolean checkToClose() {
         if (minecraft != null) {
-            if (!sameKeyOneX(KeyInputRegistry.abilityOneKey, this.minecraft.options)) {
-                zHeld = false;
-            } else {
-                if (!zHeld) {
-                    this.setFirstMousePos = false;
-                    this.currentlyHovered = this.currentlyHovered.getNext();
-                    zHeld = true;
-                }
-            }
             if (sameKeyOneX(KeyInputRegistry.abilityTwoKey, this.minecraft.options)) {
                 this.switchToHoveredGameMode();
                 this.minecraft.setScreen(null);
@@ -200,40 +148,60 @@ public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
         return false;
     }
 
-    public enum MobIcon {
-        PLAYER(Component.translatable("justice.morph.player"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_1.png"),ShapeShifts.PLAYER.id),
-        VILLAGER(Component.translatable("justice.morph.villager"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_2.png"),ShapeShifts.VILLAGER.id),
+    public enum posIcon {
+        GIORNO(Component.translatable("roundabout.pose.giorno"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/giorno.png"),Poses.GIORNO.id,0,93),
+        JOSEPH(Component.translatable("roundabout.pose.joseph"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/joseph.png"),Poses.JOSEPH.id,-31,62),
+        KOICHI(Component.translatable("roundabout.pose.koichi"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/koichi.png"),Poses.KOICHI.id,31,31),
 
-        OVA(Component.translatable("justice.morph.ova"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_ova.png"),ShapeShifts.OVA.id),
-        ZOMBIE(Component.translatable("justice.morph.zombie"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_3.png"),ShapeShifts.ZOMBIE.id),
+        WRY(Component.translatable("roundabout.pose.wry"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/wry.png"),Poses.WRY.id,-31,0),
+        OH_NO(Component.translatable("roundabout.pose.oh_no"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/oh_no.png"),Poses.OH_NO.id,-31,31),
+        TORTURE_DANCE(Component.translatable("roundabout.pose.torture_dance"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/torture_dance.png"),Poses.TORTURE_DANCE.id,0,0),
+        WAMUU(Component.translatable("roundabout.pose.wamuu"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/wamuu.png"),Poses.WAMUU.id,0,62),
+        JOTARO(Component.translatable("roundabout.pose.jotaro"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/jotaro.png"),Poses.JOTARO.id,31,62),
+        JONATHAN(Component.translatable("roundabout.pose.jonathan"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/jonathan.png"),Poses.JONATHAN.id,31,0),
 
-        SKELETON(Component.translatable("justice.morph.skeleton"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_4.png"),ShapeShifts.SKELETON.id),
-        WITHER_SKELETON(Component.translatable("justice.morph.wither_skeleton"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_wither.png"),ShapeShifts.WITHER_SKELETON.id),
-        STRAY(Component.translatable("justice.morph.stray"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_stray.png"),ShapeShifts.STRAY.id),
-        EERIE(Component.translatable("justice.morph.eerie"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_eerie.png"),ShapeShifts.EERIE.id);
+        NONE(Component.translatable("roundabout.pose.none"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/jonathan.png"),Poses.NONE.id,0,31);
 
-        protected static final PoseSwitcherScreen.MobIcon[] VALUES;
-        protected static final PoseSwitcherScreen.MobIcon[] VALUES2;
-        protected static final PoseSwitcherScreen.MobIcon[] VALUES3;
-        protected static final PoseSwitcherScreen.MobIcon[] VALUES4;
+        static PoseSwitcherScreen.posIcon getByte(Poses pose) {
+            return switch (pose) {
+                default -> throw new IncompatibleClassChangeError();
+                case NONE -> NONE;
+                case JOSEPH -> JOSEPH;
+                case KOICHI -> KOICHI;
+                case WRY -> WRY;
+                case OH_NO -> OH_NO;
+                case TORTURE_DANCE -> TORTURE_DANCE;
+                case WAMUU -> WAMUU;
+                case JOTARO -> JOTARO;
+                case JONATHAN -> JONATHAN;
+            };
+        }
+        protected static final posIcon[] VALUES;
         private static final int ICON_AREA = 16;
         protected static final int ICON_TOP_LEFT = 5;
         final Component name;
         final ResourceLocation rl;
         final byte id;
 
-        private MobIcon(Component component, ResourceLocation rl,byte id) {
+        final int xoff;
+        final int yoff;
+
+        private posIcon(Component component, ResourceLocation rl, byte id, int xoff, int yoff) {
             this.name = component;
             this.rl = rl;
             this.id = id;
+            this.xoff = xoff;
+            this.yoff = yoff;
         }
 
         void drawIcon(GuiGraphics guiGraphics, int i, int j) {
@@ -244,71 +212,19 @@ public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
             return this.name;
         }
 
-
-        PoseSwitcherScreen.MobIcon getNext() {
-            if (PoseSwitcherScreen.hasOVASkin){
-                return switch (this) {
-                    default -> throw new IncompatibleClassChangeError();
-                    case PLAYER -> OVA;
-                    case VILLAGER, OVA, EERIE -> ZOMBIE;
-                    case ZOMBIE -> SKELETON;
-                    case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
-                };
-            } else if (PoseSwitcherScreen.hasWitherSkin){
-                return switch (this) {
-                    default -> throw new IncompatibleClassChangeError();
-                    case PLAYER -> VILLAGER;
-                    case VILLAGER, OVA, EERIE  -> ZOMBIE;
-                    case ZOMBIE -> WITHER_SKELETON;
-                    case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
-                };
-            } else if (PoseSwitcherScreen.hasStraySkin){
-                return switch (this) {
-                    default -> throw new IncompatibleClassChangeError();
-                    case PLAYER -> VILLAGER;
-                    case VILLAGER, OVA, EERIE  -> ZOMBIE;
-                    case ZOMBIE -> STRAY;
-                    case SKELETON, WITHER_SKELETON, STRAY  -> PLAYER;
-                };
-            }
-            return switch (this) {
-                default -> throw new IncompatibleClassChangeError();
-                case PLAYER -> VILLAGER;
-                case OVA, VILLAGER, EERIE  -> ZOMBIE;
-                case ZOMBIE -> SKELETON;
-                case SKELETON, WITHER_SKELETON, STRAY -> PLAYER;
-            };
-        }
-        static PoseSwitcherScreen.MobIcon getFromGameType(ShapeShifts shift) {
-            return switch (shift) {
-                default -> throw new IncompatibleClassChangeError();
-                case PLAYER -> PLAYER;
-                case VILLAGER -> VILLAGER;
-                case OVA -> OVA;
-                case ZOMBIE -> ZOMBIE;
-                case SKELETON -> SKELETON;
-                case WITHER_SKELETON -> WITHER_SKELETON;
-                case STRAY -> STRAY;
-                case EERIE -> EERIE;
-            };
-        }
-
         static {
-            VALUES = new PoseSwitcherScreen.MobIcon[]{PLAYER,VILLAGER,ZOMBIE,SKELETON};
-            VALUES2 = new PoseSwitcherScreen.MobIcon[]{PLAYER,OVA,ZOMBIE,SKELETON};
-            VALUES3 = new PoseSwitcherScreen.MobIcon[]{PLAYER,VILLAGER,ZOMBIE, WITHER_SKELETON};
-            VALUES4 = new PoseSwitcherScreen.MobIcon[]{PLAYER,EERIE,ZOMBIE, STRAY};
+            VALUES = new PoseSwitcherScreen.posIcon[]{GIORNO,JOSEPH,KOICHI,WRY,OH_NO,TORTURE_DANCE,WAMUU,JOTARO,JONATHAN};
         }
     }
 
-    public class MobSlot
+    public class PoseSlot
             extends AbstractWidget {
-        final PoseSwitcherScreen.MobIcon icon;
+        final posIcon icon;
         private boolean isSelected;
 
-        public MobSlot(PoseSwitcherScreen.MobIcon MobIcon, int i, int j) {
-            super(i, j, 26, 26, MobIcon.getName());
-            this.icon = MobIcon;
+        public PoseSlot(posIcon pIcon, int i, int j) {
+            super(i, j, 26, 26, pIcon.getName());
+            this.icon = pIcon;
         }
 
         @Override
@@ -335,11 +251,11 @@ public class PoseSwitcherScreen extends Screen implements NoCancelInputScreen {
         }
 
         private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 0.0f, 75.0f, 26, 26, 128, 128);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 144.0f, 0.0f, 26, 26, 256, 256);
         }
 
         private void drawSelection(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 26.0f, 75.0f, 26, 26, 128, 128);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
         }
     }
 }

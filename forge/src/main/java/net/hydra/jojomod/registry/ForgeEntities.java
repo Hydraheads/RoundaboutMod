@@ -6,6 +6,8 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
+import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
+import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -35,6 +37,18 @@ public class ForgeEntities {
                     EntityType.Builder.of(JotaroNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_jotaro").toString())
+            );
+    public static final RegistryObject<EntityType<PlayerSteveNPC>> STEVE_NPC =
+            ENTITY_TYPES.register("jnpc_steve", () ->
+                    EntityType.Builder.of(PlayerSteveNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_steve").toString())
+            );
+    public static final RegistryObject<EntityType<PlayerAlexNPC>> ALEX_NPC =
+            ENTITY_TYPES.register("jnpc_alex", () ->
+                    EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_alex").toString())
             );
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
             ENTITY_TYPES.register("the_world", () ->

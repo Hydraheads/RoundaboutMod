@@ -70,6 +70,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
             $$1.setAllVisible(false);
             $$1.head.visible = true;
             $$1.hat.visible = true;
+            $$1.cloak.visible = false;
         } else {
             $$1.setAllVisible(true);
             $$1.hat.visible = true;
@@ -78,6 +79,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
             $$1.rightPants.visible = true;
             $$1.leftSleeve.visible = true;
             $$1.rightSleeve.visible = true;
+            $$1.cloak.visible = false;
             $$1.crouching = $$0.isCrouching();
             HumanoidModel.ArmPose $$2 = getArmPose($$0, InteractionHand.MAIN_HAND);
             HumanoidModel.ArmPose $$3 = getArmPose($$0, InteractionHand.OFF_HAND);

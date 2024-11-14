@@ -86,6 +86,8 @@
   "entity.roundabout.worthy_arrow": "Worthiness Arrow",
   "entity.roundabout.jnpc_ova_enya": "Enya",
   "entity.roundabout.jnpc_jotaro": "Jotaro",
+  "entity.roundabout.jnpc_steve": "Steve",
+  "entity.roundabout.jnpc_alex": "Alex",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.ancient_meteor": "Ancient Meteor",
@@ -453,6 +455,17 @@
   "justice.morph.stray": "Stray",
   "justice.morph.eerie": "Eerie",
   "justice.morph.select_next": "%1$s: Next, %2$s: Select",
+
+  "roundabout.pose.giorno": "Requiem",
+  "roundabout.pose.joseph": "Bloody Stream",
+  "roundabout.pose.koichi": "Bizarre Town",
+  "roundabout.pose.wry": "Wryyy!",
+  "roundabout.pose.oh_no": "Oh No!",
+  "roundabout.pose.torture_dance": "Torture Dance",
+  "roundabout.pose.wamuu": "Awaken!",
+  "roundabout.pose.jotaro": "Stand Proud",
+  "roundabout.pose.jonathan": "The Hero",
+  "roundabout.pose.none": "Strike Pose!",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
