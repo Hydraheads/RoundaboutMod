@@ -24,6 +24,8 @@ public interface IPlayerEntity {
     byte roundabout$getShapeShift();
     byte roundabout$getShapeShiftExtraData();
     byte roundabout$GetPos();
+    void roundabout$SetPoseEmote(byte Pos);
+    byte roundabout$GetPoseEmote();
     void roundabout$addKnife();
     void roundabout$setKnife(byte knives);
     int roundabout$getKnifeCount();

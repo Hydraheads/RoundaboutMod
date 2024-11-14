@@ -7,8 +7,10 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -113,6 +115,11 @@ public class PoseSwitcherScreen extends Screen {
     private static void switchToHoveredGameMode(Minecraft minecraft, posIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
+        }
+
+        byte ppos = ((IPlayerEntity)minecraft.player).roundabout$GetPoseEmote();
+        if (pIcon.id != ppos) {
+            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id, PacketDataIndex.BYTE_STRIKE_POSE);
         }
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }

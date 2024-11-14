@@ -69,6 +69,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             EntityDataSerializers.BYTE);
 
     @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$POSE_EMOTE = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
+
+    @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
 
@@ -139,6 +143,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     public byte roundabout$GetPos(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS);
+    }
+    public void roundabout$SetPoseEmote(byte Pos){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POSE_EMOTE, Pos);
+    }
+    public byte roundabout$GetPoseEmote(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);
     }
     @Unique
     @Override
@@ -797,6 +807,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POSE_EMOTE, Poses.NONE.id);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);

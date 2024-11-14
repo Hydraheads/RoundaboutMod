@@ -939,6 +939,8 @@ public class MainUtil {
     public static void handleBytePacketC2S(Player player, byte data, byte context){
         if (context == PacketDataIndex.BYTE_UPDATE_COOLDOWN) {
             ((StandUser) player).roundabout$getStandPowers().setCooldown(data, -1);
+        } if (context == PacketDataIndex.BYTE_STRIKE_POSE) {
+            ((IPlayerEntity) player).roundabout$SetPoseEmote(data);
         } if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
             if (ShapeShifts.getShiftFromByte(data) == ShapeShifts.VILLAGER){
                 byte totalMorph = 0;

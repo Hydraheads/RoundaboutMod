@@ -40,6 +40,7 @@ public class PacketDataIndex {
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
+    public static final byte BYTE_STRIKE_POSE = 7;
     public static final byte BYTE_UPDATE_COOLDOWN = 8;
 
     /**S2C Simple packets*/
