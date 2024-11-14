@@ -8,12 +8,15 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.projectile.KnifeLayer;
-import net.hydra.jojomod.entity.visages.mobs.OVAEnyaModel;
-import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
-import net.hydra.jojomod.entity.visages.mobs.OVAEnyaRenderer;
+import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.entity.visages.PlayerLikeModel;
+import net.hydra.jojomod.entity.visages.PlayerLikeRenderer;
+import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
@@ -56,6 +59,13 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Unique
     Mob roundabout$shapeShift = null;
+    @Unique
+    Mob roundabout$swappedModel = null;
+    @Unique
+    VisageData roundabout$visageData = null;
+    @Unique
+    ItemStack roundabout$lastVisage = null;
+
     public ZPlayerRender(EntityRendererProvider.Context $$0, PlayerModel<AbstractClientPlayer> $$1, float $$2) {
         super($$0, $$1, $$2);
     }
@@ -154,6 +164,8 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
         byte shape = ipe.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+
+
         if (shift != ShapeShifts.PLAYER) {
             if (shift == ShapeShifts.EERIE) {
                 ResourceLocation sauce;
@@ -268,9 +280,10 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         if (ml instanceof OVAEnyaModel<?> sm) {
                             if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$shapeShift instanceof OVAEnyaNPC skl) {
                                 this.setModelProperties($$3);
-                                sm.attackTime = this.model.attackTime;
-                                sm.crouching = this.model.crouching;
-                                sm.swimAmount = this.model.swimAmount;
+                                sm.attackTime = 0.0F;
+                                sm.crouching = false;
+                                sm.swimAmount = 0.0F;
+                                sm.setupAnim2(skl, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
                                 float $$5 = right ? 1.0F : -1.0F;
                                 $$0.translate($$5 * -0.3F, 0F, 0F);
                                 if (right) {
@@ -284,6 +297,33 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     return true;
                 }
             }
+            }
+        } else {
+            ItemStack visage = ipe.roundabout$getMaskSlot();
+            roundabout$initializeVisageModel(visage, $$3);
+            if (roundabout$swappedModel != null){
+                EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$swappedModel);
+                if (ER instanceof LivingEntityRenderer) {
+                    Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
+                    if (ml instanceof PlayerLikeModel<?> sm) {
+                        if (ER instanceof PlayerLikeRenderer<?> zr && roundabout$swappedModel instanceof JojoNPC skl) {
+                            this.setModelProperties($$3);
+                            sm.attackTime = 0.0F;
+                            sm.crouching = false;
+                            sm.swimAmount = 0.0F;
+                            sm.setupAnim2(skl, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+                            float $$5 = right ? 1.0F : -1.0F;
+                            $$0.translate($$5 * -0.3F, 0F, 0F);
+                            if (right) {
+                                roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
+                            } else {
+                                roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
+                            }
+                            return true;
+                        }
+                    }
+                }
             }
         }
         return false;
@@ -374,62 +414,100 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 if (roundabout$shapeShift != null) {
                     if (roundabout$shapeShift instanceof OVAEnyaNPC ve) {
 
-                        roundabout$shapeShift.setSwimming($$0.isSwimming());
-                        roundabout$shapeShift.setItemInHand(InteractionHand.MAIN_HAND,$$0.getMainHandItem());
-                        roundabout$shapeShift.setItemInHand(InteractionHand.OFF_HAND,$$0.getOffhandItem());
-                        roundabout$shapeShift.setPose($$0.getPose());
-                        ve.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
-                        ILivingEntityAccess ila = ((ILivingEntityAccess) $$0);
-                        ILivingEntityAccess ila2 = ((ILivingEntityAccess) roundabout$shapeShift);
-                        ila2.roundabout$setSwimAmount(ila.roundabout$getSwimAmount());
-                        ila2.roundabout$setSwimAmountO(ila.roundabout$getSwimAmountO());
-                        ila2.roundabout$setWasTouchingWater(ila.roundabout$getWasTouchingWater());
-                        ila2.roundabout$setFallFlyingTicks($$0.getFallFlyingTicks());
-                        ila2.roundabout$setSharedFlag(1, ila.roundabout$getSharedFlag(1));
-                        ila2.roundabout$setSharedFlag(2, ila.roundabout$getSharedFlag(2));
-                        ila2.roundabout$setSharedFlag(3, ila.roundabout$getSharedFlag(3));
-                        ila2.roundabout$setSharedFlag(4, ila.roundabout$getSharedFlag(4));
-                        ila2.roundabout$setSharedFlag(5, ila.roundabout$getSharedFlag(5));
-                        ila2.roundabout$setSharedFlag(6, ila.roundabout$getSharedFlag(6));
-
-                        ItemStack stack = $$0.getItemBySlot(EquipmentSlot.CHEST);
-                        if (stack.is(Items.ELYTRA)){
-                            ve.setItemSlot(EquipmentSlot.CHEST, stack);
-                        } else {
-                            ve.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
-                        }
-                        ve.roundabout$setDodgeTime(ipe.roundabout$getDodgeTime());
-                        ve.roundabout$setClientDodgeTime(ipe.roundabout$getClientDodgeTime());
-                        ve.roundabout$SetPos(ipe.roundabout$GetPos());
-                        ila2.roundabout$setUseItem($$0.getUseItem());
-                        ila2.roundabout$setUseItemTicks($$0.getUseItemRemainingTicks());
-                        ve.host = $$0;
-
-
-                        if ($$0.isFallFlying()){
-                            if (!ila2.roundabout$getSharedFlag(7)) {
-                                ila2.roundabout$setSharedFlag(7, true);
-                            }
-                        } else {
-                            if (ila2.roundabout$getSharedFlag(7)){
-                                ila2.roundabout$setSharedFlag(7,false);
-                            }
-                        }
-
-                        if ($$0.isSleeping() && !ve.isSleeping()) {
-                            Optional<BlockPos> blk = $$0.getSleepingPos();
-                            blk.ifPresent(ve::startSleeping);
-                        } else {
-                            if (!$$0.isSleeping() && ve.isSleeping()){
-                                ve.stopSleeping();
-                            }
-                        }
+                        assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
+                                roundabout$shapeShift);
+                        ci.cancel();
                     }
-                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
+                }
+            }
+        } else if (shift != ShapeShifts.EERIE){
+            ItemStack visage = ipe.roundabout$getMaskSlot();
+            roundabout$initializeVisageModel(visage,$$0);
+            if (roundabout$swappedModel != null) {
+                if (roundabout$swappedModel instanceof JojoNPC ve) {
+                    assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
+                            roundabout$swappedModel);
                     ci.cancel();
                 }
             }
         }
+    }
+
+    public void roundabout$initializeVisageModel(ItemStack visage, Player $$0){
+
+        if (visage != roundabout$lastVisage){
+            roundabout$lastVisage = visage;
+            if (visage.getItem() instanceof MaskItem mi){
+                roundabout$visageData = mi.visageData.generateVisageData($$0);
+                roundabout$swappedModel = roundabout$visageData.getModelNPC($$0);
+            } else {
+                roundabout$visageData = null;
+                roundabout$swappedModel = null;
+            }
+        }
+        if (roundabout$swappedModel == null){
+            if (roundabout$visageData != null){
+                roundabout$swappedModel = roundabout$visageData.getModelNPC($$0);
+            }
+        }
+    }
+
+    public void assertOnPlayerLike(JojoNPC ve, Player $$0,float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4,
+                                   int $$5, LivingEntity entityeah){
+        IPlayerEntity ipe = ((IPlayerEntity) $$0);
+        entityeah.setSwimming($$0.isSwimming());
+        entityeah.setItemInHand(InteractionHand.MAIN_HAND,$$0.getMainHandItem());
+        entityeah.setItemInHand(InteractionHand.OFF_HAND,$$0.getOffhandItem());
+        entityeah.setPose($$0.getPose());
+        ve.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
+        ILivingEntityAccess ila = ((ILivingEntityAccess) $$0);
+        ILivingEntityAccess ila2 = ((ILivingEntityAccess) entityeah);
+        ila2.roundabout$setSwimAmount(ila.roundabout$getSwimAmount());
+        ila2.roundabout$setSwimAmountO(ila.roundabout$getSwimAmountO());
+        ila2.roundabout$setWasTouchingWater(ila.roundabout$getWasTouchingWater());
+        ila2.roundabout$setFallFlyingTicks($$0.getFallFlyingTicks());
+        ila2.roundabout$setSharedFlag(1, ila.roundabout$getSharedFlag(1));
+        ila2.roundabout$setSharedFlag(2, ila.roundabout$getSharedFlag(2));
+        ila2.roundabout$setSharedFlag(3, ila.roundabout$getSharedFlag(3));
+        ila2.roundabout$setSharedFlag(4, ila.roundabout$getSharedFlag(4));
+        ila2.roundabout$setSharedFlag(5, ila.roundabout$getSharedFlag(5));
+        ila2.roundabout$setSharedFlag(6, ila.roundabout$getSharedFlag(6));
+
+        ItemStack stack = $$0.getItemBySlot(EquipmentSlot.CHEST);
+        ve.setItemSlot(EquipmentSlot.CHEST, stack);
+        ItemStack stackH = $$0.getItemBySlot(EquipmentSlot.HEAD);
+        ve.setItemSlot(EquipmentSlot.HEAD, stackH);
+        ItemStack stackL = $$0.getItemBySlot(EquipmentSlot.LEGS);
+        ve.setItemSlot(EquipmentSlot.LEGS, stackL);
+        ItemStack stackF = $$0.getItemBySlot(EquipmentSlot.FEET);
+        ve.setItemSlot(EquipmentSlot.FEET, stackF);
+        ve.roundabout$setDodgeTime(ipe.roundabout$getDodgeTime());
+        ve.roundabout$setClientDodgeTime(ipe.roundabout$getClientDodgeTime());
+        ve.roundabout$SetPos(ipe.roundabout$GetPos());
+        ila2.roundabout$setUseItem($$0.getUseItem());
+        ila2.roundabout$setUseItemTicks($$0.getUseItemRemainingTicks());
+        ve.host = $$0;
+
+
+        if ($$0.isFallFlying()){
+            if (!ila2.roundabout$getSharedFlag(7)) {
+                ila2.roundabout$setSharedFlag(7, true);
+            }
+        } else {
+            if (ila2.roundabout$getSharedFlag(7)){
+                ila2.roundabout$setSharedFlag(7,false);
+            }
+        }
+
+        if ($$0.isSleeping() && !ve.isSleeping()) {
+            Optional<BlockPos> blk = $$0.getSleepingPos();
+            blk.ifPresent(ve::startSleeping);
+        } else {
+            if (!$$0.isSleeping() && ve.isSleeping()){
+                ve.stopSleeping();
+            }
+        }
+        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, entityeah, $$0, $$5);
     }
 
     @Unique

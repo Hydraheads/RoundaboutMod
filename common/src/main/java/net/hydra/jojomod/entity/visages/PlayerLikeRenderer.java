@@ -37,7 +37,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
 
 
     @Override
-    public ResourceLocation getTextureLocation(T entity) {
+    public ResourceLocation getTextureLocation(JojoNPC entity) {
         return null;
     }
 

@@ -167,6 +167,9 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
             $$3.zRot = $$3.zRot + Mth.sin(this.attackTime * (float) Math.PI) * -0.4F;
         }
     }
+    public void setupAnim2(JojoNPC $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
+        setupAnim((T) $$0,$$1,$$2,$$3,$$4,$$5);
+    }
     @Override
     public void setupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
 

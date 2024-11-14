@@ -220,7 +220,8 @@ public class PoseSwitcherScreen extends Screen {
         }
 
         static {
-            VALUES = new PoseSwitcherScreen.posIcon[]{GIORNO,JOSEPH,KOICHI,WRY,OH_NO,TORTURE_DANCE,WAMUU,JOTARO,JONATHAN};
+            VALUES = new PoseSwitcherScreen.posIcon[]{GIORNO,JOSEPH,KOICHI,WRY,OH_NO,TORTURE_DANCE,WAMUU,JOTARO,JONATHAN,
+            NONE};
         }
     }
 
@@ -236,10 +237,12 @@ public class PoseSwitcherScreen extends Screen {
 
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-            this.drawSlot(guiGraphics);
-            this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
-            if (this.isSelected) {
-                this.drawSelection(guiGraphics);
+            if (!this.icon.equals(posIcon.NONE)) {
+                this.drawSlot(guiGraphics);
+                this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+                if (this.isSelected) {
+                    this.drawSelection(guiGraphics);
+                }
             }
         }
 

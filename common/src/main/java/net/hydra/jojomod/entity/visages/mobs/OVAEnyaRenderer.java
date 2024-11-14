@@ -27,7 +27,7 @@ public class OVAEnyaRenderer<T extends JojoNPC> extends PlayerLikeRenderer<OVAEn
         super.render(mobEntity,f,g,matrixStack,vertexConsumerProvider,i);
     }
     @Override
-    public ResourceLocation getTextureLocation(OVAEnyaNPC entity) {
+    public ResourceLocation getTextureLocation(JojoNPC entity) {
         return OVA_ENYA_SKIN;
     }
 }

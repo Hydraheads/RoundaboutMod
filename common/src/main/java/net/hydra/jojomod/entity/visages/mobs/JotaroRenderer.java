@@ -22,7 +22,7 @@ public class JotaroRenderer<T extends JojoNPC> extends PlayerLikeRenderer<Jotaro
         super.render(mobEntity,f,g,matrixStack,vertexConsumerProvider,i);
     }
     @Override
-    public ResourceLocation getTextureLocation(JotaroNPC entity) {
+    public ResourceLocation getTextureLocation(JojoNPC entity) {
         return JOTARO_SKIN;
     }
 }

@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class StandDiscItem extends Item {
-
     public final StandPowers standPowers;
     public StandDiscItem(Properties $$0, StandPowers standPowers) {
         super($$0);

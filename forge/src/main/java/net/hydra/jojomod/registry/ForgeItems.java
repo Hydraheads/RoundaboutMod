@@ -7,6 +7,9 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
+import net.hydra.jojomod.event.powers.visagedata.DIOVisage;
+import net.hydra.jojomod.event.powers.visagedata.JotaroVisage;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
@@ -180,11 +183,11 @@ public class ForgeItems {
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties())));
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
-            () -> new MaskItem(new Item.Properties())));
+            () -> new MaskItem(new Item.Properties(), new VisageData(null))));
     public static final RegistryObject<Item> JOTARO_MASK = ITEMS.register("jotaro_mask",
-            () -> new MaskItem(new Item.Properties()));
+            () -> new MaskItem(new Item.Properties(), new JotaroVisage(null)));
     public static final RegistryObject<Item> DIO_MASK = ITEMS.register("dio_mask",
-            () -> new MaskItem(new Item.Properties()));
+            () -> new MaskItem(new Item.Properties(), new DIOVisage(null)));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
