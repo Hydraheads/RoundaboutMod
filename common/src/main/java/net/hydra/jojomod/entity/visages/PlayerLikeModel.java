@@ -40,7 +40,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
     public ModelPart rightArm;
     public ModelPart rightLeg;
     public ModelPart leftLeg;
-    private List<ModelPart> parts;
+    public List<ModelPart> parts;
     public ModelPart leftSleeve;
     public ModelPart rightSleeve;
     public ModelPart leftPants;

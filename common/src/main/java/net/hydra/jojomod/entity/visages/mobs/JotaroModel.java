@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.visages.mobs;
 
+import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
@@ -23,6 +24,7 @@ public class JotaroModel<T extends JotaroNPC> extends PlayerLikeModel<T> {
         this.leftPants = playerlike.getChild("body_part").getChild("legs").getChild("left_legs").getChild("left_pants");
         this.rightPants = playerlike.getChild("body_part").getChild("legs").getChild("right_legs").getChild("right_pants");
         this.cloak = playerlike.getChild("body_part").getChild("upper_body").getChild("cloak");
+        this.parts = playerlike.getAllParts().filter($$0x -> !$$0x.isEmpty()).collect(ImmutableList.toImmutableList());
     }
 
     @Override
