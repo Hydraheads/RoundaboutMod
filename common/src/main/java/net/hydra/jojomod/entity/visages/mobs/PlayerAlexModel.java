@@ -11,21 +11,7 @@ import net.minecraft.client.model.geom.builders.*;
 
 public class PlayerAlexModel<T extends JojoNPCPlayer> extends PlayerLikeModel<T> {
     public PlayerAlexModel(ModelPart root) {
-        this.playerlike = root.getChild("playerlike");
-        this.head = playerlike.getChild("head_part").getChild("head");
-        this.hat = playerlike.getChild("head_part").getChild("hat");
-        this.jacket = playerlike.getChild("body_part").getChild("upper_body").getChild("jacket");
-        this.body = playerlike.getChild("body_part").getChild("upper_body").getChild("body");
-        this.leftArm = playerlike.getChild("body_part").getChild("upper_body").getChild("left_arms").getChild("left_arm");
-        this.rightArm = playerlike.getChild("body_part").getChild("upper_body").getChild("right_arms").getChild("right_arm");
-        this.leftSleeve = playerlike.getChild("body_part").getChild("upper_body").getChild("left_arms").getChild("left_sleeve");
-        this.rightSleeve = playerlike.getChild("body_part").getChild("upper_body").getChild("right_arms").getChild("right_sleeve");
-        this.leftLeg = playerlike.getChild("body_part").getChild("legs").getChild("left_legs").getChild("left_leg");
-        this.rightLeg = playerlike.getChild("body_part").getChild("legs").getChild("right_legs").getChild("right_leg");
-        this.leftPants = playerlike.getChild("body_part").getChild("legs").getChild("left_legs").getChild("left_pants");
-        this.rightPants = playerlike.getChild("body_part").getChild("legs").getChild("right_legs").getChild("right_pants");
-        this.cloak = playerlike.getChild("body_part").getChild("upper_body").getChild("cloak");
-        this.parts = playerlike.getAllParts().filter($$0x -> !$$0x.isEmpty()).collect(ImmutableList.toImmutableList());
+        initParts(root);
     }
 
     @Override
@@ -43,13 +29,15 @@ public class PlayerAlexModel<T extends JojoNPCPlayer> extends PlayerLikeModel<T>
 
         PartDefinition playerlike = partdefinition.addOrReplaceChild("playerlike", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition head_part = playerlike.addOrReplaceChild("head_part", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
+        PartDefinition full_body = playerlike.addOrReplaceChild("full_body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition head_part = full_body.addOrReplaceChild("head_part", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
         PartDefinition head = head_part.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition hat = head_part.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition body_part = playerlike.addOrReplaceChild("body_part", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition body_part = full_body.addOrReplaceChild("body_part", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition upper_body = body_part.addOrReplaceChild("upper_body", CubeListBuilder.create(), PartPose.offset(0.0F, -13.0F, 0.0F));
 
@@ -63,7 +51,7 @@ public class PlayerAlexModel<T extends JojoNPCPlayer> extends PlayerLikeModel<T>
 
         PartDefinition left_arm = left_arms.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(32, 48).addBox(0.5F, -1.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition left_sleeve = left_arms.addOrReplaceChild("left_sleeve", CubeListBuilder.create().texOffs(47, 48).addBox(0.5F, -1.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.24F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition left_sleeve = left_arms.addOrReplaceChild("left_sleeve", CubeListBuilder.create().texOffs(46, 48).addBox(0.5F, -1.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.24F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition body = upper_body.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, -11.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.001F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 

@@ -55,6 +55,24 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
     public ModelPart getRandomModelPart(RandomSource $$0) {
         return this.parts.get($$0.nextInt(this.parts.size()));
     }
+
+    public void initParts(ModelPart root){
+        this.playerlike = root.getChild("playerlike");
+        this.head = playerlike.getChild("full_body").getChild("head_part").getChild("head");
+        this.hat = playerlike.getChild("full_body").getChild("head_part").getChild("hat");
+        this.jacket = playerlike.getChild("full_body").getChild("body_part").getChild("upper_body").getChild("jacket");
+        this.body = playerlike.getChild("full_body").getChild("body_part").getChild("upper_body").getChild("body");
+        this.leftArm = playerlike.getChild("full_body").getChild("body_part").getChild("upper_body").getChild("left_arms").getChild("left_arm");
+        this.rightArm = playerlike.getChild("full_body").getChild("body_part").getChild("upper_body").getChild("right_arms").getChild("right_arm");
+        this.leftSleeve = playerlike.getChild("full_body").getChild("body_part").getChild("upper_body").getChild("left_arms").getChild("left_sleeve");
+        this.rightSleeve = playerlike.getChild("full_body").getChild("body_part").getChild("upper_body").getChild("right_arms").getChild("right_sleeve");
+        this.leftLeg = playerlike.getChild("full_body").getChild("body_part").getChild("legs").getChild("left_legs").getChild("left_leg");
+        this.rightLeg = playerlike.getChild("full_body").getChild("body_part").getChild("legs").getChild("right_legs").getChild("right_leg");
+        this.leftPants = playerlike.getChild("full_body").getChild("body_part").getChild("legs").getChild("left_legs").getChild("left_pants");
+        this.rightPants = playerlike.getChild("full_body").getChild("body_part").getChild("legs").getChild("right_legs").getChild("right_pants");
+        this.cloak = playerlike.getChild("full_body").getChild("body_part").getChild("upper_body").getChild("cloak");
+        this.parts = playerlike.getAllParts().filter($$0x -> !$$0x.isEmpty()).collect(ImmutableList.toImmutableList());
+    }
     protected ModelPart getArm(HumanoidArm p_102852_) {
         return p_102852_ == HumanoidArm.LEFT ? this.rightArm : this.leftArm;
     }

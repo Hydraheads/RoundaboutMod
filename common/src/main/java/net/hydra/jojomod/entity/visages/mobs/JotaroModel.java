@@ -10,21 +10,7 @@ import net.minecraft.client.model.geom.builders.*;
 
 public class JotaroModel<T extends JotaroNPC> extends PlayerLikeModel<T> {
     public JotaroModel(ModelPart root) {
-        this.playerlike = root.getChild("playerlike");
-        this.head = playerlike.getChild("head_part").getChild("head");
-        this.hat = playerlike.getChild("head_part").getChild("hat");
-        this.jacket = playerlike.getChild("body_part").getChild("upper_body").getChild("jacket");
-        this.body = playerlike.getChild("body_part").getChild("upper_body").getChild("body");
-        this.leftArm = playerlike.getChild("body_part").getChild("upper_body").getChild("left_arms").getChild("left_arm");
-        this.rightArm = playerlike.getChild("body_part").getChild("upper_body").getChild("right_arms").getChild("right_arm");
-        this.leftSleeve = playerlike.getChild("body_part").getChild("upper_body").getChild("left_arms").getChild("left_sleeve");
-        this.rightSleeve = playerlike.getChild("body_part").getChild("upper_body").getChild("right_arms").getChild("right_sleeve");
-        this.leftLeg = playerlike.getChild("body_part").getChild("legs").getChild("left_legs").getChild("left_leg");
-        this.rightLeg = playerlike.getChild("body_part").getChild("legs").getChild("right_legs").getChild("right_leg");
-        this.leftPants = playerlike.getChild("body_part").getChild("legs").getChild("left_legs").getChild("left_pants");
-        this.rightPants = playerlike.getChild("body_part").getChild("legs").getChild("right_legs").getChild("right_pants");
-        this.cloak = playerlike.getChild("body_part").getChild("upper_body").getChild("cloak");
-        this.parts = playerlike.getAllParts().filter($$0x -> !$$0x.isEmpty()).collect(ImmutableList.toImmutableList());
+        initParts(root);
     }
 
     @Override
@@ -48,7 +34,9 @@ public class JotaroModel<T extends JotaroNPC> extends PlayerLikeModel<T> {
 
         PartDefinition playerlike = partdefinition.addOrReplaceChild("playerlike", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition head_part = playerlike.addOrReplaceChild("head_part", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
+        PartDefinition full_body = playerlike.addOrReplaceChild("full_body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition head_part = full_body.addOrReplaceChild("head_part", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
         PartDefinition head = head_part.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -56,7 +44,7 @@ public class JotaroModel<T extends JotaroNPC> extends PlayerLikeModel<T> {
 
         PartDefinition cube_r1 = hat.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(1, 84).addBox(-4.0F, -3.0F, -2.0F, 10.0F, 1.0F, 3.0F, new CubeDeformation(-0.4F)), PartPose.offsetAndRotation(-0.975F, -2.6F, -4.0F, 0.3491F, 0.0F, 0.0F));
 
-        PartDefinition body_part = playerlike.addOrReplaceChild("body_part", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition body_part = full_body.addOrReplaceChild("body_part", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition legs = body_part.addOrReplaceChild("legs", CubeListBuilder.create(), PartPose.offset(-5.0F, -24.0F, 0.0F));
 

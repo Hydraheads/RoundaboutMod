@@ -350,6 +350,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+        Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
         if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE){
             if (shift == ShapeShifts.ZOMBIE) {
                 if (Minecraft.getInstance().level != null && (roundabout$shapeShift == null || !(roundabout$shapeShift instanceof Zombie))) {
@@ -415,7 +416,9 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 }
                 if (roundabout$shapeShift != null) {
                     if (roundabout$shapeShift instanceof OVAEnyaNPC ve) {
-
+                                ve.standPos = pose;
+                                ve.setupAnimationStates();
+                                ve.host = $$0;
                         assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
                                 roundabout$shapeShift);
                         ci.cancel();
@@ -426,7 +429,6 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
             ItemStack visage = ipe.roundabout$getMaskSlot();
             roundabout$initializeVisageModel(visage,$$0);
             if (roundabout$lastVisage == null || roundabout$lastVisage.isEmpty()){
-                Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
                 if (roundabout$swappedModel != null) {
                     if (roundabout$swappedModel instanceof JojoNPC swp) {
                         swp.standPos = pose;
@@ -442,15 +444,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         }
                         if (roundabout$swappedModel instanceof JojoNPC jj) {
                             jj.host = $$0;
-                            jj.WRYYY.stop();
-                            jj.JOTARO.stop();
-                            jj.KOICHI.stop();
-                            jj.GIORNO.stop();
-                            jj.JONATHAN.stop();
-                            jj.JOSEPH.stop();
-                            jj.TORTURE_DANCE.stop();
-                            jj.OH_NO.stop();
-                            jj.WAMUU.stop();
+                            roundabout$doJojoAnims(jj);
                         }
                         if (roundabout$swappedModel instanceof JojoNPCPlayer jj) {
                             jj.faker = $$0;
@@ -463,12 +457,30 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
             if (roundabout$swappedModel != null) {
                 if (roundabout$swappedModel instanceof JojoNPC ve) {
+                    if (roundabout$visageData != null){
+                        ve.standPos = pose;
+                        ve.setupAnimationStates();
+                        ve.host = $$0;
+                    }
                     assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
                             roundabout$swappedModel);
                     ci.cancel();
                 }
             }
         }
+    }
+
+    @Unique
+    public void roundabout$doJojoAnims(JojoNPC jj){
+        jj.WRYYY.stop();
+        jj.JOTARO.stop();
+        jj.KOICHI.stop();
+        jj.GIORNO.stop();
+        jj.JONATHAN.stop();
+        jj.JOSEPH.stop();
+        jj.TORTURE_DANCE.stop();
+        jj.OH_NO.stop();
+        jj.WAMUU.stop();
     }
 
     @Unique

@@ -7,6 +7,8 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
@@ -468,6 +470,15 @@ public abstract class InputEvents implements IInputEvents {
                 } else {
                     if (TSJumping) {
                         this.roundabout$SetTSJump(false);
+                    }
+                }
+
+                if (Poses.getPosFromByte(((IPlayerEntity) player).roundabout$GetPoseEmote()) != Poses.NONE){
+                    if (options.keyUp.isDown() || options.keyDown.isDown() ||
+                    options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown() ||
+                    player.isUsingItem() || player.swinging || player.hurtTime > 0){
+                        ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
+                        ModPacketHandler.PACKET_ACCESS.byteToServerPacket(Poses.NONE.id, PacketDataIndex.BYTE_STRIKE_POSE);
                     }
                 }
 

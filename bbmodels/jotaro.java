@@ -7,6 +7,7 @@ public class jotaro<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "jotaro"), "main");
 	private final ModelPart playerlike;
+	private final ModelPart full_body;
 	private final ModelPart head_part;
 	private final ModelPart head;
 	private final ModelPart hat;
@@ -31,10 +32,11 @@ public class jotaro<T extends Entity> extends EntityModel<T> {
 
 	public jotaro(ModelPart root) {
 		this.playerlike = root.getChild("playerlike");
-		this.head_part = this.playerlike.getChild("head_part");
+		this.full_body = this.playerlike.getChild("full_body");
+		this.head_part = this.full_body.getChild("head_part");
 		this.head = this.head_part.getChild("head");
 		this.hat = this.head_part.getChild("hat");
-		this.body_part = this.playerlike.getChild("body_part");
+		this.body_part = this.full_body.getChild("body_part");
 		this.legs = this.body_part.getChild("legs");
 		this.right_legs = this.legs.getChild("right_legs");
 		this.right_pants = this.right_legs.getChild("right_pants");
@@ -60,7 +62,9 @@ public class jotaro<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition playerlike = partdefinition.addOrReplaceChild("playerlike", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-		PartDefinition head_part = playerlike.addOrReplaceChild("head_part", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition full_body = playerlike.addOrReplaceChild("full_body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition head_part = full_body.addOrReplaceChild("head_part", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
 		PartDefinition head = head_part.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -68,7 +72,7 @@ public class jotaro<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition cube_r1 = hat.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(1, 84).addBox(-4.0F, -3.0F, -2.0F, 10.0F, 1.0F, 3.0F, new CubeDeformation(-0.4F)), PartPose.offsetAndRotation(-0.975F, -2.6F, -4.0F, 0.3491F, 0.0F, 0.0F));
 
-		PartDefinition body_part = playerlike.addOrReplaceChild("body_part", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition body_part = full_body.addOrReplaceChild("body_part", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition legs = body_part.addOrReplaceChild("legs", CubeListBuilder.create(), PartPose.offset(-5.0F, -24.0F, 0.0F));
 
