@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
@@ -428,7 +429,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         } else if (shift != ShapeShifts.EERIE){
             ItemStack visage = ipe.roundabout$getMaskSlot();
             roundabout$initializeVisageModel(visage,$$0);
-            if (roundabout$lastVisage == null || roundabout$lastVisage.isEmpty()){
+            if (roundabout$lastVisage == null || roundabout$lastVisage.isEmpty() || roundabout$lastVisage.is(ModItems.BLANK_MASK)){
                 if (roundabout$swappedModel != null) {
                     if (roundabout$swappedModel instanceof JojoNPC swp) {
                         swp.standPos = pose;
