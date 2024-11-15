@@ -21,4 +21,10 @@ public class BiomeCodec {
                         PlacedFeature.CODEC.fieldOf("feature").forGetter(naturalLocacacaModifier::feature)
                         // declare constructor
                 ).apply(builder, naturalLocacacaModifier::new)));
+
+        static RegistryObject<Codec<meteoriteModifier>> METEOR_CODEC = BIOME_MODIFIER_SERIALIZERS.register("meteorite_placement", () ->
+                RecordCodecBuilder.create(builder -> builder.group(
+                        Biome.LIST_CODEC.fieldOf("biomes").forGetter(meteoriteModifier::biomes),
+                        PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(meteoriteModifier::features)
+                ).apply(builder, meteoriteModifier::new)));
 }

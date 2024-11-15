@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": ["roundabout:placed_small_meteorite", "roundabout:placed_large_meteorite"],
+  "step": "raw_generation"
+}

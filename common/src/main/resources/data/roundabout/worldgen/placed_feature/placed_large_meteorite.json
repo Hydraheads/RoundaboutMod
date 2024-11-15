@@ -1,9 +1,9 @@
 {
-  "feature": "roundabout:viral_meteorite",
+  "feature": "roundabout:large_meteorite",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 10
+      "chance": 1000
     },
     {
       "type": "minecraft:in_square"
