@@ -3,9 +3,13 @@ package net.hydra.jojomod.entity.visages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.*;
@@ -33,7 +37,6 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
         this.addLayer(new PlayerLikeSpinAttackLayer<>(this, context.getModelSet()));
         this.addLayer(new PlayerLikeBeeStingLayer<>(this));
     }
-
 
 
     @Override

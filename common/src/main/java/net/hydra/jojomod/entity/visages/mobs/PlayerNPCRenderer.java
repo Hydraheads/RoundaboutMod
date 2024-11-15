@@ -6,9 +6,12 @@ import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.PlayerLikeRenderer;
+import net.minecraft.client.model.HumanoidArmorModel;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 
 public class PlayerNPCRenderer<T extends JojoNPC> extends PlayerLikeRenderer<JojoNPCPlayer> {

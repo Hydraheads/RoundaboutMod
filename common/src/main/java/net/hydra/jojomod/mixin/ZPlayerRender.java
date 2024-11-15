@@ -9,10 +9,12 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.projectile.KnifeLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
 import net.hydra.jojomod.entity.visages.PlayerLikeRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
@@ -423,6 +425,42 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         } else if (shift != ShapeShifts.EERIE){
             ItemStack visage = ipe.roundabout$getMaskSlot();
             roundabout$initializeVisageModel(visage,$$0);
+            if (roundabout$lastVisage == null || roundabout$lastVisage.isEmpty()){
+                Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
+                if (roundabout$swappedModel != null) {
+                    if (roundabout$swappedModel instanceof JojoNPC swp) {
+                        swp.standPos = pose;
+                        swp.setupAnimationStates();
+                    }
+                }
+                if (pose != Poses.NONE){
+                    if (roundabout$swappedModel == null) {
+                        if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                            roundabout$swappedModel = ModEntities.ALEX_NPC.create($$0.level());
+                        } else {
+                            roundabout$swappedModel = ModEntities.STEVE_NPC.create($$0.level());
+                        }
+                        if (roundabout$swappedModel instanceof JojoNPC jj) {
+                            jj.host = $$0;
+                            jj.WRYYY.stop();
+                            jj.JOTARO.stop();
+                            jj.KOICHI.stop();
+                            jj.GIORNO.stop();
+                            jj.JONATHAN.stop();
+                            jj.JOSEPH.stop();
+                            jj.TORTURE_DANCE.stop();
+                            jj.OH_NO.stop();
+                            jj.WAMUU.stop();
+                        }
+                        if (roundabout$swappedModel instanceof JojoNPCPlayer jj) {
+                            jj.faker = $$0;
+                        }
+                    }
+                } else {
+                    roundabout$swappedModel = null;
+                }
+            }
+
             if (roundabout$swappedModel != null) {
                 if (roundabout$swappedModel instanceof JojoNPC ve) {
                     assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
@@ -433,6 +471,8 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         }
     }
 
+    @Unique
+    boolean roundabout$wasJustCreated;
     public void roundabout$initializeVisageModel(ItemStack visage, Player $$0){
 
         if (visage != roundabout$lastVisage){

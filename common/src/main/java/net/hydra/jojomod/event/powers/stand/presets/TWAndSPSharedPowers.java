@@ -191,7 +191,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 /*Stand leap rebounds*/
                                 standRebound();
                             } else {
-                                if ((!doVault()) && this.getSelf().fallDistance > 3) {
+                                if ((!doVault()) && this.getSelf().fallDistance > 3 && impactSlowdown <= -1) {
                                     if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
 
                                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
@@ -935,23 +935,25 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return true;
     }
     public boolean fallBrace() {
-        impactBrace = false;
+        if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {
+            impactBrace = false;
 
-        cancelConsumableItem(this.getSelf());
-        this.setAttackTimeDuring(-15);
-        if (!this.getSelf().level().isClientSide()) {
-            ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                    this.getSelf().getX(), this.getSelf().getOnPos().getY()+1.1, this.getSelf().getZ(),
-                    50, 1.1, 0.05, 1.1, 0.4);
-            ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                    this.getSelf().getX(), this.getSelf().getOnPos().getY()+1.1, this.getSelf().getZ(),
-                    30, 1, 0.05, 1, 0.4);
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
-            int degrees = (int) (this.getSelf().getYRot() % 360);
-            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.7F,
-                    Mth.sin(degrees * ((float) Math.PI / 180)),
-                    Mth.sin(-12 * ((float) Math.PI / 180)),
-                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+            cancelConsumableItem(this.getSelf());
+            this.setAttackTimeDuring(-15);
+            if (!this.getSelf().level().isClientSide()) {
+                ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                        this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                        50, 1.1, 0.05, 1.1, 0.4);
+                ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                        this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                        30, 1, 0.05, 1, 0.4);
+                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+                int degrees = (int) (this.getSelf().getYRot() % 360);
+                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1.2F,
+                        Mth.sin(degrees * ((float) Math.PI / 180)),
+                        Mth.sin(-12 * ((float) Math.PI / 180)),
+                        -Mth.cos(degrees * ((float) Math.PI / 180)));
+            }
         }
         return true;
     }

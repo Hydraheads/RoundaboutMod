@@ -8,6 +8,8 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PoseAnimations;
+import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -96,7 +98,65 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
 
     public Player host = null;
 
+    public Poses standPos = Poses.NONE;
+    public final AnimationState WRYYY = new AnimationState();
+    public final AnimationState GIORNO = new AnimationState();
+    public final AnimationState JOSEPH = new AnimationState();
+    public final AnimationState KOICHI = new AnimationState();
+    public final AnimationState OH_NO = new AnimationState();
+    public final AnimationState TORTURE_DANCE = new AnimationState();
+    public final AnimationState WAMUU = new AnimationState();
 
+    public final AnimationState JOTARO = new AnimationState();
+    public final AnimationState JONATHAN = new AnimationState();
+
+    public void setupAnimationStates() {
+        if (standPos == Poses.JONATHAN) {
+            this.JONATHAN.startIfStopped(this.tickCount);
+        } else {
+            this.JONATHAN.stop();
+        }
+        if (standPos == Poses.JOTARO) {
+            this.JOTARO.startIfStopped(this.tickCount);
+        } else {
+            this.JOTARO.stop();
+        }
+        if (standPos == Poses.WAMUU) {
+            this.WAMUU.startIfStopped(this.tickCount);
+        } else {
+            this.WAMUU.stop();
+        }
+        if (standPos == Poses.TORTURE_DANCE) {
+            this.TORTURE_DANCE.startIfStopped(this.tickCount);
+        } else {
+            this.TORTURE_DANCE.stop();
+        }
+        if (standPos == Poses.OH_NO) {
+            this.OH_NO.startIfStopped(this.tickCount);
+        } else {
+            this.OH_NO.stop();
+        }
+        if (standPos == Poses.WRY) {
+            this.WRYYY.startIfStopped(this.tickCount);
+        } else {
+            this.WRYYY.stop();
+        }
+        if (standPos == Poses.GIORNO) {
+            this.GIORNO.startIfStopped(this.tickCount);
+        } else {
+            this.GIORNO.stop();
+        }
+        if (standPos == Poses.KOICHI) {
+            this.KOICHI.startIfStopped(this.tickCount);
+        } else {
+            this.KOICHI.stop();
+        }
+        if (standPos == Poses.JOSEPH) {
+            this.JOSEPH.startIfStopped(this.tickCount);
+        } else {
+            this.JOSEPH.stop();
+        }
+    }
     private static final EntityDataAccessor<Byte> ROUNDABOUT$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.BYTE);
 
