@@ -7,6 +7,7 @@ import net.hydra.jojomod.biome_modifiers.BiomeCodec;
 import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.networking.ForgePacketHandler;
 import net.hydra.jojomod.registry.*;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,13 +19,19 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
 
 @Mod(Roundabout.MOD_ID)
 public class RoundaboutModForge {
-
     public RoundaboutModForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+
+        ConfigManager.loadConfigs(FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + ".json"),
+                FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-server.json"));
         //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeCommonConfig.SPEC, "roundabout-client.toml");
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeCommonConfig.SPEC, "roundabout-common.toml");
 

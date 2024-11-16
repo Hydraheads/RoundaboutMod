@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -19,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.particle.ParticleEngine;
@@ -49,9 +49,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.io.File;
+import java.nio.file.Path;
+
 @Mixin(Minecraft.class)
 public abstract class InputEvents implements IInputEvents {
 
+    protected InputEvents() {
+    }
+
+    @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
+    public void roundaboutAttack(CallbackInfoReturnable<Boolean> ci) {
+
+    }
     @Shadow
     @Final
     public Options options;
@@ -85,44 +95,15 @@ public abstract class InputEvents implements IInputEvents {
     @Unique
     public boolean roundabout$activeMining = false;
 
+    @Shadow
+    @Final
+    public File gameDirectory;
     /** This class is in part for detecting and canceling mouse inputs during stand attacks.
      * Please note this should
      * only apply to non-enhancer stands while their physical body is out.*/
-        @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
-        public void roundaboutAttack(CallbackInfoReturnable<Boolean> ci) {
+        @Inject(method = "<init>(Lnet/minecraft/client/main/GameConfig;)V", at = @At("RETURN"))
+        private void roundabout$initializeConfig(GameConfig $$0, CallbackInfo ci) {
             //handleInputEvents
-            if (player != null) {
-                StandUser standComp = ((StandUser) player);
-                boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
-                if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
-                    ci.setReturnValue(true);
-                } else if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack()){
-                    if (this.hitResult != null) {
-                        boolean $$1 = false;
-                        if (isMining) {
-                            ci.setReturnValue(true);
-                            return;
-                        } else {
-                            switch (this.hitResult.getType()) {
-                                case BLOCK:
-                                    BlockHitResult $$2 = (BlockHitResult) this.hitResult;
-                                    BlockPos $$3 = $$2.getBlockPos();
-                                    if (!this.level.getBlockState($$3).isAir()) {
-                                        this.gameMode.startDestroyBlock($$3, $$2.getDirection());
-                                        if (this.level.getBlockState($$3).isAir()) {
-                                            $$1 = true;
-                                        }
-                                        break;
-                                    }
-                            }
-                        }
-                        ci.setReturnValue($$1);
-
-                    }
-                }
-                //while (this.options.attackKey.wasPressed()) {
-                //}
-            }
         }
 
 

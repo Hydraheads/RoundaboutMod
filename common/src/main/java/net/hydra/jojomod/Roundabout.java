@@ -1,26 +1,7 @@
 package net.hydra.jojomod;
 
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.item.DispenserRegistry;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.platform.Services;
-import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.worldgen.features.FeatureUtils;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.valueproviders.BiasedToBottomInt;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +12,6 @@ public class Roundabout {
     public static final String MOD_ID = "roundabout";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final Random RANDOM = new Random();
-
 
     public static boolean canBreathInTS = true;
     public static boolean renderGasOverlay = false;
@@ -50,7 +30,6 @@ public class Roundabout {
         if (Services.PLATFORM.isModLoaded("roundabout")) {
             LOGGER.info("Hello to roundabout");
         }
-        ModSounds.registerSoundEvents();
     }
 
     public static ResourceLocation location(String path) {
