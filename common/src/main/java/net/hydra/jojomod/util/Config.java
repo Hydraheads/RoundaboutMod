@@ -13,108 +13,38 @@ import net.hydra.jojomod.util.annotation.*;
         private static Config LOCAL_INSTANCE = new Config();
         private static Config SERVER_INSTANCE = new Config();
 
-        @FloatOption(group = "vanilla", value = 0.05f, max = 1)
-        public Float quartzExperienceBonus;
-        @FloatOption(group = "vanilla", value = 0.5f, max = 5)
-        public Float ironMiningSpeedIncrease;
-        @FloatOption(group = "vanilla", value = 0.25f, max = 1)
-        public Float netheriteFireResistance;
-        @FloatOption(group = "vanilla", value = 0.1f, max = 1)
-        public Float redstoneMovementSpeedIncrease;
-        @FloatOption(group = "vanilla", value = 0.005f, max = 0.05f)
-        public Float copperSwimSpeedIncrease;
-        @FloatOption(group = "vanilla", value = 0.125f, max = 1)
-        public Float emeraldVillagerDiscount;
-        @FloatOption(group = "vanilla", value = 0.05f, max = 1)
-        public Float diamondDamageReduction;
-        @IntOption(group = "vanilla", value = 30)
-        public Integer lapisEnchantability;
-        @FloatOption(group = "vanilla", value = 0.0625f, max = 1)
-        public Float amethystPotionDurationModifyChance;
 
-        @FloatOption(group = "added_vanilla", value = 0.25f, max = 1)
-        public Float glowstonePotionAmplifierIncreaseChance;
-        @FloatOption(group = "added_vanilla", value = 0.25f, max = 1)
-        public Float chorusFruitDodgeChance;
-        @FloatOption(group = "added_vanilla", value = 1f, max = 10)
-        public Float fireChargeFireDuration;
-        @FloatOption(group = "added_vanilla", value = 0.4f, max = 4)
-        public Float leatherStepHeightIncrease;
-        @FloatOption(group = "added_vanilla", value = 2f, max = 10)
-        public Float dragonBreathRadius;
-        @FloatOption(group = "added_vanilla", value = 1.5f, max = 5)
-        public Float echoShardVibrationDistanceReduction;
+    @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+    public Integer levelsToGetStand;
+    @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+    public Integer levelsToRerollStand;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean removeVanillaGuardingDelay;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean timeStopTakesBreathAway;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean enableStandLeveling;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean barrageHasAreaOfEffect;
+    @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+    public Integer standGuardingDelayTicks;
+    @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+    public Integer terrierSpawnWeightInTaiga;
+    @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+    public Integer terrierSpawnWeightInDesert;
+    @FloatOption(group = "inherit", value = 0.05F, min = 0, max = 1F)
+    public Float worthyMobOdds;
+    @FloatOption(group = "inherit", value = 0.005F, min = 0, max = 1F)
+    public Float standUserOdds;
+    @FloatOption(group = "inherit", value = 0.02F, min = 0, max = 1F)
+    public Float standUserVillagerOdds;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean standUserMobsTakePlayerDamageMultipliers;
+    @NestedOption(group = "modded")
+    public DamageMultipliers damageMultipliers;
 
-        @NestedOption(group = "vanilla")
-        public Gold goldEffects;
-        @NestedOption(group = "added_vanilla")
-        public PrismarineShard prismarineShardEffects;
-        @NestedOption(group = "added_vanilla")
-        public EnchantedGoldenApple enchantedGoldenAppleEffects;
-        @NestedOption(group = "added_vanilla")
-        public SlimeBall slimeBallEffects;
-        @NestedOption(group = "added_vanilla")
-        public Coal coalEffects;
-        @NestedOption(group = "added_vanilla")
-        public EnderPearl enderPearlEffects;
-        @NestedOption(group = "added_vanilla")
-        public NetherBrick netherBrickEffects;
-        @NestedOption(group = "modded")
-        public Silver silverEffects;
-        @NestedOption(group = "modded")
-        public Platinum platinumEffects;
-
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableQuartz;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableIron;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableNetherite;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableRedstone;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableCopper;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableGold;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableEmerald;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableDiamond;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableLapis;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableAmethyst;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableCoal;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableDragonsBreath;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableChorusFruit;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableEchoShard;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableEnderPearl;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableFireCharge;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableGlowstoneDust;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableLeather;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableNetherBrick;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enablePrismarineShard;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableRabbitHide;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableSlimeBall;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableEnchantedGoldenApple;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enableSilver;
-        @BooleanOption(group = "toggles", value = true)
-        public Boolean enablePlatinum;
-
+    @NestedOption(group = "modded")
+    public Cooldowns cooldownsInTicks;
 
         private Config() {
         }
@@ -135,94 +65,47 @@ import net.hydra.jojomod.util.annotation.*;
             SERVER_INSTANCE = config;
         }
 
-        public static class EnchantedGoldenApple {
-            @FloatOption(group = "inherit", value = 1200, max = 12000, min = 1)
-            public Float absorptionDelay;
-            @FloatOption(group = "inherit", value = 250, max = 12000)
-            public Float absorptionDelayReduction;
-            @IntOption(group = "inherit", value = 2, max = 20)
-            public Integer absorptionAmount;
-            @IntOption(group = "inherit", value = 6, max = 30)
-            public Integer maxAbsorption;
-        }
+    public static class DamageMultipliers {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer starPlatinumAttacksOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer starPlatinumAttacksOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer theWorldAttacksOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer theWorldAttacksOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer thrownBlocks;
+    }
+    public static class Cooldowns {
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer starPlatinumGuardian;
+        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
+        public Integer starFinger;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer theWorldAssault;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer dash;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer jumpingDash;
+        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
+        public Integer standJump;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer vaulting;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer impaleAttack;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer objectThrow;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer mobThrow;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer timeStopMinimum;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer timeStopInterrupt;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer timeStopActionBonusTicks;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer timeStopTimeUsedMultiplier;
+    }
 
-        public static class Silver {
-            @FloatOption(group = "inherit", value = 0.05f, max = 0.5f)
-            public Float movementSpeed;
-            @FloatOption(group = "inherit", value = 0.05f, max = 0.5f)
-            public Float jumpHeight;
-            @FloatOption(group = "inherit", value = 0.5f, max = 5)
-            public Float attackDamage;
-            @FloatOption(group = "inherit", value = 0.3f, max = 3)
-            public Float attackSpeed;
-            @FloatOption(group = "inherit", value = 0.03f, max = 0.3f)
-            public Float damageReduction;
-            @FloatOption(group = "inherit", value = 0.25f, max = 1)
-            public Float improveVision;
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean applyInFixedTime;
-        }
-
-        public static class SlimeBall {
-            @FloatOption(group = "inherit", value = 0.25f, max = 1)
-            public Float fallDamageReduction;
-            @FloatOption(group = "inherit", value = 1, max = 5f)
-            public Float knockbackIncrease;
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean bounce;
-        }
-
-        public static class Coal {
-            @FloatOption(group = "inherit", value = 5f, max = 10f)
-            public Float playerDetectionRadius;
-            @IntOption(group = "inherit", value = 1, max = 10)
-            public Integer furnaceSpeedIncrease;
-        }
-
-        public static class EnderPearl {
-            @FloatOption(group = "inherit", value = 0.05f, max = 1)
-            public Float dodgeChance;
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean waterDamagesUser;
-        }
-
-        public static class Platinum {
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean illagersIgnore;
-            @IntOption(group = "inherit", value = 1, min = 1, max = 6)
-            public Integer piecesForIllagersIgnore;
-        }
-
-        public static class PrismarineShard {
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean guardiansIgnore;
-            @IntOption(group = "inherit", value = 2, min = 1, max = 6)
-            public Integer piecesForGuardiansIgnore;
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean miningFatigueImmunity;
-            @IntOption(group = "inherit", value = 4, min = 1, max = 6)
-            public Integer piecesForMiningFatigueImmunity;
-        }
-
-        public static class Gold {
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean piglinsIgnore;
-            @IntOption(group = "inherit", value = 1, min = 1, max = 6)
-            public Integer piecesForPiglinsIgnore;
-        }
-
-        public static class NetherBrick {
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean blazesIgnore;
-            @IntOption(group = "inherit", value = 1, min = 1, max = 6)
-            public Integer piecesForBlazesIgnore;
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean witherSkeletonsIgnore;
-            @IntOption(group = "inherit", value = 2, min = 1, max = 6)
-            public Integer piecesForWitherSkeletonsIgnore;
-            @BooleanOption(group = "inherit", value = true)
-            public Boolean piglinsEnrage;
-            @IntOption(group = "inherit", value = 2, min = 1, max = 6)
-            public Integer piecesForPiglinsEnrage;
-        }
 }
