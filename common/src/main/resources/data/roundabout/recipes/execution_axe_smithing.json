@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:iron_ingot"
+  },
+  "base": {
+    "item": "minecraft:iron_axe"
+  },
+  "result": {
+    "item": "roundabout:executioner_axe"
+  },
+  "template": {
+    "item": "roundabout:execution_upgrade"
+  }
+}

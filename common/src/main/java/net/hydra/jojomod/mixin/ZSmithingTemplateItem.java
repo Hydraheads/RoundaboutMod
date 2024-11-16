@@ -20,6 +20,9 @@ public class ZSmithingTemplateItem implements ISmithingTemplateItem {
     private static ResourceLocation EMPTY_SLOT_SWORD;
     @Shadow
     @Final
+    private static ResourceLocation EMPTY_SLOT_AXE;
+    @Shadow
+    @Final
     private static ResourceLocation EMPTY_SLOT_INGOT;
 
     @Override
@@ -32,6 +35,18 @@ public class ZSmithingTemplateItem implements ISmithingTemplateItem {
     @Unique
     public List<ResourceLocation> roundabout$createSwordIconList() {
         return List.of(EMPTY_SLOT_SWORD);
+    }
+
+    @Override
+    @Unique
+    public ResourceLocation roundabout$axe_slot(){
+        return EMPTY_SLOT_AXE;
+    }
+
+    @Override
+    @Unique
+    public List<ResourceLocation> roundabout$createAxeIconList() {
+        return List.of(EMPTY_SLOT_AXE);
     }
     @Override
     @Unique

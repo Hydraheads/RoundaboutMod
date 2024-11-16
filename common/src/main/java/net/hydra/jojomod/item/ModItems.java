@@ -34,6 +34,8 @@ public class ModItems {
     public static Item GASOLINE_BUCKET;
     public static Item LUCK_SWORD;
     public static Item LUCK_UPGRADE;
+    public static Item EXECUTION_UPGRADE;
+
     public static Item HARPOON;
     public static Item SCISSORS;
     public static Item EXECUTIONER_AXE;
