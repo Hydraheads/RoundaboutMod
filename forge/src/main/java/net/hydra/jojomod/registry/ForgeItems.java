@@ -121,6 +121,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> SCISSORS = addToTab(ITEMS.register("scissors",
             () -> new ScissorItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
     ));
+    public static final RegistryObject<Item> EXECUTIONER_AXE = addToTab(ITEMS.register("executioner_axe",
+            () -> new ExecutionerAxeItem(Tiers.IRON, 7F, -3.3F, new Item.Properties(),12)
+    ));
     public static final RegistryObject<Item> HARPOON = addToTab(ITEMS.register("harpoon",
             () -> new HarpoonItem((new Item.Properties()).durability(250))
     ));

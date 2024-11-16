@@ -52,6 +52,7 @@ public class FabricItems {
     public static Item GOLDEN_GLAIVE = registerItem("golden_glaive", new GlaiveItem(Tiers.GOLD, 4F, -2.9F, new Item.Properties(),10));
     public static Item DIAMOND_GLAIVE = registerItem("diamond_glaive", new GlaiveItem(Tiers.DIAMOND, 4F, -2.9F, new Item.Properties(),9));
     public static Item NETHERITE_GLAIVE = registerItem("netherite_glaive", new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties(),12));
+    public static Item EXECUTIONER_AXE = registerItem("executioner_axe", new ExecutionerAxeItem(Tiers.IRON, 7F, -3.3F, new Item.Properties(),12));
 
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
     public static Item KNIFE_BUNDLE = registerItem("knife_bundle", new KnifeItem(new Item.Properties().stacksTo(16)));
@@ -122,6 +123,7 @@ public class FabricItems {
                         entries.accept(DIAMOND_GLAIVE);
                         entries.accept(NETHERITE_GLAIVE);
                         entries.accept(SCISSORS);
+                        entries.accept(EXECUTIONER_AXE);
                         entries.accept(HARPOON);
                         entries.accept(KNIFE);
                         entries.accept(KNIFE_BUNDLE);
@@ -205,6 +207,7 @@ public class FabricItems {
         ModItems.GOLDEN_GLAIVE = GOLDEN_GLAIVE;
         ModItems.DIAMOND_GLAIVE = DIAMOND_GLAIVE;
         ModItems.NETHERITE_GLAIVE = NETHERITE_GLAIVE;
+        ModItems.EXECUTIONER_AXE = EXECUTIONER_AXE;
         ModItems.HARPOON = HARPOON;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;

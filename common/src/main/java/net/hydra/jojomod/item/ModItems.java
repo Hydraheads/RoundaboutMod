@@ -36,6 +36,7 @@ public class ModItems {
     public static Item LUCK_UPGRADE;
     public static Item HARPOON;
     public static Item SCISSORS;
+    public static Item EXECUTIONER_AXE;
     public static Item WOODEN_GLAIVE;
     public static Item STONE_GLAIVE;
     public static Item IRON_GLAIVE;
