@@ -18,7 +18,7 @@ public class SmithingTemplates {
             )
             .withStyle(DESCRIPTION_FORMAT);
     public static final Component EXECUTION_UPGRADE_APPLIES_TO = Component.translatable(
-                    String.valueOf(new ResourceLocation(Roundabout.MOD_ID, "item.roundabout.smithing_template.luck_upgrade.applies_to"))
+                    String.valueOf(new ResourceLocation(Roundabout.MOD_ID, "item.roundabout.smithing_template.execution_upgrade.applies_to"))
             )
             .withStyle(DESCRIPTION_FORMAT);
     public static final Component LUCK_UPGRADE_INGREDIENTS = Component.translatable(
