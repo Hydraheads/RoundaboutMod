@@ -3,6 +3,9 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IItemEntityAccess;
+import net.hydra.jojomod.event.ModParticles;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
@@ -12,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,10 +28,20 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
     @Shadow
     private int age;
 
+    @Unique
+    public boolean roundabout$raidSparkle = false;
+
     @Shadow
     public ItemStack getItem() {
         return null;
     }
+
+    @Override
+    @Unique
+    public void roundabout$setRaidSparkle(boolean sparkle){
+        roundabout$raidSparkle = sparkle;
+    }
+
 
     public ZItemEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -38,6 +52,13 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
             ((IEntityAndData)this).roundabout$setNoGravTicks(((IEntityAndData)this).roundabout$getNoGravTicks()-1);
             if (!this.isNoGravity()) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.04, 0.0));
+            }
+        }
+        if (roundabout$raidSparkle){
+            if (!this.level().isClientSide()){
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(3),
+                        this.getRandomY(), this.getRandomZ(3),
+                        6, 0.0, 0.5, 0.0, 0.35);
             }
         }
         ((IEntityAndData)this).roundabout$tickQVec();
