@@ -1600,6 +1600,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     }
 
+    public void setChargeTicksMult(){
+
+    }
+
     /*Activate Time Stop**/
 
     public byte getTimeStopShortNoise(){
@@ -1613,6 +1617,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     boolean animate = false;
                     hasActedInTS = false;
                     this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
+                    if (this.maxChargedTSTicks > 0){
+
+                        this.setChargedTSTicks(this.maxChargeTSTime);
+                    }
                     if (!(((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
                         if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                             /*Charged Sound*/

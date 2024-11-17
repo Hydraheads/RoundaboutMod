@@ -291,47 +291,53 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public void setChargeTicksMult(){
+        this.setChargedTSTicks(this.getChargedTSTicks()*(1+
+                (ClientNetworking.getAppropriateConfig().maxTimestopTicksTheWorld-100)/100));
+    }
+    @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
-        if (chargedTSSeconds >= 100){
+        if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld)){
             if (canExecuteMoveWithLevel(getMaxTSFactorLevel())) {
-                this.maxChargeTSTime = 180;
-                this.setChargedTSTicks(180);
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld+
+                ClientNetworking.getAppropriateConfig().maxTimestopTicksTheWorld;
+                this.setChargedTSTicks(this.maxChargeTSTime);
+                return 80;
             } else {
-                this.maxChargeTSTime = 100;
-                this.setChargedTSTicks(100);
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().maxTimestopTicksTheWorld;
+                this.setChargedTSTicks(this.maxChargeTSTime);
             }
-            return 80;
-        } else if (chargedTSSeconds == 20) {
-            this.maxChargeTSTime = 20;
+        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld*0.2,20))) {
+            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld*0.2,20));
         } else {
-            this.maxChargeTSTime = 100;
+            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimestopTicksTheWorld);;
         }
 
         if (!canExecuteMoveWithLevel(4)){
-            if (this.maxChargeTSTime > 40){
-                this.maxChargeTSTime = 40;
+            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld)*0.4){
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimestopTicksTheWorld*0.4);;
             }
         } else if (!canExecuteMoveWithLevel(5)){
-            if (this.maxChargeTSTime > 60){
-                this.maxChargeTSTime = 60;
+            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld)*0.6){
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimestopTicksTheWorld*0.6);;
             }
         } else if (!canExecuteMoveWithLevel(6)){
-            if (this.maxChargeTSTime > 80){
-                this.maxChargeTSTime = 80;
+            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld)*0.8){
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimestopTicksTheWorld*0.8);
             }
         }
         return 0;
     }
     @Override
-    public int getMaxTSTime (){
+    public int getMaxTSTime(){
         if (canExecuteMoveWithLevel(6)){
-            return 100;
+            return (ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld);
         } else if (canExecuteMoveWithLevel(5)){
-            return 80;
+            return (int) ((ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld)*0.8);
         } else if (canExecuteMoveWithLevel(4)){
-            return 60;
+            return (int) ((ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld)*0.6);
         }
-        return 40;
+        return (int) ((ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld)*0.4);
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {

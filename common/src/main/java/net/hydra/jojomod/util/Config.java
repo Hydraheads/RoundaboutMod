@@ -44,8 +44,14 @@ import net.hydra.jojomod.util.annotation.*;
     public Float standUserVillagerOdds;
     @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 1F)
     public Float userAndWorthyBreedingOddsBonus;
-    @IntOption(group = "inherit", value = 2, min = 0, max = 100)
+    @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
     public Integer multiplyAboveForVillagerBreeding;
+    @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+    public Integer maxTimestopTicksStarPlatinum;
+    @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+    public Integer maxTimestopTicksTheWorld;
+    @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+    public Integer fullChargeTimestopTicksTheWorld;
     @BooleanOption(group = "inherit", value = true)
     public Boolean standUserMobsTakePlayerDamageMultipliers;
     @NestedOption(group = "modded")
