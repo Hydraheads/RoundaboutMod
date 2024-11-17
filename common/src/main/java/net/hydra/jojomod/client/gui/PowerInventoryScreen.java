@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -295,6 +296,9 @@ public class PowerInventoryScreen
                     ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
             pl.isCreative()){
                 bypass = true;
+            }
+            if (!ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+                bypass=true;
             }
             abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j,
                     ((IPlayerEntity)pl).roundabout$getStandLevel(),bypass);

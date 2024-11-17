@@ -2,12 +2,12 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
@@ -93,28 +93,28 @@ public class MainUtil {
         if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon){
             return 0;
         }
-        return 0.05;
+        return ClientNetworking.getAppropriateConfig().worthyMobOdds;
     }
     public static double getStandUserOdds(Mob mob) {
         if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon
                 || mob instanceof Vex){
             return 0;
         } else if (mob instanceof AbstractVillager){
-            return 0.02;
+            return ClientNetworking.getAppropriateConfig().standUserVillagerOdds;
         }
-        return 0.005;
+        return ClientNetworking.getAppropriateConfig().standUserOdds;
     }
     public static double getWorthyBreedBonus(Mob mob) {
         if (mob instanceof AbstractVillager){
-            return 0.3;
+            return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().multiplyAboveForVillagerBreeding;
         }
-        return 0.15;
+        return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
     }
     public static double getStandUserBreedBonus(Mob mob) {
         if (mob instanceof AbstractVillager){
-            return 0.2;
+            return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().multiplyAboveForVillagerBreeding;
         }
-        return 0.15;
+        return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
     }
     public static Mob homeOnWorthy(Level level, Vec3 vec3, double range) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -433,6 +434,10 @@ public class StandPowers {
     }
 
     public boolean canExecuteMoveWithLevel(int minLevel){
+        if (!ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+            return true;
+        }
+
         if (this.getSelf() instanceof Player pl){
             if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || (!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
                     ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||

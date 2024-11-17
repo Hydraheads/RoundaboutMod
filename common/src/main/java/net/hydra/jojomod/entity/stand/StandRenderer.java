@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -57,7 +58,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         }
         maxfade*= 0.01F;
         if (lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
-                !lp.isSpectator()) && !mobEntity.forceVisible){
+                !lp.isSpectator()) && !mobEntity.forceVisible && ClientNetworking.getAppropriateConfig().onlyStandUsersCanSeeStands){
             mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), (mobEntity.fadePercent), 0, 0.72f);
         } else {
             float opacity = getStandOpacity(mobEntity);

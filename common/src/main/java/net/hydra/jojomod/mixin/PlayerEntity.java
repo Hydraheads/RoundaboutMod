@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -372,17 +373,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     @Unique
     public void roundabout$addStandExp(int amt){
-        int currentExp = roundabout$getStandExp();
-        currentExp+=amt;
-        byte level = this.roundabout$getStandLevel();
-        StandPowers powers = ((StandUser)this).roundabout$getStandPowers();
-        int maxLevel = powers.getMaxLevel();
-        if (currentExp >= powers.getExpForLevelUp(level) && level < maxLevel){
-            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, 0);
-            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_LEVEL, (byte)(level+1));
-            powers.levelUp();
-        } else {
-            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, currentExp);
+        if (ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+            int currentExp = roundabout$getStandExp();
+            currentExp += amt;
+            byte level = this.roundabout$getStandLevel();
+            StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+            int maxLevel = powers.getMaxLevel();
+            if (currentExp >= powers.getExpForLevelUp(level) && level < maxLevel) {
+                ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, 0);
+                ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_LEVEL, (byte) (level + 1));
+                powers.levelUp();
+            } else {
+                ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, currentExp);
+            }
         }
     }
     @Override

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -71,11 +72,13 @@ public class StandDiscItem extends Item {
         // && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)
         if ($$4 != null && $$1 != null) {
             if ($$4.contains("Level")) {
-                byte lvl =  (byte)($$4.getByte("Level")+1);
-                if (lvl < standPowers.getMaxLevel()){
-                    $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level",lvl).withStyle(ChatFormatting.GRAY));
-                } else {
-                    $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
+                if (ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+                    byte lvl = (byte) ($$4.getByte("Level") + 1);
+                    if (lvl < standPowers.getMaxLevel()) {
+                        $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level", lvl).withStyle(ChatFormatting.GRAY));
+                    } else {
+                        $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
+                    }
                 }
             } if ($$4.contains("Skin")) {
                 byte skin = ($$4.getByte("Skin"));
