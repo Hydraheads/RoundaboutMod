@@ -18,8 +18,6 @@ import net.hydra.jojomod.util.annotation.*;
     public Integer levelsToGetStand;
     @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
     public Integer levelsToRerollStand;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean removeVanillaGuardingDelay;
     @BooleanOption(group = "inherit", value = true)
     public Boolean onlyStandUsersCanSeeStands;
     @BooleanOption(group = "inherit", value = false)
@@ -47,16 +45,19 @@ import net.hydra.jojomod.util.annotation.*;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
     public Integer multiplyAboveForVillagerBreeding;
     @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-    public Integer maxTimestopTicksStarPlatinum;
+    public Integer maxTimeStopTicksStarPlatinum;
     @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-    public Integer maxTimestopTicksTheWorld;
+    public Integer maxTimeStopTicksTheWorld;
     @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-    public Integer fullChargeTimestopTicksTheWorld;
+    public Integer fullChargeTimeStopTicksTheWorld;
     @BooleanOption(group = "inherit", value = true)
     public Boolean standUserMobsTakePlayerDamageMultipliers;
+    @IntOption(group = "inherit", value = 39, min = 0, max = 72000)
+    public Integer barrageWindup;
+    @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
+    public Integer kickBarrageWindup;
     @NestedOption(group = "modded")
     public DamageMultipliers damageMultipliers;
-
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
 
@@ -92,8 +93,16 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer thrownBlocks;
     }
     public static class Cooldowns {
+        @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
+        public Integer standPunch;
+        @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
+        public Integer finalStandPunchInString;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer finalPunchAndKickMinimum;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer starPlatinumGuardian;
+        @IntOption(group = "inherit", value = 200, min = 1, max = 72000)
+        public Integer barrageRecoil;
         @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
         public Integer starFinger;
         @IntOption(group = "inherit", value = 90, min = 0, max = 72000)

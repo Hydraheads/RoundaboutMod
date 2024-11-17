@@ -1202,23 +1202,23 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public int getMaxTSTime (){
-        return ClientNetworking.getAppropriateConfig().maxTimestopTicksStarPlatinum;
+        return ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum;
     }
     @Override
 
     public void setChargeTicksMult(){
         this.setChargedTSTicks(this.getChargedTSTicks()*(1+
-                (ClientNetworking.getAppropriateConfig().maxTimestopTicksStarPlatinum-100)/100));
+                (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum -100)/100));
     }
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
-        if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().maxTimestopTicksStarPlatinum)){
-            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimestopTicksStarPlatinum);
+        if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum)){
+            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
             this.setChargedTSTicks(this.maxChargeTSTime);
-        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld*0.2,20))) {
-            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimestopTicksTheWorld*0.2,20));
+        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimeStopTicksTheWorld *0.2,20))) {
+            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimeStopTicksTheWorld *0.2,20));
         } else {
-            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimestopTicksStarPlatinum);
+            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
         }
         return 0;
     }

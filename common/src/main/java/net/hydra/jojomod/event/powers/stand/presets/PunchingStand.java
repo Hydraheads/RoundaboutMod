@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -102,9 +103,9 @@ public class PunchingStand extends DashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
-                this.attackTimeMax= 37;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalStandPunchInString;
             } else {
-                this.attackTimeMax= 27;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.standPunch;
             }
 
         }

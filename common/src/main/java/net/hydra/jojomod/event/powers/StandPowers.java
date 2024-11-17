@@ -1406,8 +1406,8 @@ public class StandPowers {
                         }
 
                         if (sideHit){
-                            pow/=3;
-                            knockbackStrength/=3;
+                            pow/=4;
+                            knockbackStrength/=6;
                         }
 
                         if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
@@ -2282,7 +2282,8 @@ public class StandPowers {
     }
 
     public int getBarrageRecoilTime(){
-        return 35;
+        return ClientNetworking.getAppropriateConfig().
+                cooldownsInTicks.barrageRecoil;
     }
 
     public boolean isGuarding(){
@@ -2309,10 +2310,10 @@ public class StandPowers {
     public void tickMobAI(LivingEntity attackTarget){
     }
     public int getKickBarrageWindup(){
-        return 29;
+        return ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum;
     }
     public int getBarrageWindup(){
-        return 29;
+        return ClientNetworking.getAppropriateConfig().barrageWindup;
     }
     public int getBarrageLength(){
         return 60;

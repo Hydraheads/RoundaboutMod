@@ -1020,7 +1020,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public void standFinalAttack(){
 
-        this.setAttackTimeMax(20 + chargedFinal);
+        this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum + chargedFinal);
         this.setAttackTime(0);
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
 
@@ -1509,7 +1509,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     @Override
     public int getKickBarrageWindup(){
-        return 20;
+        return ClientNetworking.getAppropriateConfig().kickBarrageWindup;
     }
 
     private float getKickBarrageChargePitch(){
@@ -1617,10 +1617,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     boolean animate = false;
                     hasActedInTS = false;
                     this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
-                    if (this.maxChargedTSTicks > 0){
-
-                        this.setChargedTSTicks(this.maxChargeTSTime);
-                    }
+                    setChargeTicksMult();
                     if (!(((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
                         if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && ((Player) this.getSelf()).isCreative())) {
                             /*Charged Sound*/
@@ -1999,9 +1996,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public int getBarrageWindup(){
         if (timeStopStartedBarrage) {
-            return 13;
+            return Math.min(13,ClientNetworking.getAppropriateConfig().barrageWindup);
         } else {
-            return 29;
+            return ClientNetworking.getAppropriateConfig().barrageWindup;
         }
     }
 
