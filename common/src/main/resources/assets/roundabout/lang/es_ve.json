@@ -13,6 +13,7 @@
   "item.roundabout.iron_glaive": "Guja de hierro",
   "item.roundabout.diamond_glaive": "Guja de diamante",
   "item.roundabout.netherite_glaive": "Guja de netherita",
+  "item.roundabout.executioner_axe": "Hacha de verdugo",
   "item.roundabout.stand_disc": "Disco de Stand",
   "item.roundabout.coffee_gum": "Chicle de cafe",
   "item.roundabout.meteorite": "Meteorito antiguo",
@@ -57,7 +58,7 @@
   "item.roundabout.stand_arrow.haveStand": "Ya tienes un Stand, para removerlo usa el disco de Stand",
   "item.roundabout.stand_arrow.acquireStand": "¡Stand obtenido! ¡Presiona la tecla de convocación!",
   "item.roundabout.stand_arrow.bowTip": "En el inventario, el arco la usa como munición.",
-  "item.roundabout.stand_arrow.reroll": "¡Agachate para usar 1 nivel de",
+  "item.roundabout.stand_arrow.reroll": "¡Agachate para usar %1$s nivel de",
   "item.roundabout.stand_arrow.reroll2": "experiencia para un Stand diferente!",
   "item.roundabout.stand_arrow.rerollOutcome": "La flecha contiene: ",
   "item.roundabout.stand_arrow.magnet": "Vibra cerca de entidades dignas.",
@@ -76,6 +77,7 @@
   "entity.roundabout.terrier": "Terrier",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
+  "entity.roundabout.justice": "Justice",
   "entity.roundabout.harpoon": "Arpón",
   "entity.roundabout.match": "Fósforo",
   "entity.roundabout.knife": "Cuchillo",
@@ -83,6 +85,10 @@
   "entity.roundabout.gasoline_splatter": "Gasolina salpicada",
   "entity.roundabout.stand_arrow": "Flecha de Stand",
   "entity.roundabout.worthy_arrow": "Flecha de dignidad",
+  "entity.roundabout.jnpc_ova_enya": "Enya",
+  "entity.roundabout.jnpc_jotaro": "Jotaro",
+  "entity.roundabout.jnpc_steve": "Steve",
+  "entity.roundabout.jnpc_alex": "Alex",
 
   "block.roundabout.meteor_block": "Bloque de meteorito",
   "block.roundabout.ancient_meteor": "Meteoro antiguo",
@@ -111,6 +117,12 @@
   "key.roundabout.bonus_guard": "Uso en la otra mano / Bloqueo facil",
   "key.roundabout.switch_rows": "Alternar fila de habilidad agachandose",
   "key.roundabout.show_exp": "Alternar visualizador de EXP Stand",
+  "key.roundabout.pose": "Posar",
+
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "Hacha de hierro",
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Añade a una hacha de hierro",
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.additions_slot_description": "Añade lingote de hierro",
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.ingredients": "Lingote de hierro",
 
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Espada de hierro",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Añade a una espada de hierro",
@@ -123,6 +135,7 @@
   "item.minecraft.tipped_arrow.effect.roundabout.hex": "Flecha de maldición",
 
   "roundabout:upgrade.roundabout.luck_upgrade": "Mejora de Suerte",
+  "roundabout:upgrade.roundabout.execution_upgrade": "Mejora de ejecución",
 
   "key.category.roundabout.jojo": "Roundabout controles",
   "hud.roundabout.standout": "Stand convocado",
@@ -195,6 +208,7 @@
   "sounds.roundabout.twau_wry":  "¡WRY",
   "sounds.roundabout.twau_hey":  "¡Hey!",
   "sounds.roundabout.star_finger":  "Star Finger",
+  "sounds.roundabout.fog_morph":  "Swoosh",
 
   "sounds.roundabout.star_finger_silent":  "Star Finger",
 
@@ -364,6 +378,9 @@
   "ability.roundabout.cast_fog": "Campo de niebla",
   "ability.roundabout.cast_fog.desc": "Lanza niebla sobre una gran área, exponiendo bloques ilusorios y animando cadáveres que puedes controlar. Jugadores sin Justice ven menos.",
 
+  "ability.roundabout.fog_morph": "Transformación ilusoria",
+  "ability.roundabout.fog_morph.desc": "Aparece a otros como una criatura. Aldeano y Disfraz tienen comercios decentes a un precio fijo y son respetados por golems. Zombi es ignorado por otros zombies, pero temidos por aldeanos. Esqueleto es ignorado por otros esqueletos, pero odiados por lobos y perros.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Bloqueado",
   "ability.roundabout.locked.desc": "Desbloquea en la etapa de desarrollo %1$s",
@@ -441,6 +458,21 @@
   "justice.morph.ova": "Disfraz",
   "justice.morph.zombie": "Zombi",
   "justice.morph.skeleton": "Esqueleto",
+  "justice.morph.wither_skeleton": "Esqueleto wither",
+  "justice.morph.stray": "Glacial",
+  "justice.morph.eerie": "Inquietante",
+  "justice.morph.select_next": "%1$s: siguiente, %2$s: seleccionar",
+
+  "roundabout.pose.giorno": "Requiem",
+  "roundabout.pose.joseph": "Bloody Stream",
+  "roundabout.pose.koichi": "Bizarre Town",
+  "roundabout.pose.wry": "Wryyy!",
+  "roundabout.pose.oh_no": "Oh No!",
+  "roundabout.pose.torture_dance": "Torture Dance",
+  "roundabout.pose.wamuu": "Awaken!",
+  "roundabout.pose.jotaro": "Stand Proud",
+  "roundabout.pose.jonathan": "The Hero",
+  "roundabout.pose.none": "¡Posa!",
 
   "power_inventory.roundabout.settings.general": "Opciones de Stand",
   "power_inventory.roundabout.settings.offset": "Posición al seguir",
