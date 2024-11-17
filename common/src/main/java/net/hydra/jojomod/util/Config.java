@@ -52,9 +52,11 @@ import net.hydra.jojomod.util.annotation.*;
     public Integer fullChargeTimeStopTicksTheWorld;
     @BooleanOption(group = "inherit", value = true)
     public Boolean standUserMobsTakePlayerDamageMultipliers;
-    @IntOption(group = "inherit", value = 39, min = 0, max = 72000)
-    public Integer barrageWindup;
     @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
+    public Integer barrageWindup;
+    @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+    public Integer expRequirementMultiplier;
+    @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
     public Integer kickBarrageWindup;
     @NestedOption(group = "modded")
     public DamageMultipliers damageMultipliers;
@@ -101,7 +103,7 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer finalPunchAndKickMinimum;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer starPlatinumGuardian;
-        @IntOption(group = "inherit", value = 200, min = 1, max = 72000)
+        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
         public Integer barrageRecoil;
         @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
         public Integer starFinger;

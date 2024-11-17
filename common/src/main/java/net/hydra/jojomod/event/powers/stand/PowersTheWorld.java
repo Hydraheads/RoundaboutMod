@@ -719,10 +719,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public int getExpForLevelUp(int currentLevel){
+        int amt;
         if (currentLevel == 1){
-            return 50;
+            amt = 100;
+        } else {
+            amt = (100+((currentLevel-1)*50));
         }
-        return (75+((currentLevel-1)*30));
+        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().expRequirementMultiplier*0.01));
+        return amt;
     }
 
     /**Charge up Time Stop*/
