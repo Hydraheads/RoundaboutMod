@@ -765,7 +765,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     /**Makes*/
     public boolean fullTSChargeBonus(){
         if (canExecuteMoveWithLevel(getMaxTSFactorLevel())){
-            return this.maxChargedTSTicks >= 100;
+            return this.maxChargedTSTicks >= ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum;
         } else {
             return false;
         }
@@ -1219,8 +1219,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum)){
             this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
             this.setChargedTSTicks(this.maxChargeTSTime);
-        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimeStopTicksTheWorld *0.2,20))) {
-            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().fullChargeTimeStopTicksTheWorld *0.2,20));
+        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,20))) {
+            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,20));
         } else {
             this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
         }
