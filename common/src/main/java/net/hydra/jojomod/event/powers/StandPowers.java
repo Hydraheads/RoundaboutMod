@@ -1129,7 +1129,7 @@ public class StandPowers {
                     id = storeEnt.getId();
                 }
                     ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
-                if (!listE.isEmpty()){
+                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                             if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
@@ -1309,7 +1309,8 @@ public class StandPowers {
     }
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
-                (entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty())
+                ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
+                        ClientNetworking.getAppropriateConfig().standUserMobsTakePlayerDamageMultipliers)
         );
     }
 
@@ -1373,7 +1374,7 @@ public class StandPowers {
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
                 if (hitNumber > 1000){
-                    if (!(entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_AOE_BARRAGE))){
+                    if (!(ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect)){
                         return;
                     }
                     hitNumber-=1000;

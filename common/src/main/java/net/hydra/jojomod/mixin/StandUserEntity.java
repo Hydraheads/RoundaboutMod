@@ -1093,7 +1093,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= 3);
+        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().standGuardingDelayTicks);
     }
 
     public boolean roundabout$shieldNotDisabled(){

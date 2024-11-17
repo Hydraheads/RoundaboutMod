@@ -526,14 +526,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (this.chargedFinal >= maxChargeTSTime){
                 ret +=1;
             }
-            return ret;
+            ret *= (float) (ClientNetworking.getAppropriateConfig().
+                                damageMultipliers.theWorldAttacksOnPlayers*0.01);
         } else {
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
             if (this.chargedFinal >= maxChargeTSTime){
                 ret +=2;
             }
-            return ret;
+            ret *= (float) (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01);
         }
+        return ret;
     }
 
     @Override
@@ -550,6 +553,59 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ASSAULT_NOISE;
         }
         return super.getSoundCancelingGroupByte(soundChoice);
+    }
+
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return (float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01));
+        } else {
+            return (float) ((float) 5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01));
+        }
+    }
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return (float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01));
+        } else {
+            return (float) ((float) 6* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01));
+        }
+    }
+    @Override
+    public float getBarrageFinisherStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return (float) ((float) 3* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01));
+        } else {
+            return (float) ((float) 8* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01));
+        }
+    }
+    @Override
+    public float getBarrageHitStrength(Entity entity){
+        float str = super.getBarrageHitStrength(entity);
+        if (getReducedDamage(entity)){
+            str *=(float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01));
+        } else {
+            str *=(float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01));
+        }
+        return str;
+    }
+    @Override
+    public float getImpalePunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return (float) ((float) 3* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01));
+        } else {
+            return (float) ((float) 16* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01));
+        }
     }
 
     public boolean tryAssaultHit(StandEntity stand, AABB bb1, AABB bb2){
@@ -591,12 +647,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return false;
     }
-
     public float getAssaultStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2.5F;
+            return (float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01));
         } else {
-            return 6;
+            return (float) ((float) 7* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01));
         }
     }
 

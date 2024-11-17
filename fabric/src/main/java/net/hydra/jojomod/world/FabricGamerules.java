@@ -19,7 +19,5 @@ public class FabricGamerules {
                 GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS = GameRuleRegistry.register("roundaboutSpawnStandUserMobs",
                 GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
-        ModGamerules.ROUNDABOUT_AOE_BARRAGE = GameRuleRegistry.register("roundaboutAOEBarrage",
-                GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(false));
     }
 }

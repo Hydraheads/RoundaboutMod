@@ -17,7 +17,5 @@ public class ForgeGamerules {
                 GameRules.Category.MOBS, GameRules.BooleanValue.create(true));
         ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS = GameRules.register("roundaboutSpawnStandUserMobs",
                 GameRules.Category.MOBS,GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_AOE_BARRAGE = GameRules.register("roundaboutAOEBarrage",
-                GameRules.Category.PLAYER,GameRules.BooleanValue.create(false));
     }
 }

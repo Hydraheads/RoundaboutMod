@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -359,6 +360,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
             }
         }
+        damage*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.thrownBlocks*0.01);
         return damage;
     }
 
