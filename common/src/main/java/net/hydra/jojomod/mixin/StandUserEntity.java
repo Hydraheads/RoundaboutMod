@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -1789,7 +1790,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "baseTick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$BreathingCancel(CallbackInfo ci){
-        if (!Roundabout.canBreathInTS) {
+        boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopTakesBreathAway;
+        if (cannotBreathInTs) {
             if (!((TimeStop) this.level()).getTimeStoppingEntities().isEmpty()
                     && ((TimeStop) this.level()).getTimeStoppingEntities().contains(((LivingEntity) (Object) this))) {
                 ((IEntityAndData) this).roundabout$setRoundaboutJamBreath(true);
@@ -1799,7 +1801,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "baseTick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$BreathingCancel2(CallbackInfo ci){
-        if (!Roundabout.canBreathInTS) {
+        boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopTakesBreathAway;
+        if (cannotBreathInTs) {
             if (((IEntityAndData) this).roundabout$getRoundaboutJamBreath()) {
                 ((IEntityAndData) this).roundabout$setRoundaboutJamBreath(false);
             }

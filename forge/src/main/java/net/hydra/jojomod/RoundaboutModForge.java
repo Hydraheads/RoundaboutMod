@@ -75,10 +75,6 @@ public class RoundaboutModForge {
         MinecraftForge.EVENT_BUS.register(new ForgeCommandRegistry());
     }
 
-    private void updateConfigs(){
-        Roundabout.canBreathInTS = ForgeCommonConfig.CAN_BREATHE_IN_TS.get();
-    }
-
     private void commonSetup(final FMLCommonSetupEvent event){
         event.enqueueWork(() ->
                 ForgePacketHandler.register()
@@ -87,7 +83,6 @@ public class RoundaboutModForge {
 
 
     public void entityLifeCycle(ServerStartedEvent event) {
-        Roundabout.LOGGER.info("yes");
         Networking.setServer(event.getServer());
     }
 

@@ -13,8 +13,6 @@ public class Roundabout {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final Random RANDOM = new Random();
 
-    public static boolean canBreathInTS = true;
-    public static boolean renderGasOverlay = false;
     public static float gasDamage = 0.83F;
 
 

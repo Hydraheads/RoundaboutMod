@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -576,11 +577,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
+                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.theWorldAssault;
                     if (this.getSelf() instanceof ServerPlayer) {
                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
-                                PowerIndex.SKILL_1, 40);
+                                PowerIndex.SKILL_1, cdr);
                     }
-                    this.setCooldown(PowerIndex.SKILL_1, 40);
+                    this.setCooldown(PowerIndex.SKILL_1, cdr);
                     this.setAttackTimeDuring(-12);
                     animateStand((byte) 40);
                     return true;
@@ -640,10 +642,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
+            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.theWorldAssaultInterrupt;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 60);
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
-            this.setCooldown(PowerIndex.SKILL_1, 60);
+            this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
         } else {
             return super.canInterruptPower();

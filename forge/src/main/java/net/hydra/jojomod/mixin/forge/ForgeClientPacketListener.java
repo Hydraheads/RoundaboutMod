@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ForgeClientPacketListener {
     @Inject(method = "handleLogin", at = @At("RETURN"))
     private void handleServerPlayReady(ClientboundLoginPacket packet, CallbackInfo ci) {
-        Roundabout.LOGGER.info("Oh Jesus");
         ClientNetworking.sendHandshake();
     }
 }

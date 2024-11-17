@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -506,9 +507,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         }
 
                         if (success){
-                            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_EXTRA_2, 200);
+                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starPlatinumGuardian;
+                            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                                    PowerIndex.SKILL_EXTRA_2, cdr);
                             ((StarPlatinumEntity) stand).setScoping(false);
-                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 200);
+                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, cdr);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -664,7 +667,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
                                 maxDist, FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
-                            this.setCooldown(PowerIndex.SKILL_1, 90);
+                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
+                            this.setCooldown(PowerIndex.SKILL_1, cdr);
                             List<Entity> fingerTargets = doFinger((float) maxDist);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);
@@ -678,7 +682,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             SE.setFingerLength((float) Math.max(Math.sqrt(dd.distanceTo(this.getSelf())) * 16 - 32, 1));
                         }
                         if (this.attackTimeDuring == 27){
-                            this.setCooldown(PowerIndex.SKILL_1, 80);
+                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
+                            this.setCooldown(PowerIndex.SKILL_1, cdr);
 
                             double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
                             List<Entity> fingerTargets = doFinger((float) maxDist);
@@ -725,10 +730,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFingerInterrupt;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 90);
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
-            this.setCooldown(PowerIndex.SKILL_1, 90);
+            this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
         } else {
             return super.canInterruptPower();

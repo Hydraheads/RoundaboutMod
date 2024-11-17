@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -241,7 +242,8 @@ public abstract class HudRendering implements IHudAccess {
 
 
             if (this.minecraft.player != null) {
-                if (Roundabout.renderGasOverlay) {
+                boolean renderGasOverlay = ClientNetworking.getAppropriateConfig().renderGasSplatterOverlay;
+                if (renderGasOverlay) {
                     int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
                     if (overlay > 0) {
                         int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();

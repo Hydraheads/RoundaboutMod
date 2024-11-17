@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -42,14 +43,15 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
                 if ($$1.isCrouching()) {
-                    if ($$1.experienceLevel >= 1 || $$1.isCreative()) {
+                    int reroll = ClientNetworking.getAppropriateConfig().levelsToRerollStand;
+                    if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
                         if (!$$1.isCreative()) {
                             $$1.giveExperienceLevels(-1);
                         }
                         rollStand($$0, $$1, $$3);
                         return InteractionResultHolder.consume($$3);
                     } else {
-                        $$1.displayClientMessage(Component.translatable("container.enchant.level.requirement", 1).withStyle(ChatFormatting.RED), true);
+                        $$1.displayClientMessage(Component.translatable("container.enchant.level.requirement", reroll).withStyle(ChatFormatting.RED), true);
                         return InteractionResultHolder.fail($$3);
                     }
                 } else {
@@ -153,7 +155,8 @@ public class StandArrowItem extends RoundaboutArrowItem {
                         if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
                             PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
                         } else {
-                            if (PE.experienceLevel >= 15 || PE.isCreative()) {
+                            int get = ClientNetworking.getAppropriateConfig().levelsToGetStand;
+                            if (PE.experienceLevel >= get || PE.isCreative()) {
                                 CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
                                 CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
                                 if (tag2 != null) {
@@ -166,7 +169,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                                                     $$2.getY() + $$2.getEyeHeight(), $$2.getZ(),
                                                     20, 0, 0, 0, 0.4);
                                             if (!PE.isCreative()) {
-                                                PE.giveExperienceLevels(-15);
+                                                PE.giveExperienceLevels(-get);
                                             }
                                             $$0.removeTagKey("StandDisc");
                                             $$0.hurt(1,PE.level().getRandom(),(ServerPlayer) PE);
@@ -255,7 +258,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                             Component.empty()
                     );
                     $$2.add(
-                            Component.translatable("item.roundabout.stand_arrow.reroll").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                            Component.translatable("item.roundabout.stand_arrow.reroll",ClientNetworking.getAppropriateConfig().levelsToRerollStand).withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
                     );
                     $$2.add(
                             Component.translatable("item.roundabout.stand_arrow.reroll2").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)

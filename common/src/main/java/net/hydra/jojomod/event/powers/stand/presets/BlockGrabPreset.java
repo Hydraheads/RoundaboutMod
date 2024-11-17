@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMinecartItemAccess;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
@@ -63,8 +64,9 @@ public class BlockGrabPreset extends PunchingStand{
     public int freezeAttackInput = -1;
 
     public void throwObject(ItemStack item){
-        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 30);
-        this.setCooldown(PowerIndex.SKILL_2, 30);
+        int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.objectThrow;
+        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
+        this.setCooldown(PowerIndex.SKILL_2, cdr);
         if (item.getItem() instanceof ThrowablePotionItem) {
             ThrownPotion $$4 = new ThrownPotion(this.getSelf().level(), this.getSelf());
             $$4.setItem(item);
@@ -397,8 +399,9 @@ public class BlockGrabPreset extends PunchingStand{
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
                     if (!this.getSelf().level().isClientSide) {
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 30);
-                        this.setCooldown(PowerIndex.SKILL_2, 30);
+                        int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrow;
+                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
+                        this.setCooldown(PowerIndex.SKILL_2, cdr);
                         Entity ent = standEntity.getFirstPassenger();
 
                         Vec3 vec3d = this.getSelf().getEyePosition(0);

@@ -22,6 +22,8 @@ import net.hydra.jojomod.util.annotation.*;
     public Boolean removeVanillaGuardingDelay;
     @BooleanOption(group = "inherit", value = false)
     public Boolean timeStopTakesBreathAway;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
     public Boolean enableStandLeveling;
     @BooleanOption(group = "inherit", value = true)
@@ -82,8 +84,12 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer starPlatinumGuardian;
         @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
         public Integer starFinger;
+        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
+        public Integer starFingerInterrupt;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer theWorldAssault;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer theWorldAssaultInterrupt;
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer dash;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
