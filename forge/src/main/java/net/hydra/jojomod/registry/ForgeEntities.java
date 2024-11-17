@@ -74,6 +74,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate").toString())
             );
+    public static final RegistryObject<EntityType<DarkMirageEntity>> DARK_MIRAGE =
+            ENTITY_TYPES.register("dark_mirage", () ->
+                    EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage").toString())
+            );
     public static final RegistryObject<EntityType<StarPlatinumBaseballEntity>> STAR_PLATINUM_BASEBALL =
             ENTITY_TYPES.register("star_platinum_baseball", () ->
                     EntityType.Builder.of(StarPlatinumBaseballEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

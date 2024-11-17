@@ -89,6 +89,8 @@ public class PowersJustice extends DashPreset {
     public StandEntity getNewStandEntity(){
         if (((StandUser)this.getSelf()).roundabout$getStandSkin() == JusticeEntity.PIRATE){
             return ModEntities.JUSTICE_PIRATE.create(this.getSelf().level());
+        } else if (((StandUser)this.getSelf()).roundabout$getStandSkin() == JusticeEntity.DARK_MIRAGE){
+            return ModEntities.DARK_MIRAGE.create(this.getSelf().level());
         }
         return ModEntities.JUSTICE.create(this.getSelf().level());
     }
@@ -135,10 +137,18 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public int getDisplayPowerInventoryScale(){
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == JusticeEntity.DARK_MIRAGE){
+            return super.getDisplayPowerInventoryScale();
+        }
         return 14;
     }
     @Override
     public int getDisplayPowerInventoryYOffset(){
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == JusticeEntity.DARK_MIRAGE){
+            return super.getDisplayPowerInventoryYOffset();
+        }
         return -7;
     }
 
@@ -205,6 +215,7 @@ public class PowersJustice extends DashPreset {
                 $$1.add(JusticeEntity.TWILIGHT);
             } if (Level > 5 || bypass){
                 $$1.add(JusticeEntity.TAROT);
+                $$1.add(JusticeEntity.DARK_MIRAGE);
             } if (Level > 6 || bypass){
                 $$1.add(JusticeEntity.PIRATE);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){

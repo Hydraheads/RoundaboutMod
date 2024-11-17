@@ -20,6 +20,7 @@ public class ModEntities {
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
     public static EntityType<JusticeEntity> JUSTICE;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
+    public static EntityType<DarkMirageEntity> DARK_MIRAGE;
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<KnifeEntity> THROWN_KNIFE;

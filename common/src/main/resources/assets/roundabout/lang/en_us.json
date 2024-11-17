@@ -77,7 +77,10 @@
   "entity.roundabout.terrier": "Terrier",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
+  "entity.roundabout.star_platinum_baseball": "Star Platinum",
   "entity.roundabout.justice": "Justice",
+  "entity.roundabout.justice_pirate": "Justice",
+  "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
   "entity.roundabout.knife": "Knife",
@@ -448,6 +451,7 @@
   "skins.roundabout.justice.flamed_blue": "Blue Flame",
   "skins.roundabout.justice.twilight": "Twilight",
   "skins.roundabout.justice.pirate": "Pirate",
+  "skins.roundabout.justice.dark_mirage": "Dark Mirage",
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",

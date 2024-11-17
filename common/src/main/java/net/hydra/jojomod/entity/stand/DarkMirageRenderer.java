@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import org.jetbrains.annotations.Nullable;
 
-public class JusticePirateRenderer<T extends StandEntity> extends JusticeBaseRenderer<JusticeEntity> {
-    public JusticePirateRenderer(EntityRendererProvider.Context context) {
-        super(context, new JusticePirateModel<>(context.bakeLayer(ModEntityRendererClient.JUSTICE_PIRATE_LAYER)),0f);
+public class DarkMirageRenderer<T extends StandEntity> extends JusticeBaseRenderer<JusticeEntity> {
+    public DarkMirageRenderer(EntityRendererProvider.Context context) {
+        super(context, new DarkMirageModel<>(context.bakeLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER)),0f);
     }
 
     @Override
@@ -23,5 +23,3 @@ public class JusticePirateRenderer<T extends StandEntity> extends JusticeBaseRen
         return super.getRenderType(entity, showBody, true, showOutline);
     }
 }
-
-

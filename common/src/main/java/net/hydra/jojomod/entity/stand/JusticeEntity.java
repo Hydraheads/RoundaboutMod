@@ -26,7 +26,8 @@ public class JusticeEntity extends StandEntity {
             WITHER = 9,
             TWILIGHT = 10,
             PIRATE = 11,
-            BLUE_FLAMED = 12;
+            BLUE_FLAMED = 12,
+            DARK_MIRAGE = 13;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -57,6 +58,8 @@ public class JusticeEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.justice.twilight");
         } else if (skinId == PIRATE){
             return Component.translatable(  "skins.roundabout.justice.pirate");
+        } else if (skinId == DARK_MIRAGE){
+            return Component.translatable(  "skins.roundabout.justice.dark_mirage");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
@@ -100,11 +103,41 @@ public class JusticeEntity extends StandEntity {
             }
         } else {
 
-            if (this.getSkin() == FLAMED) {
-                for (int i = 0; i < 3; i++) {
+            if (this.getSkin() != DARK_MIRAGE) {
+                if (this.getSkin() == FLAMED) {
+                    for (int i = 0; i < 3; i++) {
+                        this.level()
+                                .addParticle(
+                                        ParticleTypes.FLAME,
+                                        this.getRandomX(1.1),
+                                        this.getRandomY(),
+                                        this.getRandomZ(1.1),
+                                        0,
+                                        0.1,
+                                        0
+                                );
+                    }
+                }
+
+                if (this.getSkin() == BLUE_FLAMED) {
+                    for (int i = 0; i < 3; i++) {
+                        this.level()
+                                .addParticle(
+                                        ParticleTypes.SOUL_FIRE_FLAME,
+                                        this.getRandomX(1.1),
+                                        this.getRandomY(),
+                                        this.getRandomZ(1.1),
+                                        0,
+                                        0.1,
+                                        0
+                                );
+                    }
+                }
+
+                for (int i = 0; i < 5; i++) {
                     this.level()
                             .addParticle(
-                                    ParticleTypes.FLAME,
+                                    ModParticles.FOG_CHAIN,
                                     this.getRandomX(1.1),
                                     this.getRandomY(),
                                     this.getRandomZ(1.1),
@@ -113,34 +146,6 @@ public class JusticeEntity extends StandEntity {
                                     0
                             );
                 }
-            }
-
-            if (this.getSkin() == BLUE_FLAMED) {
-                for (int i = 0; i < 3; i++) {
-                    this.level()
-                            .addParticle(
-                                    ParticleTypes.SOUL_FIRE_FLAME,
-                                    this.getRandomX(1.1),
-                                    this.getRandomY(),
-                                    this.getRandomZ(1.1),
-                                    0,
-                                    0.1,
-                                    0
-                            );
-                }
-            }
-
-            for (int i = 0; i < 5; i++){
-                this.level()
-                        .addParticle(
-                                ModParticles.FOG_CHAIN,
-                                this.getRandomX(1.1),
-                                this.getRandomY(),
-                                this.getRandomZ(1.1),
-                                0,
-                                0.1,
-                                0
-                        );
             }
         }
         super.tick();
@@ -148,37 +153,41 @@ public class JusticeEntity extends StandEntity {
 
     @Override
     public Vec3 getIdleOffset(LivingEntity standUser) {
-        int vis = this.getFadeOut();
-        double r = (((double) vis / MaxFade) * ((standUser.getBbWidth()/2)+this.getDistanceOut()));
-        if (r < 0.5) {
-            r = 0.5;
-        }
-        double yawfix = standUser.getYRot();
-        yawfix += this.getAnchorPlace()+125;
-        if (yawfix > 360) {
-            yawfix -= 360;
-        } else if (yawfix < 0) {
-            yawfix += 360;
-        }
-        double ang = (yawfix - 180) * Math.PI;
+        if (this.getSkin() != DARK_MIRAGE) {
+            int vis = this.getFadeOut();
+            double r = (((double) vis / MaxFade) * ((standUser.getBbWidth() / 2) + this.getDistanceOut()));
+            if (r < 0.5) {
+                r = 0.5;
+            }
+            double yawfix = standUser.getYRot();
+            yawfix += this.getAnchorPlace() + 125;
+            if (yawfix > 360) {
+                yawfix -= 360;
+            } else if (yawfix < 0) {
+                yawfix += 360;
+            }
+            double ang = (yawfix - 180) * Math.PI;
 
-        double mcap = 0.3;
-        Vec3 xyz = standUser.getDeltaMovement();
-        double yy = xyz.y() * 0.3;
-        if (yy > mcap) {
-            yy = mcap;
-        } else if (yy < -mcap) {
-            yy = -mcap;
-        }
-        if (isSwimming() || isVisuallyCrawling() || isFallFlying()) {
-            yy += 1;
-        }
+            double mcap = 0.3;
+            Vec3 xyz = standUser.getDeltaMovement();
+            double yy = xyz.y() * 0.3;
+            if (yy > mcap) {
+                yy = mcap;
+            } else if (yy < -mcap) {
+                yy = -mcap;
+            }
+            if (isSwimming() || isVisuallyCrawling() || isFallFlying()) {
+                yy += 1;
+            }
 
-        double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-        double y1 = standUser.getY() + 0.1 - yy;
-        double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
+            double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
+            double y1 = standUser.getY() + 0.1 - yy;
+            double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
 
-        return new Vec3(x1, y1, z1);
+            return new Vec3(x1, y1, z1);
+        } else {
+            return super.getIdleOffset(standUser);
+        }
     }
 
 }

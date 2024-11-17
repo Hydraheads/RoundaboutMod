@@ -26,6 +26,8 @@ public class JusticeBaseRenderer<T extends StandEntity> extends StandRenderer<Ju
     private static final ResourceLocation TWILIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_twilight.png");
     private static final ResourceLocation PIRATE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_pirate.png");
     private static final ResourceLocation BLUE_FLAME = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_flamed_blue.png");
+    private static final ResourceLocation DARK_MIRAGE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/dark_mirage.png");
+
 
 
     @Override
@@ -55,12 +57,18 @@ public class JusticeBaseRenderer<T extends StandEntity> extends StandRenderer<Ju
             return PIRATE;
         } else if (BT == JusticeEntity.BLUE_FLAMED){
             return BLUE_FLAME;
+        } else if (BT == JusticeEntity.DARK_MIRAGE){
+            return DARK_MIRAGE;
         }
         return PART_3_SKIN;
     }
     @Override
     public void render(JusticeEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        matrixStack.scale(2.0f,2.0f,2.0f);
+        if (mobEntity.getSkin() == JusticeEntity.DARK_MIRAGE){
+            matrixStack.scale(0.87f, 0.87f, 0.87f);
+        } else {
+            matrixStack.scale(2.0f,2.0f,2.0f);
+        }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

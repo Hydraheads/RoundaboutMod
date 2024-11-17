@@ -98,6 +98,13 @@ public class FabricEntities {
                         EntityType.Builder.of(JusticePirateEntity::new, MobCategory.MISC).
                                 sized(1.0F, 3.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":justice_pirate")
                 );
+        public static final EntityType<DarkMirageEntity> DARK_MIRAGE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"),
+                        EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).
+                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":dark_mirage")
+                );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -156,6 +163,7 @@ public class FabricEntities {
                 ModEntities.STAR_PLATINUM_BASEBALL = STAR_PLATINUM_BASEBALL;
                 ModEntities.JUSTICE = JUSTICE;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
+                ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
@@ -183,6 +191,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,
