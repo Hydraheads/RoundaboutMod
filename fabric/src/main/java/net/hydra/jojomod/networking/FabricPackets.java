@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hydra.jojomod.access.IPacketAccess;
+import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.Networking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -165,6 +167,15 @@ public class FabricPackets implements IPacketAccess {
 
 
     @Override
+    public void sendConfig(ServerPlayer sp) {
+        String serialized = ConfigManager.serializeConfig();
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        buf.writeBoolean(Networking.isDedicated());
+        buf.writeUtf(serialized);
+        ServerPlayNetworking.send(sp, ModMessages.CONFIG_SYNC, buf);
+    }
+
+    @Override
     public void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f vec) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
 
@@ -306,4 +317,9 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.GLAIVE_C2S_PACKET, buffer);
     }
 
+    @Override
+    public void handshake(){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+        ClientPlayNetworking.send(ModMessages.HANDSHAKE, buffer);
+    }
 }

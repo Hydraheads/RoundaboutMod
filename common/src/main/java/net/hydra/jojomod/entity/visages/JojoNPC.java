@@ -352,7 +352,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_UNHAPPY_COUNTER, 0);
-        this.entityData.define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
+        this.entityData.define(ROUNDABOUT$POS, (byte)0);
         this.entityData.define(DATA_PLAYER_ABSORPTION_ID, 0.0F);
         this.entityData.define(DATA_SCORE_ID, 0);
         this.entityData.define(DATA_PLAYER_MODE_CUSTOMISATION, (byte)0);

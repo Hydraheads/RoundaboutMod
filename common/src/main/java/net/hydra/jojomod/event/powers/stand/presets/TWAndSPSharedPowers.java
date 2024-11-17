@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand.presets;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.Config;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -178,7 +180,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if (this.getSelf().onGround()) {
                             if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
                                 if (canExecuteMoveWithLevel(getLeapLevel())) {
-                                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, 280);
+                                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJump);
                                     bonusLeapCount = 3;
                                     bigLeap(this.getSelf(), 20, 1);
                                     ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());

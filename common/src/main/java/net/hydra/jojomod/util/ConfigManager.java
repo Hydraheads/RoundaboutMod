@@ -11,6 +11,7 @@ import net.hydra.jojomod.util.annotation.IntOption;
 import net.hydra.jojomod.util.annotation.NestedOption;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
 import net.hydra.jojomod.util.option.Reflection;
+import net.minecraft.server.MinecraftServer;
 
 import java.io.IOException;
 import java.nio.file.Files;

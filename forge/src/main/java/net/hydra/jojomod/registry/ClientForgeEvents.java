@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBlockEntityWithoutLevelRenderer;
 import net.hydra.jojomod.access.IItemRenderer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

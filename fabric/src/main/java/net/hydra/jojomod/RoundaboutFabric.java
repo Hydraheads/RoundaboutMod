@@ -1,7 +1,9 @@
 package net.hydra.jojomod;
 
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.hydra.jojomod.event.commands.RoundaboutCom;
 import net.hydra.jojomod.item.DispenserRegistry;
@@ -10,6 +12,7 @@ import net.hydra.jojomod.particles.FabricParticles;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.Networking;
 import net.hydra.jojomod.world.FabricGamerules;
 import net.hydra.jojomod.world.gen.ModWorldGeneration;
 
@@ -22,6 +25,7 @@ public class RoundaboutFabric implements ModInitializer {
     public void onInitialize() {
         Roundabout.LOGGER.info("Loading Roundabout (Fabric)");
 
+        ServerLifecycleEvents.SERVER_STARTED.register(Networking::setServer);
         ConfigManager.loadConfigs(FabricLoader.getInstance()
                 .getConfigDir()
                 .resolve(Roundabout.MOD_ID + ".json"),

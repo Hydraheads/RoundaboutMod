@@ -36,6 +36,7 @@ public interface IPacketAccess {
     void sendSimpleByte(ServerPlayer sp, byte context);
     void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,
                                    float combatOpacity, float enemyOpacity);
+    void sendConfig(ServerPlayer sp);
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();
@@ -55,4 +56,5 @@ public interface IPacketAccess {
     void floatToServerPacket(float value, byte context);
     void intToServerPacket(int target, byte context);
     void singleByteToServerPacket(byte context);
+    void handshake();
 }

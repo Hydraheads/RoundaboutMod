@@ -2,6 +2,7 @@ package net.hydra.jojomod.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.mixin.object.builder.client.ModelPredicateProviderRegistryAccessor;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
@@ -30,7 +31,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         FabricPacketManager.registerS2CPackets();
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
-
+        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
 
     }

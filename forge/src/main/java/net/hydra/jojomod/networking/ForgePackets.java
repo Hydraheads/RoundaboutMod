@@ -3,6 +3,8 @@ package net.hydra.jojomod.networking;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.networking.c2s.*;
 import net.hydra.jojomod.networking.s2c.*;
+import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.Networking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -98,6 +100,12 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgeS2CPowerInventorySettingsPacket(anchorPlace,
                 distanceOut, idleOpacity, combatOpacity, enemyOpacity), sp);
     }
+    @Override
+    public void sendConfig(ServerPlayer sp) {
+        String serialized = ConfigManager.serializeConfig();
+        ForgePacketHandler.sendToClient(new ForgeSendConfigPacket(Networking.isDedicated(),serialized), sp);
+    }
+
 
     @Override
     public void StandGuardCancelClientPacket() {
@@ -169,6 +177,10 @@ public class ForgePackets implements IPacketAccess {
     @Override
     public void timeStopFloat(boolean TSJump) {
         ForgePacketHandler.sendToServer(new ForgeTSJumpPacket(TSJump));
+    }
+    @Override
+    public void handshake() {
+        ForgePacketHandler.sendToServer(new ForgeHandshakePacket());
     }
 
 }

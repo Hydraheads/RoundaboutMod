@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.Utils.ForgeBrewingRecipes;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.Networking;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.Items;
@@ -26,12 +28,16 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerLifecycleEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeEvents {
+
     @SubscribeEvent
     public static void entityAttributes(EntityAttributeCreationEvent event) {
         event.put(ForgeEntities.TERRIER_DOG.get(), Wolf.createAttributes().build());
@@ -56,7 +62,6 @@ public class ForgeEvents {
                 SpawnPlacementRegisterEvent.Operation.OR
         );
     }
-
 
 
     @SubscribeEvent

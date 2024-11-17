@@ -13,6 +13,7 @@ public class ModMessages {
     public static final ResourceLocation FLOAT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"float_packet");
     public static final ResourceLocation INT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"int_packet");
     public static final ResourceLocation SINGLE_BYTE_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"single_byte_packet");
+    public static final ResourceLocation HANDSHAKE = new ResourceLocation(Roundabout.MOD_ID,"handshake");
     public static final ResourceLocation GLAIVE_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"glaive_packet");
     public static final ResourceLocation STAND_PUNCH_PACKET = new ResourceLocation(Roundabout.MOD_ID,"punch_packet");
     public static final ResourceLocation STAND_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_packet");
@@ -43,5 +44,6 @@ public class ModMessages {
     public static final ResourceLocation SEND_SIMPLE_BYTE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"simple_s2c_packet");
     public static final ResourceLocation SEND_S2C_POWER_INVENTORY_OPTIONS = new ResourceLocation(Roundabout.MOD_ID,"s2c_inventory_packet");
     public static final ResourceLocation SEND_BUNDLE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"bundle_s2c_packet");
+    public static final ResourceLocation CONFIG_SYNC = new ResourceLocation(Roundabout.MOD_ID,"config_sync");
 
 }

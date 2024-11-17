@@ -2,6 +2,7 @@ package net.hydra.jojomod.networking;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.hydra.jojomod.networking.packet.c2s.ConfigC2S;
 import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
 import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
 import net.hydra.jojomod.networking.packet.c2s.UtilC2S;
@@ -26,7 +27,7 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.FLOAT_C2S_PACKET, UtilC2S::UpdateFloat);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INT_C2S_PACKET, UtilC2S::UpdateInt);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.GLAIVE_C2S_PACKET, UtilC2S::glaiveAttack);
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.SINGLE_BYTE_C2S_PACKET, UtilC2S::UpdateSingleByte);
+        ServerPlayNetworking.registerGlobalReceiver(ModMessages.HANDSHAKE, ConfigC2S::Handshake);
     }
     //Server to Client
     public static void registerS2CPackets(){
@@ -50,6 +51,7 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_SIMPLE_BYTE_PACKET, GenericS2CPacket::sendSimpleByte);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_BUNDLE_PACKET, GenericS2CPacket::sendBundle);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_S2C_POWER_INVENTORY_OPTIONS, GenericS2CPacket::sendPowerInventorySettings);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.CONFIG_SYNC, ConfigSyncPacket::readConfig);
     }
 
 }

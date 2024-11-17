@@ -9,6 +9,7 @@
     "ForgeServerPlayer"
   ],
   "client": [
+    "ForgeClientPacketListener",
     "ForgeFireBlock",
     "ForgeForgeGui",
     "MixinTitleScreen"

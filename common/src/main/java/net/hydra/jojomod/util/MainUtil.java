@@ -935,7 +935,12 @@ public class MainUtil {
     }
     private static final TargetingConditions OFFER_TARGER_CONTEXT = TargetingConditions.forNonCombat().range(64.0D);
 
+    public static void handShake(ServerPlayer player){
+        Networking.sendConfigToPlayer(player);
+    }
+
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
+
     public static void handleBytePacketC2S(Player player, byte data, byte context){
         if (context == PacketDataIndex.BYTE_UPDATE_COOLDOWN) {
             ((StandUser) player).roundabout$getStandPowers().setCooldown(data, -1);

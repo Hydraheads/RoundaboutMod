@@ -107,7 +107,40 @@ public abstract class InputEvents implements IInputEvents {
         }
 
 
-
+    @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
+    public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
+        if (player != null) {
+            StandUser standComp = ((StandUser) player);
+            boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
+            if (standComp.roundabout$isDazed() || ((TimeStop) player.level()).CanTimeStopEntity(player)) {
+                ci.setReturnValue(true);
+            } else if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack()) {
+                if (this.hitResult != null) {
+                    boolean $$1 = false;
+                    if (isMining) {
+                        ci.setReturnValue(true);
+                        return;
+                    } else {
+                        switch (this.hitResult.getType()) {
+                            case BLOCK:
+                                BlockHitResult $$2 = (BlockHitResult) this.hitResult;
+                                BlockPos $$3 = $$2.getBlockPos();
+                                if (!this.level.getBlockState($$3).isAir()) {
+                                    this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                    if (this.level.getBlockState($$3).isAir()) {
+                                        $$1 = true;
+                                    }
+                                    break;
+                                }
+                        }
+                    }
+                    ci.setReturnValue($$1);
+                }
+            }
+            //while (this.options.attackKey.wasPressed()) {
+            //}
+        }
+    }
 
         @Inject(method = "continueAttack", at = @At("HEAD"), cancellable = true)
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {

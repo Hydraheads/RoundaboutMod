@@ -807,7 +807,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POSE_EMOTE, Poses.NONE.id);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POSE_EMOTE, (byte)0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);

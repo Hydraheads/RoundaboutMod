@@ -102,6 +102,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeSingleByteC2SPacket::toBytes)
                 .consumerMainThread(ForgeSingleByteC2SPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeHandshakePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ForgeHandshakePacket::new)
+                .encoder(ForgeHandshakePacket::toBytes)
+                .consumerMainThread(ForgeHandshakePacket::handle)
+                .add();
 
         /**Server to Client Packets*/
         INSTANCE.messageBuilder(ForgeGenericIntPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -203,6 +208,11 @@ public class ForgePacketHandler {
                 .decoder(ForgePermaCastingEntityRemovalPacket::new)
                 .encoder(ForgePermaCastingEntityRemovalPacket::toBytes)
                 .consumerMainThread(ForgePermaCastingEntityRemovalPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(ForgeSendConfigPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeSendConfigPacket::new)
+                .encoder(ForgeSendConfigPacket::toBytes)
+                .consumerMainThread(ForgeSendConfigPacket::handle)
                 .add();
     }
 
