@@ -21,7 +21,13 @@ import net.hydra.jojomod.util.annotation.*;
     @BooleanOption(group = "inherit", value = true)
     public Boolean onlyStandUsersCanSeeStands;
     @BooleanOption(group = "inherit", value = false)
+    public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
+    @BooleanOption(group = "inherit", value = false)
     public Boolean timeStopTakesBreathAway;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean timeStopHovering;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean wardenMovesInStoppedTime;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)

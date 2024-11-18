@@ -101,6 +101,7 @@
     "ZKeyMapping",
     "ZLightTextue",
     "ZLivingEntityRenderer",
+    "ZMobRenderer",
     "ZModelBakery",
     "ZMouseHandler",
     "ZMultiPlayerGameMode",

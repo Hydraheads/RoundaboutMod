@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -298,7 +299,7 @@ public class TimeStopWorld implements TimeStop {
     public boolean CanTimeStopEntity(Entity entity){
         if (entity instanceof Player && ((Player) entity).isCreative() || entity.isSpectator()) {
             return false;
-        } else if (entity instanceof Warden) {
+        } else if (entity instanceof Warden && ClientNetworking.getAppropriateConfig().wardenMovesInStoppedTime) {
             return false;
         } else if  (!(entity instanceof LivingEntity) && entity.getFirstPassenger() != null &&
                 entity.getFirstPassenger() instanceof LivingEntity && this.isTimeStoppingEntity((LivingEntity) entity.getFirstPassenger())){

@@ -17,6 +17,7 @@ public class FabricParticles {
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
     public static final SimpleParticleType FOG_CHAIN = FabricParticleTypes.simple();
+    public static final SimpleParticleType WARDEN_CLOCK = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blood"), BLOOD);
@@ -26,6 +27,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "menacing"), MENACING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "vacuum"), VACUUM);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "fog_chain"), FOG_CHAIN);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "warden_clock"), WARDEN_CLOCK);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -35,5 +37,6 @@ public class FabricParticles {
         ModParticles.MENACING = MENACING;
         ModParticles.VACUUM = VACUUM;
         ModParticles.FOG_CHAIN = FOG_CHAIN;
+        ModParticles.WARDEN_CLOCK = WARDEN_CLOCK;
     }
 }

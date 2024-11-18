@@ -147,6 +147,7 @@ public class ForgeEvents {
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
         ModParticles.FOG_CHAIN = ForgeParticles.FOG_CHAIN.get();
+        ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

@@ -599,12 +599,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public void roundabout$setTSJump(boolean roundaboutTSJump){
-        this.roundabout$tsJump = roundaboutTSJump;
-        if (((LivingEntity)(Object)this) instanceof Player){
-            if (roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.NONE) {
-                ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.TS_FLOAT);
-            } else if (!roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT){
-                ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.NONE);
+        if (ClientNetworking.getAppropriateConfig().timeStopHovering) {
+            this.roundabout$tsJump = roundaboutTSJump;
+            if (((LivingEntity) (Object) this) instanceof Player) {
+                if (roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.NONE) {
+                    ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.TS_FLOAT);
+                } else if (!roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT) {
+                    ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.NONE);
+                }
             }
         }
     }

@@ -38,4 +38,8 @@ public class ForgeParticles {
             "fog_chain",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> WARDEN_CLOCK = PARTICLES.register(
+            "warden_clock",
+            () -> new SimpleParticleType(true)
+    );
 }

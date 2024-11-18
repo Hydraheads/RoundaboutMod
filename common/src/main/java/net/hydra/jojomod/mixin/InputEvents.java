@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
@@ -423,8 +424,10 @@ public abstract class InputEvents implements IInputEvents {
 
     @Unique
     public void roundabout$SetTSJump(boolean roundaboutTSJump){
-        ((StandUser)player).roundabout$setTSJump(roundaboutTSJump);
-        ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
+        if (ClientNetworking.getAppropriateConfig().timeStopHovering){
+            ((StandUser)player).roundabout$setTSJump(roundaboutTSJump);
+            ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
+        }
     }
 
     @javax.annotation.Nullable
