@@ -299,7 +299,7 @@ public class TimeStopWorld implements TimeStop {
     public boolean CanTimeStopEntity(Entity entity){
         if (entity instanceof Player && ((Player) entity).isCreative() || entity.isSpectator()) {
             return false;
-        } else if (entity instanceof Warden && ClientNetworking.getAppropriateConfig().wardenMovesInStoppedTime) {
+        } else if (entity instanceof Warden && ClientNetworking.getAppropriateConfig().timeStopSettings.wardenMovesInStoppedTime) {
             return false;
         } else if  (!(entity instanceof LivingEntity) && entity.getFirstPassenger() != null &&
                 entity.getFirstPassenger() instanceof LivingEntity && this.isTimeStoppingEntity((LivingEntity) entity.getFirstPassenger())){

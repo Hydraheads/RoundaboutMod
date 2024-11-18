@@ -764,7 +764,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         byte knifeCount = this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
 
         knifeCount++;
-        if (knifeCount <= 12){
+        if (knifeCount <= ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit){
             ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knifeCount);
         }
     }

@@ -51,7 +51,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.File;
-import java.nio.file.Path;
 
 @Mixin(value = Minecraft.class, priority = 100)
 public abstract class InputEvents implements IInputEvents {
@@ -427,7 +426,7 @@ public abstract class InputEvents implements IInputEvents {
 
     @Unique
     public void roundabout$SetTSJump(boolean roundaboutTSJump){
-        if (ClientNetworking.getAppropriateConfig().timeStopHovering){
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.enableHovering){
             ((StandUser)player).roundabout$setTSJump(roundaboutTSJump);
             ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
         }

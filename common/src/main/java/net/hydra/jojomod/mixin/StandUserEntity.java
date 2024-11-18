@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IMob;
@@ -15,7 +14,6 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -44,8 +42,6 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.Illusioner;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
@@ -599,7 +595,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public void roundabout$setTSJump(boolean roundaboutTSJump){
-        if (ClientNetworking.getAppropriateConfig().timeStopHovering) {
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.enableHovering) {
             this.roundabout$tsJump = roundaboutTSJump;
             if (((LivingEntity) (Object) this) instanceof Player) {
                 if (roundaboutTSJump && ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.NONE) {
@@ -769,9 +765,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public float roundaboutGetMaxStoredDamage(){
         LivingEntity living = ((LivingEntity)(Object)this);
         if (living instanceof Player) {
-            return (float) (living.getMaxHealth() * 0.3);
-        } else if (living instanceof Illusioner) {
-            return (float) (living.getMaxHealth() * 0.3);
+            return (float) (living.getMaxHealth() * (ClientNetworking.getAppropriateConfig().timeStopSettings.playerDamageCapHealthPercent *0.01));
         } else {
             return living.getMaxHealth();
         }
@@ -1096,7 +1090,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().standGuardingDelayTicks);
+        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().standGuardDelayTicks);
     }
 
     public boolean roundabout$shieldNotDisabled(){
@@ -1631,7 +1625,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)) {
                 roundabout$gasolineIFRAMES = 10;
                 roundabout$knifeIFrameTicks = 10;
-                roundabout$stackedKnivesAndMatches = 12;
+                roundabout$stackedKnivesAndMatches = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
             }
         }
 
@@ -1751,13 +1745,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         if ($$0.is(ModDamageTypes.KNIFE)){
                             roundabout$gasolineIFRAMES = 10;
                         }
-                        if (roundabout$stackedKnivesAndMatches < 12) {
+                        int knifeCap = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
+                        if (roundabout$stackedKnivesAndMatches < knifeCap) {
                             if (roundabout$stackedKnivesAndMatches <= 0) {
                                 roundabout$knifeIFrameTicks = 9;
                                 roundabout$knifeDespawnTicks = 300;
                             }
                             roundabout$stackedKnivesAndMatches++;
-                            if (roundabout$stackedKnivesAndMatches >= 12) {
+                            if (roundabout$stackedKnivesAndMatches >= knifeCap) {
                                 roundabout$extraIFrames = 8;
                             }
                             if ($$0.is(ModDamageTypes.KNIFE) && entity instanceof Player) {
@@ -1795,7 +1790,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "baseTick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$BreathingCancel(CallbackInfo ci){
-        boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopTakesBreathAway;
+        boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopSettings.preventsBreathing;
         if (cannotBreathInTs) {
             if (!((TimeStop) this.level()).getTimeStoppingEntities().isEmpty()
                     && ((TimeStop) this.level()).getTimeStoppingEntities().contains(((LivingEntity) (Object) this))) {
@@ -1806,7 +1801,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "baseTick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$BreathingCancel2(CallbackInfo ci){
-        boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopTakesBreathAway;
+        boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopSettings.preventsBreathing;
         if (cannotBreathInTs) {
             if (((IEntityAndData) this).roundabout$getRoundaboutJamBreath()) {
                 ((IEntityAndData) this).roundabout$setRoundaboutJamBreath(false);

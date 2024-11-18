@@ -839,7 +839,7 @@ public class StandPowers {
                 }
                 if (this.self instanceof Player) {
                     if ((((Player)this.self).isCreative() &&
-                            ClientNetworking.getAppropriateConfig().creativeModeRefreshesCooldowns) && ci.time > 2){
+                            ClientNetworking.getAppropriateConfig().cooldownsInTicks.creativeModeRefreshesCooldowns) && ci.time > 2){
                         ci.time=2;
                     }
                 }
@@ -1311,7 +1311,7 @@ public class StandPowers {
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
                 ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
-                        ClientNetworking.getAppropriateConfig().standUserMobsTakePlayerDamageMultipliers)
+                        ClientNetworking.getAppropriateConfig().damageMultipliers.standUserMobsTakePlayerDamageMultipliers)
         );
     }
 

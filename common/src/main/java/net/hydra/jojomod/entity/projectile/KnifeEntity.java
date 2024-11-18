@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.Config;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -126,10 +128,12 @@ public class KnifeEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
-        float $$2 = 4.0F;
+        float $$2;
 
         if ($$1 instanceof Player) {
-            $$2 = 2.1F;
+            $$2 = (float) (2.1F * (ClientNetworking.getAppropriateConfig().damageMultipliers.knifeDamageOnPlayers *0.01));
+        } else {
+            $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().damageMultipliers.knifeDamageOnMobs *0.01));;
         }
 
         if ($$1 instanceof LivingEntity $$3) {

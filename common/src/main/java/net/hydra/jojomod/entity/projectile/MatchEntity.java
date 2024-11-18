@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.GasolineBlock;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -110,7 +111,7 @@ public class MatchEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
-        float $$2 = 2.0f;
+        float $$2 = (float) (2.0f * (ClientNetworking.getAppropriateConfig().damageMultipliers.matchDamage *0.01));
 
         Entity $$4 = this.getOwner();
 

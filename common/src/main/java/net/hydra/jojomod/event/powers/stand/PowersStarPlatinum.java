@@ -665,7 +665,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             || (value instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().getUUID() == this.self.getUUID())){
                 hitEntities.remove(value);
             } else {
-                int angle = 10;
+                int angle = 14;
                 if (!(angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= angle)){
                     hitEntities.remove(value);
                 }
@@ -765,7 +765,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     /**Makes*/
     public boolean fullTSChargeBonus(){
         if (canExecuteMoveWithLevel(getMaxTSFactorLevel())){
-            return this.maxChargedTSTicks >= ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum;
+            return this.maxChargedTSTicks >= ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
         } else {
             return false;
         }
@@ -1072,7 +1072,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
                 if (!done) {
                     if (canExecuteMoveWithLevel(getLeapLevel())) {
-                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                        boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJumpAndDashShareCooldown;
+                        if (jojoveinLikeKeys){
+                            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3);
+                        } else {
+                            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                        }
                     } else {
                         setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                     }
@@ -1103,6 +1108,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             } else {
                if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
+
                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
                } else {
                    if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
@@ -1206,23 +1212,23 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public int getMaxTSTime (){
-        return ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum;
+        return ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
     }
     @Override
 
     public void setChargeTicksMult(){
         this.setChargedTSTicks(this.getChargedTSTicks()*(1+
-                (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum -100)/100));
+                (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum -100)/100));
     }
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
-        if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum)){
-            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
+        if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum)){
+            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum);
             this.setChargedTSTicks(this.maxChargeTSTime);
-        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().impulseTimeStopLength))) {
-            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().impulseTimeStopLength));
+        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength))) {
+            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength));
         } else {
-            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
+            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum);
         }
         return 0;
     }

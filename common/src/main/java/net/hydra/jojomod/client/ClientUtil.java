@@ -264,11 +264,17 @@ public class ClientUtil {
             ((StandUser) player).roundabout$setGasolineTime(context);
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
             if (((StandUser)player).roundabout$getStandPowers().hasCooldowns()) {
-                ((StandUser) player).roundabout$setMaxSealedTicks(300);
-                ((StandUser) player).roundabout$setSealedTicks(300);
+                int punishTicks = ClientNetworking.getAppropriateConfig().cooldownsInTicks.switchStandDiscWhileOnCooldowns;
+                if (punishTicks > 0){
+                    ((StandUser) player).roundabout$setMaxSealedTicks(punishTicks);
+                    ((StandUser) player).roundabout$setSealedTicks(punishTicks);
+                }
             } else {
-                ((StandUser) player).roundabout$setMaxSealedTicks(100);
-                ((StandUser) player).roundabout$setSealedTicks(100);
+                int switchTicks = ClientNetworking.getAppropriateConfig().cooldownsInTicks.switchStandDisc;
+                if (switchTicks > 0){
+                    ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
+                    ((StandUser) player).roundabout$setSealedTicks(switchTicks);
+                }
             }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;

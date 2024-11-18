@@ -32,7 +32,7 @@ public abstract class ZWarden extends Monster {
     private boolean roundabout$hasSentTSMessage = false;
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$tick(CallbackInfo ci) {
-        if (ClientNetworking.getAppropriateConfig().wardenMovesInStoppedTime) {
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.wardenMovesInStoppedTime) {
             if (this.level() instanceof ServerLevel $$0) {
                 if (((TimeStop) this.level()).inTimeStopRange(this)) {
                     if (!roundabout$hasSentTSMessage) {

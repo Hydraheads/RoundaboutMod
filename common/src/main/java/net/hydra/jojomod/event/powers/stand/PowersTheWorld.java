@@ -293,39 +293,39 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void setChargeTicksMult(){
         this.setChargedTSTicks(this.getChargedTSTicks()*(1+
-                (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld -100)/100));
+                (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld -100)/100));
     }
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
-        if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld)){
-            if (canExecuteMoveWithLevel(getMaxTSFactorLevel())) {
-                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().fullChargeTimeStopTicksTheWorld +
-                ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld;
+        if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)){
+            if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && this.getSelf() instanceof Player) {
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.fullChargeTimeStopTicksTheWorld +
+                ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
                 return 80;
             } else {
-                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld;
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
             }
-        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.2,
-                ClientNetworking.getAppropriateConfig().impulseTimeStopLength))) {
-            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.2,
-                    ClientNetworking.getAppropriateConfig().impulseTimeStopLength));
+        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld *0.2,
+                ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength))) {
+            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld *0.2,
+                    ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength));
         } else {
-            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld);;
+            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld);;
         }
 
         if (!canExecuteMoveWithLevel(4)){
-            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld)*0.4){
-                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.4);;
+            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)*0.4){
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld *0.4);;
             }
         } else if (!canExecuteMoveWithLevel(5)){
-            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld)*0.6){
-                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.6);;
+            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)*0.6){
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld *0.6);;
             }
         } else if (!canExecuteMoveWithLevel(6)){
-            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld)*0.8){
-                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.8);
+            if (this.maxChargeTSTime > (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)*0.8){
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld *0.8);
             }
         }
         return 0;
@@ -333,13 +333,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public int getMaxTSTime(){
         if (canExecuteMoveWithLevel(6)){
-            return (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld);
+            return (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld);
         } else if (canExecuteMoveWithLevel(5)){
-            return (int) ((ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld)*0.8);
+            return (int) ((ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)*0.8);
         } else if (canExecuteMoveWithLevel(4)){
-            return (int) ((ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld)*0.6);
+            return (int) ((ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)*0.6);
         }
-        return (int) ((ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld)*0.4);
+        return (int) ((ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)*0.4);
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -794,39 +794,40 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         boolean check = attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf());
         double dist = 0;
-        if (check){
-            dist = attackTarget.distanceTo(this.getSelf());
-            TPTYPE tptype = TPTYPE.GROUND;
-            if (this.getSelf() instanceof WaterAnimal || this.getSelf() instanceof Guardian){
-                tptype = TPTYPE.WATER;
-            } else if (this.getSelf() instanceof FlyingMob){
-                tptype = TPTYPE.AIR;
-            }
-            if (this.attackTimeDuring <= -1) {
-                if (!this.getSelf().isPassenger()) {
-                    teleportTime = Math.max(0,teleportTime-1);
-                    if (teleportTime == 0 && !(this.getSelf() instanceof Creeper CREEP && CREEP.isIgnited())) {
-                        if (dist <= 8 && !(this.getSelf() instanceof Creeper)) {
-                            Vec3 pos = this.getSelf().position().add(0,this.getSelf().getEyeHeight(),0);
-                            float p = 0;
-                            float y = 0;
-                            if (this.getSelf() instanceof Villager || this.getSelf() instanceof Skeleton){
-                                p =getLookAtEntityPitch(this.getSelf(), attackTarget);
-                                y = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                            }
-                            if (this.teleport(tptype)){
-                                if (this.getSelf() instanceof Villager){
-                                    for (int i = 0; i< 4; i++) {
-                                        KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), ModItems.KNIFE.getDefaultInstance(),pos);
-                                        $$7.pickup = AbstractArrow.Pickup.DISALLOWED;
-                                        $$7.shootFromRotationWithVariance(this.getSelf(),
-                                                p,
-                                                y,
-                                                -0.5F, 1.5F, 1.0F);
-                                        this.getSelf().level().addFreshEntity($$7);
-                                    }
-                                } else if (this.getSelf() instanceof Skeleton){
-                                        Arrow $$7 = new Arrow(this.getSelf().level(),pos.x,pos.y,pos.z);
+        if (check) {
+            if (ClientNetworking.getAppropriateConfig().timeStopSettings.mobsTeleportInsteadOfStoppingTime) {
+                dist = attackTarget.distanceTo(this.getSelf());
+                TPTYPE tptype = TPTYPE.GROUND;
+                if (this.getSelf() instanceof WaterAnimal || this.getSelf() instanceof Guardian) {
+                    tptype = TPTYPE.WATER;
+                } else if (this.getSelf() instanceof FlyingMob) {
+                    tptype = TPTYPE.AIR;
+                }
+                if (this.attackTimeDuring <= -1) {
+                    if (!this.getSelf().isPassenger()) {
+                        teleportTime = Math.max(0, teleportTime - 1);
+                        if (teleportTime == 0 && !(this.getSelf() instanceof Creeper CREEP && CREEP.isIgnited())) {
+                            if (dist <= 8 && !(this.getSelf() instanceof Creeper)) {
+                                Vec3 pos = this.getSelf().position().add(0, this.getSelf().getEyeHeight(), 0);
+                                float p = 0;
+                                float y = 0;
+                                if (this.getSelf() instanceof Villager || this.getSelf() instanceof Skeleton) {
+                                    p = getLookAtEntityPitch(this.getSelf(), attackTarget);
+                                    y = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                                }
+                                if (this.teleport(tptype)) {
+                                    if (this.getSelf() instanceof Villager) {
+                                        for (int i = 0; i < 4; i++) {
+                                            KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), ModItems.KNIFE.getDefaultInstance(), pos);
+                                            $$7.pickup = AbstractArrow.Pickup.DISALLOWED;
+                                            $$7.shootFromRotationWithVariance(this.getSelf(),
+                                                    p,
+                                                    y,
+                                                    -0.5F, 1.5F, 1.0F);
+                                            this.getSelf().level().addFreshEntity($$7);
+                                        }
+                                    } else if (this.getSelf() instanceof Skeleton) {
+                                        Arrow $$7 = new Arrow(this.getSelf().level(), pos.x, pos.y, pos.z);
                                         $$7.pickup = AbstractArrow.Pickup.DISALLOWED;
                                         $$7.shootFromRotation(this.getSelf(),
                                                 p,
@@ -834,22 +835,29 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                                 0F, 3.0F, 1.0F);
                                         $$7.setOwner(this.getSelf());
                                         this.getSelf().level().addFreshEntity($$7);
+                                    }
+                                    teleportTime = 200;
+                                    postTPStall = 8;
                                 }
-                                teleportTime = 200;
-                                postTPStall = 8;
-                            }
-                        } else if (dist < 40) {
-                            if (this.teleportTowards(attackTarget,tptype)) {
-                                if (this.getSelf() instanceof Creeper){
-                                    this.teleportTime = 100;
-                                } else {
-                                    this.teleportTime = 200;
+                            } else if (dist < 40) {
+                                if (this.teleportTowards(attackTarget, tptype)) {
+                                    if (this.getSelf() instanceof Creeper) {
+                                        this.teleportTime = 100;
+                                    } else {
+                                        this.teleportTime = 200;
+                                    }
+                                    postTPStall = 8;
                                 }
-                                postTPStall = 8;
                             }
-                        }
 
+                        }
                     }
+                }
+            } else {
+                if (!onCooldown(PowerIndex.SKILL_4) && this.getActivePower() == PowerIndex.NONE && !this.isStoppingTime()){
+                    this.setMaxChargeTSTime(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld);
+                    this.setChargedTSTicks(Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld,20));
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL, true);
                 }
             }
         }
@@ -1226,7 +1234,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
             if (!done){
                 if (canExecuteMoveWithLevel(getLeapLevel())) {
-                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
+                    boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJumpAndDashShareCooldown;
+                    if (jojoveinLikeKeys){
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3);
+                    } else {
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
+                    }
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
