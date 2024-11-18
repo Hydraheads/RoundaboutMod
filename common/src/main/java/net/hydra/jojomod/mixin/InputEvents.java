@@ -53,7 +53,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.io.File;
 import java.nio.file.Path;
 
-@Mixin(Minecraft.class)
+@Mixin(value = Minecraft.class, priority = 100)
 public abstract class InputEvents implements IInputEvents {
 
     protected InputEvents() {
