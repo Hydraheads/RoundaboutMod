@@ -879,7 +879,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return (float) (this.roundabout$maxGuardPoints*(ClientNetworking.getAppropriateConfig().standGuardMultiplier*0.01));
+        return (float) (this.roundabout$maxGuardPoints*(ClientNetworking.getAppropriateConfig().damageMultipliers.standGuardMultiplier*0.01));
     }
     @Unique
     public float roundabout$getGuardCooldown(){
@@ -1402,16 +1402,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (this.roundabout$gasTicks > -1) {
             if ($$0.is(DamageTypeTags.IS_FIRE) || ($$0.getDirectEntity() instanceof Projectile && $$0.getDirectEntity().isOnFire())) {
-                float power = Roundabout.gasDamage*18;
+                float power = MainUtil.gasDamageMultiplier()*17;
                 if ($$0.is(DamageTypeTags.IS_FIRE)) {
                     if ($$0.getDirectEntity() instanceof Projectile) {
                         if ($$0.getDirectEntity() instanceof MatchEntity){
                             if (((MatchEntity) $$0.getDirectEntity()).isBundle){
-                                power = Roundabout.gasDamage*20;
+                                power = MainUtil.gasDamageMultiplier()*23;
+                            } else {
+                                power = MainUtil.gasDamageMultiplier()*18;
                             }
                         }
                     } else {
-                        power = Roundabout.gasDamage*14;
+                        power = MainUtil.gasDamageMultiplier()*14;
                     }
                 }
                 this.roundabout$setGasolineTime(-1);

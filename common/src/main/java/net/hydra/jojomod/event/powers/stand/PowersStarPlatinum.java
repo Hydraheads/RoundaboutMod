@@ -363,7 +363,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else {
             amt = (100+((currentLevel-1)*50));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().expRequirementMultiplier*0.01));
+        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
         return amt;
     }
     @Override

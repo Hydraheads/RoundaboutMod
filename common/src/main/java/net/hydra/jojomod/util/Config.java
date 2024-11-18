@@ -68,14 +68,12 @@ import net.hydra.jojomod.util.annotation.*;
     public Integer timeStopChargeRate;
     @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
     public Integer impulseTimeStopLength;
-    @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
-    public Integer standGuardMultiplier;
     @BooleanOption(group = "inherit", value = true)
     public Boolean standUserMobsTakePlayerDamageMultipliers;
     @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
     public Integer barrageWindup;
     @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
-    public Integer expRequirementMultiplier;
+    public Integer standExperienceNeededForLevelupMultiplier;
     @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
     public Integer kickBarrageWindup;
     @NestedOption(group = "modded")
@@ -113,6 +111,10 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer theWorldAttacksOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer thrownBlocks;
+        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        public Integer standGuardMultiplier;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer gasolineExplosion;
     }
     public static class Cooldowns {
         @IntOption(group = "inherit", value = 27, min = 0, max = 72000)

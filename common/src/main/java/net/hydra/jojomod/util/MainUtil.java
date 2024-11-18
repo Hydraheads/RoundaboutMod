@@ -298,6 +298,10 @@ public class MainUtil {
         return false;
     }
 
+    public static float gasDamageMultiplier(){
+        return (float) (0.83F * (ClientNetworking.getAppropriateConfig().damageMultipliers.gasolineExplosion *0.01));
+    }
+
     public static void makeBleed(Entity entity, int level, int ticks, Entity source){
         if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters){
             return;
