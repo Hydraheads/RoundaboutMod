@@ -2,8 +2,10 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -357,6 +359,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 if (mindist == -1 || this.distanceToSqr($$3) < mindist){
                     mindist = (float) this.distanceToSqr($$3);
                     potentialTarget = $$3;
+                }
+            } else if ($$3 instanceof Player PE){
+                if (ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(((IPlayerEntity)PE).roundabout$getShapeShift()))){
+                    if (mindist == -1 || this.distanceToSqr($$3) < mindist) {
+                        mindist = (float) this.distanceToSqr($$3);
+                        potentialTarget = $$3;
+                    }
                 }
             }
         }
