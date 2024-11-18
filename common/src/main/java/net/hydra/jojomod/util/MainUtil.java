@@ -223,6 +223,10 @@ public class MainUtil {
         return null;
     }
     public static boolean getMobBleed(Entity Mob) {
+        if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters){
+            return false;
+        }
+
         if (Mob instanceof LivingEntity){
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
                     || Mob instanceof Villager
@@ -295,6 +299,9 @@ public class MainUtil {
     }
 
     public static void makeBleed(Entity entity, int level, int ticks, Entity source){
+        if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters){
+            return;
+        }
         if (getMobBleed(entity)){
             ((StandUser)entity).roundabout$setBleedLevel(level);
             ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.BLEED, ticks, level), source);

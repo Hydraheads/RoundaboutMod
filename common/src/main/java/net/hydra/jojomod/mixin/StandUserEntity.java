@@ -181,7 +181,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public final float roundabout$maxGuardPoints = 15F;
     @Unique
-    private float roundabout$GuardPoints = roundabout$maxGuardPoints;
+    private float roundabout$GuardPoints = this.roundabout$getMaxGuardPoints();
     @Unique
     private boolean roundabout$GuardBroken = false;
     @Unique
@@ -879,7 +879,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return this.roundabout$maxGuardPoints;
+        return (float) (this.roundabout$maxGuardPoints*(ClientNetworking.getAppropriateConfig().standGuardMultiplier*0.01));
     }
     @Unique
     public float roundabout$getGuardCooldown(){
@@ -929,9 +929,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$syncGuard();
         }
     }
+
     @Unique
     public void roundabout$fixGuard() {
-        this.roundabout$GuardPoints = this.roundabout$maxGuardPoints;
+        this.roundabout$GuardPoints = this.roundabout$getMaxGuardPoints();
         this.roundabout$GuardBroken = false;
         if (!this.level().isClientSide && this.roundabout$getStandPowers().isGuarding()) {
             this.roundabout$getStandPowers().animateStand((byte) 10);
@@ -941,7 +942,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$regenGuard(float regen){
         float finalGuard = this.roundabout$GuardPoints + regen;
-        if (finalGuard >= this.roundabout$maxGuardPoints){
+        if (finalGuard >= this.roundabout$getMaxGuardPoints()){
             this.roundabout$fixGuard();
         } else {
             this.roundabout$GuardPoints = finalGuard;
@@ -950,12 +951,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public void roundabout$tickGuard(){
-        if (this.roundabout$GuardPoints < this.roundabout$maxGuardPoints) {
+        if (this.roundabout$GuardPoints < this.roundabout$getMaxGuardPoints()) {
             if (this.roundabout$GuardBroken){
-                float guardRegen = roundabout$maxGuardPoints / 100;
+                float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
                 this.roundabout$regenGuard(guardRegen);
             } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()){
-                float guardRegen = roundabout$maxGuardPoints / 200;
+                float guardRegen = this.roundabout$getMaxGuardPoints() / 200;
                 this.roundabout$regenGuard(guardRegen);
             }
             if (this.roundabout$isGuarding() && !roundabout$shieldNotDisabled()){

@@ -1219,8 +1219,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum)){
             this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
             this.setChargedTSTicks(this.maxChargeTSTime);
-        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,20))) {
-            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,20));
+        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().impulseTimeStopLength))) {
+            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().impulseTimeStopLength));
         } else {
             this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksStarPlatinum);
         }

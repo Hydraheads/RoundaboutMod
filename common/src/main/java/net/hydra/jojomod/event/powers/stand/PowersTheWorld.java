@@ -307,8 +307,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
             }
-        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.2,20))) {
-            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.2,20));
+        } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.2,
+                ClientNetworking.getAppropriateConfig().impulseTimeStopLength))) {
+            this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld *0.2,
+                    ClientNetworking.getAppropriateConfig().impulseTimeStopLength));
         } else {
             this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().maxTimeStopTicksTheWorld);;
         }

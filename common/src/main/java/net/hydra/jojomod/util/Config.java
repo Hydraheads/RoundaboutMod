@@ -28,12 +28,20 @@ import net.hydra.jojomod.util.annotation.*;
     public Boolean timeStopHovering;
     @BooleanOption(group = "inherit", value = true)
     public Boolean wardenMovesInStoppedTime;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean creativeModeInfiniteTimeStop;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean creativeModeRefreshesCooldowns;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean disableBleedingAndBloodSplatters;
     @BooleanOption(group = "inherit", value = true)
     public Boolean enableStandLeveling;
     @BooleanOption(group = "inherit", value = true)
     public Boolean barrageHasAreaOfEffect;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean disableMeleeWhileStandActive;
     @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
     public Integer standGuardingDelayTicks;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
@@ -56,6 +64,12 @@ import net.hydra.jojomod.util.annotation.*;
     public Integer maxTimeStopTicksTheWorld;
     @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
     public Integer fullChargeTimeStopTicksTheWorld;
+    @IntOption(group = "inherit", value = 2, min = 1, max = 72000)
+    public Integer timeStopChargeRate;
+    @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
+    public Integer impulseTimeStopLength;
+    @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+    public Integer standGuardMultiplier;
     @BooleanOption(group = "inherit", value = true)
     public Boolean standUserMobsTakePlayerDamageMultipliers;
     @IntOption(group = "inherit", value = 29, min = 0, max = 72000)

@@ -135,7 +135,10 @@ public abstract class InputEvents implements IInputEvents {
                                 }
                         }
                     }
-                    ci.setReturnValue($$1);
+
+                    if (ClientNetworking.getAppropriateConfig().disableMeleeWhileStandActive) {
+                        ci.setReturnValue($$1);
+                    }
                 }
             }
             //while (this.options.attackKey.wasPressed()) {
