@@ -629,14 +629,24 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if(ticksForFinger < 26){
             pow*=(1 - ((float) (26-ticksForFinger) /26));
         }
-        if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
-            this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
-            if (entity instanceof LivingEntity LE){
-                addEXP(2, LE);
-                MainUtil.makeBleed(LE,0,200,this.self);
+
+        if(ticksForFinger < 26){
+            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                if (entity instanceof LivingEntity LE){
+                    addEXP(1, LE);
+                }
             }
         } else {
-            knockShield2(entity, 40);
+            if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
+                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                if (entity instanceof LivingEntity LE){
+                    addEXP(2, LE);
+                    MainUtil.makeBleed(LE,0,200,this.self);
+                }
+            } else {
+                knockShield2(entity, 40);
+            }
         }
     }
 
