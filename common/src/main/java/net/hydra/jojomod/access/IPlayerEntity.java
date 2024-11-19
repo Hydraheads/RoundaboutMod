@@ -1,6 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
@@ -57,5 +58,14 @@ public interface IPlayerEntity {
     void roundabout$setCombatOpacity(float combatOpacity);
     float roundabout$getEnemyOpacity();
     void roundabout$setEnemyOpacity(float enemyOpacity);
+    AnimationState getWry();
+    AnimationState getGiorno();
+    AnimationState getKoichi();
+    AnimationState getOhNo();
+    AnimationState getJoseph();
+    AnimationState getTortureDance();
+    AnimationState getWamuu();
+    AnimationState getJonathan();
+    AnimationState getJotaro();
 
 }

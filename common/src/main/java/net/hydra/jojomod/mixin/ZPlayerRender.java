@@ -436,22 +436,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         swp.setupAnimationStates();
                     }
                 }
-                if (pose != Poses.NONE){
-                    if (roundabout$swappedModel == null) {
-                        if (((IPlayerModel) this.model).roundabout$getSlim()) {
-                            roundabout$swappedModel = ModEntities.ALEX_NPC.create($$0.level());
-                        } else {
-                            roundabout$swappedModel = ModEntities.STEVE_NPC.create($$0.level());
-                        }
-                        if (roundabout$swappedModel instanceof JojoNPC jj) {
-                            jj.host = $$0;
-                            roundabout$doJojoAnims(jj);
-                        }
-                        if (roundabout$swappedModel instanceof JojoNPCPlayer jj) {
-                            jj.faker = $$0;
-                        }
-                    }
-                } else {
+                if (pose == Poses.NONE){
                     roundabout$swappedModel = null;
                 }
             }

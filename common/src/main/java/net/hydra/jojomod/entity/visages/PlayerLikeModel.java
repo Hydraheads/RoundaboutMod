@@ -173,6 +173,8 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
             float negativeRot = this.body.yRot*=-1;
 
             this.rightArm.z = Mth.sin(negativeRot) * 5.0F;
+            //this.rightArm.x = -Mth.cos(this.body.yRot) * 2.0F;
+            //this.leftArm.x = Mth.cos(this.body.yRot) * 2.0F;
             this.leftArm.z = -Mth.sin(negativeRot) * 5.0F;
             this.rightArm.yRot = this.rightArm.yRot + negativeRot;
             this.leftArm.yRot = this.leftArm.yRot + negativeRot;
@@ -204,6 +206,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
         this.animate($$0.JOTARO, Poses.JOTARO.ad, $$3, 1f);
         this.animate($$0.JONATHAN, Poses.JONATHAN.ad, $$3, 1f);
 
+
         if ($$0.standPos == Poses.NONE) {
             boolean $$6 = $$0.getFallFlyingTicks() > 4;
             boolean $$7 = $$0.isVisuallySwimming();
@@ -223,9 +226,9 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
 
             this.body.yRot = 0.0F;
             this.rightArm.z = 0.0F;
-            this.rightArm.x = 0.0F;
+            this.rightArm.x = -0.75F;
             this.leftArm.z = 0.0F;
-            this.leftArm.x = 0.0F;
+            this.leftArm.x = 0.75F;
             float $$8 = 1.0F;
             if ($$6) {
                 $$8 = (float) $$0.getDeltaMovement().lengthSqr();
@@ -291,8 +294,8 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                 this.leftLeg.y = 0.2F;
                 this.head.y = 4.2F;
                 this.body.y = 2.0F;
-                this.leftArm.y = 3.2F;
-                this.rightArm.y = 3.2F;
+                this.leftArm.y = 5.2F;
+                this.rightArm.y = 5.2F;
             } else {
                 this.body.xRot = 0.0F;
                 this.rightLeg.z = 0.0F;
@@ -301,8 +304,8 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                 this.leftLeg.y = 0.0F;
                 this.head.y = 0.0F;
                 this.body.y = 0.0F;
-                this.leftArm.y = 0.0F;
-                this.rightArm.y = 0.0F;
+                this.leftArm.y = 2.0F;
+                this.rightArm.y = 2.0F;
             }
 
             if (this.rightArmPose != HumanoidModel.ArmPose.SPYGLASS) {
@@ -430,6 +433,14 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                 this.cloak.y = -0.85F;
             }
         }
+
+
+        this.leftPants.copyFrom(this.leftLeg);
+        this.rightPants.copyFrom(this.rightLeg);
+        this.leftSleeve.copyFrom(this.leftArm);
+        this.rightSleeve.copyFrom(this.rightArm);
+        this.jacket.copyFrom(this.body);
+        this.hat.copyFrom(this.head);
     }
 
     private float quadraticArmUpdate(float $$0) {

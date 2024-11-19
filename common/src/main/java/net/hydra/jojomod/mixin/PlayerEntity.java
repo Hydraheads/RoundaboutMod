@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -12,15 +11,12 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -449,6 +445,125 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+
+    @Unique
+    public Poses roundabout$standPos = Poses.NONE;
+    @Unique
+    public final AnimationState roundabout$WRYYY = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState getWry(){
+        return roundabout$WRYYY;
+    }
+    @Unique
+    public final AnimationState roundabout$GIORNO = new AnimationState();
+
+    @Unique
+    @Override
+    public AnimationState getGiorno(){
+        return roundabout$GIORNO;
+    }
+    @Unique
+    public final AnimationState roundabout$JOSEPH = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState getJoseph(){
+        return roundabout$GIORNO;
+    }
+    @Unique
+    public final AnimationState roundabout$KOICHI = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState getKoichi(){
+        return roundabout$GIORNO;
+    }
+    @Unique
+    public final AnimationState roundabout$OH_NO = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState getOhNo(){
+        return roundabout$OH_NO;
+    }
+    @Unique
+    public final AnimationState roundabout$TORTURE_DANCE = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState getTortureDance(){
+        return roundabout$TORTURE_DANCE;
+    }
+    @Unique
+    @Override
+    public AnimationState getWamuu(){
+        return roundabout$WAMUU;
+    }
+    @Unique
+    @Override
+    public AnimationState getJotaro(){
+        return roundabout$JOTARO;
+    }
+    @Unique
+    @Override
+    public AnimationState getJonathan(){
+        return roundabout$JONATHAN;
+    }
+    @Unique
+    public final AnimationState roundabout$WAMUU = new AnimationState();
+
+    @Unique
+    public final AnimationState roundabout$JOTARO = new AnimationState();
+    @Unique
+    public final AnimationState roundabout$JONATHAN = new AnimationState();
+
+
+    @Unique
+    public void roundabout$setupAnimationStates() {
+        if (roundabout$GetPoseEmote() == Poses.JONATHAN.id) {
+            this.roundabout$JONATHAN.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$JONATHAN.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.JOTARO.id) {
+            this.roundabout$JOTARO.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$JOTARO.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.WAMUU.id) {
+            this.roundabout$WAMUU.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$WAMUU.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.TORTURE_DANCE.id) {
+            this.roundabout$TORTURE_DANCE.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$TORTURE_DANCE.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.OH_NO.id) {
+            this.roundabout$OH_NO.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$OH_NO.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.WRY.id) {
+            this.roundabout$WRYYY.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$WRYYY.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.GIORNO.id) {
+            this.roundabout$GIORNO.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$GIORNO.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.KOICHI.id) {
+            this.roundabout$KOICHI.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$KOICHI.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.JOSEPH.id) {
+            this.roundabout$JOSEPH.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$JOSEPH.stop();
+        }
+    }
+
     /**Break free from stand grab*/
     @Inject(method = "wantsToStopRiding", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$wantsToStopRiding(CallbackInfoReturnable<Boolean> cir) {
@@ -713,6 +828,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
 
+        roundabout$setupAnimationStates();
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
         }

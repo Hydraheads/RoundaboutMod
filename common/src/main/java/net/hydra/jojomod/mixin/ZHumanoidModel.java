@@ -5,16 +5,22 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.Poses;
+import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,6 +28,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Optional;
 
 @Mixin(HumanoidModel.class)
 public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> implements ArmedModel, HeadedModel, IHumanoidModelAccess {
@@ -65,63 +73,69 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
     }
 
     /**Animation for dodge skill*/
-    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0),cancellable = true)
     public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
-       if ($$0 instanceof Player){
-            byte pos = ((IPlayerEntity)$$0).roundabout$GetPos();
-            if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD){
-               //this.body.xRot = -20.0F;
-                int dodgeTime = ((IPlayerEntity)$$0).roundabout$getDodgeTime();
-                float fl;
-                if (dodgeTime > -1) {
-                    if (dodgeTime > 5) {
-                        fl = ((11 - ((float) dodgeTime + 1 + $$2 - 1.0F)) / 20.0F * 1.6F);
-                    } else {
-                        fl = ((float) dodgeTime + 1 + $$2 - 1.0F) / 20.0F * 1.6F;
-                    }
-                    if (fl != 0) {
-                        fl = Mth.sqrt(fl);
-                    }
-                    if (fl > 1.0F) {
-                        fl = 1.0F;
-                    }
+       if ($$0 instanceof Player) {
 
-                    if (pos == PlayerPosIndex.DODGE_BACKWARD){
-                        fl*=-1;
-                        this.leftLeg.xRot = (float) (-fl*1.2);
-                    } else {
-                        this.leftLeg.xRot = -fl;
-                    }
-                    this.rightLeg.xRot = fl;
-                    this.leftArm.xRot = -fl;
-                    this.rightArm.xRot = fl;
-                    this.head.xRot += (float) (-fl*0.3);
-                    this.setupAttackAnimation($$0, $$3);
+           IPlayerEntity ipe = ((IPlayerEntity) $$0);
+           if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
+               byte pos = ((IPlayerEntity) $$0).roundabout$GetPos();
+               if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
+                   //this.body.xRot = -20.0F;
+                   int dodgeTime = ((IPlayerEntity) $$0).roundabout$getDodgeTime();
+                   float fl;
+                   if (dodgeTime > -1) {
+                       if (dodgeTime > 5) {
+                           fl = ((11 - ((float) dodgeTime + 1 + $$2 - 1.0F)) / 20.0F * 1.6F);
+                       } else {
+                           fl = ((float) dodgeTime + 1 + $$2 - 1.0F) / 20.0F * 1.6F;
+                       }
+                       if (fl != 0) {
+                           fl = Mth.sqrt(fl);
+                       }
+                       if (fl > 1.0F) {
+                           fl = 1.0F;
+                       }
+
+                       if (pos == PlayerPosIndex.DODGE_BACKWARD) {
+                           fl *= -1;
+                           this.leftLeg.xRot = (float) (-fl * 1.2);
+                       } else {
+                           this.leftLeg.xRot = -fl;
+                       }
+                       this.rightLeg.xRot = fl;
+                       this.leftArm.xRot = -fl;
+                       this.rightArm.xRot = fl;
+                       this.head.xRot += (float) (-fl * 0.3);
+                       this.setupAttackAnimation($$0, $$3);
 
 
-                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                    if ($$0.isUsingItem()) {
-                        boolean $$10 = $$0.getUsedItemHand() == InteractionHand.MAIN_HAND;
-                        if ($$10 == $$9) {
-                            this.poseRightArm($$0);
-                        } else {
-                            this.poseLeftArm($$0);
-                        }
-                    } else {
-                        boolean $$11 = $$9 ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
-                        if ($$9 != $$11) {
-                            this.poseLeftArm($$0);
-                            this.poseRightArm($$0);
-                        } else {
-                            this.poseRightArm($$0);
-                            this.poseLeftArm($$0);
-                        }
-                    }
+                       boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                       if ($$0.isUsingItem()) {
+                           boolean $$10 = $$0.getUsedItemHand() == InteractionHand.MAIN_HAND;
+                           if ($$10 == $$9) {
+                               this.poseRightArm($$0);
+                           } else {
+                               this.poseLeftArm($$0);
+                           }
+                       } else {
+                           boolean $$11 = $$9 ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
+                           if ($$9 != $$11) {
+                               this.poseLeftArm($$0);
+                               this.poseRightArm($$0);
+                           } else {
+                               this.poseRightArm($$0);
+                               this.poseLeftArm($$0);
+                           }
+                       }
 
-                }
+                   }
+               }
            }
        }
+
     }
+
     @Shadow
     protected void setupAttackAnimation(T $$0, float $$1) {
     }

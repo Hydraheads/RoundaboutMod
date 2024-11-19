@@ -1233,9 +1233,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             this.setActivePower(PowerIndex.POWER_1);
             ticksForFinger = 100;
             double rand = Math.random();
-            if (this.getSelf() instanceof Player PE &&
+            byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (skn == StarPlatinumEntity.OVA_SKIN ||
+                    this.getSelf() instanceof Player PE &&
                     ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
-
                 playStandUserOnlySoundsIfNearby(STAR_FINGER_SILENT, 32, false, false);
             } else{
                 if (rand > 0.5) {
