@@ -828,7 +828,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
 
-        roundabout$setupAnimationStates();
+        if (this.level().isClientSide()) {
+            roundabout$setupAnimationStates();
+        }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
         }
