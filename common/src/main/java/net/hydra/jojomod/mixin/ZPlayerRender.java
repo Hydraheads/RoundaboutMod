@@ -622,6 +622,9 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         $$6.oAttackAnim = user.oAttackAnim;
         $$6.hurtDuration = user.hurtDuration;
         $$6.hurtTime = user.hurtTime;
+        IEntityAndData entd = ((IEntityAndData) user);
+        IEntityAndData entd2 = ((IEntityAndData) $$6);
+        entd2.roundabout$setVehicle(entd.roundabout$getVehicle());
 
         $$6.walkAnimation.setSpeed(user.walkAnimation.speed());
         IWalkAnimationState iwalk = ((IWalkAnimationState) $$6.walkAnimation);

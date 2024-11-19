@@ -136,6 +136,16 @@ public abstract class EntityAndData implements IEntityAndData {
         this.roundabout$noGravityTicks = ticks;
     }
 
+    @Override
+    @Unique
+    public Entity roundabout$getVehicle(){
+        return this.vehicle;
+    }
+    @Override
+    @Unique
+    public void roundabout$setVehicle(Entity ride){
+        this.vehicle = ride;
+    }
     @Shadow
     private int remainingFireTicks;
 
@@ -331,6 +341,9 @@ public abstract class EntityAndData implements IEntityAndData {
     public SoundSource getSoundSource() {
         return SoundSource.NEUTRAL;
     }
+
+    @Shadow @javax.annotation.Nullable private Entity vehicle;
+
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
         roundabout$tickQVec();

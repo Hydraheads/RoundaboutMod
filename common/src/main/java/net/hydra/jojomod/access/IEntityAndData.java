@@ -1,5 +1,6 @@
 package net.hydra.jojomod.access;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,9 @@ public interface IEntityAndData {
     int roundabout$getNoGravTicks();
 
     void roundabout$setNoAAB();
+
+    Entity roundabout$getVehicle();
+    void roundabout$setVehicle(Entity ride);
 
     boolean roundabout$getShadow();
     void roundabout$setShadow(boolean shadow);
