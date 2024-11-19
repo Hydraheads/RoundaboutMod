@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
@@ -62,6 +63,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
+import static net.hydra.jojomod.event.index.PacketDataIndex.INT_UPDATE_MOVE;
 
 public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public PowersStarPlatinum(LivingEntity self) {
@@ -280,6 +282,32 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return super.inputSpeedModifiers(basis);
     }
 
+    @Override
+    public void updateIntMove(int in){
+        ticksForFinger = in;
+        stopSoundsIfNearby(STAR_FINGER, 100, false);
+        stopSoundsIfNearby(STAR_FINGER_2, 100, false);
+        stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
+        this.animateStand((byte)83);
+        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
+                0.5F, (float) (1.5 + (Math.random() * 0.04)));
+    }
+
+    public int ticksForFinger = 0;
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (this.getActivePower() != PowerIndex.POWER_1 || this.attackTimeDuring >= 26) {
+            super.buttonInputAttack(keyIsDown,options);
+        } else {
+            if (keyIsDown && ticksForFinger == 100) {
+                holdDownClick = true;
+                ticksForFinger = 101;
+                animateStand((byte) 83);
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(attackTimeDuring, PacketDataIndex.INT_UPDATE_MOVE);
+                this.attackTimeDuring = 26;
+            }
+        }
+    }
 
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (keyIsDown) {
@@ -335,6 +363,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                         if (!this.onCooldown(PowerIndex.SKILL_1)) {
                                             if (canExecuteMoveWithLevel(getFingerLevel())) {
                                                 if (this.activePower != PowerIndex.POWER_1) {
+                                                    ticksForFinger = 0;
                                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                                                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                                                 }
@@ -597,6 +626,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void fingerDamage(Entity entity){
         float pow = getFingerDamage(entity);
         float knockbackStrength = 0.3F;
+        if(ticksForFinger < 26){
+            pow*=(1 - ((float) (26-ticksForFinger) /26));
+        }
         if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
             this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             if (entity instanceof LivingEntity LE){
@@ -653,7 +685,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return (float) ((float) 1.5* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
         } else {
-            return (float) ((float) 6.5* (ClientNetworking.getAppropriateConfig().
+            return (float) ((float) 10* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.starPlatinumAttacksOnMobs*0.01));
         }
     }
@@ -712,9 +744,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (this.self instanceof Player){
                     if (isPacketPlayer()){
                         BlockHitResult dd = getAheadVec(distanceOut);
-                        double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
+                        double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf())),1);
+                        double maxDist2 = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
-                                maxDist, FLOAT_STAR_FINGER_SIZE);
+                                maxDist2, FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
                             int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
@@ -1188,7 +1221,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
-
+            ticksForFinger = 100;
             double rand = Math.random();
             if (this.getSelf() instanceof Player PE &&
                     ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){

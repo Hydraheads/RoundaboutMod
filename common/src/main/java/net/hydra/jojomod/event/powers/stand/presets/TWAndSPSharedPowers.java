@@ -394,6 +394,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
     public boolean holdDownClick = false;
+
+    @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
             if (holdDownClick) {

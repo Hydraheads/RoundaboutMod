@@ -1545,6 +1545,12 @@ public class StandPowers {
     }
     public float clashProgress = 0.0f;
     private float clashOpProgress = 0.0f;
+    public void updateMove(){
+    }
+    public void updateMove(float flot){
+    }
+    public void updateIntMove(int in){
+    }
 
     /**Clash Op is the opponent you are clashing with*/
     @Nullable

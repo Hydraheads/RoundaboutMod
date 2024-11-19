@@ -1030,6 +1030,10 @@ public class MainUtil {
                     SE.setYRot(player.getYHeadRot() % 360);
                 }
             }
+        } else if (context == PacketDataIndex.STAND_MOVE_UPDATE) {
+            if (player != null) {
+                ((StandUser) player).roundabout$getStandPowers().updateMove();
+            }
         }
     }
 
@@ -1061,6 +1065,8 @@ public class MainUtil {
         } else if (context == PacketDataIndex.FLOAT_ENEMY_OPACITY) {
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setEnemyOpacity(data);
+        } else if (context == PacketDataIndex.FLOAT_UPDATE_STAND_MOVE) {
+            ((StandUser)player).roundabout$getStandPowers().updateMove(data);
         }
     }
     public static void handleIntPacketC2S(Player player, int data, byte context){
@@ -1083,6 +1089,8 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_ANCHOR_PLACE){
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setAnchorPlace(data);
+        } else if (context == PacketDataIndex.INT_UPDATE_MOVE){
+            ((StandUser)player).roundabout$getStandPowers().updateIntMove(data);
         }
     }
 

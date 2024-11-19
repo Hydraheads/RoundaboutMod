@@ -13,6 +13,7 @@ public class PacketDataIndex {
     public static final byte FLOAT_IDLE_OPACITY = 4;
     public static final byte FLOAT_COMBAT_OPACITY = 5;
     public static final byte FLOAT_ENEMY_OPACITY = 6;
+    public static final byte FLOAT_UPDATE_STAND_MOVE = 7;
 
 
     public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
@@ -27,6 +28,7 @@ public class PacketDataIndex {
     public static final byte INT_STAND_ATTACK = 4;
     public static final byte INT_STAND_ATTACK_2 = 5;
     public static final byte INT_ANCHOR_PLACE = 6;
+    public static final byte INT_UPDATE_MOVE = 7;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
@@ -37,6 +39,7 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_FORWARD_BARRAGE = 6;
     public static final byte SINGLE_BYTE_SILENT_SUMMON = 7;
     public static final byte SINGLE_BYTE_OPEN_POWER_INVENTORY = 9;
+    public static final byte STAND_MOVE_UPDATE = 10;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
