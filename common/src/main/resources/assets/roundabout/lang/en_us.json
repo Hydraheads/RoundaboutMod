@@ -362,7 +362,7 @@
   "ability.roundabout.scope": "Scope / Guardian",
   "ability.roundabout.scope.desc": "Zooms in with Star Platinum's eyes up to 3 levels, with night vision. Useful for mining and seeing far away. Catches certain projectiles.",
   "ability.roundabout.star_finger": "Star Finger",
-  "ability.roundabout.star_finger.desc": "Stretch Star Platinum's finger to hit up to 8 blocks away! Pierces through mobs and shields, and can inflict bleed.",
+  "ability.roundabout.star_finger.desc": "Stretch Star Platinum's finger to hit up to 8 blocks away! Pierces through mobs and shields, and can inflict bleed. If you press attack, you can release a lesser version of it early.",
   "ability.roundabout.inhale": "Super Inhale",
   "ability.roundabout.inhale.desc": "Star Platinum sucks in air rapidly, pulling entities towards you. It is really good at picking items and experience off of the ground!",
   "ability.roundabout.final_punch": "Final Punch",
