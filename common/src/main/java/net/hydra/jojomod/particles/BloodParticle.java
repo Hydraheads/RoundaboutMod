@@ -2,6 +2,8 @@ package net.hydra.jojomod.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public class BloodParticle extends SimpleAnimatedParticle {
@@ -20,6 +22,12 @@ public class BloodParticle extends SimpleAnimatedParticle {
     public void move(double d, double e, double f) {
         this.setBoundingBox(this.getBoundingBox().move(d, e, f));
         this.setLocationFromBoundingbox();
+    }
+
+    @Override
+    public int getLightColor(float $$0) {
+        BlockPos $$1 = BlockPos.containing(this.x, this.y, this.z);
+        return this.level.hasChunkAt($$1) ? LevelRenderer.getLightColor(this.level, $$1) : 0;
     }
 
     public static class Provider
