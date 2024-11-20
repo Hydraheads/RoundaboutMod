@@ -447,7 +447,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
 
     @Unique
-    public Poses roundabout$standPos = Poses.NONE;
+    public Poses roundabout$standPos = null;
     @Unique
     public final AnimationState roundabout$WRYYY = new AnimationState();
     @Unique
