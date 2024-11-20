@@ -74,6 +74,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract float getHealth();
+
     @Shadow public abstract float getMaxHealth();
 
     @Shadow
@@ -285,6 +287,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             if (this.roundabout$getOnlyBleeding() != onlyBleeding) {
                 this.roundabout$setOnlyBleeding(onlyBleeding);
+            }
+        } else {
+            if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters &&
+                    (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)
+                    && this.getHealth() < this.getMaxHealth())){
+
+                this.level()
+                        .addParticle(
+                                ModParticles.FOG_CHAIN,
+                                this.getRandomX(0.5),
+                                this.getRandomY(),
+                                this.getRandomZ(0.5),
+                                0,
+                                0.2,
+                                0
+                        );
             }
         }
         if (this.roundabout$getBleedLevel() > -1) {

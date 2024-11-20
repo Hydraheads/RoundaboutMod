@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -11,10 +12,12 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -27,18 +30,26 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.debug.GameModeSwitcherScreen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PowersJustice extends DashPreset {
@@ -264,12 +275,107 @@ public class PowersJustice extends DashPreset {
         super.buttonInput1(keyIsDown, options);
     }
 
+    public BlockPos bpos;
+    public boolean hold2 = false;
+    @Override
+    public void buttonInput2(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide) {
+            if (!isHoldingSneak()) {
+                if (keyIsDown) {
+                    if (!hold2) {
+                        hold2 = true;
+                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                            Vec3 vec3d = this.self.getEyePosition(0);
+                            Vec3 vec3d2 = this.self.getViewVector(0);
+                            Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                            BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2,blockHit.getBlockPos());
+                        }
+                    }
+                } else {
+                    hold2 = false;
+                }
+            }
+        }
+    }
+
+
+    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+        this.bpos = blockPos;
+        return tryPower(move, forced);
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1) {
-            return this. castFog();
+            return this.castFog();
+        } else if (move == PowerIndex.POWER_2) {
+            return this.yankChain();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if ((slot == 2 || slot == 4) && !this.isHoldingSneak()){
+            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+            if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+                return true;
+            }
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    public boolean yankChain(){
+        if (!this.getSelf().level().isClientSide()) {
+            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+            if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+                List<Entity> entities = DamageHandler.genHitbox(this.self, this.self.getX(), this.self.getY(),
+                        this.self.getZ(), 50, 50, 50);
+                boolean success = false;
+                for (Entity value : entities) {
+                    if (!(!value.showVehicleHealth() || !value.isAttackable() || value.isInvulnerable() ||
+                            !value.isAlive())) {
+                        if (icast.roundabout$inPermaCastFogRange(value)) {
+                            if (bpos != null){
+                                if (value instanceof LivingEntity LE){
+                                    if (LE.hasEffect(ModEffects.BLEED)){
+                                        double random = (Math.random() * 1.2) - 0.6;
+                                        double random2 = (Math.random() * 1.2) - 0.6;
+                                        double random3 = (Math.random() * 1.2) - 0.6;
+                                        Vec3 vector = new Vec3((bpos.getX() - LE.getX()),
+                                                (bpos.getY()+2 - LE.getY()),
+                                                (bpos.getZ() - LE.getZ())).normalize().scale(1.5F);
+                                        ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.POOF, value.getX(),
+                                                value.getY() + value.getEyeHeight(), value.getZ(),
+                                                0,
+                                                vector.x+random,
+                                                vector.y+random2,
+                                                vector.z+random3,
+                                                0.15);
+
+                                        LE.setDeltaMovement(LE.getDeltaMovement().add(vector.x,vector.y*0.55+0.2F,vector.z
+                                        ));
+                                        success = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (success) {
+                    int cdr = 80;
+                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                            PowerIndex.SKILL_2, cdr);
+                    this.setCooldown(PowerIndex.SKILL_2, cdr);
+                    this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                            this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);
+                }
+            }
+        }
+        return true;
     }
 
     @Override
