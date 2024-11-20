@@ -2,10 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
@@ -291,6 +288,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.roundabout$getBleedLevel() > -1) {
+            if (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)){
+                this.level()
+                        .addParticle(
+                                ModParticles.FOG_CHAIN,
+                                this.getRandomX(0.5),
+                                this.getRandomY(),
+                                this.getRandomZ(0.5),
+                                0,
+                                0.2,
+                                0
+                        );
+            }
             int bleedlvl = this.roundabout$getBleedLevel();
             int bloodticks = 8;
             if (bleedlvl == 1) {

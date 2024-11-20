@@ -377,12 +377,12 @@
 
   "ability.roundabout.fog_sword": "Fog Enhancement",
   "ability.roundabout.fog_sword.desc": "Your weapon attacks charge up faster, and you mine at a faster speed while Justice is active.",
-
   "ability.roundabout.cast_fog": "Fog Field",
   "ability.roundabout.cast_fog.desc": "Casts fog over a large area, exposing illusionary blocks and animating corpses for you to control. Players without Justice see less.",
-
   "ability.roundabout.fog_morph": "Illusion Morph",
   "ability.roundabout.fog_morph.desc": "Appear to others as a mob. Villager and Disguise have decent trades at fixed rates, and are respected by golems. Zombie is ignored by other zombies, but feared by villages. Skeleton is ignored by other skeletons, but hated by wolves and dogs.",
+  "ability.roundabout.fog_chain": "Fog Chains",
+  "ability.roundabout.fog_chain.desc": "Pulls mobs that are bleeding in fog towards the block you are looking at. Many mobs can bleed if you attack them with scissors, charged glaives, knives, or barbed wires.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
