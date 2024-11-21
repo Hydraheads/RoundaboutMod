@@ -107,9 +107,12 @@
   "block.roundabout.barbed_wire_bundle": "Barbed Wire Bunch",
   "block.roundabout.goddess_statue": "Love Goddess Statue",
   "block.roundabout.stereo": "Stereo",
+  "block.roundabout.fog_block": "Foggy Block",
+  "block.roundabout.fog_block.title": "Foggy",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
+  "itemgroup.justice_fog_items": "Justice Illusion Blocks",
 
   "key.roundabout.summon.stand": "Summon Stand",
   "key.roundabout.ability.one": "Skill 1",

@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class Roundabout {
 
+    public static int worldInFog = 0;
     public static final String MOD_ID = "roundabout";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final Random RANDOM = new Random();

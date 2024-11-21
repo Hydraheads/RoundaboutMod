@@ -14,14 +14,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 
 public class FabricBlocks {
     public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
@@ -52,6 +46,10 @@ public class FabricBlocks {
     , 1);
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
 
+    public static final Block FOG_DIRT = registerBlockItemless("fog_dirt",ModBlocks.getFogBlock());
+    public static final Block FOG_SAND = registerBlockItemless("fog_sand",ModBlocks.getFogBlock());
+    public static final Block FOG_STONE = registerBlockItemless("fog_stone",ModBlocks.getFogBlock());
+
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
 
@@ -64,7 +62,6 @@ public class FabricBlocks {
     private static Block registerBlockItemless(String name, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
-
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
@@ -96,6 +93,9 @@ public class FabricBlocks {
         ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
         ModBlocks.STEREO = STEREO;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
+        ModBlocks.FOG_DIRT = FOG_DIRT;
+        ModBlocks.FOG_SAND = FOG_SAND;
+        ModBlocks.FOG_STONE = FOG_STONE;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
     }

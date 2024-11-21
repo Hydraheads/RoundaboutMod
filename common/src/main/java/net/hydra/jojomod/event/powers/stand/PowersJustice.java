@@ -340,7 +340,9 @@ public class PowersJustice extends DashPreset {
                         if (icast.roundabout$inPermaCastFogRange(value)) {
                             if (bpos != null){
                                 if (value instanceof LivingEntity LE){
-                                    if (LE.hasEffect(ModEffects.BLEED)){
+                                    if (LE.hasEffect(ModEffects.BLEED) ||
+                                            (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters
+                                            && LE.getHealth() < LE.getMaxHealth())){
                                         double random = (Math.random() * 1.2) - 0.6;
                                         double random2 = (Math.random() * 1.2) - 0.6;
                                         double random3 = (Math.random() * 1.2) - 0.6;

@@ -1,15 +1,7 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
@@ -23,6 +15,7 @@ public class ModBlocks {
     public static final IntegerProperty BLOOD_LEVEL = IntegerProperty.create("level", 0, 3);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static final BooleanProperty DECAY = BooleanProperty.create("decay");
+    public static final BooleanProperty IN_FOG = BooleanProperty.create("in_fog");
     public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
     public static Block LOCACACA_CACTUS;
@@ -40,6 +33,9 @@ public class ModBlocks {
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
     public static Block STEREO;
+    public static Block FOG_DIRT;
+    public static Block FOG_SAND;
+    public static Block FOG_STONE;
 
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new Block(
@@ -160,6 +156,18 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()
     );
+    public static FogBlock getFogBlock(){
+        return new FogBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.NONE)
+                        .noOcclusion()
+                        .pushReaction(PushReaction.DESTROY)
+                        .strength(0F, 0F)
+                        .sound(SoundType.EMPTY)
+                        .noCollission()
+                        .replaceable()
+        );
+    }
 
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).

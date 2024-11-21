@@ -22,6 +22,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
@@ -76,6 +77,9 @@ public class FabricItems {
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new VisageData(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
+    public static Item FOG_SAND = registerItem("fog_sand", (Item) new FogBlockItem(ModBlocks.FOG_SAND, new Item.Properties(), Blocks.SAND));
+    public static Item FOG_STONE = registerItem("fog_stone", (Item) new FogBlockItem(ModBlocks.FOG_STONE, new Item.Properties(), Blocks.STONE));
 
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
@@ -185,6 +189,17 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_THE_WORLD);
                         entries.accept(STAND_DISC_JUSTICE);
                         entries.accept(MAX_STAND_DISC_JUSTICE);
+
+                    }).build());
+    public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
+            new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
+            FabricItemGroup.builder().title(Component.translatable("itemgroup.justice_fog_items"))
+                    .icon(() -> new ItemStack(FOG_DIRT)).displayItems((displayContext, entries) -> {
+                        //Add all items from the Jojo mod tab here
+
+                        entries.accept(FOG_DIRT);
+                        entries.accept(FOG_SAND);
+                        entries.accept(FOG_STONE);
 
                     }).build());
 

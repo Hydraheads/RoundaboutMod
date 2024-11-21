@@ -5,13 +5,7 @@ import net.hydra.jojomod.block.*;
 import net.minecraft.Util;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -49,6 +43,12 @@ public class ForgeBlocks {
             () -> ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES);
     public static final RegistryObject<Block> GODDESS_STATUE_BLOCK = BLOCKS.register("goddess_statue",
             () -> ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> FOG_DIRT = BLOCKS.register("fog_dirt",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_SAND = BLOCKS.register("fog_sand",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_STONE = BLOCKS.register("fog_stone",
+            ModBlocks::getFogBlock);
     public static final RegistryObject<Block> STEREO = BLOCKS.register("stereo",
             () -> ModBlocks.STEREO_PROPERTIES);
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",

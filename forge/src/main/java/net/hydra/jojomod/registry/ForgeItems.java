@@ -1,9 +1,6 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
@@ -11,34 +8,17 @@ import net.hydra.jojomod.event.powers.visagedata.DIOVisage;
 import net.hydra.jojomod.event.powers.visagedata.JotaroVisage;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.Util;
-import net.minecraft.core.BlockSource;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
-import net.minecraft.core.Registry;
-import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.core.dispenser.DispenseItemBehavior;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
 
-import static net.hydra.jojomod.registry.ForgeCreativeTab.addToDiscTab;
-import static net.hydra.jojomod.registry.ForgeCreativeTab.addToTab;
+import static net.hydra.jojomod.registry.ForgeCreativeTab.*;
 
 public class ForgeItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Roundabout.MOD_ID);
@@ -97,6 +77,19 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.STEREO.get(),
                     new Item.Properties().stacksTo(64)
             )));
+
+    public static final RegistryObject<BlockItem> FOG_DIRT = addToFogTab(ITEMS.register("fog_dirt",
+            () -> new FogBlockItem(ForgeBlocks.FOG_DIRT.get(),
+                    new Item.Properties().stacksTo(64)
+            , Blocks.DIRT)));
+    public static final RegistryObject<BlockItem> FOG_SAND = addToFogTab(ITEMS.register("fog_sand_block",
+            () -> new FogBlockItem(ForgeBlocks.FOG_SAND.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.GRASS)));
+    public static final RegistryObject<BlockItem> FOG_STONE = addToFogTab(ITEMS.register("fog_stone",
+            () -> new FogBlockItem(ForgeBlocks.FOG_STONE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.STONE)));
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
             () -> new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties())
             ));

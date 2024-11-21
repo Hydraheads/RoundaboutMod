@@ -386,7 +386,15 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     @Inject(method = "tickEntities", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity3(CallbackInfo ci) {
 
+
         if (minecraft.player != null){
+            if (((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
+                Roundabout.worldInFog = 1;
+            } else {
+                Roundabout.worldInFog = 0;
+            }
+
+
             if (((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
                 if (roundabout$skyLerp < roundabout$maxSkyLerp){
                     roundabout$skyLerp++;
