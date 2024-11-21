@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class FogBlockItem extends BlockItem {
-    private final Block mimicking;
+    public final Block mimicking;
     public FogBlockItem(Block $$0, Properties $$1, Block mimicking) {
         super($$0, $$1);
         this.mimicking = mimicking;

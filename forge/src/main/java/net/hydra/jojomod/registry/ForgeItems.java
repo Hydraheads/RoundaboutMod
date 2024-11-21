@@ -85,9 +85,21 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> FOG_SAND = addToFogTab(ITEMS.register("fog_sand_block",
             () -> new FogBlockItem(ForgeBlocks.FOG_SAND.get(),
                     new Item.Properties().stacksTo(64)
-                    , Blocks.GRASS)));
+                    , Blocks.SAND)));
     public static final RegistryObject<BlockItem> FOG_STONE = addToFogTab(ITEMS.register("fog_stone",
             () -> new FogBlockItem(ForgeBlocks.FOG_STONE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.STONE)));
+    public static final RegistryObject<BlockItem> FOG_DIRT_COATING = addToFogTab(ITEMS.register("fog_dirt_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_DIRT_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.DIRT)));
+    public static final RegistryObject<BlockItem> FOG_SAND_COATING = addToFogTab(ITEMS.register("fog_sand_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_SAND_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.SAND)));
+    public static final RegistryObject<BlockItem> FOG_STONE_COATING = addToFogTab(ITEMS.register("fog_stone_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_STONE_COATING.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.STONE)));
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",

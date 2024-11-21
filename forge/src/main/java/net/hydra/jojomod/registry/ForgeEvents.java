@@ -78,8 +78,11 @@ public class ForgeEvents {
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
         ModBlocks.GODDESS_STATUE_BLOCK = ForgeBlocks.GODDESS_STATUE_BLOCK.get();
         ModBlocks.FOG_DIRT = ForgeBlocks.FOG_DIRT.get();
+        ModBlocks.FOG_DIRT_COATING = ForgeBlocks.FOG_DIRT_COATING.get();
         ModBlocks.FOG_SAND = ForgeBlocks.FOG_SAND.get();
+        ModBlocks.FOG_SAND_COATING = ForgeBlocks.FOG_SAND_COATING.get();
         ModBlocks.FOG_STONE = ForgeBlocks.FOG_STONE.get();
+        ModBlocks.FOG_STONE_COATING = ForgeBlocks.FOG_STONE_COATING.get();
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
 
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();

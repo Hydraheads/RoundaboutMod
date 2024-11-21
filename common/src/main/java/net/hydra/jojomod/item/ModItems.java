@@ -45,7 +45,6 @@ public class ModItems {
     public static Item GOLDEN_GLAIVE;
     public static Item DIAMOND_GLAIVE;
     public static Item NETHERITE_GLAIVE;
-
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item BLANK_MASK;

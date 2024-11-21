@@ -78,8 +78,11 @@ public class FabricItems {
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
+    public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_SAND = registerItem("fog_sand", (Item) new FogBlockItem(ModBlocks.FOG_SAND, new Item.Properties(), Blocks.SAND));
+    public static Item FOG_SAND_COATING = registerItem("fog_sand_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_SAND_COATING, new Item.Properties(), Blocks.SAND));
     public static Item FOG_STONE = registerItem("fog_stone", (Item) new FogBlockItem(ModBlocks.FOG_STONE, new Item.Properties(), Blocks.STONE));
+    public static Item FOG_STONE_COATING = registerItem("fog_stone_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_STONE_COATING, new Item.Properties(), Blocks.STONE));
 
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
@@ -200,6 +203,9 @@ public class FabricItems {
                         entries.accept(FOG_DIRT);
                         entries.accept(FOG_SAND);
                         entries.accept(FOG_STONE);
+                        entries.accept(FOG_DIRT_COATING);
+                        entries.accept(FOG_SAND_COATING);
+                        entries.accept(FOG_STONE_COATING);
 
                     }).build());
 
@@ -244,7 +250,7 @@ public class FabricItems {
         ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;
         ModItems.NEW_LOCACACA = NEW_LOCACACA;
         ModItems.BLANK_MASK = BLANK_MASK;
-        ModItems.JOTARO_MASK = BLANK_MASK;
+        ModItems.JOTARO_MASK = JOTARO_MASK;
         ModItems.DIO_MASK = DIO_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;

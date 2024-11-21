@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "roundabout:block/fog_coating_source",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "roundabout:block/fog_coating_source"
+    },
+    "facing=south": {
+      "model": "roundabout:block/fog_coating_source",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "roundabout:block/fog_coating_source",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "roundabout:block/fog_coating_source",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "roundabout:block/fog_coating_source",
+      "x": 90
+    }
+  }
+}

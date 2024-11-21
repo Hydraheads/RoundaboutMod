@@ -47,8 +47,11 @@ public class FabricBlocks {
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
 
     public static final Block FOG_DIRT = registerBlockItemless("fog_dirt",ModBlocks.getFogBlock());
+    public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating",ModBlocks.getFogCoatingBlock());
     public static final Block FOG_SAND = registerBlockItemless("fog_sand",ModBlocks.getFogBlock());
+    public static final Block FOG_SAND_COATING = registerBlockItemless("fog_sand_coating",ModBlocks.getFogCoatingBlock());
     public static final Block FOG_STONE = registerBlockItemless("fog_stone",ModBlocks.getFogBlock());
+    public static final Block FOG_STONE_COATING = registerBlockItemless("fog_stone_coating",ModBlocks.getFogCoatingBlock());
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
@@ -94,8 +97,11 @@ public class FabricBlocks {
         ModBlocks.STEREO = STEREO;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;
+        ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_SAND = FOG_SAND;
+        ModBlocks.FOG_SAND_COATING = FOG_SAND_COATING;
         ModBlocks.FOG_STONE = FOG_STONE;
+        ModBlocks.FOG_STONE_COATING = FOG_STONE_COATING;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
     }

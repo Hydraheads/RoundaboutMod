@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -24,8 +26,11 @@ public class FogBlock extends Block {
     public static final BooleanProperty IN_FOG = ModBlocks.IN_FOG;
     public FogBlock(Properties $$0) {
         super($$0);
-        this.registerDefaultState(this.stateDefinition.any().setValue(IN_FOG, Boolean.valueOf(true))
+        this.registerDefaultState(this.stateDefinition.any().setValue(IN_FOG, Boolean.valueOf(false))
         );
+    }
+    public FogBlock(Properties $$0,boolean untrue) {
+        super($$0);
     }
 
     @SuppressWarnings("deprecation")
@@ -45,25 +50,19 @@ public class FogBlock extends Block {
                 $$1.setBlockAndUpdate($$2, $$0);
             }
         } else {
-            if ($$0.getValue(IN_FOG)) {
-                $$0 = $$0.setValue(IN_FOG, false);
                 $$1.setBlockAndUpdate($$2, $$0);
-
-                ((ServerLevel) $$1).sendParticles(ModParticles.FOG_CHAIN,
-                        $$2.getX()+0.5,
-                        $$2.getY()+0.5,
-                        $$2.getZ()+0.5,
-                        0, 0, 0.2, 0, 0.25);
-            }
         }
             $$1.scheduleTick($$2, this, 1);
-        } else {
         }
     }
 
     @Override
+    public boolean isPathfindable(BlockState $$0, BlockGetter $$1, BlockPos $$2, PathComputationType $$3) {
+        return !($$0.getValue(IN_FOG));
+    }
+    @Override
     public void tick(BlockState $$0, ServerLevel $$1, BlockPos $$2, RandomSource $$3) {
-        $$1.scheduleTick($$2, this, 2);
+        $$1.scheduleTick($$2, this, 4);
         if (((IPermaCasting)$$1).roundabout$inPermaCastFogRange($$2)){
             if (!$$0.getValue(IN_FOG)) {
                 $$0 = $$0.setValue(IN_FOG, true);
@@ -98,5 +97,18 @@ public class FogBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
         $$0.add(IN_FOG);
+    }
+
+
+    @Override
+    protected void spawnDestroyParticles(Level $$0, Player $$1, BlockPos $$2, BlockState $$3) {
+        if ($$0 instanceof ServerLevel){
+
+            ((ServerLevel) $$0).sendParticles(ModParticles.FOG_CHAIN,
+                    $$2.getX()+0.5,
+                    $$2.getY()+0.5,
+                    $$2.getZ()+0.5,
+                    15, 0, 0, 0, 0.07);
+        }
     }
 }

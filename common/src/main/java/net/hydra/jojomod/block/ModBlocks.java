@@ -34,8 +34,11 @@ public class ModBlocks {
     public static Block GODDESS_STATUE_BLOCK;
     public static Block STEREO;
     public static Block FOG_DIRT;
+    public static Block FOG_DIRT_COATING;
     public static Block FOG_SAND;
+    public static Block FOG_SAND_COATING;
     public static Block FOG_STONE;
+    public static Block FOG_STONE_COATING;
 
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new Block(
@@ -158,6 +161,18 @@ public class ModBlocks {
     );
     public static FogBlock getFogBlock(){
         return new FogBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.NONE)
+                        .noOcclusion()
+                        .pushReaction(PushReaction.DESTROY)
+                        .strength(0F, 0F)
+                        .sound(SoundType.EMPTY)
+                        .noCollission()
+                        .replaceable()
+        );
+    }
+    public static FogBlock getFogCoatingBlock(){
+        return new FogCoatBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.NONE)
                         .noOcclusion()
