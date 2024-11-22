@@ -52,6 +52,8 @@ public class FabricBlocks {
     public static final Block FOG_SAND_COATING = registerBlockItemless("fog_sand_coating",ModBlocks.getFogCoatingBlock());
     public static final Block FOG_STONE = registerBlockItemless("fog_stone",ModBlocks.getFogBlock());
     public static final Block FOG_STONE_COATING = registerBlockItemless("fog_stone_coating",ModBlocks.getFogCoatingBlock());
+    public static final Block FOG_STONE_BRICKS = registerBlockItemless("fog_stone_bricks",ModBlocks.getFogBlock());
+    public static final Block FOG_STONE_BRICKS_COATING = registerBlockItemless("fog_stone_bricks_coating",ModBlocks.getFogCoatingBlock());
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
@@ -102,6 +104,8 @@ public class FabricBlocks {
         ModBlocks.FOG_SAND_COATING = FOG_SAND_COATING;
         ModBlocks.FOG_STONE = FOG_STONE;
         ModBlocks.FOG_STONE_COATING = FOG_STONE_COATING;
+        ModBlocks.FOG_STONE_BRICKS = FOG_STONE_BRICKS;
+        ModBlocks.FOG_STONE_BRICKS_COATING = FOG_STONE_BRICKS_COATING;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
     }

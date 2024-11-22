@@ -174,7 +174,7 @@ public class PowersJustice extends DashPreset {
         }
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2_SNEAK);
+            setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_BLOCKS, PowerIndex.SKILL_2_SNEAK);
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
 
@@ -198,7 +198,9 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.fog_chain",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_FOG_CHAIN,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fog_blocks",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         return $$1;
     }

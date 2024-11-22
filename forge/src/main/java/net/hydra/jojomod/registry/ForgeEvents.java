@@ -83,6 +83,8 @@ public class ForgeEvents {
         ModBlocks.FOG_SAND_COATING = ForgeBlocks.FOG_SAND_COATING.get();
         ModBlocks.FOG_STONE = ForgeBlocks.FOG_STONE.get();
         ModBlocks.FOG_STONE_COATING = ForgeBlocks.FOG_STONE_COATING.get();
+        ModBlocks.FOG_STONE_BRICKS = ForgeBlocks.FOG_STONE_BRICKS.get();
+        ModBlocks.FOG_STONE_BRICKS_COATING = ForgeBlocks.FOG_STONE_BRICKS_COATING.get();
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
 
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();

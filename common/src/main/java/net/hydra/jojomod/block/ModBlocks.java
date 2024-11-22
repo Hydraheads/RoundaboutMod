@@ -39,6 +39,8 @@ public class ModBlocks {
     public static Block FOG_SAND_COATING;
     public static Block FOG_STONE;
     public static Block FOG_STONE_COATING;
+    public static Block FOG_STONE_BRICKS;
+    public static Block FOG_STONE_BRICKS_COATING;
 
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new Block(

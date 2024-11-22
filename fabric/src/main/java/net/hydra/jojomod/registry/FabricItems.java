@@ -83,6 +83,8 @@ public class FabricItems {
     public static Item FOG_SAND_COATING = registerItem("fog_sand_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_SAND_COATING, new Item.Properties(), Blocks.SAND));
     public static Item FOG_STONE = registerItem("fog_stone", (Item) new FogBlockItem(ModBlocks.FOG_STONE, new Item.Properties(), Blocks.STONE));
     public static Item FOG_STONE_COATING = registerItem("fog_stone_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_STONE_COATING, new Item.Properties(), Blocks.STONE));
+    public static Item FOG_STONE_BRICKS = registerItem("fog_stone_bricks", (Item) new FogBlockItem(ModBlocks.FOG_STONE_BRICKS, new Item.Properties(), Blocks.STONE));
+    public static Item FOG_STONE_BRICKS_COATING = registerItem("fog_stone_bricks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_STONE_BRICKS_COATING, new Item.Properties(), Blocks.STONE));
 
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
@@ -203,9 +205,11 @@ public class FabricItems {
                         entries.accept(FOG_DIRT);
                         entries.accept(FOG_SAND);
                         entries.accept(FOG_STONE);
+                        entries.accept(FOG_STONE_BRICKS);
                         entries.accept(FOG_DIRT_COATING);
                         entries.accept(FOG_SAND_COATING);
                         entries.accept(FOG_STONE_COATING);
+                        entries.accept(FOG_STONE_BRICKS_COATING);
 
                     }).build());
 

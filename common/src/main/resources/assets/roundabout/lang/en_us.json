@@ -387,6 +387,8 @@
   "ability.roundabout.fog_morph.desc": "Appear to others as a mob. Villager and Disguise have decent trades at fixed rates, and are respected by golems. Zombie is ignored by other zombies, but feared by villages. Skeleton is ignored by other skeletons, but hated by wolves and dogs.",
   "ability.roundabout.fog_chain": "Fog Chains",
   "ability.roundabout.fog_chain.desc": "Pulls mobs that are bleeding in fog towards the block you are looking at. Many mobs can bleed if you attack them with scissors, charged glaives, knives, or barbed wires.",
+  "ability.roundabout.fog_blocks": "Illusion Blocks",
+  "ability.roundabout.fog_blocks.desc": "Create limitless fog blocks, on demand. When placed, they can only be seen while fog is cast, and can be walked through (as they are just illusions).",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",

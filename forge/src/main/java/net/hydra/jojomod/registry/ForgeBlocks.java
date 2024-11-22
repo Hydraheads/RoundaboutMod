@@ -55,6 +55,10 @@ public class ForgeBlocks {
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_STONE_COATING = BLOCKS.register("fog_stone_coating",
             ModBlocks::getFogCoatingBlock);
+    public static final RegistryObject<Block> FOG_STONE_BRICKS = BLOCKS.register("fog_stone_bricks",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_STONE_BRICKS_COATING = BLOCKS.register("fog_stone_bricks_coating",
+            ModBlocks::getFogCoatingBlock);
     public static final RegistryObject<Block> STEREO = BLOCKS.register("stereo",
             () -> ModBlocks.STEREO_PROPERTIES);
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",
