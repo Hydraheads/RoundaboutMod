@@ -298,6 +298,17 @@ public class PowersJustice extends DashPreset {
                 } else {
                     hold2 = false;
                 }
+            } else {
+                if (keyIsDown) {
+                    if (!hold1) {
+                        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
+                            hold1 = true;
+                            ClientUtil.setJusticeBlockScreen();
+                        }
+                    }
+                } else {
+                    hold1 = false;
+                }
             }
         }
     }

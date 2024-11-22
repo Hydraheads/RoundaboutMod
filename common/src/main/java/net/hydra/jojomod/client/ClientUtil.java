@@ -3,10 +3,7 @@ package net.hydra.jojomod.client;
 import com.google.common.collect.Maps;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.gui.JusticeMobSwitcherScreen;
-import net.hydra.jojomod.client.gui.PoseSwitcherScreen;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -14,24 +11,18 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.network.protocol.PacketUtils;
-import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Shadow;
 
-import java.util.Map;
 
 public class ClientUtil {
 
@@ -111,6 +102,13 @@ public class ClientUtil {
     public static void setJusticeScreen() {
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(new JusticeMobSwitcherScreen());
+    }
+    public static void setJusticeBlockScreen() {
+        Minecraft mc = Minecraft.getInstance();
+        mc.setScreen(
+                new FogInventoryScreen(
+                        mc.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()
+                ));
     }
     public static float getDelta() {
         Minecraft mc = Minecraft.getInstance();

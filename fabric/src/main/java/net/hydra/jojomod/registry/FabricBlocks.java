@@ -52,8 +52,13 @@ public class FabricBlocks {
     public static final Block FOG_SAND_COATING = registerBlockItemless("fog_sand_coating",ModBlocks.getFogCoatingBlock());
     public static final Block FOG_STONE = registerBlockItemless("fog_stone",ModBlocks.getFogBlock());
     public static final Block FOG_STONE_COATING = registerBlockItemless("fog_stone_coating",ModBlocks.getFogCoatingBlock());
+    public static final Block FOG_IRON_ORE = registerBlockItemless("fog_iron_ore",ModBlocks.getFogBlock());
+    public static final Block FOG_GOLD_ORE = registerBlockItemless("fog_gold_ore",ModBlocks.getFogBlock());
+    public static final Block FOG_DIAMOND_ORE = registerBlockItemless("fog_diamond_ore",ModBlocks.getFogBlock());
     public static final Block FOG_STONE_BRICKS = registerBlockItemless("fog_stone_bricks",ModBlocks.getFogBlock());
     public static final Block FOG_STONE_BRICKS_COATING = registerBlockItemless("fog_stone_bricks_coating",ModBlocks.getFogCoatingBlock());
+    public static final Block FOG_NETHER_BRICKS = registerBlockItemless("fog_nether_bricks",ModBlocks.getFogBlock());
+    public static final Block FOG_NETHER_BRICKS_COATING = registerBlockItemless("fog_nether_bricks_coating",ModBlocks.getFogCoatingBlock());
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
@@ -103,9 +108,14 @@ public class FabricBlocks {
         ModBlocks.FOG_SAND = FOG_SAND;
         ModBlocks.FOG_SAND_COATING = FOG_SAND_COATING;
         ModBlocks.FOG_STONE = FOG_STONE;
+        ModBlocks.FOG_IRON_ORE = FOG_IRON_ORE;
+        ModBlocks.FOG_GOLD_ORE = FOG_GOLD_ORE;
+        ModBlocks.FOG_DIAMOND_ORE = FOG_DIAMOND_ORE;
         ModBlocks.FOG_STONE_COATING = FOG_STONE_COATING;
         ModBlocks.FOG_STONE_BRICKS = FOG_STONE_BRICKS;
         ModBlocks.FOG_STONE_BRICKS_COATING = FOG_STONE_BRICKS_COATING;
+        ModBlocks.FOG_NETHER_BRICKS = FOG_NETHER_BRICKS;
+        ModBlocks.FOG_NETHER_BRICKS_COATING = FOG_NETHER_BRICKS_COATING;
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
     }

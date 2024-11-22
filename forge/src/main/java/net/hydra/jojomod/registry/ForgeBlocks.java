@@ -53,11 +53,21 @@ public class ForgeBlocks {
             ModBlocks::getFogCoatingBlock);
     public static final RegistryObject<Block> FOG_STONE = BLOCKS.register("fog_stone",
             ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_IRON_ORE = BLOCKS.register("fog_iron_ore",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_GOLD_ORE = BLOCKS.register("fog_gold_ore",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_DIAMOND_ORE = BLOCKS.register("fog_diamond_ore",
+            ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_STONE_COATING = BLOCKS.register("fog_stone_coating",
             ModBlocks::getFogCoatingBlock);
     public static final RegistryObject<Block> FOG_STONE_BRICKS = BLOCKS.register("fog_stone_bricks",
             ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_NETHER_BRICKS = BLOCKS.register("fog_nether_bricks",
+            ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_STONE_BRICKS_COATING = BLOCKS.register("fog_stone_bricks_coating",
+            ModBlocks::getFogCoatingBlock);
+    public static final RegistryObject<Block> FOG_NETHER_BRICKS_COATING = BLOCKS.register("fog_nether_bricks_coating",
             ModBlocks::getFogCoatingBlock);
     public static final RegistryObject<Block> STEREO = BLOCKS.register("stereo",
             () -> ModBlocks.STEREO_PROPERTIES);
