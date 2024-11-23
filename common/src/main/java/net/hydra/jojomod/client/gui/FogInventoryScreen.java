@@ -6,8 +6,15 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.ChatFormatting;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.client.HotbarManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,6 +32,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -138,12 +146,16 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             if (!this.menu.getCarried().isEmpty() && this.hasClickedOutside) {
                 if ($$2 == 0) {
                     this.minecraft.player.drop(this.menu.getCarried(), true);
+                    ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                            this.menu.getCarried(),PacketDataIndex.ADD_FOG_ITEM);
                     this.menu.setCarried(ItemStack.EMPTY);
                 }
 
                 if ($$2 == 1) {
                     ItemStack $$18 = this.menu.getCarried().split(1);
                     this.minecraft.player.drop($$18, true);
+                    ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                            $$18,PacketDataIndex.ADD_FOG_ITEM);
                 }
             }
         } else {
@@ -158,9 +170,13 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                     ItemStack $$6 = $$0.remove($$2 == 0 ? 1 : $$0.getItem().getMaxStackSize());
                     ItemStack $$7 = $$0.getItem();
                     this.minecraft.player.drop($$6, true);
+                    ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                            $$6,PacketDataIndex.ADD_FOG_ITEM);
                     //this.minecraft.gameMode.handleCreativeModeItemAdd($$7, ((CreativeModeInventoryScreen.SlotWrapper)$$0).target.index);
                 } else if ($$3 == ClickType.THROW && !this.menu.getCarried().isEmpty()) {
                     this.minecraft.player.drop(this.menu.getCarried(), true);
+                    ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                            this.menu.getCarried(),PacketDataIndex.ADD_FOG_ITEM);
                     this.menu.setCarried(ItemStack.EMPTY);
                 } else {
                     this.minecraft
@@ -184,7 +200,12 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                 if ($$3 == ClickType.CLONE) {
                     if (this.menu.getCarried().isEmpty() && $$0.hasItem()) {
                         ItemStack $$10 = $$0.getItem();
-                        this.menu.setCarried($$10.copyWithCount($$10.getMaxStackSize()));
+                        if ($$10.getItem() instanceof BlockItem BI && BI.getBlock() instanceof FogBlock) {
+                            this.menu.setCarried($$10.copyWithCount($$10.getMaxStackSize()));
+                            if (this.minecraft.player != null) {
+                                this.minecraft.player.inventoryMenu.broadcastChanges();
+                            }
+                        }
                     }
 
                     return;
@@ -194,7 +215,8 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                     if (!$$9.isEmpty()) {
                         ItemStack $$11 = $$9.copyWithCount($$2 == 0 ? 1 : $$9.getMaxStackSize());
                         this.minecraft.player.drop($$11, true);
-                        this.minecraft.gameMode.handleCreativeModeItemDrop($$11);
+                        ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                                $$11,PacketDataIndex.ADD_FOG_ITEM);
                     }
 
                     return;
@@ -214,11 +236,13 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                     int $$12 = $$4 ? $$9.getMaxStackSize() : $$9.getCount();
                     this.menu.setCarried($$9.copyWithCount($$12));
                 } else if ($$2 == 0) {
-                    ItemStack $$11 = $$8.copyWithCount($$2 == 0 ? 1 : $$9.getMaxStackSize());
-                    this.minecraft.player.drop($$11, true);
-                    this.minecraft.gameMode.handleCreativeModeItemDrop($$11);
+                    this.minecraft.player.drop($$8, true);
+                    ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                            $$8,PacketDataIndex.ADD_FOG_ITEM);
                     this.menu.setCarried(ItemStack.EMPTY);
                 } else if (!this.menu.getCarried().isEmpty()) {
+                    ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                            this.menu.getCarried().copyWithCount(1),PacketDataIndex.ADD_FOG_ITEM);
                     this.menu.getCarried().shrink(1);
                 }
             } else if (this.menu != null) {
@@ -226,18 +250,23 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                 this.menu.clicked($$0 == null ? $$1 : $$0.index, $$2, $$3, this.minecraft.player);
                 if (AbstractContainerMenu.getQuickcraftHeader($$2) == 2) {
                     for (int $$14 = 0; $$14 < 9; $$14++) {
-                        this.minecraft.gameMode.handleCreativeModeItemAdd(this.menu.getSlot(45 + $$14).getItem(), 36 + $$14);
+                        ModPacketHandler.PACKET_ACCESS.inventoryToServer(36 + $$14,
+                                this.menu.getSlot(45 + $$14).getItem(),PacketDataIndex.ADD_FOG_ITEM);
                     }
                 } else if ($$0 != null) {
                     ItemStack $$15 = this.menu.getSlot($$0.index).getItem();
-                    this.minecraft.gameMode.handleCreativeModeItemAdd($$15, $$0.index - this.menu.slots.size() + 9 + 36);
+
+                    ModPacketHandler.PACKET_ACCESS.inventoryToServer($$0.index - this.menu.slots.size() + 9 + 36,
+                            $$15,PacketDataIndex.ADD_FOG_ITEM);
                     int $$16 = 45 + $$2;
                     if ($$3 == ClickType.SWAP) {
-                        this.minecraft.gameMode.handleCreativeModeItemAdd($$13, $$16 - this.menu.slots.size() + 9 + 36);
+                        ModPacketHandler.PACKET_ACCESS.inventoryToServer($$16 - this.menu.slots.size() + 9 + 36,
+                                $$13,PacketDataIndex.ADD_FOG_ITEM);
                     } else if ($$3 == ClickType.THROW && !$$13.isEmpty()) {
                         ItemStack $$17 = $$13.copyWithCount($$2 == 0 ? 1 : $$13.getMaxStackSize());
                         this.minecraft.player.drop($$17, true);
-                        this.minecraft.gameMode.handleCreativeModeItemDrop($$17);
+                        ModPacketHandler.PACKET_ACCESS.inventoryToServer(-1,
+                               $$17,PacketDataIndex.ADD_FOG_ITEM);
                     }
 
                     this.minecraft.player.inventoryMenu.broadcastChanges();
@@ -245,6 +274,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             }
         }
     }
+
 
     private boolean isCreativeSlot(@Nullable Slot $$0) {
         return $$0 != null && $$0.container == CONTAINER;
@@ -391,6 +421,22 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         }
     }
 
+
+    private boolean isHovering2(Slot $$0, double $$1, double $$2) {
+        return this.isHovering($$0.x, $$0.y, 16, 16, $$1, $$2);
+    }
+    @Nullable
+    private Slot findSlot2(double $$0, double $$1) {
+        for (int $$2 = 0; $$2 < this.menu.slots.size(); $$2++) {
+            Slot $$3 = this.menu.slots.get($$2);
+            if (this.isHovering2($$3, $$0, $$1) && $$3.isActive()) {
+                return $$3;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public boolean mouseClicked(double $$0, double $$1, int $$2) {
         if ($$2 == 0) {
@@ -402,6 +448,22 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                 this.scrolling = this.canScroll();
                 return true;
             }
+        }
+        boolean $$3 = this.minecraft.options.keyPickItem.matchesMouse($$2) && !this.minecraft.gameMode.hasInfiniteItems();
+        if ($$3) {
+            Slot $$4 = this.findSlot2($$0, $$1);
+            int $$6 = this.leftPos;
+            int $$7 = this.topPos;
+            boolean $$8 = this.hasClickedOutside($$0, $$1, $$6, $$7, $$2);
+            int $$9 = -1;
+            if ($$4 != null) {
+                $$9 = $$4.index;
+            }
+
+            if ($$8) {
+                $$9 = -999;
+            }
+            this.slotClicked($$4, $$9, $$2, ClickType.CLONE);
         }
 
         return super.mouseClicked($$0, $$1, $$2);
@@ -772,6 +834,25 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         }
 
         @Override
+        public void clicked(int $$0, int $$1, ClickType $$2, Player $$3) {
+            if ($$2 == ClickType.CLONE && !$$3.getAbilities().instabuild && this.getCarried().isEmpty() && $$0 >= 0) {
+                Roundabout.LOGGER.info("Sanity");
+                Slot $$32 = this.slots.get($$0);
+                if ($$32.hasItem()) {
+                    ItemStack $$33 = $$32.getItem();
+                    if ($$33.getItem() instanceof BlockItem BI && BI.getBlock() instanceof FogBlock) {
+                        this.setCarried($$33.copyWithCount($$33.getMaxStackSize()));
+                    }
+                }
+                this.inventoryMenu.broadcastChanges();
+            } else {
+
+                super.clicked($$0,$$1,$$2,$$3);
+            }
+        }
+
+
+        @Override
         public boolean stillValid(Player $$0) {
             return true;
         }
@@ -842,6 +923,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         public void setCarried(ItemStack $$0) {
             this.inventoryMenu.setCarried($$0);
         }
+
     }
 
     static class SlotWrapper extends Slot {

@@ -16,6 +16,10 @@ public class PacketDataIndex {
     public static final byte FLOAT_UPDATE_STAND_MOVE = 7;
 
 
+    /**C2S Inventory*/
+    public static final byte ADD_FOG_ITEM = 1;
+    public static final byte DROP_FOG_ITEM = 2;
+
     public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
     public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;
     public static final byte SINGLE_BYTE_IDLE_LEFT = 12;

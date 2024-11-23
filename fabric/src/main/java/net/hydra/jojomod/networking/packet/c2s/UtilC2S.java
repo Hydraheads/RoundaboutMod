@@ -89,4 +89,18 @@ public class UtilC2S {
 
 
     }
+    public static void inventoryChange(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                    FriendlyByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        ServerLevel world = (ServerLevel) player.level();
+        int slot = buf.readInt();
+        ItemStack context = buf.readItem();
+        byte bt = buf.readByte();
+
+        server.execute(() -> {
+            MainUtil.handleSetCreativeModeSlot(player,slot,context,bt);
+        });
+
+
+    }
 }

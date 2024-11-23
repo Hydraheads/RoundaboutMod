@@ -203,7 +203,7 @@ public class FabricItems {
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
-            FabricItemGroup.builder().title(Component.translatable("itemgroup.justice_fog_items"))
+            FabricItemGroup.builder().title(Component.translatable("itemgroup.justice_fog_items")).hideTitle()
                     .icon(() -> new ItemStack(FOG_DIRT)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
 

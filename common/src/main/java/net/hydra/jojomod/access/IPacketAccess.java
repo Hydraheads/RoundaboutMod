@@ -56,5 +56,6 @@ public interface IPacketAccess {
     void floatToServerPacket(float value, byte context);
     void intToServerPacket(int target, byte context);
     void singleByteToServerPacket(byte context);
+    void inventoryToServer(int slotNum, ItemStack stack, byte context);
     void handshake();
 }

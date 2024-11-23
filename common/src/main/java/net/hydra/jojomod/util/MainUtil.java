@@ -24,6 +24,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.PacketUtils;
+import net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -57,6 +59,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
@@ -144,6 +147,40 @@ public class MainUtil {
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
         stack.getOrCreateTagElement("Memory").putByte("Pose",((StandUser)ent).roundabout$getIdlePos());
         return stack;
+    }
+
+
+    public static void handleSetCreativeModeSlot(Player player, int integer, ItemStack stack, byte context) {
+        if (context == PacketDataIndex.ADD_FOG_ITEM) {
+            boolean flag = integer < 0;
+            ItemStack itemstack = stack;
+            if (!itemstack.isItemEnabled(player.level().enabledFeatures())) {
+                return;
+            }
+
+            CompoundTag compoundtag = BlockItem.getBlockEntityData(itemstack);
+            if (!itemstack.isEmpty() && compoundtag != null && compoundtag.contains("x") && compoundtag.contains("y") && compoundtag.contains("z")) {
+                BlockPos blockpos = BlockEntity.getPosFromTag(compoundtag);
+                if (player.level().isLoaded(blockpos)) {
+                    BlockEntity blockentity = player.level().getBlockEntity(blockpos);
+                    if (blockentity != null) {
+                        blockentity.saveToItem(itemstack);
+                    }
+                }
+            }
+
+            boolean flag1 = integer >= 1 && integer <= 45;
+            boolean flag2 = itemstack.isEmpty() || itemstack.getDamageValue() >= 0 && itemstack.getCount() <= 64 && !itemstack.isEmpty();
+            if (flag1 && flag2) {
+                player.inventoryMenu.getSlot(integer).setByPlayer(itemstack);
+                player.inventoryMenu.broadcastChanges();
+            } else if (flag && flag2) {
+                player.drop(itemstack, true);
+            }
+
+        } else if (context == PacketDataIndex.DROP_FOG_ITEM) {
+
+        }
     }
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){
         StandUser user = ((StandUser)ent);

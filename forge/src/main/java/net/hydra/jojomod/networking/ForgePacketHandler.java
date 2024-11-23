@@ -102,6 +102,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeSingleByteC2SPacket::toBytes)
                 .consumerMainThread(ForgeSingleByteC2SPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeCreativeModeSlotPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ForgeCreativeModeSlotPacket::new)
+                .encoder(ForgeCreativeModeSlotPacket::toBytes)
+                .consumerMainThread(ForgeCreativeModeSlotPacket::handle)
+                .add();
         INSTANCE.messageBuilder(ForgeHandshakePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeHandshakePacket::new)
                 .encoder(ForgeHandshakePacket::toBytes)

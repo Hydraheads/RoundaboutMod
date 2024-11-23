@@ -47,7 +47,7 @@ public class ForgeCreativeTab {
     );
     public static final RegistryObject<CreativeModeTab> FOG_GROUP = TABS.register("justice_fog_items",
             () -> CreativeModeTab.builder()
-                    .title(Component.translatable("itemgroup.justice_fog_items"))
+                    .title(Component.translatable("itemgroup.justice_fog_items")).hideTitle()
                     .icon(ForgeItems.FOG_DIRT.get()::getDefaultInstance)
                     .displayItems((displayParams, output) ->
                             FOG_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
