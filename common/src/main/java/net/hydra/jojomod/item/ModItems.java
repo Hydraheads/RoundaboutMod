@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class ModItems {
     public static Item JOTARO_MASK;
     public static Item DIO_MASK;
 
+    public static CreativeModeTab FOG_BLOCK_ITEMS;
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();
 

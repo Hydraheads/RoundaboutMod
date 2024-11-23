@@ -82,7 +82,7 @@ public class ForgeItems {
             () -> new FogBlockItem(ForgeBlocks.FOG_DIRT.get(),
                     new Item.Properties().stacksTo(64)
             , Blocks.DIRT)));
-    public static final RegistryObject<BlockItem> FOG_SAND = addToFogTab(ITEMS.register("fog_sand_block",
+    public static final RegistryObject<BlockItem> FOG_SAND = addToFogTab(ITEMS.register("fog_sand",
             () -> new FogBlockItem(ForgeBlocks.FOG_SAND.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.SAND)));

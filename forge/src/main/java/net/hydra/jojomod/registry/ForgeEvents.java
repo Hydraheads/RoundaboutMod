@@ -138,6 +138,7 @@ public class ForgeEvents {
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
+        ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());

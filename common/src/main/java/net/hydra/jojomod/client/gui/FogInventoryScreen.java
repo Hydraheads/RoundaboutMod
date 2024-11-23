@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.HotbarManager;
 import net.minecraft.client.Minecraft;
@@ -53,7 +54,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     static final SimpleContainer CONTAINER = new SimpleContainer(45);
     private static final Component TRASH_SLOT_TOOLTIP = Component.translatable("inventory.binSlot");
     private static final int TEXT_COLOR = 16777215;
-    private static CreativeModeTab selectedTab = CreativeModeTabs.getDefaultTab();
+    private static CreativeModeTab selectedTab = ModItems.FOG_BLOCK_ITEMS;
     private float scrollOffs;
     private boolean scrolling;
     private EditBox searchBox;
@@ -259,14 +260,11 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             this.searchBox.setTextColor(16777215);
             this.addWidget(this.searchBox);
             CreativeModeTab $$0 = selectedTab;
-            selectedTab = CreativeModeTabs.getDefaultTab();
+            selectedTab = ModItems.FOG_BLOCK_ITEMS;
             this.selectTab($$0);
             this.minecraft.player.inventoryMenu.removeSlotListener(this.listener);
             this.listener = new CreativeInventoryListener(this.minecraft);
             this.minecraft.player.inventoryMenu.addSlotListener(this.listener);
-            if (!selectedTab.shouldDisplay()) {
-                this.selectTab(CreativeModeTabs.getDefaultTab());
-            }
     }
 
     @Override
@@ -399,11 +397,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             double $$3 = $$0 - (double)this.leftPos;
             double $$4 = $$1 - (double)this.topPos;
 
-            for (CreativeModeTab $$5 : CreativeModeTabs.tabs()) {
-                if (this.checkTabClicked($$5, $$3, $$4)) {
-                    return true;
-                }
-            }
 
             if (selectedTab.getType() != CreativeModeTab.Type.INVENTORY && this.insideScrollbar($$0, $$1)) {
                 this.scrolling = this.canScroll();
@@ -421,12 +414,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             double $$4 = $$1 - (double)this.topPos;
             this.scrolling = false;
 
-            for (CreativeModeTab $$5 : CreativeModeTabs.tabs()) {
-                if (this.checkTabClicked($$5, $$3, $$4)) {
-                    this.selectTab($$5);
-                    return true;
-                }
-            }
         }
 
         return super.mouseReleased($$0, $$1, $$2);
@@ -582,11 +569,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         this.renderBackground($$0);
         super.render($$0, $$1, $$2, $$3);
 
-        for (CreativeModeTab $$4 : CreativeModeTabs.tabs()) {
-            if (this.checkTabHovering($$0, $$4, $$1, $$2)) {
-                break;
-            }
-        }
 
         if (this.destroyItemSlot != null
                 && selectedTab.getType() == CreativeModeTab.Type.INVENTORY
@@ -631,11 +613,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
     @Override
     protected void renderBg(GuiGraphics $$0, float $$1, int $$2, int $$3) {
-        for (CreativeModeTab $$4 : CreativeModeTabs.tabs()) {
-            if ($$4 != selectedTab) {
-                this.renderTabButton($$0, $$4);
-            }
-        }
 
         $$0.blit(
                 new ResourceLocation("textures/gui/container/creative_inventory/tab_" + selectedTab.getBackgroundSuffix()),
@@ -654,12 +631,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             $$0.blit(CREATIVE_TABS_LOCATION, $$5, $$6 + (int)((float)($$7 - $$6 - 17) * this.scrollOffs), 232 + (this.canScroll() ? 0 : 12), 0, 12, 15);
         }
 
-        this.renderTabButton($$0, selectedTab);
-        if (selectedTab.getType() == CreativeModeTab.Type.INVENTORY) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(
-                    $$0, this.leftPos + 88, this.topPos + 45, 20, (float)(this.leftPos + 88 - $$2), (float)(this.topPos + 45 - 30 - $$3), this.minecraft.player
-            );
-        }
     }
 
     private int getTabX(CreativeModeTab $$0) {
