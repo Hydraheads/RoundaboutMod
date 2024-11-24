@@ -1093,15 +1093,15 @@ public class MainUtil {
         } else if (context == PacketDataIndex.FLOAT_DISTANCE_OUT) {
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setDistanceOut(data);
-        } else if (context == PacketDataIndex.FLOAT_IDLE_OPACITY) {
+        } else if (context == PacketDataIndex.FLOAT_SIZE_PERCENT) {
             IPlayerEntity ple = (IPlayerEntity) player;
-            ple.roundabout$setIdleOpacity(data);
-        } else if (context == PacketDataIndex.FLOAT_COMBAT_OPACITY) {
+            ple.roundabout$setSizePercent(data);
+        } else if (context == PacketDataIndex.FLOAT_IDLE_ROTATION) {
             IPlayerEntity ple = (IPlayerEntity) player;
-            ple.roundabout$setCombatOpacity(data);
-        } else if (context == PacketDataIndex.FLOAT_ENEMY_OPACITY) {
+            ple.roundabout$setIdleRotation(data);
+        } else if (context == PacketDataIndex.FLOAT_IDLE_Y_OFFSET) {
             IPlayerEntity ple = (IPlayerEntity) player;
-            ple.roundabout$setEnemyOpacity(data);
+            ple.roundabout$setIdleYOffset(data);
         } else if (context == PacketDataIndex.FLOAT_UPDATE_STAND_MOVE) {
             ((StandUser)player).roundabout$getStandPowers().updateMove(data);
         }

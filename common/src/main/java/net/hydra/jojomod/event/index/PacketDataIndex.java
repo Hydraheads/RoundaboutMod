@@ -10,9 +10,9 @@ public class PacketDataIndex {
     public static final byte FLOAT_VELOCITY_BARBED_WIRE = 1;
     public static final byte FLOAT_STAR_FINGER_SIZE = 2;
     public static final byte FLOAT_DISTANCE_OUT = 3;
-    public static final byte FLOAT_IDLE_OPACITY = 4;
-    public static final byte FLOAT_COMBAT_OPACITY = 5;
-    public static final byte FLOAT_ENEMY_OPACITY = 6;
+    public static final byte FLOAT_SIZE_PERCENT = 4;
+    public static final byte FLOAT_IDLE_ROTATION = 5;
+    public static final byte FLOAT_IDLE_Y_OFFSET = 6;
     public static final byte FLOAT_UPDATE_STAND_MOVE = 7;
 
 

@@ -58,10 +58,11 @@ public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
 
     @Override
     public void render(TheWorldEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        if (mobEntity.isBaby()){
-            matrixStack.scale(0.5f,0.5f,0.5f);
+        float factor = 0.5F + (mobEntity.getSizePercent()/2);
+        if (mobEntity.isBaby()) {
+            matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
         } else {
-            matrixStack.scale(0.87f,0.87f,0.87f);
+            matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }

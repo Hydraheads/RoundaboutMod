@@ -118,11 +118,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private float roundabout$distanceOut = 1.07F;
     @Unique
-    private float roundabout$idleOpacity = 100;
+    private float roundabout$sizePercent = 1F;
     @Unique
-    private float roundabout$combatOpacity = 100;
+    private float roundabout$idleRotation = 0;
     @Unique
-    private float roundabout$enemyOpacity = 100;
+    private float roundabout$idleYOffset = 0.1F;
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
 
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
@@ -147,6 +147,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public byte roundabout$GetPoseEmote(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);
     }
+    public float roundabout$getSizePercent(){
+        return roundabout$sizePercent;
+    }
+    public float roundabout$getIdleRotation(){
+        return roundabout$idleRotation;
+    }
+    public float roundabout$getIdleYOffset(){
+        return roundabout$idleYOffset;
+    }
     @Unique
     @Override
     public void roundabout$setAnchorPlace(int anchorPlace){
@@ -155,6 +164,36 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         StandEntity ent = ((StandUser)this).roundabout$getStand();
         if (ent != null){
             ent.setAnchorPlace(anchorPlace);
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setSizePercent(float anchorPlace){
+        anchorPlace = Mth.clamp(anchorPlace,0,3);
+        this.roundabout$sizePercent = anchorPlace;
+        StandEntity ent = ((StandUser)this).roundabout$getStand();
+        if (ent != null){
+            ent.setSizePercent(anchorPlace);
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setIdleRotation(float anchorPlace){
+        anchorPlace = Mth.clamp(anchorPlace,0,360);
+        this.roundabout$idleRotation = anchorPlace;
+        StandEntity ent = ((StandUser)this).roundabout$getStand();
+        if (ent != null){
+            ent.setIdleRotation(anchorPlace);
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setIdleYOffset(float anchorPlace){
+        anchorPlace = Mth.clamp(anchorPlace,0,2);
+        this.roundabout$idleYOffset = anchorPlace;
+        StandEntity ent = ((StandUser)this).roundabout$getStand();
+        if (ent != null){
+            ent.setIdleYOffset(anchorPlace);
         }
     }
     @Unique
@@ -176,36 +215,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public float roundabout$getDistanceOut(){
         return this.roundabout$distanceOut;
-    }
-    @Unique
-    @Override
-    public void roundabout$setIdleOpacity(float idleOpacity){
-        this.roundabout$idleOpacity = Mth.clamp(idleOpacity,0,100);
-    }
-    @Unique
-    @Override
-    public float roundabout$getIdleOpacity(){
-        return this.roundabout$idleOpacity;
-    }
-    @Unique
-    @Override
-    public void roundabout$setCombatOpacity(float combatOpacity){
-        this.roundabout$combatOpacity = Mth.clamp(combatOpacity,0,100);
-    }
-    @Unique
-    @Override
-    public float roundabout$getCombatOpacity(){
-        return this.roundabout$combatOpacity;
-    }
-    @Unique
-    @Override
-    public void roundabout$setEnemyOpacity(float enemyOpacity){
-        this.roundabout$enemyOpacity = Mth.clamp(enemyOpacity,0,100);
-    }
-    @Unique
-    @Override
-    public float roundabout$getEnemyOpacity(){
-        return this.roundabout$enemyOpacity;
     }
     @Unique
     @Override
@@ -675,6 +684,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         CompoundTag compoundtag = new CompoundTag();
         compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
         compoundtag.putFloat("distanceOut",roundabout$distanceOut);
+        compoundtag.putFloat("idleRotation",roundabout$idleRotation);
+        compoundtag.putFloat("idleYOffset",roundabout$idleYOffset);
+        compoundtag.putFloat("sizePercent",roundabout$sizePercent);
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -703,6 +715,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("distanceOut")) {
             roundabout$distanceOut = compoundtag2.getFloat("distanceOut");
+        }
+        if (compoundtag2.contains("idleRotation")) {
+            roundabout$idleRotation = compoundtag2.getFloat("idleRotation");
+        }
+        if (compoundtag2.contains("idleYOffset")) {
+            roundabout$idleYOffset = compoundtag2.getFloat("idleYOffset");
+        }
+        if (compoundtag2.contains("sizePercent")) {
+            roundabout$sizePercent = compoundtag2.getFloat("sizePercent");
         }
 
         //roundabout$maskInventory.addItem()

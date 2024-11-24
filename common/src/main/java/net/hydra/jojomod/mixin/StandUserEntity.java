@@ -1246,14 +1246,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (((LivingEntity)(Object)this) instanceof Player PE){
                         stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
                         stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                        stand.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
+                        stand.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
+                        stand.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
                         if (!this.level().isClientSide()) {
                             IPlayerEntity ipe = ((IPlayerEntity) this);
                             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                                     ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
                                     ipe.roundabout$getDistanceOut(),
-                                    0,
-                                    0,
-                                    0);
+                                    ipe.roundabout$getSizePercent(),
+                                    ipe.roundabout$getIdleRotation(),
+                                    ipe.roundabout$getIdleYOffset());
                         }
                     }
 

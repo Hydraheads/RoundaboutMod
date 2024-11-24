@@ -55,9 +55,9 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                     ((ServerPlayer)((Player)(Object)this)), ipe.roundabout$getAnchorPlace(),
                     ipe.roundabout$getDistanceOut(),
-                    0,
-                    0,
-                    0);
+                    ipe.roundabout$getSizePercent(),
+                    ipe.roundabout$getIdleRotation(),
+                    ipe.roundabout$getIdleYOffset());
             roundabout$initializeDataOnClient = true;
         }
         if (!this.level().isClientSide) {
@@ -87,18 +87,27 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Inject(method = "restoreFrom(Lnet/minecraft/server/level/ServerPlayer;Z)V", at = @At(value = "TAIL"))
     public void roundabout$respawn(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
         ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
-        ((IPlayerEntity)this).roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
+        IPlayerEntity ipe = ((IPlayerEntity)this);
+        ipe.roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
         if (!this.level().isClientSide) {
             ((IPlayerEntity) this).roundabout$setMaskSlot(((IPlayerEntity) $$0).roundabout$getMaskSlot());
             ((IPlayerEntity) this).roundabout$setMaskVoiceSlot(((IPlayerEntity) $$0).roundabout$getMaskVoiceSlot());
 
             int anchorPlace = ((IPlayerEntity) $$0).roundabout$getAnchorPlace();
             float distanceOut = ((IPlayerEntity) $$0).roundabout$getDistanceOut();
-            ((IPlayerEntity) this).roundabout$setAnchorPlace(anchorPlace);
-            ((IPlayerEntity) this).roundabout$setDistanceOut(distanceOut);
+            float size = ((IPlayerEntity) $$0).roundabout$getSizePercent();
+            float rotat = ((IPlayerEntity) $$0).roundabout$getIdleRotation();
+            float yOffset = ((IPlayerEntity) $$0).roundabout$getIdleYOffset();
+            ipe.roundabout$setAnchorPlace(anchorPlace);
+            ipe.roundabout$setDistanceOut(distanceOut);
+            ipe.roundabout$setSizePercent(size);
+            ipe.roundabout$setIdleRotation(rotat);
+            ipe.roundabout$setIdleYOffset(yOffset);
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
-                    0,0,0);
+                    ipe.roundabout$getSizePercent(),
+                    ipe.roundabout$getIdleRotation(),
+                    ipe.roundabout$getIdleYOffset());
         }
     }
 

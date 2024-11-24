@@ -253,9 +253,9 @@ public class ClientUtil {
             IPlayerEntity ple = ((IPlayerEntity) player);
             ple.roundabout$setAnchorPlace(anchorPlace);
             ple.roundabout$setDistanceOut(distanceOut);
-            ple.roundabout$setIdleOpacity(idleOpacity);
-            ple.roundabout$setCombatOpacity(combatOpacity);
-            ple.roundabout$setEnemyOpacity(enemyOpacity);
+            ple.roundabout$setSizePercent(idleOpacity);
+            ple.roundabout$setIdleRotation(combatOpacity);
+            ple.roundabout$setIdleYOffset(enemyOpacity);
         }
 
     }
@@ -264,9 +264,9 @@ public class ClientUtil {
         IPlayerEntity ple = ((IPlayerEntity) player);
         ple.roundabout$setAnchorPlace(anchorPlace);
         ple.roundabout$setDistanceOut(distanceOut);
-        ple.roundabout$setIdleOpacity(idleOpacity);
-        ple.roundabout$setCombatOpacity(combatOpacity);
-        ple.roundabout$setEnemyOpacity(enemyOpacity);
+        ple.roundabout$setSizePercent(idleOpacity);
+        ple.roundabout$setIdleRotation(combatOpacity);
+        ple.roundabout$setIdleYOffset(enemyOpacity);
 
     }
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/

@@ -52,12 +52,12 @@ public interface IPlayerEntity {
     void roundabout$setAnchorPlace(int anchorPlace);
     float roundabout$getDistanceOut();
     void roundabout$setDistanceOut(float distanceOut);
-    float roundabout$getIdleOpacity();
-    void roundabout$setIdleOpacity(float idleOpacity);
-    float roundabout$getCombatOpacity();
-    void roundabout$setCombatOpacity(float combatOpacity);
-    float roundabout$getEnemyOpacity();
-    void roundabout$setEnemyOpacity(float enemyOpacity);
+    float roundabout$getSizePercent();
+    void roundabout$setSizePercent(float idleOpacity);
+    float roundabout$getIdleRotation();
+    void roundabout$setIdleRotation(float combatOpacity);
+    float roundabout$getIdleYOffset();
+    void roundabout$setIdleYOffset(float enemyOpacity);
     AnimationState getWry();
     AnimationState getGiorno();
     AnimationState getKoichi();

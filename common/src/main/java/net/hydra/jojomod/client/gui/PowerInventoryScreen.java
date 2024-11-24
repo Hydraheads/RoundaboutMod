@@ -235,6 +235,9 @@ public class PowerInventoryScreen
                 float idleOpacity =  ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                 float combatOpacity = ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking;
                 float enemyOpacity = ConfigManager.getClientConfig().opacitySettings.opacityOfOthers;
+                float standSize = ipe.roundabout$getSizePercent();
+                float idleRot = ipe.roundabout$getIdleRotation();
+                float idleY = ipe.roundabout$getIdleYOffset();
 
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-150, j, 0, 0, 148, 167);
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.general").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE), i- 135, j+24, 4210752, false);
@@ -252,7 +255,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.distance").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
 
-                    int renderSpot2 = (int) Math.floor(((double) 114 / 2) * (distanceOut));
+                    int renderSpot2 = (int) Math.floor(((double) 114 / 4) * (distanceOut));
                     if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY)) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 185, 5, 11);
                     } else {
@@ -284,6 +287,35 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot5, j + 133, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot5, j + 133, 5, 173, 5, 11);
+                    }
+                } else if (pageNumber == 2) {
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.size").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 46, 11, 173, 118, 11);
+                    int renderSpot1 = (int) Math.floor(((double) 114 / 2) * (standSize));
+                    if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 173, 5, 11);
+                    }
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.rotation").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
+
+                    int renderSpot2 = (int) Math.floor(((double) 114 / 360) * (idleRot));
+                    if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 173, 5, 11);
+                    }
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.yOffset").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 89, 11, 173, 118, 11);
+                    int renderSpot3 = (int) Math.floor(((double) 114 / 2) * (idleY));
+                    if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 173, 5, 11);
                     }
                 }
 
@@ -406,49 +438,76 @@ public class PowerInventoryScreen
                 int j = this.topPos;
                 IPlayerEntity ipe = ((IPlayerEntity) pl);
                 int jump = i-136;
-                if (isSurelyHovering(jump, j+45, 118, 11, $$0, $$1)) {
-                    int initialX = ((int)$$0) - jump;
-                    initialX = (int)((float) 359 /118)*initialX;
-                    ipe.roundabout$setAnchorPlace(initialX);
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
-                    return true;
-                }
-                if (isSurelyHovering(jump, j+67, 118, 11, $$0, $$1)) {
-                    float initialX = (float) ($$0 - jump);
-                    initialX = ((float) 2 /118)*initialX;
-                    ipe.roundabout$setDistanceOut(initialX);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
-                    return true;
-                }
-                if (isSurelyHovering(jump, j+89, 118, 11, $$0, $$1)) {
-                    float initialX = (float) ($$0 - jump);
-                    initialX = ((float) 100 /118)*initialX;
-                    ConfigManager.getClientConfig().opacitySettings.opacityOfStand = Mth.clamp(initialX,0,100);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_OPACITY);
-                    ConfigManager.saveClientConfig();
-                    return true;
-                }
-                if (isSurelyHovering(jump, j+111, 118, 11, $$0, $$1)) {
-                    float initialX = (float) ($$0 - jump);
-                    initialX = ((float) 100 /118)*initialX;
-                    ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = Mth.clamp(initialX,0,100);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_COMBAT_OPACITY);
-                    ConfigManager.saveClientConfig();
-                    return true;
-                }
-                if (isSurelyHovering(i-136, j+133, 118, 11, $$0, $$1)) {
-                    float initialX = (float) ($$0 - jump);
-                    initialX = ((float) 100 /118)*initialX;
-                    ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = Mth.clamp(initialX,0,100);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_ENEMY_OPACITY);
-                    ConfigManager.saveClientConfig();
-                    return true;
+                if (pageNumber == 1) {
+                    if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
+                        int initialX = ((int) $$0) - jump;
+                        initialX = (int) ((float) 359 / 118) * initialX;
+                        ipe.roundabout$setAnchorPlace(initialX);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                        return true;
+                    }
+                    if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 2 / 118) * initialX;
+                        ipe.roundabout$setDistanceOut(initialX);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                        return true;
+                    }
+                    if (isSurelyHovering(jump, j + 89, 118, 11, $$0, $$1)) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 100 / 118) * initialX;
+                        ConfigManager.getClientConfig().opacitySettings.opacityOfStand = Mth.clamp(initialX, 0, 100);
+                        ConfigManager.saveClientConfig();
+                        return true;
+                    }
+                    if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 100 / 118) * initialX;
+                        ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = Mth.clamp(initialX, 0, 100);
+                        ConfigManager.saveClientConfig();
+                        return true;
+                    }
+                    if (isSurelyHovering(i - 136, j + 133, 118, 11, $$0, $$1)) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 100 / 118) * initialX;
+                        ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = Mth.clamp(initialX, 0, 100);
+                        ConfigManager.saveClientConfig();
+                        return true;
+                    }
+                } else if (pageNumber == 2){
+                    if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
+                        float initialX = ((int) $$0) - jump;
+                        initialX = ((float) 2 / 118) * initialX;
+                        ipe.roundabout$setSizePercent(initialX);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_SIZE_PERCENT);
+                        return true;
+                    }
+                    if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 360 / 118) * initialX;
+                        ipe.roundabout$setIdleRotation(initialX);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_ROTATION);
+                        return true;
+                    }
+                    if (isSurelyHovering(jump, j + 89, 118, 11, $$0, $$1)) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 2 / 118) * initialX;
+                        ipe.roundabout$setIdleYOffset(initialX);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
+                        return true;
+                    }
                 }
                 if (isSurelyHovering(i-136, j+146, 65, 11, $$0, $$1)) {
                     ipe.roundabout$setAnchorPlace(55);
                     ipe.roundabout$setDistanceOut(1.07F);
+                    ipe.roundabout$setSizePercent(1F);
+                    ipe.roundabout$setIdleRotation(0F);
+                    ipe.roundabout$setIdleYOffset(0.1F);
                     ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1.07F, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, PacketDataIndex.FLOAT_SIZE_PERCENT);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0F, PacketDataIndex.FLOAT_IDLE_ROTATION);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0.1F, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
                     ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
                     ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = 100F;
                     ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;

@@ -53,10 +53,11 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
         if (!(mobEntity.getUser() != null && Minecraft.getInstance().player != null && mobEntity.getScoping() &&
                 mobEntity.getUser().is(Minecraft.getInstance().player) &&
                 Minecraft.getInstance().options.getCameraType().isFirstPerson())) {
+            float factor = 0.5F + (mobEntity.getSizePercent()/2);
             if (mobEntity.isBaby()) {
-                matrixStack.scale(0.5f, 0.5f, 0.5f);
+                matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
             } else {
-                matrixStack.scale(0.87f, 0.87f, 0.87f);
+                matrixStack.scale(0.87f*factor, 0.87f*factor, 0.87f*factor);
             }
             super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         }

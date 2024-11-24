@@ -181,6 +181,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         float cRX = 0;
         float cRY = 0;
         float cRZ = 0;
+        if (animationNumber == OffsetIndex.FOLLOW){
+            cRY = mobEntity.getIdleRotation() * Mth.DEG_TO_RAD;
+        }
         if (animationStyle == OffsetIndex.FIXED_STYLE){
             cRX = (mobEntity.getUser().getViewXRot(tickDelta)%360) * Mth.DEG_TO_RAD;
 

@@ -64,10 +64,11 @@ public class JusticeBaseRenderer<T extends StandEntity> extends StandRenderer<Ju
     }
     @Override
     public void render(JusticeEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+        float factor = 0.5F + (mobEntity.getSizePercent()/2);
         if (mobEntity.getSkin() == JusticeEntity.DARK_MIRAGE){
-            matrixStack.scale(0.87f, 0.87f, 0.87f);
+            matrixStack.scale(0.87f*factor, 0.87f*factor, 0.87f*factor);
         } else {
-            matrixStack.scale(2.0f,2.0f,2.0f);
+            matrixStack.scale(2.0f*factor,2.0f*factor,2.0f*factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }

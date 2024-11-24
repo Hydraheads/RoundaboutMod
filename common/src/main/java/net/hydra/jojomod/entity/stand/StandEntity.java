@@ -90,6 +90,13 @@ public abstract class StandEntity extends Mob{
     protected static final EntityDataAccessor<Float> DISTANCE_OUT = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.FLOAT);
 
+    protected static final EntityDataAccessor<Float> SIZE_PERCENT = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> IDLE_ROTATION = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> IDLE_Y_OFFSET = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.FLOAT);
+
     public boolean canAcquireHeldItem = false;
 
     /**This rotation data is for the model rotating when you look certain directions,
@@ -405,6 +412,24 @@ public abstract class StandEntity extends Mob{
     public final float getDistanceOut() {
         return this.entityData.get(DISTANCE_OUT);
     }
+    public final void setSizePercent(float blocks) {
+        this.entityData.set(SIZE_PERCENT, blocks);
+    }
+    public final float getSizePercent() {
+        return this.entityData.get(SIZE_PERCENT);
+    }
+    public final void setIdleRotation(float blocks) {
+        this.entityData.set(IDLE_ROTATION, blocks);
+    }
+    public final float getIdleRotation() {
+        return this.entityData.get(IDLE_ROTATION);
+    }
+    public final void setIdleYOffset(float blocks) {
+        this.entityData.set(IDLE_Y_OFFSET, blocks);
+    }
+    public final float getIdleYOffset() {
+        return this.entityData.get(IDLE_Y_OFFSET);
+    }
 
     /**
      * These functions tell the game if the stand's user is Swimming, Crawling, or Elytra Flying.
@@ -469,6 +494,9 @@ public abstract class StandEntity extends Mob{
         super.defineSynchedData();
         this.entityData.define(ANCHOR_PLACE, 55);
         this.entityData.define(DISTANCE_OUT, 1.07F);
+        this.entityData.define(SIZE_PERCENT, 1F);
+        this.entityData.define(IDLE_ROTATION, 0F);
+        this.entityData.define(IDLE_Y_OFFSET, 0.1F);
         this.entityData.define(FADE_OUT, (byte) 0);
         this.entityData.define(FADE_PERCENT, 100);
         this.entityData.define(MOVE_FORWARD, (byte) 0);
@@ -916,7 +944,7 @@ public abstract class StandEntity extends Mob{
         }
 
         double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-        double y1 = standUser.getY() + 0.1 - yy;
+        double y1 = standUser.getY() + getIdleYOffset() - yy;
         double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
 
         return new Vec3(x1, y1, z1);
