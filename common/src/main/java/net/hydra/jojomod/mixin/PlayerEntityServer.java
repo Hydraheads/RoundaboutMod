@@ -48,15 +48,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Shadow
     public ServerGamePacketListenerImpl connection;
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    public void roundabout$teleportTo(CallbackInfo ci) {
+    public void roundabout$tick(CallbackInfo ci) {
 
         if (!this.level().isClientSide() && !roundabout$initializeDataOnClient && connection !=null && connection.isAcceptingMessages()){
             IPlayerEntity ipe = ((IPlayerEntity)this);
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                     ((ServerPlayer)((Player)(Object)this)), ipe.roundabout$getAnchorPlace(),
                     ipe.roundabout$getDistanceOut(),
-                    ipe.roundabout$getIdleOpacity(),ipe.roundabout$getCombatOpacity(),
-                    ipe.roundabout$getEnemyOpacity());
+                    0,
+                    0,
+                    0);
             roundabout$initializeDataOnClient = true;
         }
         if (!this.level().isClientSide) {
@@ -93,17 +94,11 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
 
             int anchorPlace = ((IPlayerEntity) $$0).roundabout$getAnchorPlace();
             float distanceOut = ((IPlayerEntity) $$0).roundabout$getDistanceOut();
-            float idleOpacity = ((IPlayerEntity) $$0).roundabout$getIdleOpacity();
-            float combatOpacity = ((IPlayerEntity) $$0).roundabout$getCombatOpacity();
-            float enemyOpacity = ((IPlayerEntity) $$0).roundabout$getEnemyOpacity();
             ((IPlayerEntity) this).roundabout$setAnchorPlace(anchorPlace);
             ((IPlayerEntity) this).roundabout$setDistanceOut(distanceOut);
-            ((IPlayerEntity) this).roundabout$setIdleOpacity(idleOpacity);
-            ((IPlayerEntity) this).roundabout$setCombatOpacity(combatOpacity);
-            ((IPlayerEntity) this).roundabout$setEnemyOpacity(enemyOpacity);
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
-                    idleOpacity,combatOpacity,enemyOpacity);
+                    0,0,0);
         }
     }
 

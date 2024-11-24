@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.IllagerModel;
@@ -48,12 +49,12 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
             IPlayerEntity ipe = ((IPlayerEntity) lp);
             if (mobEntity.getUser() != null && mobEntity.getUser().is(lp)) {
                 if (((StandUser)lp).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
-                    maxfade = ipe.roundabout$getIdleOpacity();
+                    maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                 } else {
-                    maxfade = ipe.roundabout$getCombatOpacity();
+                    maxfade = ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking;
                 }
             } else {
-                maxfade = ipe.roundabout$getEnemyOpacity();
+                maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfOthers;
             }
         }
         maxfade*= 0.01F;

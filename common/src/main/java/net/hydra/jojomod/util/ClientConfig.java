@@ -15,6 +15,8 @@ public class ClientConfig {
 
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.OpacitySettings opacitySettings;
 
     private ClientConfig() {
     }
@@ -37,5 +39,14 @@ public class ClientConfig {
 
     }
 
+    public static class OpacitySettings {
+        @FloatOption(group = "inherit", value = 100, min = 0, max = 100)
+        public Float opacityOfStand;
+        @FloatOption(group = "inherit", value = 100, min = 0, max = 100)
+        public Float opacityWhileAttacking;
+        @FloatOption(group = "inherit", value = 100, min = 0, max = 100)
+        public Float opacityOfOthers;
+
+    }
 
 }

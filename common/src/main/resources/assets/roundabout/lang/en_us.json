@@ -491,6 +491,7 @@
   "power_inventory.roundabout.settings.attack_opacity": "Opacity (Fight)",
   "power_inventory.roundabout.settings.enemy_opacity": "Opacity (of Others)",
   "power_inventory.roundabout.settings.reset": "Reset",
+  "power_inventory.roundabout.settings.next": "Next",
 
   "roundabout.warden_ts_movement": "It did not stop?!"
 }

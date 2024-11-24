@@ -1251,8 +1251,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                                     ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
                                     ipe.roundabout$getDistanceOut(),
-                                    ipe.roundabout$getIdleOpacity(), ipe.roundabout$getCombatOpacity(),
-                                    ipe.roundabout$getEnemyOpacity());
+                                    0,
+                                    0,
+                                    0);
                         }
                     }
 

@@ -675,9 +675,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         CompoundTag compoundtag = new CompoundTag();
         compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
         compoundtag.putFloat("distanceOut",roundabout$distanceOut);
-        compoundtag.putFloat("idleOpacity",roundabout$idleOpacity);
-        compoundtag.putFloat("combatOpacity",roundabout$combatOpacity);
-        compoundtag.putFloat("enemyOpacity",roundabout$enemyOpacity);
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -706,15 +703,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("distanceOut")) {
             roundabout$distanceOut = compoundtag2.getFloat("distanceOut");
-        }
-        if (compoundtag2.contains("idleOpacity")) {
-            roundabout$idleOpacity = compoundtag2.getFloat("idleOpacity");
-        }
-        if (compoundtag2.contains("combatOpacity")) {
-            roundabout$combatOpacity = compoundtag2.getFloat("combatOpacity");
-        }
-        if (compoundtag2.contains("enemyOpacity")) {
-            roundabout$enemyOpacity = compoundtag2.getFloat("enemyOpacity");
         }
 
         //roundabout$maskInventory.addItem()

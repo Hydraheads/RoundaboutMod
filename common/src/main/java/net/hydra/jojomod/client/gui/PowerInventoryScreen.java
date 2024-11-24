@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,6 +30,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -60,6 +62,7 @@ public class PowerInventoryScreen
     private boolean buttonClicked;
 
     public boolean isOptionsOut;
+    public int pageNumber;
     private StandEntity stand = null;
     public List<AbilityIconInstance> abilityList = ImmutableList.of();
 
@@ -229,65 +232,75 @@ public class PowerInventoryScreen
                 IPlayerEntity ipe = ((IPlayerEntity) pl);
                 int anchorPlace = ipe.roundabout$getAnchorPlace();
                 float distanceOut = ipe.roundabout$getDistanceOut();
-                float idleOpacity = ipe.roundabout$getIdleOpacity();
-                float combatOpacity = ipe.roundabout$getCombatOpacity();
-                float enemyOpacity = ipe.roundabout$getEnemyOpacity();
+                float idleOpacity =  ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
+                float combatOpacity = ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking;
+                float enemyOpacity = ConfigManager.getClientConfig().opacitySettings.opacityOfOthers;
 
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-150, j, 0, 0, 148, 167);
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.general").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE), i- 135, j+24, 4210752, false);
 
-                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.offset").withStyle(ChatFormatting.GRAY), i- 135, j+36, 4210752, false);
-                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+46, 11, 173, 118, 11);
-                int renderSpot1 = (int) Math.floor(((double) 114/359)*(anchorPlace));
-                if (isSurelyHovering(i-136, j+45, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot1, j+45, 5, 185, 5, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot1, j+45, 5, 173, 5, 11);
+                if (pageNumber == 1) {
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.offset").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 46, 11, 173, 118, 11);
+                    int renderSpot1 = (int) Math.floor(((double) 114 / 359) * (anchorPlace));
+                    if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 173, 5, 11);
+                    }
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.distance").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
+
+                    int renderSpot2 = (int) Math.floor(((double) 114 / 2) * (distanceOut));
+                    if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 173, 5, 11);
+                    }
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 89, 11, 173, 118, 11);
+                    int renderSpot3 = (int) Math.floor(((double) 114 / 100) * (idleOpacity));
+                    if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 173, 5, 11);
+                    }
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.attack_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 111, 11, 173, 118, 11);
+                    int renderSpot4 = (int) Math.floor(((double) 114 / 100) * (combatOpacity));
+                    if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 173, 5, 11);
+                    }
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.enemy_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 124, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 134, 11, 173, 118, 11);
+                    int renderSpot5 = (int) Math.floor(((double) 114 / 100) * (enemyOpacity));
+                    if (isSurelyHovering(i - 136, j + 133, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot5, j + 133, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot5, j + 133, 5, 173, 5, 11);
+                    }
                 }
 
-                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.distance").withStyle(ChatFormatting.GRAY), i- 135, j+58, 4210752, false);
-                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+67, 11, 173, 118, 11);
-
-                int renderSpot2 = (int) Math.floor(((double) 114/2)*(distanceOut));
-                if (isSurelyHovering(i-136, j+67, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot2, j+67, 5, 185, 5, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot2, j+67, 5, 173, 5, 11);
-                }
-
-                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.opacity").withStyle(ChatFormatting.GRAY), i- 135, j+80, 4210752, false);
-                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+89, 11, 173, 118, 11);
-                int renderSpot3 = (int) Math.floor(((double) 114/100)*(idleOpacity));
-                if (isSurelyHovering(i-136, j+89, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot3, j+89, 5, 185, 5, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot3, j+89, 5, 173, 5, 11);
-                }
-
-                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.attack_opacity").withStyle(ChatFormatting.GRAY), i- 135, j+102, 4210752, false);
-                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+111, 11, 173, 118, 11);
-                int renderSpot4 = (int) Math.floor(((double) 114/100)*(combatOpacity));
-                if (isSurelyHovering(i-136, j+111, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot4, j+111, 5, 185, 5, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot4, j+111, 5, 173, 5, 11);
-                }
-
-                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.enemy_opacity").withStyle(ChatFormatting.GRAY), i- 135, j+124, 4210752, false);
-                context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136, j+134, 11, 173, 118, 11);
-                int renderSpot5 = (int) Math.floor(((double) 114/100)*(enemyOpacity));
-                if (isSurelyHovering(i-136, j+133, 118, 11, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot5, j+133, 5, 185, 5, 11);
-                } else {
-                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i-136+renderSpot5, j+133, 5, 173, 5, 11);
-                }
-
-                if (isSurelyHovering(i-136, j+146, 118, 11, mouseX, mouseY)) {
+                if (isSurelyHovering(i-136, j+146, 65, 11, mouseX, mouseY)) {
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.reset")
                             .withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.ITALIC), i- 135, j+148, 4210752, false);
                 } else {
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.reset")
                             .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC), i- 135, j+148, 4210752, false);
+                }
+
+                if (isSurelyHovering(i-66, j+146, 65, 11, mouseX, mouseY)) {
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.next")
+                            .withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.ITALIC), i- 65, j+148, 4210752, false);
+                } else {
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.next")
+                            .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC), i- 65, j+148, 4210752, false);
                 }
             }
             StandUser standUser = ((StandUser) pl);
@@ -338,6 +351,7 @@ public class PowerInventoryScreen
         super.init();
         this.widthTooNarrow = this.width < 379;
         isOptionsOut = false;
+        pageNumber = 1;
             //this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
             //this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
             //this.addRenderableWidget(new ImageButton(this.leftPos + 104, this.height / 2 - 22, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, $$0 -> {
@@ -391,12 +405,6 @@ public class PowerInventoryScreen
                 int i = this.leftPos;
                 int j = this.topPos;
                 IPlayerEntity ipe = ((IPlayerEntity) pl);
-                int anchorPlace = ipe.roundabout$getAnchorPlace();
-                float distanceOut = ipe.roundabout$getDistanceOut();
-                float idleOpacity = ipe.roundabout$getIdleOpacity();
-                float combatOpacity = ipe.roundabout$getCombatOpacity();
-                float enemyOpacity = ipe.roundabout$getEnemyOpacity();
-                int renderSpot1 = (int) Math.floor(((double) 114/359)*(anchorPlace));
                 int jump = i-136;
                 if (isSurelyHovering(jump, j+45, 118, 11, $$0, $$1)) {
                     int initialX = ((int)$$0) - jump;
@@ -415,35 +423,44 @@ public class PowerInventoryScreen
                 if (isSurelyHovering(jump, j+89, 118, 11, $$0, $$1)) {
                     float initialX = (float) ($$0 - jump);
                     initialX = ((float) 100 /118)*initialX;
-                    ipe.roundabout$setIdleOpacity(initialX);
+                    ConfigManager.getClientConfig().opacitySettings.opacityOfStand = Mth.clamp(initialX,0,100);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_OPACITY);
+                    ConfigManager.saveClientConfig();
                     return true;
                 }
                 if (isSurelyHovering(jump, j+111, 118, 11, $$0, $$1)) {
                     float initialX = (float) ($$0 - jump);
                     initialX = ((float) 100 /118)*initialX;
-                    ipe.roundabout$setCombatOpacity(initialX);
+                    ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = Mth.clamp(initialX,0,100);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_COMBAT_OPACITY);
+                    ConfigManager.saveClientConfig();
                     return true;
                 }
                 if (isSurelyHovering(i-136, j+133, 118, 11, $$0, $$1)) {
                     float initialX = (float) ($$0 - jump);
                     initialX = ((float) 100 /118)*initialX;
-                    ipe.roundabout$setEnemyOpacity(initialX);
+                    ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = Mth.clamp(initialX,0,100);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_ENEMY_OPACITY);
+                    ConfigManager.saveClientConfig();
                     return true;
                 }
-                if (isSurelyHovering(i-136, j+146, 118, 11, $$0, $$1)) {
+                if (isSurelyHovering(i-136, j+146, 65, 11, $$0, $$1)) {
                     ipe.roundabout$setAnchorPlace(55);
                     ipe.roundabout$setDistanceOut(1.07F);
-                    ipe.roundabout$setIdleOpacity(100);
-                    ipe.roundabout$setCombatOpacity(100);
-                    ipe.roundabout$setEnemyOpacity(100);
                     ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1.07F, PacketDataIndex.FLOAT_DISTANCE_OUT);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(100, PacketDataIndex.FLOAT_IDLE_OPACITY);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(100, PacketDataIndex.FLOAT_COMBAT_OPACITY);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(100, PacketDataIndex.FLOAT_ENEMY_OPACITY);
+                    ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
+                    ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = 100F;
+                    ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;
+                    ConfigManager.saveClientConfig();
+                    return true;
+                }
+                if (isSurelyHovering(i-66, j+146, 65, 11, $$0, $$1)) {
+                    if (pageNumber == 1){
+                        pageNumber = 2;
+                    } else {
+                        pageNumber = 1;
+                    }
                     return true;
                 }
             }
