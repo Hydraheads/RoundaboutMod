@@ -27,7 +27,7 @@ public class FogCoatBlock extends FogBlock{
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public FogCoatBlock(Properties $$0) {
         super($$0,true);
-        this.registerDefaultState(this.stateDefinition.any().setValue(IN_FOG, Boolean.valueOf(true)).setValue(FACING, Direction.DOWN)
+        this.registerDefaultState(this.stateDefinition.any().setValue(IN_FOG, Boolean.valueOf(false)).setValue(FACING, Direction.DOWN)
         );
     }
 

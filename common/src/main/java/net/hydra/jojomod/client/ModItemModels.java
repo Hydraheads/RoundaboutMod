@@ -13,6 +13,7 @@ public class ModItemModels {
     public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_bow_arrow", "inventory");
     public static ModelResourceLocation STAND_BEETLE_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_beetle_bow_arrow", "inventory");
     public static ModelResourceLocation WORTHY_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "worthy_bow_arrow", "inventory");
+    public static ModelResourceLocation FOG_BLOCK_ICON = new ModelResourceLocation(Roundabout.MOD_ID, "fog_block_icon", "inventory");
     public static ModelResourceLocation STAND_ARROW_CROSSBOW =
             new ModelResourceLocation(Roundabout.MOD_ID, "crossbow_stand_arrow", "inventory");
     public static ModelResourceLocation STAND_BEETLE_CROSSBOW =

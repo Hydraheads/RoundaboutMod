@@ -62,7 +62,7 @@ public class FogBlock extends Block {
     }
     @Override
     public void tick(BlockState $$0, ServerLevel $$1, BlockPos $$2, RandomSource $$3) {
-        $$1.scheduleTick($$2, this, 4);
+        $$1.scheduleTick($$2, this, (int)(5+Math.floor(Math.random()*4)));
         if (((IPermaCasting)$$1).roundabout$inPermaCastFogRange($$2)){
             if (!$$0.getValue(IN_FOG)) {
                 $$0 = $$0.setValue(IN_FOG, true);

@@ -19,7 +19,6 @@ public class ModBlocks {
     public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
     public static Block LOCACACA_CACTUS;
-
     public static Block LOCACACA_BLOCK;
     public static Block NEW_LOCACACA_BLOCK;
 
@@ -27,23 +26,49 @@ public class ModBlocks {
     public static Block BLOOD_SPLATTER;
     public static Block BLUE_BLOOD_SPLATTER;
     public static Block ENDER_BLOOD_SPLATTER;
-
     public static Block WIRE_TRAP;
+
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
     public static Block STEREO;
     public static Block FOG_DIRT;
     public static Block FOG_DIRT_COATING;
+    public static Block FOG_CLAY;
+    public static Block FOG_CLAY_COATING;
+    public static Block FOG_GRAVEL;
+    public static Block FOG_GRAVEL_COATING;
     public static Block FOG_SAND;
     public static Block FOG_SAND_COATING;
+    public static Block FOG_OAK_PLANKS;
+    public static Block FOG_OAK_PLANKS_COATING;
+    public static Block FOG_SPRUCE_PLANKS;
+    public static Block FOG_SPRUCE_PLANKS_COATING;
+    public static Block FOG_BIRCH_PLANKS;
+    public static Block FOG_BIRCH_PLANKS_COATING;
+    public static Block FOG_JUNGLE_PLANKS;
+    public static Block FOG_JUNGLE_PLANKS_COATING;
+    public static Block FOG_ACACIA_PLANKS;
+    public static Block FOG_ACACIA_PLANKS_COATING;
+    public static Block FOG_DARK_OAK_PLANKS;
+    public static Block FOG_DARK_OAK_PLANKS_COATING;
+    public static Block FOG_MANGROVE_PLANKS;
+    public static Block FOG_MANGROVE_PLANKS_COATING;
+    public static Block FOG_CHERRY_PLANKS;
+    public static Block FOG_CHERRY_PLANKS_COATING;
     public static Block FOG_STONE;
     public static Block FOG_STONE_COATING;
+    public static Block FOG_COAL_ORE;
     public static Block FOG_IRON_ORE;
     public static Block FOG_GOLD_ORE;
+    public static Block FOG_LAPIS_ORE;
     public static Block FOG_DIAMOND_ORE;
     public static Block FOG_STONE_BRICKS;
     public static Block FOG_STONE_BRICKS_COATING;
+    public static Block FOG_DEEPSLATE;
+    public static Block FOG_DEEPSLATE_COATING;
+    public static Block FOG_NETHERRACK;
+    public static Block FOG_NETHERRACK_COATING;
     public static Block FOG_NETHER_BRICKS;
     public static Block FOG_NETHER_BRICKS_COATING;
 

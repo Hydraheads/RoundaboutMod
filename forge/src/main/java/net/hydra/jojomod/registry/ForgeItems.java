@@ -82,14 +82,58 @@ public class ForgeItems {
             () -> new FogBlockItem(ForgeBlocks.FOG_DIRT.get(),
                     new Item.Properties().stacksTo(64)
             , Blocks.DIRT)));
+    public static final RegistryObject<BlockItem> FOG_CLAY = addToFogTab(ITEMS.register("fog_clay",
+            () -> new FogBlockItem(ForgeBlocks.FOG_CLAY.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.CLAY)));
+    public static final RegistryObject<BlockItem> FOG_GRAVEL = addToFogTab(ITEMS.register("fog_gravel",
+            () -> new FogBlockItem(ForgeBlocks.FOG_GRAVEL.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.GRAVEL)));
     public static final RegistryObject<BlockItem> FOG_SAND = addToFogTab(ITEMS.register("fog_sand",
             () -> new FogBlockItem(ForgeBlocks.FOG_SAND.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.SAND)));
+    public static final RegistryObject<BlockItem> FOG_OAK_PLANKS = addToFogTab(ITEMS.register("fog_oak_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_OAK_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.OAK_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_SPRUCE_PLANKS = addToFogTab(ITEMS.register("fog_spruce_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_SPRUCE_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.SPRUCE_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_BIRCH_PLANKS = addToFogTab(ITEMS.register("fog_birch_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_BIRCH_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.BIRCH_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_JUNGLE_PLANKS = addToFogTab(ITEMS.register("fog_jungle_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_JUNGLE_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.JUNGLE_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_ACACIA_PLANKS = addToFogTab(ITEMS.register("fog_acacia_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_ACACIA_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.ACACIA_PLANKS)));
+    public static final RegistryObject<BlockItem> DARK_OAK_PLANKS = addToFogTab(ITEMS.register("fog_dark_oak_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_DARK_OAK_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.DARK_OAK_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_MANGROVE_PLANKS = addToFogTab(ITEMS.register("fog_mangrove_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_MANGROVE_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.MANGROVE_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_CHERRY_PLANKS = addToFogTab(ITEMS.register("fog_cherry_planks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_CHERRY_PLANKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.CHERRY_PLANKS)));
     public static final RegistryObject<BlockItem> FOG_STONE = addToFogTab(ITEMS.register("fog_stone",
             () -> new FogBlockItem(ForgeBlocks.FOG_STONE.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.STONE)));
+    public static final RegistryObject<BlockItem> FOG_COAL_ORE = addToFogTab(ITEMS.register("fog_coal_ore",
+            () -> new FogBlockItem(ForgeBlocks.FOG_COAL_ORE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.COAL_ORE)));
     public static final RegistryObject<BlockItem> FOG_IRON_ORE = addToFogTab(ITEMS.register("fog_iron_ore",
             () -> new FogBlockItem(ForgeBlocks.FOG_IRON_ORE.get(),
                     new Item.Properties().stacksTo(64)
@@ -98,6 +142,10 @@ public class ForgeItems {
             () -> new FogBlockItem(ForgeBlocks.FOG_GOLD_ORE.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.GOLD_ORE)));
+    public static final RegistryObject<BlockItem> FOG_LAPIS_ORE = addToFogTab(ITEMS.register("fog_lapis_ore",
+            () -> new FogBlockItem(ForgeBlocks.FOG_LAPIS_ORE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.LAPIS_ORE)));
     public static final RegistryObject<BlockItem> FOG_DIAMOND_ORE = addToFogTab(ITEMS.register("fog_diamond_ore",
             () -> new FogBlockItem(ForgeBlocks.FOG_DIAMOND_ORE.get(),
                     new Item.Properties().stacksTo(64)
@@ -106,6 +154,14 @@ public class ForgeItems {
             () -> new FogBlockItem(ForgeBlocks.FOG_STONE_BRICKS.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.STONE_BRICKS)));
+    public static final RegistryObject<BlockItem> FOG_DEEPSLATE = addToFogTab(ITEMS.register("fog_deepslate",
+            () -> new FogBlockItem(ForgeBlocks.FOG_DEEPSLATE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.DEEPSLATE)));
+    public static final RegistryObject<BlockItem> FOG_NETHERRACK = addToFogTab(ITEMS.register("fog_netherrack",
+            () -> new FogBlockItem(ForgeBlocks.FOG_NETHERRACK.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.NETHERRACK)));
     public static final RegistryObject<BlockItem> FOG_NETHER_BRICKS = addToFogTab(ITEMS.register("fog_nether_bricks",
             () -> new FogBlockItem(ForgeBlocks.FOG_NETHER_BRICKS.get(),
                     new Item.Properties().stacksTo(64)
@@ -114,10 +170,50 @@ public class ForgeItems {
             () -> new FogCoatBlockItem(ForgeBlocks.FOG_DIRT_COATING.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.DIRT)));
+    public static final RegistryObject<BlockItem> FOG_CLAY_COATING = addToFogTab(ITEMS.register("fog_clay_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_CLAY_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.CLAY)));
+    public static final RegistryObject<BlockItem> FOG_GRAVEL_COATING = addToFogTab(ITEMS.register("fog_gravel_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_GRAVEL_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.GRAVEL)));
     public static final RegistryObject<BlockItem> FOG_SAND_COATING = addToFogTab(ITEMS.register("fog_sand_coating",
             () -> new FogCoatBlockItem(ForgeBlocks.FOG_SAND_COATING.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.SAND)));
+    public static final RegistryObject<BlockItem> FOG_OAK_PLANKS_COATING = addToFogTab(ITEMS.register("fog_oak_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_OAK_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.OAK_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_SPRUCE_PLANKS_COATING = addToFogTab(ITEMS.register("fog_spruce_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_SPRUCE_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.SPRUCE_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_BIRCH_PLANKS_COATING = addToFogTab(ITEMS.register("fog_birch_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_BIRCH_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.BIRCH_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_JUNGLE_PLANKS_COATING = addToFogTab(ITEMS.register("fog_jungle_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_JUNGLE_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.JUNGLE_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_ACACIA_PLANKS_COATING = addToFogTab(ITEMS.register("fog_acacia_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_ACACIA_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.ACACIA_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_DARK_OAK_PLANKS_COATING = addToFogTab(ITEMS.register("fog_dark_oak_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_DARK_OAK_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.DARK_OAK_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_MANGROVE_PLANKS_COATING = addToFogTab(ITEMS.register("fog_mangrove_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_MANGROVE_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.MANGROVE_PLANKS)));
+    public static final RegistryObject<BlockItem> FOG_CHERRY_PLANKS_COATING = addToFogTab(ITEMS.register("fog_cherry_planks_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_CHERRY_PLANKS_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.CHERRY_PLANKS)));
     public static final RegistryObject<BlockItem> FOG_STONE_COATING = addToFogTab(ITEMS.register("fog_stone_coating",
             () -> new FogCoatBlockItem(ForgeBlocks.FOG_STONE_COATING.get(),
                     new Item.Properties().stacksTo(64)
@@ -126,6 +222,14 @@ public class ForgeItems {
             () -> new FogCoatBlockItem(ForgeBlocks.FOG_STONE_BRICKS_COATING.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.STONE_BRICKS)));
+    public static final RegistryObject<BlockItem> FOG_DEEPSLATE_COATING = addToFogTab(ITEMS.register("fog_deepslate_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_DEEPSLATE_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.DEEPSLATE)));
+    public static final RegistryObject<BlockItem> FOG_NETHERRACK_COATING = addToFogTab(ITEMS.register("fog_netherrack_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_NETHERRACK_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.NETHERRACK)));
     public static final RegistryObject<BlockItem> FOG_NETHER_BRICKS_COATING = addToFogTab(ITEMS.register("fog_nether_bricks_coating",
             () -> new FogCoatBlockItem(ForgeBlocks.FOG_NETHER_BRICKS_COATING.get(),
                     new Item.Properties().stacksTo(64)
