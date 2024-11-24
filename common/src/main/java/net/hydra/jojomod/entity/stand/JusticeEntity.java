@@ -1,6 +1,8 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
@@ -103,12 +105,43 @@ public class JusticeEntity extends StandEntity {
             }
         } else {
 
-            if (this.getSkin() != DARK_MIRAGE) {
-                if (this.getSkin() == FLAMED) {
-                    for (int i = 0; i < 3; i++) {
+            if (!(!ConfigManager.getClientConfig().particleSettings.renderJusticeParticlesInFirstPerson &&
+                    ClientUtil.checkIfStandIsYoursAndFirstPerson(this))) {
+                if (this.getSkin() != DARK_MIRAGE) {
+                    if (this.getSkin() == FLAMED) {
+                        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.justiceSkinFlameParticlesPerTick; i++) {
+                            this.level()
+                                    .addParticle(
+                                            ParticleTypes.FLAME,
+                                            this.getRandomX(1.1),
+                                            this.getRandomY(),
+                                            this.getRandomZ(1.1),
+                                            0,
+                                            0.1,
+                                            0
+                                    );
+                        }
+                    }
+
+                    if (this.getSkin() == BLUE_FLAMED) {
+                        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.justiceSkinFlameParticlesPerTick; i++) {
+                            this.level()
+                                    .addParticle(
+                                            ParticleTypes.SOUL_FIRE_FLAME,
+                                            this.getRandomX(1.1),
+                                            this.getRandomY(),
+                                            this.getRandomZ(1.1),
+                                            0,
+                                            0.1,
+                                            0
+                                    );
+                        }
+                    }
+
+                    for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.justiceFogParticlesPerTick; i++) {
                         this.level()
                                 .addParticle(
-                                        ParticleTypes.FLAME,
+                                        ModParticles.FOG_CHAIN,
                                         this.getRandomX(1.1),
                                         this.getRandomY(),
                                         this.getRandomZ(1.1),
@@ -117,34 +150,6 @@ public class JusticeEntity extends StandEntity {
                                         0
                                 );
                     }
-                }
-
-                if (this.getSkin() == BLUE_FLAMED) {
-                    for (int i = 0; i < 3; i++) {
-                        this.level()
-                                .addParticle(
-                                        ParticleTypes.SOUL_FIRE_FLAME,
-                                        this.getRandomX(1.1),
-                                        this.getRandomY(),
-                                        this.getRandomZ(1.1),
-                                        0,
-                                        0.1,
-                                        0
-                                );
-                    }
-                }
-
-                for (int i = 0; i < 5; i++) {
-                    this.level()
-                            .addParticle(
-                                    ModParticles.FOG_CHAIN,
-                                    this.getRandomX(1.1),
-                                    this.getRandomY(),
-                                    this.getRandomZ(1.1),
-                                    0,
-                                    0.1,
-                                    0
-                            );
                 }
             }
         }

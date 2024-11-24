@@ -21,6 +21,7 @@ public abstract class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()
             .create();
+    private static Path clientConfigPath;
     private static Path localConfigPath;
     private static Path serverConfigPath;
 
@@ -30,15 +31,27 @@ public abstract class ConfigManager {
         if (Networking.isDedicated()) return Config.getServerInstance();
         return Config.getLocalInstance();
     }
+    public static ClientConfig getClientConfig() {
+        return ClientConfig.getLocalInstance();
+    }
 
-    public static void loadConfigs(Path client, Path server) {
+    public static void loadConfigs(Path client, Path server, Path actualClient) {
+        clientConfigPath = actualClient;
         localConfigPath = client;
         serverConfigPath = server;
+        loadClientConfig();
         loadLocalConfig();
         loadServerConfig();
         loaded = true;
     }
 
+    private static void loadClientConfig() {
+        ClientConfig config = loadClient();
+        validateFields(config);
+        ClientConfig.updateLocal(config);
+        saveClientConfig();
+        Roundabout.LOGGER.info("Loaded local config");
+    }
     private static void loadLocalConfig() {
         Config config = loadLocal();
         validateFields(config);
@@ -112,6 +125,9 @@ public abstract class ConfigManager {
         saveServerConfig();
     }
 
+    private static ClientConfig loadClient() {
+        return loadClient(ClientConfig.getLocalInstance(), clientConfigPath);
+    }
     private static Config loadLocal() {
         return load(Config.getLocalInstance(), localConfigPath);
     }
@@ -138,10 +154,32 @@ public abstract class ConfigManager {
         return defaultConfig;
     }
 
+
+    private static ClientConfig loadClient(ClientConfig defaultConfig, Path path) {
+        try {
+            if (!Files.exists(path)) {
+                Files.createDirectories(path.getParent());
+                Files.createFile(path);
+                return defaultConfig;
+            }
+            try {
+                return GSON.fromJson(Files.newBufferedReader(path), ClientConfig.class);
+            } catch (JsonSyntaxException e) {
+                Roundabout.LOGGER.error("Failed to parse defaultConfig file, using default config");
+            }
+        } catch (IOException e) {
+            Roundabout.LOGGER.error("Failed to load config", e);
+        }
+        return defaultConfig;
+    }
+
     public static boolean loaded() {
         return loaded;
     }
 
+    public static void saveClientConfig() {
+        saveClient(ClientConfig.getLocalInstance(), clientConfigPath);
+    }
     public static void saveLocalConfig() {
         save(Config.getLocalInstance(), localConfigPath);
     }
@@ -151,6 +189,13 @@ public abstract class ConfigManager {
     }
 
     private static void save(Config config, Path path) {
+        try {
+            Files.write(path, GSON.toJson(config).getBytes());
+        } catch (IOException e) {
+            Roundabout.LOGGER.error("Failed to save config", e);
+        }
+    }
+    private static void saveClient(ClientConfig config, Path path) {
         try {
             Files.write(path, GSON.toJson(config).getBytes());
         } catch (IOException e) {

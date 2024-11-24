@@ -40,7 +40,8 @@ public class RoundaboutModForge {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ConfigManager.loadConfigs(FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + ".json"),
-                FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-server.json"));
+                FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-server.json"),
+                FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-clientOnly.json"));
         //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeCommonConfig.SPEC, "roundabout-client.toml");
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeCommonConfig.SPEC, "roundabout-common.toml");
 

@@ -43,6 +43,19 @@ public class ClientUtil {
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
         }
     }
+    public static boolean checkIfStandIsYoursAndFirstPerson(StandEntity stand) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (stand.getUser() != null){
+                if (stand.getUser().is(player)){
+                    if (Minecraft.getInstance().options.getCameraType().isFirstPerson()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     public static boolean poseHeld = false;
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
