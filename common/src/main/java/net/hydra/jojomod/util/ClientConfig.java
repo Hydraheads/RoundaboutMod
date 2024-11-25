@@ -17,6 +17,8 @@ public class ClientConfig {
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")
     public ClientConfig.OpacitySettings opacitySettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.TimeStopSettings timeStopSettings;
 
     private ClientConfig() {
     }
@@ -47,6 +49,10 @@ public class ClientConfig {
         @FloatOption(group = "inherit", value = 100, min = 0, max = 100)
         public Float opacityOfOthers;
 
+    }
+    public static class TimeStopSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean timeStopFreezesScreen;
     }
 
 }

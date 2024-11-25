@@ -10,9 +10,11 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -228,6 +230,23 @@ public class ClientUtil {
             Entity User = player.level().getEntity(data);
             ((StandUserClient)User).roundabout$clientQueSoundCanceling(context);
         }
+    }
+
+    public static void tickTSFreezeScreen() {
+        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+            Minecraft mc = Minecraft.getInstance();
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null && mc.level != null) {
+                if (((TimeStop) mc.level).CanTimeStopEntity(player)) {
+                    if (mc.screen == null) {
+                        mc.setScreen(new PauseTSScreen(false));
+                    }
+                }
+            }
+        }
+    }
+
+    public void pauseGame(boolean $$0) {
     }
 
 

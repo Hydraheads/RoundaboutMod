@@ -888,7 +888,7 @@ public class StandPowers {
     }
 
 
-    protected void tickSounds(){
+    public void tickSounds(){
         if (this.self.level().isClientSide) {
             ((StandUserClient) this.self).roundabout$clientPlaySound();
              ((StandUserClient) this.self).roundabout$clientSoundCancel();

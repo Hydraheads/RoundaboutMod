@@ -3,9 +3,11 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
+import net.hydra.jojomod.client.gui.PauseTSScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
@@ -14,9 +16,12 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.Timer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
@@ -25,6 +30,7 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -212,8 +218,36 @@ public abstract class InputEvents implements IInputEvents {
             return false;
         }
 
-    @Inject(method = "tick", at = @At("TAIL"), cancellable = true)
-    public void roundabout$tick(CallbackInfo ci) {
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE",target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableCull()V"), cancellable = true)
+    public void roundabout$run(CallbackInfo ci) {
+        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+            if (player != null && level != null) {
+                boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
+                if (canTS) {
+                    this.timer.partialTick = 0;
+                    this.timer.tickDelta = 0;
+                    this.pausePartialTick = 0;
+                }
+            }
+        }
+    }
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+    public void roundabout$tickTick(CallbackInfo ci) {
+        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+            if (player != null && level != null) {
+                boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
+                if (canTS) {
+                    gui.tick(false);
+                    ((StandUser)player).roundabout$getStandPowers().timeTick();
+                    ci.cancel();
+                }
+            }
+        }
+    }
+
+    @Shadow
+    public void setScreen(@javax.annotation.Nullable Screen $$0) {
     }
 
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
@@ -445,6 +479,13 @@ public abstract class InputEvents implements IInputEvents {
 
     @Shadow private static Minecraft instance;
 
+    @Shadow @Final public Gui gui;
+
+    @Shadow public abstract SoundManager getSoundManager();
+
+    @Shadow @Final private Timer timer;
+    @Shadow private volatile boolean pause;
+    @Shadow private float pausePartialTick;
     @Unique
     private static boolean roundabout$hasHandledBinds = false;
 
@@ -454,6 +495,30 @@ public abstract class InputEvents implements IInputEvents {
             this.handleKeybinds();
             if (this.missTime > 0) {
                 this.missTime--;
+            }
+        }
+    }
+
+    @Inject(method = "getFrameTime", at = @At("HEAD"), cancellable = true)
+    public void roundabout$getFrameTime(CallbackInfoReturnable<Float> cir){
+        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+            if (player != null && level != null) {
+                boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
+                if (canTS) {
+                   cir.setReturnValue(0F);
+                }
+            }
+        }
+    }
+
+    @Inject(method = "getDeltaFrameTime", at = @At("HEAD"), cancellable = true)
+    public void roundabout$getDeltaFrameTime(CallbackInfoReturnable<Float> cir){
+        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+            if (player != null && level != null) {
+                boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
+                if (canTS) {
+                        cir.setReturnValue(0F);
+                }
             }
         }
     }

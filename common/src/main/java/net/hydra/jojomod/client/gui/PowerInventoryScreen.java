@@ -255,7 +255,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.distance").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
 
-                    int renderSpot2 = (int) Math.floor(((double) 114 / 4) * (distanceOut));
+                    int renderSpot2 = (int) Math.floor(((double) 114 / 2) * (distanceOut));
                     if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY)) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 185, 5, 11);
                     } else {
@@ -498,20 +498,23 @@ public class PowerInventoryScreen
                     }
                 }
                 if (isSurelyHovering(i-136, j+146, 65, 11, $$0, $$1)) {
-                    ipe.roundabout$setAnchorPlace(55);
-                    ipe.roundabout$setDistanceOut(1.07F);
-                    ipe.roundabout$setSizePercent(1F);
-                    ipe.roundabout$setIdleRotation(0F);
-                    ipe.roundabout$setIdleYOffset(0.1F);
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1.07F, PacketDataIndex.FLOAT_DISTANCE_OUT);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, PacketDataIndex.FLOAT_SIZE_PERCENT);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0F, PacketDataIndex.FLOAT_IDLE_ROTATION);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0.1F, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
-                    ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
-                    ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = 100F;
-                    ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;
-                    ConfigManager.saveClientConfig();
+                    if (pageNumber == 1) {
+                        ipe.roundabout$setAnchorPlace(55);
+                        ipe.roundabout$setDistanceOut(1.07F);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1.07F, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                        ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
+                        ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = 100F;
+                        ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;
+                        ConfigManager.saveClientConfig();
+                    } else if (pageNumber == 2){
+                        ipe.roundabout$setSizePercent(1F);
+                        ipe.roundabout$setIdleRotation(0F);
+                        ipe.roundabout$setIdleYOffset(0.1F);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, PacketDataIndex.FLOAT_SIZE_PERCENT);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0F, PacketDataIndex.FLOAT_IDLE_ROTATION);
+                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0.1F, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
+                    }
                     return true;
                 }
                 if (isSurelyHovering(i-66, j+146, 65, 11, $$0, $$1)) {

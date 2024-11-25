@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -13,6 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,6 +44,7 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
     public void roundabout$clientQueSound(byte soundChoice){
        SoundEvent soundE = ((StandUser) this).roundabout$getStandPowers().getSoundFromByte(soundChoice);
        if (soundE != null) {
+
             roundabout$AddSound(new QueueSoundInstance(soundE, soundChoice));
        }
     }
@@ -69,6 +73,15 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
 
             List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundabout$sounds);
             List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
+
+            for (int j = $$2.size() - 1; j >= 0; --j) {
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    if ($$2.get(j).roundaboutSoundByte == $$1.get(i).roundaboutSoundByte){
+                        Minecraft.getInstance().getSoundManager().stop($$2.get(j).roundaboutSoundInstance);
+                        $$2.remove(j);
+                    }
+                }
+            }
 
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 QueueSoundInstance soundI = $$1.get(i);
