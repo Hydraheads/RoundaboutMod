@@ -267,9 +267,7 @@ public abstract class InputEvents implements IInputEvents {
                     ((StandUser)player).roundabout$getStandPowers().timeTick();
 
 
-                    Roundabout.LOGGER.info("1");
                     if (this.overlay == null && this.screen == null) {
-                        Roundabout.LOGGER.info("2");
                         this.handleKeybinds();
                         if (this.missTime > 0) {
                             this.missTime--;
