@@ -2,9 +2,11 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -74,6 +76,10 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow protected double lerpY;
+    @Shadow protected double lerpZ;
+    @Shadow protected double lerpX;
+
     @Shadow public abstract float getHealth();
 
     @Shadow public abstract float getMaxHealth();
@@ -365,6 +371,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((ILivingEntityAccess) this).roundabout$setLerp(roundabout$blipVector);
             this.setPos(roundabout$blipVector.x, roundabout$blipVector.y, roundabout$blipVector.z);
             this.roundabout$blip = false;
+        } else {
+            if (ClientUtil.getWasFrozen() && !ClientUtil.getScreenFreeze()){
+                ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+                this.xo = this.lerpX;
+                this.yo = this.lerpY;
+                this.zo = this.lerpZ;
+                this.xOld = this.lerpX;
+                this.yOld = this.lerpY;
+                this.zOld = this.lerpZ;
+                ((ILivingEntityAccess) this).roundabout$setLerp(new Vec3(this.lerpX,this.lerpY,this.lerpZ).toVector3f());
+                this.setPos(this.lerpX, this.lerpY, this.lerpZ);
+            }
         }
     }
 

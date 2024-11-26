@@ -59,6 +59,23 @@ public class ClientUtil {
         return false;
     }
 
+    public static int wasFrozen = 0;
+    public static boolean getWasFrozen(){
+        return wasFrozen != 0;
+    }
+    public static boolean getScreenFreeze(){
+        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null) {
+                boolean canTS = ((TimeStop) player.level()).CanTimeStopEntity(player);
+                if (canTS) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static boolean poseHeld = false;
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){

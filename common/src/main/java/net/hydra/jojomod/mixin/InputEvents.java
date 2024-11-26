@@ -219,7 +219,7 @@ public abstract class InputEvents implements IInputEvents {
         }
 
 
-    @Inject(method = "runTick", at = @At(value = "INVOKE",target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableCull()V"), cancellable = true)
+    @Inject(method = "runTick", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/renderer/FogRenderer;setupNoFog()V"), cancellable = true)
     public void roundabout$run(CallbackInfo ci) {
         if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
             if (player != null && level != null) {
@@ -238,11 +238,18 @@ public abstract class InputEvents implements IInputEvents {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
                 if (canTS) {
+                    ClientUtil.wasFrozen = 5;
                     gui.tick(false);
                     ((StandUser)player).roundabout$getStandPowers().timeTick();
                     ci.cancel();
                 }
             }
+        }
+    }
+    @Inject(method = "tick", at = @At("TAIL"), cancellable = true)
+    public void roundabout$tickTickTail(CallbackInfo ci) {
+        if (!ClientUtil.getScreenFreeze() && ClientUtil.getWasFrozen()) {
+            ClientUtil.wasFrozen -= 1;
         }
     }
 

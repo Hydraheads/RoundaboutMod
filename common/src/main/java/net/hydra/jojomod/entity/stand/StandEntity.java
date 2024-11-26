@@ -1,12 +1,15 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
+import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -97,6 +100,7 @@ public abstract class StandEntity extends Mob{
     protected static final EntityDataAccessor<Float> IDLE_Y_OFFSET = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.FLOAT);
 
+    private byte lastOffsetType = 0;
     public boolean canAcquireHeldItem = false;
 
     /**This rotation data is for the model rotating when you look certain directions,
@@ -253,8 +257,14 @@ public abstract class StandEntity extends Mob{
     } //returns leaning direction
 
     public final byte getOffsetType() {
+        if (this.level().isClientSide()){
+            if (ClientUtil.getScreenFreeze()){
+                return this.lastOffsetType;
+            }
+        }
         return this.entityData.get(OFFSET_TYPE);
     } //returns leaning direction
+
     public final void setOffsetType(byte oft) {
         this.entityData.set(OFFSET_TYPE, oft);
     }
@@ -670,6 +680,9 @@ public abstract class StandEntity extends Mob{
         float pitch = this.getXRot();
         float yaw = this.getYRot();
         byte ot = this.getOffsetType();
+        if (this.lastOffsetType != ot){
+            this.lastOffsetType = ot;
+        }
         super.tick();
 
             if (this.level().isClientSide()){
