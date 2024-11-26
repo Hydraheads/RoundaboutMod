@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.Sets;
 import net.hydra.jojomod.access.IItemEntityAccess;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -37,9 +38,15 @@ public class ZRaid {
     private ServerLevel level;
     @Unique
     public boolean roundabout$hasRewarded = false;
+    @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$tick(CallbackInfo ci) {
+        if (((TimeStop)this.level).inTimeStopRange(center)){
+            ci.cancel();
+        }
+    }
     @SuppressWarnings("deprecation")
     @Inject(method = "tick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z"),cancellable = true)
-    public void roundabout$ShootFromRotation(CallbackInfo ci) {
+    public void roundabout$tickMid(CallbackInfo ci) {
         if (!roundabout$hasRewarded){
             roundabout$hasRewarded = true;
             for(UUID uuid : this.heroesOfTheVillage) {

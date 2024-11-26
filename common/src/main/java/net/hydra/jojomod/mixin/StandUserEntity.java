@@ -269,7 +269,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean roundabout$toggleFightOrFlight = false;
 
 
-    @Inject(method = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "HEAD",
+    @Inject(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "HEAD",
             shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
     public void roundabout$tickEffects(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
         if (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange($$0)){
