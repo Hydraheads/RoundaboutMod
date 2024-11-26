@@ -180,6 +180,8 @@
   "commands.roundabout.levelup.single": "Leveled up %s",
   "commands.roundabout.levelup_specific.multiple": "Set levels of %s entities",
   "commands.roundabout.levelup_specific.single": "Set level of %s",
+  "commands.roundabout.experience_specific.multiple": "Set experience of %s entities",
+  "commands.roundabout.experience_specific.single": "Set experience of %s",
 
   "sounds.roundabout.stand_arrow_charge":  "Stand Arrow Magnetizes",
   "sounds.roundabout.stand_arrow_use":  "Stand acquired!",

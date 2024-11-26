@@ -201,7 +201,7 @@ public class MainUtil {
 
                         if ($$4.contains("Experience")) {
                             int exp = (byte) ($$4.getInt("Experience"));
-                            exp = (byte) Mth.clamp(exp, 0, SD.standPowers.getExpForLevelUp(exp));
+                            exp = (byte) Mth.clamp(exp, 0, SD.standPowers.getExpForLevelUp(lvl));
                             IPE.roundabout$setStandExp(exp);
                         } else {
                             IPE.roundabout$setStandExp(0);

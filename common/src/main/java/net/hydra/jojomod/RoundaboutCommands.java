@@ -9,6 +9,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +19,29 @@ import java.util.Collection;
 
 public class RoundaboutCommands {
 
+    public static int roundaboutSetStandExp(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                if (entity instanceof Player PE) {
+                    IPlayerEntity ipe = ((IPlayerEntity)PE);
+                    StandUser user = ((StandUser) PE);
+                    ItemStack standDisc = user.roundabout$getStandDisc();
+                    int standExp;
+                    int lvl = ipe.roundabout$getStandLevel();
+                    standExp = Mth.clamp(level,0,user.roundabout$getStandPowers().getExpForLevelUp(lvl));
+                    if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
+                        ipe.roundabout$setStandExp(standExp);
+                    }
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.experience_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.experience_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
     public static int roundaboutSetStandLevel(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
