@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -48,6 +49,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -55,6 +58,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -263,6 +267,37 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public boolean roundabout$toggleFightOrFlight = false;
+
+
+    @Inject(method = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "HEAD",
+            shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
+    public void roundabout$tickEffects(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
+        if (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange($$0)){
+
+            if ($$0.level() != this.level()) {
+                cir.setReturnValue(false);
+                return;
+            } else {
+                Vec3 $$1 = new Vec3(this.getX(), this.getEyeY(), this.getZ());
+                Vec3 $$2 = new Vec3($$0.getX(), $$0.getEyeY(), $$0.getZ());
+                if ($$2.distanceTo($$1) > 128.0){
+                    cir.setReturnValue(false);
+                    return;
+                }
+                BlockHitResult clipX = this.level().clip(new ClipContext($$1, $$2, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this));
+                if (clipX.getType() != HitResult.Type.MISS){
+                    if (this.level().getBlockState(clipX.getBlockPos()).getBlock() instanceof FogBlock){
+                        cir.setReturnValue(false);
+                        return;
+                    }
+                }
+
+                cir.setReturnValue(this.level().clip(new ClipContext($$1, $$2, ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS);
+            }
+
+        }
+    }
 
     /**
      * Tick thru effects for bleed to not show potion swirls
