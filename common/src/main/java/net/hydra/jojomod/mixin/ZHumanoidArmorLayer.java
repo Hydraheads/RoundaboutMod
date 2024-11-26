@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
@@ -58,7 +59,7 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
                 return;
             }
 
-            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
+            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3) || ClientUtil.getScreenFreeze();
             if (roundabout$ModifyEntity) {
                 if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderChest() == null){
                     ((IEntityAndData) $$3).roundabout$setRoundaboutRenderChest($$3.getItemBySlot(EquipmentSlot.CHEST).copy());

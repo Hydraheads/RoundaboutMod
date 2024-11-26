@@ -1,13 +1,17 @@
 package net.hydra.jojomod.mixin;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.SetBlockInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.prediction.BlockStatePredictionHandler;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceKey;
@@ -27,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.storage.WritableLevelData;
@@ -40,6 +45,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 @Mixin(ClientLevel.class)
@@ -279,6 +286,60 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             }
         }
     }
+    @Unique
+    private ImmutableList<SetBlockInstance> roundabout$setBlockInstance = ImmutableList.of();
+    @Inject(method = "setBlock", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$setBlock(BlockPos $$0, BlockState $$1, int $$2, int $$3, CallbackInfoReturnable<Boolean> cir) {
+        if (ClientUtil.getScreenFreeze()) {
+
+            if (roundabout$setBlockInstance == null){
+                roundabout$setBlockInstance = ImmutableList.of();
+            }
+            if (roundabout$setBlockInstance.isEmpty()) {
+                roundabout$setBlockInstance = ImmutableList.of(new SetBlockInstance($$0,$$1,$$2,$$3));
+            } else {
+                List<SetBlockInstance> $$b = Lists.newArrayList(roundabout$setBlockInstance);
+                $$b.add(new SetBlockInstance($$0,$$1,$$2,$$3));
+                roundabout$setBlockInstance = ImmutableList.copyOf($$b);
+            }
+            cir.setReturnValue(false);
+        }
+    }
+    @Inject(method = "setServerVerifiedBlockState", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$setBlock2(BlockPos $$0, BlockState $$1, int $$2, CallbackInfo ci) {
+        if (!this.blockStatePredictionHandler.updateKnownServerState($$0, $$1)) {
+            if (ClientUtil.getScreenFreeze()) {
+
+                if (roundabout$setBlockInstance == null) {
+                    roundabout$setBlockInstance = ImmutableList.of();
+                }
+                if (roundabout$setBlockInstance.isEmpty()) {
+                    roundabout$setBlockInstance = ImmutableList.of(new SetBlockInstance($$0, $$1, $$2, 512));
+                } else {
+                    List<SetBlockInstance> $$b = Lists.newArrayList(roundabout$setBlockInstance);
+                    $$b.add(new SetBlockInstance($$0, $$1, $$2, 512));
+                    roundabout$setBlockInstance = ImmutableList.copyOf($$b);
+                }
+                ci.cancel();
+            }
+        }
+    }
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    private void roundabout$tickInGeneral(BooleanSupplier $$0, CallbackInfo ci) {
+        if (!ClientUtil.getScreenFreeze()) {
+
+            if (roundabout$setBlockInstance == null){
+                roundabout$setBlockInstance = ImmutableList.of();
+            }
+            if (!roundabout$setBlockInstance.isEmpty()){
+                for (int i = roundabout$setBlockInstance.size() - 1; i >= 0; --i) {
+                    SetBlockInstance sbi = roundabout$setBlockInstance.get(i);
+                    setBlock(sbi.pos,sbi.state,sbi.integer,sbi.integer2);
+                }
+                roundabout$setBlockInstance = ImmutableList.of();
+            }
+        }
+    }
 
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSeed(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
@@ -320,6 +381,10 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     public int getSkyFlashTime() {
         return 0;
     }
+
+    @Shadow public abstract boolean setBlock(BlockPos $$0, BlockState $$1, int $$2, int $$3);
+
+    @Shadow @Final private BlockStatePredictionHandler blockStatePredictionHandler;
 
     @Unique
     @Override

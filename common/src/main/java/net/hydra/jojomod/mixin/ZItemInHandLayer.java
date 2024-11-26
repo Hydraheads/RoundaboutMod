@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
@@ -36,7 +37,7 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
         dominant$Hand = $$3.getMainArm() == HumanoidArm.RIGHT;
         if ($$3 instanceof Player) {
-            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3);
+            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3) || ClientUtil.getScreenFreeze();
             if (roundabout$ModifyEntity) {
                 if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderMainHand() == null){
                     ((IEntityAndData) $$3).roundabout$setRoundaboutRenderMainHand($$3.getMainHandItem().copy());
