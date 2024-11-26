@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "in_fog=true": {
+      "model": "minecraft:block/cobblestone"
+    },
+    "in_fog=false": {
+      "model": "roundabout:block/fog_block_invisible"
+    }
+  }
+}

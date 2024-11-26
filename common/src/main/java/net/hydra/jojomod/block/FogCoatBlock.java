@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class FogCoatBlock extends FogBlock{
@@ -39,6 +40,7 @@ public class FogCoatBlock extends FogBlock{
 
     @Override
     public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+        if ($$0.getValue(IN_FOG)) {
             switch ((Direction)$$0.getValue(FACING)) {
                 case NORTH:
                 default:
@@ -54,6 +56,9 @@ public class FogCoatBlock extends FogBlock{
                 case DOWN:
                     return BOTTOM_AABB;
             }
+        } else {
+            return Shapes.empty();
+        }
     }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext $$0) {

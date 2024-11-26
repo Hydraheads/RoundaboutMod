@@ -58,6 +58,12 @@ public class ModBlocks {
     public static Block FOG_CHERRY_PLANKS_COATING;
     public static Block FOG_STONE;
     public static Block FOG_STONE_COATING;
+    public static Block FOG_COBBLESTONE;
+    public static Block FOG_COBBLESTONE_COATING;
+    public static Block FOG_MOSSY_COBBLESTONE;
+    public static Block FOG_MOSSY_COBBLESTONE_COATING;
+    public static Block FOG_DEEPSLATE;
+    public static Block FOG_DEEPSLATE_COATING;
     public static Block FOG_COAL_ORE;
     public static Block FOG_IRON_ORE;
     public static Block FOG_GOLD_ORE;
@@ -65,8 +71,6 @@ public class ModBlocks {
     public static Block FOG_DIAMOND_ORE;
     public static Block FOG_STONE_BRICKS;
     public static Block FOG_STONE_BRICKS_COATING;
-    public static Block FOG_DEEPSLATE;
-    public static Block FOG_DEEPSLATE_COATING;
     public static Block FOG_NETHERRACK;
     public static Block FOG_NETHERRACK_COATING;
     public static Block FOG_NETHER_BRICKS;

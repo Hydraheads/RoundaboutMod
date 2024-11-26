@@ -130,6 +130,22 @@ public class ForgeItems {
             () -> new FogBlockItem(ForgeBlocks.FOG_STONE.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.STONE)));
+    public static final RegistryObject<BlockItem> FOG_COBBLESTONE = addToFogTab(ITEMS.register("fog_cobblestone",
+            () -> new FogBlockItem(ForgeBlocks.FOG_COBBLESTONE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.COBBLESTONE)));
+    public static final RegistryObject<BlockItem> FOG_MOSSY_COBBLESTONE = addToFogTab(ITEMS.register("fog_mossy_cobblestone",
+            () -> new FogBlockItem(ForgeBlocks.FOG_COBBLESTONE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.MOSSY_COBBLESTONE)));
+    public static final RegistryObject<BlockItem> FOG_STONE_BRICKS = addToFogTab(ITEMS.register("fog_stone_bricks",
+            () -> new FogBlockItem(ForgeBlocks.FOG_STONE_BRICKS.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.STONE_BRICKS)));
+    public static final RegistryObject<BlockItem> FOG_DEEPSLATE = addToFogTab(ITEMS.register("fog_deepslate",
+            () -> new FogBlockItem(ForgeBlocks.FOG_DEEPSLATE.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.DEEPSLATE)));
     public static final RegistryObject<BlockItem> FOG_COAL_ORE = addToFogTab(ITEMS.register("fog_coal_ore",
             () -> new FogBlockItem(ForgeBlocks.FOG_COAL_ORE.get(),
                     new Item.Properties().stacksTo(64)
@@ -150,14 +166,6 @@ public class ForgeItems {
             () -> new FogBlockItem(ForgeBlocks.FOG_DIAMOND_ORE.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.DIAMOND_ORE)));
-    public static final RegistryObject<BlockItem> FOG_STONE_BRICKS = addToFogTab(ITEMS.register("fog_stone_bricks",
-            () -> new FogBlockItem(ForgeBlocks.FOG_STONE_BRICKS.get(),
-                    new Item.Properties().stacksTo(64)
-                    , Blocks.STONE_BRICKS)));
-    public static final RegistryObject<BlockItem> FOG_DEEPSLATE = addToFogTab(ITEMS.register("fog_deepslate",
-            () -> new FogBlockItem(ForgeBlocks.FOG_DEEPSLATE.get(),
-                    new Item.Properties().stacksTo(64)
-                    , Blocks.DEEPSLATE)));
     public static final RegistryObject<BlockItem> FOG_NETHERRACK = addToFogTab(ITEMS.register("fog_netherrack",
             () -> new FogBlockItem(ForgeBlocks.FOG_NETHERRACK.get(),
                     new Item.Properties().stacksTo(64)
@@ -218,6 +226,14 @@ public class ForgeItems {
             () -> new FogCoatBlockItem(ForgeBlocks.FOG_STONE_COATING.get(),
                     new Item.Properties().stacksTo(64)
                     , Blocks.STONE)));
+    public static final RegistryObject<BlockItem> FOG_COBBLESTONE_COATING = addToFogTab(ITEMS.register("fog_cobblestone_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_COBBLESTONE_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.COBBLESTONE)));
+    public static final RegistryObject<BlockItem> FOG_MOSSY_COBBLESTONE_COATING = addToFogTab(ITEMS.register("fog_cobblestone_coating",
+            () -> new FogCoatBlockItem(ForgeBlocks.FOG_MOSSY_COBBLESTONE_COATING.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.MOSSY_COBBLESTONE)));
     public static final RegistryObject<BlockItem> FOG_STONE_BRICKS_COATING = addToFogTab(ITEMS.register("fog_stone_bricks_coating",
             () -> new FogCoatBlockItem(ForgeBlocks.FOG_STONE_BRICKS_COATING.get(),
                     new Item.Properties().stacksTo(64)

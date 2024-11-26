@@ -105,6 +105,14 @@ public class ForgeBlocks {
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_DIAMOND_ORE = BLOCKS.register("fog_diamond_ore",
             ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_COBBLESTONE = BLOCKS.register("fog_cobblestone",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_COBBLESTONE_COATING = BLOCKS.register("fog_cobblestone_coating",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_MOSSY_COBBLESTONE = BLOCKS.register("fog_cobblestone",
+            ModBlocks::getFogBlock);
+    public static final RegistryObject<Block> FOG_MOSSY_COBBLESTONE_COATING = BLOCKS.register("fog_mossy_cobblestone_coating",
+            ModBlocks::getFogCoatingBlock);
     public static final RegistryObject<Block> FOG_STONE_BRICKS = BLOCKS.register("fog_stone_bricks",
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_STONE_BRICKS_COATING = BLOCKS.register("fog_stone_bricks_coating",

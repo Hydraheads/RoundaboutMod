@@ -103,6 +103,10 @@ public class ForgeEvents {
         ModBlocks.FOG_CHERRY_PLANKS_COATING = ForgeBlocks.FOG_CHERRY_PLANKS_COATING.get();
         ModBlocks.FOG_STONE = ForgeBlocks.FOG_STONE.get();
         ModBlocks.FOG_STONE_COATING = ForgeBlocks.FOG_STONE_COATING.get();
+        ModBlocks.FOG_COBBLESTONE = ForgeBlocks.FOG_COBBLESTONE.get();
+        ModBlocks.FOG_COBBLESTONE_COATING = ForgeBlocks.FOG_COBBLESTONE_COATING.get();
+        ModBlocks.FOG_MOSSY_COBBLESTONE = ForgeBlocks.FOG_MOSSY_COBBLESTONE.get();
+        ModBlocks.FOG_MOSSY_COBBLESTONE_COATING = ForgeBlocks.FOG_MOSSY_COBBLESTONE_COATING.get();
         ModBlocks.FOG_COAL_ORE = ForgeBlocks.FOG_COAL_ORE.get();
         ModBlocks.FOG_IRON_ORE = ForgeBlocks.FOG_IRON_ORE.get();
         ModBlocks.FOG_GOLD_ORE = ForgeBlocks.FOG_GOLD_ORE.get();

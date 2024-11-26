@@ -56,6 +56,10 @@ public class FabricBlocks {
     public static final Block FOG_SAND_COATING = registerBlockItemless("fog_sand_coating",ModBlocks.getFogCoatingBlock());
     public static final Block FOG_STONE = registerBlockItemless("fog_stone",ModBlocks.getFogBlock());
     public static final Block FOG_STONE_COATING = registerBlockItemless("fog_stone_coating",ModBlocks.getFogCoatingBlock());
+    public static final Block FOG_COBBLESTONE = registerBlockItemless("fog_cobblestone",ModBlocks.getFogBlock());
+    public static final Block FOG_COBBLESTONE_COATING = registerBlockItemless("fog_cobblestone_coating",ModBlocks.getFogCoatingBlock());
+    public static final Block FOG_MOSSY_COBBLESTONE = registerBlockItemless("fog_mossy_cobblestone",ModBlocks.getFogBlock());
+    public static final Block FOG_MOSSY_COBBLESTONE_COATING = registerBlockItemless("fog_mossy_cobblestone_coating",ModBlocks.getFogCoatingBlock());
     public static final Block FOG_OAK_PLANKS = registerBlockItemless("fog_oak_planks",ModBlocks.getFogBlock());
     public static final Block FOG_OAK_PLANKS_COATING = registerBlockItemless("fog_oak_planks_coating",ModBlocks.getFogCoatingBlock());
     public static final Block FOG_SPRUCE_PLANKS = registerBlockItemless("fog_spruce_planks",ModBlocks.getFogBlock());
@@ -155,6 +159,10 @@ public class FabricBlocks {
         ModBlocks.FOG_CHERRY_PLANKS_COATING = FOG_CHERRY_PLANKS_COATING;
         ModBlocks.FOG_STONE = FOG_STONE;
         ModBlocks.FOG_STONE_COATING = FOG_STONE_COATING;
+        ModBlocks.FOG_COBBLESTONE = FOG_COBBLESTONE;
+        ModBlocks.FOG_COBBLESTONE_COATING = FOG_COBBLESTONE_COATING;
+        ModBlocks.FOG_MOSSY_COBBLESTONE = FOG_MOSSY_COBBLESTONE;
+        ModBlocks.FOG_MOSSY_COBBLESTONE_COATING = FOG_MOSSY_COBBLESTONE_COATING;
         ModBlocks.FOG_COAL_ORE = FOG_COAL_ORE;
         ModBlocks.FOG_IRON_ORE = FOG_IRON_ORE;
         ModBlocks.FOG_GOLD_ORE = FOG_GOLD_ORE;
