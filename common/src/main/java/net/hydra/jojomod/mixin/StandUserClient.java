@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -44,8 +45,9 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
     public void roundabout$clientQueSound(byte soundChoice){
        SoundEvent soundE = ((StandUser) this).roundabout$getStandPowers().getSoundFromByte(soundChoice);
        if (soundE != null) {
-
-            roundabout$AddSound(new QueueSoundInstance(soundE, soundChoice));
+           if (!ClientUtil.getScreenFreeze()){
+               roundabout$AddSound(new QueueSoundInstance(soundE, soundChoice));
+           }
        }
     }
 

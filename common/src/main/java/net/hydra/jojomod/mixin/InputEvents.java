@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -17,10 +18,7 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
-import net.minecraft.client.Timer;
+import net.minecraft.client.*;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
@@ -218,6 +216,12 @@ public abstract class InputEvents implements IInputEvents {
             return false;
         }
 
+    @Unique
+    float roundabout$pt = 0;
+    @Unique
+    float roundabout$tickDelta = 0;
+    @Unique
+    float roundabout$ppt = 0;
 
     @Inject(method = "runTick", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/renderer/FogRenderer;setupNoFog()V"), cancellable = true)
     public void roundabout$run(CallbackInfo ci) {
@@ -225,9 +229,29 @@ public abstract class InputEvents implements IInputEvents {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
                 if (canTS) {
+                    roundabout$pt = this.timer.partialTick;
+                    roundabout$tickDelta = this.timer.tickDelta;
+                    roundabout$ppt = this.timer.partialTick;
                     this.timer.partialTick = 0;
                     this.timer.tickDelta = 0;
                     this.pausePartialTick = 0;
+                }
+            }
+        }
+    }
+    @Inject(method = "runTick", at = @At(value = "TAIL"), cancellable = true)
+    public void roundabout$run2(CallbackInfo ci) {
+        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+
+            if (player != null && level != null) {
+                boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
+                if (canTS) {
+                    this.timer.partialTick = roundabout$pt;
+                    this.timer.tickDelta = roundabout$tickDelta;
+                    this.pausePartialTick = roundabout$ppt;
+                    roundabout$pt = 0;
+                    roundabout$tickDelta = 0;
+                    roundabout$ppt = 0;
                 }
             }
         }
@@ -241,6 +265,17 @@ public abstract class InputEvents implements IInputEvents {
                     ClientUtil.wasFrozen = 5;
                     gui.tick(false);
                     ((StandUser)player).roundabout$getStandPowers().timeTick();
+
+
+                    Roundabout.LOGGER.info("1");
+                    if (this.overlay == null && this.screen == null) {
+                        Roundabout.LOGGER.info("2");
+                        this.handleKeybinds();
+                        if (this.missTime > 0) {
+                            this.missTime--;
+                        }
+                    }
+                    keyboardHandler.tick();
                     ci.cancel();
                 }
             }
@@ -493,6 +528,7 @@ public abstract class InputEvents implements IInputEvents {
     @Shadow @Final private Timer timer;
     @Shadow private volatile boolean pause;
     @Shadow private float pausePartialTick;
+    @Shadow @Final public KeyboardHandler keyboardHandler;
     @Unique
     private static boolean roundabout$hasHandledBinds = false;
 

@@ -76,6 +76,16 @@ public class ClientUtil {
         return false;
     }
 
+    public static boolean isPlayer(Entity PE){
+        if (PE != null){
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null) {
+                return PE.is(player);
+            }
+        }
+        return false;
+    }
+
     public static boolean poseHeld = false;
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){

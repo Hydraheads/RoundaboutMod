@@ -372,7 +372,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.setPos(roundabout$blipVector.x, roundabout$blipVector.y, roundabout$blipVector.z);
             this.roundabout$blip = false;
         } else {
-            if (ClientUtil.getWasFrozen() && !ClientUtil.getScreenFreeze()){
+            if (ClientUtil.getWasFrozen() && !ClientUtil.getScreenFreeze() && !ClientUtil.isPlayer(this)){
                 ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
                 this.xo = this.lerpX;
                 this.yo = this.lerpY;
