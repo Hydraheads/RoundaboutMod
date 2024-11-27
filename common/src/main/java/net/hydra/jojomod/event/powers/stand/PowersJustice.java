@@ -397,7 +397,7 @@ public class PowersJustice extends DashPreset {
                                         double random3 = (Math.random() * 1.2) - 0.6;
                                         Vec3 vector = new Vec3((bpos.getX() - LE.getX()),
                                                 (bpos.getY()+2 - LE.getY()),
-                                                (bpos.getZ() - LE.getZ())).normalize().scale(1.5F);
+                                                (bpos.getZ() - LE.getZ())).normalize().scale(1.8F);
                                         ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.POOF, value.getX(),
                                                 value.getY() + value.getEyeHeight(), value.getZ(),
                                                 0,
@@ -408,6 +408,8 @@ public class PowersJustice extends DashPreset {
 
                                         LE.setDeltaMovement(LE.getDeltaMovement().add(vector.x,vector.y*0.55+0.2F,vector.z
                                         ));
+                                        LE.hurtMarked = true;
+                                        LE.hasImpulse = true;
                                         success = true;
                                     }
                                 }
