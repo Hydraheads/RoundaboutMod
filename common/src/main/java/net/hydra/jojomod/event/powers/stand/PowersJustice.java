@@ -166,6 +166,8 @@ public class PowersJustice extends DashPreset {
         return -7;
     }
 
+    private boolean isInPilotMode = false;
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
@@ -189,7 +191,11 @@ public class PowersJustice extends DashPreset {
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
 
-            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+        if (isInPilotMode){
+            setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT_EXIT, PowerIndex.SKILL_4);
+        } else {
+            setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT, PowerIndex.SKILL_4);
+        }
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
@@ -205,6 +211,8 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.fog_pilot",
+                "instruction.roundabout.press_skill", StandIcons.JUSTICE_PILOT,4,level,bypas));
         return $$1;
     }
     @Override
@@ -334,7 +342,7 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if ((slot == 2 || slot == 4) && !this.isHoldingSneak()){
+        if ((slot == 2  && !this.isHoldingSneak()) || (slot == 3 && this.isHoldingSneak())){
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
             if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 return true;

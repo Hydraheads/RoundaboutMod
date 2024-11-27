@@ -391,6 +391,8 @@
   "ability.roundabout.fog_chain.desc": "Pulls mobs that are bleeding in fog towards the block you are looking at. Many mobs can bleed if you attack them with scissors, charged glaives, knives, or barbed wires.",
   "ability.roundabout.fog_blocks": "Illusion Blocks",
   "ability.roundabout.fog_blocks.desc": "Create limitless fog blocks, on demand. When placed, they can only be seen while fog is cast, and can be walked through (as they are just illusions).",
+  "ability.roundabout.fog_pilot": "Justice Control",
+  "ability.roundabout.fog_pilot.desc": "Switch to the perspective of Justice, and fly around the foggy sky. On top of surveying the area, you can command corpses from above to move around and attack your targets. Either press again or take damage to return to your body.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
