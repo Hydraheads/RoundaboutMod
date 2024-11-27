@@ -50,11 +50,20 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
             if (mobEntity.getUser() != null && mobEntity.getUser().is(lp)) {
                 if (((StandUser)lp).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
                     maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
+                    if (ConfigManager.getClientConfig().opacitySettings.opacityOfStand <= 0.1F){
+                        return;
+                    }
                 } else {
                     maxfade = ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking;
+                    if (ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking <= 0.1F){
+                        return;
+                    }
                 }
             } else {
                 maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfOthers;
+                if (ConfigManager.getClientConfig().opacitySettings.opacityOfOthers <= 0.1F){
+                    return;
+                }
             }
         }
         maxfade*= 0.01F;
