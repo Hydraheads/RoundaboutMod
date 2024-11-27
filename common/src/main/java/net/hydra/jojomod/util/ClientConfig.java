@@ -34,6 +34,8 @@ public class ClientConfig {
     public static class ParticleSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean renderJusticeParticlesInFirstPerson;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean renderJusticeParticlesWhilePilotingInFirstPerson;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer justiceFogParticlesPerTick;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)

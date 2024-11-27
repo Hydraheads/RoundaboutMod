@@ -106,7 +106,9 @@ public class JusticeEntity extends StandEntity {
         } else {
 
             if (!(!ConfigManager.getClientConfig().particleSettings.renderJusticeParticlesInFirstPerson &&
-                    ClientUtil.checkIfStandIsYoursAndFirstPerson(this))) {
+                    ClientUtil.checkIfStandIsYoursAndFirstPerson(this)) &&
+                    !(!ConfigManager.getClientConfig().particleSettings.renderJusticeParticlesWhilePilotingInFirstPerson &&
+                    ClientUtil.checkIfStandIsYoursAndFirstPersonandPiloting(this))) {
                 if (this.getSkin() != DARK_MIRAGE) {
                     if (this.getSkin() == FLAMED) {
                         for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.justiceSkinFlameParticlesPerTick; i++) {

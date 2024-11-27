@@ -89,14 +89,14 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "justice"),
                         EntityType.Builder.of(JusticeEntity::new, MobCategory.MISC).
-                                sized(1.0F, 3.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":justice")
+                                sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(12).build(Roundabout.MOD_ID+":justice")
                 );
         public static final EntityType<JusticePirateEntity> JUSTICE_PIRATE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"),
                         EntityType.Builder.of(JusticePirateEntity::new, MobCategory.MISC).
-                                sized(1.0F, 3.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":justice_pirate")
+                                sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(10).build(Roundabout.MOD_ID+":justice_pirate")
                 );
         public static final EntityType<DarkMirageEntity> DARK_MIRAGE =
                 Registry.register(

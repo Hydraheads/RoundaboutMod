@@ -713,6 +713,12 @@ public class StandPowers {
         return 300;
     }
 
+    public boolean isPiloting(){
+        return false;
+    }
+    public StandEntity getPilotingStand(){
+        return getStandEntity(this.self);
+    }
     public void tickPower(){
         if (this.self instanceof Player PE && PE.isSpectator()) {
             ((StandUser) this.getSelf()).roundabout$setActive(false);

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -64,13 +65,13 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<JusticeEntity>> JUSTICE =
             ENTITY_TYPES.register("justice", () ->
-                    EntityType.Builder.of(JusticeEntity::new, MobCategory.MISC).sized(1.0F, 3.05f).
+                    EntityType.Builder.of(JusticeEntity::new, MobCategory.MISC).sized(ModEntities.justiceWidth, ModEntities.justiceHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "justice").toString())
             );
     public static final RegistryObject<EntityType<JusticePirateEntity>> JUSTICE_PIRATE =
             ENTITY_TYPES.register("justice_pirate", () ->
-                    EntityType.Builder.of(JusticePirateEntity::new, MobCategory.MISC).sized(1.0F, 3.05f).
+                    EntityType.Builder.of(JusticePirateEntity::new, MobCategory.MISC).sized(ModEntities.justiceWidth, ModEntities.justiceHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate").toString())
             );

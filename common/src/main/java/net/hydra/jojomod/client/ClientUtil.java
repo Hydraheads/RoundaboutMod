@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import com.google.common.collect.Maps;
+import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
@@ -12,6 +13,7 @@ import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.PauseScreen;
@@ -57,6 +59,27 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+
+    public static boolean checkIfStandIsYoursAndFirstPersonandPiloting(StandEntity stand) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (stand.getUser() != null){
+                if (stand.getUser().is(player)){
+                    if (Minecraft.getInstance().options.getCameraType().isFirstPerson()){
+                        if (((StandUser)stand.getUser()).roundabout$getStandPowers().isPiloting()){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public static boolean setCameraEntity(Entity entity) {
+        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        ((ICamera)camera).setEntity(entity);
+        return entity != null && entity.isAlive() && !entity.isRemoved();
     }
 
     public static int wasFrozen = 0;

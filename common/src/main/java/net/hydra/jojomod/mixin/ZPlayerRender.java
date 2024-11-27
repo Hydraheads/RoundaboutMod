@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.projectile.KnifeLayer;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
@@ -164,6 +166,9 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                                                                                           AbstractClientPlayer $$3,
                                                                                           boolean right) {
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
+        StandUser standUser = ((StandUser) $$3);
+        StandPowers sp = standUser.roundabout$getStandPowers();
+
 
         byte shape = ipe.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);

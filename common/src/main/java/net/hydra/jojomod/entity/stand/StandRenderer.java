@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -48,7 +49,19 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         if (lp !=null) {
             IPlayerEntity ipe = ((IPlayerEntity) lp);
             if (mobEntity.getUser() != null && mobEntity.getUser().is(lp)) {
-                if (((StandUser)lp).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
+
+                StandUser standUser = ((StandUser)mobEntity.getUser());
+                StandPowers powers = standUser.roundabout$getStandPowers();
+                if (powers.isPiloting()){
+                    if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
+                        boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
+                        if (fp){
+                            return;
+                        }
+                    }
+                }
+
+                if (standUser.roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
                     maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                     if (ConfigManager.getClientConfig().opacitySettings.opacityOfStand <= 0.1F){
                         return;

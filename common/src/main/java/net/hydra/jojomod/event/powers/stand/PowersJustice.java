@@ -288,6 +288,10 @@ public class PowersJustice extends DashPreset {
         super.buttonInput1(keyIsDown, options);
     }
 
+    @Override
+    public boolean isPiloting(){
+        return isInPilotMode;
+    }
     public BlockPos bpos;
     public boolean hold2 = false;
     @Override
@@ -324,6 +328,27 @@ public class PowersJustice extends DashPreset {
         }
     }
 
+    public boolean hold4 = false;
+    @Override
+    public void buttonInput4(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide) {
+            if (keyIsDown) {
+                if (!hold4) {
+                    hold4 = true;
+                    if (isInPilotMode){
+                        ClientUtil.setCameraEntity(null);
+                        isInPilotMode = false;
+                    } else {
+                        if (ClientUtil.setCameraEntity(this.getStandEntity(this.self))){
+                            isInPilotMode = true;
+                        }
+                    }
+                }
+            } else {
+                hold4 = false;
+            }
+        }
+    }
 
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
         this.bpos = blockPos;

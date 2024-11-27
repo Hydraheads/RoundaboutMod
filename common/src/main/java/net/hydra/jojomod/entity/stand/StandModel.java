@@ -18,8 +18,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     ModelPart stand;
     ModelPart head;
     ModelPart body;
-    ModelPart leftHand;
-    ModelPart rightHand;
+    public ModelPart leftHand;
+    public ModelPart rightHand;
 
     public void setHeadRotations(float pitch,float yaw){
         this.head.xRot = pitch;

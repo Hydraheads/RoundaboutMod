@@ -60,7 +60,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 13.1F, 0.0F));
+		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 18.0F, 0.0F));
 
 		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 0.0F));
 
@@ -88,21 +88,21 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition jaw_r1 = jaw.addOrReplaceChild("jaw_r1", CubeListBuilder.create().texOffs(24, 24).addBox(-4.0F, -1.0F, -8.0F, 8.0F, 2.0F, 8.0F, new CubeDeformation(-0.251F)), PartPose.offsetAndRotation(0.0F, 0.7466F, 0.2578F, -0.1745F, 0.0F, 0.0F));
 
-		PartDefinition right_hand_2 = stand2.addOrReplaceChild("right_hand_2", CubeListBuilder.create().texOffs(40, 53).addBox(-2.0F, -7.0F, -4.0F, 4.0F, 3.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-9.5397F, -20.881F, -5.7865F, -1.3742F, -0.4407F, -2.0077F));
+		PartDefinition right_hand_2 = stand2.addOrReplaceChild("right_hand_2", CubeListBuilder.create().texOffs(40, 53).addBox(-2.3144F, 0.1508F, -4.1302F, 4.0F, 3.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-9.5397F, -17.881F, 0.7135F, -1.3742F, -0.4407F, -2.0077F));
 
-		PartDefinition right_finger2 = right_hand_2.addOrReplaceChild("right_finger2", CubeListBuilder.create().texOffs(6, 40).addBox(0.2034F, 0.1876F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.18F)), PartPose.offsetAndRotation(-0.1909F, -4.6349F, -2.2781F, 0.0F, 0.0F, 0.1309F));
+		PartDefinition right_finger2 = right_hand_2.addOrReplaceChild("right_finger2", CubeListBuilder.create().texOffs(6, 40).addBox(0.2034F, 0.1876F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.18F)), PartPose.offsetAndRotation(-0.5053F, 2.5159F, -2.4084F, 0.0F, 0.0F, 0.1309F));
 
 		PartDefinition right_fingertip3 = right_finger2.addOrReplaceChild("right_fingertip3", CubeListBuilder.create().texOffs(14, 40).addBox(-1.1217F, 0.2031F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.15F))
 		.texOffs(17, 50).addBox(0.0409F, 5.4099F, -1.0469F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
 		.texOffs(18, 53).addBox(0.0408F, 7.406F, -0.5354F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.325F, 6.2F, 0.0F, -0.1309F, 0.0F, 0.3054F));
 
-		PartDefinition left_finger2 = right_hand_2.addOrReplaceChild("left_finger2", CubeListBuilder.create().texOffs(10, 46).addBox(0.2034F, 0.1876F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.18F)), PartPose.offsetAndRotation(-0.1909F, -4.6349F, 2.3469F, 0.0F, 0.0F, 0.1309F));
+		PartDefinition left_finger2 = right_hand_2.addOrReplaceChild("left_finger2", CubeListBuilder.create().texOffs(10, 46).addBox(0.2034F, 0.1876F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.18F)), PartPose.offsetAndRotation(-0.5053F, 2.5159F, 2.2166F, 0.0F, 0.0F, 0.1309F));
 
 		PartDefinition left_fingertip2 = left_finger2.addOrReplaceChild("left_fingertip2", CubeListBuilder.create().texOffs(0, 54).addBox(-1.1217F, 0.2031F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.15F))
 		.texOffs(17, 58).addBox(0.0409F, 5.4099F, -1.0469F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
 		.texOffs(18, 61).addBox(0.0408F, 7.406F, -0.5454F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.325F, 6.2F, 0.0F, 0.1309F, 0.0F, 0.3054F));
 
-		PartDefinition middle_finger2 = right_hand_2.addOrReplaceChild("middle_finger2", CubeListBuilder.create().texOffs(4, 48).addBox(0.2034F, 0.1876F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.18F)), PartPose.offset(-0.1909F, -4.6349F, 0.0469F));
+		PartDefinition middle_finger2 = right_hand_2.addOrReplaceChild("middle_finger2", CubeListBuilder.create().texOffs(4, 48).addBox(0.2034F, 0.1876F, -1.05F, 1.0F, 6.0F, 2.0F, new CubeDeformation(0.18F)), PartPose.offset(-0.5053F, 2.5159F, -0.0834F));
 
 		PartDefinition middle_fingertip2 = middle_finger2.addOrReplaceChild("middle_fingertip2", CubeListBuilder.create().texOffs(0, 40).addBox(-1.1467F, 0.1531F, -1.05F, 1.0F, 7.0F, 2.0F, new CubeDeformation(0.15F))
 		.texOffs(17, 54).addBox(0.0159F, 6.3599F, -1.0469F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
@@ -110,7 +110,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition thumb2 = right_hand_2.addOrReplaceChild("thumb2", CubeListBuilder.create().texOffs(8, 54).addBox(0.0747F, 0.1958F, -0.9206F, 1.0F, 5.0F, 2.0F, new CubeDeformation(0.2F))
 		.texOffs(17, 46).addBox(1.3F, 3.7F, -0.925F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(18, 49).addBox(1.3F, 5.701F, -0.3965F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.175F, -4.3F, 2.175F, 0.3491F, 0.0F, 0.5672F));
+		.texOffs(18, 49).addBox(1.3F, 5.701F, -0.3965F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.4894F, 2.8508F, 2.0448F, 0.3491F, 0.0F, 0.5672F));
 
 		PartDefinition right_hand_1 = stand2.addOrReplaceChild("right_hand_1", CubeListBuilder.create().texOffs(40, 53).addBox(-2.0F, -7.0F, -4.0F, 4.0F, 3.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(9.4603F, -20.881F, -5.7865F, -1.747F, -0.4488F, -1.1814F));
 
