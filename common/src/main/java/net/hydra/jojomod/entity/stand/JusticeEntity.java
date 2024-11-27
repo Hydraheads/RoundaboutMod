@@ -186,7 +186,7 @@ public class JusticeEntity extends StandEntity {
             }
 
             double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-            double y1 = standUser.getY() + 0.1 - yy;
+            double y1 = standUser.getY() + getIdleYOffset() - yy;
             double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
 
             return new Vec3(x1, y1, z1);

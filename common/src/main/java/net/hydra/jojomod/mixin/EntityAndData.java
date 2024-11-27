@@ -2,11 +2,11 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -22,6 +22,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -269,6 +270,15 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
 
+    @SuppressWarnings("deprecation")
+    @Inject(method = "spawnSprintParticle()V", at = @At("HEAD"), cancellable = true)
+    protected void roundabout$spawnSprintParticle(CallbackInfo ci){
+        BlockPos $$0 = getOnPosLegacy();
+        BlockState $$1 = this.level().getBlockState($$0);
+        if ($$1.getBlock() instanceof FogBlock){
+            ci.cancel();
+        }
+    }
 
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
@@ -343,6 +353,8 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
     @Shadow @javax.annotation.Nullable private Entity vehicle;
+
+    @Shadow @Deprecated public abstract BlockPos getOnPosLegacy();
 
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
