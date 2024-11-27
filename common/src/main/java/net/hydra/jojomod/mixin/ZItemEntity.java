@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.item.FogBlockItem;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -36,6 +37,8 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
         return null;
     }
 
+    @Shadow public abstract int getAge();
+
     @Override
     @Unique
     public void roundabout$setRaidSparkle(boolean sparkle){
@@ -58,7 +61,19 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
             if (!this.level().isClientSide()){
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(3),
                         this.getRandomY(), this.getRandomZ(3),
-                        6, 0.0, 0.5, 0.0, 0.35);
+                        4, 0.0, 0.5, 0.0, 0.35);
+            }
+        } else if (getItem().getItem() instanceof FogBlockItem){
+            if (this.age < 5940){
+                this.age = 5940;
+            }
+
+            if (!this.level().isClientSide()){
+                if (this.getAge() % 3 == 0) {
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getRandomX(3),
+                            this.getRandomY(), this.getRandomZ(3),
+                            0, 0.0, 0.5, 0.0, 0.35);
+                }
             }
         }
         ((IEntityAndData)this).roundabout$tickQVec();

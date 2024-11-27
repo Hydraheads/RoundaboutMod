@@ -1,12 +1,17 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -26,4 +31,12 @@ public class FogBlockItem extends BlockItem {
         }
     }
 
+    @Override
+    public void inventoryTick(ItemStack $$0, Level $$1, Entity $$2, int $$3, boolean $$4) {
+        if ($$2 instanceof Player PE){
+            if (!(((StandUser)PE).roundabout$getStandPowers() instanceof PowersJustice) && !PE.isCreative()){
+                $$0.setCount(0);
+            }
+        }
+    }
 }
