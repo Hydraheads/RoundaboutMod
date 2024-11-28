@@ -11,6 +11,8 @@ public interface IPlayerEntity {
     void roundabout$SetPos(byte Pos);
     int roundabout$getAirTime();
     int roundabout$getClientDodgeTime();
+    int roundabout$getControlling();
+    void roundabout$setIsControlling(int pilot);
     int roundabout$getDodgeTime();
     void roundabout$addStandExp(int amt);
     int roundabout$getCameraHits();

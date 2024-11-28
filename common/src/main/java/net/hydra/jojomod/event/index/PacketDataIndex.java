@@ -33,6 +33,7 @@ public class PacketDataIndex {
     public static final byte INT_STAND_ATTACK_2 = 5;
     public static final byte INT_ANCHOR_PLACE = 6;
     public static final byte INT_UPDATE_MOVE = 7;
+    public static final byte INT_UPDATE_PILOT = 8;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;

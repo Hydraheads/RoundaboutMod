@@ -1128,6 +1128,8 @@ public class MainUtil {
             ple.roundabout$setAnchorPlace(data);
         } else if (context == PacketDataIndex.INT_UPDATE_MOVE){
             ((StandUser)player).roundabout$getStandPowers().updateIntMove(data);
+        } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
+            ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
         }
     }
 

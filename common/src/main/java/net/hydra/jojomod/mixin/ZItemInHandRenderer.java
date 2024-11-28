@@ -102,7 +102,9 @@ public class ZItemInHandRenderer {
                             if (ER instanceof JusticeRenderer<?> zr && stand instanceof JusticeEntity skl) {
 
 
-                                /**
+                                /** I can't for the life of me get decipher these values enough to put the hands onscreen
+                                 * Wasted 6 hours, if anyone else wants to try getting justice
+                                 * to render its hands in first person pilot mode be my guest
                                 float $$11 = hando == InteractionHand.MAIN_HAND ? aan : 0.0F;
                                 float $$12 = 1.0F - Mth.lerp($$0, oMainHandHeight, this.mainHandHeight);
                                 this.roundabout$renderArmWithItem(

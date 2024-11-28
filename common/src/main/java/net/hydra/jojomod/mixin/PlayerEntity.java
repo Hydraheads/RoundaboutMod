@@ -103,6 +103,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$STAND_EXP = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_CONTROLLING = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.INT);
 
     @Shadow
     @Final
@@ -373,6 +376,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public void roundabout$setStandExp(int level){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_EXP, level);
+    }
+    @Override
+    @Unique
+    public int roundabout$getControlling(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$IS_CONTROLLING);
+    }
+    @Override
+    @Unique
+    public void roundabout$setIsControlling(int pilot){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$IS_CONTROLLING, pilot);
     }
 
     @Override
@@ -949,6 +962,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT, (byte)0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte)0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
     }
 
     @Shadow

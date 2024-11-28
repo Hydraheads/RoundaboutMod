@@ -719,6 +719,8 @@ public class StandPowers {
     public StandEntity getPilotingStand(){
         return getStandEntity(this.self);
     }
+    public void setPiloting(int ID){
+    }
     public void tickPower(){
         if (this.self instanceof Player PE && PE.isSpectator()) {
             ((StandUser) this.getSelf()).roundabout$setActive(false);

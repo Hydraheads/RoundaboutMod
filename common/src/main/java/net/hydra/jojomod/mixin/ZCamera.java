@@ -32,8 +32,10 @@ public abstract class ZCamera implements ICamera {
     private Entity roundabout$povSwitch;
     @Override
     @Unique
-    public void setEntity(Entity entity){
-        this.roundabout$povSwitch = entity;
+    public void roundabout$setEntity(Entity entity){
+        if (roundabout$povSwitch != entity) {
+            this.roundabout$povSwitch = entity;
+        }
     }
     @Shadow
     public void setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {}
@@ -75,13 +77,13 @@ public abstract class ZCamera implements ICamera {
         this.initialized = true;
         this.level = blockGetter;
         this.entity = entity;
-        this.detached = bl;
+        this.detached = true;
         this.setRotation(roundabout$getViewYRot(entity,f),roundabout$getViewXRot(entity,f));
-        this.setPosition(Mth.lerp((double)f, roundabout$povSwitch.xo, roundabout$povSwitch.getX()),
-                Mth.lerp((double)f, roundabout$povSwitch.yo, roundabout$povSwitch.getY()) +
-                (double)Mth.lerp(f, this.eyeHeightOld, this.eyeHeight), Mth.lerp((double)f,
-                        roundabout$povSwitch.zo,
-                        roundabout$povSwitch.getZ()));
+        double xx = Mth.lerp((double)f, roundabout$povSwitch.xo, roundabout$povSwitch.getX());
+        double yy = Mth.lerp((double)f, roundabout$povSwitch.yo, roundabout$povSwitch.getY()) +
+                (double)Mth.lerp(f, this.eyeHeightOld, this.eyeHeight);
+        double zz = Mth.lerp((double)f, roundabout$povSwitch.zo, roundabout$povSwitch.getZ());
+        this.setPosition(xx, yy, zz);
         if (bl) {
             if (bl2) {
                 this.setRotation(this.yRot + 180.0f, -this.xRot);
@@ -109,7 +111,7 @@ public abstract class ZCamera implements ICamera {
             }
         }
 
-        if (roundabout$povSwitch != null && !roundabout$povSwitch.is(entity)){
+        if (roundabout$povSwitch != null && entity != null && !roundabout$povSwitch.is(entity)){
             if (roundabout$povSwitch.isAlive() && !roundabout$povSwitch.isRemoved()){
                 roundabout$setup(blockGetter, entity, bl, bl2, f);
                 ci.cancel();
@@ -117,6 +119,8 @@ public abstract class ZCamera implements ICamera {
             } else {
                 roundabout$povSwitch = null;
             }
+        } else {
+            roundabout$povSwitch = null;
         }
     }
 

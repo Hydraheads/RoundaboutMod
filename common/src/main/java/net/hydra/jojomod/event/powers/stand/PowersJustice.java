@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -85,6 +86,21 @@ public class PowersJustice extends DashPreset {
         }
     }
     public void tickPower() {
+
+        if (this.self instanceof Player PL){
+            int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
+            Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
+            if (this.self.level().isClientSide()) {
+                if (getPilotEntity instanceof LivingEntity le) {
+                    StandEntity SE = getStandEntity(this.self);
+                    if (SE != null && le.is(SE)) {
+                        ClientUtil.setCameraEntity(le);
+                    }
+                } else {
+                    ClientUtil.setCameraEntity(null);
+                }
+            }
+        }
         if (this.self instanceof Player PE && PE.isSpectator()) {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             if (ipe.roundabout$getShapeShift() != ShapeShifts.PLAYER.id){
@@ -191,7 +207,7 @@ public class PowersJustice extends DashPreset {
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
 
-        if (isInPilotMode){
+        if (isPiloting()){
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT_EXIT, PowerIndex.SKILL_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT, PowerIndex.SKILL_4);
@@ -290,7 +306,15 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public boolean isPiloting(){
-        return isInPilotMode;
+        if (this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            int zint = ipe.roundabout$getControlling();
+            StandEntity sde = ((StandUser)PE).roundabout$getStand();
+            if (sde != null && zint == sde.getId()){
+                return true;
+            }
+        }
+        return false;
     }
     public BlockPos bpos;
     public boolean hold2 = false;
@@ -335,18 +359,29 @@ public class PowersJustice extends DashPreset {
             if (keyIsDown) {
                 if (!hold4) {
                     hold4 = true;
-                    if (isInPilotMode){
-                        ClientUtil.setCameraEntity(null);
-                        isInPilotMode = false;
+                    if (isPiloting()){
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
+                                PacketDataIndex.INT_UPDATE_PILOT);
                     } else {
-                        if (ClientUtil.setCameraEntity(this.getStandEntity(this.self))){
-                            isInPilotMode = true;
-                        }
+                        StandEntity entity = this.getStandEntity(this.self);
+                        int L = 0;
+                        if (entity != null){L=entity.getId();}
+
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(L,
+                                PacketDataIndex.INT_UPDATE_PILOT);
                     }
                 }
             } else {
                 hold4 = false;
             }
+        }
+    }
+
+    @Override
+    public void setPiloting(int ID){
+        if (this.self instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            ipe.roundabout$setIsControlling(ID);
         }
     }
 
@@ -376,6 +411,9 @@ public class PowersJustice extends DashPreset {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
+    public void tickJusticeInput(){
+
+    }
     public boolean yankChain(){
         if (!this.getSelf().level().isClientSide()) {
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());

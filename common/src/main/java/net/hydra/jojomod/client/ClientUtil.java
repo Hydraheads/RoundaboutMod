@@ -78,7 +78,7 @@ public class ClientUtil {
     }
     public static boolean setCameraEntity(Entity entity) {
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        ((ICamera)camera).setEntity(entity);
+        ((ICamera)camera).roundabout$setEntity(entity);
         return entity != null && entity.isAlive() && !entity.isRemoved();
     }
 
