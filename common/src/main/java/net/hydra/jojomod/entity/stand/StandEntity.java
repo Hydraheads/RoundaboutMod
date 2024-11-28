@@ -50,6 +50,9 @@ public abstract class StandEntity extends Mob{
      * summoned. When a stand completely fades out, it despawns.*/
     public final int MaxFade = 8;
 
+    public boolean lockPos(){
+        return true;
+    }
     public float fadePercent =0F;
     protected static final EntityDataAccessor<Integer> FADE_PERCENT = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.INT);
@@ -600,7 +603,9 @@ public abstract class StandEntity extends Mob{
      */
     public void tickStandOut() {
         byte ot = this.getOffsetType();
-                this.setDeltaMovement(Vec3.ZERO);
+        if (lockPos()) {
+            this.setDeltaMovement(Vec3.ZERO);
+        }
             this.tick();
             if (this.getFollowing() == null) {
                 return;
@@ -610,7 +615,9 @@ public abstract class StandEntity extends Mob{
 
     public void tickStandOut2() {
         byte ot = this.getOffsetType();
+        if (lockPos()) {
             this.setDeltaMovement(Vec3.ZERO);
+        }
             if (this.getFollowing() == null) {
                 return;
             }

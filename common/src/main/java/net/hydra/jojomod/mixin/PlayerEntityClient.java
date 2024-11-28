@@ -1,13 +1,23 @@
 package net.hydra.jojomod.mixin;
 
 
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.AmbientSoundHandler;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
+import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
+import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,14 +25,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
+
 @Mixin(LocalPlayer.class)
-public class PlayerEntityClient implements StandUserClientPlayer {
+public abstract class PlayerEntityClient extends AbstractClientPlayer implements StandUserClientPlayer {
     @Shadow
     public Input input;
 
     @Shadow
     protected int sprintTriggerTime;
 
+    @Shadow @Final public ClientPacketListener connection;
+
+    @Shadow protected abstract void sendIsSprintingIfNeeded();
+
+    @Shadow protected abstract void sendPosition();
+
+    @Shadow @Final private List<AmbientSoundHandler> ambientSoundHandlers;
     @Unique
     private int roundabout$clashIncrement;
     @Unique
@@ -38,6 +57,10 @@ public class PlayerEntityClient implements StandUserClientPlayer {
     private long roundabout$clashDisplayExtraTimestamp = -100;
     @Unique
     private float roundabout$lastClashPower = -1;
+
+    public PlayerEntityClient(ClientLevel $$0, GameProfile $$1) {
+        super($$0, $$1);
+    }
 
     @Unique
     @Override
@@ -139,6 +162,32 @@ public class PlayerEntityClient implements StandUserClientPlayer {
         }
         if (this.roundabout$menuTicks > -1){
             this.roundabout$menuTicks--;
+        }
+
+        StandUser user = ((StandUser) this);
+        if (user.roundabout$getStandPowers().isPiloting()){
+            Entity ent = user.roundabout$getStandPowers().getPilotingStand();
+            if (ent != null){
+                roundabout$standControlTick(ent);
+                ci.cancel();
+            }
+        }
+    }
+
+    @Unique
+    private void roundabout$standControlTick(Entity ent){
+        if (this.level().hasChunkAt(this.getBlockX(), this.getBlockZ())) {
+            super.tick();
+                this.connection.send(new ServerboundMovePlayerPacket.Rot(this.getYRot(), this.getXRot(), this.onGround()));
+                this.connection.send(new ServerboundPlayerInputPacket(this.xxa, this.zza, this.input.jumping, this.input.shiftKeyDown));
+                if (ent != this) {
+                    this.connection.send(new ServerboundMoveVehiclePacket(ent));
+                    this.sendIsSprintingIfNeeded();
+                }
+            for(AmbientSoundHandler ambientsoundhandler : this.ambientSoundHandlers) {
+                ambientsoundhandler.tick();
+            }
+
         }
     }
 

@@ -1,10 +1,12 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
@@ -14,10 +16,7 @@ import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.ShapeShifts;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -46,6 +45,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersJustice extends DashPreset {
     public PowersJustice(LivingEntity self) {
@@ -378,13 +378,56 @@ public class PowersJustice extends DashPreset {
     }
 
     @Override
-    public void setPiloting(int ID){
-        if (this.self instanceof Player PE){
-            IPlayerEntity ipe = ((IPlayerEntity) PE);
-            ipe.roundabout$setIsControlling(ID);
+    public void poseStand(byte r){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand) && !isPiloting()){
+            stand.setOffsetType(r);
         }
     }
 
+    @Override
+    public void setPiloting(int ID){
+        if (this.self instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            Entity ent = this.self.level().getEntity(ID);
+            if (ent != null && ent.is(this.getPilotingStand())){
+                poseStand(OffsetIndex.LOOSE);
+                ipe.roundabout$setIsControlling(ID);
+            } else {
+                ipe.roundabout$setIsControlling(ID);
+                poseStand(OffsetIndex.FOLLOW);
+            }
+        }
+    }
+
+    private float flyingSpeed = 0.075F;
+    private float walkingSpeed = 0.05F;
+
+    @Override
+    public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
+
+        int $$13 = 0;
+        entity.xxa = kpi.leftImpulse;
+        entity.zza = kpi.forwardImpulse;
+        Vec3 vec32 = new Vec3(entity.xxa*walkingSpeed, 0, entity.zza*walkingSpeed);
+        entity.travel(vec32);
+        entity.xxa *= 0.7f;
+        entity.zza *= 0.7f;
+        Vec3 delta = entity.getDeltaMovement();
+        if (kpi.shiftKeyDown) {
+            $$13--;
+        }
+
+        if (kpi.jumping) {
+            $$13++;
+        }
+
+        if ($$13 != 0) {
+            entity.setDeltaMovement(delta.x, $$13 *flyingSpeed *5.0F, delta.z);
+        } else {
+            entity.setDeltaMovement(delta.x, 0, delta.z);
+        }
+    }
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
         this.bpos = blockPos;
         return tryPower(move, forced);

@@ -3,18 +3,32 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.util.ConfigManager;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.FlyingAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 
 public class JusticeEntity extends StandEntity {
     public JusticeEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return true;
+    }
+    @Override
+    public boolean lockPos(){
+        return false;
     }
     public static final byte
             PART_3_SKIN = 1,
@@ -157,7 +171,55 @@ public class JusticeEntity extends StandEntity {
         }
         super.tick();
     }
+    @Override
+    public boolean isControlledByLocalInstance() {
+        if (this.getUser() != null){
+            Entity ent =  this.getUserData(this.getUser()).roundabout$getStandPowers().getPilotingStand();
+            if (ent != null && ent.is(this)){
+                return true;
+            }
+        }
+        return super.isControlledByLocalInstance();
+    }
 
+
+    @Override
+    protected float getFlyingSpeed() {
+        return 0.10F;
+    }
+
+    @Override
+    public void travel(Vec3 vec3) {
+        if (this.isControlledByLocalInstance()) {
+            boolean bl;
+            double d = 0.08;
+            boolean bl2 = bl = this.getDeltaMovement().y <= 0.0;
+            if (bl && this.hasEffect(MobEffects.SLOW_FALLING)) {
+                d = 0.01;
+            }
+            FluidState fluidState = this.level().getFluidState(this.blockPosition());
+                BlockPos blockPos = this.getBlockPosBelowThatAffectsMyMovement();
+                float p = this.level().getBlockState(blockPos).getBlock().getFriction();
+                float f = this.onGround() ? p * 0.91f : 0.91f;
+                Vec3 vec37 = this.handleRelativeFrictionAndCalculateMovement(vec3, p);
+                double q = vec37.y;
+                if (this.hasEffect(MobEffects.LEVITATION)) {
+                    q += (0.05 * (double)(this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - vec37.y) * 0.2;
+                } else if (!this.level().isClientSide || this.level().hasChunkAt(blockPos)) {
+                    if (!this.isNoGravity()) {
+                        q -= d;
+                    }
+                } else {
+                    q = this.getY() > (double)this.level().getMinBuildHeight() ? -0.1 : 0.0;
+                }
+                if (this.shouldDiscardFriction()) {
+                    this.setDeltaMovement(vec37.x, q, vec37.z);
+                } else {
+                    this.setDeltaMovement(vec37.x * (double)f, q * (double)0.98f, vec37.z * (double)f);
+                }
+        }
+        this.calculateEntityAnimation(this instanceof FlyingAnimal);
+    }
     @Override
     public Vec3 getIdleOffset(LivingEntity standUser) {
         if (this.getSkin() != DARK_MIRAGE) {

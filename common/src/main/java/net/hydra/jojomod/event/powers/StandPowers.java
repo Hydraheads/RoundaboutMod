@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -1059,6 +1060,9 @@ public class StandPowers {
         }
     }
     public void updateAttack(){
+    }
+
+    public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
     }
 
     public void poseStand(byte r){

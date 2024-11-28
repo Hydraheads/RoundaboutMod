@@ -1403,7 +1403,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         } else {
-            positionUpdater.accept(stand, stand.getX(), stand.getY(), stand.getZ());
+            if (stand.lockPos()) {
+                positionUpdater.accept(stand, stand.getX(), stand.getY(), stand.getZ());
+            }
         }
     }
 
