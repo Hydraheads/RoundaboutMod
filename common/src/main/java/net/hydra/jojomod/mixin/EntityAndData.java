@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
@@ -181,8 +182,19 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
     public void roundabout$Turn(double $$0, double $$1, CallbackInfo ci){
-        if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
+        Entity thisEnt = ((Entity) (Object) this);
+        if (((TimeStop) thisEnt.level()).CanTimeStopEntity(((Entity) (Object) this))){
             ci.cancel();
+        } else if (thisEnt instanceof Player PE){
+            StandUser sus = ((StandUser)PE);
+            StandPowers powers = sus.roundabout$getStandPowers();
+            if (powers.isPiloting()){
+                Entity pilot = powers.getPilotingStand();
+                if (pilot != null){
+                    pilot.turn($$0,$$1);
+                    ci.cancel();
+                }
+            }
         }
     }
 

@@ -78,7 +78,7 @@ public abstract class ZCamera implements ICamera {
         this.level = blockGetter;
         this.entity = entity;
         this.detached = true;
-        this.setRotation(roundabout$getViewYRot(entity,f),roundabout$getViewXRot(entity,f));
+        this.setRotation(roundabout$getViewYRot(roundabout$povSwitch,f),roundabout$getViewXRot(roundabout$povSwitch,f));
         double xx = Mth.lerp((double)f, roundabout$povSwitch.xo, roundabout$povSwitch.getX());
         double yy = Mth.lerp((double)f, roundabout$povSwitch.yo, roundabout$povSwitch.getY()) +
                 (double)Mth.lerp(f, this.eyeHeightOld, this.eyeHeight);
