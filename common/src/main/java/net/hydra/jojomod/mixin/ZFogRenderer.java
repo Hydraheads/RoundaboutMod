@@ -67,9 +67,9 @@ public class ZFogRenderer {
 
                 FogType $$5 = $$0.getFluidInCamera();
                 Entity $$6 = $$0.getEntity();
-                float fogCutRange = 40f;
+                float fogCutRange = 50f;
                 if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()){
-                    fogCutRange = 100;
+                    fogCutRange = 110;
                 }
 
                 float start = 0;
@@ -148,7 +148,7 @@ public class ZFogRenderer {
                     end = joever;
                 } else {
                     float joever = Math.min(fogCutRange+((((maxSkyLerp-skyLerp)/maxSkyLerp))*$$2),$$2);
-                    start = (float) (joever*0.25);
+                    start = 0;
                     end = joever;
                 }
 
