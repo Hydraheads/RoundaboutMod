@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -179,6 +180,16 @@ public abstract class EntityAndData implements IEntityAndData {
     @Override
     public void roundabout$setShadow(boolean shadow){
         roundabout$shadow = shadow;
+    }
+    @Inject(method = "getTeamColor()I", at = @At("HEAD"), cancellable = true)
+    public void roundabout$getTeamColor(CallbackInfoReturnable<Integer> cir){
+        if (this.level.isClientSide()){
+            int raga = ClientUtil.getOutlineColor(((Entity)(Object)this));
+            if (raga != -1){
+                cir.setReturnValue(raga);
+            }
+        }
+
     }
     @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
     public void roundabout$Turn(double $$0, double $$1, CallbackInfo ci){

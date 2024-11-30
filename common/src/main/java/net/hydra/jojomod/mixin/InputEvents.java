@@ -13,11 +13,14 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Overlay;
@@ -64,6 +67,30 @@ public abstract class InputEvents implements IInputEvents {
 
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundaboutAttack(CallbackInfoReturnable<Boolean> ci) {
+
+    }
+    @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
+    public void roundabout$entityGlowing(Entity $$0,CallbackInfoReturnable<Boolean> ci) {
+        if (player != null) {
+            StandUser standComp = ((StandUser) player);
+            StandPowers powers = standComp.roundabout$getStandPowers();
+            if (powers.isPiloting()) {
+                LivingEntity ent = powers.getPilotingStand();
+                if (ent != null && powers instanceof PowersJustice){
+                    if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
+                        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+                        ent.setYRot(camera.getYRot());
+                        ent.setXRot(camera.getXRot());
+                        ent.setYHeadRot(ent.getYRot());
+                    }
+                    Entity TE = MainUtil.rayCastEntity(ent,100);
+                    if (TE != null && TE.is($$0)) {
+                        ci.setReturnValue(true);
+                        return;
+                    }
+                }
+            }
+        }
 
     }
     @Shadow
@@ -115,9 +142,16 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
+            StandPowers powers = standComp.roundabout$getStandPowers();
+            if (powers.isPiloting()){
+                ci.setReturnValue(false);
+                return;
+            }
+
             boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
             if (standComp.roundabout$isDazed() || ((TimeStop) player.level()).CanTimeStopEntity(player)) {
                 ci.setReturnValue(true);
+                return;
             } else if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack()) {
                 if (this.hitResult != null) {
                     boolean $$1 = false;
@@ -141,6 +175,7 @@ public abstract class InputEvents implements IInputEvents {
 
                     if (ClientNetworking.getAppropriateConfig().disableMeleeWhileStandActive) {
                         ci.setReturnValue($$1);
+                        return;
                     }
                 }
             }
@@ -153,6 +188,12 @@ public abstract class InputEvents implements IInputEvents {
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
+
+                StandPowers powers = standComp.roundabout$getStandPowers();
+                if (powers.isPiloting()){
+                    ci.cancel();
+                    return;
+                }
 
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
                 if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
@@ -294,7 +335,13 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$DoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
 
+
             StandUser standComp = ((StandUser) player);
+            StandPowers powers = standComp.roundabout$getStandPowers();
+            if (powers.isPiloting()){
+                ci.cancel();
+                return;
+            }
 
             if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 ci.cancel();
@@ -698,11 +745,12 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            StandPowers powers = standComp.roundabout$getStandPowers();
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();
                 if (this.options.keyAttack.isDown() && !player.isUsingItem()) {
-                    if (standComp.roundabout$getStandPowers().isMiningStand()){
+                    if (powers.isMiningStand()){
                         Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                         if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
                                 && (standComp.roundabout$getActivePower() == PowerIndex.NONE || standComp.roundabout$getAttackTimeDuring() == -1)
@@ -714,7 +762,7 @@ public abstract class InputEvents implements IInputEvents {
                                     BlockPos $$3 = $$2.getBlockPos();
                                     if (!this.level.getBlockState($$3).isAir()) {
                                             this.gameMode.startDestroyBlock($$3, $$2.getDirection());
-                                        if (standComp.roundabout$getStandPowers().canUseMiningStand()) {
+                                        if (powers.canUseMiningStand()) {
                                             standComp.roundabout$tryPower(PowerIndex.MINING, true);
                                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);
                                         }
@@ -725,12 +773,13 @@ public abstract class InputEvents implements IInputEvents {
                         }
                     }
                 }
+                powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
                 if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                    standComp.roundabout$getStandPowers().preCheckButtonInputAttack(this.options.keyAttack.isDown(),this.options);
+                    powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(),this.options);
                 }
 
                 if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
-                    standComp.roundabout$getStandPowers().preCheckButtonInputBarrage(this.options.keyAttack.isDown(),this.options);
+                    powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(),this.options);
                 }
             }
                 //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());

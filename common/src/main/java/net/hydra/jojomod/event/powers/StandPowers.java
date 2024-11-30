@@ -289,6 +289,11 @@ public class StandPowers {
             buttonInputAttack(keyIsDown, options);
         }
     }
+    public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            buttonInputAttack(keyIsDown, options);
+        }
+    }
     public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
         if (hasStandActive(this.getSelf())) {
             buttonInputBarrage(keyIsDown, options);
@@ -306,6 +311,11 @@ public class StandPowers {
                 this.tryPower(PowerIndex.ATTACK, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
             }
+        }
+    }
+    /**The Guard Variation is prioritized over this for most stands but it may find niche uses*/
+    public void buttonInputUse(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
         }
     }
 

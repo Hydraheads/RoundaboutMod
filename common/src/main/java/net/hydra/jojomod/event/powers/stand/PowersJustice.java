@@ -182,8 +182,6 @@ public class PowersJustice extends DashPreset {
         return -7;
     }
 
-    private boolean isInPilotMode = false;
-
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
@@ -305,6 +303,12 @@ public class PowersJustice extends DashPreset {
     }
 
     @Override
+    public void buttonInputUse(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+        }
+    }
+
+    @Override
     public boolean isPiloting(){
         if (this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
@@ -407,25 +411,27 @@ public class PowersJustice extends DashPreset {
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
 
         int $$13 = 0;
-        entity.xxa = kpi.leftImpulse;
-        entity.zza = kpi.forwardImpulse;
-        Vec3 vec32 = new Vec3(entity.xxa*walkingSpeed, 0, entity.zza*walkingSpeed);
-        entity.travel(vec32);
-        entity.xxa *= 0.7f;
-        entity.zza *= 0.7f;
-        Vec3 delta = entity.getDeltaMovement();
-        if (kpi.shiftKeyDown) {
-            $$13--;
-        }
+        if (entity instanceof JusticeEntity JE) {
+                entity.xxa = kpi.leftImpulse;
+                entity.zza = kpi.forwardImpulse;
+                Vec3 vec32 = new Vec3(entity.xxa * walkingSpeed, 0, entity.zza * walkingSpeed);
 
-        if (kpi.jumping) {
-            $$13++;
-        }
+                Vec3 delta = entity.getDeltaMovement();
 
-        if ($$13 != 0) {
-            entity.setDeltaMovement(delta.x, $$13 *flyingSpeed *5.0F, delta.z);
-        } else {
-            entity.setDeltaMovement(delta.x, 0, delta.z);
+
+                if (kpi.shiftKeyDown) {
+                    $$13--;
+                }
+
+                if (kpi.jumping) {
+                    $$13++;
+                }
+
+                if ($$13 != 0) {
+                    entity.setDeltaMovement(delta.x, $$13 *flyingSpeed *5.0F, delta.z);
+                } else {
+                    entity.setDeltaMovement(delta.x, 0, delta.z);
+                }
         }
     }
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){

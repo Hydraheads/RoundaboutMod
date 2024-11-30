@@ -12,7 +12,7 @@ public enum Poses {
 
     WRY((byte) 4, PoseAnimations.WRRRYYY),
     OH_NO((byte) 5, PoseAnimations.OH_NO),
-    TORTURE_DANCE((byte) 6,PoseAnimations.Jonathan),
+    TORTURE_DANCE((byte) 6,PoseAnimations.TORTURE_DANCE),
     WAMUU((byte) 7,PoseAnimations.Jonathan),
 
     JOTARO((byte) 8, PoseAnimations.JOTARO),

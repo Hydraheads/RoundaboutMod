@@ -2,10 +2,15 @@ package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
@@ -13,8 +18,15 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class JusticeEntity extends StandEntity {
@@ -186,6 +198,41 @@ public class JusticeEntity extends StandEntity {
     @Override
     protected float getFlyingSpeed() {
         return 0.10F;
+    }
+
+    public boolean stuck = false;
+    @SuppressWarnings("deprecation")
+    @Override
+    public void move(MoverType $$0, Vec3 $$1) {
+        if (this.noPhysics) {
+            Entity ent = this.getUser();
+            if (ent != null){
+                if (ent instanceof Player PE){
+                    StandUser user = ((StandUser) PE);
+                    StandPowers powers = user.roundabout$getStandPowers();
+                    if (powers.isPiloting()){
+                        Entity entX = powers.getPilotingStand();
+                        if (entX != null && entX.is(this)){
+                            BlockPos veci = BlockPos.containing(new Vec3(this.getX() + $$1.x, this.getY() + this.getEyeHeight() + $$1.y,this.getZ() + $$1.z));
+                            BlockPos veci2 = BlockPos.containing(new Vec3(this.getX() + $$1.x*2, this.getY() + this.getEyeHeight() + $$1.y*2,this.getZ() + $$1.z*2));
+                            BlockPos veci3 = BlockPos.containing(new Vec3(this.getX() + $$1.x*3, this.getY() + this.getEyeHeight() + $$1.y*2,this.getZ() + $$1.z*3));
+                            BlockState bl = this.level().getBlockState(veci);
+                            BlockState bl2 = this.level().getBlockState(veci2);
+                            BlockState bl3 = this.level().getBlockState(veci3);
+                            if (bl.isSolid() || bl2.isSolid() || bl3.isSolid()){
+                                this.setDeltaMovement(Vec3.ZERO);
+                                if (!stuck) {
+                                    stuck = true;
+                                    this.setPos(this.getX() - $$1.x, this.getY(), this.getZ() - $$1.z);
+                                }
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        super.move($$0,$$1);
     }
 
     @Override

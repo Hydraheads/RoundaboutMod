@@ -67,9 +67,9 @@ public class ZFogRenderer {
 
                 FogType $$5 = $$0.getFluidInCamera();
                 Entity $$6 = $$0.getEntity();
-                float fogCutRange = 50f;
+                float fogCutRange = 60f;
                 if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()){
-                    fogCutRange = 110;
+                    fogCutRange = 140;
                 }
 
                 float start = 0;

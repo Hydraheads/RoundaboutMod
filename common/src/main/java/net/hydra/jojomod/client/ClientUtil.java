@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Camera;
@@ -82,6 +83,28 @@ public class ClientUtil {
         return entity != null && entity.isAlive() && !entity.isRemoved();
     }
 
+    public static int getOutlineColor(Entity entity) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            StandUser standComp = ((StandUser) player);
+            StandPowers powers = standComp.roundabout$getStandPowers();
+            if (powers.isPiloting()) {
+                LivingEntity ent = powers.getPilotingStand();
+                if (ent != null && powers instanceof PowersJustice) {
+                    Entity TE = MainUtil.rayCastEntity(ent,100);
+                    if (TE != null && TE.is(entity)) {
+                        if (TE.is(player)){
+                            return 16701501;
+                        } else {
+                            return 14233126;
+                        }
+                        // 3847130 corpse
+                    }
+                }
+            }
+        }
+        return  -1;
+    }
     public static int wasFrozen = 0;
     public static boolean getWasFrozen(){
         return wasFrozen != 0;
