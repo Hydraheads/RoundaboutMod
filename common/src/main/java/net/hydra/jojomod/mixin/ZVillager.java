@@ -85,9 +85,7 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
-                if (ShapeShifts.isVillager(shift)) {
                     ci.cancel();
-                }
             }
         }
     }
