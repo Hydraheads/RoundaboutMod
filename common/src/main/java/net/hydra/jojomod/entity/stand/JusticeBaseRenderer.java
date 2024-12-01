@@ -103,8 +103,11 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
          if (powers.isPiloting()){
              if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
                  boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
-                 if (fp){
+                 if (fp && !mobEntity.getDisplay()){
                      this.model.head.visible = false;
+                     if (mobEntity instanceof DarkMirageEntity) {
+                         this.model.body.visible = false;
+                     }
                  }
              }
          }
@@ -112,6 +115,9 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
 
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         this.model.head.visible = true;
+        if (mobEntity instanceof DarkMirageEntity) {
+            this.model.body.visible = true;
+        }
     }
 
     @Nullable

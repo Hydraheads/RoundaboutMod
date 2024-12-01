@@ -219,7 +219,9 @@ public class JusticeEntity extends StandEntity {
                             BlockState bl = this.level().getBlockState(veci);
                             BlockState bl2 = this.level().getBlockState(veci2);
                             BlockState bl3 = this.level().getBlockState(veci3);
-                            if (bl.isSolid() || bl2.isSolid() || bl3.isSolid()){
+                            if ((bl.isSolid() && bl.getBlock().isCollisionShapeFullBlock(bl,this.level(),veci)) ||
+                                    (bl2.isSolid() && bl2.getBlock().isCollisionShapeFullBlock(bl2,this.level(),veci2)) ||
+                                    (bl3.isSolid() && bl3.getBlock().isCollisionShapeFullBlock(bl3,this.level(),veci3))){
                                 this.setDeltaMovement(Vec3.ZERO);
                                 if (!stuck) {
                                     stuck = true;
