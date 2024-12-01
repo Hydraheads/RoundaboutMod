@@ -3,17 +3,41 @@ package net.hydra.jojomod.entity.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class JusticeBaseRenderer<T extends StandEntity> extends StandRenderer<JusticeEntity> {
+import javax.swing.text.html.parser.Entity;
+
+public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
     public JusticeBaseRenderer(EntityRendererProvider.Context context, StandModel<JusticeEntity> entityModel, float f) {
         super(context, entityModel,f);
     }
+    public void renderRightHand(PoseStack $$0, MultiBufferSource $$1, int $$2, JusticeEntity $$3) {
+        this.renderHand($$0, $$1, $$2, $$3, this.model.rightHand);
+    }
 
+    public void renderLeftHand(PoseStack $$0, MultiBufferSource $$1, int $$2, JusticeEntity $$3) {
+        this.renderHand($$0, $$1, $$2, $$3, this.model.leftHand);
+    }
+
+    private void renderHand(PoseStack $$0, MultiBufferSource $$1, int $$2, JusticeEntity $$3, ModelPart $$4) {
+        StandModel<JusticeEntity> $$6 = this.getModel();
+        $$6.attackTime = 0.0F;
+        $$6.setupAnim($$3, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+        $$4.xRot = 0.0F;
+        $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(getTextureLocation($$3))), $$2, OverlayTexture.NO_OVERLAY);
+    }
     private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice.png");
     private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_manga.png");
     private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_ova.png");
@@ -70,7 +94,24 @@ public class JusticeBaseRenderer<T extends StandEntity> extends StandRenderer<Ju
         } else {
             matrixStack.scale(2.0f*factor,2.0f*factor,2.0f*factor);
         }
+
+        LivingEntity user = mobEntity.getUser();
+        if (user != null) {
+        StandUser standUser = ((StandUser)mobEntity.getUser());
+        StandPowers powers = standUser.roundabout$getStandPowers();
+
+         if (powers.isPiloting()){
+             if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
+                 boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
+                 if (fp){
+                     this.model.head.visible = false;
+                 }
+             }
+         }
+        }
+
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        this.model.head.visible = true;
     }
 
     @Nullable

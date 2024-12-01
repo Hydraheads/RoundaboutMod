@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-public class JusticeRenderer<T extends StandEntity> extends JusticeBaseRenderer<JusticeEntity> {
+public class JusticeRenderer extends JusticeBaseRenderer {
     public JusticeRenderer(EntityRendererProvider.Context context) {
         super(context, new JusticeModel<>(context.bakeLayer(ModEntityRendererClient.JUSTICE_LAYER)),0f);
     }

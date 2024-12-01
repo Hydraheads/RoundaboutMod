@@ -43,10 +43,12 @@ public class ZParticleEngine {
     @ModifyVariable(
             method = "add(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
     private Particle roundaboutMarkParticleTS(Particle $$0) {
-        if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((ZParticleAccess) $$0).roundabout$getX(),
-                (int) ((ZParticleAccess) $$0).roundabout$getY(),
-                (int) ((ZParticleAccess) $$0).roundabout$getZ()))){
-            ((IParticleAccess) $$0).roundabout$setRoundaboutIsTimeStopCreated(true);
+        if ($$0 != null) {
+            if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((ZParticleAccess) $$0).roundabout$getX(),
+                    (int) ((ZParticleAccess) $$0).roundabout$getY(),
+                    (int) ((ZParticleAccess) $$0).roundabout$getZ()))) {
+                ((IParticleAccess) $$0).roundabout$setRoundaboutIsTimeStopCreated(true);
+            }
         }
         return $$0;
     }
@@ -54,7 +56,7 @@ public class ZParticleEngine {
     @Inject(method = "tickParticle", at = @At("HEAD"), cancellable = true)
     void doNotTickParticleWhenTimeStopped(Particle particle, CallbackInfo ci) {
         ZParticleAccess particle1 = (ZParticleAccess) particle;
-        if (!(particle instanceof ItemPickupParticle)) {
+        if (!(particle instanceof ItemPickupParticle) && particle1 != null) {
             if (!((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.roundabout$getX(),
                     (int) particle1.roundabout$getY(),
                     (int) particle1.roundabout$getZ()))) {
@@ -96,7 +98,7 @@ public class ZParticleEngine {
 
                             ZParticleAccess particle1 = ((ZParticleAccess) $$10);
                             float tickDeltaFixed = $$4;
-                            if (!((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
+                            if (particle1 != null && !((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
                                 Vec3i range = new Vec3i((int) particle1.roundabout$getX(),
                                         (int) particle1.roundabout$getY(),
                                         (int) particle1.roundabout$getZ());

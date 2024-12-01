@@ -271,7 +271,7 @@ public class JusticeEntity extends StandEntity {
     public Vec3 getIdleOffset(LivingEntity standUser) {
         if (this.getSkin() != DARK_MIRAGE) {
             int vis = this.getFadeOut();
-            double r = (((double) vis / MaxFade) * ((standUser.getBbWidth() / 2) + this.getDistanceOut()));
+            double r = (((double) vis / MaxFade) * ((standUser.getBbWidth() / 2) + 2*(this.getDistanceOut())));
             if (r < 0.5) {
                 r = 0.5;
             }
@@ -297,7 +297,7 @@ public class JusticeEntity extends StandEntity {
             }
 
             double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-            double y1 = standUser.getY() + getIdleYOffset() - yy;
+            double y1 = standUser.getY() + getIdleYOffset() - yy+0.6;
             double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
 
             return new Vec3(x1, y1, z1);

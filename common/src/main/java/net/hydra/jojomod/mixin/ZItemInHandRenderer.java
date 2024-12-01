@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerRenderer;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -15,8 +16,10 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.Model;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
@@ -70,6 +73,26 @@ public class ZItemInHandRenderer {
     @Shadow
     private float oOffHandHeight;
 
+    float d1 = 1;
+    float d2 = -0.3F;
+    float d3 = 0.4F;
+    float d4 = -0.4F;
+    float d5 = 0.64000005F;
+    float d6 = -0.6F;
+    float d7 = -0.6F;
+    float d8 = -0.71999997F;
+    float d9 = 45F;
+    float d10 = 70F;
+    float d11 = -20F;
+    float d15 = 120F;
+    float d16 = 200F;
+    float d17 = -135F;
+    float d18 = 5.6F;
+    float d19 = 0;
+    float d20 = 0;
+    float d21 = -20F;
+    float d22 = -20F;
+    float d23 = -20F;
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
     void roundabout$renderHandsWithItems(float $$0, PoseStack $$1, MultiBufferSource.BufferSource $$2,
@@ -96,32 +119,28 @@ public class ZItemInHandRenderer {
                 if (stand != null) {
                     EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
                     EntityRenderer<? super T> ER = $$7.getRenderer(stand);
+                    EntityRenderer<? super T> P = $$7.getRenderer($$3);
                     if (ER instanceof StandRenderer<?>) {
                         Model ml = ((StandRenderer<?>) ER).getModel();
                         if (ml instanceof JusticeModel<?> sm) {
-                            if (ER instanceof JusticeRenderer<?> zr && stand instanceof JusticeEntity skl) {
+                            if (ER instanceof JusticeRenderer zr && stand instanceof JusticeEntity skl && P instanceof PlayerRenderer PR) {
 
 
                                 /** I can't for the life of me get decipher these values enough to put the hands onscreen
                                  * Wasted 6 hours, if anyone else wants to try getting justice
                                  * to render its hands in first person pilot mode be my guest
+                                 **/
+
+                                /**
                                 float $$11 = hando == InteractionHand.MAIN_HAND ? aan : 0.0F;
                                 float $$12 = 1.0F - Mth.lerp($$0, oMainHandHeight, this.mainHandHeight);
-                                this.roundabout$renderArmWithItem(
-                                        $$3, $$0, sev, InteractionHand.MAIN_HAND, $$11, $$12, $$1, $$2, $$4,
-                                        sm.rightHand, null, ml, zr.getTextureLocation(skl),
-                                        1,-0.3F,0.4F,-0.4F,0.64000005F,-0.6F,-0.6F,
-                                        -0.71999997F, 45F,70F,-20F, -1, 3.6F, 3.5F,
-                                        120F,200F,-135F,5.6F,0,0, 1F, 1F, 1F);
+                                this.roundabout$renderJusticeArmWithItem(
+                                        $$3, $$0, sev, InteractionHand.MAIN_HAND, $$11, $$12, $$1, $$2, $$4,skl);
 
                                 float $$13 = hando == InteractionHand.OFF_HAND ? aan : 0.0F;
                                 float $$14 = 1.0F - Mth.lerp($$0, this.oOffHandHeight, this.offHandHeight);
-                                this.roundabout$renderArmWithItem(
-                                        $$3, $$0, sev, InteractionHand.OFF_HAND, $$13, $$14, $$1, $$2, $$4,
-                                        sm.leftHand, null, ml, zr.getTextureLocation(skl),
-                                        1,-0.3F,0.4F,-0.4F,0.64000005F,-0.6F,-0.6F,
-                                        -0.71999997F, 45F,70F,-20F, -1, 3.6F, -3.5F,
-                                        120F,200F,-135F,5.6F,0,0, 1F, 1F, 1F);
+                                this.roundabout$renderJusticeArmWithItem(
+                                        $$3, $$0, sev, InteractionHand.OFF_HAND, $$13, $$14, $$1, $$2, $$4,skl);
                                  **/
 
                             }
@@ -141,70 +160,48 @@ public class ZItemInHandRenderer {
     * */
 
     @Unique
-    private void roundabout$renderArmWithItem(
+    private void roundabout$renderJusticeArmWithItem(
             AbstractClientPlayer $$0, float $$1, float $$2, InteractionHand $$3, float $$4, float $$6, PoseStack $$7,
-            MultiBufferSource $$8, int $$9, @Nullable ModelPart mp,  @Nullable ModelPart mp2, Model ml,
-            ResourceLocation texture, float d1, float d2, float d3, float d4, float d5, float d6, float d7,
-            float d8, float d9, float d10, float d11, float d12, float d13, float d14,
-            float d15, float d16, float d17, float d18, float d19, float d20,
-            float d21, float d22, float d23
+            MultiBufferSource $$8, int $$9, JusticeEntity skl
     ) {
         boolean $$10 = $$3 == InteractionHand.MAIN_HAND;
         HumanoidArm $$11 = $$10 ? $$0.getMainArm() : $$0.getMainArm().getOpposite();
+        $$7.pushPose();
         if ($$10 && !$$0.isInvisible()) {
-            this.roundabout$renderPlayerArm($$7, $$8, $$9, $$6, $$4, $$11, mp, mp2, ml, texture, d1, d2, d3, d4,
-                    d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16,d17,d18,d19,d20,d21,d22,d23);
+            this.roundabout$renderJusticeArm($$7, $$8, $$9, $$6, $$4, $$11, skl);
         }
+        $$7.popPose();
     }
     @Unique
-    private void roundabout$renderPlayerArm(PoseStack $$0, MultiBufferSource $$1, int $$2, float $$3, float $$4, HumanoidArm $$5,
-                                            @Nullable ModelPart mp, @Nullable ModelPart mp2, Model ml, ResourceLocation texture,
-                                            float d1, float d2, float d3, float d4, float d5, float d6, float d7,
-                                            float d8, float d9, float d10, float d11, float d12, float d13, float d14,
-                                            float d15, float d16, float d17, float d18, float d19, float d20,
-                                            float d21, float d22, float d23) {
+    private<T extends StandEntity>  void roundabout$renderJusticeArm(PoseStack $$0, MultiBufferSource $$1, int $$2,
+                                                                     float $$3, float $$4, HumanoidArm $$5, JusticeEntity JE) {
         boolean $$6 = $$5 != HumanoidArm.LEFT;
-        float $$7 = $$6 ? d1 : -d1;
+        float $$7 = $$6 ? 1.0F : -1.0F;
         float $$8 = Mth.sqrt($$4);
-        float $$9 = d2 * Mth.sin($$8 * (float) Math.PI);
-        float $$10 = d3 * Mth.sin($$8 * (float) (Math.PI * 2));
-        float $$11 = d4 * Mth.sin($$4 * (float) Math.PI);
-        $$0.translate($$7 * ($$9 + d5), $$10 + d6 + $$3 * d7, $$11 + d8);
-        $$0.mulPose(Axis.YP.rotationDegrees($$7 * d9));
+        float $$9 = -0.3F * Mth.sin($$8 * (float) Math.PI);
+        float $$10 = 0.4F * Mth.sin($$8 * (float) (Math.PI * 2));
+        float $$11 = -0.4F * Mth.sin($$4 * (float) Math.PI);
+        $$0.translate($$7 * ($$9 + 0.64000005F), $$10 + -0.6F + $$3 * -0.6F, $$11 + -0.71999997F);
+        $$0.mulPose(Axis.YP.rotationDegrees($$7 * 45.0F));
         float $$12 = Mth.sin($$4 * $$4 * (float) Math.PI);
         float $$13 = Mth.sin($$8 * (float) Math.PI);
-        $$0.mulPose(Axis.YP.rotationDegrees($$7 * $$13 * d10));
-        $$0.mulPose(Axis.ZP.rotationDegrees($$7 * $$12 * d11));
+        $$0.mulPose(Axis.YP.rotationDegrees($$7 * $$13 * 70.0F));
+        $$0.mulPose(Axis.ZP.rotationDegrees($$7 * $$12 * -20.0F));
         AbstractClientPlayer $$14 = this.minecraft.player;
         RenderSystem.setShaderTexture(0, $$14.getSkinTextureLocation());
-        $$0.translate($$7 * d12, d13, d14);
-        $$0.mulPose(Axis.ZP.rotationDegrees($$7 * d15));
-        $$0.mulPose(Axis.XP.rotationDegrees(d16));
-        $$0.mulPose(Axis.YP.rotationDegrees($$7 * -d17));
-        $$0.translate($$7 * d18, d19, d20);
-        $$0.scale(d21, d22, d23);
-        PlayerRenderer $$15 = (PlayerRenderer)this.entityRenderDispatcher.<AbstractClientPlayer>getRenderer($$14);
+        $$0.translate($$7 * -1.0F, 3.6F, 3.5F);
+        $$0.mulPose(Axis.ZP.rotationDegrees($$7 * 120.0F));
+        $$0.mulPose(Axis.XP.rotationDegrees(200.0F));
+        $$0.mulPose(Axis.YP.rotationDegrees($$7 * -135.0F));
+        $$0.translate($$7 * 5.6F, 0.0F, 0.0F);
+        JusticeBaseRenderer $$15 = (JusticeBaseRenderer)this.entityRenderDispatcher.<JusticeEntity>getRenderer(JE);
         if ($$6) {
-            roundabout$renderOtherHand($$0, $$1, $$2, $$14, mp, mp2, ml, texture, $$15);
+            $$15.renderRightHand($$0, $$1, $$2, JE);
         } else {
-            roundabout$renderOtherHand($$0, $$1, $$2, $$14, mp, mp2, ml, texture, $$15);
+            $$15.renderLeftHand($$0, $$1, $$2, JE);
         }
     }
 
-    @Unique
-    private void roundabout$renderOtherHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3,
-                                            @Nullable ModelPart $$4, @Nullable ModelPart $$5, Model ML, ResourceLocation texture,
-                                            PlayerRenderer OG){
-
-        if ($$4 != null) {
-            $$4.xRot = 0.0F;
-            $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
-        }
-        if ($$5 != null) {
-            $$5.xRot = 0.0F;
-            $$5.render($$0, $$1.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
-        }
-    }
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer, float ff, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
         if (abstractClientPlayer.isScoping()) {

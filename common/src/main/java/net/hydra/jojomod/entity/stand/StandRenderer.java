@@ -52,14 +52,17 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
 
                 StandUser standUser = ((StandUser)mobEntity.getUser());
                 StandPowers powers = standUser.roundabout$getStandPowers();
-                if (powers.isPiloting()){
-                    if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
-                        boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
-                        if (fp){
-                            return;
-                        }
-                    }
-                }
+
+                /**
+                 if (powers.isPiloting()){
+                 if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
+                 boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
+                 if (fp){
+                 return;
+                 }
+                 }
+                 }
+                 **/
 
                 if (standUser.roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
                     maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfStand;

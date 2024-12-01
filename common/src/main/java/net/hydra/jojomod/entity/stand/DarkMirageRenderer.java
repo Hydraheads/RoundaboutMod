@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import org.jetbrains.annotations.Nullable;
 
-public class DarkMirageRenderer<T extends StandEntity> extends JusticeBaseRenderer<JusticeEntity> {
+public class DarkMirageRenderer extends JusticeBaseRenderer {
     public DarkMirageRenderer(EntityRendererProvider.Context context) {
         super(context, new DarkMirageModel<>(context.bakeLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER)),0f);
     }

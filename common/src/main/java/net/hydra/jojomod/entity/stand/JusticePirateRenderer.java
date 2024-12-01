@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import org.jetbrains.annotations.Nullable;
 
-public class JusticePirateRenderer<T extends StandEntity> extends JusticeBaseRenderer<JusticeEntity> {
+public class JusticePirateRenderer extends JusticeBaseRenderer {
     public JusticePirateRenderer(EntityRendererProvider.Context context) {
         super(context, new JusticePirateModel<>(context.bakeLayer(ModEntityRendererClient.JUSTICE_PIRATE_LAYER)),0f);
     }

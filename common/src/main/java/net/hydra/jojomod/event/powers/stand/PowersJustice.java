@@ -184,30 +184,32 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_1_SNEAK);
-        } else {
-            setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
-
-        }
-
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_BLOCKS, PowerIndex.SKILL_2_SNEAK);
-        } else {
-            setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
-
-        }
-
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
-        } else {
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
-        }
-
         if (isPiloting()){
+            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.SKILL_3);
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT_EXIT, PowerIndex.SKILL_4);
         } else {
+
+            if (isHoldingSneak()){
+                setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_1_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
+            }
+
+            if (isHoldingSneak()){
+                setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_BLOCKS, PowerIndex.SKILL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
+
+            }
+
+            if (isHoldingSneak()){
+                setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+            }
+
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT, PowerIndex.SKILL_4);
         }
     }
@@ -279,8 +281,10 @@ public class PowersJustice extends DashPreset {
                     if (keyIsDown) {
                         if (!hold1) {
                             hold1 = true;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                            if (!isPiloting()) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                            }
                         }
                     } else {
                         hold1 = false;
@@ -323,6 +327,13 @@ public class PowersJustice extends DashPreset {
     public BlockPos bpos;
     public boolean hold2 = false;
     @Override
+    public void buttonInput3(boolean keyIsDown, Options options) {
+        if (!isPiloting()) {
+            super.buttonInput3(keyIsDown,options);
+        }
+
+    }
+    @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
             if (!isHoldingSneak()) {
@@ -344,9 +355,11 @@ public class PowersJustice extends DashPreset {
             } else {
                 if (keyIsDown) {
                     if (!hold1) {
-                        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
-                            hold1 = true;
-                            ClientUtil.setJusticeBlockScreen();
+                        if (!isPiloting()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                                hold1 = true;
+                                ClientUtil.setJusticeBlockScreen();
+                            }
                         }
                     }
                 } else {
@@ -364,6 +377,10 @@ public class PowersJustice extends DashPreset {
                 if (!hold4) {
                     hold4 = true;
                     if (isPiloting()){
+                        if (this.self instanceof Player PE) {
+                            IPlayerEntity ipe = ((IPlayerEntity) PE);
+                            ipe.roundabout$setIsControlling(0);
+                        }
                         ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
                                 PacketDataIndex.INT_UPDATE_PILOT);
                     } else {

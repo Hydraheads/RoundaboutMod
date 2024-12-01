@@ -60,7 +60,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 @Mixin(PlayerRenderer.class)
-public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
+public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> implements IPlayerRenderer {
 
     @Unique
     Mob roundabout$shapeShift = null;
@@ -117,6 +117,11 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     private void setModelProperties(AbstractClientPlayer $$0) {
     }
 
+    @Override
+    @Unique
+    public void roundabout$setModelProperties(AbstractClientPlayer $$0){
+        setModelProperties($$0);
+    }
 
     @Inject(method = "getArmPose", at = @At(value = "HEAD"))
     private static void roundabout$GetArmPose(AbstractClientPlayer $$0, InteractionHand $$1, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
