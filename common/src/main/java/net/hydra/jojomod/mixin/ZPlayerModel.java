@@ -84,6 +84,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+            this.hat.copyFrom(this.head);
         }
     }
     @Unique
