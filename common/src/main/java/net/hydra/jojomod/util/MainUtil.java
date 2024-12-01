@@ -1106,6 +1106,7 @@ public class MainUtil {
             ((StandUser)player).roundabout$getStandPowers().updateMove(data);
         }
     }
+    @SuppressWarnings("deprecation")
     public static void handleIntPacketC2S(Player player, int data, byte context){
         if (context == PacketDataIndex.INT_GLAIVE_TARGET){
             Entity target = player.level().getEntity(data);
@@ -1129,7 +1130,14 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_UPDATE_MOVE){
             ((StandUser)player).roundabout$getStandPowers().updateIntMove(data);
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
-            ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
+            StandEntity SE = ((StandUser)player).roundabout$getStand();
+            if (SE != null){
+                BlockPos veci3 = BlockPos.containing(new Vec3(SE.getX(), SE.getY() + SE.getEyeHeight(), SE.getZ()));
+                BlockState bl3 = SE.level().getBlockState(veci3);
+                if (!(bl3.isSolid() && bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3))){
+                    ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
+                }
+            }
         }
     }
 
