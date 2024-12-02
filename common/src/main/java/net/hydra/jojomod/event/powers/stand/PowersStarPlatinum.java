@@ -761,6 +761,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         if (this.attackTimeDuring == 27){
                             int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
+                            ticksForFinger = 101;
                             List<Entity> fingerTargets = doFinger((float) maxDist);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);
