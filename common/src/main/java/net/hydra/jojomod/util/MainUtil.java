@@ -1137,6 +1137,8 @@ public class MainUtil {
                 if (!(bl3.isSolid() && bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3))){
                     ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
                 }
+            } else {
+                ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
             }
         }
     }

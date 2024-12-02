@@ -353,6 +353,12 @@ public class StandPowers {
         }
     }
 
+    public int getPilotMode(){
+        return 2;
+    }
+    public int getMaxPilotRange(){
+        return 100;
+    }
     public void levelUp(){
         if (!this.getSelf().level().isClientSide()){
             ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,

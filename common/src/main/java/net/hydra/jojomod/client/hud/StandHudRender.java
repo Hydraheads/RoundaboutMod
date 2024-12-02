@@ -7,10 +7,13 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -187,6 +190,44 @@ public class StandHudRender {
         int y = 6141337;
         Font renderer = client.font;
         String $$6 = level + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
+
+    public static void renderDistanceHUDJustice(GuiGraphics context, Minecraft client, Player playerEntity,
+                                                int scaledWidth, int scaledHeight, int ticks, int x, StandEntity stand) {
+        int l;
+        int k;
+        int v;
+        StandUser standUser = ((StandUser)playerEntity);
+        StandPowers powers = standUser.roundabout$getStandPowers();
+        int mode = powers.getPilotMode();
+        int maxDistance = powers.getMaxPilotRange();
+        int distance = 1;
+        if (mode == 1){
+            distance = (int) stand.position().distanceTo(playerEntity.position());
+        } else if (mode == 2){
+            distance = (int) MainUtil.cheapDistanceTo2(stand.getX(),stand.getZ(),playerEntity.getX(),playerEntity.getZ());
+        }
+        int blt = (int) Math.floor(((double) 182 /maxDistance)*(distance));
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 131, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 136, blt, 5);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int y = 16173823;
+        Font renderer = client.font;
+        String $$6 = distance + "";
         int $$7 = (scaledWidth - renderer.width($$6)) / 2;
         int $$8 = scaledHeight - 31 - 4;
         context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);

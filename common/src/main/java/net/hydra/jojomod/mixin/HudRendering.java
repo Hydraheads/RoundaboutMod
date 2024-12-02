@@ -297,6 +297,11 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
+            } else if (((StandUser)minecraft.player).roundabout$getStandPowers().isPiloting()){
+                if (this.getCameraPlayer() != null) {
+                    StandHudRender.renderDistanceHUDJustice(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
+                }
+                return true;
             } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp()){
 
                 StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
