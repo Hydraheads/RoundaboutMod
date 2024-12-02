@@ -273,6 +273,12 @@ public class PowersJustice extends DashPreset {
         return $$1;
     }
 
+
+    @Override
+    public int getMaxPilotRange(){
+        return ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange;
+    }
+
     public boolean hold1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
@@ -454,6 +460,12 @@ public class PowersJustice extends DashPreset {
         return tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
     }
+
+    @Override
+    public float getPermaCastRange(){
+        return ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange;
+    }
+
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1) {

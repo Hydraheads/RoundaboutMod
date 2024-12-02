@@ -50,6 +50,8 @@ import net.hydra.jojomod.util.annotation.*;
     public Float userAndWorthyBreedingOddsBonus;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
     public Integer multiplyAboveForVillagerBreeding;
+    @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+    public Integer justiceFogAndPilotRange;
     @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
     public Integer barrageWindup;
     @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
