@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(LightTexture.class)
+@Mixin(value = LightTexture.class, priority = 100)
 public class ZLightTextue {
 
     /**Star Platinum scope acts like night vision*/
