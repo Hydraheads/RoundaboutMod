@@ -55,6 +55,7 @@
     "ZPumpkinBlock",
     "ZRaid",
     "ZRecordItem",
+    "ZServerGamePacketListenerImpl",
     "ZSheep",
     "ZShieldOffhandOverride",
     "ZSlime",

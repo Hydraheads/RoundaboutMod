@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -31,6 +33,9 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,9 +49,11 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.minecraft.world.level.block.WebBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -331,6 +338,93 @@ public abstract class InputEvents implements IInputEvents {
     public void setScreen(@javax.annotation.Nullable Screen $$0) {
     }
 
+
+    @Unique
+    public void roundabout$doItemUseWithJustice(){
+
+        if (this.rightClickDelay == 0 && this.player != null && !this.player.isUsingItem() && this.level != null) {
+
+            StandUser standComp = ((StandUser) player);
+            StandPowers powers = standComp.roundabout$getStandPowers();
+            StandEntity piloting = powers.getPilotingStand();
+            HitResult $$47 = null;
+            if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
+                if (level != null) {
+                    double d0 = 10;
+                    $$47 = piloting.pick(d0, 0, false);
+                }
+            }
+
+            if (this.gameMode != null && !this.gameMode.isDestroying()) {
+                this.rightClickDelay = 4;
+                if (!this.player.isHandsBusy()) {
+
+                    for (InteractionHand $$0 : InteractionHand.values()) {
+                        ItemStack $$1 = this.player.getItemInHand($$0);
+                        if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
+                            return;
+                        }
+
+                        if ($$47 != null && $$1.getItem() instanceof FogBlockItem) {
+                            switch ($$47.getType()) {
+                                case ENTITY:
+                                    EntityHitResult $$2 = (EntityHitResult)$$47;
+                                    Entity $$3 = $$2.getEntity();
+                                    if (!this.level.getWorldBorder().isWithinBounds($$3.blockPosition())) {
+                                        return;
+                                    }
+
+                                    InteractionResult $$4 = this.gameMode.interactAt(this.player, $$3, $$2, $$0);
+                                    if (!$$4.consumesAction()) {
+                                        $$4 = this.gameMode.interact(this.player, $$3, $$0);
+                                    }
+
+                                    if ($$4.consumesAction()) {
+                                        if ($$4.shouldSwing()) {
+                                            this.player.swing($$0);
+                                        }
+
+                                        return;
+                                    }
+                                    break;
+                                case BLOCK:
+                                    BlockHitResult $$5 = (BlockHitResult)$$47;
+                                    int $$6 = $$1.getCount();
+                                    InteractionResult $$7 = this.gameMode.useItemOn(this.player, $$0, $$5);
+                                    if ($$7.consumesAction()) {
+                                        if ($$7.shouldSwing()) {
+                                            this.player.swing($$0);
+                                            if (!$$1.isEmpty() && ($$1.getCount() != $$6 || this.gameMode.hasInfiniteItems())) {
+                                                this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                            }
+                                        }
+
+                                        return;
+                                    }
+
+                                    if ($$7 == InteractionResult.FAIL) {
+                                        return;
+                                    }
+                            }
+                        }
+
+                        if (!$$1.isEmpty()) {
+                            InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);
+                            if ($$8.consumesAction()) {
+                                if ($$8.shouldSwing()) {
+                                    this.player.swing($$0);
+                                }
+
+                                this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
     public void roundabout$DoItemUseCancel(CallbackInfo ci) {
         if (player != null) {
@@ -340,6 +434,9 @@ public abstract class InputEvents implements IInputEvents {
             StandPowers powers = standComp.roundabout$getStandPowers();
             if (powers.isPiloting()){
                 ci.cancel();
+                if (powers instanceof PowersJustice){
+                    roundabout$doItemUseWithJustice();
+                }
                 return;
             }
 
@@ -574,6 +671,10 @@ public abstract class InputEvents implements IInputEvents {
     @Shadow private volatile boolean pause;
     @Shadow private float pausePartialTick;
     @Shadow @Final public KeyboardHandler keyboardHandler;
+
+    @Shadow public abstract RenderBuffers renderBuffers();
+
+    @Shadow @Final private RenderBuffers renderBuffers;
     @Unique
     private static boolean roundabout$hasHandledBinds = false;
 
