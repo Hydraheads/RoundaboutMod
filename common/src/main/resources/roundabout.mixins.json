@@ -56,6 +56,7 @@
     "ZRaid",
     "ZRecordItem",
     "ZServerGamePacketListenerImpl",
+    "ZServerPlayerGameMode",
     "ZSheep",
     "ZShieldOffhandOverride",
     "ZSlime",

@@ -52,14 +52,15 @@ public abstract class ZServerGamePacketListenerImpl {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
-            InteractionHand $$2 = $$0.getHand();
-            ItemStack $$3 = this.player.getItemInHand($$2);
-            if (piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice
-            && $$3.getItem() instanceof FogBlockItem) {
-                ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange+15);
-                roundabout$handleUseItemOn($$0);
+            if (piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice) {
+                InteractionHand $$2 = $$0.getHand();
+                ItemStack $$3 = this.player.getItemInHand($$2);
+                if ($$3.getItem() instanceof FogBlockItem) {
+                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange + 15);
+                    roundabout$handleUseItemOn($$0);
+                }
+                ci.cancel();
             }
-            ci.cancel();
         }
     }
 

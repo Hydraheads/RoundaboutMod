@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -191,6 +192,37 @@ public abstract class InputEvents implements IInputEvents {
         }
     }
 
+    private void roundabout$justiceContinueAttack(boolean $$0) {
+        if (!$$0) {
+            this.missTime = 0;
+        }
+        StandUser standComp = ((StandUser) player);
+        StandPowers powers = standComp.roundabout$getStandPowers();
+        StandEntity piloting = powers.getPilotingStand();
+        HitResult $$47 = null;
+        if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
+            if (level != null) {
+                double d0 = 10;
+                $$47 = piloting.pick(d0, 0, false);
+            }
+        }
+        if (this.missTime <= 0 && !this.player.isUsingItem()) {
+            if ($$0 && $$47 != null && $$47.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult $$1 = (BlockHitResult)$$47;
+                BlockPos $$2 = $$1.getBlockPos();
+                if (!this.level.getBlockState($$2).isAir() && this.level.getBlockState($$2).getBlock() instanceof FogBlock) {
+                    Direction $$3 = $$1.getDirection();
+                    if (this.gameMode.continueDestroyBlock($$2, $$3)) {
+                        this.particleEngine.crack($$2, $$3);
+                        this.player.swing(InteractionHand.MAIN_HAND);
+                    }
+                }
+            } else {
+                this.gameMode.stopDestroyBlock();
+            }
+        }
+    }
+
         @Inject(method = "continueAttack", at = @At("HEAD"), cancellable = true)
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
@@ -199,6 +231,9 @@ public abstract class InputEvents implements IInputEvents {
                 StandPowers powers = standComp.roundabout$getStandPowers();
                 if (powers.isPiloting()){
                     ci.cancel();
+                    if (powers instanceof PowersJustice){
+                        roundabout$justiceContinueAttack($$0);
+                    }
                     return;
                 }
 
