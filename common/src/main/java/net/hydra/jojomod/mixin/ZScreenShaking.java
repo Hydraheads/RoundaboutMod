@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GameRenderer.class)
 public class ZScreenShaking implements IGameRenderer {
@@ -46,6 +47,17 @@ public class ZScreenShaking implements IGameRenderer {
         this.loadEffect($$0);
     }
 
+    @Inject(method = "shouldRenderBlockOutline()Z", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$shouldOutline(CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity player = Minecraft.getInstance().player;
+        if (player != null) {
+            StandUser sus = ((StandUser) player);
+            StandPowers powers = sus.roundabout$getStandPowers();
+            if (powers.isPiloting()) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
     @Inject(method = "tickFov()V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$tickfov(CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
