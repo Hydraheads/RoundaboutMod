@@ -185,7 +185,7 @@ public class PowersJustice extends DashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isPiloting()){
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.SKILL_1);
             setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
             setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.SKILL_3);
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT_EXIT, PowerIndex.SKILL_4);
@@ -277,14 +277,12 @@ public class PowersJustice extends DashPreset {
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
             if (this.getSelf().level().isClientSide) {
-                if (!isHoldingSneak()) {
+                if (!isHoldingSneak() || isPiloting()) {
                     if (keyIsDown) {
                         if (!hold1) {
                             hold1 = true;
-                            if (!isPiloting()) {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                            }
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                         }
                     } else {
                         hold1 = false;
