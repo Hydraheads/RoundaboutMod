@@ -13,6 +13,7 @@
   "item.roundabout.iron_glaive": "铁剑刃戟",
   "item.roundabout.diamond_glaive": "钻石剑刃戟",
   "item.roundabout.netherite_glaive": "下界合金剑刃戟",
+  "item.roundabout.executioner_axe": "刽子手之斧",
   "item.roundabout.stand_disc": "替身光碟",
   "item.roundabout.coffee_gum": "咖啡口香糖",
   "item.roundabout.meteorite": "古老陨石",
@@ -75,7 +76,11 @@
 
   "entity.roundabout.terrier": "猎犬",
   "entity.roundabout.the_world": "世界",
-  "entity.roundabout.star_platinum": "白金",
+  "entity.roundabout.star_platinum": "白金之星",
+  "entity.roundabout.star_platinum_baseball": "白金之星",
+  "entity.roundabout.justice": "正义",
+  "entity.roundabout.justice_pirate": "正义",
+  "entity.roundabout.dark_mirage": "黑色幻想",
   "entity.roundabout.harpoon": "鱼叉",
   "entity.roundabout.match": "火柴",
   "entity.roundabout.knife": "飞刀",
@@ -83,6 +88,10 @@
   "entity.roundabout.gasoline_splatter": "汽油渍",
   "entity.roundabout.stand_arrow": "替身箭",
   "entity.roundabout.worthy_arrow": "高价值箭",
+  "entity.roundabout.jnpc_ova_enya": "恩雅",
+  "entity.roundabout.jnpc_jotaro": "承太郎",
+  "entity.roundabout.jnpc_steve": "史蒂夫",
+  "entity.roundabout.jnpc_alex": "艾利克斯",
 
   "block.roundabout.meteor_block": "陨石方块",
   "block.roundabout.ancient_meteor": "古老陨石",
@@ -98,9 +107,13 @@
   "block.roundabout.barbed_wire_bundle": "带刺铁丝网丛",
   "block.roundabout.goddess_statue": "慈爱女神像",
   "block.roundabout.stereo": "立体声音响",
+  "block.roundabout.fog_block": "浓雾方块",
+  "block.roundabout.fog_block.title": "浓雾",
+  "block.roundabout.fog_block_coating.title": "涂层",
 
   "itemgroup.jojo": "徘徊",
   "itemgroup.jojo_discs": "替身光碟",
+  "itemgroup.justice_fog_items": "正义的幻象方块",
 
   "key.roundabout.summon.stand": "召唤替身",
   "key.roundabout.ability.one": "技能1",
@@ -111,6 +124,12 @@
   "key.roundabout.bonus_guard": "使用副手物品/一键防御",
   "key.roundabout.switch_rows": "切换潜行技能栏",
   "key.roundabout.show_exp": "切换替身经验显示",
+  "key.roundabout.pose": "选择姿势",
+
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "铁斧",
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.additions_slot_description": "Add Iron Ingot",
+  "roundabout:item.roundabout.smithing_template.execution_upgrade.ingredients": "铁锭",
 
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "铁剑",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Add to iron sword",
@@ -123,6 +142,7 @@
   "item.minecraft.tipped_arrow.effect.roundabout.hex": "妖术之箭",
 
   "roundabout:upgrade.roundabout.luck_upgrade": "幸运升级",
+  "roundabout:upgrade.roundabout.execution_upgrade": "刽子手升级",
 
   "key.category.roundabout.jojo": "Roundabout操控",
   "hud.roundabout.standout": "替身已召唤",
@@ -160,10 +180,12 @@
   "commands.roundabout.levelup.single": "升级%s",
   "commands.roundabout.levelup_specific.multiple": "设置实体%s等级",
   "commands.roundabout.levelup_specific.single": "设置%s等级",
+  "commands.roundabout.experience_specific.multiple": "设置实体%s经验值",
+  "commands.roundabout.experience_specific.single": "设置%s经验值",
 
-  "sounds.roundabout.summon_stand":  "替身被召唤！",
   "sounds.roundabout.stand_arrow_charge":  "替身箭已瞄准目标！",
   "sounds.roundabout.stand_arrow_use":  "替身获得！",
+  "sounds.roundabout.summon_stand":  "替身被召唤！",
   "sounds.roundabout.summon_star":  "替身被召唤！",
   "sounds.roundabout.summon_world":  "替身被召唤！",
   "sounds.roundabout.summon_justice":  "替身被召唤！",
@@ -195,6 +217,7 @@
   "sounds.roundabout.twau_wry":  "WRY",
   "sounds.roundabout.twau_hey":  "嘿!",
   "sounds.roundabout.star_finger":  "流星指刺",
+  "sounds.roundabout.fog_morph":  "哗哗",
 
   "sounds.roundabout.star_finger_silent":  "流星指刺",
 
@@ -360,12 +383,16 @@
 
   "ability.roundabout.fog_sword": "浓雾附着",
   "ability.roundabout.fog_sword.desc": "当正义被召唤时，你的攻击速度和挖掘速度将得到提升。",
-
   "ability.roundabout.cast_fog": "浓雾之域",
   "ability.roundabout.cast_fog.desc": "在大片区域内召唤浓雾，揭露隐藏方块并用浓雾操控尸体。替身不为正义的玩家可见度降低。",
-
   "ability.roundabout.fog_morph": "浓雾拟态",
   "ability.roundabout.fog_morph.desc": "将外表转换为其他生物。村民和普通伪装将会在村民交易中获得一定折扣同时将会被傀儡尊敬。 僵尸伪装使你被僵尸忽视，但会吓跑村民。 骷髅伪装使你被其他骷髅忽视，但会被狗和狼主动攻击。",
+  "ability.roundabout.fog_chain": "雾锁",
+  "ability.roundabout.fog_chain.desc": "将正在流血的实体拉向你所看向的方块。许多实体将会在受到剪刀、剑刃戟、带刺铁丝网攻击时流血",
+  "ability.roundabout.fog_blocks": "幻象方块",
+  "ability.roundabout.fog_blocks.desc": "无限制的创造幻象方块。放置后，其只能在雾开启时被看见，同时这些方块可被自由穿过。（毕竟只是幻象）",
+  "ability.roundabout.fog_pilot": "控制[正义]",
+  "ability.roundabout.fog_pilot.desc": "切换至[正义]视角并在浓雾中飞行。你可以飞行视角命令被你操控的实体进行移动或是攻击制定目标。受到伤害或是再次按下技能键视角便会返回。",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "锁定",
@@ -414,11 +441,11 @@
   "skins.roundabout.the_world.manga": "漫画",
   "skins.roundabout.the_world.heritage": "暗影世界",
   "skins.roundabout.the_world.ova": "OVA",
-  "skins.roundabout.the_world.black": "暗色",
+  "skins.roundabout.the_world.black": "High世界",
   "skins.roundabout.the_world.part_7": "THE WORLD",
   "skins.roundabout.the_world.blue_part_7": "蓝色THE WORLD",
   "skins.roundabout.the_world.over_heaven": "超越天堂",
-  "skins.roundabout.the_world.dark": "High世界",
+  "skins.roundabout.the_world.dark": "暗色",
   "skins.roundabout.the_world.aqua": "地球世界",
   "skins.roundabout.the_world.arcade": "街机（未来遗产）",
   
@@ -430,9 +457,11 @@
   "skins.roundabout.justice.stray": "流髑",
   "skins.roundabout.justice.bogged": "烂泥",
   "skins.roundabout.justice.wither": "凋零",
-  "skins.roundabout.justice.flamed": "燃烧",
+  "skins.roundabout.justice.flamed": "火焰",
+  "skins.roundabout.justice.flamed_blue": "蓝色火焰",
   "skins.roundabout.justice.twilight": "暮色森林",
   "skins.roundabout.justice.pirate": "海盗",
+  "skins.roundabout.justice.dark_mirage": "黑色妄想",
   
   "unlock_skin.roundabout.the_world.over_heaven": "世界：超越天堂皮肤解锁！",
   "unlock_skin.roundabout.star_platinum.atomic": "白金之星：原子皮肤解锁！",
@@ -443,13 +472,34 @@
   "justice.morph.ova": "伪装",
   "justice.morph.zombie": "僵尸",
   "justice.morph.skeleton": "骷髅",
+  "justice.morph.wither_skeleton": "凋零骷髅",
+  "justice.morph.stray": "流浪者",
+  "justice.morph.eerie": "怪异者",
   "justice.morph.select_next": "%1$s: 下一个, %2$s: 选中",
 
-  "power_inventory.roundabout.settings.general": "替身使者设置",
+  "roundabout.pose.giorno": "镇魂曲",
+  "roundabout.pose.joseph": "乔瑟夫",
+  "roundabout.pose.koichi": "奇妙小镇——康一",
+  "roundabout.pose.wry": "Wryyy!",
+  "roundabout.pose.oh_no": "Oh No!",
+  "roundabout.pose.torture_dance": "黑帮摇",
+  "roundabout.pose.wamuu": "阿姨压一压!",
+  "roundabout.pose.jotaro": "承太郎立",
+  "roundabout.pose.jonathan": "大乔立",
+  "roundabout.pose.none": "选择姿势！",
+
+  "power_inventory.roundabout.settings.general": "替身设置",
   "power_inventory.roundabout.settings.offset": "跟随位置",
   "power_inventory.roundabout.settings.distance": "跟随距离",
   "power_inventory.roundabout.settings.opacity": "替身透明度",
   "power_inventory.roundabout.settings.attack_opacity": "战斗透明度",
   "power_inventory.roundabout.settings.enemy_opacity": "他人替身透明度",
-  "power_inventory.roundabout.settings.reset": "重置设置"
+  "power_inventory.roundabout.settings.size": "大小",
+  "power_inventory.roundabout.settings.rotation": "旋转角度",
+  "power_inventory.roundabout.settings.yOffset": "y轴位置",
+  "power_inventory.roundabout.settings.reset": "重置设置",
+  "power_inventory.roundabout.settings.next": "下一个",
+  "roundabout.menu.ts_paused": "时停姿态",
+
+  "roundabout.warden_ts_movement": "它在时停中行动了？！"
 }

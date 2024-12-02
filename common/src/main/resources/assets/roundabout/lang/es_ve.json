@@ -77,7 +77,10 @@
   "entity.roundabout.terrier": "Terrier",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
+  "entity.roundabout.star_platinum_baseball": "Star Platinum",
   "entity.roundabout.justice": "Justice",
+  "entity.roundabout.justice_pirate": "Justice",
+  "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.harpoon": "Arpón",
   "entity.roundabout.match": "Fósforo",
   "entity.roundabout.knife": "Cuchillo",
@@ -104,9 +107,13 @@
   "block.roundabout.barbed_wire_bundle": "Alambres de púas",
   "block.roundabout.goddess_statue": "Estatua de la Diosa del Amor",
   "block.roundabout.stereo": "Equipo de música",
+  "block.roundabout.fog_block": "Bloque brumoso",
+  "block.roundabout.fog_block.title": "Brumoso",
+  "block.roundabout.fog_block_coating.title": "Cubierta",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Discos de Stands",
+  "itemgroup.justice_fog_items": "Bloques ilusorios de Justice",
 
   "key.roundabout.summon.stand": "Convocar Stand",
   "key.roundabout.ability.one": "Habilidad 1",
@@ -173,6 +180,8 @@
   "commands.roundabout.levelup.single": "Se subió de nivel %s",
   "commands.roundabout.levelup_specific.multiple": "Se ha cambiado el nivel de %s entidades",
   "commands.roundabout.levelup_specific.single": "Se ha cambiado el nivel de %s",
+  "commands.roundabout.experience_specific.multiple": "Se ha cambiado la experiencia de %s entidades",
+  "commands.roundabout.experience_specific.single": "Se ha cambiado la experiencia de %s",
 
   "sounds.roundabout.stand_arrow_charge":  "Flecha de Stand magnetizada",
   "sounds.roundabout.stand_arrow_use":  "¡Stand obtenido!",
@@ -261,7 +270,7 @@
   "sounds.roundabout.timestop_resume_theworld":  "¡El tiempo se resume!",
   "sounds.roundabout.timestop_resume_theworld2":  "¡El tiempo se resume!",
   "sounds.roundabout.ova_time_resume":  "¡El tiempo se resume!",
-  "sounds.roundabout.timestop_voice_theworld":  "Para, el tiempo",
+  "sounds.roundabout.timestop_voice_theworld":  "Para, tiempo",
   "sounds.roundabout.timestop_voice_theworld2":  "¡The World!",
   "sounds.roundabout.timestop_voice_theworld3":  "¡The World!",
   "sounds.roundabout.the_world_over_heaven":  "¡The World: Over Heaven!",
@@ -374,12 +383,16 @@
 
   "ability.roundabout.fog_sword": "Realce de niebla",
   "ability.roundabout.fog_sword.desc": "Los ataques de tu arma cargan más rápido y minas a una mayor velocidad cuando Justice está convocado",
-
   "ability.roundabout.cast_fog": "Campo de niebla",
   "ability.roundabout.cast_fog.desc": "Lanza niebla sobre una gran área, exponiendo bloques ilusorios y animando cadáveres que puedes controlar. Jugadores sin Justice ven menos.",
-
   "ability.roundabout.fog_morph": "Transformación ilusoria",
   "ability.roundabout.fog_morph.desc": "Aparece a otros como una criatura. Aldeano y Disfraz tienen comercios decentes a un precio fijo y son respetados por golems. Zombi es ignorado por otros zombies, pero temidos por aldeanos. Esqueleto es ignorado por otros esqueletos, pero odiados por lobos y perros.",
+  "ability.roundabout.fog_chain": "Cadenas de niebla",
+  "ability.roundabout.fog_chain.desc": "Arrastra criaturas, que están sangrando en la niebla, hacia el bloque que miras. Muchas criaturas pueden sangrar si los atacas con tijeras, gujas cargadas, cuchillos, o alambres de púas.",
+  "ability.roundabout.fog_blocks": "Bloques ilusorios",
+  "ability.roundabout.fog_blocks.desc": "Crea ilimitados bloques brumosos. Cuando son colocados, solamente pueden verse mientras la niebla está convocada, y se pueden traspasar (ya que sólo son ilusiones).",
+  "ability.roundabout.fog_pilot": "Control de Justice",
+  "ability.roundabout.fog_pilot.desc": "Cambia a la perspectiva de Justice, y vuela alrededor del cielo brumoso. Además de observar el área, puedes comandar a cadáveres a moverse o atacar objetivos desde arriba. Presionalo de nuevo o recibe daño para volver a tu cuerpo.", 
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Bloqueado",
@@ -480,5 +493,12 @@
   "power_inventory.roundabout.settings.opacity": "Opacidad (Quieto)",
   "power_inventory.roundabout.settings.attack_opacity": "Opacidad (Pelea)",
   "power_inventory.roundabout.settings.enemy_opacity": "Opacidad (De otros)",
-  "power_inventory.roundabout.settings.reset": "Reiniciar"
+  "power_inventory.roundabout.settings.size": "Tamaño",
+  "power_inventory.roundabout.settings.rotation": "Rotación",
+  "power_inventory.roundabout.settings.yOffset": "Desplazamiento en Y",
+  "power_inventory.roundabout.settings.reset": "Reiniciar",
+  "power_inventory.roundabout.settings.next": "Siguiente",
+  "roundabout.menu.ts_paused": "¡El tiempo está detenido!",
+
+  "roundabout.warden_ts_movement": "¡¿No se detuvo?!"
 }
