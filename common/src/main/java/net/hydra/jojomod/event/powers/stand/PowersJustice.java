@@ -25,6 +25,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -91,10 +92,22 @@ public class PowersJustice extends DashPreset {
             int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
             Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
             if (this.self.level().isClientSide()) {
+
                 if (getPilotEntity instanceof LivingEntity le) {
-                    StandEntity SE = getStandEntity(this.self);
-                    if (SE != null && le.is(SE)) {
-                        ClientUtil.setCameraEntity(le);
+
+                    if (le.isRemoved() || !le.isAlive() ||
+                            MainUtil.cheapDistanceTo2(le.getX(),le.getZ(),PL.getX(),PL.getZ())
+                                    > getMaxPilotRange()) {
+                        IPlayerEntity ipe = ((IPlayerEntity) PL);
+                        ipe.roundabout$setIsControlling(0);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
+                                PacketDataIndex.INT_UPDATE_PILOT);
+                        ClientUtil.setCameraEntity(null);
+                    } else {
+                        StandEntity SE = getStandEntity(this.self);
+                        if (SE != null && le.is(SE)) {
+                            ClientUtil.setCameraEntity(le);
+                        }
                     }
                 } else {
                     ClientUtil.setCameraEntity(null);
