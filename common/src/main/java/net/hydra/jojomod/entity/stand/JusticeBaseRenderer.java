@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -101,12 +102,19 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
         StandPowers powers = standUser.roundabout$getStandPowers();
 
          if (powers.isPiloting()){
+             boolean renderHand = ClientConfig.getLocalInstance().renderJusticeHandsWhilePiloting;
              if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
                  boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
                  if (fp && !mobEntity.getDisplay()){
+
                      this.model.head.visible = false;
                      if (mobEntity instanceof DarkMirageEntity) {
                          this.model.body.visible = false;
+                     } else {
+                         if (!renderHand){
+                             this.model.leftHand.visible = false;
+                             this.model.rightHand.visible = false;
+                         }
                      }
                  }
              }
@@ -117,6 +125,9 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
         this.model.head.visible = true;
         if (mobEntity instanceof DarkMirageEntity) {
             this.model.body.visible = true;
+        } else {
+            this.model.leftHand.visible = true;
+            this.model.rightHand.visible = true;
         }
     }
 

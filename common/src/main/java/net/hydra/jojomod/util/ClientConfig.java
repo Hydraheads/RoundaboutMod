@@ -12,7 +12,8 @@ import net.hydra.jojomod.util.annotation.*;
 public class ClientConfig {
     private static ClientConfig LOCAL_INSTANCE = new ClientConfig();
 
-
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean renderJusticeHandsWhilePiloting;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")
