@@ -297,7 +297,7 @@ public class ZItemInHandRenderer {
                 }
             } else {
                 if (itemStack.getItem() instanceof StandArrowItem){
-                    Mob ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
+                    LivingEntity ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
                     if (ME != null) {
                         float homingMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
                         boolean bl = interactionHand == InteractionHand.MAIN_HAND;
