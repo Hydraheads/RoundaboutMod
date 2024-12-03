@@ -7,19 +7,14 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
-import net.hydra.jojomod.item.FogBlockItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
-import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -67,11 +62,9 @@ public abstract class ZServerPlayerGameMode {
         if (this.player != null) { StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
-            if (piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice) {
-                Roundabout.LOGGER.info("1");
+            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice) {
                 BlockState $$6 = this.level.getBlockState($$0);
                 if (!$$6.isAir() && $$6.getBlock() instanceof FogBlock) {
-                    Roundabout.LOGGER.info("2");
                     roundabout$handleBlockBreakAction($$0,$$1,$$2,$$3,$$4);
                 }
                 ci.cancel();

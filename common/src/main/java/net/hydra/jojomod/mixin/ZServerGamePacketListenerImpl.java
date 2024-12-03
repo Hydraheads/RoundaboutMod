@@ -52,7 +52,7 @@ public abstract class ZServerGamePacketListenerImpl {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
-            if (piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice) {
+            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice) {
                 InteractionHand $$2 = $$0.getHand();
                 ItemStack $$3 = this.player.getItemInHand($$2);
                 if ($$3.getItem() instanceof FogBlockItem) {

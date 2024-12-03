@@ -291,7 +291,7 @@ public class StandPowers {
     }
     public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
         if (hasStandActive(this.getSelf())) {
-            buttonInputAttack(keyIsDown, options);
+            buttonInputUse(keyIsDown, options);
         }
     }
     public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
