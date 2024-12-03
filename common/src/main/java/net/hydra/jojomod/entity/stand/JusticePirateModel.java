@@ -13,6 +13,8 @@ public class JusticePirateModel<T extends JusticeEntity> extends StandModel<T> {
     public JusticePirateModel(ModelPart root) {
         this.stand = root.getChild("stand");
         this.head = stand.getChild("stand2").getChild("head");
+        this.rightHand = stand.getChild("stand2").getChild("right_hand_2");
+        this.leftHand = stand.getChild("stand2").getChild("right_hand_1");
     }
 
     @Override
@@ -31,9 +33,9 @@ public class JusticePirateModel<T extends JusticeEntity> extends StandModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 7.0F, 0.0F));
+        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 19.0F, 0.0F));
 
-        PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 0.0F));
+        PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 16.0F, 0.0F));
 
         PartDefinition right_hand_2 = stand2.addOrReplaceChild("right_hand_2", CubeListBuilder.create().texOffs(40, 53).addBox(-2.0F, -7.0F, -4.0F, 4.0F, 3.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-9.5397F, -20.881F, -5.7865F, -1.3742F, -0.4407F, -2.0077F));
 
