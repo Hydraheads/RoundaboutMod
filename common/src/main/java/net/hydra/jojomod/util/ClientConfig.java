@@ -16,6 +16,10 @@ public class ClientConfig {
     public Boolean renderJusticeHandsWhilePiloting;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean showCreativeTextOnWorthinessArrow;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")

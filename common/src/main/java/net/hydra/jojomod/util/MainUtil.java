@@ -119,15 +119,15 @@ public class MainUtil {
         }
         return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
     }
-    public static Mob homeOnWorthy(Level level, Vec3 vec3, double range) {
+    public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
                 vec3.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
-        Mob mm = null;
+        LivingEntity mm = null;
         double distance = -1;
         for (Entity value : hitEntities) {
-            if (value instanceof Mob mb){
+            if (value instanceof LivingEntity mb){
                 if (canGrantStand(mb) && (distance == -1 || mb.distanceToSqr(vec3) < distance)){
                     mm = mb;
                     distance = mb.distanceToSqr(vec3);
@@ -317,7 +317,7 @@ public class MainUtil {
                 }
             }
         } else if (ent instanceof Player PE){
-            if (PE.experienceLevel < 15 && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
+            if (PE.experienceLevel < ClientNetworking.getAppropriateConfig().levelsToGetStand && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
                 return true;
             }
         }
@@ -329,6 +329,12 @@ public class MainUtil {
                     && !(ME instanceof StandEntity)){
                 if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
                     return ((IMob)ME).roundabout$isWorthy();
+                }
+            }
+        } else if (ent instanceof Player PL){
+            if (ClientNetworking.getAppropriateConfig().canAwakenOtherPlayersWithArrows){
+                if (((StandUser)PL).roundabout$getStandDisc().isEmpty()){
+                    return PL.experienceLevel >= ClientNetworking.getAppropriateConfig().levelsToGetStand;
                 }
             }
         }

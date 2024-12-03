@@ -965,6 +965,23 @@ public class StandPowers {
         return false;
     }
 
+    public float levelupDamageMod(float damage){
+        int percent = ClientNetworking.getAppropriateConfig().
+                damageMultipliers.bonusStandDmgByMaxLevel;
+
+        if (percent > 0  && this.self instanceof Player PE && this.getMaxLevel() >= 1){
+            int level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+            ItemStack sdisc = ((StandUser)PE).roundabout$getStandDisc();
+            if (!sdisc.isEmpty() && sdisc.getItem() instanceof MaxStandDiscItem){
+                level = getMaxLevel();
+            }
+            damage *= (float) (1+
+                                ((((this.getMaxLevel()-1) - ((float) ((this.getMaxLevel()-1) - (level-1))))/(this.getMaxLevel()-1)*
+                                        (0.01*percent))));
+        }
+        return damage;
+    }
+
     public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
         boolean interrupt = false;
         if (interrupter instanceof LivingEntity){

@@ -157,11 +157,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public float getFinalPunchStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            return (float) ((((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)*(ClientNetworking.getAppropriateConfig().
-                                damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
+            return levelupDamageMod((float) ((((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)*(ClientNetworking.getAppropriateConfig().
+                                damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
         } else {
-            return (float) ((((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)*(ClientNetworking.getAppropriateConfig().
-                                damageMultipliers.starPlatinumAttacksOnMobs*0.01)+3);
+            return levelupDamageMod((float) ((((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)*(ClientNetworking.getAppropriateConfig().
+                                damageMultipliers.starPlatinumAttacksOnMobs*0.01)+3));
         }
     }
 
@@ -169,11 +169,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public float getBarrageHitStrength(Entity entity){
         float str = super.getBarrageHitStrength(entity);
         if (getReducedDamage(entity)){
-            str *=(float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
         } else {
-            str *=(float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01));
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
         }
         if (forwardBarrage){
             str*=0.6F;
@@ -184,11 +184,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public float getBarrageFinisherStrength(Entity entity){
         float str = super.getBarrageFinisherStrength(entity);
         if (this.getReducedDamage(entity)){
-            str *=(float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
         } else {
-            str *=(float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01));
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
         }
         if (forwardBarrage && !(entity instanceof Player)){
             str*=0.6F;
@@ -675,28 +675,28 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return (float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
+            return levelupDamageMod((float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
         } else {
-            return (float) ((float) 5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01));
+            return levelupDamageMod((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
         }
     } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return (float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
+            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
         } else {
-            return (float) ((float) 6* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01));
+            return levelupDamageMod((float) ((float) 6* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
         }
     }
     public float getFingerDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return (float) ((float) 1.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
+            return levelupDamageMod((float) ((float) 1.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
         } else {
-            return (float) ((float) 10* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01));
+            return levelupDamageMod((float) ((float) 10* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
         }
     }
     public List<Entity> FingerGrabHitbox(List<Entity> entities, float maxDistance){
@@ -1420,11 +1420,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return (float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01));
+            return levelupDamageMod(((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01))));
         } else {
-            return (float) ((float) 16* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01));
+            return levelupDamageMod(((float) ((float) 16* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01))));
         }
     }
 

@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.ClientConfig;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
@@ -243,7 +244,7 @@ public abstract class HudRendering implements IHudAccess {
 
 
             if (this.minecraft.player != null) {
-                boolean renderGasOverlay = ClientConfig.getLocalInstance().renderGasSplatterOverlay;
+                boolean renderGasOverlay = ConfigManager.getClientConfig().renderGasSplatterOverlay;
                 if (renderGasOverlay) {
                     int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
                     if (overlay > 0) {

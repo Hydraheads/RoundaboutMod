@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.ClientConfig;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -102,7 +103,7 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
         StandPowers powers = standUser.roundabout$getStandPowers();
 
          if (powers.isPiloting()){
-             boolean renderHand = ClientConfig.getLocalInstance().renderJusticeHandsWhilePiloting;
+             boolean renderHand = ConfigManager.getClientConfig().renderJusticeHandsWhilePiloting;
              if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
                  boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
                  if (fp && !mobEntity.getDisplay()){

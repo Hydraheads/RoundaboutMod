@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -56,7 +57,7 @@ public class StandArrowEntity extends AbstractArrow {
     @Override
     public void tick() {
         if (this.getArrow().getItem() instanceof StandArrowItem) {
-            Mob targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 5);
+            LivingEntity targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 5);
             if (targetMob != null) {
                 this.setDeltaMovement(
                         targetMob.position().add(0, targetMob.getEyeHeight(), 0).subtract(this.position()).normalize().scale(this.getDeltaMovement().length())
@@ -108,10 +109,10 @@ public class StandArrowEntity extends AbstractArrow {
         boolean worthy = false;
         float X = $$3;
         if (this.getArrow().getItem() instanceof StandArrowItem) {
-            if ($$1 instanceof Mob mob && MainUtil.canGrantStand(mob)) {
+            if (($$1 instanceof Mob mob && MainUtil.canGrantStand(mob)) || ($$1 instanceof Player PE && MainUtil.canGrantStand(PE))) {
                 worthy = true;
                 X = 0.2F;
-                StandArrowItem.grantMobStand(this.getArrow(), this.level(), mob);
+                StandArrowItem.grantMobStand(this.getArrow(), this.level(), (LivingEntity) $$1);
                 if (this.pickup == Pickup.ALLOWED) {
                     this.getArrow().hurt(1, this.level().getRandom(), null);
                 }
