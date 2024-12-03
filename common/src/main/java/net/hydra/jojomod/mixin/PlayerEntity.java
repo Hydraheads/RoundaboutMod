@@ -722,7 +722,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
         }
         CompoundTag compoundtag2 = $$0.getCompound("roundabout");
-        Roundabout.LOGGER.info(""+compoundtag2.contains("anchorPlace")+" "+compoundtag2.getInt("anchorPlace"));
         if (compoundtag2.contains("anchorPlace")) {
             roundabout$anchorPlace = compoundtag2.getInt("anchorPlace");
         }

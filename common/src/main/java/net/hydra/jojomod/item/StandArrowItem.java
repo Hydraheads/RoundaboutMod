@@ -224,7 +224,6 @@ public class StandArrowItem extends RoundaboutArrowItem {
         if (discStack.getItem() instanceof StandDiscItem de){
             if (!target.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)){
                 discStack.getOrCreateTagElement("Memory").putByte("Level",de.standPowers.getMaxLevel());
-                Roundabout.LOGGER.info("Sanity");
             }
 
             ((StandUser) target).roundabout$setStand(null);

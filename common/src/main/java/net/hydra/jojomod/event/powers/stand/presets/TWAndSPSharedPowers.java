@@ -658,10 +658,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                //this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
-                /*Roundabout.LOGGER.info("maxChargedTSTicks: "+this.maxChargedTSTicks+" MaxChargedTSTime: "+this.maxChargeTSTime+
-                        " chargedtsticks: "+this.getChargedTSTicks()+" maxtst"+this.getMaxTSTime());
-                        */
                 float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.timeStopMinimum+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().cooldownsInTicks.timeStopTimeUsedMultiplier*0.01)));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
                         this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
@@ -1810,8 +1806,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     public float getFinalAttackKnockback(){
-        Roundabout.LOGGER.info("CF"+this.chargedFinal);
-        Roundabout.LOGGER.info("KB"+(float)((this.chargedFinal/maxSuperHitTime)*3));
         return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
     }
     public float getFinalPunchStrength(Entity entity){

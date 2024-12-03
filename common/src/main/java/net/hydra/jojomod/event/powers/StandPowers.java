@@ -1730,14 +1730,12 @@ public class StandPowers {
                     skinind =0;
                 }
                 SE.roundabout$setIdlePosX(poses.get(skinind));
-                Roundabout.LOGGER.info(""+poses.get(skinind));
             } else {
                 skinind-=1;
                 if (skinind < 0){
                     skinind =poses.size()-1;
                 }
                 SE.roundabout$setIdlePosX(poses.get(skinind));
-                Roundabout.LOGGER.info(""+poses.get(skinind));
             }
         }
     }
