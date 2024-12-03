@@ -84,7 +84,7 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer barrageWindup;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer kickBarrageWindup;
-        @BooleanOption(group = "inherit", value = false)
+        @BooleanOption(group = "inherit", value = true)
         public Boolean mobsInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean standsInterruptSomeStandAttacks;
