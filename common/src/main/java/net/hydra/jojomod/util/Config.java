@@ -22,8 +22,6 @@ import net.hydra.jojomod.util.annotation.*;
     public Boolean onlyStandUsersCanSeeStands;
     @BooleanOption(group = "inherit", value = false)
     public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
     public Boolean enableStandLeveling;
     @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
@@ -54,10 +52,8 @@ import net.hydra.jojomod.util.annotation.*;
     public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
     @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
     public Integer justiceFogAndPilotRange;
-    @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
-    public Integer barrageWindup;
-    @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-    public Integer kickBarrageWindup;
+    @NestedOption(group = "modded")
+    public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
     public DamageMultipliers damageMultipliers;
     @NestedOption(group = "modded")
@@ -83,6 +79,22 @@ import net.hydra.jojomod.util.annotation.*;
         static void updateServer(Config config) {
             SERVER_INSTANCE = config;
         }
+    public static class ChargeSettings {
+        @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
+        public Integer barrageWindup;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer kickBarrageWindup;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean mobsInterruptSomeStandAttacks;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standsInterruptSomeStandAttacks;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean playersInterruptSomeStandAttacks;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean barragesAreAlwaysInterruptable;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean timeStopIsAlwaysInterruptable;
+    }
     public static class DamageMultipliers {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starPlatinumAttacksOnMobs;

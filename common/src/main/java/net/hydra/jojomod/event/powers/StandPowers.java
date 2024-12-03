@@ -2,7 +2,6 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -10,14 +9,13 @@ import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -35,7 +33,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
@@ -966,6 +963,37 @@ public class StandPowers {
 
     public boolean canInterruptPower(){
         return false;
+    }
+
+    public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
+        boolean interrupt = false;
+        if (interrupter instanceof LivingEntity){
+            if (isStandDamage && ClientNetworking.getAppropriateConfig().chargeSettings.standsInterruptSomeStandAttacks){
+                interrupt = true;
+            } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
+                    ClientNetworking.getAppropriateConfig().chargeSettings.timeStopIsAlwaysInterruptable){
+                interrupt = true;
+            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().chargeSettings.playersInterruptSomeStandAttacks){
+                interrupt = true;
+            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().chargeSettings.mobsInterruptSomeStandAttacks){
+                interrupt = true;
+            } else if (this.isBarraging() && ClientNetworking.getAppropriateConfig().chargeSettings.barragesAreAlwaysInterruptable) {
+                if ((this.self) instanceof Player){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.GUARD, true);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                }
+                return true;
+            }
+        } else {
+            interrupt = true;
+        }
+
+        if (interrupt){
+            return canInterruptPower();
+        } else {
+            return false;
+        }
     }
 
 
@@ -2346,7 +2374,7 @@ public class StandPowers {
         return ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum;
     }
     public int getBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().barrageWindup;
+        return ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
     }
     public int getBarrageLength(){
         return 60;

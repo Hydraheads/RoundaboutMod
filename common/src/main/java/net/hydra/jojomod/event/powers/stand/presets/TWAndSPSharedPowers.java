@@ -1514,7 +1514,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     @Override
     public int getKickBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().kickBarrageWindup;
+        return ClientNetworking.getAppropriateConfig().chargeSettings.kickBarrageWindup;
     }
 
     private float getKickBarrageChargePitch(){
@@ -1999,10 +1999,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public int getBarrageWindup(){
+        int windupSetting = ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
         if (timeStopStartedBarrage) {
-            return Math.min(13,ClientNetworking.getAppropriateConfig().barrageWindup);
+            return Math.min(13,windupSetting);
         } else {
-            return ClientNetworking.getAppropriateConfig().barrageWindup;
+            return windupSetting;
         }
     }
 
