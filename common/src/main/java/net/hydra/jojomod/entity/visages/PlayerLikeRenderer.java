@@ -19,6 +19,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -84,13 +85,18 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
             $$1.rightSleeve.visible = true;
             $$1.cloak.visible = false;
             $$1.crouching = $$0.isCrouching();
-            HumanoidModel.ArmPose $$2 = getArmPose($$0, InteractionHand.MAIN_HAND);
-            HumanoidModel.ArmPose $$3 = getArmPose($$0, InteractionHand.OFF_HAND);
-            if ($$2.isTwoHanded()) {
-                $$3 = $$0.getOffhandItem().isEmpty() ? HumanoidModel.ArmPose.EMPTY : HumanoidModel.ArmPose.ITEM;
+            LivingEntity ent = $$0;
+            if ($$0.host != null){
+                ent = $$0.host;
             }
 
-            if ($$0.getMainArm() == HumanoidArm.RIGHT) {
+            HumanoidModel.ArmPose $$2 = getArmPose(ent, InteractionHand.MAIN_HAND);
+            HumanoidModel.ArmPose $$3 = getArmPose(ent, InteractionHand.OFF_HAND);
+            if ($$2.isTwoHanded()) {
+                $$3 = ent.getOffhandItem().isEmpty() ? HumanoidModel.ArmPose.EMPTY : HumanoidModel.ArmPose.ITEM;
+            }
+
+            if (ent.getMainArm() == HumanoidArm.RIGHT) {
                 $$1.rightArmPose = $$2;
                 $$1.leftArmPose = $$3;
             } else {
@@ -104,7 +110,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
     public Vec3 getRenderOffset(T $$0, float $$1) {
         return $$0.isCrouching() ? new Vec3(0.0, -0.125, 0.0) : super.getRenderOffset($$0, $$1);
     }
-    private static HumanoidModel.ArmPose getArmPose(JojoNPC $$0, InteractionHand $$1) {
+    private static HumanoidModel.ArmPose getArmPose(LivingEntity $$0, InteractionHand $$1) {
         ItemStack $$2 = $$0.getItemInHand($$1);
         if ($$2.isEmpty()) {
             return HumanoidModel.ArmPose.EMPTY;

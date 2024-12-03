@@ -21,6 +21,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 import java.util.function.Function;
@@ -118,7 +119,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
     }
 
 
-    private void poseRightArm(T $$0) {
+    private void poseRightArm(LivingEntity $$0) {
         switch (this.rightArmPose) {
             case EMPTY:
                 this.rightArm.yRot = 0.0F;
@@ -193,6 +194,35 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
     public void setupAnim2(JojoNPC $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
         setupAnim((T) $$0,$$1,$$2,$$3,$$4,$$5);
     }
+
+    public void poseArms(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5){
+
+        LivingEntity ent = $$0;
+        if ($$0.host != null){
+            ent = $$0.host;
+        }
+
+        boolean $$9 = ent.getMainArm() == HumanoidArm.RIGHT;
+
+
+        if ($$0.isUsingItem()) {
+            boolean $$10 = $$0.getUsedItemHand() == InteractionHand.MAIN_HAND;
+            if ($$10 == $$9) {
+                this.poseRightArm($$0);
+            } else {
+                this.poseLeftArm($$0);
+            }
+        } else {
+            boolean $$11 = $$9 ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
+            if ($$9 != $$11) {
+                this.poseLeftArm($$0);
+                this.poseRightArm($$0);
+            } else {
+                this.poseRightArm($$0);
+                this.poseLeftArm($$0);
+            }
+        }
+   }
     @Override
     public void setupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
 
@@ -263,24 +293,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
 
             this.rightArm.yRot = 0.0F;
             this.leftArm.yRot = 0.0F;
-            boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-            if ($$0.isUsingItem()) {
-                boolean $$10 = $$0.getUsedItemHand() == InteractionHand.MAIN_HAND;
-                if ($$10 == $$9) {
-                    this.poseRightArm($$0);
-                } else {
-                    this.poseLeftArm($$0);
-                }
-            } else {
-                boolean $$11 = $$9 ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
-                if ($$9 != $$11) {
-                    this.poseLeftArm($$0);
-                    this.poseRightArm($$0);
-                } else {
-                    this.poseRightArm($$0);
-                    this.poseLeftArm($$0);
-                }
-            }
+            poseArms($$0,$$1,$$2,$$3,$$4,$$5);
 
             this.setupAttackAnimation($$0, $$3);
             if (this.crouching) {
@@ -388,24 +401,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                     this.setupAttackAnimation($$0, $$3);
 
 
-                    boolean JJ = $$0.getMainArm() == HumanoidArm.RIGHT;
-                    if ($$0.isUsingItem()) {
-                        boolean $$10 = $$0.getUsedItemHand() == InteractionHand.MAIN_HAND;
-                        if ($$10 == JJ) {
-                            this.poseRightArm($$0);
-                        } else {
-                            this.poseLeftArm($$0);
-                        }
-                    } else {
-                        boolean $$11 = JJ ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
-                        if (JJ != $$11) {
-                            this.poseLeftArm($$0);
-                            this.poseRightArm($$0);
-                        } else {
-                            this.poseRightArm($$0);
-                            this.poseLeftArm($$0);
-                        }
-                    }
+                    poseArms($$0,$$1,$$2,$$3,$$4,$$5);
 
                 }
             }
@@ -446,7 +442,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
     private float quadraticArmUpdate(float $$0) {
         return -65.0F * $$0 + $$0 * $$0;
     }
-    private void poseLeftArm(T $$0) {
+    private void poseLeftArm(LivingEntity $$0) {
         switch (this.leftArmPose) {
             case EMPTY:
                 this.leftArm.yRot = 0.0F;
