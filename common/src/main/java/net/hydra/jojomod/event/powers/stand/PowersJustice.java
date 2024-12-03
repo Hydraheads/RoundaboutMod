@@ -91,7 +91,7 @@ public class PowersJustice extends DashPreset {
         if (this.self instanceof Player PL){
             int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
             Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
-            if (this.self.level().isClientSide()) {
+            if (this.self.level().isClientSide() && isPacketPlayer()) {
 
                 if (getPilotEntity instanceof LivingEntity le) {
 
