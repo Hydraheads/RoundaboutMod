@@ -134,22 +134,15 @@ public class GasolineBlock extends Block {
     @SuppressWarnings("deprecation")
     @Override
     public void onProjectileHit(Level $$0, BlockState $$1, BlockHitResult $$2, Projectile $$3) {
-        if (!$$0.isClientSide) {
-            BlockPos $$4 = $$2.getBlockPos();
-            if (($$3.isOnFire() || $$3 instanceof MatchEntity) && $$3.mayInteract($$0, $$4)) {
-                float power;
-                if ($$3 instanceof MatchEntity){
-                    if (((MatchEntity)$$3).isBundle){
-                        power = MainUtil.gasDamageMultiplier()*23;
-                    } else {
-                        power = MainUtil.gasDamageMultiplier()*18;
-                    }
-                } else {
-                    power = MainUtil.gasDamageMultiplier()*17;
-                }
-                MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 2, 4, power);
-            }
+        if ($$0.isClientSide) return;
+        BlockPos $$4 = $$2.getBlockPos();
+        if (!(($$3.isOnFire() || $$3 instanceof MatchEntity) && $$3.mayInteract($$0, $$4))) return;
+        float factor = 17;
+        if ($$3 instanceof MatchEntity){
+            if (((MatchEntity)$$3).isBundle) factor = 23;
+            else factor = 18;
         }
+        MainUtil.gasExplode($$1, (ServerLevel) $$0, $$4, 0, 2, 4, MainUtil.gasDamageMultiplier() * factor);
     }
 
     @SuppressWarnings("deprecation")
@@ -170,25 +163,20 @@ public class GasolineBlock extends Block {
     @Override
     public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
         ItemStack $$6 = $$3.getItemInHand($$4);
-        if (!$$6.is(Items.FLINT_AND_STEEL) && !$$6.is(Items.FIRE_CHARGE)) {
-            return super.use($$0, $$1, $$2, $$3, $$4, $$5);
-        } else {
-            if (!$$1.isClientSide) {
-                MainUtil.gasExplode($$0, (ServerLevel) $$1, $$2, 0, 2, 4, MainUtil.gasDamageMultiplier()*14);
+        if (!$$6.is(Items.FLINT_AND_STEEL) && !$$6.is(Items.FIRE_CHARGE)) return super.use($$0, $$1, $$2, $$3, $$4, $$5);
+        if (!$$1.isClientSide) MainUtil.gasExplode($$0, (ServerLevel) $$1, $$2, 0, 2, 4, MainUtil.gasDamageMultiplier()*14);
+        $$1.setBlock($$2, Blocks.AIR.defaultBlockState(), 11);
+        Item $$7 = $$6.getItem();
+        if (!$$3.isCreative()) {
+            if ($$6.is(Items.FLINT_AND_STEEL)) {
+                $$6.hurtAndBreak(1, $$3, $$1x -> $$1x.broadcastBreakEvent($$4));
+            } else {
+                $$6.shrink(1);
             }
-            $$1.setBlock($$2, Blocks.AIR.defaultBlockState(), 11);
-            Item $$7 = $$6.getItem();
-            if (!$$3.isCreative()) {
-                if ($$6.is(Items.FLINT_AND_STEEL)) {
-                    $$6.hurtAndBreak(1, $$3, $$1x -> $$1x.broadcastBreakEvent($$4));
-                } else {
-                    $$6.shrink(1);
-                }
-            }
-
-            $$3.awardStat(Stats.ITEM_USED.get($$7));
-            return InteractionResult.sidedSuccess($$1.isClientSide);
         }
+
+        $$3.awardStat(Stats.ITEM_USED.get($$7));
+        return InteractionResult.sidedSuccess($$1.isClientSide);
     }
 
 }
