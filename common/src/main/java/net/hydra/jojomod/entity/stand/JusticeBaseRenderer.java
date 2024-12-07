@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.text.html.parser.Entity;
@@ -97,6 +98,7 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
             matrixStack.scale(2.0f*factor,2.0f*factor,2.0f*factor);
         }
 
+        Player pl = Minecraft.getInstance().player;
         LivingEntity user = mobEntity.getUser();
         if (user != null) {
         StandUser standUser = ((StandUser)mobEntity.getUser());
@@ -106,7 +108,7 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
              boolean renderHand = ConfigManager.getClientConfig().renderJusticeHandsWhilePiloting;
              if (powers.getPilotingStand() != null && powers.getPilotingStand().is(mobEntity)){
                  boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
-                 if (fp && !mobEntity.getDisplay()){
+                 if (fp && !mobEntity.getDisplay() && pl != null && user.is(pl)){
 
                      this.model.head.visible = false;
                      if (mobEntity instanceof DarkMirageEntity) {
