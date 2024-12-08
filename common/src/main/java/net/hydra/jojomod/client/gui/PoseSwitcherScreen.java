@@ -187,6 +187,7 @@ public class PoseSwitcherScreen extends Screen {
                 case KOICHI -> KOICHI;
                 case WRY -> WRY;
                 case OH_NO -> OH_NO;
+                case GIORNO -> GIORNO;
                 case TORTURE_DANCE -> TORTURE_DANCE;
                 case WAMUU -> WAMUU;
                 case JOTARO -> JOTARO;

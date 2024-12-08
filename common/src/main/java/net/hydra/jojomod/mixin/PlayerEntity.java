@@ -490,14 +490,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     @Override
     public AnimationState getJoseph(){
-        return roundabout$GIORNO;
+        return roundabout$JOSEPH;
     }
     @Unique
     public final AnimationState roundabout$KOICHI = new AnimationState();
     @Unique
     @Override
     public AnimationState getKoichi(){
-        return roundabout$GIORNO;
+        return roundabout$KOICHI;
     }
     @Unique
     public final AnimationState roundabout$OH_NO = new AnimationState();

@@ -5,13 +5,12 @@ import net.minecraft.client.animation.AnimationDefinition;
 public enum Poses {
     NONE((byte) 0,null),
     GIORNO((byte) 1, PoseAnimations.Giorno),
-
     JOSEPH((byte) 2, PoseAnimations.Jonathan),
-
     KOICHI((byte) 3,PoseAnimations.Koichi),
 
     WRY((byte) 4, PoseAnimations.WRRRYYY),
     OH_NO((byte) 5, PoseAnimations.OH_NO),
+
     TORTURE_DANCE((byte) 6,PoseAnimations.TORTURE_DANCE),
     WAMUU((byte) 7,PoseAnimations.Jonathan),
 
