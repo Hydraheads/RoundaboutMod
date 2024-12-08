@@ -338,7 +338,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         .addParticle(
                                 ModParticles.FOG_CHAIN,
                                 this.getRandomX(0.5),
-                                this.getRandomY(),
+                                this.getRandomY()+this.getBbHeight(),
                                 this.getRandomZ(0.5),
                                 0,
                                 0.2,
@@ -352,7 +352,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         .addParticle(
                                 ModParticles.FOG_CHAIN,
                                 this.getRandomX(0.5),
-                                this.getRandomY(),
+                                this.getRandomY()+this.getBbHeight(),
                                 this.getRandomZ(0.5),
                                 0,
                                 0.2,
