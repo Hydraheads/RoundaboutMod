@@ -272,7 +272,7 @@ public class JusticeEntity extends StandEntity {
                     this.setDeltaMovement(vec37.x * (double)f, q * (double)0.98f, vec37.z * (double)f);
                 }
 
-            if (this.getUser() instanceof Player PE) {
+            if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
                 ModPacketHandler.PACKET_ACCESS.updatePilot(this);
             }
         }
