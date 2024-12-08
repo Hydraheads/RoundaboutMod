@@ -1191,12 +1191,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     public StandPowers roundabout$getStandPowers() {
         if (this.level().isClientSide){
-            if (!ItemStack.matches(roundabout$itemParityClient, this.roundabout$getStandDisc())){
-                roundabout$itemParityClient = this.roundabout$getStandDisc();
-                if (this.roundabout$getStandDisc().getItem() instanceof StandDiscItem SE){
+            ItemStack standDisc = this.roundabout$getStandDisc();
+            if (!ItemStack.matches(roundabout$itemParityClient, standDisc)){
+                if (standDisc.getItem() instanceof StandDiscItem SE){
                     SE.generateStandPowers((LivingEntity)(Object)this);
+                    roundabout$itemParityClient = standDisc;
                 } else {
                     this.roundabout$setStandPowers(null);
+                    roundabout$itemParityClient = ItemStack.EMPTY;
                 }
             }
         }

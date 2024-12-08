@@ -443,7 +443,7 @@ public abstract class InputEvents implements IInputEvents {
                             }
                         }
 
-                        if (!$$1.isEmpty()) {
+                        if (!$$1.isEmpty() && $$1.getItem() instanceof FogBlockItem) {
                             InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);
                             if ($$8.consumesAction()) {
                                 if ($$8.shouldSwing()) {
