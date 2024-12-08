@@ -125,6 +125,7 @@ public class JusticeEntity extends StandEntity {
     public int tsReleaseTime = 0;
     @Override
     public void tick(){
+
         if (!this.level().isClientSide){
             if (this.getAnimation() == 31) {
                 tsReleaseTime++;

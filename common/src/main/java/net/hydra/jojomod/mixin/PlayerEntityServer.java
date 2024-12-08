@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
@@ -86,7 +87,11 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     /** respawn */
     @Inject(method = "restoreFrom(Lnet/minecraft/server/level/ServerPlayer;Z)V", at = @At(value = "TAIL"))
     public void roundabout$respawn(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
-        ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
+        if ($$0.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH)){
+            ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
+        } else {
+            ((StandUser)this).roundabout$setStandDisc(ItemStack.EMPTY);
+        }
         IPlayerEntity ipe = ((IPlayerEntity)this);
         ipe.roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
         if (!this.level().isClientSide) {

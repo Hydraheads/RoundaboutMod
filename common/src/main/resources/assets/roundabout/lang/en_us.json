@@ -412,6 +412,8 @@
   "gamerule.roundaboutStandGriefing.description": "Controls whether or not stands can mess with blocks",
   "gamerule.roundaboutStandLeveling": "Stand Leveling",
   "gamerule.roundaboutStandLeveling.description": "Whether or not stands start off maxed",
+  "gamerule.roundaboutKeepStandsOnDeath": "Keep Stands on Death",
+  "gamerule.roundaboutKeepStandsOnDeath.description": "Whether or not you lose/drop stands when you die",
   "gamerule.roundaboutStandRedstoneInterference": "Stand Redstone Interactions",
   "gamerule.roundaboutStandRedstoneInterference.description": "Whether or not stands can interact with levers, redstone, etc.",
   "gamerule.roundaboutMobGrabbing": "Mob Grabbing",
@@ -420,8 +422,6 @@
   "gamerule.roundaboutSpawnWorthyMobs.description": "Whether or not mobs can spawn worthy of stands",
   "gamerule.roundaboutSpawnStandUserMobs": "Stand User Spawning",
   "gamerule.roundaboutSpawnStandUserMobs.description": "Whether or not mobs can spawn with stands",
-  "gamerule.roundaboutAOEBarrage": "Area Of Effect Barrage",
-  "gamerule.roundaboutAOEBarrage.description": "Whether or not stand barrages sweep up multiple targets",
 
   "idle.roundabout.passive": "Idle Pose",
   "idle.roundabout.battle": "Battle Ready",

@@ -11,6 +11,8 @@ public class FabricGamerules {
                 GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_STAND_LEVELING = GameRuleRegistry.register("roundaboutStandLeveling",
                 GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+        ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH = GameRuleRegistry.register("roundaboutKeepStandsOnDeath",
+                GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE = GameRuleRegistry.register("roundaboutStandRedstoneInterference",
                 GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB = GameRuleRegistry.register("roundaboutMobGrabbing",

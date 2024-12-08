@@ -9,6 +9,8 @@ public class ForgeGamerules {
                 GameRules.Category.MISC, GameRules.BooleanValue.create(true));
         ModGamerules.ROUNDABOUT_STAND_LEVELING = GameRules.register("roundaboutStandLeveling",
                 GameRules.Category.MISC, GameRules.BooleanValue.create(true));
+        ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH = GameRules.register("roundaboutKeepStandsOnDeath",
+                GameRules.Category.PLAYER, GameRules.BooleanValue.create(true));
         ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE = GameRules.register("roundaboutStandRedstoneInterference",
                 GameRules.Category.MISC, GameRules.BooleanValue.create(true));
         ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB = GameRules.register("roundaboutMobGrabbing",

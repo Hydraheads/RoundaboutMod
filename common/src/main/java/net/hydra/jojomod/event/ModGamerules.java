@@ -9,5 +9,5 @@ public class ModGamerules {
     public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_ALLOW_ENTITY_GRAB;
     public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_WORTHY_MOB_SPAWNS;
     public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_STAND_USER_MOB_SPAWNS;
-    public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_AOE_BARRAGE;
+    public static GameRules.Key<GameRules.BooleanValue> ROUNDABOUT_KEEP_STANDS_ON_DEATH;
 }
