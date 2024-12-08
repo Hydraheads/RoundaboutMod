@@ -18,8 +18,6 @@ import net.hydra.jojomod.util.annotation.*;
     public Integer levelsToGetStand;
     @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
     public Integer levelsToRerollStand;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean onlyStandUsersCanSeeStands;
     @BooleanOption(group = "inherit", value = false)
     public Boolean canAwakenOtherPlayersWithArrows;
     @BooleanOption(group = "inherit", value = true)

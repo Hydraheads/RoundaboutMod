@@ -13,13 +13,15 @@ public class ClientConfig {
     private static ClientConfig LOCAL_INSTANCE = new ClientConfig();
 
     @BooleanOption(group = "inherit", value = true)
+    public Boolean onlyStandUsersCanSeeStands;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
+    @BooleanOption(group = "inherit", value = true)
     public Boolean renderJusticeHandsWhilePiloting;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
     public Boolean showCreativeTextOnWorthinessArrow;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")
@@ -62,6 +64,8 @@ public class ClientConfig {
     public static class TimeStopSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean timeStopFreezesScreen;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean simpleTimeStopShader;
     }
 
 }

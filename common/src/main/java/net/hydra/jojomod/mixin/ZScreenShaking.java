@@ -8,10 +8,13 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Camera;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -21,10 +24,13 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import javax.annotation.Nullable;
 
 @Mixin(GameRenderer.class)
 public class ZScreenShaking implements IGameRenderer {
@@ -55,6 +61,37 @@ public class ZScreenShaking implements IGameRenderer {
             StandPowers powers = sus.roundabout$getStandPowers();
             if (powers.isPiloting()) {
                 cir.setReturnValue(false);
+            }
+        }
+    }
+
+
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    private void roundabout$tick(CallbackInfo ci) {
+        if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
+            boolean changed = false;
+            if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
+                if (roundabout$tsShaderStatus == 0) {
+                    changed = true;
+                    roundabout$tsShaderStatus = 1;
+                    this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                }
+            } else {
+                if (roundabout$tsShaderStatus == 1) {
+                    changed = true;
+                    roundabout$tsShaderStatus = 0;
+                    this.postEffect = null;
+                }
+            }
+
+            if (changed) {
+                Minecraft mc = Minecraft.getInstance();
+                CameraType $$0 = mc.options.getCameraType();
+                if ($$0.isFirstPerson() != mc.options.getCameraType().isFirstPerson()) {
+                    mc.gameRenderer.checkEntityPostEffect(mc.options.getCameraType().isFirstPerson() ? mc.getCameraEntity() : null);
+                }
+
+                mc.levelRenderer.needsUpdate();
             }
         }
     }
@@ -118,6 +155,16 @@ public class ZScreenShaking implements IGameRenderer {
         }
     }
 
+    @Unique
+    public int roundabout$tsShaderStatus = 0;
+    @Inject(method = "checkEntityPostEffect(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "TAIL"), cancellable = true)
+    private void roundabout$checkEntityPostEffect(Entity $$0, CallbackInfo ci){
+        //$$0 is matrcices, $$1 is tickdelta
+
+
+
+    }
+
     public boolean cleared = false;
     /**Minor code to prevent nauseating barrage shaking effect when getting barraged.*/
 
@@ -176,6 +223,8 @@ public class ZScreenShaking implements IGameRenderer {
     private RenderBuffers renderBuffers;
     @Shadow private float fov;
     @Shadow private float oldFov;
+
+    @Shadow @Nullable private PostChain postEffect;
 
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderLevel(float $$0, long $$1, PoseStack $$2, CallbackInfo ci) {
