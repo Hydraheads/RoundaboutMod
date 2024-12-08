@@ -66,37 +66,51 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
 
     @Override
     public void roundabout$clientPlaySound(){
-        if (!this.roundabout$sounds.isEmpty()) {
+        if (this.roundabout$sounds != null && !this.roundabout$sounds.isEmpty()) {
             List<QueueSoundInstance> $$0 = Lists.newArrayList(this.roundabout$sounds);
             for (int i = $$0.size() - 1; i >= 0; --i) {
                 QueueSoundInstance soundI = $$0.get(i);
                 ((StandUser) this).roundabout$getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
             }
 
-            List<QueueSoundInstance> $$1 = Lists.newArrayList(this.roundabout$sounds);
-            List<PlayedSoundInstance> $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
+            List<QueueSoundInstance> $$1;
+            if (this.roundabout$sounds != null && !this.roundabout$sounds.isEmpty()) {
+                $$1 = Lists.newArrayList(this.roundabout$sounds);
+            } else {
+                $$1 = Lists.newArrayList();
+            }
+            List<PlayedSoundInstance> $$2;
+            if (this.roundabout$soundsPlaying != null && !this.roundabout$soundsPlaying.isEmpty()){
+                $$2 = Lists.newArrayList(this.roundabout$soundsPlaying);
+            } else {
+                $$2 = Lists.newArrayList();
+            }
 
-            for (int j = $$2.size() - 1; j >= 0; --j) {
-                for (int i = $$1.size() - 1; i >= 0; --i) {
-                    if ($$2.get(j).roundaboutSoundByte == $$1.get(i).roundaboutSoundByte){
-                        Minecraft.getInstance().getSoundManager().stop($$2.get(j).roundaboutSoundInstance);
-                        $$2.remove(j);
+            if (!$$2.isEmpty()) {
+                for (int j = $$2.size() - 1; j >= 0; --j) {
+                    for (int i = $$1.size() - 1; i >= 0; --i) {
+                        if ($$2.get(j).roundaboutSoundByte == $$1.get(i).roundaboutSoundByte) {
+                            Minecraft.getInstance().getSoundManager().stop($$2.get(j).roundaboutSoundInstance);
+                            $$2.remove(j);
+                        }
                     }
                 }
             }
 
-            for (int i = $$1.size() - 1; i >= 0; --i) {
-                QueueSoundInstance soundI = $$1.get(i);
-                SoundInstance qSound = new EntityBoundSoundInstance(
-                        soundI.roundaboutSoundEvent,
-                        SoundSource.NEUTRAL,
-                        ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
-                        ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte),
-                        ((Entity) (Object) this),
-                        ((Entity) (Object) this).level().random.nextLong()
-                );
-                Minecraft.getInstance().getSoundManager().play(qSound);
-                $$2.add(new PlayedSoundInstance(soundI.roundaboutSoundEvent,soundI.roundaboutSoundByte,qSound));
+            if (!$$1.isEmpty()) {
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    QueueSoundInstance soundI = $$1.get(i);
+                    SoundInstance qSound = new EntityBoundSoundInstance(
+                            soundI.roundaboutSoundEvent,
+                            SoundSource.NEUTRAL,
+                            ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
+                            ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte),
+                            ((Entity) (Object) this),
+                            ((Entity) (Object) this).level().random.nextLong()
+                    );
+                    Minecraft.getInstance().getSoundManager().play(qSound);
+                    $$2.add(new PlayedSoundInstance(soundI.roundaboutSoundEvent, soundI.roundaboutSoundByte, qSound));
+                }
             }
             this.roundabout$sounds = ImmutableList.of();
             this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
