@@ -1,15 +1,19 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -266,6 +270,10 @@ public class JusticeEntity extends StandEntity {
                 } else {
                     this.setDeltaMovement(vec37.x * (double)f, q * (double)0.98f, vec37.z * (double)f);
                 }
+
+            if (this.getUser() instanceof Player PE) {
+                ModPacketHandler.PACKET_ACCESS.updatePilot(this);
+            }
         }
         this.calculateEntityAnimation(this instanceof FlyingAnimal);
     }

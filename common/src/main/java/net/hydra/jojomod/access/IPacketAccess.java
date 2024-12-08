@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
@@ -30,6 +31,8 @@ public interface IPacketAccess {
     void permaCastingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
+
+    void updatePilot(LivingEntity entity);
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
     void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f blip);
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);

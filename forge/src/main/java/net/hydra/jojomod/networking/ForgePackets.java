@@ -9,6 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
@@ -181,6 +183,12 @@ public class ForgePackets implements IPacketAccess {
     @Override
     public void timeStopFloat(boolean TSJump) {
         ForgePacketHandler.sendToServer(new ForgeTSJumpPacket(TSJump));
+    }
+    @Override
+    public void updatePilot(LivingEntity entity) {
+        ForgePacketHandler.sendToServer(new ForgePilotPacket((float) entity.getX(),
+                (float) entity.getY(), (float) entity.getZ(),entity.getYRot(),entity.getXRot(),
+                entity.getId()));
     }
     @Override
     public void handshake() {

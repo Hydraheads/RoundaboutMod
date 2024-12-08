@@ -11,8 +11,11 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
+
+import javax.swing.text.html.parser.Entity;
 
 public class FabricPackets implements IPacketAccess {
     @Override
@@ -269,6 +272,18 @@ public class FabricPackets implements IPacketAccess {
 
         buffer.writeBoolean(TSJump);
         ClientPlayNetworking.send(ModMessages.TIME_STOP_JUMP_ID, buffer);
+    }
+    @Override
+    public void updatePilot(LivingEntity entity) {
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeFloat((float) entity.getX());
+        buffer.writeFloat((float) entity.getY());
+        buffer.writeFloat((float) entity.getZ());
+        buffer.writeFloat(entity.getYRot());
+        buffer.writeFloat(entity.getXRot());
+        buffer.writeInt(entity.getId());
+        ClientPlayNetworking.send(ModMessages.STAND_PILOT_ID, buffer);
     }
 
     @Override

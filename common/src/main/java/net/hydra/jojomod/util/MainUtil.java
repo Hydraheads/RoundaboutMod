@@ -2,6 +2,7 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Sets;
+import com.google.common.primitives.Floats;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -24,7 +25,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketUtils;
+import net.minecraft.network.protocol.game.ClientboundMoveVehiclePacket;
+import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -309,6 +313,49 @@ public class MainUtil {
         }
     }
 
+    private static boolean containsInvalidValues(double $$0, double $$1, double $$2, float $$3, float $$4) {
+        return Double.isNaN($$0) || Double.isNaN($$1) || Double.isNaN($$2) || !Floats.isFinite($$4) || !Floats.isFinite($$3);
+    }
+
+    private static double clampHorizontal(double $$0) {
+        return Mth.clamp($$0, -3.0E7, 3.0E7);
+    }
+
+    private static double clampVertical(double $$0) {
+        return Mth.clamp($$0, -2.0E7, 2.0E7);
+    }
+    public static void handleMovePilot(double getX, double getY, double getZ, float getYRot, float getXRot,
+                                       Player player, int entityInt) {
+        Entity entity = player.level().getEntity(entityInt);
+        if (entity != null) {
+            if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)) {
+            } else {
+                if (entity != player) {
+                    ServerLevel serverlevel = (ServerLevel) player.level();
+                    double d0 = entity.getX();
+                    double d1 = entity.getY();
+                    double d2 = entity.getZ();
+                    double d3 = clampHorizontal(getX);
+                    double d4 = clampVertical(getY);
+                    double d5 = clampHorizontal(getZ);
+                    float f = Mth.wrapDegrees(getYRot);
+                    float f1 = Mth.wrapDegrees(getXRot);
+
+                    boolean flag = serverlevel.noCollision(entity, entity.getBoundingBox().deflate(0.0625D));
+                    boolean flag1 = entity.verticalCollisionBelow;
+                    if (entity instanceof LivingEntity) {
+                        LivingEntity livingentity = (LivingEntity) entity;
+                        if (livingentity.onClimbable()) {
+                            livingentity.resetFallDistance();
+                        }
+                    }
+
+                    entity.absMoveTo(d3, d4, d5, f, f1);
+                }
+
+            }
+        }
+    }
     public static boolean canCauseRejection(Entity ent){
         if (ent instanceof Mob ME){
             if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)){
