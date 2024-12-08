@@ -985,7 +985,14 @@ public class StandPowers {
     public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
         boolean interrupt = false;
         if (interrupter instanceof LivingEntity){
-            if (isStandDamage && ClientNetworking.getAppropriateConfig().chargeSettings.standsInterruptSomeStandAttacks){
+            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().chargeSettings.barragesAreAlwaysInterruptable) {
+                if ((this.self) instanceof Player){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.GUARD, true);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                }
+                return true;
+            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().chargeSettings.standsInterruptSomeStandAttacks){
                 interrupt = true;
             } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
                     ClientNetworking.getAppropriateConfig().chargeSettings.timeStopIsAlwaysInterruptable){
@@ -994,13 +1001,6 @@ public class StandPowers {
                 interrupt = true;
             } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().chargeSettings.mobsInterruptSomeStandAttacks){
                 interrupt = true;
-            } else if (this.isBarraging() && ClientNetworking.getAppropriateConfig().chargeSettings.barragesAreAlwaysInterruptable) {
-                if ((this.self) instanceof Player){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.GUARD, true);
-                } else {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                }
-                return true;
             }
         } else {
             interrupt = true;
