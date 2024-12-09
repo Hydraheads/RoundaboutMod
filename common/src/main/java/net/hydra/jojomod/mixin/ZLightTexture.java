@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(value = LightTexture.class, priority = 100)
-public class ZLightTextue {
+public class ZLightTexture {
 
     /**Star Platinum scope acts like night vision*/
     @Shadow @Final private Minecraft minecraft;

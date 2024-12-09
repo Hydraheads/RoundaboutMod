@@ -103,7 +103,7 @@
     "ZKeyboardInput",
     "ZKeyMapping",
     "ZLevelRenderer",
-    "ZLightTextue",
+    "ZLightTexture",
     "ZLivingEntityRenderer",
     "ZMobRenderer",
     "ZModelBakery",
@@ -114,6 +114,7 @@
     "ZParticleEngine",
     "ZPlayerModel",
     "ZPlayerRender",
+    "ZScreenEffectRenderer",
     "ZScreenShaking",
     "ZTimeStopTextureFreeze",
     "ZWorldRenderer"
