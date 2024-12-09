@@ -610,7 +610,10 @@ public abstract class StandEntity extends Mob{
             if (this.getFollowing() == null) {
                 return;
             }
-            ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
+
+            if (!(OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) || this.isControlledByLocalInstance() ) {
+                ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
+            }
     }
 
     public void tickStandOut2() {
@@ -618,10 +621,12 @@ public abstract class StandEntity extends Mob{
         if (lockPos()) {
             this.setDeltaMovement(Vec3.ZERO);
         }
-            if (this.getFollowing() == null) {
-                return;
-            }
+        if (this.getFollowing() == null) {
+            return;
+        }
+        if (!(OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) || this.isControlledByLocalInstance() ) {
             ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
+        }
     }
 
 

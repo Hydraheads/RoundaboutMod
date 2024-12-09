@@ -190,10 +190,11 @@ public class JusticeEntity extends StandEntity {
     }
     @Override
     public boolean isControlledByLocalInstance() {
-        if (this.getUser() != null){
-            Entity ent =  this.getUserData(this.getUser()).roundabout$getStandPowers().getPilotingStand();
+        LivingEntity user =  this.getUser();
+        if (user != null){
+            Entity ent =  this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
             if (ent != null && ent.is(this)){
-                return true;
+                return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
             }
         }
         return super.isControlledByLocalInstance();

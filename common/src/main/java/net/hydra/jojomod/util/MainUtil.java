@@ -351,6 +351,7 @@ public class MainUtil {
                     }
 
                     entity.absMoveTo(d3, d4, d5, f, f1);
+                    entity.moveTo(d3, d4, d5, f, f1);
                 }
 
             }
