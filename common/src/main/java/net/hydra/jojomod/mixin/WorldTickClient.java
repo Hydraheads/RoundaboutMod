@@ -109,8 +109,18 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
         byte ot = stand.getOffsetType();
         ++stand.tickCount;
-        stand.setOldPosAndRot();
-        stand.tickStandOut();
+
+
+        Entity user = stand.getUser();
+        Entity following = stand.getFollowing();
+        if (!stand.level().isClientSide() || (user != null && !user.is(stand) && !user.isRemoved()) ||
+                (following != null && !following.is(stand) && !following.isRemoved())) {
+            stand.setOldPosAndRot();
+            stand.tickStandOut();
+        } else {
+            stand.setOldPosAndRot();
+            stand.tick();
+        }
         for (Entity $$2 : stand.getPassengers()) {
             this.tickPassenger(stand, $$2);
         }

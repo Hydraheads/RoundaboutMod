@@ -1377,38 +1377,39 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!(this.roundabout$hasStandOut())) {
             return;
         }
-        byte OT = stand.getOffsetType();
-        if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
 
-            Vec3 grabPos = stand.getStandOffsetVector(roundabout$User);
-            positionUpdater.accept(stand, grabPos.x, grabPos.y, grabPos.z);
+            byte OT = stand.getOffsetType();
+            if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
 
-            if (!this.level().isClientSide() || ((LivingEntity) (Object) this) instanceof Player) {
-                stand.setYRot(roundabout$User.getYHeadRot() % 360);
-                stand.setXRot(roundabout$User.getXRot());
-                stand.setYBodyRot(roundabout$User.getYHeadRot() % 360);
-                stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
-                if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
-                    float rot;
-                    if (OT == OffsetIndex.BENEATH) {
-                        rot = (roundabout$User.getYRot()) % 360;
-                    } else if (OT == OffsetIndex.GUARD_AND_TRACE){
-                        BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
-                        rot = (roundabout$User.getYHeadRot()) % 360;
-                        stand.setXRot(roundabout$getStandPowers().getLookAtPlacePitch(stand,dd.getBlockPos().getCenter()));
-                    } else {
-                        rot = (float) ((roundabout$User.getYHeadRot() -(stand.getPunchYaw(stand.getAnchorPlace(),
-                                0.36))) % 360);
+                Vec3 grabPos = stand.getStandOffsetVector(roundabout$User);
+                positionUpdater.accept(stand, grabPos.x, grabPos.y, grabPos.z);
+
+                if (!this.level().isClientSide() || ((LivingEntity) (Object) this) instanceof Player) {
+                    stand.setYRot(roundabout$User.getYHeadRot() % 360);
+                    stand.setXRot(roundabout$User.getXRot());
+                    stand.setYBodyRot(roundabout$User.getYHeadRot() % 360);
+                    stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
+                    if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
+                        float rot;
+                        if (OT == OffsetIndex.BENEATH) {
+                            rot = (roundabout$User.getYRot()) % 360;
+                        } else if (OT == OffsetIndex.GUARD_AND_TRACE) {
+                            BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
+                            rot = (roundabout$User.getYHeadRot()) % 360;
+                            stand.setXRot(roundabout$getStandPowers().getLookAtPlacePitch(stand, dd.getBlockPos().getCenter()));
+                        } else {
+                            rot = (float) ((roundabout$User.getYHeadRot() - (stand.getPunchYaw(stand.getAnchorPlace(),
+                                    0.36))) % 360);
+                        }
+                        stand.setYRot(rot);
+                        stand.setYBodyRot(rot);
                     }
-                    stand.setYRot(rot);
-                    stand.setYBodyRot(rot);
+                }
+            } else {
+                if (stand.lockPos()) {
+                    positionUpdater.accept(stand, stand.getX(), stand.getY(), stand.getZ());
                 }
             }
-        } else {
-            if (stand.lockPos()) {
-                positionUpdater.accept(stand, stand.getX(), stand.getY(), stand.getZ());
-            }
-        }
     }
 
     public void roundabout$onStandOutLookAround(StandEntity passenger) {
