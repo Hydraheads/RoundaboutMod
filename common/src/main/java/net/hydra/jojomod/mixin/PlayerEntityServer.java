@@ -3,10 +3,12 @@ package net.hydra.jojomod.mixin;
 import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -90,6 +92,10 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         if ($$0.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH)){
             ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
         } else {
+            if (ClientNetworking.getAppropriateConfig().standDiscsDropWithKeepGameRuleOff){
+                ItemStack disc = MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc());
+                $$0.drop(disc,true,false);
+            }
             ((StandUser)this).roundabout$setStandDisc(ItemStack.EMPTY);
         }
         IPlayerEntity ipe = ((IPlayerEntity)this);

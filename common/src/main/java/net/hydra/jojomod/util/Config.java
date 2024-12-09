@@ -30,6 +30,8 @@ import net.hydra.jojomod.util.annotation.*;
     public Boolean disableMeleeWhileStandActive;
     @BooleanOption(group = "inherit", value = false)
     public Boolean disableBleedingAndBloodSplatters;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean standDiscsDropWithKeepGameRuleOff;
     @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
     public Integer standGuardDelayTicks;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
