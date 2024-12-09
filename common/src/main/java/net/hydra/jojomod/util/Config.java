@@ -198,6 +198,8 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer playerDamageCapHealthPercent;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeInfiniteTimeStop;
+        @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
+        public Integer blockRangeNegativeOneIsInfinite;
 
     }
 

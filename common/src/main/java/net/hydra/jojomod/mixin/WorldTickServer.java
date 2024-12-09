@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin;
 
+import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -190,7 +192,14 @@ public class WorldTickServer {
             }
         }
     }
-
+    @Inject(method = "tickTime", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$TickEntity3(CallbackInfo ci) {
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1){
+            if (((TimeStop) this).inTimeStopRange(new Vec3i((int) 0, (int) 0, (int) 0))){
+                ci.cancel();
+            }
+        }
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$TickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickTimeStoppingEntity();

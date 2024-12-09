@@ -135,7 +135,7 @@ public class StandPowers {
         this.activePowerPhase = activePowerPhase;
     }
     public float getTimestopRange(){
-        return 100;
+        return ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
     }
     public float getPermaCastRange(){
         return 100;

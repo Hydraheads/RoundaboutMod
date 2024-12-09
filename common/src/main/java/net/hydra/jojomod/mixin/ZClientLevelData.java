@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IClientLevelData;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -80,7 +81,8 @@ public abstract class ZClientLevelData implements IClientLevelData {
     public void roundabout$roundaboutInitializeTS(){
         LocalPlayer LP = Minecraft.getInstance().player;
         if (LP != null && Minecraft.getInstance().level != null &&
-                ((TimeStop)Minecraft.getInstance().level).inTimeStopRange(LP)) {
+                (((TimeStop)Minecraft.getInstance().level).inTimeStopRange(LP)
+                && !(ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1))) {
             if (!this.roundabout$getRoundaboutTimeStopInitialized()){
                 this.roundabout$DayTimeActual = dayTime;
                 this.roundabout$DayTimeTarget = dayTime;

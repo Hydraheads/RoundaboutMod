@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.SetBlockInstance;
@@ -382,6 +383,12 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             this.setGameTime(this.levelData.getGameTime() + 1L);
             if (this.levelData.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
                 this.setDayTime(((IClientLevelData)this.levelData).roundabout$getRoundaboutDayTimeMinecraft() + 1L);
+                ci.cancel();
+            }
+        }
+
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1){
+            if (((TimeStop) this).inTimeStopRange(new Vec3i((int) 0, (int) 0, (int) 0))){
                 ci.cancel();
             }
         }
