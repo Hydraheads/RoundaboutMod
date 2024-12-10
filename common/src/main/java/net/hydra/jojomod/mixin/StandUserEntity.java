@@ -408,6 +408,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$blip = false;
         } else {
             if (ClientUtil.getWasFrozen() && !ClientUtil.getScreenFreeze() && !ClientUtil.isPlayer(this)){
+                if (((Entity)(Object)this) instanceof StandEntity SE){
+                    if (SE.getUser() != null) {
+                        StandUser user =  ((StandUser) SE.getUser());
+                        StandPowers powers = user.roundabout$getStandPowers();
+                        if (powers.isPiloting()){
+                            LivingEntity pilot = powers.getPilotingStand();
+                            if (pilot != null && pilot.is(SE)){
+                                return;
+                            }
+                        }
+                    }
+                }
                 ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
                 this.xo = this.lerpX;
                 this.yo = this.lerpY;
