@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
+import net.hydra.jojomod.entity.corpses.FallenZombie;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -29,27 +30,32 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<OVAEnyaNPC>> OVA_ENYA =
             ENTITY_TYPES.register("jnpc_ova_enya", () ->
-                    EntityType.Builder.of(OVAEnyaNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
+                    EntityType.Builder.of(OVAEnyaNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_ova_enya").toString())
             );
     public static final RegistryObject<EntityType<JotaroNPC>> JOTARO =
             ENTITY_TYPES.register("jnpc_jotaro", () ->
-                    EntityType.Builder.of(JotaroNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
+                    EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_jotaro").toString())
             );
     public static final RegistryObject<EntityType<PlayerSteveNPC>> STEVE_NPC =
             ENTITY_TYPES.register("jnpc_steve", () ->
-                    EntityType.Builder.of(PlayerSteveNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
+                    EntityType.Builder.of(PlayerSteveNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_steve").toString())
             );
     public static final RegistryObject<EntityType<PlayerAlexNPC>> ALEX_NPC =
             ENTITY_TYPES.register("jnpc_alex", () ->
-                    EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.CREATURE).sized(0.6f, 1.8f).
+                    EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_alex").toString())
+            );
+    public static final RegistryObject<EntityType<FallenZombie>> FALLEN_ZOMBIE =
+            ENTITY_TYPES.register("fallen_zombie", () ->
+                    EntityType.Builder.of(FallenZombie::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "fallen_zombie").toString())
             );
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
             ENTITY_TYPES.register("the_world", () ->

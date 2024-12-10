@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
+import net.hydra.jojomod.entity.corpses.FallenZombie;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
@@ -46,6 +47,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
         event.put(ForgeEntities.STEVE_NPC.get(), PlayerSteveNPC.createAttributes().build());
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
+        event.put(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombie.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -211,6 +213,7 @@ public class ForgeEvents {
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
+        ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.JOTARO = ForgeEntities.JOTARO.get();

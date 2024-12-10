@@ -7,6 +7,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.entity.corpses.FallenZombieModel;
+import net.hydra.jojomod.entity.corpses.FallenZombieRenderer;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -44,6 +46,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), JotaroRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombieRenderer::new);
     }
 
     @SubscribeEvent
