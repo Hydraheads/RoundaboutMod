@@ -79,11 +79,9 @@ public abstract class ZServerGamePacketListenerImpl {
             BlockPos $$6 = $$4.getBlockPos();
             Vec3 $$7 = Vec3.atCenterOf($$6);
             if (!(this.player.getEyePosition().distanceToSqr($$7) > ROUNDABOUT$MAX_INTERACTION_DISTANCE)) {
-                Roundabout.LOGGER.info("6");
                 Vec3 $$8 = $$5.subtract($$7);
                 double $$9 = 1.0000001;
                 if (Math.abs($$8.x()) < 1.0000001 && Math.abs($$8.y()) < 1.0000001 && Math.abs($$8.z()) < 1.0000001) {
-                    Roundabout.LOGGER.info("7");
                     Direction $$10 = $$4.getDirection();
                     this.player.resetLastActionTime();
                     int $$11 = this.player.level().getMaxBuildHeight();
