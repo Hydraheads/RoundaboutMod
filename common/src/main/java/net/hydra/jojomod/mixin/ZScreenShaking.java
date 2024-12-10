@@ -95,6 +95,20 @@ public class ZScreenShaking implements IGameRenderer {
             }
         }
     }
+
+
+    @Inject(method = "checkEntityPostEffect(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "TAIL"), cancellable = true)
+    private void roundabout$checkEntityPostEffect(Entity $$0, CallbackInfo ci){
+        //$$0 is matrcices, $$1 is tickdelta
+
+        if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
+            if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
+                this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+            } else {
+                this.postEffect = null;
+            }
+        }
+    }
     @Inject(method = "tickFov()V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$tickfov(CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
@@ -157,13 +171,6 @@ public class ZScreenShaking implements IGameRenderer {
 
     @Unique
     public int roundabout$tsShaderStatus = 0;
-    @Inject(method = "checkEntityPostEffect(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$checkEntityPostEffect(Entity $$0, CallbackInfo ci){
-        //$$0 is matrcices, $$1 is tickdelta
-
-
-
-    }
 
     public boolean cleared = false;
     /**Minor code to prevent nauseating barrage shaking effect when getting barraged.*/
