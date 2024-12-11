@@ -8,12 +8,16 @@ import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -80,6 +84,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public float yHeadRot;
+    @Shadow public float yBodyRot;
     @Shadow protected double lerpY;
     @Shadow protected double lerpZ;
     @Shadow protected double lerpX;
@@ -1709,6 +1715,38 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE",
+    target="Lnet/minecraft/world/entity/LivingEntity;setPose(Lnet/minecraft/world/entity/Pose;)V",
+            shift= At.Shift.BEFORE), cancellable = true)
+    public void roundabout$die2(DamageSource $$0, CallbackInfo ci){
+        /**Corspe dropping, for Justice*/
+        if ($$0.getDirectEntity() != null) {
+            if ($$0.getDirectEntity() instanceof Player PE && (PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
+            || (PE.getMainHandItem().is(ModItems.SCISSORS) && ((StandUser)PE).roundabout$getStandPowers()
+            instanceof PowersJustice))) {
+                LivingEntity ths = ((LivingEntity)(Object)this);
+                boolean marked = false;
+                FallenMob mb = null;
+                if (ths instanceof Zombie){
+                    marked = true;
+                    mb = ModEntities.FALLEN_ZOMBIE.create(this.level());
+
+                }
+                if (mb != null){
+                    mb.setPos(this.position());
+                    mb.setXRot(this.getXRot());
+                    mb.setYRot(this.getYRot());
+                    mb.setYBodyRot(this.yBodyRot);
+                    mb.setYHeadRot(this.yHeadRot);
+                    this.level().addFreshEntity(mb);
+                }
+                if (marked){
+                    discard();
+                    ci.cancel();
+                }
+            }
+        }
+    }
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
