@@ -141,6 +141,7 @@ public class ForgeEvents {
         ModItems.NETHERITE_GLAIVE = ForgeItems.NETHERITE_GLAIVE.get();
         ModItems.SCISSORS = ForgeItems.SCISSORS.get();
         ModItems.EXECUTIONER_AXE = ForgeItems.EXECUTIONER_AXE.get();
+        ModItems.BODY_BAG = ForgeItems.BODY_BAG.get();
         ModItems.HARPOON = ForgeItems.HARPOON.get();
         ModItems.KNIFE = ForgeItems.KNIFE.get();
         ModItems.KNIFE_BUNDLE = ForgeItems.KNIFE_BUNDLE.get();

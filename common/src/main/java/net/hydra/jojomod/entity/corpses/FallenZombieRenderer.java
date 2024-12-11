@@ -19,7 +19,7 @@ public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, Fall
 
     @Override
     public ResourceLocation getTextureLocation(FallenZombie var1) {
-        return ZOMBIE_LOCATION;
+        return FALLEN_ZOMBIE_LOCATION;
     }
 
     protected FallenZombieRenderer(EntityRendererProvider.Context $$0, FallenZombieModel<FallenZombie> $$1,
