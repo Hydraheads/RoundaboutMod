@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.EntityModel;
@@ -67,6 +68,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
                     $$1.mulPose(Axis.XP.rotationDegrees($$5 * 45));
                 }
+            }
+        } else if ($$0 instanceof FallenMob FM){
+            /*fog corpse / corpse control*/
+            if (!FM.isActivated){
+                float yes = Math.min(10,FM.ticksThroughPhases+ $$4);
+                float $$5 = (yes /10);
+                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 90));
+                $$1.translate(0,-$$5*(0.5*FM.getBbHeight()),-($$5*0.15));
             }
         }
     }
