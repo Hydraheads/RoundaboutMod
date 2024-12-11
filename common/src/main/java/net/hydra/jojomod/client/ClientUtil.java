@@ -12,6 +12,8 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.item.BodyBagItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Camera;
@@ -48,6 +50,17 @@ public class ClientUtil {
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
         }
     }
+    public static boolean checkIfClientHoldingBag() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (player.getMainHandItem().getItem() instanceof BodyBagItem
+            || player.getOffhandItem().getItem() instanceof BodyBagItem){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean checkIfStandIsYoursAndFirstPerson(StandEntity stand) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

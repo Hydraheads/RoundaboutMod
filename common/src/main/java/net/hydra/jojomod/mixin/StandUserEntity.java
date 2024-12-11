@@ -84,6 +84,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract float getYHeadRot();
+
     @Shadow public float yHeadRot;
     @Shadow public float yBodyRot;
     @Shadow protected double lerpY;
@@ -1727,10 +1729,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 LivingEntity ths = ((LivingEntity)(Object)this);
                 boolean marked = false;
                 FallenMob mb = null;
-                if (ths instanceof Zombie){
-                    marked = true;
-                    mb = ModEntities.FALLEN_ZOMBIE.create(this.level());
+                if (!ths.isBaby()) {
+                    if (ths instanceof Zombie) {
+                        marked = true;
+                        mb = ModEntities.FALLEN_ZOMBIE.create(this.level());
 
+                    }
                 }
                 if (mb != null){
                     mb.setPos(this.position());
@@ -1738,6 +1742,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     mb.setYRot(this.getYRot());
                     mb.setYBodyRot(this.yBodyRot);
                     mb.setYHeadRot(this.yHeadRot);
+                    mb.yHeadRotO = this.getYHeadRot();
+                    mb.setOldPosAndRot();
                     this.level().addFreshEntity(mb);
                 }
                 if (marked){

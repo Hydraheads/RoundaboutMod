@@ -1,6 +1,9 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.util.ConfigManager;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -84,6 +87,25 @@ public class FallenMob extends Mob {
     public void tick(){
         if (ticksThroughPhases < 10){
             ticksThroughPhases++;
+        } else {
+                if (this.level().isClientSide){
+                    if (ClientUtil.checkIfClientHoldingBag()) {
+                        if (this.tickCount % 5 == 0) {
+                            for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
+                                this.level()
+                                        .addParticle(
+                                                ParticleTypes.HAPPY_VILLAGER,
+                                                this.getRandomX(1.3),
+                                                this.getY() + this.getBbHeight() / 6,
+                                                this.getRandomZ(1.3),
+                                                0,
+                                                0.15,
+                                                0
+                                        );
+                            }
+                        }
+                    }
+                }
         }
         super.tick();
     }

@@ -49,6 +49,8 @@ public class ClientConfig {
         public Integer justiceFogParticlesPerTick;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer justiceSkinFlameParticlesPerTick;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer bodyBagHoldingParticlesPerFiveTicks;
 
     }
 
