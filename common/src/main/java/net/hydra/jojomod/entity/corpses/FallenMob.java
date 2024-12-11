@@ -88,24 +88,24 @@ public class FallenMob extends Mob {
         if (ticksThroughPhases < 10){
             ticksThroughPhases++;
         } else {
-                if (this.level().isClientSide){
-                    if (ClientUtil.checkIfClientHoldingBag()) {
-                        if (this.tickCount % 5 == 0) {
-                            for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
-                                this.level()
-                                        .addParticle(
-                                                ParticleTypes.HAPPY_VILLAGER,
-                                                this.getRandomX(1.3),
-                                                this.getY() + this.getBbHeight() / 6,
-                                                this.getRandomZ(1.3),
-                                                0,
-                                                0.15,
-                                                0
-                                        );
-                            }
+            if (this.level().isClientSide){
+                if (ClientUtil.checkIfClientHoldingBag()) {
+                    if (this.tickCount % 5 == 0) {
+                        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
+                            this.level()
+                                    .addParticle(
+                                            ParticleTypes.HAPPY_VILLAGER,
+                                            this.getRandomX(1.3),
+                                            this.getY() + this.getBbHeight() / 6,
+                                            this.getRandomZ(1.3),
+                                            0,
+                                            0.15,
+                                            0
+                                    );
                         }
                     }
                 }
+            }
         }
         super.tick();
     }

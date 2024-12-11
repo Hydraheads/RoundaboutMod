@@ -489,6 +489,8 @@
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.none": "Strike Pose!",
 
+  "roundabout.corpse.none": "Choose Body",
+
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
   "power_inventory.roundabout.settings.distance": "Following Distance",

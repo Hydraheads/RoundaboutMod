@@ -158,6 +158,10 @@ public class ClientUtil {
             }
         }
     }
+    public static void openCorpseBag() {
+        Minecraft client = Minecraft.getInstance();
+        client.setScreen(new CorpseBagScreen());
+    }
 
     public static void handleIntPacketS2C(int data, byte context) {
         LocalPlayer player = Minecraft.getInstance().player;
