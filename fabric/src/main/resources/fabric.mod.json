@@ -8,8 +8,9 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "https://modrinth.com/mod/roundabout_the_jojo_mod",
+        "sources": "https://github.com/Hydraheads/RoundaboutMod",
+        "issues": "https://github.com/Hydraheads/RoundaboutMod/issues"
     },
     "license": "${license}",
     "icon": "${mod_id}.png",
