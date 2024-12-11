@@ -51,11 +51,8 @@ public class StereoBlock extends JukeboxBlock {
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
-        if ($$0.getValue(FACING).getAxis() == Direction.Axis.X){
-            return SHAPEA;
-        } else {
-            return SHAPEB;
-        }
+        if ($$0.getValue(FACING).getAxis() == Direction.Axis.X) return SHAPEA;
+        return SHAPEB;
     }
 
     @Override
@@ -93,31 +90,22 @@ public class StereoBlock extends JukeboxBlock {
 
     @Override
     public void onRemove(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
-        if (!$$0.is($$3.getBlock())) {
-            if ($$1.getBlockEntity($$2) instanceof StereoBlockEntity $$5) {
-                $$5.popOutRecord();
-            }
+        if ($$0.is($$3.getBlock())) return;
+        if ($$1.getBlockEntity($$2) instanceof StereoBlockEntity $$5) $$5.popOutRecord();
 
-            super.onRemove($$0, $$1, $$2, $$3, $$4);
-        }
+        super.onRemove($$0, $$1, $$2, $$3, $$4);
     }
 
     @Override
     public int getSignal(BlockState $$0, BlockGetter $$1, BlockPos $$2, Direction $$3) {
-        if ($$1.getBlockEntity($$2) instanceof StereoBlockEntity $$4 && $$4.isRecordPlaying()) {
-            return 20;
-        }
-
+        if ($$1.getBlockEntity($$2) instanceof StereoBlockEntity $$4 && $$4.isRecordPlaying()) return 20;
         return 0;
     }
 
 
     @Override
     public int getAnalogOutputSignal(BlockState $$0, Level $$1, BlockPos $$2) {
-        if ($$1.getBlockEntity($$2) instanceof StereoBlockEntity $$3 && $$3.getFirstItem().getItem() instanceof RecordItem $$4) {
-            return $$4.getAnalogOutput();
-        }
-
+        if ($$1.getBlockEntity($$2) instanceof StereoBlockEntity $$3 && $$3.getFirstItem().getItem() instanceof RecordItem $$4) return $$4.getAnalogOutput();
         return 0;
     }
 }

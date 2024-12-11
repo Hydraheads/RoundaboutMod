@@ -21,7 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class MatchItem extends Item implements Vanishable {
 
-
+    //Default Duration: 72000
+    public static final int MATCHITEM_DEFAULT_DURATION = 72000;
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 2.0F;
     public static final float SHOOT_POWER = 0.8F;
@@ -35,7 +36,6 @@ public class MatchItem extends Item implements Vanishable {
         return UseAnim.SPEAR;
     }
 
-    /**Default 72000*/
     @Override
     public int getUseDuration(ItemStack $$0) {
         return 72000;
@@ -87,10 +87,7 @@ public class MatchItem extends Item implements Vanishable {
 
     @Override
     public int getEnchantmentValue() {
-        return
-                1;
+        return 1;
     }
-
-
 
 }
