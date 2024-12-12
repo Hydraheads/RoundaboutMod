@@ -23,6 +23,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -43,11 +44,19 @@ public class CorpseBagScreen extends Screen {
     private boolean setFirstMousePos;
     public boolean zHeld;
 
+    public final ItemStack stack;
+
     private final List<PoseSlot> slots = Lists.newArrayList();
 
     public CorpseBagScreen() {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
+        stack = null;
+    }
+    public CorpseBagScreen(ItemStack stack) {
+        super(GameNarrator.NO_TITLE);
+        this.currentlyHovered = null;
+        this.stack = stack;
     }
 
     private ShapeShifts getDefaultSelected() {
@@ -106,6 +115,12 @@ public class CorpseBagScreen extends Screen {
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             this.currentlyHovered = MobSlot.icon;
+        }
+        for (int m = 0; m < corpseIcon.VALUES.length; ++m) {
+            corpseIcon pIcon = corpseIcon.VALUES[m]; //13 44
+            if (pIcon.id != corpseIcon.NONE.id) {
+                guiGraphics.drawString(this.font, "11", this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
+            }
         }
     }
 

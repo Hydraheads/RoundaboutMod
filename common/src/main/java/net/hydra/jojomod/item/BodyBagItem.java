@@ -17,9 +17,9 @@ public class BodyBagItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
         if ($$0.isClientSide) {
-            ClientUtil.openCorpseBag();
+            ClientUtil.openCorpseBag($$3);
         }
-         return InteractionResultHolder.fail($$3);
+         return InteractionResultHolder.pass($$3);
     }
 
 }

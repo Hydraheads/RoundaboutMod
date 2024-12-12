@@ -27,6 +27,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Vector3f;
 
@@ -158,9 +159,9 @@ public class ClientUtil {
             }
         }
     }
-    public static void openCorpseBag() {
+    public static void openCorpseBag(ItemStack stack) {
         Minecraft client = Minecraft.getInstance();
-        client.setScreen(new CorpseBagScreen());
+        client.setScreen(new CorpseBagScreen(stack));
     }
 
     public static void handleIntPacketS2C(int data, byte context) {
