@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +25,6 @@ import java.util.UUID;
 public class FallenMob extends Mob {
     public boolean isActivated = false;
     public int ticksThroughPhases = 0;
-
     public Entity placer;
     public Entity controller;
     private static final EntityDataAccessor<Integer> CONTROLLER =
@@ -42,14 +43,12 @@ public class FallenMob extends Mob {
     public int getPlacer() {
         return this.getEntityData().get(CONTROLLER);
     }
-
     public void setPlacer(int controller){
         this.entityData.set(CONTROLLER, controller);
     }
     public void setPlacer(Entity controller){
         this.placer = controller;
     }
-
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
@@ -88,28 +87,52 @@ public class FallenMob extends Mob {
         if (ticksThroughPhases < 10){
             ticksThroughPhases++;
         } else {
-            if (this.level().isClientSide){
-                if (ClientUtil.checkIfClientHoldingBag()) {
-                    if (this.tickCount % 5 == 0) {
-                        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
-                            this.level()
-                                    .addParticle(
-                                            ParticleTypes.HAPPY_VILLAGER,
-                                            this.getRandomX(1.3),
-                                            this.getY() + this.getBbHeight() / 6,
-                                            this.getRandomZ(1.3),
-                                            0,
-                                            0.15,
-                                            0
-                                    );
+            if (!isActivated){
+                if (this.level().isClientSide){
+                    if (ClientUtil.checkIfClientHoldingBag()) {
+                        if (this.tickCount % 5 == 0) {
+                            for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
+                                this.level()
+                                        .addParticle(
+                                                ParticleTypes.HAPPY_VILLAGER,
+                                                this.getRandomX(1.3),
+                                                this.getY() + this.getBbHeight() / 6,
+                                                this.getRandomZ(1.3),
+                                                0,
+                                                0.15,
+                                                0
+                                        );
+                            }
                         }
                     }
+                } else {
+
                 }
             }
         }
         super.tick();
     }
 
+    public String getData(){
+        return "zombie";
+    }
+
+    @Override
+    public void playerTouch(Player $$0) {
+        if (!isActivated && this.isAlive() && !this.isRemoved()) {
+            if (!this.level().isClientSide) {
+                if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
+                    if (BB.fillWithBody($$0.getMainHandItem(),this)){
+                        this.discard();
+                    }
+                } else if ($$0.getOffhandItem().getItem() instanceof BodyBagItem BB){
+                    if (BB.fillWithBody($$0.getOffhandItem(),this)){
+                        this.discard();
+                    }
+                }
+            }
+        }
+    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

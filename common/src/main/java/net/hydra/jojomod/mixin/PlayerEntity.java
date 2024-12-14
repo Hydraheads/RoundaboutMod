@@ -56,7 +56,6 @@ import java.util.function.Predicate;
 @Mixin(Player.class)
 public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity{
 
-
     @Shadow public abstract boolean isSwimming();
 
     @Shadow public abstract float getDestroySpeed(BlockState $$0);

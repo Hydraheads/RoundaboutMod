@@ -20,6 +20,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -67,12 +68,19 @@ public class CorpseBagScreen extends Screen {
         return ShapeShifts.PLAYER;
     }
 
+    public int zombies = 0;
+
     @Override
     protected void init() {
         super.init();
         zHeld = true;
         Player pl = Minecraft.getInstance().player;
-
+        if (stack != null && !stack.isEmpty()){
+            CompoundTag $$1 = stack.getOrCreateTagElement("bodies");
+            zombies = $$1.getInt("zombie");
+        } else {
+            zombies = 0;
+        }
 
         this.currentlyHovered = corpseIcon.NONE;
         for (int i = 0; i < corpseIcon.VALUES.length; ++i) {
@@ -119,7 +127,11 @@ public class CorpseBagScreen extends Screen {
         for (int m = 0; m < corpseIcon.VALUES.length; ++m) {
             corpseIcon pIcon = corpseIcon.VALUES[m]; //13 44
             if (pIcon.id != corpseIcon.NONE.id) {
-                guiGraphics.drawString(this.font, "11", this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
+                int num = 0;
+                if (pIcon == corpseIcon.ZOMBIE){
+                    num = zombies;
+                }
+                guiGraphics.drawString(this.font, ""+num, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
             }
         }
     }
