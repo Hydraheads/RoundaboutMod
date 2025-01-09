@@ -10,6 +10,7 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -1083,7 +1085,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT){
             StandUser user = ((StandUser) player);
             user.roundabout$getStandPowers().getPoseInDirection(true);
-        } if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
+        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
             StandUser standUser = ((StandUser) player);
             standUser.roundabout$getStandPowers().setCooldown(context,-1);
             IPlayerEntity iplay = ((IPlayerEntity) player);
@@ -1095,6 +1097,9 @@ public class MainUtil {
             ModPacketHandler.PACKET_ACCESS.sendBundlePacket(((ServerPlayer) player), PacketDataIndex.S2C_BUNDLE_POWER_INV,
                     standUser.roundabout$getStandSkin(), unlocked, (byte) 0);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
+            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
+            player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);

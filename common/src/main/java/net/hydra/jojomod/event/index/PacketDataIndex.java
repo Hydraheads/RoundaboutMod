@@ -45,6 +45,7 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_SILENT_SUMMON = 7;
     public static final byte SINGLE_BYTE_OPEN_POWER_INVENTORY = 9;
     public static final byte STAND_MOVE_UPDATE = 10;
+    public static final byte SINGLE_BYTE_OPEN_FOG_INVENTORY = 14;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;

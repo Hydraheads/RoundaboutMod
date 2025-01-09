@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Camera;
@@ -210,6 +211,7 @@ public class ClientUtil {
         mc.setScreen(new JusticeMobSwitcherScreen());
     }
     public static void setJusticeBlockScreen() {
+        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(
                 new FogInventoryScreen(

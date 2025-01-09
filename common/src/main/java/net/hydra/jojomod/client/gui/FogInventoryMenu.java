@@ -16,7 +16,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 
 public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
-    public static final int CONTAINER_ID = 0;
+    public static final int CONTAINER_ID = 42357;
     public static final int RESULT_SLOT = 0;
     public static final int CRAFT_SLOT_START = 1;
     public static final int CRAFT_SLOT_END = 5;
@@ -43,7 +43,7 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
     private final Player owner;
 
     public FogInventoryMenu(Inventory $$0, boolean $$1, final Player $$2) {
-        super(null, 0);
+        super(null, CONTAINER_ID);
         this.active = $$1;
         this.owner = $$2;
         this.addSlot(new ResultSlot($$0.player, this.craftSlots, this.resultSlots, 0, 154, 28));
