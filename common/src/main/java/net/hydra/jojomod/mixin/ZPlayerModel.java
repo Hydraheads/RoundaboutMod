@@ -13,6 +13,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Vector3f;
@@ -94,15 +95,32 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     public void roundabout$SetupAnim3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0 instanceof Player) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
-            this.roundabout$animate2(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-            this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+
+
+            if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
+
+                this.cloak.resetPose();
+                this.roundabout$animate2(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+                if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
+                        this.cloak.z += 0.0F;
+                        this.cloak.y += 0.0F;
+                } else {
+                    this.cloak.z += -1.1F;
+                    this.cloak.y += -0.85F;
+                }
+                this.cloak.zRot*=-1;
+                this.cloak.x*=-1;
+                this.cloak.y*=-1;
+                this.cloak.z*=-1;
+            }
         }
     }
     @Unique
@@ -176,6 +194,47 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
 
                     keyframe1.interpolation().apply(p_253861_, f2, akeyframe, i, j, p_232323_);
+                    p_288241_.target().apply(p_232330_, p_253861_);
+                });
+            });
+        }
+
+    }
+
+
+
+    @Unique
+    public void roundabout$animate3(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
+        float f = roundabout$getElapsedSeconds(p_232321_, p_232322_);
+
+        for(Map.Entry<String, List<AnimationChannel>> entry : p_232321_.boneAnimations().entrySet()) {
+            Optional<ModelPart> optional = roundabout$getAnyDescendantWithName2(entry.getKey());
+            List<AnimationChannel> list = entry.getValue();
+            optional.ifPresent((p_232330_) -> {
+                list.forEach((p_288241_) -> {
+                    Keyframe[] akeyframe = p_288241_.keyframes();
+                    Keyframe[] copiedArray = new Keyframe[akeyframe.length];
+                    for (int jjk = 0; jjk < copiedArray.length; jjk++){
+                        Keyframe yup = akeyframe[0];
+                        yup.target().set(yup.target().x*-1,yup.target().y*-1,yup.target().z*-1);
+                        copiedArray[jjk] = yup;
+                    }
+
+                    int i = Math.max(0, Mth.binarySearch(0, copiedArray.length, (p_232315_) -> {
+                        return f <= copiedArray[p_232315_].timestamp();
+                    }) - 1);
+                    int j = Math.min(copiedArray.length - 1, i + 1);
+                    Keyframe keyframe = copiedArray[i];
+                    Keyframe keyframe1 = copiedArray[j];
+                    float f1 = f - keyframe.timestamp();
+                    float f2;
+                    if (j != i) {
+                        f2 = Mth.clamp(f1 / (keyframe1.timestamp() - keyframe.timestamp()), 0.0F, 1.0F);
+                    } else {
+                        f2 = 0.0F;
+                    }
+
+                    keyframe1.interpolation().apply(p_253861_, f2, copiedArray, i, j, p_232323_);
                     p_288241_.target().apply(p_232330_, p_253861_);
                 });
             });
