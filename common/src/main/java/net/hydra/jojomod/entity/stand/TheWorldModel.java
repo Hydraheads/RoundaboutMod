@@ -25,15 +25,15 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 				.getChild("torso").getChild("upper_chest").getChild("right_arm").getChild("lower_right_arm");
 	}
 
-	public static LayerDefinition getTexturedModelData(){
+	public static LayerDefinition getTexturedModelData() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
 		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 7.0F, 0.0F));
 
-		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 0.0F));
+		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, -3.0F, 0.0F));
 
-		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -24.15F, 0.0F));
+		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -4.15F, 0.0F));
 
 		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -5.85F, -4.0F, 8.0F, 6.0F, 8.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 6).addBox(-1.0F, -0.65F, -4.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
@@ -47,9 +47,9 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		PartDefinition top = extra_details.addOrReplaceChild("top", CubeListBuilder.create().texOffs(60, 45).addBox(-4.0F, -0.6114F, 0.9698F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.246F))
 				.texOffs(0, 73).addBox(-4.0F, -0.6F, -5.0302F, 8.0F, 2.0F, 8.0F, new CubeDeformation(0.2499F)), PartPose.offset(0.0F, -0.1F, 0.0F));
 
-		PartDefinition top_r1 = top.addOrReplaceChild("top_r1", CubeListBuilder.create().texOffs(24, 0).addBox(-4.0F, -0.2671F, -5.2528F, 8.0F, 2.0F, 6.0F, new CubeDeformation(0.2496F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.3944F, 0.0F, 0.0F));
+		PartDefinition top_r1 = top.addOrReplaceChild("top_r1", CubeListBuilder.create().texOffs(24, 0).addBox(-4.0F, -0.2671F, -5.2528F, 8.0F, 2.0F, 6.0F, new CubeDeformation(0.2497F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.3944F, 0.0F, 0.0F));
 
-		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -4.0F, 0.0F));
 
 		PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -65,7 +65,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(16, 53).addBox(-4.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(60, 23).addBox(-4.0F, -0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition upper_right_leg_r1 = upper_right_arm.addOrReplaceChild("upper_right_leg_r1", CubeListBuilder.create().texOffs(46, 0).mirror().addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-2.0F, 5.75F, 2.45F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition upper_right_leg_r1 = upper_right_arm.addOrReplaceChild("upper_right_leg_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-2.0F, 5.75F, 2.45F, 0.0F, 3.1416F, 0.0F));
 
 		PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(0, 49).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(28, 59).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
@@ -75,7 +75,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(48, 30).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
 				.texOffs(0, 59).addBox(0.0F, -0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition upper_left_leg_r1 = upper_left_arm.addOrReplaceChild("upper_left_leg_r1", CubeListBuilder.create().texOffs(46, 0).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 5.75F, 2.45F, 0.0F, -3.1416F, 0.0F));
+		PartDefinition upper_left_leg_r1 = upper_left_arm.addOrReplaceChild("upper_left_leg_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 5.75F, 2.45F, 0.0F, -3.1416F, 0.0F));
 
 		PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(28, 47).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(52, 58).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(2.0F, 5.5F, 0.0F));
@@ -121,7 +121,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 
 		PartDefinition upper_left_leg_r2 = lower_left_leg.addOrReplaceChild("upper_left_leg_r2", CubeListBuilder.create().texOffs(0, 3).addBox(0.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, 0.0F, -2.5F, -0.0873F, 0.0F, 0.0F));
 
-		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -4.0F));
+		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, 3.0F, -2.0F));
 
 		PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-12.0F, -8.0F, 1.0F));
 
@@ -165,7 +165,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 
 		PartDefinition LeftArm_r3 = LeftArmBAM3.addOrReplaceChild("LeftArm_r3", CubeListBuilder.create().texOffs(0, 112).mirror().addBox(-4.25F, -1.25F, -4.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(0.625F, -0.5F, -1.0F, -1.5708F, 0.0F, -1.5708F));
 
-		PartDefinition kick_barrage = stand2.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, -12.0F, -2.0F));
+		PartDefinition kick_barrage = stand2.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, 8.0F, -2.0F));
 
 		PartDefinition One = kick_barrage.addOrReplaceChild("One", CubeListBuilder.create().texOffs(45, 118).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
 				.texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
@@ -198,6 +198,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
+
 	StandPowers Power = new PowersTheWorld(null);
 
 	@Override
@@ -217,14 +218,14 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
 		this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
 		this.animate(pEntity.assault, StandAnimations.ASSAULT, pAgeInTicks, 1f);
-		this.animate(pEntity.assault_punch, StandAnimations.ASSAULT_PUNCH, pAgeInTicks, 2.5f);
+		this.animate(pEntity.assault_punch, StandAnimations.ASSAULT_PUNCH, pAgeInTicks, 1f);
 		this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
 		this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
-		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1.25f);
+		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
 		this.animate(pEntity.hideLegEntirely, StandAnimations.HIDE_LEGS_ENTIRELY, pAgeInTicks, 1.25f);
 		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
 		this.animate(pEntity.finalKickWindup, StandAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
-		this.animate(pEntity.finalKick, StandAnimations.FINAL_KICK, pAgeInTicks, 0.5f);
+		this.animate(pEntity.finalKick, StandAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
 		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.6f);
 	}
 
