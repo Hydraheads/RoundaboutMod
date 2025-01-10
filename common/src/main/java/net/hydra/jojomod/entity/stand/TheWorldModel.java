@@ -217,15 +217,15 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);
 		this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
 		this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
-		this.animate(pEntity.assault, StandAnimations.ASSAULT, pAgeInTicks, 1f);
-		this.animate(pEntity.assault_punch, StandAnimations.ASSAULT_PUNCH, pAgeInTicks, 1f);
+		this.animate(pEntity.assault, TheWorldAnimations.ASSAULT, pAgeInTicks, 1f);
+		this.animate(pEntity.assault_punch, TheWorldAnimations.ASSAULT_PUNCH, pAgeInTicks, 1f);
 		this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
 		this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
 		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
 		this.animate(pEntity.hideLegEntirely, StandAnimations.HIDE_LEGS_ENTIRELY, pAgeInTicks, 1.25f);
 		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
-		this.animate(pEntity.finalKickWindup, StandAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
-		this.animate(pEntity.finalKick, StandAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
+		this.animate(pEntity.finalKickWindup, TheWorldAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
+		this.animate(pEntity.finalKick, TheWorldAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
 		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.6f);
 	}
 
