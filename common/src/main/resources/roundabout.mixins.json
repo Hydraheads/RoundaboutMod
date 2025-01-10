@@ -89,6 +89,7 @@
     "ZBossBar",
     "ZCamera",
     "ZClientLevelData",
+    "ZElytraModel",
     "ZEntityRenderDispatcher",
     "ZEntityRenderer",
     "ZFogRenderer",
