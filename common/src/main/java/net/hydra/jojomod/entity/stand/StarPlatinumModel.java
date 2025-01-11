@@ -351,7 +351,7 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
 		this.animate(pEntity.blockLoinAnimationState, StarPlatinumAnimations.BLOCK_LOIN, pAgeInTicks, 1f);
 		this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
-		this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1.25f);
+		this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1f);
 		this.animate(pEntity.blockRetractAnimation, StandAnimations.RETRACT_BLOCK, pAgeInTicks, 1.25f);
 		this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
 		this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);
@@ -359,12 +359,12 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
 		this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
 		this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
-		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1.25f);
+		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
 		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
-		this.animate(pEntity.starFinger, StandAnimations.STAR_FINGER, pAgeInTicks, 0.55f);
-		this.animate(pEntity.starFinger2, StandAnimations.STAR_FINGER, pAgeInTicks, 7f);
-		this.animate(pEntity.finalPunchWindup, StandAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1f);
-		this.animate(pEntity.finalPunch, StandAnimations.FINAL_PUNCH, pAgeInTicks, 1.5f);
+		this.animate(pEntity.starFinger, StarPlatinumAnimations.STAR_FINGER, pAgeInTicks, 0.55f);
+		this.animate(pEntity.starFinger2, StarPlatinumAnimations.STAR_FINGER, pAgeInTicks, 7f);
+		this.animate(pEntity.finalPunchWindup, StarPlatinumAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1f);
+		this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
 		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.6f);
 	}
 
