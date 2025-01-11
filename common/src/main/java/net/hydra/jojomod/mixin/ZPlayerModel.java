@@ -116,9 +116,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.cloak.z += -1.1F;
                     this.cloak.y += -0.85F;
                 }
-                this.cloak.zRot*=-1;
+                this.cloak.xRot*=-1;
                 this.cloak.x*=-1;
-                this.cloak.y*=-1;
                 this.cloak.z*=-1;
             }
         }
