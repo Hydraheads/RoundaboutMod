@@ -11,6 +11,12 @@
       "roundabout:ova_summon"
     ]
   },
+  "body_bag": {
+    "subtitle": "sounds.roundabout.body_bag",
+    "sounds": [
+      "roundabout:body_bag"
+    ]
+  },
   "summon_justice": {
     "subtitle": "sounds.roundabout.summon_justice",
     "sounds": [

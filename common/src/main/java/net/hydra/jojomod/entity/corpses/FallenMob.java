@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.corpses;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.item.BodyBagItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -10,15 +11,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
@@ -123,10 +121,13 @@ public class FallenMob extends Mob {
             if (!this.level().isClientSide) {
                 if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getMainHandItem(),this)){
+                        this.level().playSound(null, this.blockPosition(), ModSounds.BODY_BAG_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+
                         this.discard();
                     }
                 } else if ($$0.getOffhandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getOffhandItem(),this)){
+                        this.level().playSound(null, this.blockPosition(), ModSounds.BODY_BAG_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
                         this.discard();
                     }
                 }
