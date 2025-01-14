@@ -61,6 +61,8 @@ public abstract class ZScreenEffectRenderer {
 
         return null;
     }
+
+    /**Anti xrayx-ray measures for justice pilot mode block clipping*/
     @Inject(method = "renderScreenEffect(Lnet/minecraft/client/Minecraft;Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At(value = "HEAD"),cancellable = true)
     private static void roundabout$renderScreenEffect(Minecraft $$0, PoseStack $$1, CallbackInfo ci) {
 
@@ -71,7 +73,7 @@ public abstract class ZScreenEffectRenderer {
             StandEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() ) {
 
-                if (!$$2.noPhysics && !(powers instanceof PowersJustice)) {
+                if (!$$2.noPhysics) {
                     BlockState $$3 = roundabout$getViewBlockingState(piloting);
                     if ($$3 != null) {
                         renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon($$3), $$1);
