@@ -68,9 +68,11 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
     public void roundabout$clientPlaySound(){
         if (this.roundabout$sounds != null && !this.roundabout$sounds.isEmpty()) {
             List<QueueSoundInstance> $$0 = Lists.newArrayList(this.roundabout$sounds);
-            for (int i = $$0.size() - 1; i >= 0; --i) {
-                QueueSoundInstance soundI = $$0.get(i);
-                ((StandUser) this).roundabout$getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
+            if (!$$0.isEmpty()) {
+                for (int i = $$0.size() - 1; i >= 0; --i) {
+                    QueueSoundInstance soundI = $$0.get(i);
+                    ((StandUser) this).roundabout$getStandPowers().runExtraSoundCode(soundI.roundaboutSoundByte);
+                }
             }
 
             List<QueueSoundInstance> $$1;
@@ -88,10 +90,12 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
 
             if (!$$2.isEmpty()) {
                 for (int j = $$2.size() - 1; j >= 0; --j) {
-                    for (int i = $$1.size() - 1; i >= 0; --i) {
-                        if ($$2.get(j).roundaboutSoundByte == $$1.get(i).roundaboutSoundByte) {
-                            Minecraft.getInstance().getSoundManager().stop($$2.get(j).roundaboutSoundInstance);
-                            $$2.remove(j);
+                    if (!$$1.isEmpty()) {
+                        for (int i = $$1.size() - 1; i >= 0; --i) {
+                            if ($$2.get(j).roundaboutSoundByte == $$1.get(i).roundaboutSoundByte) {
+                                Minecraft.getInstance().getSoundManager().stop($$2.get(j).roundaboutSoundInstance);
+                                $$2.remove(j);
+                            }
                         }
                     }
                 }
