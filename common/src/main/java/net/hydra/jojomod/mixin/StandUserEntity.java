@@ -45,8 +45,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -1734,6 +1733,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         marked = true;
                         mb = ModEntities.FALLEN_ZOMBIE.create(this.level());
 
+                    } else if (ths instanceof Skeleton || ths instanceof Stray) {
+                        marked = true;
+                        mb = ModEntities.FALLEN_SKELETON.create(this.level());
+                    } else if (ths instanceof Villager || ths instanceof Witch || ths instanceof AbstractIllager) {
+                        marked = true;
+                        mb = ModEntities.FALLEN_VILLAGER.create(this.level());
+                    } else if (ths instanceof Spider && !(ths instanceof CaveSpider)) {
+                        marked = true;
+                        mb = ModEntities.FALLEN_SPIDER.create(this.level());
+                    } else if (ths instanceof Creeper) {
+                        marked = true;
+                        mb = ModEntities.FALLEN_CREEPER.create(this.level());
                     }
                 }
                 if (mb != null){

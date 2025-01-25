@@ -22,6 +22,14 @@ public enum Corpses {
     public static FallenMob getEntity(Corpses corpses, Level level){
         if (corpses.equals(ZOMBIE)){
             return ModEntities.FALLEN_ZOMBIE.create(level);
+        } else if (corpses.equals(SKELETON)){
+            return ModEntities.FALLEN_SKELETON.create(level);
+        } else if (corpses.equals(SPIDER)){
+            return ModEntities.FALLEN_SPIDER.create(level);
+        } else if (corpses.equals(VILLAGER)){
+            return ModEntities.FALLEN_VILLAGER.create(level);
+        } else if (corpses.equals(CREEPER)){
+            return ModEntities.FALLEN_CREEPER.create(level);
         }
         return null;
     }

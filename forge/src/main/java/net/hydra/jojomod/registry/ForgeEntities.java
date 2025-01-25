@@ -3,7 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
-import net.hydra.jojomod.entity.corpses.FallenZombie;
+import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -56,6 +56,26 @@ public class ForgeEntities {
             ENTITY_TYPES.register("fallen_zombie", () ->
                     EntityType.Builder.of(FallenZombie::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fallen_zombie").toString())
+            );
+    public static final RegistryObject<EntityType<FallenSkeleton>> FALLEN_SKELETON =
+            ENTITY_TYPES.register("fallen_skeleton", () ->
+                    EntityType.Builder.of(FallenSkeleton::new, MobCategory.MISC).sized(0.6F, 1.99F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "fallen_skeleton").toString())
+            );
+    public static final RegistryObject<EntityType<FallenSpider>> FALLEN_SPIDER =
+            ENTITY_TYPES.register("fallen_spider", () ->
+                    EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(0.8F, 0.8F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "fallen_spider").toString())
+            );
+    public static final RegistryObject<EntityType<FallenVillager>> FALLEN_VILLAGER =
+            ENTITY_TYPES.register("fallen_villager", () ->
+                    EntityType.Builder.of(FallenVillager::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "fallen_villager").toString())
+            );
+    public static final RegistryObject<EntityType<FallenCreeper>> FALLEN_CREEPER =
+            ENTITY_TYPES.register("fallen_creeper", () ->
+                    EntityType.Builder.of(FallenCreeper::new, MobCategory.MISC).sized(0.6F, 1.7F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "fallen_creeper").toString())
             );
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
             ENTITY_TYPES.register("the_world", () ->

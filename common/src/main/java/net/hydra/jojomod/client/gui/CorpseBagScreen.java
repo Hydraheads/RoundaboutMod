@@ -69,6 +69,10 @@ public class CorpseBagScreen extends Screen {
     }
 
     public int zombies = 0;
+    public int skeletons = 0;
+    public int spiders = 0;
+    public int villagers = 0;
+    public int creepers = 0;
 
     @Override
     protected void init() {
@@ -78,8 +82,16 @@ public class CorpseBagScreen extends Screen {
         if (stack != null && !stack.isEmpty()){
             CompoundTag $$1 = stack.getOrCreateTagElement("bodies");
             zombies = $$1.getInt("zombie");
+            skeletons = $$1.getInt("skeleton");
+            spiders = $$1.getInt("spider");
+            villagers = $$1.getInt("villager");
+            creepers = $$1.getInt("creeper");
         } else {
             zombies = 0;
+            skeletons = 0;
+            spiders = 0;
+            villagers = 0;
+            creepers = 0;
         }
 
         this.currentlyHovered = corpseIcon.NONE;
@@ -130,6 +142,14 @@ public class CorpseBagScreen extends Screen {
                 int num = 0;
                 if (pIcon == corpseIcon.ZOMBIE){
                     num = zombies;
+                } else if (pIcon == corpseIcon.SKELETON){
+                    num = skeletons;
+                } else if (pIcon == corpseIcon.CREEPER){
+                    num = creepers;
+                } else if (pIcon == corpseIcon.SPIDER){
+                    num = spiders;
+                } else if (pIcon == corpseIcon.VILLAGER){
+                    num = villagers;
                 }
                 guiGraphics.drawString(this.font, ""+num, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
             }

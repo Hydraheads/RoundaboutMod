@@ -6,7 +6,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
-import net.hydra.jojomod.entity.corpses.FallenZombie;
+import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
@@ -48,6 +48,10 @@ public class ForgeEvents {
         event.put(ForgeEntities.STEVE_NPC.get(), PlayerSteveNPC.createAttributes().build());
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombie.createAttributes().build());
+        event.put(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeleton.createAttributes().build());
+        event.put(ForgeEntities.FALLEN_SPIDER.get(), FallenSpider.createAttributes().build());
+        event.put(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillager.createAttributes().build());
+        event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -215,6 +219,10 @@ public class ForgeEvents {
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
+        ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();
+        ModEntities.FALLEN_SPIDER = ForgeEntities.FALLEN_SPIDER.get();
+        ModEntities.FALLEN_VILLAGER = ForgeEntities.FALLEN_VILLAGER.get();
+        ModEntities.FALLEN_CREEPER = ForgeEntities.FALLEN_CREEPER.get();
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.JOTARO = ForgeEntities.JOTARO.get();

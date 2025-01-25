@@ -7,7 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
-import net.hydra.jojomod.entity.corpses.FallenZombie;
+import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -66,6 +66,30 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "fallen_zombie"),
                         EntityType.Builder.of(FallenZombie::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_zombie")
+                );
+        public static final EntityType<FallenSkeleton> FALLEN_SKELETON =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "fallen_skeleton"),
+                        EntityType.Builder.of(FallenSkeleton::new, MobCategory.MISC).sized(0.6F, 1.99F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                );
+        public static final EntityType<FallenSpider> FALLEN_SPIDER =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "fallen_spider"),
+                        EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(0.8F, 0.8F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                );
+        public static final EntityType<FallenVillager> FALLEN_VILLAGER =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "fallen_villager"),
+                        EntityType.Builder.of(FallenVillager::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                );
+        public static final EntityType<FallenCreeper> FALLEN_CREEPER =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "fallen_creeper"),
+                        EntityType.Builder.of(FallenCreeper::new, MobCategory.MISC).sized(0.6F, 1.7F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
                 );
 
         public static final EntityType<TheWorldEntity> THE_WORLD =
@@ -181,6 +205,10 @@ public class FabricEntities {
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
+                ModEntities.FALLEN_SKELETON = FALLEN_SKELETON;
+                ModEntities.FALLEN_SPIDER = FALLEN_SPIDER;
+                ModEntities.FALLEN_VILLAGER = FALLEN_VILLAGER;
+                ModEntities.FALLEN_CREEPER = FALLEN_CREEPER;
 
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.JOTARO = JOTARO;
@@ -196,6 +224,10 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(FALLEN_ZOMBIE, FallenZombie.createAttributes());
+                FabricDefaultAttributeRegistry.register(FALLEN_SKELETON, FallenSkeleton.createAttributes());
+                FabricDefaultAttributeRegistry.register(FALLEN_SPIDER, FallenSpider.createAttributes());
+                FabricDefaultAttributeRegistry.register(FALLEN_VILLAGER, FallenVillager.createAttributes());
+                FabricDefaultAttributeRegistry.register(FALLEN_CREEPER, FallenCreeper.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());

@@ -1,26 +1,19 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IBlockEntityWithoutLevelRenderer;
-import net.hydra.jojomod.access.IItemRenderer;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
-import net.hydra.jojomod.entity.corpses.FallenZombieModel;
-import net.hydra.jojomod.entity.corpses.FallenZombieRenderer;
+import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.particles.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ExplodeParticle;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -47,6 +40,10 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombieRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeletonRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FALLEN_SPIDER.get(), FallenSpiderRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillagerRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
     }
 
     @SubscribeEvent
