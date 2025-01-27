@@ -11,7 +11,7 @@ public class FallenSpiderModel <T extends FallenMob> extends SpiderModel<T> {
 
     public void setupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
         if (!$$0.isActivated){
-            this.root().resetPose();
+            super.setupAnim($$0,0,0,0,0,0);
         } else {
             super.setupAnim($$0, $$1, $$2, $$3, $$4, $$5);
         }
