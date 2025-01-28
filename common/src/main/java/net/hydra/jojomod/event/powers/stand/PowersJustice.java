@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class PowersJustice extends DashPreset {
     public PowersJustice(LivingEntity self) {
         super(self);
     }
+    private List<LivingEntity> fogControlledEntities = new ArrayList<>();
 
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
@@ -73,6 +76,30 @@ public class PowersJustice extends DashPreset {
     @Override
     public boolean isMiningStand() {
         return false;
+    }
+    public List<LivingEntity> queryJusticeEntities(){
+        if (fogControlledEntities == null){
+            fogControlledEntities = new ArrayList<>();
+        }
+        return fogControlledEntities;
+    }
+    public List<LivingEntity> addJusticeEntities(LivingEntity LE){
+        if (fogControlledEntities == null){
+            fogControlledEntities = new ArrayList<>();
+        }
+        fogControlledEntities.add(LE);
+        return fogControlledEntities;
+    }
+    public List<LivingEntity> removeJusticeEntities(LivingEntity LE){
+        if (fogControlledEntities == null){
+            fogControlledEntities = new ArrayList<>();
+        }
+        fogControlledEntities.remove(LE);
+        return fogControlledEntities;
+    }
+    public List<LivingEntity> clearJusticeEntities(){
+        fogControlledEntities = new ArrayList<>();
+        return fogControlledEntities;
     }
 
     @Override
