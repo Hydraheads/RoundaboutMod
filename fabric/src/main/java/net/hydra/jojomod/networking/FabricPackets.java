@@ -13,6 +13,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import javax.swing.text.html.parser.Entity;
@@ -331,6 +332,16 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeItem(stack);
         buffer.writeByte(context);
         ClientPlayNetworking.send(ModMessages.INVENTORY_C2S_PACKET, buffer);
+    }
+    @Override
+    public void itemContextToServer(byte context, ItemStack stack, byte context2, Vector3f vec){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+
+        buffer.writeByte(context);
+        buffer.writeItem(stack);
+        buffer.writeByte(context2);
+        buffer.writeVector3f(vec);
+        ClientPlayNetworking.send(ModMessages.ITEM_CONTEXT_C2S_PACKET, buffer);
     }
     @Override
     public void glaivePacket(ItemStack glaive, int target){

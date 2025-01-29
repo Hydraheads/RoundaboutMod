@@ -25,6 +25,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -157,19 +162,28 @@ public class CorpseBagScreen extends Screen {
     }
 
     private void switchToHoveredGameMode() {
-        CorpseBagScreen.switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
+       switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
     }
 
-    private static void switchToHoveredGameMode(Minecraft minecraft, corpseIcon pIcon) {
+    private void switchToHoveredGameMode(Minecraft minecraft, corpseIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
         }
 
-        byte ppos = ((IPlayerEntity)minecraft.player).roundabout$GetPoseEmote();
-        if (pIcon.id != ppos) {
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id, PacketDataIndex.BYTE_STRIKE_POSE);
+        if (stack != null && !stack.isEmpty() && minecraft.player != null) {
+
+            Vec3 vec3d = minecraft.player.getEyePosition(0);
+            Vec3 vec3d2 = minecraft.player.getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
+            BlockHitResult blockHit = minecraft.player.level().clip(new ClipContext(vec3d, vec3d3,
+                    ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, minecraft.player));
+            Vector3f vc = minecraft.player.position().toVector3f();
+            if (blockHit.getType() == HitResult.Type.BLOCK){
+                vc = blockHit.getBlockPos().getCenter().toVector3f();
+            }
+            ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
+                    stack, PacketDataIndex.USE_CORPSE_BAG, vc);
         }
-        //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
         return (key1.isDown() || (key1.same(options.keyLoadHotbarActivator) && options.keyLoadHotbarActivator.isDown())

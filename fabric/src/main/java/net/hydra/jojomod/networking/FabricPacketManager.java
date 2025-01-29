@@ -30,6 +30,7 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INT_C2S_PACKET, UtilC2S::UpdateInt);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.GLAIVE_C2S_PACKET, UtilC2S::glaiveAttack);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INVENTORY_C2S_PACKET, UtilC2S::inventoryChange);
+        ServerPlayNetworking.registerGlobalReceiver(ModMessages.ITEM_CONTEXT_C2S_PACKET, UtilC2S::inventoryChange);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.HANDSHAKE, ConfigC2S::Handshake);
     }
     //Server to Client

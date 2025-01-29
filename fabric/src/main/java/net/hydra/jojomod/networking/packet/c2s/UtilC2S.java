@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 public class UtilC2S {
 
@@ -99,6 +100,21 @@ public class UtilC2S {
 
         server.execute(() -> {
             MainUtil.handleSetCreativeModeSlot(player,slot,context,bt);
+        });
+
+
+    }
+    public static void itemChange(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                                       FriendlyByteBuf buf, PacketSender responseSender){
+        //Everything here is server only!
+        ServerLevel world = (ServerLevel) player.level();
+        byte bt = buf.readByte();
+        ItemStack context = buf.readItem();
+        byte bt2 = buf.readByte();
+        Vector3f vec = buf.readVector3f();
+
+        server.execute(() -> {
+            MainUtil.handleChangeItem(player,bt,context,bt2,vec);
         });
 
 

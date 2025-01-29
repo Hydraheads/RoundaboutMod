@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public interface IPacketAccess {
@@ -60,5 +61,6 @@ public interface IPacketAccess {
     void intToServerPacket(int target, byte context);
     void singleByteToServerPacket(byte context);
     void inventoryToServer(int slotNum, ItemStack stack, byte context);
+    void itemContextToServer(byte context, ItemStack stack, byte context2, Vector3f vec);
     void handshake();
 }

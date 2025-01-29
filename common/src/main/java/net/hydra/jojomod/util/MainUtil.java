@@ -72,6 +72,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,6 +156,11 @@ public class MainUtil {
         return stack;
     }
 
+    public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
+        if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
+
+        }
+    }
 
     public static void handleSetCreativeModeSlot(Player player, int integer, ItemStack stack, byte context) {
         if (context == PacketDataIndex.ADD_FOG_ITEM) {
@@ -183,8 +189,6 @@ public class MainUtil {
             } else if (flag && flag2) {
                 player.drop(itemstack, true);
             }
-
-        } else if (context == PacketDataIndex.DROP_FOG_ITEM) {
 
         }
     }
@@ -1048,9 +1052,9 @@ public class MainUtil {
     public static void handleBytePacketC2S(Player player, byte data, byte context){
         if (context == PacketDataIndex.BYTE_UPDATE_COOLDOWN) {
             ((StandUser) player).roundabout$getStandPowers().setCooldown(data, -1);
-        } if (context == PacketDataIndex.BYTE_STRIKE_POSE) {
+        } else if (context == PacketDataIndex.BYTE_STRIKE_POSE) {
             ((IPlayerEntity) player).roundabout$SetPoseEmote(data);
-        } if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
+        } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
             if (ShapeShifts.getShiftFromByte(data) == ShapeShifts.VILLAGER){
                 byte totalMorph = 0;
                 Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
@@ -1066,6 +1070,8 @@ public class MainUtil {
             }
             ((IPlayerEntity) player).roundabout$shapeShift();
             ((IPlayerEntity) player).roundabout$setShapeShift(data);
+        } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
+
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/

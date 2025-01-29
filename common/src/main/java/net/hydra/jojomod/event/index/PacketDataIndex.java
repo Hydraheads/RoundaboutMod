@@ -19,6 +19,7 @@ public class PacketDataIndex {
     /**C2S Inventory*/
     public static final byte ADD_FOG_ITEM = 1;
     public static final byte DROP_FOG_ITEM = 2;
+    public static final byte USE_CORPSE_BAG = 3;
 
     public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
     public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;
@@ -51,6 +52,7 @@ public class PacketDataIndex {
     public static final byte BYTE_CHANGE_MORPH = 6;
     public static final byte BYTE_STRIKE_POSE = 7;
     public static final byte BYTE_UPDATE_COOLDOWN = 8;
+    public static final byte BYTE_SUMMON_CORPSE = 9;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;
