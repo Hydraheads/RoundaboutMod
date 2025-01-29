@@ -170,8 +170,10 @@ public class CorpseBagScreen extends Screen {
             return;
         }
 
+        Roundabout.LOGGER.info("a");
         if (stack != null && !stack.isEmpty() && minecraft.player != null) {
 
+            Roundabout.LOGGER.info("b");
             Vec3 vec3d = minecraft.player.getEyePosition(0);
             Vec3 vec3d2 = minecraft.player.getViewVector(0);
             Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);

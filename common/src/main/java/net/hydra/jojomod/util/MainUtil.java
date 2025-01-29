@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -12,6 +13,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -157,8 +160,33 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
+        Roundabout.LOGGER.info("1");
         if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
+            CompoundTag $$1 = stack.getOrCreateTagElement("bodies");
+            int zombies = $$1.getInt("zombie");
+            int skeletons = $$1.getInt("skeleton");
+            int spiders = $$1.getInt("spider");
+            int villagers = $$1.getInt("villager");
+            int creepers = $$1.getInt("creeper");
+            FallenMob fm = null;
+            Roundabout.LOGGER.info("2");
+            if (context == Corpses.ZOMBIE.id){
+                fm = ModEntities.FALLEN_ZOMBIE.create(player.level());
+            } else if (context == Corpses.SKELETON.id){
+                fm = ModEntities.FALLEN_SKELETON.create(player.level());
+            } else if (context == Corpses.SPIDER.id){
+                fm = ModEntities.FALLEN_SPIDER.create(player.level());
+            } else if (context == Corpses.VILLAGER.id){
+                fm = ModEntities.FALLEN_VILLAGER.create(player.level());
+            } else if (context == Corpses.CREEPER.id){
+                fm = ModEntities.FALLEN_CREEPER.create(player.level());
+            }
 
+            if (fm != null){
+                Roundabout.LOGGER.info("3");
+                fm.setPos(vec.x,vec.y,vec.z);
+                player.level().addFreshEntity(fm);
+            }
         }
     }
 
