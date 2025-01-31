@@ -153,36 +153,67 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
-        if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
-            CompoundTag $$1 = stack.getOrCreateTagElement("bodies");
-            int zombies = $$1.getInt("zombie");
-            int skeletons = $$1.getInt("skeleton");
-            int spiders = $$1.getInt("spider");
-            int villagers = $$1.getInt("villager");
-            int creepers = $$1.getInt("creeper");
-            FallenMob fm = null;
-            int yElevation = 0;
-            if (context == Corpses.ZOMBIE.id){
-                fm = ModEntities.FALLEN_ZOMBIE.create(player.level());
-            } else if (context == Corpses.SKELETON.id){
-                fm = ModEntities.FALLEN_SKELETON.create(player.level());
-            } else if (context == Corpses.SPIDER.id){
-                fm = ModEntities.FALLEN_SPIDER.create(player.level());
-            } else if (context == Corpses.VILLAGER.id){
-                fm = ModEntities.FALLEN_VILLAGER.create(player.level());
-            } else if (context == Corpses.CREEPER.id){
-                fm = ModEntities.FALLEN_CREEPER.create(player.level());
-            }
+        if (player.getInventory().contains(stack)) {
+            ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+            if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
+                CompoundTag $$1 = item.getOrCreateTagElement("bodies");
+                int zombies = $$1.getInt("zombie");
+                int skeletons = $$1.getInt("skeleton");
+                int spiders = $$1.getInt("spider");
+                int villagers = $$1.getInt("villager");
+                int creepers = $$1.getInt("creeper");
+                FallenMob fm = null;
+                int yElevation = 0;
+                if (context == Corpses.ZOMBIE.id) {
+                    zombies--;
+                    if (zombies >= 0) {
+                        fm = ModEntities.FALLEN_ZOMBIE.create(player.level());
+                    }
+                } else if (context == Corpses.SKELETON.id) {
+                    skeletons--;
+                    if (skeletons >= 0) {
+                        fm = ModEntities.FALLEN_SKELETON.create(player.level());
+                    }
+                } else if (context == Corpses.SPIDER.id) {
+                    spiders--;
+                    if (spiders >= 0) {
+                        fm = ModEntities.FALLEN_SPIDER.create(player.level());
+                    }
+                } else if (context == Corpses.VILLAGER.id) {
+                    villagers--;
+                    if (villagers >= 0) {
+                        fm = ModEntities.FALLEN_VILLAGER.create(player.level());
+                    }
+                } else if (context == Corpses.CREEPER.id) {
+                    creepers--;
+                    if (creepers >= 0) {
+                        fm = ModEntities.FALLEN_CREEPER.create(player.level());
+                    }
+                }
 
-            if (fm != null){
-                fm.setPos(vec.x,vec.y+yElevation,vec.z);
-                fm.placer = player;
-                fm.setPhasesFull(true);
-                fm.tickThroughPlacerStart();
-                fm.setForcedRotation(player.getYRot()%360);
-                fm.setYRot(player.getYRot()%360);
-                fm.setYBodyRot(player.yBodyRot%360);
-                player.level().addFreshEntity(fm);
+                if (fm != null) {
+                    fm.setPos(vec.x, vec.y + yElevation, vec.z);
+                    fm.placer = player;
+                    fm.setPhasesFull(true);
+                    fm.tickThroughPlacerStart();
+                    fm.setForcedRotation(player.getYRot() % 360);
+                    fm.setYRot(player.getYRot() % 360);
+                    fm.setYBodyRot(player.yBodyRot % 360);
+                    player.level().addFreshEntity(fm);
+                    if (!player.isCreative() && player instanceof ServerPlayer SP) {
+                        if (context == Corpses.ZOMBIE.id) {
+                            item.getOrCreateTagElement("bodies").putInt("zombie", zombies);
+                        } else if (context == Corpses.SKELETON.id) {
+                            item.getOrCreateTagElement("bodies").putInt("skeleton", skeletons);
+                        } else if (context == Corpses.SPIDER.id) {
+                            item.getOrCreateTagElement("bodies").putInt("spider", spiders);
+                        } else if (context == Corpses.VILLAGER.id) {
+                            item.getOrCreateTagElement("bodies").putInt("villager", villagers);
+                        } else if (context == Corpses.CREEPER.id) {
+                            item.getOrCreateTagElement("bodies").putInt("creeper", creepers);
+                        }
+                    }
+                }
             }
         }
     }

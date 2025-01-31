@@ -188,6 +188,7 @@ public class FallenMob extends Mob {
             }
         }
     }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
