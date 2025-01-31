@@ -170,10 +170,8 @@ public class CorpseBagScreen extends Screen {
             return;
         }
 
-        Roundabout.LOGGER.info("a");
         if (stack != null && !stack.isEmpty() && minecraft.player != null) {
 
-            Roundabout.LOGGER.info("b");
             Vec3 vec3d = minecraft.player.getEyePosition(0);
             Vec3 vec3d2 = minecraft.player.getViewVector(0);
             Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
@@ -181,7 +179,7 @@ public class CorpseBagScreen extends Screen {
                     ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, minecraft.player));
             Vector3f vc = minecraft.player.position().toVector3f();
             if (blockHit.getType() == HitResult.Type.BLOCK){
-                vc = blockHit.getBlockPos().getCenter().toVector3f();
+                vc = blockHit.getBlockPos().getCenter().toVector3f().add(0,1,0);
             }
             ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
                     stack, PacketDataIndex.USE_CORPSE_BAG, vc);

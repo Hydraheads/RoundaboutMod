@@ -3,7 +3,6 @@ package net.hydra.jojomod.util;
 
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -21,7 +20,6 @@ import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -30,11 +28,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.PacketUtils;
-import net.minecraft.network.protocol.game.ClientboundMoveVehiclePacket;
-import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
-import net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -160,7 +153,6 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
-        Roundabout.LOGGER.info("1");
         if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
             CompoundTag $$1 = stack.getOrCreateTagElement("bodies");
             int zombies = $$1.getInt("zombie");
@@ -169,7 +161,7 @@ public class MainUtil {
             int villagers = $$1.getInt("villager");
             int creepers = $$1.getInt("creeper");
             FallenMob fm = null;
-            Roundabout.LOGGER.info("2");
+            int yElevation = 0;
             if (context == Corpses.ZOMBIE.id){
                 fm = ModEntities.FALLEN_ZOMBIE.create(player.level());
             } else if (context == Corpses.SKELETON.id){
@@ -183,8 +175,13 @@ public class MainUtil {
             }
 
             if (fm != null){
-                Roundabout.LOGGER.info("3");
-                fm.setPos(vec.x,vec.y,vec.z);
+                fm.setPos(vec.x,vec.y+yElevation,vec.z);
+                fm.placer = player;
+                fm.setPhasesFull(true);
+                fm.tickThroughPlacerStart();
+                fm.setForcedRotation(player.getYRot()%360);
+                fm.setYRot(player.getYRot()%360);
+                fm.setYBodyRot(player.yBodyRot%360);
                 player.level().addFreshEntity(fm);
             }
         }

@@ -1,7 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
@@ -23,10 +22,30 @@ import java.util.UUID;
 public class FallenMob extends Mob {
     public boolean isActivated = false;
     public int ticksThroughPhases = 0;
+    public int ticksThroughPlacer = 0;
     public Entity placer;
     public Entity controller;
+    private static final EntityDataAccessor<Boolean> TICKS_THROUGH_PLACER =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> CONTROLLER =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> FORCED_ROTATION =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Boolean> PHASES_FULL =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
+    public float getForcedRotation() {
+        return this.getEntityData().get(FORCED_ROTATION);
+    }
+    public void setForcedRotation(float fr){
+        this.entityData.set(FORCED_ROTATION, fr);
+    }
+    public boolean getPhasesFull() {
+        return this.getEntityData().get(PHASES_FULL);
+    }
+
+    public void setPhasesFull(boolean bool){
+        this.entityData.set(PHASES_FULL, bool);
+    }
     public int getController() {
         return this.getEntityData().get(CONTROLLER);
     }
@@ -37,6 +56,9 @@ public class FallenMob extends Mob {
     public void setController(Entity controller){
         this.controller = controller;
         this.entityData.set(CONTROLLER, controller.getId());
+    }
+    public boolean getTicksThroughPlacer() {
+        return this.getEntityData().get(TICKS_THROUGH_PLACER);
     }
     public int getPlacer() {
         return this.getEntityData().get(CONTROLLER);
@@ -80,13 +102,37 @@ public class FallenMob extends Mob {
         }
         super.readAdditionalSaveData($$0);
     }
+    public void tickThroughPlacerStart(){
+        this.entityData.set(TICKS_THROUGH_PLACER, true);
+        this.ticksThroughPlacer = 50;
+    }
     @Override
     public void tick(){
-        if (ticksThroughPhases < 10){
-            ticksThroughPhases++;
+        if (ticksThroughPlacer > 0){
+            ticksThroughPlacer--;
+            if (ticksThroughPlacer <= 0){
+                this.entityData.set(TICKS_THROUGH_PLACER, false);
+            }
+        }
+
+        if (!getPhasesFull()){
+            if (ticksThroughPhases < 10){
+                ticksThroughPhases++;
+            } else {
+                if (!this.level().isClientSide()) {
+                    setPhasesFull(true);
+                }
+            }
         } else {
-            if (!isActivated){
+            if (!isActivated && !getTicksThroughPlacer()){
                 if (this.level().isClientSide){
+
+                    float fr = this.getForcedRotation();
+                    if (fr != 0){
+                        this.setYRot(fr);
+                        this.setYBodyRot(fr);
+                    }
+
                     if (ClientUtil.checkIfClientHoldingBag()) {
                         if (this.tickCount % 5 == 0) {
                             for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
@@ -117,7 +163,7 @@ public class FallenMob extends Mob {
 
     @Override
     public void playerTouch(Player $$0) {
-        if (!isActivated && this.isAlive() && !this.isRemoved()) {
+        if (!isActivated && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
             if (!this.level().isClientSide) {
                 if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getMainHandItem(),this)){
@@ -138,6 +184,9 @@ public class FallenMob extends Mob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(CONTROLLER, -1);
+        this.entityData.define(TICKS_THROUGH_PLACER, false);
+        this.entityData.define(PHASES_FULL, false);
+        this.entityData.define(FORCED_ROTATION, 0F);
     }
     protected FallenMob(EntityType<? extends Mob> $$0, Level $$1) {
         super($$0, $$1);
