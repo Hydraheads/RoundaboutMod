@@ -129,8 +129,10 @@ public class FallenMob extends Mob {
 
                     float fr = this.getForcedRotation();
                     if (fr != 0){
-                        this.setYRot(fr);
                         this.setYBodyRot(fr);
+                        this.yBodyRotO = fr;
+                        this.setYRot(fr);
+                        this.xRotO = fr;
                     }
 
                     if (ClientUtil.checkIfClientHoldingBag()) {
@@ -150,7 +152,13 @@ public class FallenMob extends Mob {
                         }
                     }
                 } else {
-
+                    float fr = this.getForcedRotation();
+                    if (fr != 0){
+                        this.setYBodyRot(fr);
+                        this.yBodyRotO = fr;
+                        this.setYRot(fr);
+                        this.xRotO = fr;
+                    }
                 }
             }
         }
