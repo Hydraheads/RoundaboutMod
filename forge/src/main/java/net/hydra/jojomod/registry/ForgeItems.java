@@ -34,7 +34,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> STAND_BEETLE_ARROW = addToTab(ITEMS.register("stand_beetle_arrow",
             () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
     public static final RegistryObject<Item> BODY_BAG = addToTab(ITEMS.register("body_bag",
-            () -> new BodyBagItem(new Item.Properties().stacksTo(64))));
+            () -> new BodyBagItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> CREATIVE_BODY_BAG = addToTab(ITEMS.register("creative_body_bag",
+            () -> new BodyBagItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> KNIFE = addToTab(ITEMS.register("knife",
             () -> new KnifeItem(new Item.Properties().stacksTo(64))));
     public static final RegistryObject<Item> KNIFE_BUNDLE = addToTab(ITEMS.register("knife_bundle",

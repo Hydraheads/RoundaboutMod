@@ -43,6 +43,7 @@ public class ModItems {
     public static Item SCISSORS;
     public static Item EXECUTIONER_AXE;
     public static Item BODY_BAG;
+    public static Item CREATIVE_BODY_BAG;
     public static Item WOODEN_GLAIVE;
     public static Item STONE_GLAIVE;
     public static Item IRON_GLAIVE;

@@ -21,6 +21,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -153,15 +154,22 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
+        if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
         if (player.getInventory().contains(stack)) {
             ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
-            if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
+            int zombies = 1;
+            int skeletons = 1;
+            int spiders = 1;
+            int villagers = 1;
+            int creepers = 1;
+            if (!stack.is(ModItems.CREATIVE_BODY_BAG)){
                 CompoundTag $$1 = item.getOrCreateTagElement("bodies");
-                int zombies = $$1.getInt("zombie");
-                int skeletons = $$1.getInt("skeleton");
-                int spiders = $$1.getInt("spider");
-                int villagers = $$1.getInt("villager");
-                int creepers = $$1.getInt("creeper");
+                zombies = $$1.getInt("zombie");
+                skeletons = $$1.getInt("skeleton");
+                spiders = $$1.getInt("spider");
+                villagers = $$1.getInt("villager");
+                creepers = $$1.getInt("creeper");
+            }
                 FallenMob fm = null;
                 int yElevation = 0;
                 if (context == Corpses.ZOMBIE.id) {
@@ -200,21 +208,23 @@ public class MainUtil {
                     fm.setYRot(player.getYRot() % 360);
                     fm.setYBodyRot(player.yBodyRot % 360);
                     player.level().addFreshEntity(fm);
-                    if (!player.isCreative() && player instanceof ServerPlayer SP) {
-                        if (context == Corpses.ZOMBIE.id) {
-                            item.getOrCreateTagElement("bodies").putInt("zombie", zombies);
-                        } else if (context == Corpses.SKELETON.id) {
-                            item.getOrCreateTagElement("bodies").putInt("skeleton", skeletons);
-                        } else if (context == Corpses.SPIDER.id) {
-                            item.getOrCreateTagElement("bodies").putInt("spider", spiders);
-                        } else if (context == Corpses.VILLAGER.id) {
-                            item.getOrCreateTagElement("bodies").putInt("villager", villagers);
-                        } else if (context == Corpses.CREEPER.id) {
-                            item.getOrCreateTagElement("bodies").putInt("creeper", creepers);
+                    if (!stack.is(ModItems.CREATIVE_BODY_BAG)) {
+                        if (!player.isCreative() && player instanceof ServerPlayer SP) {
+                            if (context == Corpses.ZOMBIE.id) {
+                                item.getOrCreateTagElement("bodies").putInt("zombie", zombies);
+                            } else if (context == Corpses.SKELETON.id) {
+                                item.getOrCreateTagElement("bodies").putInt("skeleton", skeletons);
+                            } else if (context == Corpses.SPIDER.id) {
+                                item.getOrCreateTagElement("bodies").putInt("spider", spiders);
+                            } else if (context == Corpses.VILLAGER.id) {
+                                item.getOrCreateTagElement("bodies").putInt("villager", villagers);
+                            } else if (context == Corpses.CREEPER.id) {
+                                item.getOrCreateTagElement("bodies").putInt("creeper", creepers);
+                            }
                         }
                     }
                 }
-            }
+        }
         }
     }
 

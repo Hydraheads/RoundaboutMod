@@ -28,6 +28,10 @@ public class BodyBagItem extends Item {
 
     public boolean fillWithBody(ItemStack stack, FallenMob fm){
         if (stack.getItem() instanceof BodyBagItem BBI){
+
+            if (stack.is(ModItems.CREATIVE_BODY_BAG)){
+                return true;
+            }
             int bodyCount;
             CompoundTag $$1 = stack.getOrCreateTagElement("bodies");
             String str = fm.getData();

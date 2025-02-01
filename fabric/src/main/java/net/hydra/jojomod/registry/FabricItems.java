@@ -59,6 +59,7 @@ public class FabricItems {
     public static Item EXECUTIONER_AXE = registerItem("executioner_axe", new ExecutionerAxeItem(Tiers.IRON, 7F, -3.3F, new Item.Properties(),12));
 
     public static Item BODY_BAG = registerItem("body_bag", new BodyBagItem(new Item.Properties().stacksTo(1)));
+    public static Item CREATIVE_BODY_BAG = registerItem("creative_body_bag", new BodyBagItem(new Item.Properties().stacksTo(1)));
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
     public static Item KNIFE_BUNDLE = registerItem("knife_bundle", new KnifeItem(new Item.Properties().stacksTo(16)));
 
@@ -174,6 +175,7 @@ public class FabricItems {
                         entries.accept(EXECUTION_UPGRADE);
                         entries.accept(EXECUTIONER_AXE);
                         entries.accept(BODY_BAG);
+                        entries.accept(CREATIVE_BODY_BAG);
                         entries.accept(HARPOON);
                         entries.accept(KNIFE);
                         entries.accept(KNIFE_BUNDLE);
@@ -310,6 +312,7 @@ public class FabricItems {
         ModItems.NETHERITE_GLAIVE = NETHERITE_GLAIVE;
         ModItems.EXECUTIONER_AXE = EXECUTIONER_AXE;
         ModItems.BODY_BAG = BODY_BAG;
+        ModItems.CREATIVE_BODY_BAG = CREATIVE_BODY_BAG;
         ModItems.HARPOON = HARPOON;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;

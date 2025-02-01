@@ -146,6 +146,7 @@ public class ForgeEvents {
         ModItems.SCISSORS = ForgeItems.SCISSORS.get();
         ModItems.EXECUTIONER_AXE = ForgeItems.EXECUTIONER_AXE.get();
         ModItems.BODY_BAG = ForgeItems.BODY_BAG.get();
+        ModItems.CREATIVE_BODY_BAG = ForgeItems.CREATIVE_BODY_BAG.get();
         ModItems.HARPOON = ForgeItems.HARPOON.get();
         ModItems.KNIFE = ForgeItems.KNIFE.get();
         ModItems.KNIFE_BUNDLE = ForgeItems.KNIFE_BUNDLE.get();

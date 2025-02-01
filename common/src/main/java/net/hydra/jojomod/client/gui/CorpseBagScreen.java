@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
@@ -141,22 +142,24 @@ public class CorpseBagScreen extends Screen {
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             this.currentlyHovered = MobSlot.icon;
         }
-        for (int m = 0; m < corpseIcon.VALUES.length; ++m) {
-            corpseIcon pIcon = corpseIcon.VALUES[m]; //13 44
-            if (pIcon.id != corpseIcon.NONE.id) {
-                int num = 0;
-                if (pIcon == corpseIcon.ZOMBIE){
-                    num = zombies;
-                } else if (pIcon == corpseIcon.SKELETON){
-                    num = skeletons;
-                } else if (pIcon == corpseIcon.CREEPER){
-                    num = creepers;
-                } else if (pIcon == corpseIcon.SPIDER){
-                    num = spiders;
-                } else if (pIcon == corpseIcon.VILLAGER){
-                    num = villagers;
+        if (!stack.is(ModItems.CREATIVE_BODY_BAG)) {
+            for (int m = 0; m < corpseIcon.VALUES.length; ++m) {
+                corpseIcon pIcon = corpseIcon.VALUES[m]; //13 44
+                if (pIcon.id != corpseIcon.NONE.id) {
+                    int num = 0;
+                    if (pIcon == corpseIcon.ZOMBIE) {
+                        num = zombies;
+                    } else if (pIcon == corpseIcon.SKELETON) {
+                        num = skeletons;
+                    } else if (pIcon == corpseIcon.CREEPER) {
+                        num = creepers;
+                    } else if (pIcon == corpseIcon.SPIDER) {
+                        num = spiders;
+                    } else if (pIcon == corpseIcon.VILLAGER) {
+                        num = villagers;
+                    }
+                    guiGraphics.drawString(this.font, "" + num, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
                 }
-                guiGraphics.drawString(this.font, ""+num, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
             }
         }
     }
@@ -288,7 +291,19 @@ public class CorpseBagScreen extends Screen {
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             if (!this.icon.equals(corpseIcon.NONE)) {
+                guiGraphics.setColor(1f, 1f, 1f, 1f);
+                if (
+                        !stack.is(ModItems.CREATIVE_BODY_BAG) &&
+                                ((this.icon.equals(corpseIcon.CREEPER) && creepers <= 0) ||
+                           (this.icon.equals(corpseIcon.SKELETON) && skeletons <= 0) ||
+                           (this.icon.equals(corpseIcon.ZOMBIE) && zombies <= 0) ||
+                           (this.icon.equals(corpseIcon.SPIDER) && spiders <= 0) ||
+                           (this.icon.equals(corpseIcon.VILLAGER) && villagers <= 0))
+                ){
+                    guiGraphics.setColor(0.5f, 0.5f, 0.5f, 0.7f);
+                }
                 this.drawSlot(guiGraphics);
+                guiGraphics.setColor(1f, 1f, 1f, 1f);
                 this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
                 if (this.isSelected) {
                     this.drawSelection(guiGraphics);
