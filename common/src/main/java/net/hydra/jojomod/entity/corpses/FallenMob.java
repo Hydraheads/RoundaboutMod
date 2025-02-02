@@ -67,7 +67,12 @@ public class FallenMob extends Mob {
     }
     public void setController(Entity controller){
         this.controller = controller;
-        this.entityData.set(CONTROLLER, controller.getId());
+        if (controller !=null){
+            this.entityData.set(CONTROLLER, controller.getId());
+        } else {
+            this.entityData.set(CONTROLLER, 0);
+
+        }
     }
     public boolean getTicksThroughPlacer() {
         return this.getEntityData().get(TICKS_THROUGH_PLACER);
@@ -120,13 +125,21 @@ public class FallenMob extends Mob {
     }
     @Override
     public void tick(){
-        if (!getActivated() && !this.level().isClientSide()) {
+        if (!this.level().isClientSide()) {
             IPermaCasting icast = ((IPermaCasting) this.level());
-            LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this,this.getOnPos());
-            if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
-                if (((StandUser)pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ){
-                    setActivated(true);
-                    PJ.addJusticeEntities(this);
+            if (!getActivated()) {
+                LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this, this.getOnPos());
+                if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
+                    if (((StandUser) pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                        setActivated(true);
+                        this.setController(pcaster);
+                        PJ.addJusticeEntities(this);
+                    }
+                }
+            } else {
+                if (controller == null || controller.isRemoved() || !controller.isAlive()){
+                    setActivated(false);
+                    this.setController(null);
                 }
             }
         }

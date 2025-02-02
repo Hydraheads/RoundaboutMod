@@ -30,4 +30,6 @@ public interface IPermaCasting {
 
     boolean roundabout$inPermaCastFogRange(Entity entity);
     boolean roundabout$inPermaCastFogRange(Vec3i pos);
+    LivingEntity roundabout$inPermaCastFogRangeEntity(Entity entity);
+    LivingEntity roundabout$inPermaCastFogRangeEntity(Vec3i pos);
 }

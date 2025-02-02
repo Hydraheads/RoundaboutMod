@@ -262,6 +262,49 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
+    public LivingEntity roundabout$inPermaCastFogRangeEntity(Vec3i pos){
+        if (!((Level) (Object) this).isClientSide) {
+            if (roundabout$PermaCastingEntities == null){
+                roundabout$PermaCastingEntities = ImmutableList.of();
+            }
+            if (!roundabout$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    LivingEntity it = $$1.get(i);
+                    if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                        return it;
+                    }
+                }
+            }
+        } else {
+            if (roundabout$PermaCastingEntitiesClient == null){
+                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            }
+            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    PermanentZoneCastInstance it = $$1.get(i);
+                    if (it.context == PermanentZoneCastInstance.FOG_FIELD &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
+                        Entity it2 = ((Level) (Object) this).getEntity(it.id);
+                        if (it2 instanceof LivingEntity){
+                            return (LivingEntity) it2;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public LivingEntity roundabout$inPermaCastFogRangeEntity(Entity entity){
+        return roundabout$inPermaCastFogRangeEntity(new Vec3i((int) entity.getX(),
+                (int) entity.getY(),
+                (int) entity.getZ()));
+    }
+    @Override
     public boolean roundabout$inPermaCastFogRange(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
             if (roundabout$PermaCastingEntities == null){
@@ -332,7 +375,8 @@ public class PermaCastWorld implements IPermaCasting {
                     List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
                     for (int i = $$1.size() - 1; i >= 0; --i) {
                         LivingEntity it = $$1.get(i);
-                        if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                        if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
+                                MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
                             if (!fm.getTicksThroughPlacer() || it.is(fm.placer)){
                                 if (((StandUser)it).roundabout$getStandPowers() instanceof PowersJustice PJ){
                                     if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceMaxCorpses){
@@ -354,9 +398,9 @@ public class PermaCastWorld implements IPermaCasting {
                         PermanentZoneCastInstance it = $$1.get(i);
                         if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
                             Entity it2 = ((Level) (Object) this).getEntity(it.id);
-                            if (it2 instanceof LivingEntity) {
+                            if (it2 instanceof LivingEntity && ((StandUser) it2).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD) {
                                 if (!fm.getTicksThroughPlacer() || it2.getId() == fm.getPlacer()) {
-                                    if (((StandUser)it).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                                    if (((StandUser)it2).roundabout$getStandPowers() instanceof PowersJustice PJ) {
                                         if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceMaxCorpses) {
                                             return (LivingEntity) it2;
                                         }
