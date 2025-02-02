@@ -52,6 +52,8 @@ import net.hydra.jojomod.util.annotation.*;
     public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
     @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
     public Integer justiceFogAndPilotRange;
+    @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+    public Integer justiceMaxCorpses;
     @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")

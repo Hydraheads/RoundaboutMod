@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
@@ -22,7 +24,6 @@ import net.minecraft.world.level.Level;
 import java.util.UUID;
 
 public class FallenMob extends Mob {
-    public boolean isActivated = false;
     public int ticksThroughPhases = 0;
     public int ticksThroughPlacer = 0;
     public Entity placer;
@@ -35,11 +36,20 @@ public class FallenMob extends Mob {
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> PHASES_FULL =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_ACTIVATED =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     public float getForcedRotation() {
         return this.getEntityData().get(FORCED_ROTATION);
     }
     public void setForcedRotation(float fr){
         this.entityData.set(FORCED_ROTATION, fr);
+    }
+    public boolean getActivated() {
+        return this.getEntityData().get(IS_ACTIVATED);
+    }
+
+    public void setActivated(boolean bool){
+        this.entityData.set(IS_ACTIVATED, bool);
     }
     public boolean getPhasesFull() {
         return this.getEntityData().get(PHASES_FULL);
@@ -74,7 +84,7 @@ public class FallenMob extends Mob {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        $$0.putBoolean("IsActivated",isActivated);
+        $$0.putBoolean("IsActivated",getActivated());
         $$0.putInt("TicksThroughPhases",ticksThroughPhases);
         if (this.placer != null) {
             $$0.putUUID("Placer", this.placer.getUUID());
@@ -86,7 +96,7 @@ public class FallenMob extends Mob {
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        this.isActivated = $$0.getBoolean("IsActivated");
+        this.setActivated($$0.getBoolean("IsActivated"));
         this.ticksThroughPhases = $$0.getInt("TicksThroughPhases");
         UUID $$1;
         UUID $$2;
@@ -110,11 +120,14 @@ public class FallenMob extends Mob {
     }
     @Override
     public void tick(){
-        if (!isActivated) {
+        if (!getActivated() && !this.level().isClientSide()) {
             IPermaCasting icast = ((IPermaCasting) this.level());
             LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this,this.getOnPos());
             if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
-                this.discard();
+                if (((StandUser)pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ){
+                    setActivated(true);
+                    PJ.addJusticeEntities(this);
+                }
             }
         }
         if (ticksThroughPlacer > 0){
@@ -133,7 +146,7 @@ public class FallenMob extends Mob {
                 }
             }
         } else {
-            if (!isActivated && !getTicksThroughPlacer()){
+            if (!getActivated() && !getTicksThroughPlacer()){
                 if (this.level().isClientSide){
 
                     float fr = this.getForcedRotation();
@@ -180,7 +193,7 @@ public class FallenMob extends Mob {
 
     @Override
     public void playerTouch(Player $$0) {
-        if (!isActivated && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
+        if (!getActivated() && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
             if (!this.level().isClientSide) {
                 if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getMainHandItem(),this)){
@@ -204,6 +217,7 @@ public class FallenMob extends Mob {
         this.entityData.define(CONTROLLER, -1);
         this.entityData.define(TICKS_THROUGH_PLACER, false);
         this.entityData.define(PHASES_FULL, false);
+        this.entityData.define(IS_ACTIVATED, false);
         this.entityData.define(FORCED_ROTATION, 0F);
     }
     protected FallenMob(EntityType<? extends Mob> $$0, Level $$1) {

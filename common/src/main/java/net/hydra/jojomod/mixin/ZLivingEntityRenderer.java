@@ -72,7 +72,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             }
         } else if ($$0 instanceof FallenMob FM){
             /*fog corpse / corpse control*/
-            if (!FM.isActivated){
+            if (!FM.getActivated()){
                 int tickTock = FM.ticksThroughPhases;
                 if (FM.getPhasesFull()){
                     tickTock = 10;

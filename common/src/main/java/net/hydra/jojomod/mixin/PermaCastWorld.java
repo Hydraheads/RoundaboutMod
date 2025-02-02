@@ -3,9 +3,11 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Vec3i;
@@ -320,7 +322,7 @@ public class PermaCastWorld implements IPermaCasting {
 
     @Override
     public LivingEntity roundabout$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos){
-        if (!fm.isActivated && fm.getPhasesFull()) {
+        if (!fm.getActivated() && fm.getPhasesFull()) {
             if (!((Level) (Object) this).isClientSide) {
 
                 if (roundabout$PermaCastingEntities == null) {
@@ -332,7 +334,11 @@ public class PermaCastWorld implements IPermaCasting {
                         LivingEntity it = $$1.get(i);
                         if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
                             if (!fm.getTicksThroughPlacer() || it.is(fm.placer)){
-                                return it;
+                                if (((StandUser)it).roundabout$getStandPowers() instanceof PowersJustice PJ){
+                                    if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceMaxCorpses){
+                                        return it;
+                                    }
+                                }
                             }
                         }
                     }
@@ -350,7 +356,11 @@ public class PermaCastWorld implements IPermaCasting {
                             Entity it2 = ((Level) (Object) this).getEntity(it.id);
                             if (it2 instanceof LivingEntity) {
                                 if (!fm.getTicksThroughPlacer() || it2.getId() == fm.getPlacer()) {
-                                    return (LivingEntity) it2;
+                                    if (((StandUser)it).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                                        if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceMaxCorpses) {
+                                            return (LivingEntity) it2;
+                                        }
+                                    }
                                 }
                             }
                         }
