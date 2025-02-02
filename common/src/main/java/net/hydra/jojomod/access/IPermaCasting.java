@@ -1,6 +1,7 @@
 package net.hydra.jojomod.access;
 
 import com.google.common.collect.ImmutableList;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +17,7 @@ public interface IPermaCasting {
     boolean roundabout$isPermaCastingEntity(LivingEntity entity);
     LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos);
     LivingEntity roundabout$inPermaCastRangeEntity(Entity entity);
+    LivingEntity roundabout$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos);
     PermanentZoneCastInstance roundabout$getPermaCastingInstanceClient(Vec3 pos);
     boolean roundabout$inPermaCastRange(Entity entity);
     boolean roundabout$inPermaCastRange(Vec3i pos);

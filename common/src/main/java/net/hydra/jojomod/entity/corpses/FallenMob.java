@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.sound.ModSounds;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -108,6 +110,13 @@ public class FallenMob extends Mob {
     }
     @Override
     public void tick(){
+        if (!isActivated) {
+            IPermaCasting icast = ((IPermaCasting) this.level());
+            LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this,this.getOnPos());
+            if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
+                this.discard();
+            }
+        }
         if (ticksThroughPlacer > 0){
             ticksThroughPlacer--;
             if (ticksThroughPlacer <= 0){

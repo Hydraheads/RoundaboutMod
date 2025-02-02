@@ -537,6 +537,9 @@ public class PowersJustice extends DashPreset {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
+    @Override
+    public void tickPermaCast(){
+    }
     public void tickJusticeInput(){
 
     }

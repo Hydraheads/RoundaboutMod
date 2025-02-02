@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -317,6 +318,48 @@ public class PermaCastWorld implements IPermaCasting {
         return null;
     }
 
+    @Override
+    public LivingEntity roundabout$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos){
+        if (!fm.isActivated && fm.getPhasesFull()) {
+            if (!((Level) (Object) this).isClientSide) {
+
+                if (roundabout$PermaCastingEntities == null) {
+                    roundabout$PermaCastingEntities = ImmutableList.of();
+                }
+                if (!roundabout$PermaCastingEntities.isEmpty()) {
+                    List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+                    for (int i = $$1.size() - 1; i >= 0; --i) {
+                        LivingEntity it = $$1.get(i);
+                        if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                            if (!fm.getTicksThroughPlacer() || it.is(fm.placer)){
+                                return it;
+                            }
+                        }
+                    }
+                }
+            } else {
+
+                if (roundabout$PermaCastingEntitiesClient == null) {
+                    roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+                }
+                if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
+                    List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+                    for (int i = $$1.size() - 1; i >= 0; --i) {
+                        PermanentZoneCastInstance it = $$1.get(i);
+                        if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
+                            Entity it2 = ((Level) (Object) this).getEntity(it.id);
+                            if (it2 instanceof LivingEntity) {
+                                if (!fm.getTicksThroughPlacer() || it2.getId() == fm.getPlacer()) {
+                                    return (LivingEntity) it2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
     @Override
     public LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
