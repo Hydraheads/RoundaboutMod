@@ -140,6 +140,13 @@ public class FallenMob extends Mob {
                 if (controller == null || controller.isRemoved() || !controller.isAlive()){
                     setActivated(false);
                     this.setController(null);
+                } else {
+                    if (((StandUser) controller).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                        if (!PJ.isCastingFog()){
+                            setActivated(false);
+                            this.setController(null);
+                        }
+                    }
                 }
             }
         }

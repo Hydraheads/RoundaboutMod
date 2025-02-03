@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
@@ -10,9 +9,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -44,7 +43,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +74,32 @@ public class PowersJustice extends DashPreset {
     @Override
     public boolean isMiningStand() {
         return false;
+    }
+    public void cycleThroughJusticeEntities(){
+        if (fogControlledEntities == null){
+            fogControlledEntities = new ArrayList<>();
+        }
+        List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
+        if (!fogControlledEntities2.isEmpty()){
+            for (LivingEntity value : fogControlledEntities2) {
+                if (value.isRemoved() || !value.isAlive()) {
+                    Roundabout.LOGGER.info("1");
+                    removeJusticeEntities(value);
+                } else {
+                    if (value instanceof FallenMob fm){
+                        if (fm.controller != null && fm.controller.is(this.getSelf())){
+
+                        } else {
+                            removeJusticeEntities(value);
+                            Roundabout.LOGGER.info("2");
+                        }
+                    } else {
+                        removeJusticeEntities(value);
+                        Roundabout.LOGGER.info("3");
+                    }
+                }
+            }
+        }
     }
     public List<LivingEntity> queryJusticeEntities(){
         if (fogControlledEntities == null){
@@ -539,6 +563,7 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public void tickPermaCast(){
+        cycleThroughJusticeEntities();
     }
     public void tickJusticeInput(){
 
@@ -616,5 +641,12 @@ public class PowersJustice extends DashPreset {
             }
         }
         return true;
+    }
+    public boolean isCastingFog(){
+        IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+        if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+            return true;
+        }
+        return false;
     }
 }
