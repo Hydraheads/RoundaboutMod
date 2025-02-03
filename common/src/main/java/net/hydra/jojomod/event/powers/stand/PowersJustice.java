@@ -83,7 +83,6 @@ public class PowersJustice extends DashPreset {
         if (!fogControlledEntities2.isEmpty()){
             for (LivingEntity value : fogControlledEntities2) {
                 if (value.isRemoved() || !value.isAlive()) {
-                    Roundabout.LOGGER.info("1");
                     removeJusticeEntities(value);
                 } else {
                     if (value instanceof FallenMob fm){
@@ -91,11 +90,9 @@ public class PowersJustice extends DashPreset {
 
                         } else {
                             removeJusticeEntities(value);
-                            Roundabout.LOGGER.info("2");
                         }
                     } else {
                         removeJusticeEntities(value);
-                        Roundabout.LOGGER.info("3");
                     }
                 }
             }
