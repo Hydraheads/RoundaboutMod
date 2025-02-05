@@ -72,24 +72,22 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             }
         } else if ($$0 instanceof FallenMob FM){
             /*fog corpse / corpse control*/
-            if (!FM.getActivated()){
-                int tickTock = FM.ticksThroughPhases;
-                if (FM.getPhasesFull()){
-                    tickTock = 10;
-                }
-                if ($$0 instanceof FallenSpider FS){
-
-                    float yes = Math.min(10,tickTock+ $$4);
-                    float $$5 = (yes /10);
-                    $$1.mulPose(Axis.XP.rotationDegrees($$5 * 180));
-                    $$1.translate(0,-$$5*(1*FM.getBbHeight()),0);
-                } else {
-
-                    float yes = Math.min(10,tickTock+ $$4);
-                    float $$5 = (yes /10);
-                    $$1.mulPose(Axis.XP.rotationDegrees($$5 * 90));
-                    $$1.translate(0,-$$5*(0.5*FM.getBbHeight()),-($$5*0.15));
-                }
+            int tickTock = FM.ticksThroughPhases;
+            if (FM.getPhasesFull()){
+                tickTock = 10;
+                FM.ticksThroughPhases = 10;
+            }
+            float yes = Math.min(10, tickTock + $$4);
+            if (FM.getActivated()) {
+                yes = Math.max(0,tickTock- $$4);
+            }
+            float $$5 = (yes /10);
+            if ($$0 instanceof FallenSpider FS){
+                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 180));
+                $$1.translate(0,-$$5*(1*FM.getBbHeight()),0);
+            } else {
+                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 90));
+                $$1.translate(0,-$$5*(0.5*FM.getBbHeight()),-($$5*0.15));
             }
         }
     }

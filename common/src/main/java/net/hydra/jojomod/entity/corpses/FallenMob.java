@@ -28,6 +28,7 @@ public class FallenMob extends Mob {
     public int ticksThroughPlacer = 0;
     public Entity placer;
     public Entity controller;
+    public int spinTicks = 0;
     private static final EntityDataAccessor<Boolean> TICKS_THROUGH_PLACER =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> CONTROLLER =
@@ -56,6 +57,7 @@ public class FallenMob extends Mob {
     }
 
     public void setPhasesFull(boolean bool){
+        ticksThroughPhases = 10;
         this.entityData.set(PHASES_FULL, bool);
     }
     public int getController() {
@@ -103,6 +105,10 @@ public class FallenMob extends Mob {
     public void readAdditionalSaveData(CompoundTag $$0){
         this.setActivated($$0.getBoolean("IsActivated"));
         this.ticksThroughPhases = $$0.getInt("TicksThroughPhases");
+
+        if (ticksThroughPhases >= 10) {
+            setPhasesFull(true);
+        }
         UUID $$1;
         UUID $$2;
         if ($$0.hasUUID("Placer")) {
@@ -128,12 +134,14 @@ public class FallenMob extends Mob {
         if (!this.level().isClientSide()) {
             IPermaCasting icast = ((IPermaCasting) this.level());
             if (!getActivated()) {
-                LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this, this.getOnPos());
-                if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
-                    if (((StandUser) pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ) {
-                        setActivated(true);
-                        this.setController(pcaster);
-                        PJ.addJusticeEntities(this);
+                if (ticksThroughPhases >= 10) {
+                    LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this, this.getOnPos());
+                    if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
+                        if (((StandUser) pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                            setActivated(true);
+                            this.setController(pcaster);
+                            PJ.addJusticeEntities(this);
+                        }
                     }
                 }
             } else {
@@ -157,53 +165,72 @@ public class FallenMob extends Mob {
             }
         }
 
-        if (!getPhasesFull()){
-            if (ticksThroughPhases < 10){
-                ticksThroughPhases++;
-            } else {
-                if (!this.level().isClientSide()) {
-                    setPhasesFull(true);
-                }
-            }
-        } else {
-            if (!getActivated() && !getTicksThroughPlacer()){
-                if (this.level().isClientSide){
 
-                    float fr = this.getForcedRotation();
-                    if (fr != 0){
-                        this.setYBodyRot(fr);
-                        this.yBodyRotO = fr;
-                        this.setYRot(fr);
-                        this.xRotO = fr;
-                    }
 
-                    if (ClientUtil.checkIfClientHoldingBag()) {
-                        if (this.tickCount % 5 == 0) {
-                            for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
-                                this.level()
-                                        .addParticle(
-                                                ParticleTypes.HAPPY_VILLAGER,
-                                                this.getRandomX(1.3),
-                                                this.getY() + this.getBbHeight() / 6,
-                                                this.getRandomZ(1.3),
-                                                0,
-                                                0.15,
-                                                0
-                                        );
-                            }
+            if (!getActivated()){
+                if (!getPhasesFull()) {
+                    if (ticksThroughPhases < 10) {
+                        ticksThroughPhases++;
+                    } else {
+                        if (!this.level().isClientSide()) {
+                            setPhasesFull(true);
                         }
                     }
                 } else {
-                    float fr = this.getForcedRotation();
-                    if (fr != 0){
-                        this.setYBodyRot(fr);
-                        this.yBodyRotO = fr;
-                        this.setYRot(fr);
-                        this.xRotO = fr;
+                    if (!getTicksThroughPlacer()) {
+                        if (this.level().isClientSide) {
+
+                            float fr = this.getForcedRotation();
+                            if (fr != 0 && spinTicks < 100) {
+                                this.setYBodyRot(fr);
+                                this.yBodyRotO = fr;
+                                this.setYRot(fr);
+                                this.yRotO = fr;
+                                spinTicks++;
+                            } else {
+                                spinTicks=0;
+                                this.setForcedRotation(0);
+                            }
+
+                            if (ClientUtil.checkIfClientHoldingBag()) {
+                                if (this.tickCount % 5 == 0) {
+                                    for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
+                                        this.level()
+                                                .addParticle(
+                                                        ParticleTypes.HAPPY_VILLAGER,
+                                                        this.getRandomX(1.3),
+                                                        this.getY() + this.getBbHeight() / 6,
+                                                        this.getRandomZ(1.3),
+                                                        0,
+                                                        0.15,
+                                                        0
+                                                );
+                                    }
+                                }
+                            }
+                        } else {
+                            float fr = this.getForcedRotation();
+                            if (fr != 0 && spinTicks < 100) {
+                                this.setYBodyRot(fr);
+                                this.yBodyRotO = fr;
+                                this.setYRot(fr);
+                                this.yRotO = fr;
+                                spinTicks++;
+                            } else {
+                                spinTicks=0;
+                                this.setForcedRotation(0);
+                            }
+                        }
                     }
                 }
+            } else {
+                if (ticksThroughPhases > 0){
+                    if (ticksThroughPhases >= 10){
+                        setPhasesFull(false);
+                    }
+                    ticksThroughPhases--;
+                }
             }
-        }
         super.tick();
     }
 
