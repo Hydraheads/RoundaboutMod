@@ -2165,7 +2165,12 @@ public class StandPowers {
 
     /**The Sound Event to cancel when your barrage is canceled*/
 
-    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
+
+    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
+        if (isVoice && this.getSelf() instanceof Player PE &&
+                ((IPlayerEntity) PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
+            return;
+        }
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
             Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
@@ -2186,6 +2191,10 @@ public class StandPowers {
                 }
             }
         }
+    }
+
+    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
+        playSoundsIfNearby(soundNo,range,onSelf,false);
     }
     /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
     public void playBarrageCrySound(){
