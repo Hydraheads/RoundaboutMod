@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -155,14 +156,15 @@ public class MainUtil {
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
         if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
-        if (player.getInventory().contains(stack)) {
-            ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+        if (player.getInventory().contains(stack) || stack.is(ModItems.CREATIVE_BODY_BAG)) {
+            ItemStack item;
             int zombies = 1;
             int skeletons = 1;
             int spiders = 1;
             int villagers = 1;
             int creepers = 1;
             if (!stack.is(ModItems.CREATIVE_BODY_BAG)){
+                item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
                 CompoundTag $$1 = item.getOrCreateTagElement("bodies");
                 zombies = $$1.getInt("zombie");
                 skeletons = $$1.getInt("skeleton");
@@ -209,6 +211,7 @@ public class MainUtil {
                     fm.setYBodyRot(player.yBodyRot % 360);
                     player.level().addFreshEntity(fm);
                     if (!stack.is(ModItems.CREATIVE_BODY_BAG)) {
+                        item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
                         if (!player.isCreative() && player instanceof ServerPlayer SP) {
                             if (context == Corpses.ZOMBIE.id) {
                                 item.getOrCreateTagElement("bodies").putInt("zombie", zombies);
