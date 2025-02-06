@@ -22,6 +22,8 @@ public class ClientConfig {
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
     public Boolean showCreativeTextOnWorthinessArrow;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean pressingAbilityKeysSummonsStands;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")

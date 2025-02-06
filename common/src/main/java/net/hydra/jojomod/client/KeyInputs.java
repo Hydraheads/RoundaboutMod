@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.inventory.HorseInventoryScreen;
@@ -57,7 +58,8 @@ public class KeyInputs {
         if (keyIsDown) {
             if (!((StandUser) player).roundabout$getStandDisc().isEmpty() && !((StandUser) player).roundabout$getActive()) {
                 if (((StandUser) player).roundabout$getStandPowers().canSummonStand() && ((StandUser) player).roundabout$getSealedTicks() <= -1) {
-                    if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+                    if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0 &&
+                            ConfigManager.getClientConfig().pressingAbilityKeysSummonsStands) {
                         ((StandUser) player).roundabout$setActive(true);
                         ((StandUser) player).roundabout$setSummonCD(2);
                         ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON);
