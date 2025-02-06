@@ -678,6 +678,7 @@ public class StandPowers {
     public static final byte TIME_STOP_NOISE_7 = TIME_STOP_NOISE+6;
     public static final byte TIME_STOP_NOISE_8 = TIME_STOP_NOISE+7;
     public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
+    public static final byte TIME_STOP_NOISE_10 = TIME_STOP_NOISE+9;
     public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+13;
     public static final byte TIME_RESUME_NOISE = 60;
     public static final byte TIME_RESUME_NOISE_2 = 61;

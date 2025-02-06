@@ -1134,14 +1134,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.STAND_THEWORLD_MUDA1_SOUND_EVENT;
         } else if (soundChoice == ASSAULT_NOISE){
             return ModSounds.THE_WORLD_ASSAULT_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE) {
-            return ModSounds.TIME_STOP_THE_WORLD_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_2) {
-            return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_3) {
-            return ModSounds.TIME_STOP_THE_WORLD3_EVENT;
         } else if (soundChoice == TIME_STOP_CHARGE){
             return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
