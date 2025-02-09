@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -26,10 +27,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 
@@ -106,13 +111,37 @@ public class ClientUtil {
             if (powers.isPiloting()) {
                 LivingEntity ent = powers.getPilotingStand();
                 if (ent != null && powers instanceof PowersJustice) {
-                    Entity TE = MainUtil.rayCastEntity(ent,100);
+                    Entity TE = MainUtil.getTargetEntity(ent,100,10);
                     if (TE != null && TE.is(entity)) {
-                        if (TE.is(player)){
-                            return 16701501;
+                        Vec3 vec3d = ent.getEyePosition(0);
+                        Vec3 vec3d2 = ent.getViewVector(0);
+                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                        BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                        if ((blockHit.distanceTo(ent)-1) < ent.distanceToSqr(entity)){
                         } else {
-                            return 14233126;
+                            if (TE.is(player)){
+                                return 16701501;
+                            } else {
+                                if (TE instanceof FallenMob fm && fm.getController() == player.getId()){
+                                    if (fm.getSelected()){
+                                        return 1504180;
+                                    } else {
+                                        return 8385147;
+                                    }
+
+                                    //Blue -> 3972095
+                                    //Green -> 8385147
+                                }
+                                return 14233126;
+                            }
                         }
+
+                        if (TE instanceof FallenMob fm){
+                            if (fm.getSelected() && fm.getController() == player.getId()){
+                                return 3972095;
+                            }
+                        }
+
                         // 3847130 corpse
                     }
                 }

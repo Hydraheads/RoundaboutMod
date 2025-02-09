@@ -850,6 +850,9 @@ public class MainUtil {
     }
 
     public static Entity getTargetEntity(LivingEntity User, float distance){
+        return getTargetEntity(User,distance,25);
+    }
+    public static Entity getTargetEntity(LivingEntity User, float distance, int angle){
         /*First, attempts to hit what you are looking at*/
             getDistanceOut(User, distance, false);
         Entity targetEntity = rayCastEntity(User,distance);
@@ -858,7 +861,7 @@ public class MainUtil {
             float halfReach = (float) (distance*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = AttackHitboxNear(User, GrabHitbox(User, DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distance),distance);
+                    pointVec.z, halfReach, halfReach, halfReach), distance, angle),distance);
         }
         return targetEntity;
     }
@@ -920,14 +923,13 @@ public class MainUtil {
         return false;
     }
 
-    public static List<Entity> GrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+    public static List<Entity> GrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, int angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
             if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())){
                 hitEntities.remove(value);
             } else {
-                int angle = 25;
                 if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
                     hitEntities.remove(value);
                 }
@@ -937,7 +939,11 @@ public class MainUtil {
     }
 
     public static int getTargetEntityId(LivingEntity User, float distance){
-        Entity targetEntity = getTargetEntity(User, distance);
+        return getTargetEntityId(User,distance,25);
+    }
+
+    public static int getTargetEntityId(LivingEntity User, float distance, int angle){
+        Entity targetEntity = getTargetEntity(User, distance, angle);
         int id;
         if (targetEntity != null) {
             id = targetEntity.getId();

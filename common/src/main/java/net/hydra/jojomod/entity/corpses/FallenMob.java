@@ -39,18 +39,27 @@ public class FallenMob extends Mob {
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_ACTIVATED =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SELECTED =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     public float getForcedRotation() {
         return this.getEntityData().get(FORCED_ROTATION);
     }
     public void setForcedRotation(float fr){
         this.entityData.set(FORCED_ROTATION, fr);
     }
+
     public boolean getActivated() {
         return this.getEntityData().get(IS_ACTIVATED);
     }
-
     public void setActivated(boolean bool){
         this.entityData.set(IS_ACTIVATED, bool);
+    }
+
+    public boolean getSelected() {
+        return this.getEntityData().get(SELECTED);
+    }
+    public void setSelected(boolean bool){
+        this.entityData.set(SELECTED, bool);
     }
     public boolean getPhasesFull() {
         return this.getEntityData().get(PHASES_FULL);
@@ -266,6 +275,7 @@ public class FallenMob extends Mob {
         this.entityData.define(PHASES_FULL, false);
         this.entityData.define(IS_ACTIVATED, false);
         this.entityData.define(FORCED_ROTATION, 0F);
+        this.entityData.define(SELECTED, false);
     }
     protected FallenMob(EntityType<? extends Mob> $$0, Level $$1) {
         super($$0, $$1);

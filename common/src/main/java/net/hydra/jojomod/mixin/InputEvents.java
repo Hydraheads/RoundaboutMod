@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.client.gui.PauseTSScreen;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
@@ -45,7 +46,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RespawnAnchorBlock;
@@ -91,9 +94,22 @@ public abstract class InputEvents implements IInputEvents {
                         ent.setXRot(camera.getXRot());
                         ent.setYHeadRot(ent.getYRot());
                     }
-                    Entity TE = MainUtil.rayCastEntity(ent,100);
+                    if ($$0 instanceof FallenMob fm){
+                        if (fm.getSelected() && fm.getController() == player.getId()){
+                            ci.setReturnValue(true);
+                            return;
+                        }
+                    }
+                    Entity TE = MainUtil.getTargetEntity(ent,100,10);
                     if (TE != null && TE.is($$0)) {
-                        ci.setReturnValue(true);
+                        Vec3 vec3d = ent.getEyePosition(0);
+                        Vec3 vec3d2 = ent.getViewVector(0);
+                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                        BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                        if ((blockHit.distanceTo(ent)-1) < ent.distanceToSqr(TE)){
+                        } else {
+                            ci.setReturnValue(true);
+                        }
                         return;
                     }
                 }

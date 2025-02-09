@@ -181,6 +181,8 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$setShadow(boolean shadow){
         roundabout$shadow = shadow;
     }
+
+    /**Highlight color with Justice piloting*/
     @Inject(method = "getTeamColor()I", at = @At("HEAD"), cancellable = true)
     public void roundabout$getTeamColor(CallbackInfoReturnable<Integer> cir){
         if (this.level.isClientSide()){
