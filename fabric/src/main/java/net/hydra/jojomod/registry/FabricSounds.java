@@ -25,6 +25,8 @@ public class FabricSounds {
         addSound(ModSounds.PUNCH_3_SOUND_ID, ModSounds.PUNCH_3_SOUND_EVENT);
         addSound(ModSounds.PUNCH_4_SOUND_ID, ModSounds.PUNCH_4_SOUND_EVENT);
         addSound(ModSounds.BODY_BAG_ID, ModSounds.BODY_BAG_EVENT);
+        addSound(ModSounds.JUSTICE_SELECT_ID, ModSounds.JUSTICE_SELECT_EVENT);
+        addSound(ModSounds.JUSTICE_SELECT_ATTACK_ID, ModSounds.JUSTICE_SELECT_ATTACK_EVENT);
         addSound(ModSounds.STAND_GUARD_SOUND_ID, ModSounds.STAND_GUARD_SOUND_EVENT);
         addSound(ModSounds.MELEE_GUARD_SOUND_ID, ModSounds.MELEE_GUARD_SOUND_EVENT);
         addSound(ModSounds.HIT_1_SOUND_ID, ModSounds.HIT_1_SOUND_EVENT);

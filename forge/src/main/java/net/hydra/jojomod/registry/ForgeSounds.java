@@ -51,6 +51,10 @@ public class ForgeSounds {
             register(ModSounds.PUNCH_4_SOUND, ModSounds.PUNCH_4_SOUND_ID);
     public static final RegistryObject<SoundEvent> BODY_BAG_EVENT =
             register(ModSounds.BODY_BAG, ModSounds.BODY_BAG_ID);
+    public static final RegistryObject<SoundEvent> JUSTICE_SELECT_EVENT =
+            register(ModSounds.JUSTICE_SELECT, ModSounds.JUSTICE_SELECT_ID);
+    public static final RegistryObject<SoundEvent> JUSTICE_SELECT_ATTACK_EVENT =
+            register(ModSounds.JUSTICE_SELECT_ATTACK, ModSounds.JUSTICE_SELECT_ATTACK_ID);
     public static final RegistryObject<SoundEvent> DODGE_EVENT =
             register(ModSounds.DODGE, ModSounds.DODGE_ID);
     public static final RegistryObject<SoundEvent> IMPALE_CHARGE =

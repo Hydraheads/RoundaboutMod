@@ -29,6 +29,18 @@
       "roundabout:summon_justice_2"
     ]
   },
+  "justice_select": {
+    "subtitle": "sounds.roundabout.justice_select",
+    "sounds": [
+      "roundabout:justice_select"
+    ]
+  },
+  "justice_select_attack": {
+    "subtitle": "sounds.roundabout.justice_select_attack",
+    "sounds": [
+      "roundabout:justice_select_attack"
+    ]
+  },
   "levelup": {
     "subtitle": "sounds.roundabout.levelup",
     "sounds": [

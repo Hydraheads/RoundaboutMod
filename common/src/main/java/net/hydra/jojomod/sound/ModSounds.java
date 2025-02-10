@@ -165,6 +165,14 @@ public class ModSounds {
     public static final ResourceLocation BODY_BAG_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BODY_BAG);
     public static SoundEvent BODY_BAG_EVENT = SoundEvent.createVariableRangeEvent(BODY_BAG_ID);
 
+    public static final String JUSTICE_SELECT = "justice_select";
+    public static final ResourceLocation JUSTICE_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JUSTICE_SELECT);
+    public static SoundEvent JUSTICE_SELECT_EVENT = SoundEvent.createVariableRangeEvent(JUSTICE_SELECT_ID);
+
+    public static final String JUSTICE_SELECT_ATTACK = "justice_select_attack";
+    public static final ResourceLocation JUSTICE_SELECT_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JUSTICE_SELECT_ATTACK);
+    public static SoundEvent JUSTICE_SELECT_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(JUSTICE_SELECT_ATTACK_ID);
+
     public static final String DODGE = "dodge";
     public static final ResourceLocation DODGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DODGE);
     public static SoundEvent DODGE_EVENT = SoundEvent.createVariableRangeEvent(DODGE_ID);

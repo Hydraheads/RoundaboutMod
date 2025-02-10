@@ -34,6 +34,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -134,6 +135,40 @@ public class PowersJustice extends DashPreset {
             }
         }
     }
+
+    @Override
+    public void pilotInputAttack(){
+        LivingEntity ent = getPilotingStand();
+        if (ent != null) {
+            Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
+            if (TE != null) {
+                Vec3 vec3d = ent.getEyePosition(0);
+                Vec3 vec3d2 = ent.getViewVector(0);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
+                } else {
+                    if (TE instanceof FallenMob fm && fm.getController() == this.self.getId()) {
+                        ent.playSound(ModSounds.JUSTICE_SELECT_EVENT, 1F, 1.0F);
+                       ModPacketHandler.PACKET_ACCESS.intToServerPacket(fm.getId(),
+                                    PacketDataIndex.INT_STAND_ATTACK);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (target instanceof FallenMob fm) {
+            if (fm.getSelected()){
+                fm.setSelected(false);
+            } else {
+                fm.setSelected(true);
+            }
+        }
+    }
+
     public void tickPower() {
 
         if (this.self instanceof Player PL){

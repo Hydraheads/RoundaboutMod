@@ -350,6 +350,8 @@ public class StandPowers {
         }
     }
 
+    public void pilotInputAttack(){
+    }
     public int getPilotMode(){
         return 2;
     }

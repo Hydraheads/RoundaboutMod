@@ -169,6 +169,7 @@ public abstract class InputEvents implements IInputEvents {
             StandPowers powers = standComp.roundabout$getStandPowers();
             if (powers.isPiloting()){
                 ci.setReturnValue(false);
+                powers.pilotInputAttack();
                 return;
             }
 

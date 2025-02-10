@@ -124,9 +124,9 @@ public class ClientUtil {
                             } else {
                                 if (TE instanceof FallenMob fm && fm.getController() == player.getId()){
                                     if (fm.getSelected()){
-                                        return 1504180;
+                                        return 1503183;
                                     } else {
-                                        return 8385147;
+                                        return 1503059;
                                     }
 
                                     //Blue -> 3972095
@@ -136,13 +136,13 @@ public class ClientUtil {
                             }
                         }
 
-                        if (TE instanceof FallenMob fm){
-                            if (fm.getSelected() && fm.getController() == player.getId()){
-                                return 3972095;
-                            }
-                        }
 
                         // 3847130 corpse
+                    }
+                    if (entity instanceof FallenMob fm){
+                        if (fm.getSelected() && fm.getController() == player.getId()){
+                            return 3972095;
+                        }
                     }
                 }
             }

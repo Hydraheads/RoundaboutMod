@@ -143,6 +143,9 @@ public class FallenMob extends Mob {
         if (!this.level().isClientSide()) {
             IPermaCasting icast = ((IPermaCasting) this.level());
             if (!getActivated()) {
+                if (this.getSelected()){
+                    this.setSelected(false);
+                }
                 if (ticksThroughPhases >= 10) {
                     LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this, this.getOnPos());
                     if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
