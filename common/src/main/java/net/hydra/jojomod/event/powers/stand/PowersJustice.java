@@ -149,9 +149,13 @@ public class PowersJustice extends DashPreset {
                 if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
                 } else {
                     if (TE instanceof FallenMob fm && fm.getController() == this.self.getId()) {
-                        ent.playSound(ModSounds.JUSTICE_SELECT_EVENT, 1F, 1.0F);
+                        this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(fm.getId(),
                                     PacketDataIndex.INT_STAND_ATTACK);
+                    } else {
+                        this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
+                                PacketDataIndex.INT_STAND_ATTACK);
                     }
                 }
             }
@@ -160,6 +164,37 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public void handleStandAttack(Player player, Entity target){
+        if (target instanceof FallenMob fm && fm.getController() == this.self.getId()) {
+            if (fm.getSelected()){
+                fm.setSelected(false);
+            } else {
+                fm.setSelected(true);
+            }
+        } else {
+            if (fogControlledEntities == null){
+                fogControlledEntities = new ArrayList<>();
+            }
+            List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
+            if (!fogControlledEntities2.isEmpty()) {
+                for (LivingEntity value : fogControlledEntities2) {
+                    if (value.isRemoved() || !value.isAlive()) {
+                    } else {
+                        if (value instanceof FallenMob fm && target instanceof LivingEntity LE) {
+                            if (fm.controller != null && fm.controller.is(this.getSelf())) {
+                                if (LE instanceof Player pl){
+                                    fm.setLastHurtByPlayer(pl);
+                                }
+                                fm.setLastHurtByMob(LE);
+                                fm.setTarget(LE);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @Override
+    public void handleStandAttack2(Player player, Entity target){
         if (target instanceof FallenMob fm) {
             if (fm.getSelected()){
                 fm.setSelected(false);
@@ -169,6 +204,25 @@ public class PowersJustice extends DashPreset {
         }
     }
 
+    @Override
+    public void pilotInputInteract(){
+        LivingEntity ent = getPilotingStand();
+        if (ent != null) {
+            Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
+            if (TE != null) {
+                Vec3 vec3d = ent.getEyePosition(0);
+                Vec3 vec3d2 = ent.getViewVector(0);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
+                } else {
+                    if (TE instanceof FallenMob fm && fm.getController() == this.self.getId()) {
+                        ent.playSound(ModSounds.JUSTICE_SELECT_EVENT, 1F, 1.0F);
+                    }
+                }
+            }
+        }
+    }
     public void tickPower() {
 
         if (this.self instanceof Player PL){

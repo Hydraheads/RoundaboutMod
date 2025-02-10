@@ -399,6 +399,10 @@ public abstract class InputEvents implements IInputEvents {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
+            if (powers.isPiloting()){
+                powers.pilotInputAttack();
+                return;
+            }
             HitResult $$47 = null;
             if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
                 if (level != null) {
