@@ -3,13 +3,14 @@ package net.hydra.jojomod.entity.corpses;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.Level;
 
 public class FallenSkeleton extends FallenMob implements RangedAttackMob  {
-    public FallenSkeleton(EntityType<? extends Mob> $$0, Level $$1) {
+    public FallenSkeleton(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
     }
 

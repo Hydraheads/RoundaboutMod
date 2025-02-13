@@ -14,20 +14,29 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class FallenMob extends Mob {
+public class FallenMob extends PathfinderMob implements NeutralMob {
     public int ticksThroughPhases = 0;
     public int ticksThroughPlacer = 0;
     public Entity placer;
     public Entity controller;
+    public LivingEntity corpseTarget;
     public int spinTicks = 0;
     private static final EntityDataAccessor<Boolean> TICKS_THROUGH_PLACER =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
@@ -96,6 +105,17 @@ public class FallenMob extends Mob {
     }
     public void setPlacer(Entity controller){
         this.placer = controller;
+    }
+
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
+        this.addBehaviourGoals();
+    }
+
+    protected void addBehaviourGoals() {
+        this.targetSelector.addGoal(1, new CorpseTargetGoal(this));
     }
 
     @Override
@@ -280,7 +300,37 @@ public class FallenMob extends Mob {
         this.entityData.define(FORCED_ROTATION, 0F);
         this.entityData.define(SELECTED, false);
     }
-    protected FallenMob(EntityType<? extends Mob> $$0, Level $$1) {
+    protected FallenMob(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
+    }
+
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
+    private int remainingPersistentAngerTime;
+    @Nullable
+    private UUID persistentAngerTarget;
+    @Override
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+    }
+
+    @Override
+    public void setRemainingPersistentAngerTime(int $$0) {
+        this.remainingPersistentAngerTime = $$0;
+    }
+
+    @Override
+    public int getRemainingPersistentAngerTime() {
+        return this.remainingPersistentAngerTime;
+    }
+
+    @Override
+    public void setPersistentAngerTarget(@javax.annotation.Nullable UUID $$0) {
+        this.persistentAngerTarget = $$0;
+    }
+
+    @Nullable
+    @Override
+    public UUID getPersistentAngerTarget() {
+        return this.persistentAngerTarget;
     }
 }

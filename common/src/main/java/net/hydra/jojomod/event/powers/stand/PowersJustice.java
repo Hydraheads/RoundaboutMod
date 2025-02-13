@@ -152,7 +152,7 @@ public class PowersJustice extends DashPreset {
                         this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(fm.getId(),
                                     PacketDataIndex.INT_STAND_ATTACK);
-                    } else {
+                    } else if (!ClientUtil.isPlayer(TE)){
                         this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
                         ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
                                 PacketDataIndex.INT_STAND_ATTACK);
@@ -180,7 +180,9 @@ public class PowersJustice extends DashPreset {
                     if (value.isRemoved() || !value.isAlive()) {
                     } else {
                         if (value instanceof FallenMob fm && target instanceof LivingEntity LE) {
-                            if (fm.controller != null && fm.controller.is(this.getSelf())) {
+                            if (fm.controller != null && fm.controller.is(this.getSelf()) && fm.getSelected()) {
+
+                                fm.corpseTarget = LE;
                                 if (LE instanceof Player pl){
                                     fm.setLastHurtByPlayer(pl);
                                 }
