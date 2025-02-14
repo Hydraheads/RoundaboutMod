@@ -188,6 +188,7 @@ public class PowersJustice extends DashPreset {
                                 }
                                 fm.setLastHurtByMob(LE);
                                 fm.setTarget(LE);
+                                fm.setSelected(false);
                             }
                         }
                     }

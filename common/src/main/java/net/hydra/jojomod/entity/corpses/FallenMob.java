@@ -181,6 +181,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                     setActivated(false);
                     this.setController(null);
                 } else {
+                    if (this.getSelected() && !((StandUser) controller).roundabout$getStandPowers().isPiloting()){
+                        this.setSelected(false);
+                    }
                     if (((StandUser) controller).roundabout$getStandPowers() instanceof PowersJustice PJ) {
                         if (!PJ.isCastingFog()){
                             setActivated(false);
