@@ -482,14 +482,26 @@ public class PowersJustice extends DashPreset {
         return false;
     }
     public BlockPos bpos;
-    public boolean hold2 = false;
+    public boolean hold3 = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (!isPiloting()) {
             super.buttonInput3(keyIsDown,options);
+        } else {
+            if (keyIsDown) {
+                if (!hold3) {
+                    hold3 = true;
+                    ClientUtil.setJusticeTacticsScreen();
+                }
+            } else {
+                if (hold3) {
+                    hold3 = false;
+                }
+            }
         }
 
     }
+    public boolean hold2 = false;
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {

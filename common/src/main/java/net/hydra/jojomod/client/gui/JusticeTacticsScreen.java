@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.GameNarrator;
@@ -43,26 +44,22 @@ public class JusticeTacticsScreen extends Screen {
     private static final int SLOT_PADDING = 5;
     private static final int SLOT_AREA_PADDED = 31;
     private static final int HELP_TIPS_OFFSET_Y = 5;
-    private static final int ALL_SLOTS_WIDTH = corpseIcon.VALUES.length * 31 - 5;
-    private corpseIcon currentlyHovered;
+    private static final int ALL_SLOTS_WIDTH = tacticIcon.VALUES.length * 31 - 5;
+    private tacticIcon currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
     public boolean zHeld;
-
-    public final ItemStack stack;
 
     private final List<PoseSlot> slots = Lists.newArrayList();
 
     public JusticeTacticsScreen() {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
-        stack = null;
     }
     public JusticeTacticsScreen(ItemStack stack) {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
-        this.stack = stack;
     }
 
     private ShapeShifts getDefaultSelected() {
@@ -73,35 +70,15 @@ public class JusticeTacticsScreen extends Screen {
         return ShapeShifts.PLAYER;
     }
 
-    public int zombies = 0;
-    public int skeletons = 0;
-    public int spiders = 0;
-    public int villagers = 0;
-    public int creepers = 0;
-
     @Override
     protected void init() {
         super.init();
         zHeld = true;
         Player pl = Minecraft.getInstance().player;
-        if (stack != null && !stack.isEmpty()){
-            CompoundTag $$1 = stack.getOrCreateTagElement("bodies");
-            zombies = $$1.getInt("zombie");
-            skeletons = $$1.getInt("skeleton");
-            spiders = $$1.getInt("spider");
-            villagers = $$1.getInt("villager");
-            creepers = $$1.getInt("creeper");
-        } else {
-            zombies = 0;
-            skeletons = 0;
-            spiders = 0;
-            villagers = 0;
-            creepers = 0;
-        }
 
-        this.currentlyHovered = corpseIcon.NONE;
-        for (int i = 0; i < corpseIcon.VALUES.length; ++i) {
-            corpseIcon pIcon = corpseIcon.VALUES[i];
+        this.currentlyHovered = tacticIcon.NONE;
+        for (int i = 0; i < tacticIcon.VALUES.length; ++i) {
+            tacticIcon pIcon = tacticIcon.VALUES[i];
             this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
         }
     }
@@ -141,38 +118,17 @@ public class JusticeTacticsScreen extends Screen {
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             this.currentlyHovered = MobSlot.icon;
         }
-        if (!stack.is(ModItems.CREATIVE_BODY_BAG)) {
-            for (int m = 0; m < corpseIcon.VALUES.length; ++m) {
-                corpseIcon pIcon = corpseIcon.VALUES[m]; //13 44
-                if (pIcon.id != corpseIcon.NONE.id) {
-                    int num = 0;
-                    if (pIcon == corpseIcon.ZOMBIE) {
-                        num = zombies;
-                    } else if (pIcon == corpseIcon.SKELETON) {
-                        num = skeletons;
-                    } else if (pIcon == corpseIcon.CREEPER) {
-                        num = creepers;
-                    } else if (pIcon == corpseIcon.SPIDER) {
-                        num = spiders;
-                    } else if (pIcon == corpseIcon.VILLAGER) {
-                        num = villagers;
-                    }
-                    guiGraphics.drawString(this.font, "" + num, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
-                }
-            }
-        }
     }
 
     private void switchToHoveredGameMode() {
        switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
     }
 
-    private void switchToHoveredGameMode(Minecraft minecraft, corpseIcon pIcon) {
+    private void switchToHoveredGameMode(Minecraft minecraft, tacticIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
         }
 
-        if (stack != null && !stack.isEmpty() && minecraft.player != null) {
 
             Vec3 vec3d = minecraft.player.getEyePosition(0);
             Vec3 vec3d2 = minecraft.player.getViewVector(0);
@@ -183,9 +139,8 @@ public class JusticeTacticsScreen extends Screen {
             if (blockHit.getType() == HitResult.Type.BLOCK){
                 vc = blockHit.getBlockPos().getCenter().toVector3f().add(0,1,0);
             }
-            ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
-                    stack, PacketDataIndex.USE_CORPSE_BAG, vc);
-        }
+            //ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
+                    //stack, PacketDataIndex.USE_CORPSE_BAG, vc);
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
         return (key1.isDown() || (key1.same(options.keyLoadHotbarActivator) && options.keyLoadHotbarActivator.isDown())
@@ -219,33 +174,47 @@ public class JusticeTacticsScreen extends Screen {
         return false;
     }
 
-    public enum corpseIcon {
-        ZOMBIE(Component.translatable("entity.minecraft.zombie"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/zombie.png"),Corpses.ZOMBIE.id,-31,31),
-        SKELETON(Component.translatable("entity.minecraft.skeleton"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/skeleton.png"),Corpses.SKELETON.id,0,0),
-        CREEPER(Component.translatable("entity.minecraft.creeper"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/creeper.png"),Corpses.CREEPER.id,31,0),
-        VILLAGER(Component.translatable("entity.minecraft.villager"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/villager.png"),Corpses.VILLAGER.id,-31,0),
-        SPIDER(Component.translatable("entity.minecraft.spider"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/spider.png"),Corpses.SPIDER.id,31,31),
+    public enum tacticIcon {
 
-        NONE(Component.translatable("roundabout.corpse.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/jonathan.png"),Corpses.NONE.id,0,31);
+        NONE(Component.translatable("roundabout.corpse.tactics.none"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/pose_icons/jonathan.png"),Tactics.NONE.id,0,31),
+        SELECT_ALL(Component.translatable("roundabout.corpse.tactics.select_all"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/select_all.png"), Tactics.SELECT_ALL.id,-15,4),
+        DESELECT_ALL(Component.translatable("roundabout.corpse.tactics.deselect_all"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/deselect_all.png"),Tactics.DESELECT_ALL.id,15,4),
+        STAY_PUT(Component.translatable("roundabout.corpse.tactics.still"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/stay_put.png"),Tactics.STAY_PUT.id,-31,40),
+        ROAM(Component.translatable("roundabout.corpse.tactics.wander"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/roam.png"),Tactics.ROAM.id,-31,70),
+        FOLLOW(Component.translatable("roundabout.corpse.tactics.follow"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/follow.png"),Tactics.FOLLOW.id,-61,55),
+        DEFEND(Component.translatable("roundabout.corpse.tactics.guard"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/defend.png"),Tactics.DEFEND.id,31,40),
+        HUNT_TARGET(Component.translatable("roundabout.corpse.tactics.target"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/target.png"),Tactics.HUNT_TARGET.id,31,70),
+        HUNT_MONSTERS(Component.translatable("roundabout.corpse.tactics.hunt_monster"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/hunt_monsters.png"),Tactics.HUNT_MONSTERS.id,61,40),
+        HUNT_PLAYERS(Component.translatable("roundabout.corpse.tactics.hunt_player"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/hunt_players.png"),Tactics.HUNT_PLAYERS.id,61,70),
+        PEACEFUL(Component.translatable("roundabout.corpse.tactics.peaceful"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,91,55);
 
-        static corpseIcon getByte(Corpses corpse) {
-            return switch (corpse) {
+        static tacticIcon getByte(Tactics tactics) {
+            return switch (tactics) {
                 default -> throw new IncompatibleClassChangeError();
-                case ZOMBIE -> ZOMBIE;
-                case SKELETON -> SKELETON;
-                case CREEPER -> CREEPER;
-                case VILLAGER -> VILLAGER;
-                case SPIDER -> SPIDER;
-                case NONE -> NONE;
+                case SELECT_ALL -> SELECT_ALL;
+                case DESELECT_ALL -> DESELECT_ALL;
+                case STAY_PUT -> STAY_PUT;
+                case ROAM -> ROAM;
+                case FOLLOW -> FOLLOW;
+                case DEFEND -> DEFEND;
+                case HUNT_TARGET -> HUNT_TARGET;
+                case HUNT_MONSTERS -> HUNT_MONSTERS;
+                case HUNT_PLAYERS -> HUNT_PLAYERS;
+                case PEACEFUL -> PEACEFUL;
             };
         }
-        protected static final corpseIcon[] VALUES;
+        protected static final tacticIcon[] VALUES;
         private static final int ICON_AREA = 16;
         protected static final int ICON_TOP_LEFT = 5;
         final Component name;
@@ -255,7 +224,7 @@ public class JusticeTacticsScreen extends Screen {
         final int xoff;
         final int yoff;
 
-        private corpseIcon(Component component, ResourceLocation rl, byte id, int xoff, int yoff) {
+        private tacticIcon(Component component, ResourceLocation rl, byte id, int xoff, int yoff) {
             this.name = component;
             this.rl = rl;
             this.id = id;
@@ -272,37 +241,25 @@ public class JusticeTacticsScreen extends Screen {
         }
 
         static {
-            VALUES = new corpseIcon[]{ZOMBIE,SKELETON,VILLAGER,CREEPER,SPIDER,
-                    NONE};
+            VALUES = new tacticIcon[]{NONE,SELECT_ALL,DESELECT_ALL,STAY_PUT,ROAM,FOLLOW,
+            FOLLOW, DEFEND, HUNT_TARGET, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL};
         }
     }
 
     public class PoseSlot
             extends AbstractWidget {
-        final corpseIcon icon;
+        final tacticIcon icon;
         private boolean isSelected;
 
-        public PoseSlot(corpseIcon pIcon, int i, int j) {
+        public PoseSlot(tacticIcon pIcon, int i, int j) {
             super(i, j, 26, 26, pIcon.getName());
             this.icon = pIcon;
         }
 
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-            if (!this.icon.equals(corpseIcon.NONE)) {
-                guiGraphics.setColor(1f, 1f, 1f, 1f);
-                if (
-                        !stack.is(ModItems.CREATIVE_BODY_BAG) &&
-                                ((this.icon.equals(corpseIcon.CREEPER) && creepers <= 0) ||
-                           (this.icon.equals(corpseIcon.SKELETON) && skeletons <= 0) ||
-                           (this.icon.equals(corpseIcon.ZOMBIE) && zombies <= 0) ||
-                           (this.icon.equals(corpseIcon.SPIDER) && spiders <= 0) ||
-                           (this.icon.equals(corpseIcon.VILLAGER) && villagers <= 0))
-                ){
-                    guiGraphics.setColor(0.5f, 0.5f, 0.5f, 0.7f);
-                }
+            if (!this.icon.equals(tacticIcon.NONE)) {
                 this.drawSlot(guiGraphics);
-                guiGraphics.setColor(1f, 1f, 1f, 1f);
                 this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
                 if (this.isSelected) {
                     this.drawSelection(guiGraphics);

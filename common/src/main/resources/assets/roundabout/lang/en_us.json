@@ -499,6 +499,17 @@
   "roundabout.pose.none": "Strike Pose!",
 
   "roundabout.corpse.none": "Choose Body",
+  "roundabout.corpse.tactics.none": "Tactic Select",
+  "roundabout.corpse.tactics.still": "Stay Put",
+  "roundabout.corpse.tactics.select_all": "Select All",
+  "roundabout.corpse.tactics.deselect_all": "Deselect All",
+  "roundabout.corpse.tactics.wander": "Roam",
+  "roundabout.corpse.tactics.follow": "Follow",
+  "roundabout.corpse.tactics.guard": "Defend",
+  "roundabout.corpse.tactics.target": "Hunt Target",
+  "roundabout.corpse.tactics.hunt_monster": "Hunt Monsters",
+  "roundabout.corpse.tactics.hunt_player": "Hunt Players",
+  "roundabout.corpse.tactics.peaceful": "Stand Down",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",

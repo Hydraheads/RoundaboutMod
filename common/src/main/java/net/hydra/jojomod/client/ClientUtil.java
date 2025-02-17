@@ -235,6 +235,10 @@ public class ClientUtil {
         }
     }
 
+    public static void setJusticeTacticsScreen() {
+        Minecraft mc = Minecraft.getInstance();
+        mc.setScreen(new JusticeTacticsScreen());
+    }
     public static void setJusticeScreen() {
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(new JusticeMobSwitcherScreen());
