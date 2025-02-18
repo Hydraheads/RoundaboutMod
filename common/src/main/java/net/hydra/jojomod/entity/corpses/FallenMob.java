@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
@@ -130,17 +131,26 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
-        //this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
-        //this.targetSelector
-                //.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, $$0 -> $$0 instanceof Enemy && !($$0 instanceof Creeper)));
         this.addBehaviourGoals();
     }
-
-
-
     protected void addBehaviourGoals() {
         this.targetSelector.addGoal(1, new CorpseTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
     }
+
+    public boolean canGetMadAt(LivingEntity $$0) {
+        if (!this.canAttack($$0)) {
+            return false;
+        } else {
+            return (
+                    (this.getTargetTactic() == Tactics.HUNT_PLAYERS.id && $$0.getType() == EntityType.PLAYER && !(this.controller != null && $$0.is(this.controller))) ||
+                            (this.getTargetTactic() == Tactics.HUNT_MONSTERS.id && $$0 instanceof Enemy && !($$0 instanceof Creeper) && !(this.controller != null && $$0.is(this.controller)))
+            );
+        }
+    }
+
+
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){

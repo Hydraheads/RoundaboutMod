@@ -473,9 +473,6 @@ public class PowersJustice extends DashPreset {
         if (fogControlledEntities == null){
             fogControlledEntities = new ArrayList<>();
         }
-        if (context != Tactics.NONE.id) {
-            this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
-        }
 
             List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
             if (!fogControlledEntities2.isEmpty()){

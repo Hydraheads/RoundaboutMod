@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -136,8 +137,12 @@ public class JusticeTacticsScreen extends Screen {
             if (blockHit.getType() == HitResult.Type.BLOCK){
                 vc = blockHit.getBlockPos().getCenter().toVector3f().add(0,1,0);
             }
+
+
+        if (pIcon.id != Tactics.NONE.id) {
+            minecraft.player.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
             ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id,PacketDataIndex.BYTE_CORPSE_TACTICS);
-                    //stack, PacketDataIndex.USE_CORPSE_BAG, vc);
+        }
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
         return (key1.isDown() || (key1.same(options.keyLoadHotbarActivator) && options.keyLoadHotbarActivator.isDown())
