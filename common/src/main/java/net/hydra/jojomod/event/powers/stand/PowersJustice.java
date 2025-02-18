@@ -493,6 +493,15 @@ public class PowersJustice extends DashPreset {
                                     if (fm.getSelected()){
                                         fm.setSelected(false);
                                     }
+                                } else if (context == Tactics.ROAM.id || context == Tactics.FOLLOW.id ||
+                                        context == Tactics.STAY_PUT.id) {
+                                    if (fm.getSelected()){
+                                        fm.setMovementTactic(context);
+                                    }
+                                } else {
+                                    if (fm.getSelected()){
+                                        fm.setTargetTactic(context);
+                                    }
                                 }
                             } else {
                                 removeJusticeEntities(value);

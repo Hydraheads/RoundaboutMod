@@ -22,6 +22,8 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -50,6 +52,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SELECTED =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> TARGET_TACTIC =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> MOVEMENT_TACTIC =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BYTE);
     public float getForcedRotation() {
         return this.getEntityData().get(FORCED_ROTATION);
     }
@@ -62,6 +68,19 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
     public void setActivated(boolean bool){
         this.entityData.set(IS_ACTIVATED, bool);
+    }
+
+    public byte getTargetTactic() {
+        return this.getEntityData().get(TARGET_TACTIC);
+    }
+    public void setTargetTactic(byte byt){
+        this.entityData.set(TARGET_TACTIC, byt);
+    }
+    public byte getMovementTactic() {
+        return this.getEntityData().get(MOVEMENT_TACTIC);
+    }
+    public void setMovementTactic(byte byt){
+        this.entityData.set(MOVEMENT_TACTIC, byt);
     }
 
     public boolean getSelected() {
@@ -111,8 +130,13 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
+        //this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
+        //this.targetSelector
+                //.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, $$0 -> $$0 instanceof Enemy && !($$0 instanceof Creeper)));
         this.addBehaviourGoals();
     }
+
+
 
     protected void addBehaviourGoals() {
         this.targetSelector.addGoal(1, new CorpseTargetGoal(this));
@@ -121,6 +145,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("IsActivated",getActivated());
+        $$0.putByte("moveTactic",getMovementTactic());
+        $$0.putByte("targetTactic",getTargetTactic());
         $$0.putInt("TicksThroughPhases",ticksThroughPhases);
         if (this.placer != null) {
             $$0.putUUID("Placer", this.placer.getUUID());
@@ -134,6 +160,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public void readAdditionalSaveData(CompoundTag $$0){
         this.setActivated($$0.getBoolean("IsActivated"));
         this.ticksThroughPhases = $$0.getInt("TicksThroughPhases");
+        this.setTargetTactic($$0.getByte("targetTactic"));
+        this.setMovementTactic($$0.getByte("moveTactic"));
 
         if (ticksThroughPhases >= 10) {
             setPhasesFull(true);
@@ -302,6 +330,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.entityData.define(IS_ACTIVATED, false);
         this.entityData.define(FORCED_ROTATION, 0F);
         this.entityData.define(SELECTED, false);
+        this.entityData.define(TARGET_TACTIC, (byte)0);
+        this.entityData.define(MOVEMENT_TACTIC, (byte)0);
     }
     protected FallenMob(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
