@@ -21,6 +21,7 @@ import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -1129,6 +1130,10 @@ public class MainUtil {
             ((StandUser) player).roundabout$getStandPowers().setCooldown(data, -1);
         } else if (context == PacketDataIndex.BYTE_STRIKE_POSE) {
             ((IPlayerEntity) player).roundabout$SetPoseEmote(data);
+        } else if (context == PacketDataIndex.BYTE_CORPSE_TACTICS) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersJustice PJ){
+                PJ.justiceTacticsUse(data);
+            }
         } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
             if (ShapeShifts.getShiftFromByte(data) == ShapeShifts.VILLAGER){
                 byte totalMorph = 0;

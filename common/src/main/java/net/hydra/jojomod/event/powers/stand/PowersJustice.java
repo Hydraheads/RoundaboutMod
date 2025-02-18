@@ -469,6 +469,41 @@ public class PowersJustice extends DashPreset {
         }
     }
 
+    public void justiceTacticsUse(byte context) {
+        if (fogControlledEntities == null){
+            fogControlledEntities = new ArrayList<>();
+        }
+        if (context != Tactics.NONE.id) {
+            this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
+        }
+
+            List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
+            if (!fogControlledEntities2.isEmpty()){
+                for (LivingEntity value : fogControlledEntities2) {
+                    if (value.isRemoved() || !value.isAlive()) {
+                        removeJusticeEntities(value);
+                    } else {
+                        if (value instanceof FallenMob fm){
+                            if (fm.controller != null && fm.controller.is(this.getSelf())){
+                                if (context == Tactics.SELECT_ALL.id){
+                                    if (!fm.getSelected()){
+                                        fm.setSelected(true);
+                                    }
+                                } else if (context == Tactics.DESELECT_ALL.id){
+                                    if (fm.getSelected()){
+                                        fm.setSelected(false);
+                                    }
+                                }
+                            } else {
+                                removeJusticeEntities(value);
+                            }
+                        } else {
+                            removeJusticeEntities(value);
+                        }
+                    }
+                }
+            }
+    }
     @Override
     public boolean isPiloting(){
         if (this.getSelf() instanceof Player PE){

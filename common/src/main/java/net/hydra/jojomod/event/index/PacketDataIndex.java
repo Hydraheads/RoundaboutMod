@@ -53,6 +53,7 @@ public class PacketDataIndex {
     public static final byte BYTE_STRIKE_POSE = 7;
     public static final byte BYTE_UPDATE_COOLDOWN = 8;
     public static final byte BYTE_SUMMON_CORPSE = 9;
+    public static final byte BYTE_CORPSE_TACTICS = 10;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;

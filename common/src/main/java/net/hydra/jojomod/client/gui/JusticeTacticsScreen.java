@@ -7,11 +7,9 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
-import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.index.Tactics;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
@@ -21,7 +19,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -139,7 +136,7 @@ public class JusticeTacticsScreen extends Screen {
             if (blockHit.getType() == HitResult.Type.BLOCK){
                 vc = blockHit.getBlockPos().getCenter().toVector3f().add(0,1,0);
             }
-            //ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
+            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id,PacketDataIndex.BYTE_CORPSE_TACTICS);
                     //stack, PacketDataIndex.USE_CORPSE_BAG, vc);
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
