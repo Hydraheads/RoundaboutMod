@@ -184,10 +184,10 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
                     this.connection.send(new ServerboundMoveVehiclePacket(ent));
                     this.sendIsSprintingIfNeeded();
                 }
+            this.sendPosition();
             for(AmbientSoundHandler ambientsoundhandler : this.ambientSoundHandlers) {
                 ambientsoundhandler.tick();
             }
-
         }
     }
 
