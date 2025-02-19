@@ -71,7 +71,6 @@ public abstract class ZMultiPlayerGameMode {
             }
         }
     }
-    /**
     @Inject(method = "performUseItemOn", at = @At("HEAD"), cancellable = true)
     public void roundabout$performUseItemOn(LocalPlayer $$0, InteractionHand $$1, BlockHitResult $$2, CallbackInfoReturnable<InteractionResult> cir) {
         if (((StandUser)$$0).roundabout$getStandPowers() instanceof PowersJustice PJ && PJ.isPiloting()){
@@ -109,7 +108,6 @@ public abstract class ZMultiPlayerGameMode {
             }
         }
     }
-    **/
 
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "releaseUsingItem", at = @At("HEAD"), cancellable = true)

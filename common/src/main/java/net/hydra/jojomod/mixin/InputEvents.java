@@ -400,8 +400,9 @@ public abstract class InputEvents implements IInputEvents {
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting()){
-                powers.pilotInputAttack();
-                return;
+                if (powers.pilotInputInteract()){
+                    return;
+                }
             }
             HitResult $$47 = null;
             if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){

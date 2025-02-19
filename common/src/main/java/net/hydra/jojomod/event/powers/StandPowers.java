@@ -352,7 +352,8 @@ public class StandPowers {
 
     public void pilotInputAttack(){
     }
-    public void pilotInputInteract(){
+    public boolean pilotInputInteract(){
+        return false;
     }
     public int getPilotMode(){
         return 2;

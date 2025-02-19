@@ -208,7 +208,7 @@ public class PowersJustice extends DashPreset {
     }
 
     @Override
-    public void pilotInputInteract(){
+    public boolean pilotInputInteract(){
         LivingEntity ent = getPilotingStand();
         if (ent != null) {
             Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
@@ -225,6 +225,7 @@ public class PowersJustice extends DashPreset {
                 }
             }
         }
+        return false;
     }
     public void tickPower() {
 
