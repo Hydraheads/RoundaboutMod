@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -15,8 +16,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,6 +33,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
@@ -57,6 +66,50 @@ public abstract class ZServerPlayerGameMode {
     @Shadow private BlockPos delayedDestroyPos;
 
     @Shadow private int delayedTickStart;
+
+    /**prevents door interactions with justice*/
+    @Inject(method = "useItemOn(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$useItemOn(ServerPlayer serverPlayer, Level level, ItemStack itemStack, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+
+        if (serverPlayer != null && ((StandUser)serverPlayer).roundabout$getStandPowers() instanceof PowersJustice PJ && PJ.isPiloting()) {
+            InteractionResult interactionResult2;
+            InteractionResult interactionResult;
+            BlockPos blockPos = blockHitResult.getBlockPos();
+            BlockState blockState = level.getBlockState(blockPos);
+            if (!blockState.getBlock().isEnabled(level.enabledFeatures())) {
+                cir.setReturnValue(InteractionResult.FAIL);
+            }
+            if (this.gameModeForPlayer == GameType.SPECTATOR) {
+                MenuProvider menuProvider = blockState.getMenuProvider(level, blockPos);
+                if (menuProvider != null) {
+                    serverPlayer.openMenu(menuProvider);
+                    cir.setReturnValue(InteractionResult.SUCCESS);
+                }
+                cir.setReturnValue(InteractionResult.PASS);
+            }
+            boolean bl = !serverPlayer.getMainHandItem().isEmpty() || !serverPlayer.getOffhandItem().isEmpty();
+            boolean bl2 = serverPlayer.isSecondaryUseActive() && bl;
+            ItemStack itemStack2 = itemStack.copy();
+            if (!bl2) {
+                cir.setReturnValue(InteractionResult.PASS);
+            }
+            if (itemStack.isEmpty() || serverPlayer.getCooldowns().isOnCooldown(itemStack.getItem())) {
+                cir.setReturnValue(InteractionResult.PASS);
+            }
+            UseOnContext useOnContext = new UseOnContext(serverPlayer, interactionHand, blockHitResult);
+            if (this.isCreative()) {
+                int i = itemStack.getCount();
+                interactionResult2 = itemStack.useOn(useOnContext);
+                itemStack.setCount(i);
+            } else {
+                interactionResult2 = itemStack.useOn(useOnContext);
+            }
+            if (interactionResult2.consumesAction()) {
+                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, blockPos, itemStack2);
+            }
+            cir.setReturnValue(interactionResult2);
+        }
+    }
     @Inject(method = "handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;II)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$handleBlockBreakActionM(BlockPos $$0, ServerboundPlayerActionPacket.Action $$1, Direction $$2, int $$3, int $$4, CallbackInfo ci) {
         if (this.player != null) { StandUser standComp = ((StandUser) player);
