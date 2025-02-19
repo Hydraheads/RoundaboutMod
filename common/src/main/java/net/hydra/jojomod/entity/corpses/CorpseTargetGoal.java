@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.Tactics;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -59,7 +60,7 @@ public class CorpseTargetGoal extends TargetGoal {
     @Override
     public void start() {
         if (mob instanceof FallenMob fm){
-            if (fm.getActivated()){
+            if (fm.getActivated() && fm.getTargetTactic() != Tactics.PEACEFUL.id){
                 this.mob.setTarget(fm.corpseTarget);
             } else {
                 this.mob.setTarget(null);

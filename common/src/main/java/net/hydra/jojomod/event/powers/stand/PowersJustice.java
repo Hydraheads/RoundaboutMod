@@ -34,7 +34,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -498,6 +497,13 @@ public class PowersJustice extends DashPreset {
                                 } else {
                                     if (fm.getSelected()){
                                         fm.setTargetTactic(context);
+                                        if (context == Tactics.PEACEFUL.id){
+                                            Roundabout.LOGGER.info("XXX");
+                                            fm.setAggressive(false);
+                                            fm.setLastHurtByPlayer(null);
+                                            fm.setLastHurtByMob(null);
+                                            fm.setTarget(null);
+                                        }
                                     }
                                 }
                             } else {

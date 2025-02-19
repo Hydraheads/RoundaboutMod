@@ -150,6 +150,13 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         }
     }
 
+    @Override
+    public boolean canAttack(LivingEntity $$0){
+        if (this.getTargetTactic() == Tactics.PEACEFUL.id){
+            return false;
+        }
+        return super.canAttack($$0);
+    }
 
 
     @Override
