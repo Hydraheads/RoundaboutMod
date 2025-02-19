@@ -185,6 +185,7 @@ public class PowersJustice extends DashPreset {
                                 if (LE instanceof Player pl){
                                     fm.setLastHurtByPlayer(pl);
                                 }
+                                fm.manualTarget = LE;
                                 fm.setLastHurtByMob(LE);
                                 fm.setTarget(LE);
                                 fm.setSelected(false);
@@ -498,11 +499,21 @@ public class PowersJustice extends DashPreset {
                                     if (fm.getSelected()){
                                         fm.setTargetTactic(context);
                                         if (context == Tactics.PEACEFUL.id){
-                                            Roundabout.LOGGER.info("XXX");
                                             fm.setAggressive(false);
                                             fm.setLastHurtByPlayer(null);
+                                            fm.manualTarget = null;
                                             fm.setLastHurtByMob(null);
                                             fm.setTarget(null);
+                                        } else if (context == Tactics.HUNT_TARGET.id){
+                                            if (fm.manualTarget != null && !fm.manualTarget.isRemoved() &&
+                                                    fm.manualTarget.isAlive()){
+                                                if (fm.manualTarget instanceof Player PE){
+                                                    fm.setLastHurtByPlayer(PE);
+                                                }
+                                                fm.setLastHurtByMob(fm.manualTarget);
+                                                fm.setTarget(fm.manualTarget);
+                                            }
+
                                         }
                                     }
                                 }

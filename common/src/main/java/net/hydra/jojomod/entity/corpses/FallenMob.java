@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.Tactics;
@@ -40,6 +41,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public Entity placer;
     public Entity controller;
     public LivingEntity corpseTarget;
+    public LivingEntity manualTarget;
+    public LivingEntity autoTarget;
+    public LivingEntity autoTarget2;
     public int spinTicks = 0;
     private static final EntityDataAccessor<Boolean> TICKS_THROUGH_PLACER =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
@@ -226,6 +230,32 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                     setActivated(false);
                     this.setController(null);
                 } else {
+
+                    if (getTargetTactic() == Tactics.NONE.id || getTargetTactic() == Tactics.DEFEND.id) {
+                        if (controller instanceof LivingEntity LE) {
+                            autoTarget = LE.getLastHurtByMob();
+                            autoTarget2 = LE.getLastHurtMob();
+                            boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
+                            boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
+
+                            if (check1 && check2) {
+                                if (autoTarget2 != null && (this.tickCount - LE.getLastHurtMobTimestamp()) < 200) {
+                                    if (autoTarget2 instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget2);
+                                    setTarget(autoTarget2);
+                                } else if (autoTarget != null && (this.tickCount - LE.getLastHurtByMobTimestamp()) < 200) {
+                                    if (autoTarget instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget);
+                                    setTarget(autoTarget);
+                                }
+                            }
+                        }
+                    }
+
                     if (this.getSelected() && !((StandUser) controller).roundabout$getStandPowers().isPiloting()){
                         this.setSelected(false);
                     }
