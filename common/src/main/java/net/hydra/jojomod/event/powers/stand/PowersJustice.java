@@ -711,7 +711,7 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if ((slot == 2  && (!this.isHoldingSneak()) || isPiloting()) || (slot == 3 && this.isHoldingSneak())){
+        if ((slot == 2  && (!this.isHoldingSneak() || isPiloting())) || (slot == 3 && this.isHoldingSneak())){
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
             if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 return true;

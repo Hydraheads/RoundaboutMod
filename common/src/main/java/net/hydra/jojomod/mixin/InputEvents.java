@@ -423,26 +423,6 @@ public abstract class InputEvents implements IInputEvents {
 
                         if ($$47 != null && $$1.getItem() instanceof FogBlockItem) {
                             switch ($$47.getType()) {
-                                case ENTITY:
-                                    EntityHitResult $$2 = (EntityHitResult)$$47;
-                                    Entity $$3 = $$2.getEntity();
-                                    if (!this.level.getWorldBorder().isWithinBounds($$3.blockPosition())) {
-                                        return;
-                                    }
-
-                                    InteractionResult $$4 = this.gameMode.interactAt(this.player, $$3, $$2, $$0);
-                                    if (!$$4.consumesAction()) {
-                                        $$4 = this.gameMode.interact(this.player, $$3, $$0);
-                                    }
-
-                                    if ($$4.consumesAction()) {
-                                        if ($$4.shouldSwing()) {
-                                            this.player.swing($$0);
-                                        }
-
-                                        return;
-                                    }
-                                    break;
                                 case BLOCK:
                                     BlockHitResult $$5 = (BlockHitResult)$$47;
                                     int $$6 = $$1.getCount();
