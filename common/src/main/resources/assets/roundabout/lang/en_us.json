@@ -435,6 +435,10 @@
 
   "idle.roundabout.passive": "Idle Pose",
   "idle.roundabout.battle": "Battle Ready",
+
+  "idle.roundabout.floaty": "Floaty",
+  "idle.roundabout.star_platinum": "The Star",
+
   "idle.roundabout.passive_justice": "Idle Pose",
   "idle.roundabout.battle_justice": "Menace",
 

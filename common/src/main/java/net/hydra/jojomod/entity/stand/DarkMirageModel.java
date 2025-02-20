@@ -129,6 +129,8 @@ public class DarkMirageModel<T extends JusticeEntity> extends StandModel<T> {
         defaultModifiers(pEntity);
         this.animate(pEntity.idleAnimation, StandAnimations.STAND_IDLE_FLOAT, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimation2, StandAnimations.IDLE_2, pAgeInTicks, 0.4f);
+        this.animate(pEntity.idleAnimationState3, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
+        this.animate(pEntity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, pAgeInTicks, 1f);
     }
 
     @Override

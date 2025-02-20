@@ -155,6 +155,8 @@ public abstract class StandEntity extends Mob{
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState idleAnimationState2 = new AnimationState();
+    public final AnimationState idleAnimationState3 = new AnimationState();
+    public final AnimationState idleAnimationState4 = new AnimationState();
     public final AnimationState punchState1 = new AnimationState();
     public final AnimationState punchState2 = new AnimationState();
     public final AnimationState punchState3 = new AnimationState();
@@ -181,6 +183,16 @@ public abstract class StandEntity extends Mob{
                 this.idleAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState.stop();
+            }
+            if (this.getAnimation() == 0 && this.getIdleAnimation() == 2) {
+                this.idleAnimationState3.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationState3.stop();
+            }
+            if (this.getAnimation() == 0 && this.getIdleAnimation() == 3) {
+                this.idleAnimationState4.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationState4.stop();
             }
             if (this.getAnimation() == 1) {
                 this.punchState1.startIfStopped(this.tickCount);
@@ -291,6 +303,10 @@ public abstract class StandEntity extends Mob{
     public Component getPosName(byte posID){
         if (posID == 1){
             return Component.translatable(  "idle.roundabout.battle");
+        } else if (posID == 2){
+            return Component.translatable(  "idle.roundabout.floaty");
+        } else if (posID == 3){
+            return Component.translatable(  "idle.roundabout.star_platinum");
         } else {
             return Component.translatable(  "idle.roundabout.passive");
         }
