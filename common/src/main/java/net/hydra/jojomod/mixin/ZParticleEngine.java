@@ -43,7 +43,7 @@ public class ZParticleEngine {
     @ModifyVariable(
             method = "add(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
     private Particle roundaboutMarkParticleTS(Particle $$0) {
-        if ($$0 != null) {
+        if ($$0 != null && level != null) {
             if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((ZParticleAccess) $$0).roundabout$getX(),
                     (int) ((ZParticleAccess) $$0).roundabout$getY(),
                     (int) ((ZParticleAccess) $$0).roundabout$getZ()))) {
