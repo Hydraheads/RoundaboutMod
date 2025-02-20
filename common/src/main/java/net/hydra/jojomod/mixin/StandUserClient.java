@@ -95,6 +95,10 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                             if ($$2.get(j).roundaboutSoundByte == $$1.get(i).roundaboutSoundByte) {
                                 Minecraft.getInstance().getSoundManager().stop($$2.get(j).roundaboutSoundInstance);
                                 $$2.remove(j);
+                                j--;
+                                if (j < 0){
+                                    break;
+                                }
                             }
                         }
                     }
