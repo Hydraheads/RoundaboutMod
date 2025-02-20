@@ -14,6 +14,7 @@
   "item.roundabout.diamond_glaive": "钻石剑刃戟",
   "item.roundabout.netherite_glaive": "下界合金剑刃戟",
   "item.roundabout.executioner_axe": "刽子手之斧",
+  "item.roundabout.body_bag": "尸袋",
   "item.roundabout.stand_disc": "替身光碟",
   "item.roundabout.coffee_gum": "咖啡口香糖",
   "item.roundabout.meteorite": "古老陨石",
@@ -487,6 +488,8 @@
   "roundabout.pose.jotaro": "承太郎立",
   "roundabout.pose.jonathan": "大乔立",
   "roundabout.pose.none": "选择姿势！",
+
+  "roundabout.corpse.none": "选择操作的尸体",
 
   "power_inventory.roundabout.settings.general": "替身设置",
   "power_inventory.roundabout.settings.offset": "跟随位置",

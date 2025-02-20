@@ -14,6 +14,8 @@
   "item.roundabout.diamond_glaive": "Guja de diamante",
   "item.roundabout.netherite_glaive": "Guja de netherita",
   "item.roundabout.executioner_axe": "Hacha de verdugo",
+  "item.roundabout.body_bag": "Bolsa de cuerpos",
+  "item.roundabout.creative_body_bag": "Bolsa de cuerpos de creativo",
   "item.roundabout.stand_disc": "Disco de Stand",
   "item.roundabout.coffee_gum": "Goma de máscar de cafe",
   "item.roundabout.meteorite": "Meteorito antiguo",
@@ -88,6 +90,11 @@
   "entity.roundabout.gasoline_splatter": "Gasolina salpicada",
   "entity.roundabout.stand_arrow": "Flecha de Stand",
   "entity.roundabout.worthy_arrow": "Flecha de dignidad",
+  "entity.roundabout.fallen_creeper": "Cádaver de creeper",
+  "entity.roundabout.fallen_villager": "Cádaver de aldeano",
+  "entity.roundabout.fallen_zombie": "Cádaver de zombi",
+  "entity.roundabout.fallen_skeleton": "Cádaver de esqueleto",
+  "entity.roundabout.fallen_spider": "Cádaver de araña",
   "entity.roundabout.jnpc_ova_enya": "Enya",
   "entity.roundabout.jnpc_jotaro": "Jotaro",
   "entity.roundabout.jnpc_steve": "Steve",
@@ -218,6 +225,9 @@
   "sounds.roundabout.twau_hey":  "¡Hey!",
   "sounds.roundabout.star_finger":  "Star Finger",
   "sounds.roundabout.fog_morph":  "Swoosh",
+  "sounds.roundabout.body_bag":  "Cuerpo recolectado",
+  "sounds.roundabout.justice_select":  "Selección",
+  "sounds.roundabout.justice_select_attack":  "Orden de ataque",
 
   "sounds.roundabout.star_finger_silent":  "Star Finger",
 
@@ -461,6 +471,7 @@
   "skins.roundabout.justice.flamed_blue": "Flama azul",
   "skins.roundabout.justice.twilight": "Twilight",
   "skins.roundabout.justice.pirate": "Pirata",
+  "skins.roundabout.justice.dark_mirage": "Dark Mirage",
 
   "unlock_skin.roundabout.the_world.over_heaven": "¡Aspecto The World: Over Heaven desbloqueado!",
   "unlock_skin.roundabout.star_platinum.atomic": "¡Aspecto Star Platinum: Atomic desbloqueado!",
@@ -486,6 +497,8 @@
   "roundabout.pose.jotaro": "Stand Proud",
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.none": "¡Posa!",
+
+  "roundabout.corpse.none": "Escoger cuerpo",
 
   "power_inventory.roundabout.settings.general": "Opciones de Stand",
   "power_inventory.roundabout.settings.offset": "Posición al seguir",
