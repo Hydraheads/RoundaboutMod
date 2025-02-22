@@ -20,7 +20,7 @@ public class SwellGoalFallen extends Goal {
     @Override
     public boolean canUse() {
         LivingEntity $$0 = this.creeper.getTarget();
-        return this.creeper.getSwellDir() > 0 || $$0 != null && this.creeper.distanceToSqr($$0) < 9.0;
+        return this.creeper.getSwellDir() > 0 || ($$0 != null && this.creeper.distanceToSqr($$0) < 9.0 && this.creeper.getActivated());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SwellGoalFallen extends Goal {
 
     @Override
     public void tick() {
-        if (this.target == null) {
+        if (this.target == null || !this.creeper.getActivated()) {
             this.creeper.setSwellDir(-1);
         } else if (this.creeper.distanceToSqr(this.target) > 49.0) {
             this.creeper.setSwellDir(-1);
