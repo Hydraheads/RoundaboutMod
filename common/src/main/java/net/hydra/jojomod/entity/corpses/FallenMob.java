@@ -156,7 +156,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     public boolean canAttack(LivingEntity $$0){
-        if (this.getTargetTactic() == Tactics.PEACEFUL.id){
+        if (this.getTargetTactic() == Tactics.PEACEFUL.id || !this.getActivated()){
             return false;
         }
         return super.canAttack($$0);
@@ -224,6 +224,14 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                             PJ.addJusticeEntities(this);
                         }
                     }
+                }
+                if (this.getTarget() != null){
+                    setLastHurtByPlayer(null);
+                    setLastHurtByMob(null);
+                    setTarget(null);
+                }
+                if (this.getNavigation().isInProgress()){
+                    this.getNavigation().stop();
                 }
             } else {
                 if (controller == null || controller.isRemoved() || !controller.isAlive()){
