@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
@@ -120,7 +121,9 @@ public class MatchEntity extends ThrowableItemProjectile {
         SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
         Vec3 DM = $$1.getDeltaMovement();
         if ($$1 instanceof Creeper) {
-            ((Creeper)$$1).ignite();
+            ((Creeper) $$1).ignite();
+        } else if ($$1 instanceof FallenCreeper) {
+            ((FallenCreeper)$$1).ignite();
         } if ($$1.getType() == EntityType.TNT_MINECART) {
             DamageSource DS = $$1.damageSources().explosion($$1, $$0.getEntity());
             ((IMinecartTNT)$$1).roundabout$explode(DS, this.getDeltaMovement().lengthSqr());

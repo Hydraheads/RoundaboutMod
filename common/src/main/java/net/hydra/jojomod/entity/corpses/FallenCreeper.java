@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -139,6 +140,24 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
 
     @Override
     public void tick() {
+
+
+        if (((StandUser)this).roundabout$isDazed() ||
+                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
+            if (((Creeper)(Object)this).isAlive()) {
+                oldSwell = swell;
+            }
+
+            this.swell -= 1;
+            if (this.swell < 0) {
+                this.swell = 0;
+            }
+            super.tick();
+            return;
+        }
+
+
         if (this.isAlive()) {
             this.oldSwell = this.swell;
             if (this.isIgnited()) {
