@@ -20,6 +20,7 @@ public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCree
 
     public FallenCreeperRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new FallenCreeperModel<>($$0.bakeLayer(ModelLayers.CREEPER)), 0.5F);
+        this.addLayer(new FallenCreeperPowerLayer(this, $$0.getModelSet()));
     }
 
     @Override
@@ -28,7 +29,7 @@ public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCree
     }
 
 
-    protected void scale(Creeper $$0, PoseStack $$1, float $$2) {
+    protected void scale(FallenCreeper $$0, PoseStack $$1, float $$2) {
         float $$3 = $$0.getSwelling($$2);
         float $$4 = 1.0F + Mth.sin($$3 * 100.0F) * $$3 * 0.01F;
         $$3 = Mth.clamp($$3, 0.0F, 1.0F);
@@ -39,7 +40,7 @@ public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCree
         $$1.scale($$5, $$6, $$5);
     }
 
-    protected float getWhiteOverlayProgress(Creeper $$0, float $$1) {
+    protected float getWhiteOverlayProgress(FallenCreeper $$0, float $$1) {
         float $$2 = $$0.getSwelling($$1);
         return (int)($$2 * 10.0F) % 2 == 0 ? 0.0F : Mth.clamp($$2, 0.5F, 1.0F);
     }

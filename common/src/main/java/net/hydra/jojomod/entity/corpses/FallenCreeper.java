@@ -47,13 +47,14 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new SwellGoalFallen(this));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0, true));
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0, false));
         this.addBehaviourGoals();
     }
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.5D).add(Attributes.MAX_HEALTH, 20)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 1).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
+
     }
 
     @Override
