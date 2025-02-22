@@ -243,6 +243,12 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                         if (controller instanceof LivingEntity LE) {
                             autoTarget = LE.getLastHurtByMob();
                             autoTarget2 = LE.getLastHurtMob();
+                            if (autoTarget instanceof FallenMob fm && fm.getController() == this.getController()){
+                                autoTarget = null;
+                            }
+                            if (autoTarget2 instanceof FallenMob fm && fm.getController() == this.getController()){
+                                autoTarget2 = null;
+                            }
                             boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
                             boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
 
