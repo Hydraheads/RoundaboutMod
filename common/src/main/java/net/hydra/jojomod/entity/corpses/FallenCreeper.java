@@ -232,12 +232,20 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource $$0) {
-        return SoundEvents.CREEPER_HURT;
+        if (this.getActivated()){
+            return SoundEvents.CREEPER_HURT;
+        } else {
+            return super.getHurtSound($$0);
+        }
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.CREEPER_DEATH;
+        if (this.getActivated()){
+            return SoundEvents.CREEPER_DEATH;
+        } else {
+            return super.getDeathSound();
+        }
     }
     public boolean isIgnited() {
         return this.entityData.get(DATA_IS_IGNITED);

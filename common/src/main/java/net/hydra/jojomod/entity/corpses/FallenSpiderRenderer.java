@@ -28,7 +28,6 @@ public class FallenSpiderRenderer<T extends Spider> extends MobRenderer<FallenSp
 
     public FallenSpiderRenderer(EntityRendererProvider.Context $$0, ModelLayerLocation $$1) {
         super($$0, new FallenSpiderModel<>($$0.bakeLayer($$1)), 0.8F);
-        this.addLayer(new SpiderEyesLayer<>(this));
     }
 
     protected float getFlipDegrees(T $$0) {
