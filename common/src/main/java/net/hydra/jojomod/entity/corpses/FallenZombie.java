@@ -64,10 +64,13 @@ public class FallenZombie extends FallenMob{
     @Override
     protected SoundEvent getDeathSound() {
         if (this.getActivated()){
-            return SoundEvents.ZOMBIE_DEATH;
+            return SoundEvents.VILLAGER_DEATH;
         } else {
             return super.getDeathSound();
         }
+    }
+    protected SoundEvent getStepSound() {
+        return SoundEvents.ZOMBIE_STEP;
     }
 
 
@@ -83,9 +86,6 @@ public class FallenZombie extends FallenMob{
     @Override
     public MobType getMobType() {
         return MobType.UNDEAD;
-    }
-    protected SoundEvent getStepSound() {
-        return SoundEvents.ZOMBIE_STEP;
     }
     @Override
     protected void playStepSound(BlockPos $$0, BlockState $$1) {
