@@ -110,5 +110,6 @@ public class FallenSkeleton extends FallenMob implements RangedAttackMob  {
     public boolean canFireProjectileWeapon(ProjectileWeaponItem $$0) {
         return $$0 == Items.BOW;
     }
+
 }
 

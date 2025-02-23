@@ -210,6 +210,15 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
+
+            if (this.getTarget() != null && !(this.getTarget().isAlive() || this.getTarget().isRemoved())){
+                this.setTarget(null);
+                this.setLastHurtByMob(null);
+                this.setPersistentAngerTarget(null);
+                this.setLastHurtByPlayer(null);
+                this.setAggressive(false);
+            }
+
             IPermaCasting icast = ((IPermaCasting) this.level());
             if (!getActivated()) {
                 if (this.getSelected()){
