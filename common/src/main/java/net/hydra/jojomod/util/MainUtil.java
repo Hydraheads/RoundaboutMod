@@ -31,6 +31,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundHorseScreenOpenPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -1182,7 +1183,16 @@ public class MainUtil {
 
             ModPacketHandler.PACKET_ACCESS.sendBundlePacket(((ServerPlayer) player), PacketDataIndex.S2C_BUNDLE_POWER_INV,
                     standUser.roundabout$getStandSkin(), unlocked, (byte) 0);
-            player.containerMenu = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
+
+            if (player.containerMenu != player.inventoryMenu) {
+                player.containerMenu = player.inventoryMenu;
+            }
+
+            ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
+            int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
+            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) player), PacketDataIndex.S2C_POWER_INVENTORY,
+                    cid);
+            player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);

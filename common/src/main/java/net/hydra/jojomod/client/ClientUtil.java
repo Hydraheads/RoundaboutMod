@@ -39,6 +39,8 @@ import org.joml.Vector3f;
 
 
 public class ClientUtil {
+    public static int checkthis = 0;
+    public static int checkthisdat = 0;
 
     /**
      * A generalized packet for sending ints to the client. Context is what to do with the data int
@@ -46,6 +48,9 @@ public class ClientUtil {
     public static void handleIntPacketS2C(LocalPlayer player, int data, byte context) {
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(data);
+        } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
+            checkthisdat = data;
+            checkthis = 1;
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){

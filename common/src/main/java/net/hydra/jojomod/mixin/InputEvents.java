@@ -11,6 +11,8 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.client.gui.PauseTSScreen;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -841,6 +843,20 @@ public abstract class InputEvents implements IInputEvents {
                     if (KeyInputRegistry.menuKey.isDown()) {
                         KeyInputs.menuKey(player,((Minecraft) (Object) this));
                     }
+
+                    if (ClientUtil.checkthis > 0){
+                        if (ClientUtil.checkthis == 1){
+                            player.clientSideCloseContainer();
+
+                            PowerInventoryMenu powa = new PowerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
+                                    ClientUtil.checkthisdat);
+                            player.containerMenu = powa;
+                            Minecraft.getInstance().setScreen(new PowerInventoryScreen(player,powa));
+                            ClientUtil.checkthis = 0;
+                            ClientUtil.checkthisdat = 0;
+                        }
+                    }
+
                     if (KeyInputs.roundaboutClickCount > 0) {
                         KeyInputs.roundaboutClickCount--;
                     }

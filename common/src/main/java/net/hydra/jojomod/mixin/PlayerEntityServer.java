@@ -40,7 +40,20 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Shadow
     private void initMenu(AbstractContainerMenu $$0) {
     }
+    @Shadow
+    private void nextContainerCounter() {
+    }
 
+    @Override
+    @Unique
+    public int roundabout$getCounter(){
+        return containerCounter;
+    }
+    @Override
+    @Unique
+    public void roundabout$nextContainerCounter(){
+        nextContainerCounter();
+    }
     @Override
     @Unique
     public void roundabout$initMenu(AbstractContainerMenu $$0){
@@ -50,6 +63,8 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     private boolean roundabout$initializeDataOnClient = false;
     @Shadow
     public ServerGamePacketListenerImpl connection;
+    @Shadow private int containerCounter;
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
 

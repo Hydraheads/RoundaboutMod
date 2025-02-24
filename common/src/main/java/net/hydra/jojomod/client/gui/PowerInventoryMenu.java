@@ -47,8 +47,8 @@ public class PowerInventoryMenu extends AbstractContainerMenu {
     public final boolean active;
     private final Player owner;
 
-    public PowerInventoryMenu(Inventory $$0, boolean $$1, final Player $$2) {
-        super(null, CONTAINER_ID);
+    public PowerInventoryMenu(Inventory $$0, boolean $$1, final Player $$2, int cid) {
+        super(null, cid);
         this.active = $$1;
         this.owner = $$2;
         //this.addSlot(new ResultSlot($$0.player, this.craftSlots, this.resultSlots, 0, 154, 28));
