@@ -9,7 +9,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.corpses.FallenVillager;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -198,12 +200,10 @@ public class PowersJustice extends DashPreset {
     }
     @Override
     public void handleStandAttack2(Player player, Entity target){
-        if (target instanceof FallenMob fm) {
-            if (fm.getSelected()){
-                fm.setSelected(false);
-            } else {
-                fm.setSelected(true);
-            }
+        if (target instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
+            fm.ignite();
+        } else  {
+
         }
     }
 
@@ -219,8 +219,11 @@ public class PowersJustice extends DashPreset {
                 BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
                 if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
                 } else {
-                    if (TE instanceof FallenMob fm && fm.getController() == this.self.getId()) {
-                        ent.playSound(ModSounds.JUSTICE_SELECT_EVENT, 1F, 1.0F);
+                    if (TE instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
+                        this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
+                                PacketDataIndex.INT_STAND_ATTACK_2);
+                        return true;
                     }
                 }
             }
