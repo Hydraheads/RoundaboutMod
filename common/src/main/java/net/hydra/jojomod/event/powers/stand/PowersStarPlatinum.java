@@ -244,7 +244,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     if (this.getSelf() instanceof Player && isPacketPlayer()) {
                          ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
                     }
+                    if (!this.self.level().isClientSide()){
                         SE.setFingerLength(1F);
+                    }
                 }
             }
 
