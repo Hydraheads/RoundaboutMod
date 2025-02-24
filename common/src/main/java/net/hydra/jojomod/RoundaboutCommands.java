@@ -1,12 +1,14 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.commands.StandType;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -16,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class RoundaboutCommands {
 
@@ -39,6 +42,59 @@ public class RoundaboutCommands {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.experience_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
         } else {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.experience_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+    public static int roundaboutSetStand(CommandSourceStack source, Collection<? extends Entity> targets,
+                                         String standType, int level, byte skin, byte pose, boolean hiddenUnlocked) {
+
+
+        String name = "";
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                    StandUser user = ((StandUser) LE);
+                    ItemStack disc = ItemStack.EMPTY;
+                    if (Objects.equals(standType, "star_platinum") || Objects.equals(standType, "starplatinum") || Objects.equals(standType, "starPlatinum")){
+                        disc = ModItems.STAND_DISC_STAR_PLATINUM.getDefaultInstance();
+                        name = Component.translatable("item.roundabout.star_platinum_disc.desc").getString();
+                    } else if (Objects.equals(standType, "the_world") || Objects.equals(standType, "theworld") || Objects.equals(standType, "theWorld")){
+                        disc = ModItems.STAND_DISC_THE_WORLD.getDefaultInstance();
+                        name = Component.translatable("item.roundabout.the_world_disc.desc").getString();
+                    } else if (Objects.equals(standType, "justice")){
+                        disc = ModItems.STAND_DISC_JUSTICE.getDefaultInstance();
+                        name = Component.translatable("item.roundabout.justice_disc.desc").getString();
+                    }
+                    user.roundabout$setStandDisc(disc);
+                if (disc != null && disc.getItem() instanceof StandDiscItem SD) {
+                    SD.generateStandPowers(LE);
+
+                    if (entity instanceof Player PE) {
+                        ItemStack standDisc = user.roundabout$getStandDisc();
+                        IPlayerEntity ipe = ((IPlayerEntity)PE);
+                        int standLevel = ipe.roundabout$getStandLevel();
+                        if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
+                            ipe.roundabout$setStandExp(0);
+                            level = (byte) Mth.clamp(level, 1, SD.standPowers.getMaxLevel());
+                            ipe.roundabout$setStandLevel((byte) level);
+                        }
+                        ipe.roundabout$setUnlockedBonusSkin(hiddenUnlocked);
+                    }
+
+                    user.roundabout$setStandSkin(skin);
+                    user.roundabout$setIdlePosX(pose);
+
+                    if (user.roundabout$getActive()){
+                        ((StandUser) entity).roundabout$summonStand(entity.level(), true,false);
+                    }
+                }
+            }
+        }
+
+        final String nm = name;
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable("commands.roundabout.argument.standtype.valid_2", ((Entity)targets.iterator().next()).getDisplayName(),nm), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.argument.standtype.valid", targets.size(), nm), true);
         }
         return targets.size();
     }

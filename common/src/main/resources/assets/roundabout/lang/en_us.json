@@ -45,6 +45,7 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
+  "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.blank_mask": "Glass Visage",
   "item.roundabout.blank_mask.desc": "Hides Armor",
@@ -189,6 +190,10 @@
   "commands.roundabout.levelup_specific.single": "Set level of %s",
   "commands.roundabout.experience_specific.multiple": "Set experience of %s entities",
   "commands.roundabout.experience_specific.single": "Set experience of %s",
+  "commands.roundabout.argument.standtype.valid": "Set Stand of %s entities to %s",
+  "commands.roundabout.argument.standtype.valid_2": "Set Stand of %s to %s",
+  "commands.roundabout.argument.standtype.invalid": "Unknown stand type: %s",
+  "commands.roundabout.argument.standtype.invalid_2": "Must enter a stand type, or 'none'.",
 
   "sounds.roundabout.stand_arrow_charge":  "Stand Arrow Magnetizes",
   "sounds.roundabout.stand_arrow_use":  "Stand acquired!",
