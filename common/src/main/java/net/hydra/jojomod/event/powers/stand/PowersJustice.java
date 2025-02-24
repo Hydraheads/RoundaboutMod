@@ -227,6 +227,14 @@ public class PowersJustice extends DashPreset {
                     }
                 }
             }
+            Vec3 vec3d = ent.getEyePosition(0);
+            Vec3 vec3d2 = ent.getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+            BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+            BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
+            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
+            this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
+
         }
         return false;
     }
@@ -693,8 +701,39 @@ public class PowersJustice extends DashPreset {
         }
     }
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
-        this.bpos = blockPos;
-        return tryPower(move, forced);
+        if (move == PowerIndex.POWER_2) {
+            this.bpos = blockPos;
+            return tryPower(move, forced);
+        } else {
+            if (move == PowerIndex.POWER_3_EXTRA){
+                if (fogControlledEntities == null){
+                    fogControlledEntities = new ArrayList<>();
+                }
+
+                List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
+                if (!fogControlledEntities2.isEmpty()) {
+                    for (LivingEntity value : fogControlledEntities2) {
+                        if (value.isRemoved() || !value.isAlive()) {
+                            removeJusticeEntities(value);
+                        } else {
+                            if (value instanceof FallenMob fm) {
+                                if (fm.controller != null && fm.controller.is(this.getSelf())) {
+                                    if (fm.getSelected()) {
+                                        fm.getNavigation().moveTo(fm.getNavigation().createPath(blockPos, 0), 1);
+                                        if (fm.getTarget() != null){
+                                            fm.manualTarget = null;
+                                            fm.setLastHurtByMob(null);
+                                            fm.setTarget(null);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
     }
 
