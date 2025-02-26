@@ -145,7 +145,7 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
         if (((StandUser)this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
-            if (((Creeper)(Object)this).isAlive()) {
+            if (this.isAlive()) {
                 oldSwell = swell;
             }
 
