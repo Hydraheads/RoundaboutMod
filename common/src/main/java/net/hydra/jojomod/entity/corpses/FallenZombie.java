@@ -25,7 +25,7 @@ public class FallenZombie extends FallenMob{
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.MAX_HEALTH, 20)
-                .add(Attributes.ATTACK_DAMAGE, 1).
+                .add(Attributes.ATTACK_DAMAGE, 3).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
 

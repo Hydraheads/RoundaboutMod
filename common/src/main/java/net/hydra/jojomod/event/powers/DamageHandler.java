@@ -48,6 +48,15 @@ public class DamageHandler {
     public static boolean StandDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND, attacker), power);
     }
+    public static boolean CorpseDamageEntity(Entity entity, float power, Entity attacker){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE, attacker), power);
+    }
+    public static boolean CorpseArrowDamageEntity(Entity entity, float power, Entity attacker){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE_ARROW, attacker), power);
+    }
+    public static boolean CorpseExplosionDamageEntity(Entity entity, float power, Entity attacker){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE_EXPLOSION, attacker), power);
+    }
     public static boolean PenetratingStandDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.PENETRATING_STAND, attacker), power);
     }

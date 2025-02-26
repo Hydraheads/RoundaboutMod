@@ -16,8 +16,8 @@ public class FallenVillager extends FallenMob{
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.27).add(Attributes.MAX_HEALTH, 20)
-                .add(Attributes.ATTACK_DAMAGE, 1).
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.275).add(Attributes.MAX_HEALTH, 20)
+                .add(Attributes.ATTACK_DAMAGE, 2.75).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
 

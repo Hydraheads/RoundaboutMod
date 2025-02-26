@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.Tactics;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
@@ -16,9 +17,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -30,6 +33,8 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -131,7 +136,47 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.placer = controller;
     }
 
+    @Override
+    public boolean doHurtTarget(Entity $$0) {
 
+        if (((StandUser) this).roundabout$isDazed() ||
+                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
+            return false;
+        }
+
+
+
+        float $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float $$2 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+        if ($$0 instanceof LivingEntity) {
+            $$1 += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity)$$0).getMobType());
+            $$2 += (float)EnchantmentHelper.getKnockbackBonus(this);
+        }
+
+        int $$3 = EnchantmentHelper.getFireAspect(this);
+        if ($$3 > 0) {
+            $$0.setSecondsOnFire($$3 * 4);
+        }
+
+        boolean $$4 = DamageHandler.CorpseDamageEntity($$0, $$1,this);
+        if ($$4) {
+            if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
+                ((LivingEntity)$$0)
+                        .knockback(
+                                (double)($$2 * 0.5F),
+                                (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
+                                (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
+                        );
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+            }
+
+            this.doEnchantDamageEffects(this, $$0);
+            this.setLastHurtMob($$0);
+        }
+
+        return $$4;
+    }
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
