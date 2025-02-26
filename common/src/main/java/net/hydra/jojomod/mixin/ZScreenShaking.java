@@ -72,9 +72,11 @@ public class ZScreenShaking implements IGameRenderer {
             boolean changed = false;
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
                 if (roundabout$tsShaderStatus == 0) {
-                    changed = true;
-                    roundabout$tsShaderStatus = 1;
-                    this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                    if (!(ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
+                        changed = true;
+                        roundabout$tsShaderStatus = 1;
+                        this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                    }
                 }
             } else {
                 if (roundabout$tsShaderStatus == 1) {
