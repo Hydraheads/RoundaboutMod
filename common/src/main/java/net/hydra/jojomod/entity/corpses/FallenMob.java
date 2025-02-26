@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.corpses;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.Tactics;
@@ -23,17 +22,10 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
-import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
@@ -136,6 +128,13 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.placer = controller;
     }
 
+    public float getAtkPower(Entity $$0){
+        if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
+            return (float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2);
+        }
+        return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+    }
+
     @Override
     public boolean doHurtTarget(Entity $$0) {
 
@@ -159,7 +158,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             $$0.setSecondsOnFire($$3 * 4);
         }
 
-        boolean $$4 = DamageHandler.CorpseDamageEntity($$0, $$1,this);
+        boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this);
         if ($$4) {
             if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
                 ((LivingEntity)$$0)
