@@ -120,6 +120,22 @@ public class RoundaboutCommands {
         }
         return targets.size();
     }
+    public static int executeReplenish(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                ((LivingEntity) entity).setHealth(((LivingEntity) entity).getMaxHealth());
+                if (entity instanceof Player PE){
+                    PE.getFoodData().setFoodLevel(20);
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.heal.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.heal.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
     public static int executeHeal(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {

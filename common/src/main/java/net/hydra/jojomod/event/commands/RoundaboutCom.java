@@ -71,6 +71,16 @@ public class RoundaboutCom {
                                         EntityArgument.getEntities(context, "targets"),IntegerArgumentType.getInteger(context,"experience")))
                         )
                 ));
+        dispatcher.register(Commands.literal("roundaboutReplenish")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.executeReplenish((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                                .executes(context -> RoundaboutCommands.executeReplenish((CommandSourceStack)context.getSource(),
+                                        EntityArgument.getEntities(context, "targets")))
+                        )
+                );
     }
 
 }
