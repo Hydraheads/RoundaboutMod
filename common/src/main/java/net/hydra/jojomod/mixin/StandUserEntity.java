@@ -1501,7 +1501,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM){
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
-                $$1/=2;
+                $$1/=3;
             }
             ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, $$0.getEntity(), $$0.getDirectEntity()),
                     $$1));

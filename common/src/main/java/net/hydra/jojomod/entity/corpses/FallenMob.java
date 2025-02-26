@@ -136,6 +136,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     @Override
+    public boolean removeWhenFarAway(double $$0) {
+        return false;
+    }
+    @Override
     public boolean doHurtTarget(Entity $$0) {
 
         if (((StandUser) this).roundabout$isDazed() ||
@@ -242,7 +246,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         if ($$0.hasUUID("Controller")) {
             $$2 = $$0.getUUID("Controller");
             if (this.level() instanceof ServerLevel SE){
-                this.controller = SE.getEntity($$2);
+                this.setController(SE.getEntity($$2));
             }
         }
         super.readAdditionalSaveData($$0);
@@ -291,7 +295,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                     setActivated(false);
                     this.setController(null);
                 } else {
-
+                    if (controller.getId() != this.getController()){
+                        this.setController(controller.getId());
+                    }
                     if (getTargetTactic() == Tactics.NONE.id || getTargetTactic() == Tactics.DEFEND.id) {
                         if (controller instanceof LivingEntity LE) {
                             autoTarget = LE.getLastHurtByMob();
