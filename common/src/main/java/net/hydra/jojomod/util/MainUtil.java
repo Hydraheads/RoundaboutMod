@@ -955,7 +955,8 @@ public class MainUtil {
         return id;
     }
     public static boolean isStandDamage(DamageSource sauce){
-        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)){
+        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
+                || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)){
             return true;
         }
         return false;

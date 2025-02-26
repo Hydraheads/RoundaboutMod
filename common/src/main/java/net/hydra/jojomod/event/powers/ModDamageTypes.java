@@ -17,6 +17,9 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand"));
         public static final ResourceKey<DamageType> STAR_FINGER = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "star_finger"));
         public static final ResourceKey<DamageType> PENETRATING_STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "penetrating_stand"));
+        public static final ResourceKey<DamageType> CORPSE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse"));
+        public static final ResourceKey<DamageType> CORPSE_ARROW = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse_arrow"));
+        public static final ResourceKey<DamageType> CORPSE_EXPLOSION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse_explosion"));
         public static final ResourceKey<DamageType> TIME = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "time"));
         public static final ResourceKey<DamageType> KNIFE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "knife"));
         public static final ResourceKey<DamageType> MATCH = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "match"));
