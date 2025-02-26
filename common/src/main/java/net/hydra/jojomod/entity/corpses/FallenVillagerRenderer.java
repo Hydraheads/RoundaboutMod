@@ -13,6 +13,8 @@ import net.minecraft.world.entity.npc.Villager;
 public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVillagerModel<FallenVillager>> {
     private static final ResourceLocation FALLEN_ZOMBIE_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_villager.png");
+    private static final ResourceLocation FALLEN_ZOMBIE_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_villager_holes.png");
 
     public FallenVillagerRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new FallenVillagerModel<>($$0.bakeLayer(ModelLayers.VILLAGER)), 0.5F);
@@ -22,8 +24,13 @@ public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVi
 
     private static final ResourceLocation VILLAGER_BASE_SKIN = new ResourceLocation("textures/entity/villager/villager.png");
 
-    public ResourceLocation getTextureLocation(FallenVillager $$0) {
-        return FALLEN_ZOMBIE_LOCATION;
+    @Override
+    public ResourceLocation getTextureLocation(FallenVillager var1) {
+        if (var1.getTurned()){
+            return FALLEN_ZOMBIE_LOCATION_2;
+        } else {
+            return FALLEN_ZOMBIE_LOCATION;
+        }
     }
 
     protected void scale(FallenVillager $$0, PoseStack $$1, float $$2) {

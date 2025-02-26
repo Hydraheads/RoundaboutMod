@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -52,6 +53,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_ACTIVATED =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_TURNED =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SELECTED =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> TARGET_TACTIC =
@@ -70,8 +73,25 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
     public void setActivated(boolean bool){
         this.entityData.set(IS_ACTIVATED, bool);
+        if (!getTurned() && bool){
+            this.setTurned(true);
+            //insert code for cool particles and sfx
+            if (!this.level().isClientSide()) {
+                this.level().playSound(null, this.getX(), this.getY(),
+                        this.getZ(), ModSounds.INHALE_EVENT, this.getSoundSource(), 100.0F, (float) (0.7F + (Math.random() * 0.05)));
+                ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
+                        this.getY()+this.getEyeHeight(), this.getZ(),
+                        10, 0.5, 0.5, 0.5, 0.2);
+            }
+        }
     }
 
+    public boolean getTurned() {
+        return this.getEntityData().get(IS_TURNED);
+    }
+    public void setTurned(boolean bool){
+        this.entityData.set(IS_TURNED, bool);
+    }
     public byte getTargetTactic() {
         return this.getEntityData().get(TARGET_TACTIC);
     }
@@ -227,6 +247,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
+        this.setTurned($$0.getBoolean("IsTurned"));
         this.setActivated($$0.getBoolean("IsActivated"));
         this.ticksThroughPhases = $$0.getInt("TicksThroughPhases");
         this.setTargetTactic($$0.getByte("targetTactic"));
@@ -375,7 +396,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                                 this.setForcedRotation(0);
                             }
 
-                            if (ClientUtil.checkIfClientHoldingBag()) {
+                            if (!getTurned() && ClientUtil.checkIfClientHoldingBag()) {
                                 if (this.tickCount % 5 == 0) {
                                     for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
                                         this.level()
@@ -423,7 +444,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     public void playerTouch(Player $$0) {
-        if (!getActivated() && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
+        if (!getActivated() && !getTurned() && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
             if (!this.level().isClientSide) {
                 if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getMainHandItem(),this)){
@@ -448,6 +469,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.entityData.define(TICKS_THROUGH_PLACER, false);
         this.entityData.define(PHASES_FULL, false);
         this.entityData.define(IS_ACTIVATED, false);
+        this.entityData.define(IS_TURNED, false);
         this.entityData.define(FORCED_ROTATION, 0F);
         this.entityData.define(SELECTED, false);
         this.entityData.define(TARGET_TACTIC, (byte)0);

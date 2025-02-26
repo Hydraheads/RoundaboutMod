@@ -14,13 +14,18 @@ import net.minecraft.world.entity.monster.Spider;
 public class FallenSpiderRenderer<T extends Spider> extends MobRenderer<FallenSpider, FallenSpiderModel<FallenSpider>> {
     private static final ResourceLocation FALLEN_SPIDER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_spider.png");
+    private static final ResourceLocation FALLEN_SPIDER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_spider_holes.png");
 
 
     @Override
     public ResourceLocation getTextureLocation(FallenSpider var1) {
-        return FALLEN_SPIDER_LOCATION;
+        if (var1.getTurned()){
+            return FALLEN_SPIDER_LOCATION_2;
+        } else {
+            return FALLEN_SPIDER_LOCATION;
+        }
     }
-
 
     public FallenSpiderRenderer(EntityRendererProvider.Context $$0) {
         this($$0, ModelLayers.SPIDER);

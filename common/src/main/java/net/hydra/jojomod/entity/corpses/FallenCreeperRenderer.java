@@ -17,6 +17,8 @@ import net.minecraft.world.entity.monster.Creeper;
 public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCreeperModel<FallenCreeper>> {
     private static final ResourceLocation FALLEN_CREEPER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_creeper.png");
+    private static final ResourceLocation FALLEN_CREEPER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_creeper_holes.png");
 
     public FallenCreeperRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new FallenCreeperModel<>($$0.bakeLayer(ModelLayers.CREEPER)), 0.5F);
@@ -25,9 +27,12 @@ public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCree
 
     @Override
     public ResourceLocation getTextureLocation(FallenCreeper var1) {
-        return FALLEN_CREEPER_LOCATION;
+        if (var1.getTurned()){
+            return FALLEN_CREEPER_LOCATION_2;
+        } else {
+            return FALLEN_CREEPER_LOCATION;
+        }
     }
-
 
     protected void scale(FallenCreeper $$0, PoseStack $$1, float $$2) {
         float $$3 = $$0.getSwelling($$2);

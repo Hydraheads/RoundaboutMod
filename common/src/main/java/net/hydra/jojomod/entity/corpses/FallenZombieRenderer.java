@@ -12,6 +12,8 @@ public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, Fall
     private static final ResourceLocation ZOMBIE_LOCATION = new ResourceLocation("textures/entity/zombie/zombie.png");
     private static final ResourceLocation FALLEN_ZOMBIE_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_zombie.png");
+    private static final ResourceLocation FALLEN_ZOMBIE_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_zombie_holes.png");
 
     public FallenZombieRenderer(EntityRendererProvider.Context $$0) {
         this($$0, ModelLayers.ZOMBIE, ModelLayers.ZOMBIE_INNER_ARMOR, ModelLayers.ZOMBIE_OUTER_ARMOR);
@@ -19,7 +21,11 @@ public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, Fall
 
     @Override
     public ResourceLocation getTextureLocation(FallenZombie var1) {
-        return FALLEN_ZOMBIE_LOCATION;
+        if (var1.getTurned()){
+            return FALLEN_ZOMBIE_LOCATION_2;
+        } else {
+            return FALLEN_ZOMBIE_LOCATION;
+        }
     }
 
     protected FallenZombieRenderer(EntityRendererProvider.Context $$0, FallenZombieModel<FallenZombie> $$1,
