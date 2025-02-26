@@ -4,6 +4,7 @@
     "roundabout:match",
     "roundabout:knife",
     "roundabout:harpoon",
+    "roundabout:corpse_arrow",
     "roundabout:power_throw"
   ]
 }
