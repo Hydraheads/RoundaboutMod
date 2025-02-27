@@ -49,6 +49,7 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		super.defaultModifiers(entity);
 	}
 	public static LayerDefinition getTexturedModelData() {
+
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -193,8 +194,10 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 
 		PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(30, 18).addBox(-4.5F, -7.0F, -2.5F, 9.0F, 4.0F, 5.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 43).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
+		PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
+
+		PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(30, 18).addBox(-4.5F, -7.0F, -2.5F, 9.0F, 4.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 43).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 
@@ -350,10 +353,8 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		this.animate(pEntity.blockGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 1f);
 		this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
 		this.animate(pEntity.blockLoinAnimationState, StarPlatinumAnimations.BLOCK_LOIN, pAgeInTicks, 1f);
-		this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
-		this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1f);
-		//this.animate(pEntity.itemGrabAnimation, StarPlatinumAnimations.ItemGrab, pAgeInTicks, 1f);
-		//this.animate(pEntity.itemThrowAnimation, StarPlatinumAnimations.ItemThrow, pAgeInTicks, 1f);
+		this.animate(pEntity.itemGrabAnimation, StarPlatinumAnimations.ItemGrab, pAgeInTicks, 1f);
+		this.animate(pEntity.itemThrowAnimation, StarPlatinumAnimations.ItemThrow, pAgeInTicks, 1f);
 		this.animate(pEntity.blockRetractAnimation, StandAnimations.RETRACT_BLOCK, pAgeInTicks, 1.25f);
 		this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
 		this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);

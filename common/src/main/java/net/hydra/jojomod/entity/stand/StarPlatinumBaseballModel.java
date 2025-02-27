@@ -49,6 +49,7 @@ public class StarPlatinumBaseballModel<T extends StarPlatinumEntity> extends Sta
         super.defaultModifiers(entity);
     }
     public static LayerDefinition getTexturedModelData() {
+
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -164,7 +165,9 @@ public class StarPlatinumBaseballModel<T extends StarPlatinumEntity> extends Sta
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(0, 43).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
+        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
+
+        PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(0, 43).addBox(-4.0F, -24.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 18.0F, 0.0F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 
@@ -175,11 +178,11 @@ public class StarPlatinumBaseballModel<T extends StarPlatinumEntity> extends Sta
 
         PartDefinition right_shoulder_pad = upper_right_arm.addOrReplaceChild("right_shoulder_pad", CubeListBuilder.create().texOffs(99, 66).addBox(-5.1F, -2.0F, -3.0F, 6.0F, 3.0F, 6.0F, new CubeDeformation(-0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(69, 16).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
-
-        PartDefinition bat = lower_right_arm.addOrReplaceChild("bat", CubeListBuilder.create().texOffs(118, 25).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+        PartDefinition bat = upper_right_arm.addOrReplaceChild("bat", CubeListBuilder.create().texOffs(118, 25).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(124, 16).addBox(-0.5F, -11.0F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(120, 0).addBox(-1.0F, -25.0F, -1.0F, 2.0F, 14.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.925F, 4.75F, 4.9F, 1.5708F, 0.0F, 0.0F));
+                .texOffs(120, 0).addBox(-1.0F, -25.0F, -1.0F, 2.0F, 14.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.075F, 10.15F, 4.9F, 1.5708F, 0.0F, 0.0F));
+
+        PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(69, 16).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
 
         PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
@@ -306,10 +309,8 @@ public class StarPlatinumBaseballModel<T extends StarPlatinumEntity> extends Sta
         this.animate(pEntity.blockGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 1f);
         this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
         this.animate(pEntity.blockLoinAnimationState, StarPlatinumAnimations.BLOCK_LOIN, pAgeInTicks, 1f);
-        this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
-        this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1f);
-        //this.animate(pEntity.itemGrabAnimation, StarPlatinumAnimations.ItemGrab, pAgeInTicks, 1f);
-        //this.animate(pEntity.itemThrowAnimation, StarPlatinumAnimations.ItemThrow, pAgeInTicks, 1f);
+        this.animate(pEntity.itemGrabAnimation, StarPlatinumAnimations.ItemGrab, pAgeInTicks, 1f);
+        this.animate(pEntity.itemThrowAnimation, StarPlatinumAnimations.ItemThrow, pAgeInTicks, 1f);
         this.animate(pEntity.blockRetractAnimation, StandAnimations.RETRACT_BLOCK, pAgeInTicks, 1.25f);
         this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
         this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);

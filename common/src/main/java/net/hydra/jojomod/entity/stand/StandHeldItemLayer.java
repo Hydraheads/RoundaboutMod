@@ -53,6 +53,8 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
                     shiftY = -0.5F;
                     shiftX = 4;
                 }
+            } else if (p_117185_ instanceof StarPlatinumEntity SP){
+                shiftZ = -1F;
             }
             this.getParentModel().translateToHand(p_117188_, p_117189_, shiftZ, shiftY, shiftX);
             if (MainUtil.isThrownBlockItem((p_117186_.getItem()))) {
