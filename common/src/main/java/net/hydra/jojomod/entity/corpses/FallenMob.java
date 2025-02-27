@@ -206,6 +206,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.addBehaviourGoals();
     }
     public void addBehaviourGoals() {
+        this.goalSelector.addGoal(7, new CorpseStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(6, new CorpseFollowCommanderGoal(this, 1.0, 10.0F, 1.5F, false));
         this.targetSelector.addGoal(1, new CorpseTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
