@@ -1321,6 +1321,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     stand.setIdleAnimation(roundabout$getIdlePos());
 
                     if (((LivingEntity)(Object)this) instanceof Player PE){
+                        stand.playerSetProperties(PE);
                         stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
                         stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
                         stand.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());

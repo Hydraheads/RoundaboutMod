@@ -33,6 +33,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -55,7 +58,6 @@ public class PowersJustice extends DashPreset {
         super(self);
     }
     private List<LivingEntity> fogControlledEntities = new ArrayList<>();
-
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
         return new PowersJustice(entity);
@@ -100,6 +102,7 @@ public class PowersJustice extends DashPreset {
             }
         }
     }
+
     public List<LivingEntity> queryJusticeEntities(){
         if (fogControlledEntities == null){
             fogControlledEntities = new ArrayList<>();

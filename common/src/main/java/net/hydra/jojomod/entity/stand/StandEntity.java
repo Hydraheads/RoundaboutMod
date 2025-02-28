@@ -29,6 +29,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
@@ -435,6 +436,8 @@ public abstract class StandEntity extends Mob{
         this.entityData.set(ANCHOR_PLACE, degrees);
     }
 
+    public void playerSetProperties(Player PE) {
+    }
     public final void setDistanceOut(float blocks) {
         this.entityData.set(DISTANCE_OUT, blocks);
     }

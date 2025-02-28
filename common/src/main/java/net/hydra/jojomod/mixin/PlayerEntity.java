@@ -125,6 +125,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private float roundabout$idleRotation = 0;
     @Unique
     private float roundabout$idleYOffset = 0.1F;
+    @Unique
+    private byte roundabout$teamColor = 0;
+
+    @Unique
+    @Override
+    public void roundabout$setTeamColor(byte color){
+        roundabout$teamColor = color;
+    }
+    @Unique
+    @Override
+    public byte roundabout$getTeamColor(){
+        return roundabout$teamColor;
+    }
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
 
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
@@ -699,6 +712,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("idleRotation",roundabout$idleRotation);
         compoundtag.putFloat("idleYOffset",roundabout$idleYOffset);
         compoundtag.putFloat("sizePercent",roundabout$sizePercent);
+        compoundtag.putByte("teamColor",roundabout$teamColor);
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -735,6 +749,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("sizePercent")) {
             roundabout$sizePercent = compoundtag2.getFloat("sizePercent");
+        }
+        if (compoundtag2.contains("teamColor")) {
+            roundabout$teamColor = compoundtag2.getByte("teamColor");
         }
 
         //roundabout$maskInventory.addItem()

@@ -81,7 +81,8 @@ public class StandPowers {
      * Basically, stand attacks are clientside, but they need the server's confirmation to kickstart so you
      * can't hit targets in frozen tps*/
     public boolean kickStarted = true;
-
+    public void playerSetProperties(Player PE) {
+    }
 
     public StandPowers(LivingEntity self) {
         this.self = self;

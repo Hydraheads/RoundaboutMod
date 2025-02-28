@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -13,6 +14,9 @@ import net.minecraft.core.Position;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -21,6 +25,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -38,6 +43,22 @@ public class JusticeEntity extends StandEntity {
         super(entityType, world);
     }
 
+
+    protected static final EntityDataAccessor<Byte> JUSTICE_TEAM = SynchedEntityData.defineId(JusticeEntity.class,
+            EntityDataSerializers.BYTE);
+    public final void setJusticeTeam(Byte team) {
+        this.entityData.set(JUSTICE_TEAM, team);
+    } //sets leaning direction
+    public byte getJusticeTeam() {
+        return this.entityData.get(JUSTICE_TEAM);
+    }
+
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(JUSTICE_TEAM, (byte) 0);
+    }
     @Override
     public boolean isNoGravity() {
         return true;
@@ -122,6 +143,11 @@ public class JusticeEntity extends StandEntity {
         }
     }
 
+    @Override
+    public void playerSetProperties(Player PE) {
+        this.setJusticeTeam(((IPlayerEntity)PE).roundabout$getTeamColor());
+        super.playerSetProperties(PE);
+    }
     public int tsReleaseTime = 0;
     @Override
     public void tick(){
