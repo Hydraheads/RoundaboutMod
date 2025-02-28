@@ -11,10 +11,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.Villager;
 
 public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVillagerModel<FallenVillager>> {
-    private static final ResourceLocation FALLEN_ZOMBIE_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_villager.png");
-    private static final ResourceLocation FALLEN_ZOMBIE_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_villager_holes.png");
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_villager_blue.png");
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_villager_red.png");
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_villager_green.png");
 
     public FallenVillagerRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new FallenVillagerModel<>($$0.bakeLayer(ModelLayers.VILLAGER)), 0.5F);
@@ -27,9 +33,19 @@ public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVi
     @Override
     public ResourceLocation getTextureLocation(FallenVillager var1) {
         if (var1.getTurned()){
-            return FALLEN_ZOMBIE_LOCATION_2;
+            if (var1.getActivated()){
+                byte bt = var1.getJusticeTeamColor();
+                if (bt == 1){
+                    return FALLEN_VILLAGER_LOCATION_B;
+                } else if (bt ==2){
+                    return FALLEN_VILLAGER_LOCATION_R;
+                } else if (bt==3){
+                    return FALLEN_VILLAGER_LOCATION_G;
+                }
+            }
+            return FALLEN_VILLAGER_LOCATION_2;
         } else {
-            return FALLEN_ZOMBIE_LOCATION;
+            return FALLEN_VILLAGER_LOCATION;
         }
     }
 

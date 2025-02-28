@@ -19,6 +19,12 @@ public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCree
             "textures/entity/justice_corpses/justice_creeper.png");
     private static final ResourceLocation FALLEN_CREEPER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_creeper_holes.png");
+    private static final ResourceLocation FALLEN_CREEPER_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_creeper_blue.png");
+    private static final ResourceLocation FALLEN_CREEPER_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_creeper_red.png");
+    private static final ResourceLocation FALLEN_CREEPER_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_creeper_green.png");
 
     public FallenCreeperRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new FallenCreeperModel<>($$0.bakeLayer(ModelLayers.CREEPER)), 0.5F);
@@ -28,6 +34,16 @@ public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCree
     @Override
     public ResourceLocation getTextureLocation(FallenCreeper var1) {
         if (var1.getTurned()){
+            if (var1.getActivated()){
+                byte bt = var1.getJusticeTeamColor();
+                if (bt == 1){
+                    return FALLEN_CREEPER_LOCATION_B;
+                } else if (bt ==2){
+                    return FALLEN_CREEPER_LOCATION_R;
+                } else if (bt==3){
+                    return FALLEN_CREEPER_LOCATION_G;
+                }
+            }
             return FALLEN_CREEPER_LOCATION_2;
         } else {
             return FALLEN_CREEPER_LOCATION;

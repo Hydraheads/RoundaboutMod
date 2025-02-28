@@ -16,7 +16,8 @@ public enum Tactics {
     HUNT_TARGET((byte) 7),
     HUNT_MONSTERS((byte) 8),
     HUNT_PLAYERS((byte) 9),
-    PEACEFUL((byte) 10);
+    PEACEFUL((byte) 10),
+    CHANGE_TEAM((byte) 11);
 
     public final byte id;
 

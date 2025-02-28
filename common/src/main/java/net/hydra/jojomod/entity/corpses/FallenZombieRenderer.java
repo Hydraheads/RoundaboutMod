@@ -1,12 +1,18 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, FallenZombieModel<FallenZombie>> {
     private static final ResourceLocation ZOMBIE_LOCATION = new ResourceLocation("textures/entity/zombie/zombie.png");
@@ -14,6 +20,12 @@ public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, Fall
             "textures/entity/justice_corpses/justice_zombie.png");
     private static final ResourceLocation FALLEN_ZOMBIE_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_zombie_holes.png");
+    private static final ResourceLocation FALLEN_ZOMBIE_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_zombie_red.png");
+    private static final ResourceLocation FALLEN_ZOMBIE_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_zombie_green.png");
+    private static final ResourceLocation FALLEN_ZOMBIE_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_zombie_blue.png");
 
     public FallenZombieRenderer(EntityRendererProvider.Context $$0) {
         this($$0, ModelLayers.ZOMBIE, ModelLayers.ZOMBIE_INNER_ARMOR, ModelLayers.ZOMBIE_OUTER_ARMOR);
@@ -22,6 +34,16 @@ public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, Fall
     @Override
     public ResourceLocation getTextureLocation(FallenZombie var1) {
         if (var1.getTurned()){
+            if (var1.getActivated()){
+                byte bt = var1.getJusticeTeamColor();
+                if (bt == 1){
+                    return FALLEN_ZOMBIE_LOCATION_B;
+                } else if (bt ==2){
+                    return FALLEN_ZOMBIE_LOCATION_R;
+                } else if (bt==3){
+                    return FALLEN_ZOMBIE_LOCATION_G;
+                }
+            }
             return FALLEN_ZOMBIE_LOCATION_2;
         } else {
             return FALLEN_ZOMBIE_LOCATION;

@@ -7,9 +7,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.index.Tactics;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.GameNarrator;
@@ -85,7 +88,9 @@ public class JusticeTacticsScreen extends Screen {
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         this.switchToHoveredGameMode();
-        this.minecraft.setScreen(null);
+        if (this.currentlyHovered.id != Tactics.CHANGE_TEAM.id){
+            this.minecraft.setScreen(null);
+        }
         return true;
     }
 
@@ -176,6 +181,15 @@ public class JusticeTacticsScreen extends Screen {
         return false;
     }
 
+    ResourceLocation RL0 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tactics_icons/team_base.png");
+    ResourceLocation RL1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tactics_icons/team_blue.png");
+    ResourceLocation RL2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tactics_icons/team_red.png");
+    ResourceLocation RL3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tactics_icons/team_green.png");
+
     public enum tacticIcon {
 
         NONE(Component.translatable("roundabout.corpse.tactics.none"), new ResourceLocation(Roundabout.MOD_ID,
@@ -199,7 +213,9 @@ public class JusticeTacticsScreen extends Screen {
         HUNT_PLAYERS(Component.translatable("roundabout.corpse.tactics.hunt_player"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/hunt_players.png"),Tactics.HUNT_PLAYERS.id,61,70),
         PEACEFUL(Component.translatable("roundabout.corpse.tactics.peaceful"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,91,55);
+                "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,91,55),
+        CHANGE_TEAM(Component.translatable("roundabout.corpse.tactics.change_team"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/team_base.png"),Tactics.CHANGE_TEAM.id,-72,-28);
 
         static tacticIcon getByte(Tactics tactics) {
             return switch (tactics) {
@@ -214,6 +230,7 @@ public class JusticeTacticsScreen extends Screen {
                 case HUNT_MONSTERS -> HUNT_MONSTERS;
                 case HUNT_PLAYERS -> HUNT_PLAYERS;
                 case PEACEFUL -> PEACEFUL;
+                case CHANGE_TEAM -> CHANGE_TEAM;
             };
         }
         protected static final tacticIcon[] VALUES;
@@ -237,6 +254,9 @@ public class JusticeTacticsScreen extends Screen {
         void drawIcon(GuiGraphics guiGraphics, int i, int j) {
             guiGraphics.blit(rl, i-1, j-1, 0, 0, 18, 18, 18, 18);
         }
+        void drawIcon2(ResourceLocation rl, GuiGraphics guiGraphics, int i, int j) {
+            guiGraphics.blit(rl, i-1, j-1, 0, 0, 18, 18, 18, 18);
+        }
 
         Component getName() {
             return this.name;
@@ -244,7 +264,7 @@ public class JusticeTacticsScreen extends Screen {
 
         static {
             VALUES = new tacticIcon[]{NONE,SELECT_ALL,DESELECT_ALL,STAY_PUT,ROAM,FOLLOW,
-            FOLLOW, DEFEND, HUNT_TARGET, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL};
+            FOLLOW, DEFEND, HUNT_TARGET, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL, CHANGE_TEAM};
         }
     }
 
@@ -261,10 +281,34 @@ public class JusticeTacticsScreen extends Screen {
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             if (!this.icon.equals(tacticIcon.NONE)) {
-                this.drawSlot(guiGraphics);
-                this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+                if (!this.icon.equals(tacticIcon.CHANGE_TEAM)) {
+                    this.drawSlot(guiGraphics);
+                }
+                if (this.icon.equals(tacticIcon.CHANGE_TEAM)) {
+                    Player pl = Minecraft.getInstance().player;
+                    if (pl != null){
+                        StandEntity sd = ((StandUser)pl).roundabout$getStand();
+                        if (sd instanceof JusticeEntity JE){
+                            if (JE.getJusticeTeam() == 0){
+                                this.icon.drawIcon2(RL0, guiGraphics, this.getX() + 5, this.getY() + 5);
+                            } else if (JE.getJusticeTeam() == 1){
+                                this.icon.drawIcon2(RL1, guiGraphics, this.getX() + 5, this.getY() + 5);
+                            } else if (JE.getJusticeTeam() == 2){
+                                this.icon.drawIcon2(RL2, guiGraphics, this.getX() + 5, this.getY() + 5);
+                            } else if (JE.getJusticeTeam() == 3){
+                                this.icon.drawIcon2(RL3, guiGraphics, this.getX() + 5, this.getY() + 5);
+                            }
+                        } else {
+                            this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+                        }
+                    }
+                } else {
+                    this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+                }
                 if (this.isSelected) {
-                    this.drawSelection(guiGraphics);
+                    if (!this.icon.equals(tacticIcon.CHANGE_TEAM)) {
+                        this.drawSelection(guiGraphics);
+                    }
                 }
             }
         }

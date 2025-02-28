@@ -103,6 +103,29 @@ public class PowersJustice extends DashPreset {
         }
     }
 
+    public void cycleThroughJusticeEntities2(){
+        if (fogControlledEntities == null){
+            fogControlledEntities = new ArrayList<>();
+        }
+        List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
+        if (!fogControlledEntities2.isEmpty()){
+            for (LivingEntity value : fogControlledEntities2) {
+                if (value.isRemoved() || !value.isAlive()) {
+                } else {
+                    if (value instanceof FallenMob fm){
+                        if (fm.controller != null && fm.controller.is(this.getSelf())){
+                            if (this.getSelf() instanceof Player PE){
+                                byte bt = ((IPlayerEntity)PE).roundabout$getTeamColor();
+                                if (fm.getJusticeTeamColor() != bt){
+                                    fm.setJusticeTeamColor(bt);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     public List<LivingEntity> queryJusticeEntities(){
         if (fogControlledEntities == null){
             fogControlledEntities = new ArrayList<>();
@@ -242,8 +265,8 @@ public class PowersJustice extends DashPreset {
         return false;
     }
     public void tickPower() {
-
         if (this.self instanceof Player PL){
+            cycleThroughJusticeEntities2();
             int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
             Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
             if (this.self.level().isClientSide() && isPacketPlayer()) {
@@ -488,6 +511,23 @@ public class PowersJustice extends DashPreset {
         if (fogControlledEntities == null){
             fogControlledEntities = new ArrayList<>();
         }
+
+        if (context == Tactics.CHANGE_TEAM.id){
+            if (this.getSelf() instanceof Player PE){
+                byte bt = ((IPlayerEntity) PE).roundabout$getTeamColor();
+                bt++;
+                if (bt > 3){
+                    bt = 0;
+                }
+                ((IPlayerEntity) PE).roundabout$setTeamColor(bt);
+               StandEntity SE = this.getStandEntity(this.self);
+               if (SE instanceof JusticeEntity JE){
+                   JE.setJusticeTeam(bt);
+               }
+            }
+            return;
+        }
+
 
             List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
             if (!fogControlledEntities2.isEmpty()){

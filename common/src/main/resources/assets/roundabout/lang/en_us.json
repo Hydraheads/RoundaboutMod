@@ -522,6 +522,7 @@
   "roundabout.corpse.tactics.hunt_monster": "Hunt Monsters",
   "roundabout.corpse.tactics.hunt_player": "Hunt Players",
   "roundabout.corpse.tactics.peaceful": "Stand Down",
+  "roundabout.corpse.tactics.change_team": "Team Color",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",

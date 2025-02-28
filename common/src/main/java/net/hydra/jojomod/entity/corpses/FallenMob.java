@@ -61,11 +61,19 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> MOVEMENT_TACTIC =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> TEAM_COLOR =
+            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.BYTE);
     public float getForcedRotation() {
         return this.getEntityData().get(FORCED_ROTATION);
     }
     public void setForcedRotation(float fr){
         this.entityData.set(FORCED_ROTATION, fr);
+    }
+    public byte getJusticeTeamColor() {
+        return this.getEntityData().get(TEAM_COLOR);
+    }
+    public void setJusticeTeamColor(byte fr){
+        this.entityData.set(TEAM_COLOR, fr);
     }
 
     public boolean getActivated() {
@@ -476,6 +484,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.entityData.define(SELECTED, false);
         this.entityData.define(TARGET_TACTIC, (byte)0);
         this.entityData.define(MOVEMENT_TACTIC, (byte)0);
+        this.entityData.define(TEAM_COLOR, (byte)0);
     }
     protected FallenMob(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);

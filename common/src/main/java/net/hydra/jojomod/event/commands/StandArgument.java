@@ -21,7 +21,6 @@ public class StandArgument implements ArgumentType<StandType> {
 
         @Override
         public StandType parse(StringReader reader) throws CommandSyntaxException {
-            Roundabout.LOGGER.info("1");
             String s = reader.readUnquotedString();
             StandType standType = StandType.byName(s, (StandType)null);
             if (standType == null) {

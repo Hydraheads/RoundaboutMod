@@ -99,10 +99,8 @@ public class CorpseFollowCommanderGoal extends Goal {
 
     @Override
     public void tick() {
-        Roundabout.LOGGER.info("1");
         this.fallenMob.getLookControl().setLookAt(this.owner, 10.0F, (float)this.fallenMob.getMaxHeadXRot());
         if (--this.timeToRecalcPath <= 0) {
-            Roundabout.LOGGER.info("2");
             this.timeToRecalcPath = this.adjustedTickDelay(10);
             this.navigation.moveTo(this.owner, this.speedModifier);
         }

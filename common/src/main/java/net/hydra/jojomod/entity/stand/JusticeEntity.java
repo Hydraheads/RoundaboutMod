@@ -162,6 +162,7 @@ public class JusticeEntity extends StandEntity {
             }
         } else {
 
+
             if (!(!ConfigManager.getClientConfig().particleSettings.renderJusticeParticlesInFirstPerson &&
                     ClientUtil.checkIfStandIsYoursAndFirstPerson(this)) &&
                     !(!ConfigManager.getClientConfig().particleSettings.renderJusticeParticlesWhilePilotingInFirstPerson &&

@@ -16,11 +16,27 @@ public class FallenSpiderRenderer<T extends Spider> extends MobRenderer<FallenSp
             "textures/entity/justice_corpses/justice_spider.png");
     private static final ResourceLocation FALLEN_SPIDER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_spider_holes.png");
+    private static final ResourceLocation FALLEN_SPIDER_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_spider_blue.png");
+    private static final ResourceLocation FALLEN_SPIDER_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_spider_red.png");
+    private static final ResourceLocation FALLEN_SPIDER_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/justice_corpses/justice_spider_green.png");
 
 
     @Override
     public ResourceLocation getTextureLocation(FallenSpider var1) {
         if (var1.getTurned()){
+            if (var1.getActivated()){
+                byte bt = var1.getJusticeTeamColor();
+                if (bt == 1){
+                    return FALLEN_SPIDER_LOCATION_B;
+                } else if (bt ==2){
+                    return FALLEN_SPIDER_LOCATION_R;
+                } else if (bt==3){
+                    return FALLEN_SPIDER_LOCATION_G;
+                }
+            }
             return FALLEN_SPIDER_LOCATION_2;
         } else {
             return FALLEN_SPIDER_LOCATION;
