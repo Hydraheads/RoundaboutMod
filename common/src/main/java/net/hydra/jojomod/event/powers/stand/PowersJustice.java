@@ -410,16 +410,26 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.passive", StandIcons.JUSTICE_FOG_SWORD, 0, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.cast_fog",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_CAST_FOG,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.fog_morph",
-                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.fog_chain",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.fog_chain",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_FOG_CHAIN,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fog_blocks",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.fog_morph_2",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_2,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fog_morph_3",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_3,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fog_morph_4",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_4,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.fog_blocks",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.fog_pilot",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.fog_pilot",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_PILOT,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.corpse_army",
+                "instruction.roundabout.passive", StandIcons.JUSTICE_CORPSE_ARMY,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.tactics",
+                "instruction.roundabout.press_skill", StandIcons.JUSTICE_TACTICS,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.fog_clones",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_CLONES,3,level,bypas));
         return $$1;
     }
     @Override

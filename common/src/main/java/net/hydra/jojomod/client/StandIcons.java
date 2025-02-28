@@ -136,8 +136,18 @@ public class StandIcons {
             "textures/gui/icons/justice/cast_fog.png");
     public static final ResourceLocation JUSTICE_DISGUISE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/disguise_icon.png");
+    public static final ResourceLocation JUSTICE_DISGUISE_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/disguise_2.png");
+    public static final ResourceLocation JUSTICE_DISGUISE_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/disguise_3.png");
+    public static final ResourceLocation JUSTICE_DISGUISE_4 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/disguise_4.png");
     public static final ResourceLocation JUSTICE_FOG_CHAIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/fog_chain.png");
+    public static final ResourceLocation JUSTICE_FOG_CLONES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/fog_clones.png");
+    public static final ResourceLocation JUSTICE_CORPSE_ARMY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/justice/corpse_army.png");
     public static final ResourceLocation JUSTICE_TACTICS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/tactics.png");
     public static final ResourceLocation JUSTICE_FOG_BLOCKS = new ResourceLocation(Roundabout.MOD_ID,
