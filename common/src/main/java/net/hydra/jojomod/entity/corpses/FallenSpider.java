@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -51,6 +52,18 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
     public String getData() {
         return "spider";
     }
+    @Nullable
+    public LivingEntity getControllingPassenger() {
+        if (!this.getPassengers().isEmpty()) {
+            Entity entity = this.getPassengers().get(0);
+            if (entity instanceof LivingEntity && this.getActivated()
+            && this.getController() == entity.getId()) {
+                return (LivingEntity)entity;
+            }
+        }
+
+        return null;
+    }
 
     @Override
     protected void registerGoals() {
@@ -67,7 +80,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide) {
+        if (this.isControlledByLocalInstance()) {
             this.setClimbing(this.horizontalCollision);
         }
     }
@@ -76,7 +89,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
 
     @Override
     protected float getRiddenSpeed(Player $$0) {
-        return (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        return (float) ((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED)*0.49);
     }
 
     public boolean isJumping() {
@@ -142,6 +155,27 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
 
 
     @Override
+    public boolean causeFallDamage(float $$0, float $$1, DamageSource $$2) {
+        if ($$0 > 1.0F) {
+            this.playSound(SoundEvents.HORSE_LAND, 0.4F, 1.0F);
+        }
+
+        int $$3 = this.calculateFallDamage($$0, $$1);
+        if ($$3 <= 0) {
+            return false;
+        } else {
+            this.hurt($$2, (float)$$3);
+            if (this.isVehicle()) {
+                for (Entity $$4 : this.getIndirectPassengers()) {
+                    $$4.hurt($$2, (float)$$3);
+                }
+            }
+
+            this.playBlockFallSound();
+            return true;
+        }
+    }
+    @Override
     protected SoundEvent getAmbientSound() {
         if (this.getActivated()) {
             return SoundEvents.SPIDER_AMBIENT;
@@ -171,6 +205,11 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
     @Override
     protected void playStepSound(BlockPos $$0, BlockState $$1) {
         if (this.getActivated()) {
+            if (this.getController() > 0 && this.getControllingPassenger() instanceof
+            Player PE && this.getController() == PE.getId() &&
+                    ((StandUser)PE).roundabout$getStandPowers().isPiloting()){
+                return;
+            }
             this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
         }
     }
@@ -315,7 +354,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
         }
     }
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
-        if (this.isVehicle()) {
+        if (this.isVehicle() || !this.getActivated()) {
             return super.mobInteract($$0, $$1);
         } else {
 

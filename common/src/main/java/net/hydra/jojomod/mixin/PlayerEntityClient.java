@@ -180,10 +180,19 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
             super.tick();
                 this.connection.send(new ServerboundMovePlayerPacket.Rot(this.getYRot(), this.getXRot(), this.onGround()));
                 this.connection.send(new ServerboundPlayerInputPacket(this.xxa, this.zza, this.input.jumping, this.input.shiftKeyDown));
+                /**
                 if (ent != this) {
                     this.connection.send(new ServerboundMoveVehiclePacket(ent));
                     this.sendIsSprintingIfNeeded();
                 }
+                 */
+            if (this.isPassenger()) {
+                Entity $$0 = this.getRootVehicle();
+                if ($$0 != this && $$0.isControlledByLocalInstance()) {
+                    this.connection.send(new ServerboundMoveVehiclePacket($$0));
+                    this.sendIsSprintingIfNeeded();
+                }
+            }
             this.sendPosition();
             for(AmbientSoundHandler ambientsoundhandler : this.ambientSoundHandlers) {
                 ambientsoundhandler.tick();
