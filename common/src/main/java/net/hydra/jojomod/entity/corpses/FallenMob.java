@@ -243,6 +243,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
+        $$0.putBoolean("IsTurned",getTurned());
         $$0.putBoolean("IsActivated",getActivated());
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
