@@ -1,4 +1,4 @@
-// Made with Blockbench 4.11.1
+// Made with Blockbench 4.12.3
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
@@ -35,6 +35,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart body2;
 	private final ModelPart torso;
 	private final ModelPart upper_chest;
+	private final ModelPart upper_chest_only;
 	private final ModelPart right_arm;
 	private final ModelPart upper_right_arm;
 	private final ModelPart right_shoulder_pad;
@@ -98,6 +99,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.body2 = this.body.getChild("body2");
 		this.torso = this.body2.getChild("torso");
 		this.upper_chest = this.torso.getChild("upper_chest");
+		this.upper_chest_only = this.upper_chest.getChild("upper_chest_only");
 		this.right_arm = this.upper_chest.getChild("right_arm");
 		this.upper_right_arm = this.right_arm.getChild("upper_right_arm");
 		this.right_shoulder_pad = this.upper_right_arm.getChild("right_shoulder_pad");
@@ -158,7 +160,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition middle_tuft3_r1 = middle_tuft2.addOrReplaceChild("middle_tuft3_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(0.9876F, -1.6968F, -4.8218F, 0.8727F, 0.0F, 0.0F));
 
-		PartDefinition middle_tuft2_r1 = middle_tuft2.addOrReplaceChild("middle_tuft2_r1", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -5.4F, -0.6F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.4579F, 0.9599F, 0.0F, 0.0F));
+		PartDefinition middle_tuft2_r1 = middle_tuft2.addOrReplaceChild("middle_tuft2_r1", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -5.4F, -0.6F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.458F, 0.9599F, 0.0F, 0.0F));
 
 		PartDefinition middle_tuff2 = hair.addOrReplaceChild("middle_tuff2", CubeListBuilder.create(), PartPose.offsetAndRotation(-1.081F, 1.2514F, -4.2602F, 0.2182F, 0.0F, 0.0F));
 
@@ -166,7 +168,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition middle_tuft3 = middle_tuff2.addOrReplaceChild("middle_tuft3", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0024F, -3.4145F, -0.9799F, 0.2618F, 0.0F, 0.0F));
 
-		PartDefinition middle_tuft4_r1 = middle_tuft3.addOrReplaceChild("middle_tuft4_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(1.0076F, -1.1129F, -3.9247F, 0.829F, 0.0F, 0.0F));
+		PartDefinition middle_tuft4_r1 = middle_tuft3.addOrReplaceChild("middle_tuft4_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(1.0076F, -1.1129F, -3.9246F, 0.829F, 0.0F, 0.0F));
 
 		PartDefinition middle_tuft3_r2 = middle_tuft3.addOrReplaceChild("middle_tuft3_r2", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -4.4F, -0.6F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.4579F, 0.9599F, 0.0F, 0.0F));
 
@@ -248,7 +250,9 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(0, 43).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
+		PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
+
+		PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(0, 43).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 
@@ -263,7 +267,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition bat = lower_right_arm.addOrReplaceChild("bat", CubeListBuilder.create().texOffs(118, 25).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
 		.texOffs(124, 16).addBox(-0.5F, -11.0F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(120, 0).addBox(-1.0F, -25.0F, -1.0F, 2.0F, 14.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.925F, 4.75F, 4.9F, 1.5708F, 0.0F, 0.0F));
+		.texOffs(120, 0).addBox(-1.0F, -25.0F, -1.0F, 2.0F, 14.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.925F, 4.75F, 6.15F, 1.5708F, 0.0F, 0.0F));
 
 		PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
@@ -292,9 +296,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		.texOffs(108, 46).addBox(-3.0F, 0.75F, -2.0F, 1.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition lower_right_leg = right_leg.addOrReplaceChild("lower_right_leg", CubeListBuilder.create().texOffs(0, 61).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
+		.texOffs(107, 48).addBox(-1.0F, -1.1F, -2.3F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
 		.texOffs(71, 26).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 7.0F, 0.0F));
-
-		PartDefinition lower_right_leg_r2 = lower_right_leg.addOrReplaceChild("lower_right_leg_r2", CubeListBuilder.create().texOffs(107, 48).addBox(-3.0F, -1.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, -0.1F, -2.3F, 0.0F, 0.0F, 0.0F));
 
 		PartDefinition left_leg = legs.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(2.0F, -1.0F, 0.0F));
 
@@ -303,9 +306,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		PartDefinition cube_r1 = upper_left_leg.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(108, 46).addBox(0.0F, -4.0F, -1.0F, 1.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 4.75F, 1.0F, 0.0F, 3.1416F, 0.0F));
 
 		PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(60, 62).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
+		.texOffs(107, 48).mirror().addBox(-1.0F, -1.1F, -2.3F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(72, 69).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 7.0F, 0.0F));
-
-		PartDefinition lower_left_leg_r2 = lower_left_leg.addOrReplaceChild("lower_left_leg_r2", CubeListBuilder.create().texOffs(107, 48).mirror().addBox(1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-2.0F, -0.1F, -2.3F, 0.0F, 0.0F, 0.0F));
 
 		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -4.0F));
 
