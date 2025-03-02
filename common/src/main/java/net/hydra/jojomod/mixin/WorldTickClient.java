@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.SetBlockInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.prediction.BlockStatePredictionHandler;
@@ -419,7 +420,10 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     @Unique
     public float roundabout$maxSkyLerp = 30;
     @Unique
-    public Vec3 roundabout$fogSky = new Vec3(220,220,220);
+    public Vec3 roundabout$fogSky = new Vec3(
+            ConfigManager.getClientConfig().justiceFogBrightness,
+            ConfigManager.getClientConfig().justiceFogBrightness,
+            ConfigManager.getClientConfig().justiceFogBrightness);
 
     @Inject(method = "getSkyColor", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$getSkyColor(Vec3 $$0, float $$1, CallbackInfoReturnable<Vec3> cir) {

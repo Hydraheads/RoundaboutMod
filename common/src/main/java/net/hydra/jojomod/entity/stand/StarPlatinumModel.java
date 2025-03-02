@@ -49,7 +49,6 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 		super.defaultModifiers(entity);
 	}
 	public static LayerDefinition getTexturedModelData() {
-
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -78,7 +77,7 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 
 		PartDefinition middle_tuft3_r1 = middle_tuft2.addOrReplaceChild("middle_tuft3_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(0.9876F, -1.6968F, -4.8218F, 0.8727F, 0.0F, 0.0F));
 
-		PartDefinition middle_tuft2_r1 = middle_tuft2.addOrReplaceChild("middle_tuft2_r1", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -5.4F, -0.6F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.4579F, 0.9599F, 0.0F, 0.0F));
+		PartDefinition middle_tuft2_r1 = middle_tuft2.addOrReplaceChild("middle_tuft2_r1", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -5.4F, -0.6F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.458F, 0.9599F, 0.0F, 0.0F));
 
 		PartDefinition middle_tuff2 = hair.addOrReplaceChild("middle_tuff2", CubeListBuilder.create(), PartPose.offsetAndRotation(-1.081F, 1.2514F, -4.2602F, 0.2182F, 0.0F, 0.0F));
 
@@ -86,17 +85,17 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 
 		PartDefinition middle_tuft3 = middle_tuff2.addOrReplaceChild("middle_tuft3", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0024F, -3.4145F, -0.9799F, 0.2618F, 0.0F, 0.0F));
 
-		PartDefinition middle_tuft4_r1 = middle_tuft3.addOrReplaceChild("middle_tuft4_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(1.0076F, -1.1129F, -3.9247F, 0.829F, 0.0F, 0.0F));
+		PartDefinition middle_tuft4_r1 = middle_tuft3.addOrReplaceChild("middle_tuft4_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(1.0076F, -1.1129F, -3.9246F, 0.829F, 0.0F, 0.0F));
 
-		PartDefinition middle_tuft3_r2 = middle_tuft3.addOrReplaceChild("middle_tuft3_r2", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -4.4F, -0.6F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.4579F, 0.9599F, 0.0F, 0.0F));
+		PartDefinition middle_tuft3_r2 = middle_tuft3.addOrReplaceChild("middle_tuft3_r2", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -4.4F, -0.6F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.458F, 0.9599F, 0.0F, 0.0F));
 
-		PartDefinition middle_tuff3 = hair.addOrReplaceChild("middle_tuff3", CubeListBuilder.create(), PartPose.offsetAndRotation(-1.0801F, 4.1256F, -5.1237F, 0.6109F, 0.0F, 0.0F));
+		PartDefinition middle_tuff3 = hair.addOrReplaceChild("middle_tuff3", CubeListBuilder.create(), PartPose.offsetAndRotation(-1.08F, 4.1256F, -5.1237F, 0.6109F, 0.0F, 0.0F));
 
 		PartDefinition middle_tuff_r3 = middle_tuff3.addOrReplaceChild("middle_tuff_r3", CubeListBuilder.create().texOffs(101, 88).addBox(0.0F, -1.5F, -2.05F, 2.0F, 2.0F, 2.0F, new CubeDeformation(1.0F)), PartPose.offsetAndRotation(0.0F, -1.0F, 0.0F, 0.7418F, 0.0F, 0.0F));
 
 		PartDefinition middle_tuft4 = middle_tuff3.addOrReplaceChild("middle_tuft4", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0024F, -3.4145F, -0.9799F, 0.2618F, 0.0F, 0.0F));
 
-		PartDefinition middle_tuft5_r1 = middle_tuft4.addOrReplaceChild("middle_tuft5_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(1.0076F, -1.1129F, -3.9247F, 0.829F, 0.0F, 0.0F));
+		PartDefinition middle_tuft5_r1 = middle_tuft4.addOrReplaceChild("middle_tuft5_r1", CubeListBuilder.create().texOffs(101, 97).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(1.0076F, -1.1129F, -3.9246F, 0.829F, 0.0F, 0.0F));
 
 		PartDefinition middle_tuft4_r2 = middle_tuft4.addOrReplaceChild("middle_tuft4_r2", CubeListBuilder.create().texOffs(101, 92).addBox(0.0F, -4.4F, -0.6F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.51F)), PartPose.offsetAndRotation(-0.0024F, 2.5756F, 0.4579F, 0.9599F, 0.0F, 0.0F));
 
@@ -251,19 +250,17 @@ public class StarPlatinumModel<T extends StarPlatinumEntity> extends StandModel<
 
 		PartDefinition upper_right_leg = right_leg.addOrReplaceChild("upper_right_leg", CubeListBuilder.create().texOffs(72, 57).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition lower_right_leg = right_leg.addOrReplaceChild("lower_right_leg", CubeListBuilder.create().texOffs(0, 63).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(71, 26).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 7.0F, 0.0F));
-
-		PartDefinition lower_right_leg_r2 = lower_right_leg.addOrReplaceChild("lower_right_leg_r2", CubeListBuilder.create().texOffs(5, 59).addBox(-3.0F, -1.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, -0.1F, -2.3F, 0.0F, 0.0F, 0.0F));
+		PartDefinition lower_right_leg = right_leg.addOrReplaceChild("lower_right_leg", CubeListBuilder.create().texOffs(0, 61).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
+				.texOffs(5, 59).addBox(-1.0F, -1.1F, -2.3F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(71, 26).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 7.0F, 0.0F));
 
 		PartDefinition left_leg = legs.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(2.0F, -1.0F, 0.0F));
 
 		PartDefinition upper_left_leg = left_leg.addOrReplaceChild("upper_left_leg", CubeListBuilder.create().texOffs(44, 73).addBox(-2.0F, 1.0F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(60, 62).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(72, 69).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 7.0F, 0.0F));
-
-		PartDefinition lower_left_leg_r2 = lower_left_leg.addOrReplaceChild("lower_left_leg_r2", CubeListBuilder.create().texOffs(5, 59).mirror().addBox(1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-2.0F, -0.1F, -2.3F, 0.0F, 0.0F, 0.0F));
+				.texOffs(5, 59).mirror().addBox(-1.0F, -1.1F, -2.3F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
+				.texOffs(72, 69).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.202F)), PartPose.offset(0.0F, 7.0F, 0.0F));
 
 		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -4.0F));
 

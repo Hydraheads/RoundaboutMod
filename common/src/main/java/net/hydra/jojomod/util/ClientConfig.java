@@ -24,6 +24,8 @@ public class ClientConfig {
     public Boolean showCreativeTextOnWorthinessArrow;
     @BooleanOption(group = "inherit", value = true)
     public Boolean pressingAbilityKeysSummonsStands;
+    @IntOption(group = "inherit", value = 150)
+    public Integer justiceFogBrightness;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")
