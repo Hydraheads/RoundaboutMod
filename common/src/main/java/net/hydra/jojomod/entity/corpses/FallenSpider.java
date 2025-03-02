@@ -157,7 +157,6 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
     @Override
     public boolean causeFallDamage(float $$0, float $$1, DamageSource $$2) {
         if ($$0 > 1.0F) {
-            this.playSound(SoundEvents.HORSE_LAND, 0.4F, 1.0F);
         }
 
         int $$3 = this.calculateFallDamage($$0, $$1);
@@ -165,11 +164,6 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
             return false;
         } else {
             this.hurt($$2, (float)$$3);
-            if (this.isVehicle()) {
-                for (Entity $$4 : this.getIndirectPassengers()) {
-                    $$4.hurt($$2, (float)$$3);
-                }
-            }
 
             this.playBlockFallSound();
             return true;
