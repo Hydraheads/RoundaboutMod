@@ -64,7 +64,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<FallenSpider>> FALLEN_SPIDER =
             ENTITY_TYPES.register("fallen_spider", () ->
-                    EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(0.8F, 0.8F).clientTrackingRange(8).
+                    EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(1.4f, 0.9f).clientTrackingRange(8).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fallen_spider").toString())
             );
     public static final RegistryObject<EntityType<FallenVillager>> FALLEN_VILLAGER =

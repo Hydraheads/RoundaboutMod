@@ -77,7 +77,7 @@ public class FabricEntities {
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "fallen_spider"),
-                        EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(0.8F, 0.8F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                        EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(1.4f, 0.9f).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
                 );
         public static final EntityType<FallenVillager> FALLEN_VILLAGER =
                 Registry.register(
