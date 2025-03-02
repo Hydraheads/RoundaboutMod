@@ -298,7 +298,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
             this.setupAttackAnimation($$0, $$3);
             if (this.crouching) {
                 this.body.xRot = 0.5F;
-                this.body.z = 5.2F;
+                this.body.z = -0.5F;
                 this.rightArm.xRot += 0.4F;
                 this.leftArm.xRot += 0.4F;
                 this.rightLeg.z = 4.0F;
@@ -306,7 +306,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                 this.rightLeg.y = 0.2F;
                 this.leftLeg.y = 0.2F;
                 this.head.y = 4.2F;
-                this.body.y = 2.0F;
+                this.body.y = -9.0F;
                 this.leftArm.y = 5.2F;
                 this.rightArm.y = 5.2F;
             } else {
@@ -316,7 +316,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                 this.rightLeg.y = 0.0F;
                 this.leftLeg.y = 0.0F;
                 this.head.y = 0.0F;
-                this.body.y = 0.0F;
+                this.body.y = -11.0F;
                 this.leftArm.y = 2.0F;
                 this.rightArm.y = 2.0F;
             }
