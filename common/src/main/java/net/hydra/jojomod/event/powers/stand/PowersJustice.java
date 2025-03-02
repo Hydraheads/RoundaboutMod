@@ -168,7 +168,7 @@ public class PowersJustice extends DashPreset {
         LivingEntity ent = getPilotingStand();
         if (ent != null) {
             Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-            if (TE != null) {
+            if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable())) {
                 Vec3 vec3d = ent.getEyePosition(0);
                 Vec3 vec3d2 = ent.getViewVector(0);
                 Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
@@ -238,7 +238,7 @@ public class PowersJustice extends DashPreset {
         LivingEntity ent = getPilotingStand();
         if (ent != null) {
             Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-            if (TE != null) {
+            if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable())) {
                 Vec3 vec3d = ent.getEyePosition(0);
                 Vec3 vec3d2 = ent.getViewVector(0);
                 Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);

@@ -117,7 +117,7 @@ public class ClientUtil {
                 LivingEntity ent = powers.getPilotingStand();
                 if (ent != null && powers instanceof PowersJustice) {
                     Entity TE = MainUtil.getTargetEntity(ent,100,10);
-                    if (TE != null && TE.is(entity)) {
+                    if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable())) {
                         Vec3 vec3d = ent.getEyePosition(0);
                         Vec3 vec3d2 = ent.getViewVector(0);
                         Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);

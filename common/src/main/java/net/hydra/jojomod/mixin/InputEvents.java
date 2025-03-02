@@ -82,6 +82,8 @@ public abstract class InputEvents implements IInputEvents {
     public void roundaboutAttack(CallbackInfoReturnable<Boolean> ci) {
 
     }
+
+    /*outline, highlight, glowing, justice, corpse*/
     @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
     public void roundabout$entityGlowing(Entity $$0,CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
@@ -103,7 +105,7 @@ public abstract class InputEvents implements IInputEvents {
                         }
                     }
                     Entity TE = MainUtil.getTargetEntity(ent,100,10);
-                    if (TE != null && TE.is($$0)) {
+                    if (TE != null && TE.is($$0) && !(TE instanceof StandEntity && !TE.isAttackable())) {
                         Vec3 vec3d = ent.getEyePosition(0);
                         Vec3 vec3d2 = ent.getViewVector(0);
                         Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
