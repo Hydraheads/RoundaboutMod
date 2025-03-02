@@ -93,7 +93,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             }
         }
     }
-
+    protected float getEquipmentDropChance(EquipmentSlot $$0) {
+        return 0;
+    }
     public boolean getTurned() {
         return this.getEntityData().get(IS_TURNED);
     }
