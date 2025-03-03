@@ -329,7 +329,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                     this.getNavigation().stop();
                 }
             } else {
-                if (controller == null || controller.isRemoved() || !controller.isAlive()){
+                if (controller == null || controller.isRemoved() || !controller.isAlive() ||
+                        !icast.roundabout$inPermaCastFogRange(this) ||  (controller instanceof LivingEntity LE &&
+                        !icast.roundabout$isPermaCastingEntity(LE))){
                     setActivated(false);
                     this.setController(null);
                 } else {
