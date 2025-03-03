@@ -1146,7 +1146,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             knockbackStrength/=3;
                         }
 
-                        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                             if (entity instanceof LivingEntity) {
                                 if (lastHit) {
                                     if (entity instanceof Player PE){

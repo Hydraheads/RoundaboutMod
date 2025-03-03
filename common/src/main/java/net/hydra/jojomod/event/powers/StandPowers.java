@@ -1491,7 +1491,7 @@ public class StandPowers {
                             knockbackStrength/=6;
                         }
 
-                        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                             if (entity instanceof LivingEntity LE) {
                                 if (lastHit) {
                                     setDazed((LivingEntity) entity, (byte) 0);
@@ -1998,6 +1998,28 @@ public class StandPowers {
             }
         }
         if (DamageHandler.StandDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
+        if (DamageHandler.StandRushDamageEntity(target,pow, attacker)){
             if (attacker instanceof LivingEntity LE){
                 LE.setLastHurtMob(target);
             }

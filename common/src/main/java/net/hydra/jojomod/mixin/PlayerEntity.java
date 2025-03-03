@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -822,7 +823,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**If you are in a barrage, does not play the hurt sound*/
     @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$GetHurtSound(DamageSource $$0, CallbackInfoReturnable<SoundEvent> ci) {
-        if (((StandUser) this).roundabout$isDazed()) {
+        if (((StandUser) this).roundabout$isDazed() || $$0.is(ModDamageTypes.STAND_RUSH)) {
             ci.setReturnValue(null);
         } else {
             ShapeShifts shift = ShapeShifts.getShiftFromByte(roundabout$getShapeShift());

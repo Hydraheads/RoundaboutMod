@@ -1491,7 +1491,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$ApplyArmorToDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> ci){
         if ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.CORPSE) ||
-                $$0.is(ModDamageTypes.CORPSE_ARROW) ||
+                $$0.is(ModDamageTypes.CORPSE_ARROW) ||  $$0.is(ModDamageTypes.STAND_RUSH) ||
                 $$0.is(ModDamageTypes.CORPSE_EXPLOSION)) {
             ci.setReturnValue($$1);
         }
@@ -1586,7 +1586,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Prevent you from hearing every hit in a rush*/
     @Inject(method = "playHurtSound", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$PlayHurtSound(DamageSource $$0, CallbackInfo ci) {
-        if (this.roundabout$isDazed()) {
+        if (this.roundabout$isDazed() || $$0.is(ModDamageTypes.STAND_RUSH)) {
             ci.cancel();
         }
     }
@@ -1867,7 +1867,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 if (roundaboutTSHurtSound < 1){
                     roundaboutTSHurtSound = 1;
-                } if (roundaboutTSHurtSound < 2 && ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.PENETRATING_STAND))){
+                } if (roundaboutTSHurtSound < 2 && ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.PENETRATING_STAND)
+                        || $$0.is(ModDamageTypes.STAND_RUSH))){
                     roundaboutTSHurtSound = 2;
                 }
                 if (MainUtil.isStandDamage($$0) && $$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().fullTSChargeBonus()){

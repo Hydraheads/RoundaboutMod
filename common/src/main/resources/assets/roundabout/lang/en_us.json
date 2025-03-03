@@ -157,6 +157,7 @@
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
+  "death.attack.stand_rush": "%1$s was beaten down by %2$s",
   "death.attack.star_finger": "%1$s was turned into sashimi whilst fighting %2$s",
   "death.attack.penetrating_stand": "%1$s was retired by %2$s",
   "death.attack.corpse": "%1$s was brought to justice by %2$s",
