@@ -44,7 +44,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.MAX_HEALTH, 16)
-                .add(Attributes.ATTACK_DAMAGE, 2).
+                .add(Attributes.ATTACK_DAMAGE, 1.5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
 
@@ -89,7 +89,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
 
     @Override
     protected float getRiddenSpeed(Player $$0) {
-        return (float) ((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED)*0.49);
+        return (float) ((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED)*0.4);
     }
 
     public boolean isJumping() {
