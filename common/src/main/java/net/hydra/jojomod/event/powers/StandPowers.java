@@ -1675,7 +1675,8 @@ public class StandPowers {
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
-        if (targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity)){
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+        || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
             targetEntity = null;
         }
 
@@ -1705,7 +1706,8 @@ public class StandPowers {
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
-        if (targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity)){
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
             targetEntity = null;
         }
 
@@ -1952,7 +1954,8 @@ public class StandPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.showVehicleHealth() || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
+                if (!value.showVehicleHealth() || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
+                        || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
                 || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
                         ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value))){
                     hitEntities.remove(value);
