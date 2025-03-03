@@ -348,7 +348,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
         }
     }
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
-        if (this.isVehicle() || !this.getActivated()) {
+        if (this.isVehicle() || !this.getActivated() || !(getController() == $$0.getId())) {
             return super.mobInteract($$0, $$1);
         } else {
 
