@@ -237,7 +237,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
         this.animate($$0.JONATHAN, Poses.JONATHAN.ad, $$3, 1f);
 
 
-        if ($$0.standPos == Poses.NONE) {
+        if ($$0.standPos == Poses.NONE || $$0.standPos == null) {
             boolean $$6 = $$0.getFallFlyingTicks() > 4;
             boolean $$7 = $$0.isVisuallySwimming();
             this.head.yRot = $$4 * (float) (Math.PI / 180.0);
