@@ -192,7 +192,11 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             $$0.setSecondsOnFire($$3 * 4);
         }
 
-        boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this);
+        Entity ent2 = this;
+        if (getController() > 0 && getController() != $$0.getId()){
+            ent2 = controller;
+        }
+        boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),ent2);
         if ($$4) {
             if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
                 ((LivingEntity)$$0)

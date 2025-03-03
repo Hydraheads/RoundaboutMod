@@ -425,6 +425,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             ConfigManager.getClientConfig().justiceFogBrightness,
             ConfigManager.getClientConfig().justiceFogBrightness);
 
+    /*Fog color, fog sky color, fog sky brightness*/
     @Inject(method = "getSkyColor", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$getSkyColor(Vec3 $$0, float $$1, CallbackInfoReturnable<Vec3> cir) {
         if (minecraft.player != null){
