@@ -161,6 +161,11 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             ci.cancel();
+            return;
+        }
+        if (Minecraft.getInstance().player !=null && !((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()
+                && ((IPermaCasting)$$0.level()).roundabout$inPermaCastFogRange($$0)){
+            ci.cancel();
         }
     }
 
