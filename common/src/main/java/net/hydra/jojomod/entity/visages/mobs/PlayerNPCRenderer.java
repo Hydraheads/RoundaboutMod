@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.visages.mobs;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.client.HumanoidLikeArmorLayer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
@@ -18,6 +19,7 @@ public class PlayerNPCRenderer<T extends JojoNPC> extends PlayerLikeRenderer<Joj
     private static final ResourceLocation STEVE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/steve.png");
     public PlayerNPCRenderer(EntityRendererProvider.Context context) {
         super(context, new PlayerNPCModel<>(context.bakeLayer(ModEntityRendererClient.STEVE_LAYER)),0f);
+        this.addLayer(new HumanoidLikeArmorLayer<>(this, new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelManager()));
     }
     @Override
     public void render(JojoNPCPlayer mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.visages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.entity.client.HumanoidLikeArmorLayer;
+import net.hydra.jojomod.entity.client.HumanoidLikeArmorModel;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
