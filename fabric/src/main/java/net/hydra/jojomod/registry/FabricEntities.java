@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -60,6 +61,13 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "jnpc_alex"),
                         EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_alex")
+                );
+        public static final EntityType<FogCloneEntity> FOG_CLONE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "fog_clone"),
+                        EntityType.Builder.of(FogCloneEntity::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":fog_clone")
                 );
         public static final EntityType<FallenZombie> FALLEN_ZOMBIE =
                 Registry.register(
@@ -214,6 +222,7 @@ public class FabricEntities {
                 ModEntities.JOTARO = JOTARO;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
+                ModEntities.FOG_CLONE = FOG_CLONE;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
@@ -222,6 +231,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(FOG_CLONE, PlayerAlexNPC.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(FALLEN_ZOMBIE, FallenZombie.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_SKELETON, FallenSkeleton.createAttributes());

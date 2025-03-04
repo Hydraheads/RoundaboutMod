@@ -41,6 +41,7 @@ public class ModEntities {
     public static EntityType<JotaroNPC> JOTARO;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
+    public static EntityType<FogCloneEntity> FOG_CLONE;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;

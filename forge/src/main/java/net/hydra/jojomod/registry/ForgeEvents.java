@@ -47,6 +47,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
         event.put(ForgeEntities.STEVE_NPC.get(), PlayerSteveNPC.createAttributes().build());
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
+        event.put(ForgeEntities.FOG_CLONE.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombie.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeleton.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SPIDER.get(), FallenSpider.createAttributes().build());
@@ -229,6 +230,7 @@ public class ForgeEvents {
         ModEntities.JOTARO = ForgeEntities.JOTARO.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();
+        ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();
 
         ForgeItems.assignStupidForge();
     }

@@ -396,7 +396,7 @@ public class PowersJustice extends DashPreset {
             }
 
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+                setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_FOG_CLONES, PowerIndex.NONE);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
             }
@@ -609,7 +609,17 @@ public class PowersJustice extends DashPreset {
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (!isPiloting()) {
-            super.buttonInput3(keyIsDown,options);
+            if (keyIsDown) {
+                if (!inputDash) {
+                    if (isHoldingSneak()) {
+                        inputDash = true;
+                    } else {
+                        super.buttonInput3(keyIsDown, options);
+                    }
+                }
+            } else {
+                inputDash = false;
+            }
         } else {
             if (keyIsDown) {
                 if (!hold3) {
@@ -622,7 +632,6 @@ public class PowersJustice extends DashPreset {
                 }
             }
         }
-
     }
     public boolean hold2 = false;
     @Override
