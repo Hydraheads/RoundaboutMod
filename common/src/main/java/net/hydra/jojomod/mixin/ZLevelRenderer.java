@@ -1,7 +1,11 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.shader.FogDataHolder;
+import net.hydra.jojomod.client.shader.TSPostShader;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -70,6 +73,23 @@ public abstract class ZLevelRenderer {
                         }
 
                 }
+            }
+        }
+    }
+
+    @Inject(method = "renderLevel", at=@At("TAIL"))
+    private void renderShaders(PoseStack matrixes, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci)
+    {
+        if (FogDataHolder.fogDensity > 0 && FogDataHolder.shouldRenderFog)
+        {
+            if (TSPostShader.FOG_SHADER != null && TSPostShader.FOG_SHADER_PASSES != null)
+            {
+                //TSPostShader.setFloatUniform(TSPostShader.FOG_SHADER_PASSES, "FogDensity", FogDataHolder.fogDensity);
+                //TSPostShader.setFloatUniform(TSPostShader.FOG_SHADER_PASSES, "FogNear", FogDataHolder.fogNear);
+                //TSPostShader.setFloatUniform(TSPostShader.FOG_SHADER_PASSES, "FogFar", FogDataHolder.fogFar);
+                //TSPostShader.setVec3Uniform(TSPostShader.FOG_SHADER_PASSES, "FogColor", FogDataHolder.fogColor);
+
+                //TSPostShader.renderShader(TSPostShader.FOG_SHADER.get(), partialTick, matrixes);
             }
         }
     }

@@ -1,0 +1,23 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "1",
+    "dstrgb": "0"
+  },
+  "vertex": "blit",
+  "fragment": "fog",
+  "attributes": [ "Position", "TexCoord" ],
+  "samplers": [
+    { "name": "DiffuseSampler" },
+    { "name": "MainDepthSampler" }
+  ],
+  "uniforms": [
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+    { "name":  "OutSize", "type": "float", "count": 2, "values":  [ 1.0, 1.0 ] },
+
+    { "name":  "FogDensity", "type": "float", "count": 1, "values": [ 1.0 ]},
+    { "name":  "FogNear", "type": "float", "count": 1, "values": [ 0.05 ]},
+    { "name":  "FogFar", "type": "float", "count": 1, "values": [ 12.0 ]},
+    { "name":  "FogColor", "type": "float", "count": 3, "values": [ 1.0, 1.0, 1.0 ]}
+  ]
+}

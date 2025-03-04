@@ -77,9 +77,11 @@
     "ZZombie"
   ],
   "client": [
+    "CoreShaderMixin",
     "HudRendering",
     "InputEvents",
     "PlayerEntityClient",
+    "ShaderInstanceNamespaceFix",
     "StandUserClient",
     "WorldTickClient",
     "ZBannerRenderer",

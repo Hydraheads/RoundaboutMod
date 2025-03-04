@@ -1,6 +1,8 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.shader.TSCoreShader;
+import net.hydra.jojomod.client.shader.TSPostShader;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
@@ -44,6 +46,9 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALLEN_SPIDER.get(), FallenSpiderRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillagerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
+
+        TSCoreShader.bootstrapShaders();
+        TSPostShader.bootstrapShaders();
     }
 
     @SubscribeEvent

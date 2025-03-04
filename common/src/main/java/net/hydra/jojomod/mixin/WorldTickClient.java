@@ -6,11 +6,13 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.shader.FogDataHolder;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.SetBlockInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.ConfigManager;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.prediction.BlockStatePredictionHandler;
@@ -427,28 +429,31 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
     /*Fog color, fog sky color, fog sky brightness*/
     @Inject(method = "getSkyColor", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$getSkyColor(Vec3 $$0, float $$1, CallbackInfoReturnable<Vec3> cir) {
-        if (minecraft.player != null){
+    private void roundabout$getSkyColor(Vec3 cameraPos, float tickDelta, CallbackInfoReturnable<Vec3> cir) {
+        if (minecraft.player != null) {
             if (roundabout$skyLerp >= 1) {
-                float lerp = $$1;
-                if (!((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
-                    lerp*=-1;
+                float lerp = tickDelta;
+                if (!((IPermaCasting) minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)) {
+                    lerp *= -1;
                 }
-                if (roundabout$skyLerp >= roundabout$maxSkyLerp){
-                    lerp=0;
+                if (roundabout$skyLerp >= roundabout$maxSkyLerp) {
+                    lerp = 0;
                 }
-                float f = this.getTimeOfDay($$1);
-                Vec3 vec3 = $$0.subtract(2.0D, 2.0D, 2.0D).scale(0.25D);
+
+                float f = this.getTimeOfDay(tickDelta);
+                Vec3 vec3 = cameraPos.subtract(2.0D, 2.0D, 2.0D).scale(0.25D);
                 BiomeManager biomemanager = this.getBiomeManager();
                 Vec3 vec31 = CubicSampler.gaussianSampleVec3(vec3, (p_194161_, p_194162_, p_194163_) -> {
                     return Vec3.fromRGB24(biomemanager.getNoiseBiomeAtQuart(p_194161_, p_194162_, p_194163_).value().getSkyColor());
                 });
+
                 float f1 = Mth.cos(f * ((float) Math.PI * 2F)) * 2.0F + 0.5F;
                 f1 = Mth.clamp(f1, 0.0F, 1.0F);
                 float f2 = (float) vec31.x * f1;
                 float f3 = (float) vec31.y * f1;
                 float f4 = (float) vec31.z * f1;
-                float f5 = this.getRainLevel($$1);
+
+                float f5 = this.getRainLevel(tickDelta);
                 if (f5 > 0.0F) {
                     float f6 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.6F;
                     float f7 = 1.0F - f5 * 0.75F;
@@ -457,7 +462,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                     f4 = f4 * f7 + f6 * (1.0F - f7);
                 }
 
-                float f9 = this.getThunderLevel($$1);
+                float f9 = this.getThunderLevel(tickDelta);
                 if (f9 > 0.0F) {
                     float f10 = (f2 * 0.3F + f3 * 0.59F + f4 * 0.11F) * 0.2F;
                     float f8 = 1.0F - f9 * 0.75F;
@@ -468,7 +473,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
                 int i = this.getSkyFlashTime();
                 if (i > 0) {
-                    float f11 = (float) i - $$1;
+                    float f11 = (float) i - tickDelta;
                     if (f11 > 1.0F) {
                         f11 = 1.0F;
                     }
@@ -478,12 +483,38 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                     f3 = f3 * (1.0F - f11) + 0.8F * f11;
                     f4 = f4 * (1.0F - f11) + 1.0F * f11;
                 }
-                Vec3 interp = new Vec3((double) f2, (double) f3, (double) f4).lerp(roundabout$fogSky,
-                        ((((roundabout$skyLerp+lerp)/roundabout$maxSkyLerp))/100)*0.95);
+
+                Vec3 interp = new Vec3((double) f2, (double) f3, (double) f4)
+                        .lerp(roundabout$fogSky, ((((roundabout$skyLerp + lerp) / roundabout$maxSkyLerp)) / 100) * 0.95);
+
                 cir.setReturnValue(interp);
+
+                if (true) //(Minecraft.getInstance().options.graphicsMode().get() == GraphicsStatus.FABULOUS)
+                {
+                    // TODO: fix fabulous rendertargets
+                    // fabulous graphics mode should be used for fixed transparency
+                    // but fabulous splits up the rendertargets across several framebuffers to fix transparency
+                    // so ill have to target all of them one day
+
+                    // this sorta works rn tho
+
+                    FogDataHolder.shouldRenderFog = true;
+                    FogDataHolder.fogColor.set((float) interp.x, (float) interp.y, (float) interp.z);
+
+                    FogDataHolder.fogDensity = (roundabout$skyLerp / roundabout$maxSkyLerp) * 2;
+                    FogDataHolder.fogNear = Mth.clamp(0.05f + (roundabout$skyLerp / roundabout$maxSkyLerp) * 0.5f, 0.05f, Float.MAX_VALUE);
+                    FogDataHolder.fogFar = Mth.clamp(6.0f - (roundabout$skyLerp / roundabout$maxSkyLerp) * 5.0f, 12.0f, Float.MAX_VALUE);
+                }
+//                else
+//                {
+//                    FogDataHolder.shouldRenderFog = false;
+//                    FogDataHolder.fogDensity = 0;
+//                    cir.setReturnValue(interp);
+//                }
             }
         }
     }
+
     @Inject(method = "tickEntities", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity3(CallbackInfo ci) {
 
@@ -494,7 +525,6 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             } else {
                 Roundabout.worldInFog = 0;
             }
-
 
             if (((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
                 if (roundabout$skyLerp < roundabout$maxSkyLerp){

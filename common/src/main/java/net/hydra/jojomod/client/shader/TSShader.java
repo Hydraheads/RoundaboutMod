@@ -1,4 +1,4 @@
-package net.hydra.jojomod.client;
+package net.hydra.jojomod.client.shader;
 
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.ShaderInstance;
