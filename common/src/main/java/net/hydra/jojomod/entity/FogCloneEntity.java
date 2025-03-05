@@ -2,6 +2,10 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -10,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class FogCloneEntity extends CloneEntity {
     public FogCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
@@ -66,5 +71,31 @@ public class FogCloneEntity extends CloneEntity {
         }
 
         return super.canBeCollidedWith();
+    }
+
+    public void goPoof(){
+        simulatePoof(new Vec3(this.getX(),this.getY(),this.getZ()));
+        this.discard();
+    }
+
+    public void simulatePoof(Vec3 vec){
+        ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, vec.x(),
+                vec.y()+this.getEyeHeight(), vec.z(),
+                12, 0.2, 0.3, 0.2, 0.3);
+        this.level().playSound(null,  vec.x(),
+                vec.y(), vec.z(), ModSounds.POP_EVENT, this.getSoundSource(), 1.0F, (float)(1F+ Math.random()*0.03));
+    }
+
+    @Override
+    public boolean hurt(DamageSource $$0, float $$1) {
+        if (this.isInvulnerableTo($$0)) {
+            return false;
+        } else if (this.level().isClientSide) {
+            return false;
+        } else if (this.isDeadOrDying()) {
+            return false;
+        }
+        goPoof();
+        return false;
     }
 }

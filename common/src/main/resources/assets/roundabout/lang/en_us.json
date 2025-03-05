@@ -100,6 +100,7 @@
   "entity.roundabout.jnpc_jotaro": "Jotaro",
   "entity.roundabout.jnpc_steve": "Steve",
   "entity.roundabout.jnpc_alex": "Alex",
+  "entity.roundabout.fog_clone": "Fog Clone",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.ancient_meteor": "Ancient Meteor",
@@ -312,6 +313,8 @@
   "sounds.roundabout.impale_charge":  "Preparing strike",
   "sounds.roundabout.impale_hit":  "Impaled",
   "sounds.roundabout.explosive_bat":  "Home Run",
+  "sounds.roundabout.fog_clone":  "Illusionary formation",
+  "sounds.roundabout.pop":  "Pop",
 
   "sounds.roundabout.star_platinum_ora_2":  "ORA",
   "sounds.roundabout.star_platinum_ora_3":  "ORA",

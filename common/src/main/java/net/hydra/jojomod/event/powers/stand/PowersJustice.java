@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -831,6 +832,11 @@ public class PowersJustice extends DashPreset {
             fclone2.setPlayer(PE);
             this.getSelf().level().addFreshEntity(fclone);
             this.getSelf().level().addFreshEntity(fclone2);
+            ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
+                    this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
+                    11, 0.4, 0.4, 0.4, 0.1);
+            this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                    this.self.getZ(), ModSounds.FOG_CLONE_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         }
         return true;
     }

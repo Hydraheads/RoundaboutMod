@@ -89,7 +89,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                         this.getZ(), ModSounds.INHALE_EVENT, this.getSoundSource(), 100.0F, (float) (0.7F + (Math.random() * 0.05)));
                 ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
                         this.getY()+this.getEyeHeight(), this.getZ(),
-                        10, 0.5, 0.5, 0.5, 0.2);
+                        11, 0.3, 0.3, 0.3, 0.3);
             }
         }
     }
