@@ -174,8 +174,12 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
         Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);
         $$3.pushPose();
+        double crouchDist = 0;
+        if ($$6.isCrouching()){
+            crouchDist = 0.1;
+        }
         if (!renderoffset.equals(Vec3.ZERO)){
-            $$3.translate(-1*renderoffset.x,-1*renderoffset.y,-1*renderoffset.z);
+            $$3.translate(-1*renderoffset.x,-1*renderoffset.y-crouchDist,-1*renderoffset.z);
         }
 
         if (light == 15728880) {
