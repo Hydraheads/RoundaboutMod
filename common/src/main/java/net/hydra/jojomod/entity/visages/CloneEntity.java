@@ -30,6 +30,9 @@ public class CloneEntity extends PathfinderMob {
         setPlayerUUID(player.getUUID());
     }
     public Player getPlayer(){
+        if (this.player == null && this.getPlayerUUID().isPresent()){
+            this.player = this.level().getPlayerByUUID(this.getPlayerUUID().get());
+        }
         return this.player;
     }
     @Override

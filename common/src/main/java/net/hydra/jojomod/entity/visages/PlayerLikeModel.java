@@ -306,7 +306,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                 this.rightLeg.y = 0.2F;
                 this.leftLeg.y = 0.2F;
                 this.head.y = 4.2F;
-                this.body.y = -9.0F;
+                this.body.y = -7.8F;
                 this.leftArm.y = 5.2F;
                 this.rightArm.y = 5.2F;
             } else {
