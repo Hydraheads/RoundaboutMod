@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -396,7 +397,7 @@ public class PowersJustice extends DashPreset {
             }
 
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_FOG_CLONES, PowerIndex.NONE);
+                setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_FOG_CLONES, PowerIndex.SKILL_3);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
             }
@@ -612,6 +613,9 @@ public class PowersJustice extends DashPreset {
             if (keyIsDown) {
                 if (!inputDash) {
                     if (isHoldingSneak()) {
+                        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                        }
                         inputDash = true;
                     } else {
                         super.buttonInput3(keyIsDown, options);
@@ -808,12 +812,37 @@ public class PowersJustice extends DashPreset {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1) {
             return this.castFog();
+        } else if (move == PowerIndex.POWER_3) {
+            return this.spawnClones();
         } else if (move == PowerIndex.POWER_2) {
             return this.yankChain();
         }
         return super.setPowerOther(move,lastMove);
     }
+    
+    /**Fog Clones*/
+    public boolean spawnClones(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
+            FogCloneEntity fclone = ModEntities.FOG_CLONE.create(this.getSelf().level());
+            FogCloneEntity fclone2 = ModEntities.FOG_CLONE.create(this.getSelf().level());
+            fclone.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+            fclone2.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+            fclone.setPlayer(PE);
+            fclone2.setPlayer(PE);
+            this.getSelf().level().addFreshEntity(fclone);
+            this.getSelf().level().addFreshEntity(fclone2);
+        }
+        return true;
+    }
 
+    @Override
+    public boolean cancelCollision(Entity et) {
+        if (et instanceof FogCloneEntity FC){
+            Roundabout.LOGGER.info("SKIBIDI HIBIDI 2");
+            return true;
+        }
+        return false;
+    }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if ((slot == 2  && (!this.isHoldingSneak() || isPiloting())) || (slot == 3 && this.isHoldingSneak())){

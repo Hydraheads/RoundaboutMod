@@ -1425,7 +1425,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return levelupDamageMod(((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.starPlatinumAttacksOnPlayers*0.01))));
         } else {
-            return levelupDamageMod(((float) ((float) 16* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) 17* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.starPlatinumAttacksOnMobs*0.01))));
         }
     }

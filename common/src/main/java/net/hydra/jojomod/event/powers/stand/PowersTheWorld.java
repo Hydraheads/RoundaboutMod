@@ -611,7 +611,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.theWorldAttacksOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 16* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 17* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.theWorldAttacksOnMobs*0.01)));
         }
     }
