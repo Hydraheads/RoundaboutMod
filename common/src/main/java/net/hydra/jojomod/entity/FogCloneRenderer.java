@@ -9,6 +9,11 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IWalkAnimationState;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
+import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
+import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -42,12 +47,18 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         return null;
     }
 
-    JojoNPCPlayer AC = null;
+    JojoNPC AC = null;
 
     public void render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         Player pl = $$0.getPlayer();
         if (pl != null) {
-            if (AC == null){
+
+
+            ItemStack visage = ((IPlayerEntity)pl).roundabout$getMaskSlot();
+            roundabout$initializeVisageModel(visage,pl);
+
+            if (AC == null || (!(AC instanceof PlayerAlexNPC) && !(AC instanceof PlayerSteveNPC) &&
+                    (visage.isEmpty() || visage.is(ModItems.BLANK_MASK)))){
                 if (((AbstractClientPlayer) pl).getModelName().equals("slim")){
                     AC = ModEntities.ALEX_NPC.create(Minecraft.getInstance().level);
                 } else {
@@ -59,13 +70,18 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
                         $$0);
             }
         }
+
+
+
         super.render($$0, $$1, $$2, $$3, $$4, $$5);
     }
 
 
-    public void assertOnPlayerLike(JojoNPCPlayer ve, Player $$0,float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4,
+    public void assertOnPlayerLike(JojoNPC ve, Player $$0,float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4,
                                    int $$5, T entityeah){
-        ve.faker = $$0;
+        if (ve instanceof JojoNPCPlayer v2){
+            v2.faker = $$0;
+        }
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
         ve.setSwimming($$0.isSwimming());
         ve.setItemInHand(InteractionHand.MAIN_HAND,$$0.getMainHandItem());
@@ -124,7 +140,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
 
 
     @Unique
-    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, JojoNPCPlayer $$6, Player user, int light,
+    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, JojoNPC $$6, Player user, int light,
                                               T entityeah) {
 
         $$6.xOld = entityeah.xOld;
@@ -166,7 +182,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
 
 
     @Unique
-    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,JojoNPCPlayer $$6,
+    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,JojoNPC $$6,
                                               int light, Player user) {
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
         Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);
@@ -191,4 +207,29 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         $$7.setRenderHitBoxes(hb);
         $$3.popPose();
     }
+
+    public void roundabout$initializeVisageModel(ItemStack visage, Player $$0){
+
+        if (visage != roundabout$lastVisage){
+            roundabout$lastVisage = visage;
+            if (visage.getItem() instanceof MaskItem mi){
+                roundabout$visageData = mi.visageData.generateVisageData($$0);
+                AC = roundabout$visageData.getModelNPC($$0);
+            } else {
+                roundabout$visageData = null;
+                AC = null;
+            }
+        }
+        if (AC == null){
+            if (roundabout$visageData != null){
+                 AC = roundabout$visageData.getModelNPC($$0);
+            }
+        }
+    }
+    @Unique
+    VisageData roundabout$visageData = null;
+    @Unique
+    ItemStack roundabout$lastVisage = null;
+
+
 }

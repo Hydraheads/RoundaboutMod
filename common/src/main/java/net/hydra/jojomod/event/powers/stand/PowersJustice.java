@@ -830,6 +830,8 @@ public class PowersJustice extends DashPreset {
             fclone2.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
             fclone.setPlayer(PE);
             fclone2.setPlayer(PE);
+            fclone.setTimer(100);
+            fclone2.setTimer(101);
             this.getSelf().level().addFreshEntity(fclone);
             this.getSelf().level().addFreshEntity(fclone2);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),

@@ -17,6 +17,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class FogCloneEntity extends CloneEntity {
+
+    public int timer = 0;
     public FogCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -30,6 +32,21 @@ public class FogCloneEntity extends CloneEntity {
         return $$0.canBeCollidedWith() && !this.isPassengerOfSameVehicle($$0);
     }
 
+    public int getTimer(){
+        return timer;
+    }
+    public void setTimer(int timer){
+        this.timer = timer;
+    }
+    @Override
+    public void tick() {
+        if (!this.level().isClientSide()) {
+            this.timer--;
+            if (this.timer < 0) {
+                this.goPoof();
+            }
+        }
+    }
     @Override
     public void push(Entity $$0) {
         if (this.level().isClientSide()){
