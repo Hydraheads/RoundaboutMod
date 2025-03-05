@@ -147,9 +147,6 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         $$6.oAttackAnim = entityeah.oAttackAnim;
         $$6.hurtDuration = entityeah.hurtDuration;
         $$6.hurtTime = entityeah.hurtTime;
-        IEntityAndData entd = ((IEntityAndData) entityeah);
-        IEntityAndData entd2 = ((IEntityAndData) $$6);
-        entd2.roundabout$setVehicle(entd.roundabout$getVehicle());
 
         $$6.walkAnimation.setSpeed(entityeah.walkAnimation.speed());
         IWalkAnimationState iwalk = ((IWalkAnimationState) $$6.walkAnimation);
