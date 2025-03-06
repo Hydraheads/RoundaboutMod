@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +15,9 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class FogCloneEntity extends CloneEntity {
@@ -24,6 +27,14 @@ public class FogCloneEntity extends CloneEntity {
         super($$0, $$1);
     }
 
+    public float lockedYRot = 0;
+    @Override
+    public float getSpeed() {
+        if (this.getPlayer() != null){
+            return this.getPlayer().getSpeed();
+        }
+        return super.getSpeed();
+    }
     @Override
     public boolean canCollideWith(Entity $$0) {
         if (this.getPlayer() != null && this.getPlayer().is($$0)){
@@ -42,13 +53,32 @@ public class FogCloneEntity extends CloneEntity {
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
+            this.setYRot(lockedYRot);
+            this.yRotO = lockedYRot;
             this.timer--;
             if (this.timer < 0) {
                 this.goPoof();
+                return;
+            }
+
+            if (this.tickCount%10==0) {
+                doBasicPathfind();
             }
         }
         super.tick();
     }
+
+    public void doBasicPathfind(){
+
+        int range = 20;
+        Vec3 vec3d = this.getEyePosition(0);
+        Vec3 vec3d2 = this.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        BlockPos pos = blockHit.getBlockPos();
+        this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 1);
+    }
+
     @Override
     public void push(Entity $$0) {
         /**

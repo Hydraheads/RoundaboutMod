@@ -832,6 +832,16 @@ public class PowersJustice extends DashPreset {
             fclone2.setPlayer(PE);
             fclone.setTimer(100);
             fclone2.setTimer(101);
+            float first = ((this.getSelf().getYHeadRot()-30)%360);
+            float second = ((this.getSelf().getYHeadRot()+30)%360);
+            fclone.setYRot(first);
+            fclone2.setYRot(second);
+            fclone.lockedYRot = first;
+            fclone2.lockedYRot = second;
+            fclone.yRotO = first;
+            fclone2.yRotO = second;
+            fclone.doBasicPathfind();
+            fclone2.doBasicPathfind();
             this.getSelf().level().addFreshEntity(fclone);
             this.getSelf().level().addFreshEntity(fclone2);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
@@ -853,7 +863,7 @@ public class PowersJustice extends DashPreset {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if ((slot == 2  && (!this.isHoldingSneak() || isPiloting())) || (slot == 3 && this.isHoldingSneak())){
+        if ((slot == 2  && (!this.isHoldingSneak() || isPiloting()))){
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
             if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 return true;
