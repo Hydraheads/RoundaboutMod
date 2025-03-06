@@ -166,6 +166,14 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     @Override
+    public float getSpeed() {
+        if (!this.getActivated()){
+            return 0;
+        } else {
+            return super.getSpeed();
+        }
+    }
+    @Override
     public boolean removeWhenFarAway(double $$0) {
         return false;
     }
@@ -325,7 +333,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                     setLastHurtByMob(null);
                     setTarget(null);
                 }
-                if (this.getNavigation().isInProgress()){
+
+                this.moveControl.setWantedPosition(this.getX(),this.getY(),this.getZ(),0);
+                if (this.getNavigation().getPath() != null){
                     this.getNavigation().stop();
                 }
             } else {
