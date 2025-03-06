@@ -54,7 +54,7 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
         ItemStack $$6 = $$2.getItemBySlot($$3);
         if ($$6.getItem() instanceof ArmorItem $$7) {
             if ($$7.getEquipmentSlot() == $$3) {
-                this.getParentModel().copyPropertiesTo($$5);
+                this.getParentModel().copyPropertiesTo2($$5);
                 this.setPartVisibility($$5, $$3);
                 boolean $$9 = this.usesInnerModel($$3);
                 if ($$7 instanceof DyeableArmorItem $$10) {

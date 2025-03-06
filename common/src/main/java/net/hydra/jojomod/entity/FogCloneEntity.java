@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
@@ -46,37 +47,36 @@ public class FogCloneEntity extends CloneEntity {
                 this.goPoof();
             }
         }
+        super.tick();
     }
     @Override
     public void push(Entity $$0) {
-        if (this.level().isClientSide()){
-            Player safeLocal = ClientUtil.getPlayer();
-            if (safeLocal != null && this.getPlayerUUID().isPresent() && safeLocal.getUUID().equals(this.getPlayerUUID().get())){
-                return;
-            }
-        } else {
-
-            if (this.getPlayer() != null && this.getPlayer().is($$0)){
-                return;
+        /**
+         *
+         Player safeLocal = ClientUtil.getPlayer();
+         if (safeLocal != null && this.getPlayerUUID().isPresent() && safeLocal.getUUID().equals(this.getPlayerUUID().get())){
+         return;
+         }
+         *
+         * **/
+        if (!this.level().isClientSide()){
+            if (!($$0 instanceof FogCloneEntity) && !($$0 instanceof FallenMob) && $$0.isPushable()) {
+                if (!(this.getPlayer() != null && this.getPlayer().is($$0))) {
+                    goPoof();
+                }
             }
         }
-        super.push($$0);
     }
 
     @Override
     public void doPush(Entity $$0) {
-        if (this.level().isClientSide()){
-            Player safeLocal = ClientUtil.getPlayer();
-            if (safeLocal != null && this.getPlayerUUID().isPresent() && safeLocal.getUUID().equals(this.getPlayerUUID().get())){
-                return;
-            }
-        } else {
-
-            if (this.getPlayer() != null && this.getPlayer().is($$0)){
-                return;
+        if (!this.level().isClientSide()){
+            if (!($$0 instanceof FogCloneEntity) && !($$0 instanceof FallenMob) && $$0.isPushable()){
+                if (!(this.getPlayer() != null && this.getPlayer().is($$0))){
+                    goPoof();
+                }
             }
         }
-        super.doPush($$0);
     }
     @Override
     public boolean canBeCollidedWith() {
