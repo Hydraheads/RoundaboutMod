@@ -54,23 +54,31 @@ public class FogCloneEntity extends CloneEntity {
     public void tick() {
         if (!this.level().isClientSide()) {
             this.setYRot(lockedYRot);
+            this.setYHeadRot(lockedYRot);
+            this.setYBodyRot(lockedYRot);
             this.yRotO = lockedYRot;
+            this.yBodyRotO = lockedYRot;
+            this.yHeadRot = lockedYRot;
             this.timer--;
             if (this.timer < 0) {
                 this.goPoof();
                 return;
             }
 
-            if (this.tickCount%10==0) {
+            nextPathfind--;
+            if (nextPathfind <= 0) {
                 doBasicPathfind();
+                nextPathfind=10;
             }
         }
         super.tick();
     }
 
+    int nextPathfind = 1;
+
     public void doBasicPathfind(){
 
-        int range = 20;
+        int range = 15;
         Vec3 vec3d = this.getEyePosition(0);
         Vec3 vec3d2 = this.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);

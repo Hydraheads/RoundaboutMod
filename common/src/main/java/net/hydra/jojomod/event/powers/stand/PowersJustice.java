@@ -832,21 +832,29 @@ public class PowersJustice extends DashPreset {
             fclone2.setPlayer(PE);
             fclone.setTimer(100);
             fclone2.setTimer(101);
-            float first = ((this.getSelf().getYHeadRot()-30)%360);
-            float second = ((this.getSelf().getYHeadRot()+30)%360);
+            float first = ((this.getSelf().getYHeadRot()-25)%360);
+            float second = ((this.getSelf().getYHeadRot()+25)%360);
             fclone.setYRot(first);
             fclone2.setYRot(second);
             fclone.lockedYRot = first;
             fclone2.lockedYRot = second;
             fclone.yRotO = first;
             fclone2.yRotO = second;
-            fclone.doBasicPathfind();
-            fclone2.doBasicPathfind();
             this.getSelf().level().addFreshEntity(fclone);
             this.getSelf().level().addFreshEntity(fclone2);
+            fclone.setYRot(first);
+            fclone2.setYRot(second);
+            fclone.lockedYRot = first;
+            fclone2.lockedYRot = second;
+            fclone.yRotO = first;
+            fclone2.yRotO = second;
+
+            fclone.setDeltaMovement(fclone.getForward().scale(0.3));
+            fclone2.setDeltaMovement(fclone2.getForward().scale(0.3));
+
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
-                    11, 0.4, 0.4, 0.4, 0.1);
+                    50, 1, 1, 1, 0.1);
             this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                     this.self.getZ(), ModSounds.FOG_CLONE_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         }
