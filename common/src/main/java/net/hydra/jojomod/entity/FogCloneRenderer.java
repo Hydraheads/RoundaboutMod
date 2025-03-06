@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.realmsclient.dto.PlayerInfo;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -47,7 +48,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         return null;
     }
 
-    JojoNPC AC = null;
+    public JojoNPC AC = null;
 
     public void render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         Player pl = $$0.getPlayer();
@@ -60,12 +61,15 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
             if (AC == null || (!(AC instanceof PlayerAlexNPC) && !(AC instanceof PlayerSteveNPC) &&
                     (visage.isEmpty() || visage.is(ModItems.BLANK_MASK)))){
                 if (((AbstractClientPlayer) pl).getModelName().equals("slim")){
+                    Roundabout.LOGGER.info("create1");
                     AC = ModEntities.ALEX_NPC.create(Minecraft.getInstance().level);
                 } else {
+                    Roundabout.LOGGER.info("create2");
                     AC = ModEntities.STEVE_NPC.create(Minecraft.getInstance().level);
                 }
             }
             if (AC != null) {
+                AC.host = pl;
                 assertOnPlayerLike(AC, pl, $$1, $$2, $$3, $$4, $$5,
                         $$0);
             }
@@ -109,8 +113,6 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         ve.setItemSlot(EquipmentSlot.LEGS, stackL);
         ItemStack stackF = $$0.getItemBySlot(EquipmentSlot.FEET);
         ve.setItemSlot(EquipmentSlot.FEET, stackF);
-        ve.roundabout$setDodgeTime(ipe.roundabout$getDodgeTime());
-        ve.roundabout$setClientDodgeTime(ipe.roundabout$getClientDodgeTime());
         ve.roundabout$SetPos(ipe.roundabout$GetPos());
         ila2.roundabout$setUseItem($$0.getUseItem());
         ila2.roundabout$setUseItemTicks($$0.getUseItemRemainingTicks());
@@ -159,8 +161,8 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         $$6.xRotO = entityeah.xRotO;
         $$6.yRotO = entityeah.yRotO;
         $$6.tickCount = entityeah.tickCount;
-        $$6.attackAnim = entityeah.attackAnim;
-        $$6.oAttackAnim = entityeah.oAttackAnim;
+        $$6.attackAnim = user.attackAnim;
+        $$6.oAttackAnim = user.oAttackAnim;
         $$6.hurtDuration = entityeah.hurtDuration;
         $$6.hurtTime = entityeah.hurtTime;
 
@@ -171,7 +173,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         iwalk.roundabout$setSpeedOld(uwalk.roundabout$getSpeedOld());
 
         ILivingEntityAccess ilive = ((ILivingEntityAccess)$$6);
-        ILivingEntityAccess ulive = ((ILivingEntityAccess)entityeah);
+        ILivingEntityAccess ulive = ((ILivingEntityAccess)user);
         ilive.roundabout$setAnimStep(ulive.roundabout$getAnimStep());
         ilive.roundabout$setAnimStepO(ulive.roundabout$getAnimStepO());
         $$6.setSpeed(entityeah.getSpeed());
@@ -222,6 +224,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         }
         if (AC == null){
             if (roundabout$visageData != null){
+                Roundabout.LOGGER.info("create3");
                  AC = roundabout$visageData.getModelNPC($$0);
             }
         }

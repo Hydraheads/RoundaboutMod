@@ -37,7 +37,7 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
 
     @Override
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
-        if ($$3.standPos == Poses.NONE) {
+        if ($$3.standPos == Poses.NONE || $$3.standPos == null) {
             play = $$3.host;
             boolean $$10 = $$3.getMainArm() == HumanoidArm.RIGHT;
             ItemStack $$11 = $$10 ? $$3.getOffhandItem() : $$3.getMainHandItem();
