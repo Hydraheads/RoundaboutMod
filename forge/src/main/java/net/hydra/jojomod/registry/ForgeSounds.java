@@ -247,6 +247,10 @@ public class ForgeSounds {
             register(ModSounds.GLAIVE_CHARGE, ModSounds.GLAIVE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> GLAIVE_ATTACK =
             register(ModSounds.GLAIVE_ATTACK, ModSounds.GLAIVE_ATTACK_ID);
+    public static final RegistryObject<SoundEvent> FOG_CLONE =
+            register(ModSounds.FOG_CLONE, ModSounds.FOG_CLONE_ID);
+    public static final RegistryObject<SoundEvent> POP =
+            register(ModSounds.POP, ModSounds.POP_ID);
     public static final RegistryObject<SoundEvent> BLOCK_GRAB =
             register(ModSounds.BLOCK_GRAB, ModSounds.BLOCK_GRAB_ID);
     public static final RegistryObject<SoundEvent> BLOCK_THROW =

@@ -180,6 +180,9 @@ public class ClientUtil {
         }
         return false;
     }
+    public static Player getPlayer(){
+        return Minecraft.getInstance().player;
+    }
 
     public static boolean poseHeld = false;
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {

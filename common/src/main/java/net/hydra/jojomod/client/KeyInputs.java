@@ -1,22 +1,16 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.screens.inventory.HorseInventoryScreen;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.HorseInventoryMenu;
+import net.minecraft.world.item.ItemStack;
 
 public class KeyInputs {
 
@@ -44,6 +38,15 @@ public class KeyInputs {
     public static void menuKey(Player player, Minecraft client){
         if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
             forceSummon(player,true);
+            PlayerMaskSlots ms = ((IPlayerEntity)player).roundabout$getMaskInventory();
+            ItemStack stack = ms.getItem(0);
+            ItemStack stack2 = ms.getItem(1);
+            if (!stack.equals(((IPlayerEntity)player).roundabout$getMaskSlot())){
+                ms.setItem(0,((IPlayerEntity)player).roundabout$getMaskSlot());
+            }
+            if (!stack2.equals(((IPlayerEntity)player).roundabout$getMaskVoiceSlot())){
+                ms.setItem(1,((IPlayerEntity)player).roundabout$getMaskVoiceSlot());
+            }
             ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY);
             ((IPlayerEntity)player).roundabout$setUnlockedBonusSkin(false);
         }

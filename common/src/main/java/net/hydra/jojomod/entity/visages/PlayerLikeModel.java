@@ -306,7 +306,7 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
                 this.rightLeg.y = 0.2F;
                 this.leftLeg.y = 0.2F;
                 this.head.y = 4.2F;
-                this.body.y = -9.0F;
+                this.body.y = -7.8F;
                 this.leftArm.y = 5.2F;
                 this.rightArm.y = 5.2F;
             } else {
@@ -498,6 +498,26 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
         $$0.leftArm.copyFrom(this.leftArm);
         $$0.rightLeg.copyFrom(this.rightLeg);
         $$0.leftLeg.copyFrom(this.leftLeg);
+    }
+    public void copyPropertiesTo2(HumanoidModel<T> $$0) {
+        super.copyPropertiesTo($$0);
+        $$0.leftArmPose = this.leftArmPose;
+        $$0.rightArmPose = this.rightArmPose;
+        $$0.crouching = this.crouching;
+        $$0.head.copyFrom(this.head);
+        $$0.hat.copyFrom(this.hat);
+        $$0.body.copyFrom(this.body);
+        $$0.body.y += 11;
+        $$0.rightArm.copyFrom(this.rightArm);
+        $$0.rightArm.x-=4;
+        $$0.leftArm.copyFrom(this.leftArm);
+        $$0.leftArm.x+=4;
+        $$0.rightLeg.copyFrom(this.rightLeg);
+        $$0.rightLeg.x-=2;
+        $$0.rightLeg.y+=12;
+        $$0.leftLeg.copyFrom(this.leftLeg);
+        $$0.leftLeg.x+=2;
+        $$0.leftLeg.y+=12;
     }
 
     protected float rotlerpRad(float $$0, float $$1, float $$2) {

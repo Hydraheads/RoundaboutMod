@@ -731,6 +731,18 @@
       "roundabout:glaive_attack"
     ]
   },
+  "pop": {
+    "subtitle": "sounds.roundabout.pop",
+    "sounds": [
+      "roundabout:pop"
+    ]
+  },
+  "fog_clone": {
+    "subtitle": "sounds.roundabout.fog_clone",
+    "sounds": [
+      "roundabout:fog_clone"
+    ]
+  },
   "hallelujah": {
     "subtitle": "sounds.roundabout.hallelujah",
     "sounds": [

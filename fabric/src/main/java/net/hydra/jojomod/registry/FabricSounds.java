@@ -151,6 +151,8 @@ public class FabricSounds {
 
         addSound(ModSounds.GLAIVE_CHARGE_ID, ModSounds.GLAIVE_CHARGE_EVENT);
         addSound(ModSounds.GLAIVE_ATTACK_ID, ModSounds.GLAIVE_ATTACK_EVENT);
+        addSound(ModSounds.FOG_CLONE_ID, ModSounds.FOG_CLONE_EVENT);
+        addSound(ModSounds.POP_ID, ModSounds.POP_EVENT);
 
         addSound(ModSounds.BLOCK_GRAB_ID, ModSounds.BLOCK_GRAB_EVENT);
         addSound(ModSounds.BLOCK_THROW_ID, ModSounds.BLOCK_THROW_EVENT);

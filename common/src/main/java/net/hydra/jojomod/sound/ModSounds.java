@@ -434,6 +434,13 @@ public class ModSounds {
     public static final ResourceLocation GLAIVE_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GLAIVE_ATTACK);
     public static SoundEvent GLAIVE_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(GLAIVE_ATTACK_ID);
 
+    public static final String FOG_CLONE = "fog_clone";
+    public static final ResourceLocation FOG_CLONE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FOG_CLONE);
+    public static SoundEvent FOG_CLONE_EVENT = SoundEvent.createVariableRangeEvent(FOG_CLONE_ID);
+    public static final String POP = "pop";
+    public static final ResourceLocation POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POP);
+    public static SoundEvent POP_EVENT = SoundEvent.createVariableRangeEvent(POP_ID);
+
 
     public static final String BLOCK_GRAB = "block_grab";
     public static final ResourceLocation BLOCK_GRAB_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_GRAB);
