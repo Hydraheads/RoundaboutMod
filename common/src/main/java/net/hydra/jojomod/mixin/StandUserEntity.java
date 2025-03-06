@@ -1795,8 +1795,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
-
+        private void roundabout$roundabouthurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
         if (roundabout$gasolineIFRAMES > 0 && $$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             ci.setReturnValue(false);
             return;
@@ -1909,6 +1908,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.setReturnValue(false);
             return;
         } else {
+
+            LivingEntity living = ((LivingEntity)(Object)this);
+            if (((StandUser)living).roundabout$getStandPowers().interceptDamageEvent($$0,$$1)){
+                ci.setReturnValue(false);
+                return;
+            }
+
+
             /*This extra check ensures that extra damage will not be dealt if a projectile ticks before the TS damage catch-up*/
             if (roundabout$getStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
                 ci.setReturnValue(false);

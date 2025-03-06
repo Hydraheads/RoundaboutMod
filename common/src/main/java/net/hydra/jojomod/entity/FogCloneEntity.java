@@ -43,6 +43,9 @@ public class FogCloneEntity extends CloneEntity {
 
         return $$0.canBeCollidedWith() && !this.isPassengerOfSameVehicle($$0);
     }
+    public void switchPlaces() {
+
+    }
 
     public int getTimer(){
         return timer;

@@ -30,6 +30,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -1133,6 +1134,9 @@ public class StandPowers {
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
     }
 
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        return false;
+    }
     public void poseStand(byte r){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){

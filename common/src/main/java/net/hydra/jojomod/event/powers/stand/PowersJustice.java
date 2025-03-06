@@ -41,6 +41,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -820,6 +821,9 @@ public class PowersJustice extends DashPreset {
         }
         return super.setPowerOther(move,lastMove);
     }
+
+    public FogCloneEntity clone1;
+    public FogCloneEntity clone2;
     
     /**Fog Clones*/
     public boolean spawnClones(){
@@ -852,6 +856,9 @@ public class PowersJustice extends DashPreset {
             fclone.setDeltaMovement(fclone.getForward().scale(0.3));
             fclone2.setDeltaMovement(fclone2.getForward().scale(0.3));
 
+            clone1 = fclone;
+            clone2 = fclone2;
+
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
                     50, 1, 1, 1, 0.1);
@@ -862,9 +869,19 @@ public class PowersJustice extends DashPreset {
     }
 
     @Override
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        if (clone1 != null && clone1.isAlive() && ((StandUser)clone1).roundabout$getStoredDamage() <= 0){
+            clone1.switchPlaces();
+            return true;
+        } else if (clone2 != null && clone2.isAlive() && ((StandUser)clone2).roundabout$getStoredDamage() <= 0){
+            clone2.switchPlaces();
+            return true;
+        }
+        return false;
+    }
+    @Override
     public boolean cancelCollision(Entity et) {
         if (et instanceof FogCloneEntity FC){
-            Roundabout.LOGGER.info("SKIBIDI HIBIDI 2");
             return true;
         }
         return false;
