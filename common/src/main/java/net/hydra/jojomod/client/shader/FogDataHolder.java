@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.shader;
 
 import org.joml.Vector3f;
 
-/* Static class to handle data for fog as Mixins cannot directly store data */
+/* Static class to handle data for fog as Mixins cannot directly store interchangable data */
 public class FogDataHolder {
     public static boolean shouldRenderFog = false;
 

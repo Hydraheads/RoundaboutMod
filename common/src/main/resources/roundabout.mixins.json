@@ -77,7 +77,6 @@
     "ZZombie"
   ],
   "client": [
-    "CoreShaderMixin",
     "HudRendering",
     "InputEvents",
     "PlayerEntityClient",
@@ -95,6 +94,7 @@
     "ZEntityRenderDispatcher",
     "ZEntityRenderer",
     "ZFogRenderer",
+    "ZGameRenderer",
     "ZHeldItemLowering",
     "ZHumanoidArmorLayer",
     "ZHumanoidMobRenderer",

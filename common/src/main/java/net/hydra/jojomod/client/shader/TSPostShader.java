@@ -18,6 +18,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+// TODO: fix fabulous rendertargets
+// fabulous graphics mode should be used for fixed transparency
+// but fabulous splits up the rendertargets across several framebuffers to fix transparency
+// so ill have to target all of them one day
+
+// this sorta works rn tho
+
 /* class for handling post shaders & programs */
 public class TSPostShader {
     /* final list of instances */
@@ -73,7 +80,7 @@ public class TSPostShader {
         });
     }
 
-    public static void renderShader(PostShaderWithName instance, float tickDelta, PoseStack matrixes)
+    public static void renderShader(PostShaderWithName instance, float tickDelta)
     {
         Minecraft client = Minecraft.getInstance();
 
@@ -98,6 +105,18 @@ public class TSPostShader {
     }
 
     public static void setVec3Uniform(List<PostPass> passes, String name, Vector3f value)
+    {
+        for (PostPass p : passes)
+        {
+            Uniform u = p.getEffect().getUniform(name);
+            if (u != null)
+            {
+                u.set(value);
+            }
+        }
+    }
+
+    public static void setSamplerUniform(List<PostPass> passes, String name, int value)
     {
         for (PostPass p : passes)
         {

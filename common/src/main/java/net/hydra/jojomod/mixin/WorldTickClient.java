@@ -489,28 +489,12 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
                 cir.setReturnValue(interp);
 
-                if (true) //(Minecraft.getInstance().options.graphicsMode().get() == GraphicsStatus.FABULOUS)
-                {
-                    // TODO: fix fabulous rendertargets
-                    // fabulous graphics mode should be used for fixed transparency
-                    // but fabulous splits up the rendertargets across several framebuffers to fix transparency
-                    // so ill have to target all of them one day
+                FogDataHolder.shouldRenderFog = true;
+                FogDataHolder.fogColor.set((float) interp.x, (float) interp.y, (float) interp.z);
 
-                    // this sorta works rn tho
-
-                    FogDataHolder.shouldRenderFog = true;
-                    FogDataHolder.fogColor.set((float) interp.x, (float) interp.y, (float) interp.z);
-
-                    FogDataHolder.fogDensity = (roundabout$skyLerp / roundabout$maxSkyLerp) * 2;
-                    FogDataHolder.fogNear = Mth.clamp(0.05f + (roundabout$skyLerp / roundabout$maxSkyLerp) * 0.5f, 0.05f, Float.MAX_VALUE);
-                    FogDataHolder.fogFar = Mth.clamp(6.0f - (roundabout$skyLerp / roundabout$maxSkyLerp) * 5.0f, 12.0f, Float.MAX_VALUE);
-                }
-//                else
-//                {
-//                    FogDataHolder.shouldRenderFog = false;
-//                    FogDataHolder.fogDensity = 0;
-//                    cir.setReturnValue(interp);
-//                }
+                FogDataHolder.fogDensity = (roundabout$skyLerp / roundabout$maxSkyLerp);
+                FogDataHolder.fogNear = Mth.clamp(0.05f + (roundabout$skyLerp / roundabout$maxSkyLerp) * 0.5f, 0.05f, Float.MAX_VALUE);
+                FogDataHolder.fogFar = Mth.clamp(500.0f - (roundabout$skyLerp / roundabout$maxSkyLerp) * 5.0f, 12.0f, Float.MAX_VALUE);
             }
         }
     }
