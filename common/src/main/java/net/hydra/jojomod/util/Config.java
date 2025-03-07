@@ -174,6 +174,8 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer timeStopActionBonusTicks;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer timeStopTimeUsedMultiplier;
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        public Integer justiceFogClone;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
     }

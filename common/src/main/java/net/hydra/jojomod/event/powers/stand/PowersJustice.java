@@ -617,6 +617,8 @@ public class PowersJustice extends DashPreset {
                 if (!inputDash) {
                     if (isHoldingSneak()) {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
+
+                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
                         }
                         inputDash = true;
@@ -859,7 +861,7 @@ public class PowersJustice extends DashPreset {
 
             clone1 = fclone;
             clone2 = fclone2;
-
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
                     50, 1, 1, 1, 0.1);
