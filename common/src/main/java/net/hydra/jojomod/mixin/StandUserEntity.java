@@ -1609,6 +1609,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 0;
     }
 
+    @Shadow protected float lastHurt;
+
     /**Part of Registering Stand Guarding as a form of Blocking*/
     @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurtCurrentlyUsedShield(F)V", shift = At.Shift.BEFORE))
     private void roundabout$RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
@@ -1909,10 +1911,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         } else {
 
-            LivingEntity living = ((LivingEntity)(Object)this);
-            if (((StandUser)living).roundabout$getStandPowers().interceptDamageEvent($$0,$$1)){
-                ci.setReturnValue(false);
-                return;
+            boolean dothis = false;
+            if ((float)this.invulnerableTime > 10.0F && !$$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+                if (!($$1 <= this.lastHurt)) {
+                    dothis = true;
+                }
+            } else {
+                dothis = true;
+            }
+            if (dothis) {
+                LivingEntity living = ((LivingEntity) (Object) this);
+                if (((StandUser) living).roundabout$getStandPowers().interceptDamageEvent($$0, $$1)) {
+                    ci.setReturnValue(false);
+                    return;
+                }
             }
 
 

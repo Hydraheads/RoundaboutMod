@@ -1,17 +1,24 @@
 package net.hydra.jojomod.entity;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +26,11 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 public class FogCloneEntity extends CloneEntity {
 
@@ -44,7 +56,46 @@ public class FogCloneEntity extends CloneEntity {
         return $$0.canBeCollidedWith() && !this.isPassengerOfSameVehicle($$0);
     }
     public void switchPlaces() {
+        if (!this.level().isClientSide() && this.getPlayer() != null){
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
+            simulatePoof(new Vec3(this.getPlayer().getX(),
+                    this.getPlayer().getY(),
+                    this.getPlayer().getZ()));
+            ((IPlayerEntityServer)this.getPlayer()).roundabout$setInvincibleTicks(5);
+            ((ServerPlayer)this.getPlayer()).teleportTo(
+                    (ServerLevel)this.level(),
+                    x,
+                    y,
+                    z,
+                    EnumSet.noneOf(RelativeMovement.class),
+                    this.getYRot(),
+                    this.getXRot()
+            );
+            packetNearby(new Vector3f((float) x, (float) y, (float) z));
+            ((ServerPlayer)this.getPlayer()).isChangingDimension();
+            this.discard();
+        }
+    }
 
+    public final void packetNearby(Vector3f blip) {
+        if (!this.level().isClientSide && this.getPlayer() != null) {
+            ServerLevel serverWorld = ((ServerLevel) this.level());
+            Vec3 userLocation = new Vec3(this.getX(),  this.getY(), this.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100) && !serverPlayerEntity.is(this.getPlayer())) {
+                    ModPacketHandler.PACKET_ACCESS.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getPlayer().getId(),blip);
+                }
+            }
+        }
     }
 
     public int getTimer(){

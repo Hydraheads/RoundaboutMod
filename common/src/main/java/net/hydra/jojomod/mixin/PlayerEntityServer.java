@@ -64,10 +64,20 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Shadow
     public ServerGamePacketListenerImpl connection;
     @Shadow private int containerCounter;
+    @Unique private int roundabout$invincibleTicks = 0;
 
+    @Override
+    public void roundabout$setInvincibleTicks(int ticks){
+        roundabout$invincibleTicks = ticks;
+    }
+    @Inject(method = "isChangingDimension()Z", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$changeDimensions(CallbackInfoReturnable<Boolean> cir) {
+        if (roundabout$invincibleTicks > 0){
+            cir.setReturnValue(true);
+        }
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
-
         if (!this.level().isClientSide() && !roundabout$initializeDataOnClient && connection !=null && connection.isAcceptingMessages()){
             IPlayerEntity ipe = ((IPlayerEntity)this);
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
@@ -79,6 +89,9 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             roundabout$initializeDataOnClient = true;
         }
         if (!this.level().isClientSide) {
+            if (roundabout$invincibleTicks > 0){
+                roundabout$invincibleTicks--;
+            }
             ((IPlayerEntity) this).roundabout$getMaskInventory().update();
         }
     }
