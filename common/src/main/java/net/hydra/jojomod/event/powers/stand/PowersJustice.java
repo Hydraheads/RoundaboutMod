@@ -475,6 +475,18 @@ public class PowersJustice extends DashPreset {
         return 1.3F;
     }
 
+    public int getFogCloneLevel(){
+        return 5;
+    }
+    public int getVillagerMorphLevel(){
+        return 2;
+    }
+    public int getZombieMorphLevel(){
+        return 3;
+    }
+    public int getSkeletonMorphLevel(){
+        return 4;
+    }
     @Override
     public boolean hasMoreThanOneSkin(){
         return true;

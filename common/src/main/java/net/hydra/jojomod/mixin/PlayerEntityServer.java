@@ -137,11 +137,13 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             float size = ((IPlayerEntity) $$0).roundabout$getSizePercent();
             float rotat = ((IPlayerEntity) $$0).roundabout$getIdleRotation();
             float yOffset = ((IPlayerEntity) $$0).roundabout$getIdleYOffset();
+            byte teamColor = ((IPlayerEntity) $$0).roundabout$getTeamColor();
             ipe.roundabout$setAnchorPlace(anchorPlace);
             ipe.roundabout$setDistanceOut(distanceOut);
             ipe.roundabout$setSizePercent(size);
             ipe.roundabout$setIdleRotation(rotat);
             ipe.roundabout$setIdleYOffset(yOffset);
+            ipe.roundabout$setTeamColor(teamColor);
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
                     ipe.roundabout$getSizePercent(),
