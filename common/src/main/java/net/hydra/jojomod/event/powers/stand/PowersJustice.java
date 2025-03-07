@@ -671,6 +671,10 @@ public class PowersJustice extends DashPreset {
                                     if (fm.getSelected()){
                                         fm.setMovementTactic(context);
                                     }
+                                } else if (context == Tactics.KILL_ALL.id){
+                                    if (fm.getSelected()) {
+                                        fm.kill();
+                                    }
                                 } else {
                                     if (fm.getSelected()){
                                         fm.setTargetTactic(context);

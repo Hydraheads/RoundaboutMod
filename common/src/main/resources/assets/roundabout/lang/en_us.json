@@ -537,6 +537,8 @@
   "roundabout.corpse.tactics.hunt_player": "Hunt Players",
   "roundabout.corpse.tactics.peaceful": "Stand Down",
   "roundabout.corpse.tactics.change_team": "Team Color",
+  "roundabout.corpse.tactics.kill_all": "Destroy Corpses",
+  "roundabout.corpse.tactics.cackle": "Cackle",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
