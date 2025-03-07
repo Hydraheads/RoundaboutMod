@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
@@ -892,11 +893,15 @@ public class PowersJustice extends DashPreset {
     @Override
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
         if (clone1 != null && clone1.isAlive() && ((StandUser)clone1).roundabout$getStoredDamage() <= 0){
-            clone1.switchPlaces();
-            return true;
+            if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                clone1.switchPlaces();
+                return true;
+            }
         } else if (clone2 != null && clone2.isAlive() && ((StandUser)clone2).roundabout$getStoredDamage() <= 0){
-            clone2.switchPlaces();
-            return true;
+            if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                clone2.switchPlaces();
+                return true;
+            }
         }
         return false;
     }
