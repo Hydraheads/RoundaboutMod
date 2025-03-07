@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -26,9 +27,9 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -126,6 +127,14 @@ public class FogCloneEntity extends CloneEntity {
             }
         }
         super.tick();
+    }
+
+    public boolean addEffect(MobEffectInstance $$0, @Nullable Entity $$1) {
+        if ($$1 != null){
+            this.goPoof();
+            return false;
+        }
+        return super.addEffect($$0,$$1);
     }
 
     int nextPathfind = 1;
