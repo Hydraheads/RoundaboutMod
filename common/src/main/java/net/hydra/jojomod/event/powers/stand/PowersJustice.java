@@ -476,6 +476,10 @@ public class PowersJustice extends DashPreset {
     }
 
     @Override
+    public boolean hasMoreThanOneSkin(){
+        return true;
+    }
+    @Override
     public float getBonusPassiveMiningSpeed(){
         return 1.3F;
     }
@@ -491,19 +495,17 @@ public class PowersJustice extends DashPreset {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(JusticeEntity.MANGA_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(JusticeEntity.OVA_SKIN);
-            } if (Level > 3 || bypass){
+            } if (Level > 2 || bypass){
                 $$1.add(JusticeEntity.STRAY_SKIN);
                 $$1.add(JusticeEntity.BOGGED);
-            } if (Level > 4 || bypass){
+            } if (Level > 3 || bypass){
                 $$1.add(JusticeEntity.WITHER);
                 $$1.add(JusticeEntity.TWILIGHT);
-            } if (Level > 5 || bypass){
+            } if (Level > 4 || bypass){
                 $$1.add(JusticeEntity.TAROT);
-                $$1.add(JusticeEntity.DARK_MIRAGE);
-            } if (Level > 6 || bypass){
                 $$1.add(JusticeEntity.PIRATE);
+                $$1.add(JusticeEntity.DARK_MIRAGE);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(JusticeEntity.FLAMED);
                 $$1.add(JusticeEntity.BLUE_FLAMED);
@@ -907,6 +909,10 @@ public class PowersJustice extends DashPreset {
         return true;
     }
 
+    @Override
+    public Component getSkinName(byte skinId){
+        return JusticeEntity.getSkinNameT(skinId);
+    }
     @Override
     public boolean onCreateProjectile(Projectile proj){
         if (clone1 != null && clone1.isAlive()){
