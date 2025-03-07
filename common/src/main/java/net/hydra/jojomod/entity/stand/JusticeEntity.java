@@ -135,7 +135,9 @@ public class JusticeEntity extends StandEntity {
             }
         }
     }
-
+    public boolean isInvulnerable() {
+        return true;
+    }
     @Override
     public Component getPosName(byte posID){
         if (posID == 1){
