@@ -1505,12 +1505,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         && !$$0.is(DamageTypes.THORNS)&& !$$0.is(ModDamageTypes.CORPSE) &&
                 !$$0.is(ModDamageTypes.CORPSE_EXPLOSION) &&
                 !$$0.is(ModDamageTypes.CORPSE_ARROW)){
-            ((StandUser)pe).roundabout$getStandPowers().interceptDamageDealtEvent($$0,$$1);
+            if (((StandUser)pe).roundabout$getStandPowers().interceptDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
+                ci.setReturnValue(false);
+                return;
+            }
         }
 
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM){
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
-                $$1/=3;
+                $$1/=3.2f;
             }
             Entity ent2 = FM;
             if (FM.getController() > 0 && FM.getController() != this.getId()){
@@ -1702,18 +1705,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Villager call to action*/
     @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
-        if (((LivingEntity)(Object)this) instanceof AbstractVillager AV && !($$0.getEntity()
-                instanceof AbstractVillager) && $$0.getEntity() instanceof LivingEntity LE) {
-            if (!this.isInvulnerableTo($$0)) {
-                AABB AAB = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
-                List<? extends AbstractVillager> ENT = this.level().getNearbyEntities(AbstractVillager.class, MainUtil.attackTargeting, ((LivingEntity)(Object)this), AAB);
+        if (!this.isInvulnerableTo($$0)) {
+            if (((LivingEntity)(Object)this) instanceof AbstractVillager AV && !($$0.getEntity()
+                    instanceof AbstractVillager) && $$0.getEntity() instanceof LivingEntity LE) {
+                    AABB AAB = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+                    List<? extends AbstractVillager> ENT = this.level().getNearbyEntities(AbstractVillager.class, MainUtil.attackTargeting, ((LivingEntity)(Object)this), AAB);
 
-                for (AbstractVillager $$3 : ENT) {
-                    if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
-                        if($$3.getTarget() == null && !(LE instanceof Player PE && PE.isCreative())){
-                            $$3.setTarget(LE);
+                    for (AbstractVillager $$3 : ENT) {
+                        if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
+                            if($$3.getTarget() == null && !(LE instanceof Player PE && PE.isCreative())){
+                                $$3.setTarget(LE);
+                            }
                         }
                     }
+            }
+
+
+            if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
+                    && !$$0.is(DamageTypes.THORNS)){
+                if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
+                    ci.cancel();
                 }
             }
         }

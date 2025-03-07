@@ -43,6 +43,8 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -1138,7 +1140,10 @@ public class StandPowers {
         return false;
     }
 
-    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1){
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        return false;
+    }
+    public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;
     }
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
@@ -2375,7 +2380,15 @@ public class StandPowers {
     public boolean canUseMiningStand() {
         return (isMiningStand() && (!(this.getSelf().getMainHandItem().getItem() instanceof DiggerItem) || this.getActivePower() == PowerIndex.MINING));
     }
-
+    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
+    }
+    public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
+        if (!($$1.getBlock() instanceof IceBlock)) {
+            if (Math.random() > 0.62) {
+                addEXP(1);
+            }
+        }
+    }
 
     public float getBonusPassiveMiningSpeed(){
         return 1F;

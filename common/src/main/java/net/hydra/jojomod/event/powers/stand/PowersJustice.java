@@ -21,16 +21,14 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -51,6 +49,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -321,6 +321,39 @@ public class PowersJustice extends DashPreset {
         return ModEntities.JUSTICE.create(this.getSelf().level());
     }
 
+    @Override
+    public byte getMaxLevel(){
+        return 5;
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1) {
+            amt = 50;
+        } else if (currentLevel == 2){
+            amt = 150;
+        } else {
+            amt = (100+((currentLevel-1)*100));
+        }
+        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        return amt;
+    }
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 5){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else if (level == 2 || level == 3 || level == 4){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
@@ -884,12 +917,32 @@ public class PowersJustice extends DashPreset {
         return false;
     }
     @Override
-    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1){
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if (clone1 != null && clone1.isAlive()){
             clone1.goPoof();
         } if (clone2 != null && clone2.isAlive()){
             clone2.goPoof();
         }
+
+        return false;
+    }
+    @Override
+    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
+        if (hasStandActive(this.getSelf())) {
+            if (!($$1.getBlock() instanceof IceBlock)) {
+                if (Math.random() > 0.62) {
+                    addEXP(1);
+                }
+            }
+        }
+    }
+    @Override
+    public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if (hasStandActive(this.getSelf()) || $$0.is(ModDamageTypes.CORPSE)
+                || $$0.is(ModDamageTypes.CORPSE_ARROW) || $$0.is(ModDamageTypes.CORPSE_EXPLOSION)){
+            addEXP(1);
+        }
+
         return false;
     }
     @Override
@@ -975,6 +1028,7 @@ public class PowersJustice extends DashPreset {
                 }
 
                 if (success) {
+                    addEXP(4);
                     int cdr = 80;
                     ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                             PowerIndex.SKILL_2, cdr);

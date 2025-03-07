@@ -19,11 +19,10 @@ public class ZItemStack {
     protected void roundabout$mineBlock(Level $$0, BlockState $$1, BlockPos $$2, Player $$3, CallbackInfo ci) {
         StandPowers powers = ((StandUser) $$3).roundabout$getStandPowers();
         if (((StandUser) $$3).roundabout$getActive() && powers.canUseMiningStand()) {
-
-            if (Math.random() > 0.82){
-                powers.addEXP(1);
-            }
+            powers.gainExpFromSpecialMining($$1,$$2);
             ci.cancel();
+        } else {
+            powers.gainExpFromStandardMining($$1,$$2);
         }
     }
 }
