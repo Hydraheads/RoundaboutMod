@@ -40,9 +40,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -583,7 +587,47 @@ public class PowersJustice extends DashPreset {
         if (keyIsDown) {
         }
     }
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            boolean done = false;
+            Vec3 vector = null;
+            if (effect.getDuration() == 13) {
+                vector = new Vec3(0,
+                        (this.self.getY()+10 - this.self.getY()),
+                        0).normalize().scale(1.8F);
 
+
+                done = true;
+                this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
+                ));
+            } else if (effect.getDuration() == 2) {
+                vector = new Vec3(0,
+                        (this.self.getY()-10 - this.self.getY()),
+                        0).normalize().scale(1.8F);
+                done = true;
+                this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
+                ));
+            }
+            if (done){
+                this.self.hurtMarked = true;
+                this.self.hasImpulse = true;
+                double random = (Math.random() * 1.2) - 0.6;
+                double random2 = (Math.random() * 1.2) - 0.6;
+                double random3 = (Math.random() * 1.2) - 0.6;
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.POOF, this.self.getX(),
+                        this.self.getY() + this.self.getEyeHeight(), this.self.getZ(),
+                        0,
+                        vector.x+random,
+                        vector.y+random2,
+                        vector.z+random3,
+                        0.15);
+
+                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                        this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);
+            }
+        }
+    }
     public void justiceTacticsUse(byte context) {
         if (fogControlledEntities == null){
             fogControlledEntities = new ArrayList<>();

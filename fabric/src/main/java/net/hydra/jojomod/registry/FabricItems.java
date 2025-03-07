@@ -338,6 +338,7 @@ public class FabricItems {
 
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_STAR_PLATINUM);
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_THE_WORLD);
+        ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_JUSTICE);
 
         registerPotions();
     }
