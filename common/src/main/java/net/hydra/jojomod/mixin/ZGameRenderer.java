@@ -1,9 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.client.shader.FogDataHolder;
-import net.hydra.jojomod.client.shader.TSCoreShader;
-import net.hydra.jojomod.client.shader.TSPostShader;
-import net.hydra.jojomod.client.shader.callback.ResourceProviderEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -22,13 +18,13 @@ public abstract class ZGameRenderer {
     @Inject(method="reloadShaders", at=@At("HEAD"))
     private void RoundaboutReloadShaders(ResourceProvider provider, CallbackInfo ci)
     {
-        ResourceProviderEvent.invoke(provider);
+        //ResourceProviderEvent.invoke(provider);
     }
 
     @Inject(method="shutdownShaders", at=@At("HEAD"))
     private void shutdownShaders(CallbackInfo ci)
     {
-        TSCoreShader.clear();
+        //TSCoreShader.clear();
     }
 
     @Inject(at = @At(value = "INVOKE",

@@ -33,9 +33,11 @@ public class TSCoreShader {
 
     public static void register(String name)
     {
+        /**
         registrar.add(name);
         if (resourceProvider != null)
             registerShader(name);
+         **/
     }
 
     private static void registerShader(String s)

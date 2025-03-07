@@ -49,8 +49,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillagerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
 
-        TSCoreShader.bootstrapShaders();
-        TSPostShader.bootstrapShaders();
+        //TSCoreShader.bootstrapShaders();
+        //TSPostShader.bootstrapShaders();
     }
 
     @SubscribeEvent

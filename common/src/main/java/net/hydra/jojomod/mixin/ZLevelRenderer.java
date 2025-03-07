@@ -80,7 +80,7 @@ public abstract class ZLevelRenderer {
     @Inject(method="renderLevel", at=@At("TAIL"))
     private void roundabout$renderLevel(PoseStack $$0, float tickDelta, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
     {
-        if (FogDataHolder.fogDensity > 0.25 && FogDataHolder.shouldRenderFog && minecraft.player != null && (minecraft.player.isCreative() || minecraft.player.isSpectator())) {
+        if (FogDataHolder.fogDensity > 0.25 && FogDataHolder.shouldRenderFog && minecraft.player != null && (minecraft.player.isSpectator())) {
             if (TSPostShader.FOG_SHADER != null && TSPostShader.FOG_SHADER_PASSES != null) {
                 TSPostShader.setFloatUniform(TSPostShader.FOG_SHADER_PASSES, "FogDensity", FogDataHolder.fogDensity);
                 TSPostShader.setFloatUniform(TSPostShader.FOG_SHADER_PASSES, "FogNear", FogDataHolder.fogNear);
