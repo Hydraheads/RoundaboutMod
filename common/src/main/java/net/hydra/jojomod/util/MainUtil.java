@@ -1300,7 +1300,9 @@ public class MainUtil {
             if (SE != null){
                 BlockPos veci3 = BlockPos.containing(new Vec3(SE.getX(), SE.getY() + SE.getEyeHeight(), SE.getZ()));
                 BlockState bl3 = SE.level().getBlockState(veci3);
-                if (!(bl3.isSolid() && bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3))){
+                if (!(bl3.isSolid() && (bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3) ||
+                        (bl3.getBlock() instanceof SlabBlock ||
+                        bl3.getBlock() instanceof StairBlock)))){
                     ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {

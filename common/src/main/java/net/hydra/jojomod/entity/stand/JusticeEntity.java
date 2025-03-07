@@ -31,6 +31,8 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
@@ -234,7 +236,6 @@ public class JusticeEntity extends StandEntity {
     }
 
     public boolean stuck = false;
-    @SuppressWarnings("deprecation")
     @Override
     public void move(MoverType $$0, Vec3 $$1) {
         if (this.noPhysics) {
@@ -252,9 +253,9 @@ public class JusticeEntity extends StandEntity {
                             BlockState bl = this.level().getBlockState(veci);
                             BlockState bl2 = this.level().getBlockState(veci2);
                             BlockState bl3 = this.level().getBlockState(veci3);
-                            if ((bl.isSolid() && bl.getBlock().isCollisionShapeFullBlock(bl,this.level(),veci)) ||
-                                    (bl2.isSolid() && bl2.getBlock().isCollisionShapeFullBlock(bl2,this.level(),veci2)) ||
-                                    (bl3.isSolid() && bl3.getBlock().isCollisionShapeFullBlock(bl3,this.level(),veci3))){
+                            if (getFullBlock(bl,veci) ||
+                                    getFullBlock(bl2,veci2) ||
+                                    getFullBlock(bl3,veci3)){
                                 this.setDeltaMovement(Vec3.ZERO);
                                 if (!stuck) {
                                     stuck = true;
@@ -268,6 +269,16 @@ public class JusticeEntity extends StandEntity {
             }
         }
         super.move($$0,$$1);
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public boolean getFullBlock(BlockState bs, BlockPos bp){
+        Block blk = bs.getBlock();
+        return (bs.isSolid() && (blk.isCollisionShapeFullBlock(bs,this.level(),bp) ||
+                (blk instanceof SlabBlock ||
+                        blk instanceof StairBlock)));
+
     }
 
     @Override
