@@ -42,7 +42,7 @@ public class FallenVillager extends FallenMob{
     @Override
     protected SoundEvent getDeathSound() {
         if (this.getActivated()){
-            return SoundEvents.ZOMBIE_DEATH;
+            return SoundEvents.VILLAGER_DEATH;
         } else {
             return super.getDeathSound();
         }

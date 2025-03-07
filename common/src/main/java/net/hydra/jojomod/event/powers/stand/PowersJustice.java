@@ -242,35 +242,38 @@ public class PowersJustice extends DashPreset {
         }
     }
 
+    public int lastHeldAge = 0;
     @Override
     public boolean pilotInputInteract(){
+        if (Math.abs(lastHeldAge-this.getSelf().tickCount) >= 6){
         LivingEntity ent = getPilotingStand();
-        if (ent != null) {
-            Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-            if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable())) {
+            if (ent != null) {
+                Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
+                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable())) {
+                    Vec3 vec3d = ent.getEyePosition(0);
+                    Vec3 vec3d2 = ent.getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                    BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                    if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
+                    } else {
+                        if (TE instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
+                            this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
+                                    PacketDataIndex.INT_STAND_ATTACK_2);
+                            return true;
+                        }
+                    }
+                }
                 Vec3 vec3d = ent.getEyePosition(0);
                 Vec3 vec3d2 = ent.getViewVector(0);
                 Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
                 BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
-                } else {
-                    if (TE instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
-                        this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
-                                PacketDataIndex.INT_STAND_ATTACK_2);
-                        return true;
-                    }
-                }
+                BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
+                this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
             }
-            Vec3 vec3d = ent.getEyePosition(0);
-            Vec3 vec3d2 = ent.getViewVector(0);
-            Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-            BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-            BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
-            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
-            this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
-
         }
+        lastHeldAge = this.getSelf().tickCount;
         return false;
     }
     public void tickPower() {
