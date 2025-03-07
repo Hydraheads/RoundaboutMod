@@ -1134,6 +1134,9 @@ public class StandPowers {
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
     }
 
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1){
+        return false;
+    }
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
         return false;
     }

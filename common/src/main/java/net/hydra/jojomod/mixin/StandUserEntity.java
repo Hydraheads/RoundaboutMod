@@ -1500,6 +1500,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+
+        if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
+        && !$$0.is(DamageTypes.THORNS)&& !$$0.is(ModDamageTypes.CORPSE) &&
+                !$$0.is(ModDamageTypes.CORPSE_EXPLOSION) &&
+                !$$0.is(ModDamageTypes.CORPSE_ARROW)){
+            ((StandUser)pe).roundabout$getStandPowers().interceptDamageDealtEvent($$0,$$1);
+        }
+
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM){
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=3;

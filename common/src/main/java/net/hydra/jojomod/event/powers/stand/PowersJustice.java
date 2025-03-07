@@ -869,6 +869,15 @@ public class PowersJustice extends DashPreset {
     }
 
     @Override
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1){
+        if (clone1 != null && clone1.isAlive()){
+            clone1.goPoof();
+        } if (clone2 != null && clone2.isAlive()){
+            clone2.goPoof();
+        }
+        return false;
+    }
+    @Override
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
         if (clone1 != null && clone1.isAlive() && ((StandUser)clone1).roundabout$getStoredDamage() <= 0){
             clone1.switchPlaces();
