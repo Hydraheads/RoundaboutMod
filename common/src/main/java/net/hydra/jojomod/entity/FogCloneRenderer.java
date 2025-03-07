@@ -61,10 +61,8 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
             if (AC == null || (!(AC instanceof PlayerAlexNPC) && !(AC instanceof PlayerSteveNPC) &&
                     (visage.isEmpty() || visage.is(ModItems.BLANK_MASK)))){
                 if (((AbstractClientPlayer) pl).getModelName().equals("slim")){
-                    Roundabout.LOGGER.info("create1");
                     AC = ModEntities.ALEX_NPC.create(Minecraft.getInstance().level);
                 } else {
-                    Roundabout.LOGGER.info("create2");
                     AC = ModEntities.STEVE_NPC.create(Minecraft.getInstance().level);
                 }
             }
@@ -81,7 +79,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
     }
 
 
-    public void assertOnPlayerLike(JojoNPC ve, Player $$0,float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4,
+    public void assertOnPlayerLike(LivingEntity ve, Player $$0,float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4,
                                    int $$5, T entityeah){
         if (ve instanceof JojoNPCPlayer v2){
             v2.faker = $$0;
@@ -91,7 +89,9 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         ve.setItemInHand(InteractionHand.MAIN_HAND,$$0.getMainHandItem());
         ve.setItemInHand(InteractionHand.OFF_HAND,$$0.getOffhandItem());
         ve.setPose($$0.getPose());
-        ve.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
+        if (ve instanceof JojoNPC v2) {
+            v2.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
+        }
         ILivingEntityAccess ila = ((ILivingEntityAccess) $$0);
         ILivingEntityAccess ila2 = ((ILivingEntityAccess) ve);
         ila2.roundabout$setSwimAmount(ila.roundabout$getSwimAmount());
@@ -113,10 +113,12 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         ve.setItemSlot(EquipmentSlot.LEGS, stackL);
         ItemStack stackF = $$0.getItemBySlot(EquipmentSlot.FEET);
         ve.setItemSlot(EquipmentSlot.FEET, stackF);
-        ve.roundabout$SetPos(ipe.roundabout$GetPos());
+        if (ve instanceof JojoNPC v2) {
+            v2.roundabout$SetPos(ipe.roundabout$GetPos());
+            v2.host = $$0;
+        }
         ila2.roundabout$setUseItem($$0.getUseItem());
         ila2.roundabout$setUseItemTicks($$0.getUseItemRemainingTicks());
-        ve.host = $$0;
 
 
         if ($$0.isFallFlying()){
@@ -142,7 +144,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
 
 
     @Unique
-    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, JojoNPC $$6, Player user, int light,
+    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user, int light,
                                               T entityeah) {
 
         $$6.xOld = entityeah.xOld;
@@ -184,7 +186,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
 
 
     @Unique
-    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,JojoNPC $$6,
+    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6,
                                               int light, Player user) {
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
         Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);

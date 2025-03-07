@@ -388,7 +388,7 @@ public class PowersJustice extends DashPreset {
         } else {
 
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_1_SNEAK);
+                setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_3);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
             }
@@ -502,7 +502,7 @@ public class PowersJustice extends DashPreset {
                 } else {
                     if (keyIsDown) {
                         if (!hold1) {
-                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
+                            if (!this.onCooldown(PowerIndex.SKILL_3)){
                                 hold1 = true;
                                 ClientUtil.setJusticeScreen();
                             }
@@ -619,6 +619,7 @@ public class PowersJustice extends DashPreset {
                     if (isHoldingSneak()) {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
 
+                            ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
                         }
@@ -862,6 +863,7 @@ public class PowersJustice extends DashPreset {
 
             clone1 = fclone;
             clone2 = fclone2;
+
             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
