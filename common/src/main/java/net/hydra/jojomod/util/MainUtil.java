@@ -1138,21 +1138,34 @@ public class MainUtil {
                 PJ.justiceTacticsUse(data);
             }
         } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
-            if (ShapeShifts.getShiftFromByte(data) == ShapeShifts.VILLAGER){
-                byte totalMorph = 0;
-                Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
-                if (ent != null){
-                    VillagerType VT = ent.getVillagerData().getType();
-                    VillagerProfession VP = ent.getVillagerData().getProfession();
-                    totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + ShapeShifts.getByteFromProfession(VP));
-                } else {
-                    VillagerType VT = VillagerType.byBiome(player.level().getBiome(player.blockPosition()));
-                    totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + 1);
+            StandPowers sp = ((StandUser) player).roundabout$getStandPowers();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(data);
+            if (sp instanceof PowersJustice pj){
+
+                if (ShapeShifts.isVillager(shift) && !sp.canExecuteMoveWithLevel(pj.getVillagerMorphLevel())){
+                    return;
+                }if (ShapeShifts.isZombie(shift) && !sp.canExecuteMoveWithLevel(pj.getZombieMorphLevel())){
+                    return;
+                }if (ShapeShifts.isSkeleton(shift) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())){
+                    return;
                 }
-                ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
+                if (shift == ShapeShifts.VILLAGER){
+                    byte totalMorph = 0;
+                    Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
+                    if (ent != null){
+                        VillagerType VT = ent.getVillagerData().getType();
+                        VillagerProfession VP = ent.getVillagerData().getProfession();
+                        totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + ShapeShifts.getByteFromProfession(VP));
+                    } else {
+                        VillagerType VT = VillagerType.byBiome(player.level().getBiome(player.blockPosition()));
+                        totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + 1);
+                    }
+                    ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
+                }
+                ((IPlayerEntity) player).roundabout$shapeShift();
+                ((IPlayerEntity) player).roundabout$setShapeShift(data);
             }
-            ((IPlayerEntity) player).roundabout$shapeShift();
-            ((IPlayerEntity) player).roundabout$setShapeShift(data);
+
         } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
 
         }

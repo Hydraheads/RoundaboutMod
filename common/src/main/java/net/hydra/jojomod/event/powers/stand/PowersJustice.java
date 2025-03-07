@@ -421,7 +421,13 @@ public class PowersJustice extends DashPreset {
         } else {
 
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_3);
+                if (canExecuteMoveWithLevel(getVillagerMorphLevel())
+                || canExecuteMoveWithLevel(getZombieMorphLevel()) ||
+                        canExecuteMoveWithLevel(getSkeletonMorphLevel())) {
+                    setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_3);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
             }
@@ -434,7 +440,11 @@ public class PowersJustice extends DashPreset {
             }
 
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_FOG_CLONES, PowerIndex.SKILL_3);
+                if (canExecuteMoveWithLevel(getFogCloneLevel())) {
+                    setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_FOG_CLONES, PowerIndex.SKILL_3);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
             }
@@ -450,11 +460,11 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_CAST_FOG,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.fog_chain",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_FOG_CHAIN,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.fog_morph_2",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, getVillagerMorphLevel(), "ability.roundabout.fog_morph_2",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_2,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fog_morph_3",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getZombieMorphLevel(), "ability.roundabout.fog_morph_3",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_3,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fog_morph_4",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, getSkeletonMorphLevel(), "ability.roundabout.fog_morph_4",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_4,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.fog_blocks",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypas));
@@ -466,7 +476,7 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.passive", StandIcons.JUSTICE_CORPSE_ARMY,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.tactics",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_TACTICS,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.fog_clones",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, getFogCloneLevel(), "ability.roundabout.fog_clones",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_CLONES,3,level,bypas));
         return $$1;
     }
@@ -551,7 +561,12 @@ public class PowersJustice extends DashPreset {
                         if (!hold1) {
                             if (!this.onCooldown(PowerIndex.SKILL_3)){
                                 hold1 = true;
-                                ClientUtil.setJusticeScreen();
+
+                                if (canExecuteMoveWithLevel(getVillagerMorphLevel())
+                                        || canExecuteMoveWithLevel(getZombieMorphLevel()) ||
+                                        canExecuteMoveWithLevel(getSkeletonMorphLevel())) {
+                                    ClientUtil.setJusticeScreen();
+                                }
                             }
                         }
                     } else {
@@ -666,9 +681,11 @@ public class PowersJustice extends DashPreset {
                     if (isHoldingSneak()) {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
 
-                            ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
-                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                            if (canExecuteMoveWithLevel(getFogCloneLevel())) {
+                                ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
+                                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                            }
                         }
                         inputDash = true;
                     } else {
