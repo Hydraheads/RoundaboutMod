@@ -39,6 +39,7 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
@@ -1132,6 +1133,9 @@ public class StandPowers {
     }
 
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
+    }
+    public boolean onCreateProjectile(Projectile proj){
+        return false;
     }
 
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1){

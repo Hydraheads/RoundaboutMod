@@ -45,6 +45,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -868,6 +869,15 @@ public class PowersJustice extends DashPreset {
         return true;
     }
 
+    @Override
+    public boolean onCreateProjectile(Projectile proj){
+        if (clone1 != null && clone1.isAlive()){
+            clone1.goPoof();
+        } if (clone2 != null && clone2.isAlive()){
+            clone2.goPoof();
+        }
+        return false;
+    }
     @Override
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1){
         if (clone1 != null && clone1.isAlive()){
