@@ -838,7 +838,8 @@ public class MainUtil {
         LivingEntity target = null;
         if (!entities.isEmpty()) {
             for (Entity value : entities) {
-                if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)) {
+                if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
+                        && !(value instanceof FallenMob)) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
                         target = (LivingEntity) value;
