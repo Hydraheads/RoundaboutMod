@@ -260,6 +260,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public void addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("IsTurned",getTurned());
         $$0.putBoolean("IsActivated",getActivated());
+        $$0.putBoolean("diesUnc",diesWhenUncontrolled);
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
         $$0.putInt("TicksThroughPhases",ticksThroughPhases);
@@ -274,6 +275,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         this.setTurned($$0.getBoolean("IsTurned"));
+        diesWhenUncontrolled = $$0.getBoolean("diesUnc");
         this.setActivated($$0.getBoolean("IsActivated"));
         this.ticksThroughPhases = $$0.getInt("TicksThroughPhases");
         this.setTargetTactic($$0.getByte("targetTactic"));
