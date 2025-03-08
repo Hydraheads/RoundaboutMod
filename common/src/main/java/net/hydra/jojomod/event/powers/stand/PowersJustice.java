@@ -789,9 +789,9 @@ public class PowersJustice extends DashPreset {
             StandEntity SE = this.getStandEntity(this.self);
             if (SE instanceof JusticeEntity JE){
                 JE.setAnimation((byte) 2);
-                JE.cackleTime = 100;
+                JE.cackleTime = 54;
                 this.self.level().playSound(null, JE.getX(),JE.getY(),
-                        JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 2.0F, 1F);
+                        JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 100.0F, 1F);
             }
             return;
         }
