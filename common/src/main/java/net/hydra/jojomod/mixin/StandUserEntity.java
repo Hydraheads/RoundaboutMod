@@ -488,10 +488,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
     }
+    @Unique
+    public boolean roundabout$isDrown = false;
+    @Unique
+    @Override
+    public void roundabout$setDrowning(boolean drown){
+        roundabout$isDrown = drown;
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getDrowning(){
+        return roundabout$isDrown;
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
         //if (StandID > -1) {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand() && (this.roundabout$getStand() == null ||
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
                             OffsetIndex.OffsetStyle(this.roundabout$getStand().getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
@@ -515,6 +527,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (roundabout$sealedTicks > -1){
             roundabout$sealedTicks--;
+            if (roundabout$sealedTicks <= -1){
+                this.roundabout$setDrowning(false);
+            }
         }
         if (roundabout$gasolineIFRAMES > 0){
             roundabout$gasolineIFRAMES--;
@@ -2011,6 +2026,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "baseTick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$BreathingCancel(CallbackInfo ci){
+        if (roundabout$isDrown) {
+            this.hurt(this.damageSources().drown(), 2.0f);
+        }
         boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopSettings.preventsBreathing;
         if (cannotBreathInTs) {
             if (!((TimeStop) this.level()).getTimeStoppingEntities().isEmpty()
@@ -2033,6 +2051,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
+
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1) {
             if (curse == LocacacaCurseIndex.HEART) {

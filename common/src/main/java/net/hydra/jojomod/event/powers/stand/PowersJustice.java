@@ -403,6 +403,13 @@ public class PowersJustice extends DashPreset {
         return false;
     }
     public void tickPower() {
+        if  (!this.self.level().isClientSide()){
+            if (((StandUser)this.self).roundabout$getSealedTicks() >= 0){
+                if (this.isCastingFog()){
+                    this.castFog();
+                }
+            }
+        }
         if (this.self instanceof Player PL){
             cycleThroughJusticeEntities2();
             int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();

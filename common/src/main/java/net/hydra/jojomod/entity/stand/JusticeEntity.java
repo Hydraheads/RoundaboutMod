@@ -46,6 +46,8 @@ public class JusticeEntity extends StandEntity {
     }
 
 
+    protected static final EntityDataAccessor<Integer> JUSTICE_SZ = SynchedEntityData.defineId(JusticeEntity.class,
+            EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> JUSTICE_TEAM = SynchedEntityData.defineId(JusticeEntity.class,
             EntityDataSerializers.BYTE);
     public final void setJusticeTeam(Byte team) {
@@ -54,11 +56,17 @@ public class JusticeEntity extends StandEntity {
     public byte getJusticeTeam() {
         return this.entityData.get(JUSTICE_TEAM);
     }
-
+    public final void setJusticeSize(Integer size) {
+        this.entityData.set(JUSTICE_SZ, size);
+    } //sets leaning direction
+    public int getJusticeSize() {
+        return this.entityData.get(JUSTICE_SZ);
+    }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(JUSTICE_SZ, 100);
         this.entityData.define(JUSTICE_TEAM, (byte) 0);
     }
     @Override
@@ -147,6 +155,21 @@ public class JusticeEntity extends StandEntity {
         }
     }
 
+    public void inhaleTick() {
+        int perc = getJusticeSize()-2;
+        if (perc < 0){
+            if (this.getUser() != null){
+                StandUser user = ((StandUser) this.getUser());
+                user.roundabout$setMaxSealedTicks(400);
+                user.roundabout$setSealedTicks(400);
+                user.roundabout$setDrowning(true);
+                user.roundabout$setActive(false);
+            }
+            this.discard();
+
+        }
+        this.setJusticeSize(perc);
+    }
     @Override
     public void playerSetProperties(Player PE) {
         this.setJusticeTeam(((IPlayerEntity)PE).roundabout$getTeamColor());
@@ -157,6 +180,10 @@ public class JusticeEntity extends StandEntity {
     public void tick(){
 
         if (!this.level().isClientSide){
+            int perc = getJusticeSize()+1;
+            if (perc <= 100){
+                this.setJusticeSize(perc);
+            }
             if (this.getAnimation() == 31) {
                 tsReleaseTime++;
                 if (tsReleaseTime > 24){
@@ -164,6 +191,7 @@ public class JusticeEntity extends StandEntity {
                     tsReleaseTime = 0;
                 }
             }
+
         } else {
 
 

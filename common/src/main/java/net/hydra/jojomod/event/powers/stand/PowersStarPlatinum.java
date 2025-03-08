@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -436,7 +437,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             List<Entity> listEnt = DamageHandler.genHitbox(self, pointVec3.x, pointVec3.y,
                     pointVec3.z, halfReach, halfReach, halfReach);
             for (Entity value : listEnt) {
-                if (!(value instanceof StarPlatinumEntity) && !value.isInvulnerable()) {
+                if (value instanceof JusticeEntity JE) {
+                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= 60)) {
+                        JE.inhaleTick();
+                    }
+                } else if (!(value instanceof StarPlatinumEntity) && !value.isInvulnerable()) {
                     if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= 60)) {
                         double strength = 0.05;
                         if (value instanceof ItemEntity || value instanceof ExperienceOrb) {
