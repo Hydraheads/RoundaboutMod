@@ -124,6 +124,10 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer maxKnivesInOneHit;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer matchDamage;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer corpseDamageOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer corpseDamageOnPlayers;
         @BooleanOption(group = "inherit", value = true)
         public Boolean standUserMobsTakePlayerDamageMultipliers;
     }
@@ -178,6 +182,8 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer timeStopTimeUsedMultiplier;
         @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
         public Integer justiceFogClone;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer fogChain;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
     }

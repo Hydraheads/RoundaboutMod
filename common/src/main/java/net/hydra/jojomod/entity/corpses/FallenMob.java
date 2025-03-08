@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.Tactics;
@@ -161,9 +162,11 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     public float getAtkPower(Entity $$0){
         if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
-            return (float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2);
+            return (float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2)
+                                * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01));
         }
-        return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        return (float) ((float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)
+                        * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01));
     }
 
     @Override

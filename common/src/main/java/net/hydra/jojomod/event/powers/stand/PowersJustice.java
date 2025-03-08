@@ -1260,7 +1260,7 @@ public class PowersJustice extends DashPreset {
 
                 if (success) {
                     addEXP(4);
-                    int cdr = 80;
+                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
                     ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                             PowerIndex.SKILL_2, cdr);
                     this.setCooldown(PowerIndex.SKILL_2, cdr);

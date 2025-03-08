@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -31,7 +30,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -40,8 +38,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -55,7 +51,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -1532,6 +1527,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=3.2f;
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+            } else {
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
             }
             Entity ent2 = FM;
             if (FM.getController() > 0 && FM.getController() != this.getId()){
@@ -1543,6 +1541,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else if ($$0.is(DamageTypes.PLAYER_EXPLOSION) && $$0.getEntity() instanceof FallenMob FM){
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=2;
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+            } else {
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
             }
             Entity ent2 = FM;
             if (FM.getController() > 0 && FM.getController() != this.getId()){
