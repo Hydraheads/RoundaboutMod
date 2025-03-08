@@ -499,7 +499,7 @@ public class PowersJustice extends DashPreset {
         if (isPiloting()){
             setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.SKILL_1);
             setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
-            setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_TACTICS, PowerIndex.SKILL_3);
+            setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_TACTICS, PowerIndex.NO_CD);
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT_EXIT, PowerIndex.SKILL_4);
         } else {
 
