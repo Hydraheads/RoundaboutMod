@@ -17,6 +17,12 @@
       "roundabout:body_bag"
     ]
   },
+  "cackle": {
+    "subtitle": "sounds.roundabout.cackle",
+    "sounds": [
+      "roundabout:cackle"
+    ]
+  },
   "summon_justice": {
     "subtitle": "sounds.roundabout.summon_justice",
     "sounds": [

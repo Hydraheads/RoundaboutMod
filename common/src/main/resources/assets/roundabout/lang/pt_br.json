@@ -100,6 +100,7 @@
   "entity.roundabout.jnpc_jotaro": "Jotaro",
   "entity.roundabout.jnpc_steve": "Steve",
   "entity.roundabout.jnpc_alex": "Alex",
+  "entity.roundabout.fog_clone": "Clone de Nevoa",
 
   "block.roundabout.meteor_block": "Bloco de Meteorito",
   "block.roundabout.ancient_meteor": "Meteoro Ancestral",
@@ -146,7 +147,7 @@
 
   "item.minecraft.potion.effect.roundabout.hex": "Poção amaldiçoada",
   "item.minecraft.lingering_potion.effect.roundabout.hex": "Poção Prolongada amaldiçoada ",
-  "item.minecraft.splash_potion.effect.roundabout.hex": "Poção arremesavel amaldiçoada ,
+  "item.minecraft.splash_potion.effect.roundabout.hex": "Poção arremesavel amaldiçoada" ,
   "item.minecraft.tipped_arrow.effect.roundabout.hex": "Flecha de Maldição",
 
   "roundabout:upgrade.roundabout.luck_upgrade": "Upgrade Luck",
@@ -157,6 +158,7 @@
   "sounds.roundabout.dsp_summon": "Invocação Explosiva de Stand",
 
   "death.attack.stand": "%1$s tomou bala perdida enquanto lutava com %2$s",
+  "death.attack.stand_rush": "%1$s Foi transformado em purê por %2$s",
   "death.attack.star_finger": "%1$s virou Farofa depois de lutar com %2$s",
   "death.attack.penetrating_stand": "%1$s foi aleijado por %2$s",
   "death.attack.corpse": "%1$s foi indiciado por %2$s",
@@ -311,6 +313,8 @@
   "sounds.roundabout.impale_charge":  "Preparando Ataque",
   "sounds.roundabout.impale_hit":  "Impalado",
   "sounds.roundabout.explosive_bat":  "Home Run",
+  "sounds.roundabout.fog_clone":  "Formação ilusória",
+  "sounds.roundabout.pop":  "Pop",
 
   "sounds.roundabout.star_platinum_ora_2":  "ORA",
   "sounds.roundabout.star_platinum_ora_3":  "ORA",
@@ -488,10 +492,10 @@
   "skins.roundabout.justice.ova": "OVA",
   "skins.roundabout.justice.tarot": "Tarot",
   "skins.roundabout.justice.stray": "Errante",
-  "skins.roundabout.justice.bogged": "Bogged",
+  "skins.roundabout.justice.bogged": "Atolado",
   "skins.roundabout.justice.wither": "Wither",
-  "skins.roundabout.justice.flamed": "Fire",
-  "skins.roundabout.justice.flamed_blue": "Blue Fire",
+  "skins.roundabout.justice.flamed": "Flame",
+  "skins.roundabout.justice.flamed_blue": "Blue Flame",
   "skins.roundabout.justice.twilight": "Twilight",
   "skins.roundabout.justice.pirate": "Pirata",
   "skins.roundabout.justice.dark_mirage": "Dark Mirage",

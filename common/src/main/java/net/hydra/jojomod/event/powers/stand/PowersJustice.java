@@ -790,6 +790,8 @@ public class PowersJustice extends DashPreset {
             if (SE instanceof JusticeEntity JE){
                 JE.setAnimation((byte) 2);
                 JE.cackleTime = 100;
+                this.self.level().playSound(null, JE.getX(),JE.getY(),
+                        JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 2.0F, 1F);
             }
             return;
         }
