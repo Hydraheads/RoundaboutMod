@@ -785,6 +785,14 @@ public class PowersJustice extends DashPreset {
             return;
         }
 
+        if (context == Tactics.CACKLE.id){
+            StandEntity SE = this.getStandEntity(this.self);
+            if (SE instanceof JusticeEntity JE){
+                JE.setAnimation((byte) 2);
+                JE.cackleTime = 100;
+            }
+            return;
+        }
 
             List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
             if (!fogControlledEntities2.isEmpty()){
@@ -866,7 +874,9 @@ public class PowersJustice extends DashPreset {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
 
                             if (canExecuteMoveWithLevel(getFogCloneLevel())) {
-                                ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
+                                if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
+                                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
+                                }
                                 this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
                             }

@@ -128,6 +128,7 @@ public class JusticeEntity extends StandEntity {
     }
     public final AnimationState idleAnimation = new AnimationState();
     public final AnimationState idleAnimation2 = new AnimationState();
+    public final AnimationState cackleAnimation = new AnimationState();
     @Override
     public void setupAnimationStates() {
         if (this.getUser() != null) {
@@ -140,6 +141,11 @@ public class JusticeEntity extends StandEntity {
                 this.idleAnimation.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimation.stop();
+            }
+            if (this.getAnimation() == 2) {
+                this.cackleAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.cackleAnimation.stop();
             }
         }
     }
@@ -176,10 +182,18 @@ public class JusticeEntity extends StandEntity {
         super.playerSetProperties(PE);
     }
     public int tsReleaseTime = 0;
+    public int cackleTime = 0;
     @Override
     public void tick(){
 
         if (!this.level().isClientSide){
+            if (cackleTime > 0){
+                cackleTime--;
+                if (cackleTime <= 0){
+                    this.setAnimation((byte) 0);
+                }
+            }
+
             int perc = getJusticeSize()+1;
             if (perc <= 100){
                 this.setJusticeSize(perc);
