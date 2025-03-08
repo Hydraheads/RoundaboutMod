@@ -2,8 +2,10 @@ package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ICreeper;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IRaider;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -54,6 +56,7 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -78,6 +81,9 @@ public class PowersJustice extends DashPreset {
     }
     @Override
     public boolean canSummonStand(){
+        if (this.getSelf() instanceof Creeper || this.getSelf() instanceof Raider){
+            return false;
+        }
         return true;
     }
     @Override
@@ -302,21 +308,65 @@ public class PowersJustice extends DashPreset {
         if (check) {
             if (!this.isDazed(this.getSelf())) {
                 if (!this.isCastingFog()){
-                    this.castFog();
+                    if (!(this.getSelf() instanceof Creeper cr && this.getSelf().getMaxHealth() <= this.getSelf().getHealth())) {
+                        this.castFog();
+                    }
+                }
+                if (this.getSelf() instanceof Creeper cr){
+                    ICreeper ic = ((ICreeper) cr);
+                    if (this.getSelf().getMaxHealth() <= this.getSelf().getHealth()){
+                        if (!ic.roundabout$isTransformed()){
+                            ic.roundabout$setTransformed(true);
+                            particleSpew();
+                        }
+                    } else {
+                        if (ic.roundabout$isTransformed()){
+                            ic.roundabout$setTransformed(false);
+                            particleSpew();
+                        }
+                    }
+                } if (this.getSelf() instanceof Raider rd){
+                    IRaider ir = ((IRaider) rd);
+                    if (!ir.roundabout$isTransformed()){
+                        ir.roundabout$setTransformed(true);
+                        particleSpew();
+                    }
                 }
                 if (fogControlledEntities == null) {
                     fogControlledEntities = new ArrayList<>();
                 }
                 if (fogControlledEntities.size() < ClientNetworking.getAppropriateConfig().justiceStandUserMobMinionCount
                 && this.getSelf().tickCount % 20 == 0){
-                    initializeCorpse(rollCorpse(),attackTarget);
+                    if (!(this.getSelf() instanceof Creeper cr && this.getSelf().getMaxHealth() <= this.getSelf().getHealth())) {
+                        initializeCorpse(rollCorpse(),attackTarget);
+                    }
                 }
             }
         } else {
             if (this.isCastingFog()){
                 this.castFog();
             }
+            if (this.getSelf() instanceof Creeper cr){
+                ICreeper ic = ((ICreeper) cr);
+                if (ic.roundabout$isTransformed()){
+                    ic.roundabout$setTransformed(false);
+                    particleSpew();
+                }
+            } if (this.getSelf() instanceof Raider rd) {
+                IRaider ir = ((IRaider) rd);
+                if (ir.roundabout$isTransformed()) {
+                    ir.roundabout$setTransformed(false);
+                    particleSpew();
+                }
+            }
         }
+    }
+
+    public void particleSpew(){
+        this.self.level().playSound(null, this.self, ModSounds.FOG_MORPH_EVENT, SoundSource.PLAYERS, 0.36F, 1.0F);
+        ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
+                this.self.getY()+(this.self.getBbWidth()*0.6), this.self.getZ(),
+                14, 0.4, 0.2, 0.4, 0.35);
     }
     public int lastHeldAge = 0;
     @Override
