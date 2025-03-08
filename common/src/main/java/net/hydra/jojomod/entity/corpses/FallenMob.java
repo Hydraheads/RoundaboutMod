@@ -38,6 +38,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public int ticksThroughPlacer = 0;
     public Entity placer;
     public Entity controller;
+    public boolean diesWhenUncontrolled;
     public LivingEntity corpseTarget;
     public LivingEntity manualTarget;
     public LivingEntity autoTarget;
@@ -389,6 +390,15 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                             setActivated(false);
                             this.setController(null);
                         }
+                    }
+                }
+
+                if (!this.getActivated()){
+                    if (diesWhenUncontrolled){
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
+                                this.getY()+this.getEyeHeight(), this.getZ(),
+                                20, 0.3, 0.3, 0.3, 0.3);
+                        this.discard();
                     }
                 }
             }

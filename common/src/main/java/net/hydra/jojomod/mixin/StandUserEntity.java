@@ -1512,6 +1512,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM){
+            if (!(((LivingEntity)(Object)this) instanceof Player) && FM.getController() == this.getId()){
+                ci.setReturnValue(false);
+            }
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=3.2f;
             }

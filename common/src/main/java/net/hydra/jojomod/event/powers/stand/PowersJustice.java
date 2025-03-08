@@ -46,7 +46,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -242,6 +247,77 @@ public class PowersJustice extends DashPreset {
         }
     }
 
+    public LivingEntity rollCorpse(){
+        LivingEntity corpse = null;
+        if (this.getSelf() instanceof Skeleton){
+            corpse = ModEntities.FALLEN_SKELETON.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Creeper){
+            corpse = ModEntities.FALLEN_CREEPER.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Zombie){
+            corpse = ModEntities.FALLEN_ZOMBIE.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Spider){
+            corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Vindicator){
+            corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
+        } else {
+            double rand = Math.random();
+            if (rand < 0.2){
+                corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
+            } else if (rand < 0.4){
+                corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
+            } else if (rand < 0.6){
+                corpse = ModEntities.FALLEN_ZOMBIE.create(this.getSelf().level());
+            } else if (rand < 0.8){
+                if (this.self instanceof Villager || this.self instanceof IronGolem){
+                    corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
+                } else {
+                    corpse = ModEntities.FALLEN_SKELETON.create(this.getSelf().level());
+                }
+            } else {
+                if (this.self instanceof Villager || this.self instanceof IronGolem || this.self instanceof SnowGolem
+                        || this.self instanceof TamableAnimal){
+                    corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
+                } else {
+                    corpse = ModEntities.FALLEN_CREEPER.create(this.getSelf().level());
+                }
+            }
+        }
+        return corpse;
+    }
+    public void initializeCorpse(LivingEntity corpse, LivingEntity attackTarget){
+        if (corpse instanceof FallenMob fm){
+            fm.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+            fm.diesWhenUncontrolled = true;
+            this.getSelf().level().addFreshEntity(fm);
+            this.addJusticeEntities(fm);
+            fm.setActivated(true);
+            fm.setMovementTactic(Tactics.FOLLOW.id);
+            fm.setTarget(attackTarget);
+            fm.setController(this.getSelf());
+        }
+    }
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        boolean check = attackTarget != null && attackTarget.isAlive();
+        if (check) {
+            if (!this.isDazed(this.getSelf())) {
+                if (!this.isCastingFog()){
+                    this.castFog();
+                }
+                if (fogControlledEntities == null) {
+                    fogControlledEntities = new ArrayList<>();
+                }
+                if (fogControlledEntities.size() < ClientNetworking.getAppropriateConfig().justiceStandUserMobMinionCount
+                && this.getSelf().tickCount % 20 == 0){
+                    initializeCorpse(rollCorpse(),attackTarget);
+                }
+            }
+        } else {
+            if (this.isCastingFog()){
+                this.castFog();
+            }
+        }
+    }
     public int lastHeldAge = 0;
     @Override
     public boolean pilotInputInteract(){
