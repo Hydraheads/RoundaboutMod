@@ -39,6 +39,11 @@ public class FogBlock extends Block {
         return !(p_153848_.getValue(IN_FOG));
     }
 
+    @Override
+    public boolean propagatesSkylightDown(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
+        return true;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public void onPlace(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {

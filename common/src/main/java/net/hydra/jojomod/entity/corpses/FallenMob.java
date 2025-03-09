@@ -147,6 +147,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
         }
     }
+    @Override
+    public boolean canBreatheUnderwater(){
+        return true;
+    }
     public boolean getTicksThroughPlacer() {
         return this.getEntityData().get(TICKS_THROUGH_PLACER);
     }
