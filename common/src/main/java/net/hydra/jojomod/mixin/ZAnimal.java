@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
@@ -58,8 +59,10 @@ public abstract class ZAnimal extends AgeableMob {
                         ((IMob)$$2).roundabout$setIsNaturalStandUser(true);
                         int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
                         ItemStack stack = ModItems.STAND_ARROW_POOL.get(index).getDefaultInstance();
-                        if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem){
+                        if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                             ((StandUser)$$2).roundabout$setStandDisc(stack);
+                            SD.generateStandPowers($$2);
+                            ((StandUser)$$2).roundabout$getStandPowers().rollSkin();
                         }
                     } else {
                         double WorthyOdds = MainUtil.getWorthyOdds($$2);

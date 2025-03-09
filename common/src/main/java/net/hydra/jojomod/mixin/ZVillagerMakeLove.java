@@ -8,6 +8,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.VillagerMakeLove;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.Villager;
@@ -52,8 +53,10 @@ public class ZVillagerMakeLove {
                         ((IMob) villager).roundabout$setIsNaturalStandUser(true);
                         int index = (int) (Math.floor(Math.random() * ModItems.STAND_ARROW_POOL.size()));
                         ItemStack stack = ModItems.STAND_ARROW_POOL.get(index).getDefaultInstance();
-                        if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem) {
+                        if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
                             ((StandUser) villager).roundabout$setStandDisc(stack);
+                            SD.generateStandPowers($$1);
+                            ((StandUser)$$1).roundabout$getStandPowers().rollSkin();
                         }
                     } else {
                         double WorthyOdds = MainUtil.getWorthyOdds(villager);
