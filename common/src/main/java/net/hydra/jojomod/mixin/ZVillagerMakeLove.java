@@ -55,8 +55,8 @@ public class ZVillagerMakeLove {
                         ItemStack stack = ModItems.STAND_ARROW_POOL.get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
                             ((StandUser) villager).roundabout$setStandDisc(stack);
-                            SD.generateStandPowers($$1);
-                            ((StandUser)$$1).roundabout$getStandPowers().rollSkin();
+                            SD.generateStandPowers(villager);
+                            ((StandUser)villager).roundabout$getStandPowers().rollSkin();
                         }
                     } else {
                         double WorthyOdds = MainUtil.getWorthyOdds(villager);
