@@ -773,7 +773,7 @@ public class PowersJustice extends DashPreset {
             if (this.getSelf() instanceof Player PE){
                 byte bt = ((IPlayerEntity) PE).roundabout$getTeamColor();
                 bt++;
-                if (bt > 3){
+                if (bt > 4){
                     bt = 0;
                 }
                 ((IPlayerEntity) PE).roundabout$setTeamColor(bt);

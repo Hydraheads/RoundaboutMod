@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Spider;
 
 public class FallenSpiderRenderer<T extends Spider> extends MobRenderer<FallenSpider, FallenSpiderModel<FallenSpider>> {
+    private static final ResourceLocation SPIDER_LOCATION = new ResourceLocation("textures/entity/spider/spider.png");
     private static final ResourceLocation FALLEN_SPIDER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_spider.png");
     private static final ResourceLocation FALLEN_SPIDER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
@@ -35,6 +36,8 @@ public class FallenSpiderRenderer<T extends Spider> extends MobRenderer<FallenSp
                     return FALLEN_SPIDER_LOCATION_R;
                 } else if (bt==3){
                     return FALLEN_SPIDER_LOCATION_G;
+                } else if (bt==4){
+                    return SPIDER_LOCATION;
                 }
             }
             return FALLEN_SPIDER_LOCATION_2;

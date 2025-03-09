@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.Creeper;
 
 public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCreeperModel<FallenCreeper>> {
+    private static final ResourceLocation CREEPER_LOCATION = new ResourceLocation("textures/entity/creeper/creeper.png");
     private static final ResourceLocation FALLEN_CREEPER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_creeper.png");
     private static final ResourceLocation FALLEN_CREEPER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
@@ -42,6 +43,8 @@ public class FallenCreeperRenderer extends MobRenderer<FallenCreeper, FallenCree
                     return FALLEN_CREEPER_LOCATION_R;
                 } else if (bt==3){
                     return FALLEN_CREEPER_LOCATION_G;
+                } else if (bt == 4){
+                    return CREEPER_LOCATION;
                 }
             }
             return FALLEN_CREEPER_LOCATION_2;

@@ -196,6 +196,8 @@ public class JusticeTacticsScreen extends Screen {
             "textures/gui/tactics_icons/team_red.png");
     ResourceLocation RL3 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/tactics_icons/team_green.png");
+    ResourceLocation RL4 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tactics_icons/team_mobs.png");
 
     public enum tacticIcon {
 
@@ -310,6 +312,8 @@ public class JusticeTacticsScreen extends Screen {
                                 this.icon.drawIcon2(RL2, guiGraphics, this.getX() + 5, this.getY() + 5);
                             } else if (JE.getJusticeTeam() == 3){
                                 this.icon.drawIcon2(RL3, guiGraphics, this.getX() + 5, this.getY() + 5);
+                            } else if (JE.getJusticeTeam() == 4){
+                                this.icon.drawIcon2(RL4, guiGraphics, this.getX() + 5, this.getY() + 5);
                             }
                         } else {
                             this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
