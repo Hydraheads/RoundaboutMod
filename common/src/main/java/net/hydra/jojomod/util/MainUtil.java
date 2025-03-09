@@ -49,6 +49,7 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
@@ -864,6 +865,10 @@ public class MainUtil {
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = AttackHitboxNear(User, GrabHitbox(User, DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distance, angle),distance);
+        }
+
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
         }
         return targetEntity;
     }

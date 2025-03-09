@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -36,6 +37,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
@@ -1712,6 +1714,9 @@ public class StandPowers {
                 targetEntity = SE.getUser();
             }
         }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
 
         storeEnt = targetEntity;
 
@@ -1741,6 +1746,9 @@ public class StandPowers {
             if (SE.getUser() != null){
                 targetEntity = SE.getUser();
             }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
         }
 
         return targetEntity;
