@@ -37,7 +37,9 @@ public class TSPostShader {
 
     public static void register(String name)
     {
+        /**
         registrar.add(name);
+         **/
     }
 
     /* sets up the callback */

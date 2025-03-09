@@ -47,6 +47,9 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALLEN_SPIDER.get(), FallenSpiderRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillagerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
+
+        //TSCoreShader.bootstrapShaders();
+        //TSPostShader.bootstrapShaders();
     }
 
     @SubscribeEvent
@@ -74,6 +77,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLUE_BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENDER_BLOOD.get(), BloodParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.POINTER.get(), PointerParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MENACING.get(), MenacingParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VACUUM.get(), VacuumParticle.Provider::new);

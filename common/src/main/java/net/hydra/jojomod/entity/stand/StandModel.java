@@ -88,6 +88,14 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                 if (this.root().hasChild("stand2")) {
 
                     if (this.root().getChild("stand2").hasChild("head")) {
+                        if (User != null){
+                            if (User.isBaby()){
+                                ModelPart mp = this.root().getChild("stand2").getChild("head");
+                                mp.xScale*= 1.5F;
+                                mp.yScale*= 1.5F;
+                                mp.zScale*= 1.5F;
+                            }
+                        }
                         rotateHead(entity, this.root().getChild("stand2").getChild("head"), tickDelta);
                     }
 

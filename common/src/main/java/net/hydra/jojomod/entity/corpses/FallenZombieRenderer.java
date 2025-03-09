@@ -42,6 +42,8 @@ public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, Fall
                     return FALLEN_ZOMBIE_LOCATION_R;
                 } else if (bt==3){
                     return FALLEN_ZOMBIE_LOCATION_G;
+                } else if (bt==4){
+                    return ZOMBIE_LOCATION;
                 }
             }
             return FALLEN_ZOMBIE_LOCATION_2;

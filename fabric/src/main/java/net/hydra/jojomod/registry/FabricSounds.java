@@ -70,6 +70,7 @@ public class FabricSounds {
         addSound(ModSounds.KNIFE_IMPACT_GROUND_ID, ModSounds.KNIFE_IMPACT_GROUND_EVENT);
 
         addSound(ModSounds.FOG_MORPH_ID, ModSounds.FOG_MORPH_EVENT);
+        addSound(ModSounds.CACKLE_ID, ModSounds.CACKLE_EVENT);
 
         addSound(ModSounds.LOCACACA_PETRIFY_ID, ModSounds.LOCACACA_PETRIFY_EVENT);
         addSound(ModSounds.LOCACACA_FUSION_ID, ModSounds.LOCACACA_FUSION_EVENT);

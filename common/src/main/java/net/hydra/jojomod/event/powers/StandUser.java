@@ -161,5 +161,7 @@ public interface StandUser {
     byte roundabout$getIdlePos();
     void roundabout$setIdlePosX(byte pos);
     void roundabout$setStandSkin(byte skin);
+    void roundabout$setDrowning(boolean drown);
+    boolean roundabout$getDrowning();
 
 }

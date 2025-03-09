@@ -2,8 +2,10 @@ package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ICreeper;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IRaider;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -21,15 +23,14 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -41,13 +42,35 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.MushroomCow;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.HoglinBase;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -66,6 +89,9 @@ public class PowersJustice extends DashPreset {
     }
     @Override
     public boolean canSummonStand(){
+        if (this.getSelf() instanceof Creeper || this.getSelf() instanceof Raider){
+            return false;
+        }
         return true;
     }
     @Override
@@ -235,38 +261,173 @@ public class PowersJustice extends DashPreset {
         }
     }
 
+    public LivingEntity rollCorpse(){
+        LivingEntity corpse = null;
+        if (this.getSelf() instanceof Skeleton){
+            corpse = ModEntities.FALLEN_SKELETON.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Creeper){
+            corpse = ModEntities.FALLEN_CREEPER.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Zombie){
+            corpse = ModEntities.FALLEN_ZOMBIE.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Spider){
+            corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
+        } else if (this.getSelf() instanceof Vindicator){
+            corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
+        } else {
+            double rand = Math.random();
+            if (rand < 0.2){
+                corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
+            } else if (rand < 0.4){
+                corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
+            } else if (rand < 0.6){
+                corpse = ModEntities.FALLEN_ZOMBIE.create(this.getSelf().level());
+            } else if (rand < 0.8){
+                if (this.self instanceof Villager || this.self instanceof IronGolem){
+                    corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
+                } else {
+                    corpse = ModEntities.FALLEN_SKELETON.create(this.getSelf().level());
+                }
+            } else {
+                if (this.self instanceof Villager || this.self instanceof IronGolem || this.self instanceof SnowGolem
+                        || this.self instanceof TamableAnimal){
+                    corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
+                } else {
+                    corpse = ModEntities.FALLEN_CREEPER.create(this.getSelf().level());
+                }
+            }
+        }
+        return corpse;
+    }
+    public void initializeCorpse(LivingEntity corpse, LivingEntity attackTarget){
+        if (corpse instanceof FallenMob fm){
+            fm.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+            fm.diesWhenUncontrolled = true;
+            this.getSelf().level().addFreshEntity(fm);
+            this.addJusticeEntities(fm);
+            fm.setActivated(true);
+            fm.setMovementTactic(Tactics.FOLLOW.id);
+            fm.setTarget(attackTarget);
+            fm.setController(this.getSelf());
+        }
+    }
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        boolean check = attackTarget != null && attackTarget.isAlive();
+        if (check) {
+            if (!this.isDazed(this.getSelf())) {
+                if (!this.isCastingFog()){
+                    if (!(this.getSelf() instanceof Creeper cr && this.getSelf().getMaxHealth() <= this.getSelf().getHealth())) {
+                        this.castFog();
+                    }
+                }
+                if (this.getSelf() instanceof Creeper cr){
+                    ICreeper ic = ((ICreeper) cr);
+                    if (this.getSelf().getMaxHealth() <= this.getSelf().getHealth()){
+                        if (!ic.roundabout$isTransformed()){
+                            ic.roundabout$setTransformed(true);
+                            particleSpew();
+                        }
+                    } else {
+                        if (ic.roundabout$isTransformed()){
+                            ic.roundabout$setTransformed(false);
+                            particleSpew();
+                        }
+                    }
+                } if (this.getSelf() instanceof Raider rd){
+                    IRaider ir = ((IRaider) rd);
+                    if (!ir.roundabout$isTransformed()){
+                        ir.roundabout$setTransformed(true);
+                        particleSpew();
+                    }
+                }
+                if (fogControlledEntities == null) {
+                    fogControlledEntities = new ArrayList<>();
+                }
+                if (fogControlledEntities.size() < ClientNetworking.getAppropriateConfig().justiceStandUserMobMinionCount
+                && this.getSelf().tickCount % 20 == 0){
+                    if (!(this.getSelf() instanceof Creeper cr && this.getSelf().getMaxHealth() <= this.getSelf().getHealth())) {
+                        initializeCorpse(rollCorpse(),attackTarget);
+                    }
+                }
+            }
+        } else {
+            if (this.isCastingFog()){
+                this.castFog();
+            }
+            if (this.getSelf() instanceof Creeper cr){
+                ICreeper ic = ((ICreeper) cr);
+                if (ic.roundabout$isTransformed()){
+                    ic.roundabout$setTransformed(false);
+                    particleSpew();
+                }
+            } if (this.getSelf() instanceof Raider rd) {
+                IRaider ir = ((IRaider) rd);
+                if (ir.roundabout$isTransformed()) {
+                    ir.roundabout$setTransformed(false);
+                    particleSpew();
+                }
+            }
+        }
+    }
+
+    public void particleSpew(){
+        this.self.level().playSound(null, this.self, ModSounds.FOG_MORPH_EVENT, SoundSource.PLAYERS, 0.36F, 1.0F);
+        ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
+                this.self.getY()+(this.self.getBbWidth()*0.6), this.self.getZ(),
+                14, 0.4, 0.2, 0.4, 0.35);
+    }
+    public int lastHeldAge = 0;
     @Override
     public boolean pilotInputInteract(){
+        if (Math.abs(lastHeldAge-this.getSelf().tickCount) >= 6){
         LivingEntity ent = getPilotingStand();
-        if (ent != null) {
-            Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-            if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable())) {
+            if (ent != null) {
+                Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
+                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable())) {
+                    Vec3 vec3d = ent.getEyePosition(0);
+                    Vec3 vec3d2 = ent.getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                    BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                    if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
+                    } else {
+                        if (TE instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
+                            this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
+                                    PacketDataIndex.INT_STAND_ATTACK_2);
+                            return true;
+                        }
+                    }
+                }
                 Vec3 vec3d = ent.getEyePosition(0);
                 Vec3 vec3d2 = ent.getViewVector(0);
                 Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
                 BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
-                } else {
-                    if (TE instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
-                        this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
-                                PacketDataIndex.INT_STAND_ATTACK_2);
-                        return true;
-                    }
-                }
+                BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
+                this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
+                this.self.level()
+                        .addParticle(
+                                ModParticles.POINTER,
+                                bpos.getX()+0.5,
+                                bpos.getY()+0.5,
+                                bpos.getZ()+0.5,
+                                0,
+                                0,
+                                0
+                        );
             }
-            Vec3 vec3d = ent.getEyePosition(0);
-            Vec3 vec3d2 = ent.getViewVector(0);
-            Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-            BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-            BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
-            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
-            this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
-
         }
+        lastHeldAge = this.getSelf().tickCount;
         return false;
     }
     public void tickPower() {
+        if  (!this.self.level().isClientSide()){
+            if (((StandUser)this.self).roundabout$getSealedTicks() >= 0){
+                if (this.isCastingFog()){
+                    this.castFog();
+                }
+            }
+        }
         if (this.self instanceof Player PL){
             cycleThroughJusticeEntities2();
             int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
@@ -318,6 +479,39 @@ public class PowersJustice extends DashPreset {
         return ModEntities.JUSTICE.create(this.getSelf().level());
     }
 
+    @Override
+    public byte getMaxLevel(){
+        return 5;
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1) {
+            amt = 50;
+        } else if (currentLevel == 2){
+            amt = 150;
+        } else {
+            amt = (100+((currentLevel-1)*100));
+        }
+        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        return amt;
+    }
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 5){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else if (level == 2 || level == 3 || level == 4){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
@@ -380,12 +574,18 @@ public class PowersJustice extends DashPreset {
         if (isPiloting()){
             setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.SKILL_1);
             setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
-            setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_TACTICS, PowerIndex.SKILL_3);
+            setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_TACTICS, PowerIndex.NO_CD);
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT_EXIT, PowerIndex.SKILL_4);
         } else {
 
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_1_SNEAK);
+                if (canExecuteMoveWithLevel(getVillagerMorphLevel())
+                || canExecuteMoveWithLevel(getZombieMorphLevel()) ||
+                        canExecuteMoveWithLevel(getSkeletonMorphLevel())) {
+                    setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_DISGUISE, PowerIndex.SKILL_3);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
             }
@@ -398,7 +598,11 @@ public class PowersJustice extends DashPreset {
             }
 
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_FOG_CLONES, PowerIndex.SKILL_3);
+                if (canExecuteMoveWithLevel(getFogCloneLevel())) {
+                    setSkillIcon(context, x, y, 3, StandIcons.JUSTICE_FOG_CLONES, PowerIndex.SKILL_3);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
             }
@@ -414,11 +618,11 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_CAST_FOG,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.fog_chain",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_FOG_CHAIN,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.fog_morph_2",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, getVillagerMorphLevel(), "ability.roundabout.fog_morph_2",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_2,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fog_morph_3",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getZombieMorphLevel(), "ability.roundabout.fog_morph_3",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_3,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fog_morph_4",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, getSkeletonMorphLevel(), "ability.roundabout.fog_morph_4",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_4,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.fog_blocks",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypas));
@@ -430,7 +634,7 @@ public class PowersJustice extends DashPreset {
                 "instruction.roundabout.passive", StandIcons.JUSTICE_CORPSE_ARMY,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.tactics",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_TACTICS,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.fog_clones",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, getFogCloneLevel(), "ability.roundabout.fog_clones",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_CLONES,3,level,bypas));
         return $$1;
     }
@@ -439,6 +643,22 @@ public class PowersJustice extends DashPreset {
         return 1.3F;
     }
 
+    public int getFogCloneLevel(){
+        return 5;
+    }
+    public int getVillagerMorphLevel(){
+        return 2;
+    }
+    public int getZombieMorphLevel(){
+        return 3;
+    }
+    public int getSkeletonMorphLevel(){
+        return 4;
+    }
+    @Override
+    public boolean hasMoreThanOneSkin(){
+        return true;
+    }
     @Override
     public float getBonusPassiveMiningSpeed(){
         return 1.3F;
@@ -455,19 +675,17 @@ public class PowersJustice extends DashPreset {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(JusticeEntity.MANGA_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(JusticeEntity.OVA_SKIN);
-            } if (Level > 3 || bypass){
+            } if (Level > 2 || bypass){
                 $$1.add(JusticeEntity.STRAY_SKIN);
                 $$1.add(JusticeEntity.BOGGED);
-            } if (Level > 4 || bypass){
+            } if (Level > 3 || bypass){
                 $$1.add(JusticeEntity.WITHER);
                 $$1.add(JusticeEntity.TWILIGHT);
-            } if (Level > 5 || bypass){
+            } if (Level > 4 || bypass){
                 $$1.add(JusticeEntity.TAROT);
-                $$1.add(JusticeEntity.DARK_MIRAGE);
-            } if (Level > 6 || bypass){
                 $$1.add(JusticeEntity.PIRATE);
+                $$1.add(JusticeEntity.DARK_MIRAGE);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(JusticeEntity.FLAMED);
                 $$1.add(JusticeEntity.BLUE_FLAMED);
@@ -499,9 +717,14 @@ public class PowersJustice extends DashPreset {
                 } else {
                     if (keyIsDown) {
                         if (!hold1) {
-                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
+                            if (!this.onCooldown(PowerIndex.SKILL_3)){
                                 hold1 = true;
-                                ClientUtil.setJusticeScreen();
+
+                                if (canExecuteMoveWithLevel(getVillagerMorphLevel())
+                                        || canExecuteMoveWithLevel(getZombieMorphLevel()) ||
+                                        canExecuteMoveWithLevel(getSkeletonMorphLevel())) {
+                                    ClientUtil.setJusticeScreen();
+                                }
                             }
                         }
                     } else {
@@ -518,7 +741,47 @@ public class PowersJustice extends DashPreset {
         if (keyIsDown) {
         }
     }
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            boolean done = false;
+            Vec3 vector = null;
+            if (effect.getDuration() == 13) {
+                vector = new Vec3(0,
+                        (this.self.getY()+10 - this.self.getY()),
+                        0).normalize().scale(1.8F);
 
+
+                done = true;
+                this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
+                ));
+            } else if (effect.getDuration() == 2) {
+                vector = new Vec3(0,
+                        (this.self.getY()-10 - this.self.getY()),
+                        0).normalize().scale(1.8F);
+                done = true;
+                this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
+                ));
+            }
+            if (done){
+                this.self.hurtMarked = true;
+                this.self.hasImpulse = true;
+                double random = (Math.random() * 1.2) - 0.6;
+                double random2 = (Math.random() * 1.2) - 0.6;
+                double random3 = (Math.random() * 1.2) - 0.6;
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.POOF, this.self.getX(),
+                        this.self.getY() + this.self.getEyeHeight(), this.self.getZ(),
+                        0,
+                        vector.x+random,
+                        vector.y+random2,
+                        vector.z+random3,
+                        0.15);
+
+                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                        this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);
+            }
+        }
+    }
     public void justiceTacticsUse(byte context) {
         if (fogControlledEntities == null){
             fogControlledEntities = new ArrayList<>();
@@ -528,7 +791,7 @@ public class PowersJustice extends DashPreset {
             if (this.getSelf() instanceof Player PE){
                 byte bt = ((IPlayerEntity) PE).roundabout$getTeamColor();
                 bt++;
-                if (bt > 3){
+                if (bt > 4){
                     bt = 0;
                 }
                 ((IPlayerEntity) PE).roundabout$setTeamColor(bt);
@@ -540,6 +803,18 @@ public class PowersJustice extends DashPreset {
             return;
         }
 
+        if (context == Tactics.CACKLE.id){
+            StandEntity SE = this.getStandEntity(this.self);
+            if (SE instanceof JusticeEntity JE){
+                JE.setAnimation((byte) 2);
+                JE.cackleTime = 54;
+                //this.playStandUserOnlySoundsIfNearby(SoundIndex.CACKLE, 200, true,
+                        //true);
+                this.self.level().playSound(null, JE.getX(),JE.getY(),
+                        JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 100.0F, 1F);
+            }
+            return;
+        }
 
             List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {};
             if (!fogControlledEntities2.isEmpty()){
@@ -561,6 +836,10 @@ public class PowersJustice extends DashPreset {
                                         context == Tactics.STAY_PUT.id) {
                                     if (fm.getSelected()){
                                         fm.setMovementTactic(context);
+                                    }
+                                } else if (context == Tactics.KILL_ALL.id){
+                                    if (fm.getSelected()) {
+                                        fm.kill();
                                     }
                                 } else {
                                     if (fm.getSelected()){
@@ -594,6 +873,39 @@ public class PowersJustice extends DashPreset {
                 }
             }
     }
+
+    public void rollSkin(){
+        StandUser user = getUserData(this.self);
+        if (this.self instanceof Skeleton){
+            user.roundabout$setStandSkin(JusticeEntity.SKELETON_SKIN);
+        } else if (this.self instanceof MushroomCow){
+            user.roundabout$setStandSkin(JusticeEntity.BOGGED);
+        } else if (this.self instanceof Stray){
+            user.roundabout$setStandSkin(JusticeEntity.STRAY_SKIN);
+        } else if (this.self instanceof Spider){
+            user.roundabout$setStandSkin(JusticeEntity.OVA_SKIN);
+        } else if (this.self instanceof WitherSkeleton ||
+                this.self instanceof WitherBoss){
+            user.roundabout$setStandSkin(JusticeEntity.WITHER);
+        } else if (this.self instanceof Sniffer){
+            user.roundabout$setStandSkin(JusticeEntity.TWILIGHT);
+        } else if (this.self instanceof Camel){
+            user.roundabout$setStandSkin(JusticeEntity.TAROT);
+        } else if (this.self instanceof Drowned ||
+                this.self instanceof WaterAnimal ||
+                this.self instanceof Guardian){
+            user.roundabout$setStandSkin(JusticeEntity.PIRATE);
+        } else if (this.self instanceof Piglin ||
+                this.self instanceof ZombifiedPiglin ||
+                this.self instanceof HoglinBase ||
+                this.self instanceof Blaze){
+            user.roundabout$setStandSkin(JusticeEntity.FLAMED);
+        } else if (this.self instanceof Zombie){
+            user.roundabout$setStandSkin(JusticeEntity.MANGA_SKIN);
+        } else if (this.self instanceof Strider){
+            user.roundabout$setStandSkin(JusticeEntity.BLUE_FLAMED);
+        }
+    }
     @Override
     public boolean isPiloting(){
         if (this.getSelf() instanceof Player PE){
@@ -615,7 +927,14 @@ public class PowersJustice extends DashPreset {
                 if (!inputDash) {
                     if (isHoldingSneak()) {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+
+                            if (canExecuteMoveWithLevel(getFogCloneLevel())) {
+                                if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
+                                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
+                                }
+                                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                            }
                         }
                         inputDash = true;
                     } else {
@@ -820,6 +1139,9 @@ public class PowersJustice extends DashPreset {
         }
         return super.setPowerOther(move,lastMove);
     }
+
+    public FogCloneEntity clone1;
+    public FogCloneEntity clone2;
     
     /**Fog Clones*/
     public boolean spawnClones(){
@@ -832,11 +1154,33 @@ public class PowersJustice extends DashPreset {
             fclone2.setPlayer(PE);
             fclone.setTimer(100);
             fclone2.setTimer(101);
+            float first = ((this.getSelf().getYHeadRot()-25)%360);
+            float second = ((this.getSelf().getYHeadRot()+25)%360);
+            fclone.setYRot(first);
+            fclone2.setYRot(second);
+            fclone.lockedYRot = first;
+            fclone2.lockedYRot = second;
+            fclone.yRotO = first;
+            fclone2.yRotO = second;
             this.getSelf().level().addFreshEntity(fclone);
             this.getSelf().level().addFreshEntity(fclone2);
+            fclone.setYRot(first);
+            fclone2.setYRot(second);
+            fclone.lockedYRot = first;
+            fclone2.lockedYRot = second;
+            fclone.yRotO = first;
+            fclone2.yRotO = second;
+
+            fclone.setDeltaMovement(fclone.getForward().scale(0.3));
+            fclone2.setDeltaMovement(fclone2.getForward().scale(0.3));
+
+            clone1 = fclone;
+            clone2 = fclone2;
+
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
-                    11, 0.4, 0.4, 0.4, 0.1);
+                    50, 1, 1, 1, 0.1);
             this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                     this.self.getZ(), ModSounds.FOG_CLONE_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         }
@@ -844,16 +1188,72 @@ public class PowersJustice extends DashPreset {
     }
 
     @Override
+    public Component getSkinName(byte skinId){
+        return JusticeEntity.getSkinNameT(skinId);
+    }
+    @Override
+    public boolean onCreateProjectile(Projectile proj){
+        if (clone1 != null && clone1.isAlive()){
+            clone1.goPoof();
+        } if (clone2 != null && clone2.isAlive()){
+            clone2.goPoof();
+        }
+        return false;
+    }
+    @Override
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if (clone1 != null && clone1.isAlive()){
+            clone1.goPoof();
+        } if (clone2 != null && clone2.isAlive()){
+            clone2.goPoof();
+        }
+
+        return false;
+    }
+    @Override
+    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
+        if (hasStandActive(this.getSelf())) {
+            if (!($$1.getBlock() instanceof IceBlock)) {
+                if (Math.random() > 0.62) {
+                    addEXP(1);
+                }
+            }
+        }
+    }
+    @Override
+    public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if (hasStandActive(this.getSelf()) || $$0.is(ModDamageTypes.CORPSE)
+                || $$0.is(ModDamageTypes.CORPSE_ARROW) || $$0.is(ModDamageTypes.CORPSE_EXPLOSION)){
+            addEXP(1);
+        }
+
+        return false;
+    }
+    @Override
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        if (clone1 != null && clone1.isAlive() && ((StandUser)clone1).roundabout$getStoredDamage() <= 0){
+            if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                clone1.switchPlaces();
+                return true;
+            }
+        } else if (clone2 != null && clone2.isAlive() && ((StandUser)clone2).roundabout$getStoredDamage() <= 0){
+            if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                clone2.switchPlaces();
+                return true;
+            }
+        }
+        return false;
+    }
+    @Override
     public boolean cancelCollision(Entity et) {
         if (et instanceof FogCloneEntity FC){
-            Roundabout.LOGGER.info("SKIBIDI HIBIDI 2");
             return true;
         }
         return false;
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if ((slot == 2  && (!this.isHoldingSneak() || isPiloting())) || (slot == 3 && this.isHoldingSneak())){
+        if ((slot == 2  && (!this.isHoldingSneak() || isPiloting()))){
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
             if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 return true;
@@ -912,7 +1312,8 @@ public class PowersJustice extends DashPreset {
                 }
 
                 if (success) {
-                    int cdr = 80;
+                    addEXP(4);
+                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
                     ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                             PowerIndex.SKILL_2, cdr);
                     this.setCooldown(PowerIndex.SKILL_2, cdr);

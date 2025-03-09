@@ -403,11 +403,6 @@ public abstract class InputEvents implements IInputEvents {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
-            if (powers.isPiloting()){
-                if (powers.pilotInputInteract()){
-                    return;
-                }
-            }
             HitResult $$47 = null;
             if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
                 if (level != null) {
@@ -415,6 +410,7 @@ public abstract class InputEvents implements IInputEvents {
                     $$47 = piloting.pick(d0, 0, false);
                 }
             }
+            boolean B = false;
 
             if (this.gameMode != null && !this.gameMode.isDestroying()) {
                 this.rightClickDelay = 4;
@@ -461,6 +457,10 @@ public abstract class InputEvents implements IInputEvents {
                             }
                         }
                     }
+                }
+            }
+            if (powers.isPiloting()){
+                if (powers.pilotInputInteract()){
                 }
             }
         }

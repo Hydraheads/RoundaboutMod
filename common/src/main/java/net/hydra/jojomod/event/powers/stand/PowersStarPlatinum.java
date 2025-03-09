@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -41,17 +42,27 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.hoglin.HoglinBase;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
@@ -143,7 +154,25 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public SoundEvent getLastRejectionHitSound(){
         return ModSounds.STAR_PLATINUM_ORA_SOUND_EVENT;
     }
-
+    public void rollSkin(){
+        StandUser user = getUserData(this.self);
+        if (this.self instanceof Zombie){
+            user.roundabout$setStandSkin(StarPlatinumEntity.PART_3_MANGA_SKIN);
+        } else if (this.self instanceof Creeper){
+            user.roundabout$setStandSkin(StarPlatinumEntity.GREEN_SKIN);
+        } else if (this.self instanceof WanderingTrader){
+            user.roundabout$setStandSkin(StarPlatinumEntity.BASEBALL_SKIN);
+        } else if (this.self instanceof Warden){
+            user.roundabout$setStandSkin(StarPlatinumEntity.ATOMIC_SKIN);
+        } else if (this.self instanceof Raider){
+            user.roundabout$setStandSkin(StarPlatinumEntity.OVA_SKIN);
+        } else if (this.self instanceof Piglin ||
+                this.self instanceof Rabbit){
+            user.roundabout$setStandSkin(StarPlatinumEntity.PART_4_SKIN);
+        } else if (this.self instanceof IronGolem){
+            user.roundabout$setStandSkin(StarPlatinumEntity.PART_6_SKIN);
+        }
+    }
     @Override
     public boolean canScope(){
         return (this.isGuarding() || this.hasBlock() || this.hasEntity()
@@ -436,7 +465,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             List<Entity> listEnt = DamageHandler.genHitbox(self, pointVec3.x, pointVec3.y,
                     pointVec3.z, halfReach, halfReach, halfReach);
             for (Entity value : listEnt) {
-                if (!(value instanceof StarPlatinumEntity) && !value.isInvulnerable()) {
+                if (value instanceof JusticeEntity JE) {
+                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= 60)) {
+                        JE.inhaleTick();
+                    }
+                } else if (!(value instanceof StarPlatinumEntity) && !value.isInvulnerable()) {
                     if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= 60)) {
                         double strength = 0.05;
                         if (value instanceof ItemEntity || value instanceof ExperienceOrb) {

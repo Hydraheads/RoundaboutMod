@@ -49,6 +49,7 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
@@ -450,8 +451,7 @@ public class MainUtil {
     }
     public static boolean canGrantStand(Entity ent){
         if (ent instanceof Mob ME){
-            if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)
-                    && !(ME instanceof StandEntity)){
+            if (!(ME instanceof StandEntity)){
                 if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
                     return ((IMob)ME).roundabout$isWorthy();
                 }
@@ -838,7 +838,8 @@ public class MainUtil {
         LivingEntity target = null;
         if (!entities.isEmpty()) {
             for (Entity value : entities) {
-                if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)) {
+                if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
+                        && !(value instanceof FallenMob)) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
                         target = (LivingEntity) value;
@@ -864,6 +865,10 @@ public class MainUtil {
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = AttackHitboxNear(User, GrabHitbox(User, DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distance, angle),distance);
+        }
+
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
         }
         return targetEntity;
     }
@@ -1138,21 +1143,34 @@ public class MainUtil {
                 PJ.justiceTacticsUse(data);
             }
         } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
-            if (ShapeShifts.getShiftFromByte(data) == ShapeShifts.VILLAGER){
-                byte totalMorph = 0;
-                Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
-                if (ent != null){
-                    VillagerType VT = ent.getVillagerData().getType();
-                    VillagerProfession VP = ent.getVillagerData().getProfession();
-                    totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + ShapeShifts.getByteFromProfession(VP));
-                } else {
-                    VillagerType VT = VillagerType.byBiome(player.level().getBiome(player.blockPosition()));
-                    totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + 1);
+            StandPowers sp = ((StandUser) player).roundabout$getStandPowers();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(data);
+            if (sp instanceof PowersJustice pj){
+
+                if (ShapeShifts.isVillager(shift) && !sp.canExecuteMoveWithLevel(pj.getVillagerMorphLevel())){
+                    return;
+                }if (ShapeShifts.isZombie(shift) && !sp.canExecuteMoveWithLevel(pj.getZombieMorphLevel())){
+                    return;
+                }if (ShapeShifts.isSkeleton(shift) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())){
+                    return;
                 }
-                ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
+                if (shift == ShapeShifts.VILLAGER){
+                    byte totalMorph = 0;
+                    Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
+                    if (ent != null){
+                        VillagerType VT = ent.getVillagerData().getType();
+                        VillagerProfession VP = ent.getVillagerData().getProfession();
+                        totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + ShapeShifts.getByteFromProfession(VP));
+                    } else {
+                        VillagerType VT = VillagerType.byBiome(player.level().getBiome(player.blockPosition()));
+                        totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + 1);
+                    }
+                    ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
+                }
+                ((IPlayerEntity) player).roundabout$shapeShift();
+                ((IPlayerEntity) player).roundabout$setShapeShift(data);
             }
-            ((IPlayerEntity) player).roundabout$shapeShift();
-            ((IPlayerEntity) player).roundabout$setShapeShift(data);
+
         } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
 
         }
@@ -1300,7 +1318,9 @@ public class MainUtil {
             if (SE != null){
                 BlockPos veci3 = BlockPos.containing(new Vec3(SE.getX(), SE.getY() + SE.getEyeHeight(), SE.getZ()));
                 BlockState bl3 = SE.level().getBlockState(veci3);
-                if (!(bl3.isSolid() && bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3))){
+                if (!(bl3.isSolid() && (bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3) ||
+                        (bl3.getBlock() instanceof SlabBlock ||
+                        bl3.getBlock() instanceof StairBlock)))){
                     ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {

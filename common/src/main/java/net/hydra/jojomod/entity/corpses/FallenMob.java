@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.Tactics;
@@ -38,6 +39,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public int ticksThroughPlacer = 0;
     public Entity placer;
     public Entity controller;
+    public boolean diesWhenUncontrolled;
     public LivingEntity corpseTarget;
     public LivingEntity manualTarget;
     public LivingEntity autoTarget;
@@ -145,6 +147,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
         }
     }
+    @Override
+    public boolean canBreatheUnderwater(){
+        return true;
+    }
     public boolean getTicksThroughPlacer() {
         return this.getEntityData().get(TICKS_THROUGH_PLACER);
     }
@@ -160,11 +166,29 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     public float getAtkPower(Entity $$0){
         if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
-            return (float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2);
+            return getDamageMod((float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2)
+                                * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01)));
         }
-        return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        return getDamageMod((float) ((float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)
+                        * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01)));
     }
 
+    /**If rpg leveling config is on*/
+    public float getDamageMod(float pow){
+        if (this.controller != null){
+            return ((StandUser)this.controller).roundabout$getStandPowers().levelupDamageMod(pow);
+        }
+        return pow;
+    }
+
+    @Override
+    public float getSpeed() {
+        if (!this.getActivated()){
+            return 0;
+        } else {
+            return super.getSpeed();
+        }
+    }
     @Override
     public boolean removeWhenFarAway(double $$0) {
         return false;
@@ -251,6 +275,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public void addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("IsTurned",getTurned());
         $$0.putBoolean("IsActivated",getActivated());
+        $$0.putBoolean("diesUnc",diesWhenUncontrolled);
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
         $$0.putInt("TicksThroughPhases",ticksThroughPhases);
@@ -265,6 +290,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         this.setTurned($$0.getBoolean("IsTurned"));
+        diesWhenUncontrolled = $$0.getBoolean("diesUnc");
         this.setActivated($$0.getBoolean("IsActivated"));
         this.ticksThroughPhases = $$0.getInt("TicksThroughPhases");
         this.setTargetTactic($$0.getByte("targetTactic"));
@@ -325,7 +351,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                     setLastHurtByMob(null);
                     setTarget(null);
                 }
-                if (this.getNavigation().isInProgress()){
+
+                this.moveControl.setWantedPosition(this.getX(),this.getY(),this.getZ(),0);
+                if (this.getNavigation().getPath() != null){
                     this.getNavigation().stop();
                 }
             } else {
@@ -379,6 +407,15 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                             setActivated(false);
                             this.setController(null);
                         }
+                    }
+                }
+
+                if (!this.getActivated()){
+                    if (diesWhenUncontrolled){
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
+                                this.getY()+this.getEyeHeight(), this.getZ(),
+                                20, 0.3, 0.3, 0.3, 0.3);
+                        this.discard();
                     }
                 }
             }

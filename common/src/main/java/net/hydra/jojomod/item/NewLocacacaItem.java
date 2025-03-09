@@ -46,7 +46,7 @@ public class NewLocacacaItem extends Item {
             LivingEntity ent = MainUtil.getStoneTarget($$0, $$1);
             if (ent != null) {
                 float scale = ($$2.getUseDuration() - $$1.getUseItemRemainingTicks());
-                if (!$$0.isClientSide) {
+                if (!$$0.isClientSide()) {
                     double random = (Math.random() * 1.2) - 0.6;
                     double random2 = (Math.random() * 1.2) - 0.6;
                     double random3 = (Math.random() * 1.2) - 0.6;

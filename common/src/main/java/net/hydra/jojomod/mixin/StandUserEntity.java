@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -31,7 +30,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -40,8 +38,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -55,7 +51,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -488,10 +483,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
     }
+    @Unique
+    public boolean roundabout$isDrown = false;
+    @Unique
+    @Override
+    public void roundabout$setDrowning(boolean drown){
+        roundabout$isDrown = drown;
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getDrowning(){
+        return roundabout$isDrown;
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
         //if (StandID > -1) {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand() && (this.roundabout$getStand() == null ||
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
                             OffsetIndex.OffsetStyle(this.roundabout$getStand().getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
@@ -515,6 +522,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (roundabout$sealedTicks > -1){
             roundabout$sealedTicks--;
+            if (roundabout$sealedTicks <= -1){
+                this.roundabout$setDrowning(false);
+            }
         }
         if (roundabout$gasolineIFRAMES > 0){
             roundabout$gasolineIFRAMES--;
@@ -1500,9 +1510,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+
+        if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
+        && !$$0.is(DamageTypes.THORNS)&& !$$0.is(ModDamageTypes.CORPSE) &&
+                !$$0.is(ModDamageTypes.CORPSE_EXPLOSION) &&
+                !$$0.is(ModDamageTypes.CORPSE_ARROW)){
+            if (((StandUser)pe).roundabout$getStandPowers().interceptDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
+                ci.setReturnValue(false);
+                return;
+            }
+        }
+
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM){
+            if (!(((LivingEntity)(Object)this) instanceof Player) && FM.getController() == this.getId()){
+                ci.setReturnValue(false);
+            }
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
-                $$1/=3;
+                $$1/=3.2f;
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1 = FM.getDamageMod($$1);
+            } else {
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
             if (FM.getController() > 0 && FM.getController() != this.getId()){
@@ -1514,6 +1543,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else if ($$0.is(DamageTypes.PLAYER_EXPLOSION) && $$0.getEntity() instanceof FallenMob FM){
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=2;
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1 = FM.getDamageMod($$1);
+            } else {
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
             if (FM.getController() > 0 && FM.getController() != this.getId()){
@@ -1609,6 +1643,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 0;
     }
 
+    @Shadow protected float lastHurt;
+
     /**Part of Registering Stand Guarding as a form of Blocking*/
     @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurtCurrentlyUsedShield(F)V", shift = At.Shift.BEFORE))
     private void roundabout$RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
@@ -1692,18 +1728,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Villager call to action*/
     @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
-        if (((LivingEntity)(Object)this) instanceof AbstractVillager AV && !($$0.getEntity()
-                instanceof AbstractVillager) && $$0.getEntity() instanceof LivingEntity LE) {
-            if (!this.isInvulnerableTo($$0)) {
-                AABB AAB = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
-                List<? extends AbstractVillager> ENT = this.level().getNearbyEntities(AbstractVillager.class, MainUtil.attackTargeting, ((LivingEntity)(Object)this), AAB);
+        if (!this.isInvulnerableTo($$0)) {
+            if (((LivingEntity)(Object)this) instanceof AbstractVillager AV && !($$0.getEntity()
+                    instanceof AbstractVillager) && $$0.getEntity() instanceof LivingEntity LE) {
+                    AABB AAB = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+                    List<? extends AbstractVillager> ENT = this.level().getNearbyEntities(AbstractVillager.class, MainUtil.attackTargeting, ((LivingEntity)(Object)this), AAB);
 
-                for (AbstractVillager $$3 : ENT) {
-                    if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
-                        if($$3.getTarget() == null && !(LE instanceof Player PE && PE.isCreative())){
-                            $$3.setTarget(LE);
+                    for (AbstractVillager $$3 : ENT) {
+                        if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
+                            if($$3.getTarget() == null && !(LE instanceof Player PE && PE.isCreative())){
+                                $$3.setTarget(LE);
+                            }
                         }
                     }
+            }
+
+
+            if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
+                    && !$$0.is(DamageTypes.THORNS)){
+                if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
+                    ci.cancel();
                 }
             }
         }
@@ -1751,9 +1795,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$die2(DamageSource $$0, CallbackInfo ci){
         /**Corspe dropping, for Justice*/
         if ($$0.getDirectEntity() != null) {
-            if ($$0.getDirectEntity() instanceof Player PE && (PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
+            if (($$0.getDirectEntity() instanceof Player PE && (PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
             || (PE.getMainHandItem().is(ModItems.SCISSORS) && ((StandUser)PE).roundabout$getStandPowers()
-            instanceof PowersJustice))) {
+            instanceof PowersJustice))) && !$$0.is(ModDamageTypes.CORPSE)) {
                 LivingEntity ths = ((LivingEntity)(Object)this);
                 boolean marked = false;
                 FallenMob mb = null;
@@ -1795,8 +1839,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci){
-
+        private void roundabout$roundabouthurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
         if (roundabout$gasolineIFRAMES > 0 && $$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             ci.setReturnValue(false);
             return;
@@ -1909,6 +1952,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.setReturnValue(false);
             return;
         } else {
+
+            boolean dothis = false;
+            if ((float)this.invulnerableTime > 10.0F && !$$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+                if (!($$1 <= this.lastHurt)) {
+                    dothis = true;
+                }
+            } else {
+                dothis = true;
+            }
+            if (dothis) {
+                LivingEntity living = ((LivingEntity) (Object) this);
+                if (((StandUser) living).roundabout$getStandPowers().interceptDamageEvent($$0, $$1)) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+
+
             /*This extra check ensures that extra damage will not be dealt if a projectile ticks before the TS damage catch-up*/
             if (roundabout$getStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
                 ci.setReturnValue(false);
@@ -1970,6 +2031,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "baseTick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$BreathingCancel(CallbackInfo ci){
+        if (roundabout$isDrown) {
+            this.hurt(this.damageSources().drown(), 2.0f);
+        }
         boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopSettings.preventsBreathing;
         if (cannotBreathInTs) {
             if (!((TimeStop) this.level()).getTimeStoppingEntities().isEmpty()
@@ -1992,6 +2056,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
+
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1) {
             if (curse == LocacacaCurseIndex.HEART) {

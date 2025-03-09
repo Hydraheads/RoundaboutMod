@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 
 public class FallenSkeletonRenderer extends HumanoidMobRenderer<FallenSkeleton, FallenSkeletonModel<FallenSkeleton>> {
+    private static final ResourceLocation SKELETON_LOCATION = new ResourceLocation("textures/entity/skeleton/skeleton.png");
     private static final ResourceLocation FALLEN_SKELETON_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton.png");
     private static final ResourceLocation FALLEN_SKELETON_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
@@ -35,6 +36,8 @@ public class FallenSkeletonRenderer extends HumanoidMobRenderer<FallenSkeleton, 
                     return FALLEN_SKELETON_LOCATION_R;
                 } else if (bt==3){
                     return FALLEN_SKELETON_LOCATION_G;
+                } else if (bt == 4){
+                    return SKELETON_LOCATION;
                 }
             }
             return FALLEN_SKELETON_LOCATION_2;

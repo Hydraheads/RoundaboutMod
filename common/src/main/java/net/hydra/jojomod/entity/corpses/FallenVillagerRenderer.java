@@ -22,13 +22,14 @@ public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVi
     private static final ResourceLocation FALLEN_VILLAGER_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_villager_green.png");
 
+    private static final ResourceLocation VILLAGER_BASE_SKIN = new ResourceLocation("textures/entity/villager/villager.png");
+
     public FallenVillagerRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new FallenVillagerModel<>($$0.bakeLayer(ModelLayers.VILLAGER)), 0.5F);
         this.addLayer(new CustomHeadLayer<>(this, $$0.getModelSet(), $$0.getItemInHandRenderer()));
         this.addLayer(new CrossedArmsItemLayer<>(this, $$0.getItemInHandRenderer()));
     }
 
-    private static final ResourceLocation VILLAGER_BASE_SKIN = new ResourceLocation("textures/entity/villager/villager.png");
 
     @Override
     public ResourceLocation getTextureLocation(FallenVillager var1) {
@@ -41,6 +42,8 @@ public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVi
                     return FALLEN_VILLAGER_LOCATION_R;
                 } else if (bt==3){
                     return FALLEN_VILLAGER_LOCATION_G;
+                } else if (bt==4){
+                    return VILLAGER_BASE_SKIN;
                 }
             }
             return FALLEN_VILLAGER_LOCATION_2;

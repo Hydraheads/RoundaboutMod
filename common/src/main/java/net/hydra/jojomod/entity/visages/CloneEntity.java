@@ -51,7 +51,7 @@ public class CloneEntity extends PathfinderMob {
         super($$0, $$1);
     }
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.5D).add(Attributes.MAX_HEALTH, 20)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 1).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }

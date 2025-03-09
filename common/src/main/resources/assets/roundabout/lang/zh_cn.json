@@ -18,7 +18,7 @@
   "item.roundabout.creative_body_bag": "创造尸袋",
   "item.roundabout.stand_disc": "替身光碟",
   "item.roundabout.coffee_gum": "咖啡口香糖",
-  "item.roundabout.meteorite": "古老陨石",
+  "item.roundabout.meteorite": "陨石",
   "item.roundabout.meteorite_ingot": "古老陨石锭",
   "item.roundabout.harpoon": "鱼叉",
   "item.roundabout.knife": "飞刀",
@@ -100,6 +100,7 @@
   "entity.roundabout.jnpc_jotaro": "承太郎",
   "entity.roundabout.jnpc_steve": "史蒂夫",
   "entity.roundabout.jnpc_alex": "艾利克斯",
+  "entity.roundabout.fog_clone": "迷雾克隆",
 
   "block.roundabout.meteor_block": "陨石方块",
   "block.roundabout.ancient_meteor": "古老陨石",
@@ -157,6 +158,7 @@
   "sounds.roundabout.dsp_summon": "炸裂的替身召唤",
 
   "death.attack.stand": "%1$s在与%2$s战斗时死于神秘的力量",
+  "death.attack.stand_rush": "%1$s因%2$s再起不能",
   "death.attack.star_finger": "%1$s在与%2$s战斗时被变成了生鱼片",
   "death.attack.penetrating_stand": "%1$s因%2$s再起不能",
   "death.attack.corpse": "%1$s被%2$s以正义之名绳之以法",
@@ -311,6 +313,8 @@
   "sounds.roundabout.impale_charge":  "蓄力攻击",
   "sounds.roundabout.impale_hit":  "穿胸",
   "sounds.roundabout.explosive_bat":  "全垒打",
+  "sounds.roundabout.fog_clone":  "幻影形态",
+  "sounds.roundabout.pop":  "砰！",
 
   "sounds.roundabout.star_platinum_ora_2":  "欧拉",
   "sounds.roundabout.star_platinum_ora_3":  "欧拉！",

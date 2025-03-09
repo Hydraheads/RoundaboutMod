@@ -54,6 +54,7 @@
     "ZProjectileAtk",
     "ZPumpkinBlock",
     "ZRaid",
+    "ZRaider",
     "ZRecordItem",
     "ZServerGamePacketListenerImpl",
     "ZServerPlayerGameMode",

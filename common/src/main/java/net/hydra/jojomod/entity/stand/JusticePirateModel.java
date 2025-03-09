@@ -124,6 +124,7 @@ public class JusticePirateModel<T extends JusticeEntity> extends StandModel<T> {
         defaultModifiers(pEntity);
         this.animate(pEntity.idleAnimation, JusticeAnimations.IDLE_JUSTICE, pAgeInTicks, 0.47f);
         this.animate(pEntity.idleAnimation2, JusticeAnimations.IDLE_JUSTICE_2, pAgeInTicks, 0.3f);
+        this.animate(pEntity.cackleAnimation, JusticeAnimations.CACKLE, pAgeInTicks, 1f);
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.PlayerLikeRenderer;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -18,7 +19,9 @@ public class PlayerAlexRenderer<T extends JojoNPC> extends PlayerLikeRenderer<Jo
     private static final ResourceLocation ALEX_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/alex.png");
     public PlayerAlexRenderer(EntityRendererProvider.Context context) {
         super(context, new PlayerAlexModel<>(context.bakeLayer(ModEntityRendererClient.ALEX_LAYER)),0f);
-        this.addLayer(new HumanoidLikeArmorLayer<>(this, new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR)), context.getModelManager()));
+        if (ConfigManager.getClientConfig().renderArmorOnFogClones) {
+            this.addLayer(new HumanoidLikeArmorLayer<>(this, new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR)), context.getModelManager()));
+        }
     }
     @Override
     public void render(JojoNPCPlayer mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

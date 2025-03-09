@@ -79,7 +79,11 @@ public abstract class ZProjectile extends Entity implements IProjectileAccess{
     @Inject(method = "setOwner", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$SetOwner(@Nullable Entity $$0, CallbackInfo ci) {
         if ($$0 != null) {
-            if ($$0 instanceof LivingEntity) {
+            if ($$0 instanceof LivingEntity le) {
+                if (((StandUser)le).roundabout$getStandPowers().onCreateProjectile(((Projectile)(Object)this))){
+                    ci.cancel();
+                    return;
+                }
                 if (((TimeStop) $$0.level()).inTimeStopRange($$0) && !(((TimeStop) $$0.level()).CanTimeStopEntity($$0))) {
                     this.roundabout$setRoundaboutIsTimeStopCreated(true);
                     if (!$$0.level().isClientSide) {

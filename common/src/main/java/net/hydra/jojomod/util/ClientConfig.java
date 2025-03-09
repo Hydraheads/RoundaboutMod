@@ -18,6 +18,8 @@ public class ClientConfig {
     public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
     @BooleanOption(group = "inherit", value = true)
     public Boolean renderJusticeHandsWhilePiloting;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean renderArmorOnFogClones;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)

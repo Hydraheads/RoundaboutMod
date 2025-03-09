@@ -97,6 +97,8 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
         } else {
             matrixStack.scale(2.0f*factor,2.0f*factor,2.0f*factor);
         }
+        float percentage = ((float) mobEntity.getJusticeSize()/100);
+        matrixStack.scale(percentage,percentage,percentage);
 
         Player pl = Minecraft.getInstance().player;
         LivingEntity user = mobEntity.getUser();

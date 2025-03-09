@@ -199,8 +199,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
             this.roundabout$setIsNaturalStandUser(true);
             int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
             ItemStack stack = ModItems.STAND_ARROW_POOL.get(index).getDefaultInstance();
-            if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem){
+            if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                 ((StandUser)this).roundabout$setStandDisc(stack);
+                SD.generateStandPowers(((LivingEntity) (Object) this));
+                ((StandUser)this).roundabout$getStandPowers().rollSkin();
             }
         } else if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
             this.roundabout$setWorthy(true);
@@ -434,7 +436,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
                 Mob mb = ((Mob) (Object) this);
                 if (this.getTarget() != null && !this.roundabout$getFightOrFlight()){
-                    if (!((StandUser) this).roundabout$getActive()){
+                    if (!((StandUser) this).roundabout$getActive() &&
+                            ((StandUser)this).roundabout$getSealedTicks() <= -1){
                         ((StandUser)this).roundabout$summonStand(this.level(),true,true);
                     }
                     if (roundabout$retractTicks != 100) {

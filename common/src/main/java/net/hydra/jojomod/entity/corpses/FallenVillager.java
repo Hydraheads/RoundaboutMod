@@ -8,6 +8,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.level.Level;
 
 public class FallenVillager extends FallenMob{
@@ -19,6 +21,12 @@ public class FallenVillager extends FallenMob{
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.275).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 2.75).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.addBehaviourGoals();
     }
 
     @Override
@@ -42,7 +50,7 @@ public class FallenVillager extends FallenMob{
     @Override
     protected SoundEvent getDeathSound() {
         if (this.getActivated()){
-            return SoundEvents.ZOMBIE_DEATH;
+            return SoundEvents.VILLAGER_DEATH;
         } else {
             return super.getDeathSound();
         }

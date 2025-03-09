@@ -114,14 +114,21 @@ public class JusticeTacticsScreen extends Screen {
             this.firstMouseY = j;
             this.setFirstMousePos = true;
         }
+        caughtSomething = false;
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
         for (PoseSlot MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
+            caughtSomething = true;
             this.currentlyHovered = MobSlot.icon;
         }
+        if (!caughtSomething){
+            this.currentlyHovered = tacticIcon.NONE;
+        }
     }
+
+    boolean caughtSomething = false;
 
     private void switchToHoveredGameMode() {
        switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
@@ -189,6 +196,8 @@ public class JusticeTacticsScreen extends Screen {
             "textures/gui/tactics_icons/team_red.png");
     ResourceLocation RL3 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/tactics_icons/team_green.png");
+    ResourceLocation RL4 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tactics_icons/team_mobs.png");
 
     public enum tacticIcon {
 
@@ -215,7 +224,11 @@ public class JusticeTacticsScreen extends Screen {
         PEACEFUL(Component.translatable("roundabout.corpse.tactics.peaceful"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,91,55),
         CHANGE_TEAM(Component.translatable("roundabout.corpse.tactics.change_team"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/team_base.png"),Tactics.CHANGE_TEAM.id,-72,-28);
+                "textures/gui/tactics_icons/team_base.png"),Tactics.CHANGE_TEAM.id,-72,-28),
+        KILL_ALL(Component.translatable("roundabout.corpse.tactics.kill_all"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/kill_corpses.png"),Tactics.KILL_ALL.id,45,4),
+        CACKLE(Component.translatable("roundabout.corpse.tactics.cackle"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/cackle.png"),Tactics.CACKLE.id,-45,4);
 
         static tacticIcon getByte(Tactics tactics) {
             return switch (tactics) {
@@ -231,6 +244,8 @@ public class JusticeTacticsScreen extends Screen {
                 case HUNT_PLAYERS -> HUNT_PLAYERS;
                 case PEACEFUL -> PEACEFUL;
                 case CHANGE_TEAM -> CHANGE_TEAM;
+                case KILL_ALL -> KILL_ALL;
+                case CACKLE -> CACKLE;
             };
         }
         protected static final tacticIcon[] VALUES;
@@ -264,7 +279,7 @@ public class JusticeTacticsScreen extends Screen {
 
         static {
             VALUES = new tacticIcon[]{NONE,SELECT_ALL,DESELECT_ALL,STAY_PUT,ROAM,FOLLOW,
-            FOLLOW, DEFEND, HUNT_TARGET, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL, CHANGE_TEAM};
+            FOLLOW, DEFEND, HUNT_TARGET, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL, CHANGE_TEAM, KILL_ALL, CACKLE};
         }
     }
 
@@ -297,6 +312,8 @@ public class JusticeTacticsScreen extends Screen {
                                 this.icon.drawIcon2(RL2, guiGraphics, this.getX() + 5, this.getY() + 5);
                             } else if (JE.getJusticeTeam() == 3){
                                 this.icon.drawIcon2(RL3, guiGraphics, this.getX() + 5, this.getY() + 5);
+                            } else if (JE.getJusticeTeam() == 4){
+                                this.icon.drawIcon2(RL4, guiGraphics, this.getX() + 5, this.getY() + 5);
                             }
                         } else {
                             this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
@@ -316,11 +333,6 @@ public class JusticeTacticsScreen extends Screen {
         @Override
         public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
             this.defaultButtonNarrationText(narrationElementOutput);
-        }
-
-        @Override
-        public boolean isHoveredOrFocused() {
-            return super.isHoveredOrFocused() || this.isSelected;
         }
 
         public void setSelected(boolean bl) {

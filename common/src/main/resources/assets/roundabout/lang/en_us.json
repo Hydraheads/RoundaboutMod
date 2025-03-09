@@ -238,6 +238,7 @@
   "sounds.roundabout.body_bag":  "Body collected",
   "sounds.roundabout.justice_select":  "Selection",
   "sounds.roundabout.justice_select_attack":  "Attack Order",
+  "sounds.roundabout.cackle":  "Cackle",
 
   "sounds.roundabout.star_finger_silent":  "Star Finger",
 
@@ -537,6 +538,8 @@
   "roundabout.corpse.tactics.hunt_player": "Hunt Players",
   "roundabout.corpse.tactics.peaceful": "Stand Down",
   "roundabout.corpse.tactics.change_team": "Team Color",
+  "roundabout.corpse.tactics.kill_all": "Destroy Corpses",
+  "roundabout.corpse.tactics.cackle": "Cackle",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",

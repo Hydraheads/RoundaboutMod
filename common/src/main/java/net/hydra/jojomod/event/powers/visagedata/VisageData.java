@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class VisageData {
 
@@ -17,5 +18,8 @@ public class VisageData {
     }
     public JojoNPC getModelNPC(Player pl){
         return null;
+    }
+    public Vec3 sizeModifier(){
+        return new Vec3(1.0F,1.0F,1.0F);
     }
 }

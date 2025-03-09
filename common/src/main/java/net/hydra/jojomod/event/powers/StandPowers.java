@@ -2,12 +2,15 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
@@ -30,17 +33,22 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -624,6 +632,8 @@ public class StandPowers {
             return ModSounds.OVA_TIME_RESUME_EVENT;
         } else if (soundChoice == SoundIndex.STAND_ARROW_CHARGE) {
             return ModSounds.STAND_ARROW_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.CACKLE) {
+            return ModSounds.CACKLE_EVENT;
         }
         return null;
     }
@@ -638,6 +648,8 @@ public class StandPowers {
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE) {
             return 0.7f;
+        } else if (soundChoice == SoundIndex.CACKLE) {
+                return 120f;
         } else if (soundChoice == TIME_STOP_NOISE_4 || soundChoice == TIME_STOP_NOISE_5
                 || soundChoice == TIME_STOP_NOISE_7
                 || soundChoice == TIME_STOP_NOISE_8
@@ -1132,7 +1144,19 @@ public class StandPowers {
 
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
     }
+    public boolean onCreateProjectile(Projectile proj){
+        return false;
+    }
 
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        return false;
+    }
+    public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        return false;
+    }
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        return false;
+    }
     public void poseStand(byte r){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
@@ -1694,6 +1718,9 @@ public class StandPowers {
                 targetEntity = SE.getUser();
             }
         }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
 
         storeEnt = targetEntity;
 
@@ -1723,6 +1750,9 @@ public class StandPowers {
             if (SE.getUser() != null){
                 targetEntity = SE.getUser();
             }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
         }
 
         return targetEntity;
@@ -2364,7 +2394,15 @@ public class StandPowers {
     public boolean canUseMiningStand() {
         return (isMiningStand() && (!(this.getSelf().getMainHandItem().getItem() instanceof DiggerItem) || this.getActivePower() == PowerIndex.MINING));
     }
-
+    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
+    }
+    public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
+        if (!($$1.getBlock() instanceof IceBlock)) {
+            if (Math.random() > 0.62) {
+                addEXP(1);
+            }
+        }
+    }
 
     public float getBonusPassiveMiningSpeed(){
         return 1F;
@@ -2485,6 +2523,10 @@ public class StandPowers {
                 heldDownSwitch = false;
             }
         }
+    }
+
+    public void rollSkin(){
+
     }
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){

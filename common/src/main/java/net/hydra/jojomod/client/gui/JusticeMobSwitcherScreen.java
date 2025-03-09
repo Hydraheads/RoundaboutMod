@@ -9,9 +9,13 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
@@ -157,7 +161,20 @@ public class JusticeMobSwitcherScreen extends Screen {
                         ShapeShifts.getShiftFromByte(((IPlayerEntity)minecraft.player).roundabout$getShapeShift()));
         JusticeMobSwitcherScreen.MobIcon MobIcon3 = MobIcon;
         if (MobIcon3 != MobIcon2) {
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(MobIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
+            StandPowers sp = ((StandUser) minecraft.player).roundabout$getStandPowers();
+            if (sp instanceof PowersJustice pj) {
+
+                if (ShapeShifts.isVillager(ShapeShifts.getShiftFromByte(MobIcon3.id)) && !sp.canExecuteMoveWithLevel(pj.getVillagerMorphLevel())) {
+                    return;
+                }
+                if (ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(MobIcon3.id)) && !sp.canExecuteMoveWithLevel(pj.getZombieMorphLevel())) {
+                    return;
+                }
+                if (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(MobIcon3.id)) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())) {
+                    return;
+                }
+                ModPacketHandler.PACKET_ACCESS.byteToServerPacket(MobIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
+            }
            // minecraft.player.connection.sendUnsignedCommand(MobIcon3.getCommand());
         }
     }
@@ -220,7 +237,8 @@ public class JusticeMobSwitcherScreen extends Screen {
         STRAY(Component.translatable("justice.morph.stray"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/icons/justice/disguise_stray.png"),ShapeShifts.STRAY.id),
         EERIE(Component.translatable("justice.morph.eerie"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/justice/disguise_eerie.png"),ShapeShifts.EERIE.id);
+                "textures/gui/icons/justice/disguise_eerie.png"),ShapeShifts.EERIE.id),
+        LOCKED(Component.translatable("ability.roundabout.locked.ctrl"), StandIcons.LOCKED,ShapeShifts.PLAYER.id);
 
         protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES;
         protected static final JusticeMobSwitcherScreen.MobIcon[] VALUES2;
@@ -239,10 +257,43 @@ public class JusticeMobSwitcherScreen extends Screen {
         }
 
         void drawIcon(GuiGraphics guiGraphics, int i, int j) {
-            guiGraphics.blit(rl, i-1, j-1, 0, 0, 18, 18, 18, 18);
+            Player pl = Minecraft.getInstance().player;
+            if (pl != null) {
+                StandPowers sp = ((StandUser)pl).roundabout$getStandPowers();
+                if (sp instanceof PowersJustice pj) {
+                    if (ShapeShifts.isVillager(ShapeShifts.getShiftFromByte(id)) && !sp.canExecuteMoveWithLevel(pj.getVillagerMorphLevel())) {
+                        guiGraphics.blit(LOCKED.rl, i - 1, j - 1, 0, 0, 18, 18, 18, 18);
+                        return;
+                    }
+                    if (ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(id)) && !sp.canExecuteMoveWithLevel(pj.getZombieMorphLevel())) {
+                        guiGraphics.blit(LOCKED.rl, i - 1, j - 1, 0, 0, 18, 18, 18, 18);
+                        return;
+                    }
+                    if (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(id)) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())) {
+                        guiGraphics.blit(LOCKED.rl, i - 1, j - 1, 0, 0, 18, 18, 18, 18);
+                        return;
+                    }
+                }
+                guiGraphics.blit(rl, i - 1, j - 1, 0, 0, 18, 18, 18, 18);
+            }
         }
 
         Component getName() {
+            Player pl = Minecraft.getInstance().player;
+            if (pl != null) {
+                StandPowers sp = ((StandUser) pl).roundabout$getStandPowers();
+                if (sp instanceof PowersJustice pj) {
+                    if (ShapeShifts.isVillager(ShapeShifts.getShiftFromByte(id)) && !sp.canExecuteMoveWithLevel(pj.getVillagerMorphLevel())) {
+                        return LOCKED.name;
+                    }
+                    if (ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(id)) && !sp.canExecuteMoveWithLevel(pj.getZombieMorphLevel())) {
+                        return LOCKED.name;
+                    }
+                    if (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(id)) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())) {
+                        return LOCKED.name;
+                    }
+                }
+            }
             return this.name;
         }
 

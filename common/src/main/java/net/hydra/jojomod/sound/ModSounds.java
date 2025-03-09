@@ -131,6 +131,9 @@ public class ModSounds {
     public static final String FOG_MORPH = "fog_morph";
     public static final ResourceLocation FOG_MORPH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FOG_MORPH);
     public static SoundEvent FOG_MORPH_EVENT = SoundEvent.createVariableRangeEvent(FOG_MORPH_ID);
+    public static final String CACKLE = "cackle";
+    public static final ResourceLocation CACKLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CACKLE);
+    public static SoundEvent CACKLE_EVENT = SoundEvent.createVariableRangeEvent(CACKLE_ID);
 
 
     public static final String KNIFE_IMPACT_GROUND = "knife_impact_ground";

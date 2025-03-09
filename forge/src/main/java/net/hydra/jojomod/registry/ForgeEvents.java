@@ -182,6 +182,7 @@ public class ForgeEvents {
 
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
+        ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_JUSTICE.get());
 
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(Potions.AWKWARD, ModItems.LOCACACA_PIT, ForgeItems.HEX_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.REDSTONE, ForgeItems.HEX_POTION_EXTENDED.get()));
@@ -192,6 +193,7 @@ public class ForgeEvents {
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();
+        ModParticles.POINTER = ForgeParticles.POINTER.get();
         ModParticles.AIR_CRACKLE = ForgeParticles.AIR_CRACKLE.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();

@@ -26,7 +26,7 @@ public abstract class ZGameRenderer {
     @Inject(method="shutdownShaders", at=@At("HEAD"))
     private void shutdownShaders(CallbackInfo ci)
     {
-        TSCoreShader.clear();
+        //TSCoreShader.clear();
     }
 
     @Inject(at = @At(value = "INVOKE",
