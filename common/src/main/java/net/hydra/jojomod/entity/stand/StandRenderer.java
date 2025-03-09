@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -24,7 +25,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.Vec3;
 
 public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandModel<T>> {
     /**Stand renderers should all extend this, because it is used
@@ -90,6 +93,14 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
             this.model.young = true;
         } else {
             this.model.young = false;
+        }
+
+        if (User instanceof Player PE){
+            ItemStack stack = ((IPlayerEntity)PE).roundabout$getMaskSlot();
+            if (!stack.isEmpty() && stack.getItem() instanceof MaskItem mi){
+                Vec3 vec = mi.visageData.generateVisageData(PE).sizeModifier();
+                matrixStack.scale((float) vec.x, (float) vec.y, (float) vec.z);
+            }
         }
 
         maxfade*= 0.01F;
