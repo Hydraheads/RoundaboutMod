@@ -632,6 +632,8 @@ public class StandPowers {
             return ModSounds.OVA_TIME_RESUME_EVENT;
         } else if (soundChoice == SoundIndex.STAND_ARROW_CHARGE) {
             return ModSounds.STAND_ARROW_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.CACKLE) {
+            return ModSounds.CACKLE_EVENT;
         }
         return null;
     }
@@ -646,6 +648,8 @@ public class StandPowers {
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE) {
             return 0.7f;
+        } else if (soundChoice == SoundIndex.CACKLE) {
+                return 120f;
         } else if (soundChoice == TIME_STOP_NOISE_4 || soundChoice == TIME_STOP_NOISE_5
                 || soundChoice == TIME_STOP_NOISE_7
                 || soundChoice == TIME_STOP_NOISE_8

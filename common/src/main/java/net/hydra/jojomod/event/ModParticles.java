@@ -14,4 +14,5 @@ public class ModParticles {
     public static SimpleParticleType VACUUM;
     public static SimpleParticleType FOG_CHAIN;
     public static SimpleParticleType WARDEN_CLOCK;
+    public static SimpleParticleType POINTER;
 }

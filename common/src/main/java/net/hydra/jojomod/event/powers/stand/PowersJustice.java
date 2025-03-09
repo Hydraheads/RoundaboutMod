@@ -405,6 +405,16 @@ public class PowersJustice extends DashPreset {
                 BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
                 ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
                 this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
+                this.self.level()
+                        .addParticle(
+                                ModParticles.POINTER,
+                                bpos.getX()+0.5,
+                                bpos.getY()+0.5,
+                                bpos.getZ()+0.5,
+                                0,
+                                0,
+                                0
+                        );
             }
         }
         lastHeldAge = this.getSelf().tickCount;
@@ -798,6 +808,8 @@ public class PowersJustice extends DashPreset {
             if (SE instanceof JusticeEntity JE){
                 JE.setAnimation((byte) 2);
                 JE.cackleTime = 54;
+                //this.playStandUserOnlySoundsIfNearby(SoundIndex.CACKLE, 200, true,
+                        //true);
                 this.self.level().playSound(null, JE.getX(),JE.getY(),
                         JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 100.0F, 1F);
             }
