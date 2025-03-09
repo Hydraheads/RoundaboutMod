@@ -17,6 +17,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
@@ -49,6 +50,7 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new SwellGoalFallen(this));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.addBehaviourGoals();
     }
     public static AttributeSupplier.Builder createAttributes() {
