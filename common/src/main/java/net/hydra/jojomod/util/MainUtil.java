@@ -450,8 +450,7 @@ public class MainUtil {
     }
     public static boolean canGrantStand(Entity ent){
         if (ent instanceof Mob ME){
-            if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)
-                    && !(ME instanceof StandEntity)){
+            if (!(ME instanceof StandEntity)){
                 if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
                     return ((IMob)ME).roundabout$isWorthy();
                 }
