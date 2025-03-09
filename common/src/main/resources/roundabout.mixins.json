@@ -80,7 +80,7 @@
     "HudRendering",
     "InputEvents",
     "PlayerEntityClient",
-    "ShaderInstanceNamespaceFix",
+    "RenderTargetMixin",
     "StandUserClient",
     "WorldTickClient",
     "ZBannerRenderer",

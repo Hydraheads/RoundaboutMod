@@ -1,14 +1,16 @@
 package net.hydra.jojomod.client.shader;
 
 import com.mojang.blaze3d.shaders.Uniform;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.shader.callback.ResourceProviderEvent;
+import net.hydra.jojomod.client.shader.callback.ShaderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostPass;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.io.IOException;
@@ -42,8 +44,11 @@ public class TSPostShader {
     public static void bootstrapShaders()
     {
         register("fog");
+        register("timestop");
 
-        ResourceProviderEvent.register(provider -> {
+        final int[] framecount = {0};
+
+        ShaderEvents.registerResourceProvider(provider -> {
             shaderInstances.clear();
             for (String s : registrar)
             {
@@ -77,6 +82,45 @@ public class TSPostShader {
             assert FOG_SHADER != null; // will cause a nullptr exception if FOG_SHADER is null while we try to access passes
             // given fog is a pretty key component, crashing is warranted
             FOG_SHADER_PASSES = getPasses(FOG_SHADER.get());
+        });
+        ShaderEvents.registerOnLevelRendered((matrices, partialTick, finishNanoTime, renderBlockOutline, camera, renderer, lightTexture, projectionMatrix) -> {
+//            for (PostShaderWithName i : shaderInstances)
+//            {
+//                setSamplerUniform(getPasses(i), "MainDepthSampler", DepthRenderTarget.getFrom(Minecraft.getInstance().getMainRenderTarget()).getStillDepthBuffer());
+//                renderShader(i, partialTick);
+//            }
+
+            framecount[0] += 1;
+
+            if (FOG_SHADER != null & FOG_SHADER_PASSES != null && FogDataHolder.fogDensity > 0.5f)
+            {
+                setFloatUniform(FOG_SHADER_PASSES, "FogDensity", FogDataHolder.fogDensity);
+                setFloatUniform(FOG_SHADER_PASSES, "FogNear", FogDataHolder.fogNear);
+                setFloatUniform(FOG_SHADER_PASSES, "FogFar", FogDataHolder.fogFar);
+                setVec3Uniform(FOG_SHADER_PASSES, "FogColor", FogDataHolder.fogColor);
+
+                setSamplerUniform(FOG_SHADER_PASSES, "MainDepthSampler", DepthRenderTarget.getFrom(Minecraft.getInstance().getMainRenderTarget()).getStillDepthBuffer());
+
+                //renderShader(FOG_SHADER.get(), partialTick);
+            }
+
+            if (getByName("timestop") != null)
+            {
+                PostShaderWithName i = getByName("timestop").get();
+                List<PostPass> passes = getPasses(i);
+                assert passes != null;
+
+                setMatrix4x4Uniform(passes, "ProjMatrix", projectionMatrix.invert());
+                setMatrix4x4Uniform(passes, "modelViewMatrix", new Matrix4f().invert());
+                setSamplerUniform(passes, "frameCounter", framecount[0]);
+
+                ChunkPos p = Minecraft.getInstance().level.getChunk(camera.getBlockPosition()).getPos();
+                Vector3f chunkPos = new Vector3f(p.x, 0, p.z);
+                setVec3Uniform(passes, "ChunkOffset", chunkPos);
+                setVec3Uniform(passes, "CameraPosition", camera.getPosition().toVector3f());
+
+                //renderShader(getByName("timestop").get(), partialTick);
+            }
         });
     }
 
@@ -117,6 +161,18 @@ public class TSPostShader {
     }
 
     public static void setSamplerUniform(List<PostPass> passes, String name, int value)
+    {
+        for (PostPass p : passes)
+        {
+            Uniform u = p.getEffect().getUniform(name);
+            if (u != null)
+            {
+                u.set(value);
+            }
+        }
+    }
+
+    public static void setMatrix4x4Uniform(List<PostPass> passes, String name, Matrix4f value)
     {
         for (PostPass p : passes)
         {

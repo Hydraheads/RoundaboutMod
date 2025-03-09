@@ -1,7 +1,6 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.shader.TSCoreShader;
 import net.hydra.jojomod.client.shader.TSPostShader;
 import net.hydra.jojomod.entity.FogCloneRenderer;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
@@ -48,9 +47,6 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALLEN_SPIDER.get(), FallenSpiderRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillagerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
-
-        TSCoreShader.bootstrapShaders();
-        TSPostShader.bootstrapShaders();
     }
 
     @SubscribeEvent
@@ -69,6 +65,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.JOTARO_LAYER, JotaroModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerNPCModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
+
+        TSPostShader.bootstrapShaders();
     }
     @SubscribeEvent
     public static void registerParticleStuff(RegisterParticleProvidersEvent event) {
