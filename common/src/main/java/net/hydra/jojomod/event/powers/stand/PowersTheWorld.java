@@ -531,14 +531,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
-            if (this.chargedFinal >= maxChargeTSTime){
+            if (this.chargedFinal >= maxSuperHitTime){
                 ret +=1;
             }
             ret *= levelupDamageMod(levelupDamageMod((float) (ClientNetworking.getAppropriateConfig().
                                 damageMultipliers.theWorldAttacksOnPlayers*0.01)));
         } else {
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
-            if (this.chargedFinal >= maxChargeTSTime){
+            if (this.chargedFinal >= maxSuperHitTime){
                 ret +=2;
             }
             ret *= levelupDamageMod(levelupDamageMod((float) (ClientNetworking.getAppropriateConfig().
