@@ -230,6 +230,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             ((StandUser) target).roundabout$setActive(false);
             ((StandUser) target).roundabout$setStandDisc(discStack.copy());
             de.generateStandPowers(target);
+            ((StandUser) target).roundabout$getStandPowers().rollSkin();
             ((StandUser) target).roundabout$summonStand(target.level(),true,false);
             return true;
         }

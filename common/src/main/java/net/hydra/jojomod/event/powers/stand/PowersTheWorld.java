@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
@@ -33,16 +34,22 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -515,7 +522,36 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
         }
     }
-
+    @Override
+    public void rollSkin(){
+        StandUser user = getUserData(this.self);
+        if (this.self instanceof WitherSkeleton
+        || this.self instanceof WitherBoss){
+            user.roundabout$setStandSkin(TheWorldEntity.BLACK_SKIN);
+        } else if (this.self instanceof Drowned ||
+                this.self instanceof WaterAnimal ||
+                this.self instanceof Guardian){
+            user.roundabout$setStandSkin(TheWorldEntity.AQUA_SKIN);
+        } else if (this.self instanceof IronGolem){
+            user.roundabout$setStandSkin(TheWorldEntity.DARK_SKIN);
+        } else if (this.self instanceof Zombie){
+            user.roundabout$setStandSkin(TheWorldEntity.MANGA_SKIN);
+        } else if (this.self instanceof WanderingTrader){
+            user.roundabout$setStandSkin(TheWorldEntity.ARCADE_SKIN);
+        } else if (this.self instanceof EnderMan ||
+                this.self instanceof Endermite){
+            user.roundabout$setStandSkin(TheWorldEntity.HERITAGE_SKIN);
+        } else if (this.self instanceof EnderDragon ||
+                this.self instanceof Warden){
+            user.roundabout$setStandSkin(TheWorldEntity.OVER_HEAVEN);
+        } else if (this.self instanceof Witch){
+            user.roundabout$setStandSkin(TheWorldEntity.PART_7_BLUE);
+        } else if (this.self instanceof Raider){
+            user.roundabout$setStandSkin(TheWorldEntity.OVA_SKIN);
+        } else if (this.self instanceof Skeleton){
+            user.roundabout$setStandSkin(TheWorldEntity.PART_7_SKIN);
+        }
+    }
     @Override
     public float getFloatOutRange(){
         return 10F;

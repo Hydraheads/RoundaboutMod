@@ -51,10 +51,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.HoglinBase;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -852,6 +860,39 @@ public class PowersJustice extends DashPreset {
                     }
                 }
             }
+    }
+
+    public void rollSkin(){
+        StandUser user = getUserData(this.self);
+        if (this.self instanceof Skeleton){
+            user.roundabout$setStandSkin(JusticeEntity.SKELETON_SKIN);
+        } else if (this.self instanceof MushroomCow){
+            user.roundabout$setStandSkin(JusticeEntity.BOGGED);
+        } else if (this.self instanceof Stray){
+            user.roundabout$setStandSkin(JusticeEntity.STRAY_SKIN);
+        } else if (this.self instanceof Spider){
+            user.roundabout$setStandSkin(JusticeEntity.OVA_SKIN);
+        } else if (this.self instanceof WitherSkeleton ||
+                this.self instanceof WitherBoss){
+            user.roundabout$setStandSkin(JusticeEntity.WITHER);
+        } else if (this.self instanceof Sniffer){
+            user.roundabout$setStandSkin(JusticeEntity.TWILIGHT);
+        } else if (this.self instanceof Camel){
+            user.roundabout$setStandSkin(JusticeEntity.TAROT);
+        } else if (this.self instanceof Drowned ||
+                this.self instanceof WaterAnimal ||
+                this.self instanceof Guardian){
+            user.roundabout$setStandSkin(JusticeEntity.PIRATE);
+        } else if (this.self instanceof Piglin ||
+                this.self instanceof ZombifiedPiglin ||
+                this.self instanceof HoglinBase ||
+                this.self instanceof Blaze){
+            user.roundabout$setStandSkin(JusticeEntity.FLAMED);
+        } else if (this.self instanceof Zombie){
+            user.roundabout$setStandSkin(JusticeEntity.MANGA_SKIN);
+        } else if (this.self instanceof Strider){
+            user.roundabout$setStandSkin(JusticeEntity.BLUE_FLAMED);
+        }
     }
     @Override
     public boolean isPiloting(){

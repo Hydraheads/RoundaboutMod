@@ -2512,6 +2512,10 @@ public class StandPowers {
             }
         }
     }
+
+    public void rollSkin(){
+
+    }
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
             return SoundIndex.BARRAGE_SOUND_GROUP;
