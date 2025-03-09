@@ -1528,8 +1528,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=3.2f;
                 $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1 = FM.getDamageMod($$1);
             } else {
                 $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
             if (FM.getController() > 0 && FM.getController() != this.getId()){
@@ -1542,8 +1544,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=2;
                 $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1 = FM.getDamageMod($$1);
             } else {
                 $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
             if (FM.getController() > 0 && FM.getController() != this.getId()){

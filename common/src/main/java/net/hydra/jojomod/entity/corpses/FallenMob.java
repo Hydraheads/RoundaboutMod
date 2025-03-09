@@ -162,11 +162,19 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     public float getAtkPower(Entity $$0){
         if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
-            return (float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2)
-                                * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01));
+            return getDamageMod((float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2)
+                                * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01)));
         }
-        return (float) ((float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)
-                        * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01));
+        return getDamageMod((float) ((float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)
+                        * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01)));
+    }
+
+    /**If rpg leveling config is on*/
+    public float getDamageMod(float pow){
+        if (this.controller != null){
+            return ((StandUser)this.controller).roundabout$getStandPowers().levelupDamageMod(pow);
+        }
+        return pow;
     }
 
     @Override
