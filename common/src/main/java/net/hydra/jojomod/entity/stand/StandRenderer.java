@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
@@ -46,9 +47,10 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         LocalPlayer lp = Minecraft.getInstance().player;
         float maxfade = 100;
+        LivingEntity User = mobEntity.getUser();
         if (lp !=null) {
             IPlayerEntity ipe = ((IPlayerEntity) lp);
-            if (mobEntity.getUser() != null && mobEntity.getUser().is(lp)) {
+            if (User != null && mobEntity.getUser().is(lp)) {
 
                 StandUser standUser = ((StandUser)mobEntity.getUser());
                 StandPowers powers = standUser.roundabout$getStandPowers();
@@ -82,6 +84,14 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
                 }
             }
         }
+
+        if (User != null && User.isBaby()){
+            matrixStack.scale(0.6F, 0.6F, 0.6F);
+            this.model.young = true;
+        } else {
+            this.model.young = false;
+        }
+
         maxfade*= 0.01F;
         if (lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
                 !lp.isSpectator()) && !mobEntity.forceVisible && ConfigManager.getClientConfig().onlyStandUsersCanSeeStands){
@@ -92,6 +102,8 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
             mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), mobEntity.fadePercent, opacity*maxfade, 0.72f);
         }
         (this.model).setAlpha(mobEntity.fadePercent);
+
+
 
         int plight = i;
         var owner = mobEntity.getUser();
