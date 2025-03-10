@@ -335,7 +335,7 @@ public class ForgeItems {
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null))));
     public static final RegistryObject<Item> STAND_DISC_MAGICIANS_RED = addToDiscTab(ITEMS.register("magicians_red_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_MAGICIANS_RED = addToDiscTab(ITEMS.register("magicians_red_disc",
+    public static final RegistryObject<Item> MAX_STAND_DISC_MAGICIANS_RED = addToDiscTab(ITEMS.register("max_magicians_red_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null))));
     public static final RegistryObject<Item> STAND_DISC_JUSTICE = addToDiscTab(
             ITEMS.register("justice_disc",
