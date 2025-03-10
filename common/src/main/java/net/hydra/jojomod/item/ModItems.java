@@ -16,6 +16,8 @@ public class ModItems {
     public static Item STAND_DISC_THE_WORLD;
     public static Item MAX_STAND_DISC_THE_WORLD;
     public static Item STAND_DISC_JUSTICE;
+    public static Item MAX_STAND_DISC_MAGICIANS_RED;
+    public static Item STAND_DISC_MAGICIANS_RED;
     public static Item MAX_STAND_DISC_JUSTICE;
     public static Item STAND_DISC;
     public static Item LOCACACA_PIT;

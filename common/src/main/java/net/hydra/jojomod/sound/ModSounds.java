@@ -318,6 +318,10 @@ public class ModSounds {
     public static final ResourceLocation OVA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_SUMMON);
     public static SoundEvent OVA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(OVA_SUMMON_ID);
 
+    public static final String SUMMON_MAGICIAN = "summon_magician";
+    public static final ResourceLocation SUMMON_MAGICIAN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_MAGICIAN);
+    public static SoundEvent SUMMON_MAGICIAN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_MAGICIAN_ID);
+
     public static final String FINAL_KICK = "final_kick";
     public static final ResourceLocation FINAL_KICK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FINAL_KICK);
     public static SoundEvent FINAL_KICK_EVENT = SoundEvent.createVariableRangeEvent(FINAL_KICK_ID);

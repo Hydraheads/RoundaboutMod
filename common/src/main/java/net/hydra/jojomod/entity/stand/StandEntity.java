@@ -298,7 +298,7 @@ public abstract class StandEntity extends Mob{
     }
 
     public Component getSkinName(byte skinId){
-        return null;
+        return Component.empty();
     }
 
     public Component getPosName(byte posID){
