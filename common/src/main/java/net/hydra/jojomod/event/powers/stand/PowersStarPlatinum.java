@@ -1,7 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
@@ -43,17 +42,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.animal.Rabbit;
-import net.minecraft.world.entity.animal.WaterAnimal;
-import net.minecraft.world.entity.animal.camel.Camel;
-import net.minecraft.world.entity.animal.sniffer.Sniffer;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
-import net.minecraft.world.entity.monster.hoglin.HoglinBase;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -74,7 +68,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
-import static net.hydra.jojomod.event.index.PacketDataIndex.INT_UPDATE_MOVE;
 
 public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public PowersStarPlatinum(LivingEntity self) {
@@ -157,7 +150,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void rollSkin(){
         StandUser user = getUserData(this.self);
         if (this.self instanceof Zombie){
-            user.roundabout$setStandSkin(StarPlatinumEntity.PART_3_MANGA_SKIN);
+            user.roundabout$setStandSkin(StarPlatinumEntity.MANGA_SKIN);
         } else if (this.self instanceof Creeper){
             user.roundabout$setStandSkin(StarPlatinumEntity.GREEN_SKIN);
         } else if (this.self instanceof WanderingTrader){
@@ -171,6 +164,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             user.roundabout$setStandSkin(StarPlatinumEntity.PART_4_SKIN);
         } else if (this.self instanceof IronGolem){
             user.roundabout$setStandSkin(StarPlatinumEntity.PART_6_SKIN);
+        } else if (this.self instanceof EnderMan || this.self instanceof EnderDragon){
+            user.roundabout$setStandSkin(StarPlatinumEntity.MANGA_PURPLE_SKIN);
         }
     }
     @Override
@@ -897,7 +892,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(StarPlatinumEntity.PART_3_MANGA_SKIN);
+                $$1.add(StarPlatinumEntity.MANGA_SKIN);
             } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.OVA_SKIN);
             } if (Level > 3 || bypass){
@@ -908,6 +903,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 $$1.add(StarPlatinumEntity.PART_4_SKIN);
             } if (Level > 6 || bypass){
                 $$1.add(StarPlatinumEntity.PART_6_SKIN);
+                $$1.add(StarPlatinumEntity.MANGA_PURPLE_SKIN);
+                $$1.add(StarPlatinumEntity.FIRST_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(StarPlatinumEntity.ATOMIC_SKIN);
             }

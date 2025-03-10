@@ -6,9 +6,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -26,12 +24,14 @@ public class StarPlatinumEntity extends StandEntity {
 
     public static final byte
             PART_3_SKIN = 1,
-            PART_3_MANGA_SKIN = 2,
+            MANGA_PURPLE_SKIN = 2,
             OVA_SKIN = 3,
             GREEN_SKIN = 4,
             BASEBALL_SKIN = 5,
             PART_4_SKIN = 6,
+            MANGA_SKIN = 7,
             PART_6_SKIN = 8,
+            FIRST_SKIN = 9,
             ATOMIC_SKIN = 10;
 
     @Override
@@ -41,8 +41,12 @@ public class StarPlatinumEntity extends StandEntity {
     public static Component getSkinNameT(byte skinId){
         if (skinId == PART_3_SKIN){
             return Component.translatable(  "skins.roundabout.star_platinum.base");
-        } else if (skinId == PART_3_MANGA_SKIN){
+        } else if (skinId == MANGA_SKIN){
             return Component.translatable(  "skins.roundabout.star_platinum.manga");
+        } else if (skinId == MANGA_PURPLE_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.manga_purple");
+        } else if (skinId == FIRST_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.first_summon");
         } else if (skinId == OVA_SKIN){
             return Component.translatable(  "skins.roundabout.star_platinum.ova");
         } else if (skinId == GREEN_SKIN){
