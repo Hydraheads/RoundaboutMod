@@ -112,6 +112,10 @@ public class PowersMagiciansRed extends PunchingStand{
     }
 
     @Override
+    public boolean canLightFurnace(){
+        return true;
+    }
+    @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_3) {
             return this.snap();

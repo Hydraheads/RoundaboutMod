@@ -80,6 +80,8 @@ public class StandIcons {
             "textures/gui/icons/the_world/air_tanks.png");
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fire_clear.png");
+    public static final ResourceLocation FURNACE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/magician_furnace.png");
     public static final ResourceLocation LIGHT_FIRE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/light_fire.png");
     public static final ResourceLocation PROJECTILE_BURN = new ResourceLocation(Roundabout.MOD_ID,

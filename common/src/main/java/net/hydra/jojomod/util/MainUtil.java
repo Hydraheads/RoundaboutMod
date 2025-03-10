@@ -4,10 +4,7 @@ package net.hydra.jojomod.util;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IPlayerEntityServer;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -38,6 +35,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -60,6 +58,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.inventory.FurnaceMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -67,6 +66,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
@@ -1251,9 +1251,18 @@ public class MainUtil {
                     SE.setYRot(player.getYHeadRot() % 360);
                 }
             }
-        } else if (context == PacketDataIndex.STAND_MOVE_UPDATE) {
+        } else if (context == PacketDataIndex.SINGLE_BYTE_SMELT) {
             if (player != null) {
-                ((StandUser) player).roundabout$getStandPowers().updateMove();
+                Roundabout.LOGGER.info("Sigma ");
+
+                 if (player.containerMenu instanceof FurnaceMenu fm) {
+                     Roundabout.LOGGER.info("Sigma Sigma");
+                    Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
+                    if (ct instanceof FurnaceBlockEntity fbe){
+
+                    //Roundabout.LOGGER.info("Sigma Sigma Boy");
+                    }
+                 }
             }
         }
     }

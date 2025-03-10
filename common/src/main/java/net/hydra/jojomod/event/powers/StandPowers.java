@@ -191,6 +191,9 @@ public class StandPowers {
     public boolean getIsTsCharging(){
         return false;
     }
+    public boolean canLightFurnace(){
+        return false;
+    }
 
 
     public int getDisplayPowerInventoryScale(){
