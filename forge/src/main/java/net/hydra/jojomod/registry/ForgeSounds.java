@@ -177,6 +177,8 @@ public class ForgeSounds {
             register(ModSounds.OVA_SUMMON, ModSounds.OVA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> SUMMON_MAGICIAN_EVENT =
             register(ModSounds.SUMMON_MAGICIAN, ModSounds.SUMMON_MAGICIAN_ID);
+    public static final RegistryObject<SoundEvent> SNAP_EVENT =
+            register(ModSounds.SNAP, ModSounds.SNAP_ID);
     public static final RegistryObject<SoundEvent> OVA_SUMMON_THE_WORLD_EVENT =
             register(ModSounds.OVA_SUMMON_THE_WORLD, ModSounds.OVA_SUMMON_THE_WORLD_ID);
     public static final RegistryObject<SoundEvent> LEVELUP_EVENT =

@@ -11,6 +11,12 @@
       "roundabout:summon_magician"
     ]
   },
+  "snap": {
+    "subtitle": "sounds.roundabout.snap",
+    "sounds": [
+      "roundabout:snap"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [
