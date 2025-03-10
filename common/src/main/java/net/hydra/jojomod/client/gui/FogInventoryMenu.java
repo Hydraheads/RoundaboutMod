@@ -42,25 +42,19 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
     public final boolean active;
     private final Player owner;
 
-    public FogInventoryMenu(Inventory $$0, boolean $$1, final Player $$2) {
+    public FogInventoryMenu(Inventory inventory, boolean isActive, final Player player) {
         super(null, CONTAINER_ID);
-        this.active = $$1;
-        this.owner = $$2;
-        this.addSlot(new ResultSlot($$0.player, this.craftSlots, this.resultSlots, 0, 154, 28));
+        this.active = isActive;
+        this.owner = player;
+        this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 154, 28));
 
-        for (int $$3 = 0; $$3 < 2; $$3++) {
-            for (int $$4 = 0; $$4 < 2; $$4++) {
-                this.addSlot(new Slot(this.craftSlots, $$4 + $$3 * 2, 98 + $$4 * 18, 18 + $$3 * 18));
-            }
-        }
-
-        for (int $$5 = 0; $$5 < 4; $$5++) {
-            final EquipmentSlot $$6 = SLOT_IDS[$$5];
-            this.addSlot(new Slot($$0, 39 - $$5, 8, 8 + $$5 * 18) {
+        for (int slotIndex = 0; slotIndex < 4; slotIndex++) {
+            final EquipmentSlot slot = SLOT_IDS[slotIndex];
+            this.addSlot(new Slot(inventory, 39 - slotIndex, 8, 8 + slotIndex * 18) {
                 @Override
-                public void setByPlayer(ItemStack $$0) {
-                    FogInventoryMenu.onEquipItem($$2, $$6, $$0, this.getItem());
-                    super.setByPlayer($$0);
+                public void setByPlayer(ItemStack stack) {
+                    FogInventoryMenu.onEquipItem(player, slot, stack, this.getItem());
+                    super.setByPlayer(stack);
                 }
 
                 @Override
@@ -69,38 +63,33 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
                 }
 
                 @Override
-                public boolean mayPlace(ItemStack $$0) {
-                    return $$6 == Mob.getEquipmentSlotForItem($$0);
+                public boolean mayPlace(ItemStack stack) {
+                    return slot == Mob.getEquipmentSlotForItem(stack);
                 }
 
                 @Override
-                public boolean mayPickup(Player $$0) {
-                    ItemStack $$1 = this.getItem();
-                    return !$$1.isEmpty() && !$$0.isCreative() && EnchantmentHelper.hasBindingCurse($$1) ? false : super.mayPickup($$0);
+                public boolean mayPickup(Player p) {
+                    ItemStack stack = this.getItem();
+                    return !stack.isEmpty() && !p.isCreative() && EnchantmentHelper.hasBindingCurse(stack) ? false : super.mayPickup(p);
                 }
 
                 @Override
                 public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                    return Pair.of(FogInventoryMenu.BLOCK_ATLAS, FogInventoryMenu.TEXTURE_EMPTY_SLOTS[$$6.getIndex()]);
+                    return Pair.of(FogInventoryMenu.BLOCK_ATLAS, FogInventoryMenu.TEXTURE_EMPTY_SLOTS[slot.getIndex()]);
                 }
             });
         }
 
-        for (int $$7 = 0; $$7 < 3; $$7++) {
-            for (int $$8 = 0; $$8 < 9; $$8++) {
-                this.addSlot(new Slot($$0, $$8 + ($$7 + 1) * 9, 8 + $$8 * 18, 84 + $$7 * 18));
-            }
+        // hotbar slots (9x1)
+        for (int x = 0; x < 9; x++) {
+            this.addSlot(new Slot(inventory, x, 8 + x * 18, 142));
         }
 
-        for (int $$9 = 0; $$9 < 9; $$9++) {
-            this.addSlot(new Slot($$0, $$9, 8 + $$9 * 18, 142));
-        }
-
-        this.addSlot(new Slot($$0, 40, 77, 62) {
+        this.addSlot(new Slot(inventory, 40, 77, 62) {
             @Override
-            public void setByPlayer(ItemStack $$0) {
-                FogInventoryMenu.onEquipItem($$2, EquipmentSlot.OFFHAND, $$0, this.getItem());
-                super.setByPlayer($$0);
+            public void setByPlayer(ItemStack stack) {
+                FogInventoryMenu.onEquipItem(player, EquipmentSlot.OFFHAND, stack, this.getItem());
+                super.setByPlayer(stack);
             }
 
             @Override
@@ -110,10 +99,10 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
         });
     }
 
-    static void onEquipItem(Player $$0, EquipmentSlot $$1, ItemStack $$2, ItemStack $$3) {
-        Equipable $$4 = Equipable.get($$2);
-        if ($$4 != null) {
-            $$0.onEquipItem($$1, $$3, $$2);
+    static void onEquipItem(Player p, EquipmentSlot slot, ItemStack newStack, ItemStack oldStack) {
+        Equipable toEquip = Equipable.get(newStack);
+        if (toEquip != null) {
+            p.onEquipItem(slot, oldStack, newStack);
         }
     }
 
@@ -156,65 +145,66 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player $$0, int $$1) {
-        ItemStack $$2 = ItemStack.EMPTY;
-        Slot $$3 = this.slots.get($$1);
-        if ($$3.hasItem()) {
-            ItemStack $$4 = $$3.getItem();
-            $$2 = $$4.copy();
-            EquipmentSlot $$5 = Mob.getEquipmentSlotForItem($$2);
-            if ($$1 == 0) {
-                if (!this.moveItemStackTo($$4, 9, 45, true)) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
+        ItemStack stack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(slotIndex);
+        if (slot.hasItem()) {
+            ItemStack slotStack = slot.getItem();
+            stack = slotStack.copy();
+            EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem(stack);
+
+            if (slotIndex == 0) {
+                if (!this.moveItemStackTo(slotStack, 9, 45, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                $$3.onQuickCraft($$4, $$2);
-            } else if ($$1 >= 1 && $$1 < 5) {
-                if (!this.moveItemStackTo($$4, 9, 45, false)) {
+                slot.onQuickCraft(slotStack, stack);
+            } else if (slotIndex >= 1 && slotIndex < 5) {
+                if (!this.moveItemStackTo(slotStack, 9, 45, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$1 >= 5 && $$1 < 9) {
-                if (!this.moveItemStackTo($$4, 9, 45, false)) {
+            } else if (slotIndex >= 5 && slotIndex < 9) {
+                if (!this.moveItemStackTo(slotStack, 9, 45, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$5.getType() == EquipmentSlot.Type.ARMOR && !this.slots.get(8 - $$5.getIndex()).hasItem()) {
-                int $$6 = 8 - $$5.getIndex();
-                if (!this.moveItemStackTo($$4, $$6, $$6 + 1, false)) {
+            } else if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR && !this.slots.get(8 - equipmentSlot.getIndex()).hasItem()) {
+                int $$6 = 8 - equipmentSlot.getIndex();
+                if (!this.moveItemStackTo(slotStack, $$6, $$6 + 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$5 == EquipmentSlot.OFFHAND && !this.slots.get(45).hasItem()) {
-                if (!this.moveItemStackTo($$4, 45, 46, false)) {
+            } else if (equipmentSlot == EquipmentSlot.OFFHAND && !this.slots.get(45).hasItem()) {
+                if (!this.moveItemStackTo(slotStack, 45, 46, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$1 >= 9 && $$1 < 36) {
-                if (!this.moveItemStackTo($$4, 36, 45, false)) {
+            } else if (slotIndex >= 9 && slotIndex < 36) {
+                if (!this.moveItemStackTo(slotStack, 36, 45, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$1 >= 36 && $$1 < 45) {
-                if (!this.moveItemStackTo($$4, 9, 36, false)) {
+            } else if (slotIndex >= 36 && slotIndex < 45) {
+                if (!this.moveItemStackTo(slotStack, 9, 36, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo($$4, 9, 45, false)) {
+            } else if (!this.moveItemStackTo(slotStack, 9, 45, false)) {
                 return ItemStack.EMPTY;
             }
 
-            if ($$4.isEmpty()) {
-                $$3.setByPlayer(ItemStack.EMPTY);
+            if (slotStack.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                $$3.setChanged();
+                slot.setChanged();
             }
 
-            if ($$4.getCount() == $$2.getCount()) {
+            if (slotStack.getCount() == stack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            $$3.onTake($$0, $$4);
-            if ($$1 == 0) {
-                $$0.drop($$4, false);
+            slot.onTake(player, slotStack);
+            if (slotIndex == 0) {
+                player.drop(slotStack, false);
             }
         }
 
-        return $$2;
+        return stack;
     }
 
     @Override

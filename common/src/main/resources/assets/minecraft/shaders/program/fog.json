@@ -9,6 +9,7 @@
   "attributes": [ "Position", "TexCoord" ],
   "samplers": [
     { "name": "DiffuseSampler" },
+    { "name": "TranslucencySampler" },
     { "name": "MainDepthSampler" }
   ],
   "uniforms": [

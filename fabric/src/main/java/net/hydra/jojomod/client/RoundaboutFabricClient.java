@@ -7,8 +7,6 @@ import net.fabricmc.fabric.mixin.object.builder.client.ModelPredicateProviderReg
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.shader.TSCoreShader;
-import net.hydra.jojomod.client.shader.TSPostShader;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.particles.FabricParticlesClient;
@@ -38,8 +36,5 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         Player pl = Minecraft.getInstance().player;
-
-        TSCoreShader.bootstrapShaders();
-        TSPostShader.bootstrapShaders();
     }
 }

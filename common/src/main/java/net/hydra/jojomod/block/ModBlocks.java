@@ -1,5 +1,11 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.Roundabout;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -224,4 +230,26 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
 
+    public static void registerDynamicFogBlocks()
+    {
+        // TODO: dynamically generate blockstates and then it's ready for use
+        for (Block b : BuiltInRegistries.BLOCK)
+        {
+            ResourceLocation i = BuiltInRegistries.BLOCK.getKey(b);
+            // fix for not registering our own blocks as fog blocks, would result in a deadlock (or an error tbh)
+            if (i.getNamespace().equals("roundabout") || BuiltInRegistries.BLOCK.containsKey(new ResourceLocation("roundabout", "fog_" + i.getPath())))
+                continue;
+
+            //Roundabout.LOGGER.info("Registering block \"roundabout:fog_{}\"",i.getPath());
+
+            if (b.defaultBlockState().getProperties().isEmpty()) {
+                Registry.register(BuiltInRegistries.BLOCK,
+                        new ResourceLocation(Roundabout.MOD_ID, "fog_" + i.getPath()),
+                        getFogBlock());
+            } else {
+                //Roundabout.LOGGER.warn("Skipping block {} as it has unsupported properties", i);
+                continue;
+            }
+        }
+    }
 }
