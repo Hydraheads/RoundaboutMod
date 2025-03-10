@@ -130,6 +130,13 @@ public class FabricEntities {
                         EntityType.Builder.of(JusticeEntity::new, MobCategory.MISC).
                                 sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(12).build(Roundabout.MOD_ID+":justice")
                 );
+        public static final EntityType<MagiciansRedEntity> MAGICIANS_RED =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "magicians_red"),
+                        EntityType.Builder.of(MagiciansRedEntity::new, MobCategory.MISC).
+                                sized(0.75F, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":magicians_red")
+                );
         public static final EntityType<JusticePirateEntity> JUSTICE_PIRATE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -201,6 +208,7 @@ public class FabricEntities {
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
                 ModEntities.STAR_PLATINUM_BASEBALL = STAR_PLATINUM_BASEBALL;
                 ModEntities.JUSTICE = JUSTICE;
+                ModEntities.MAGICIANS_RED = MAGICIANS_RED;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -242,6 +250,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(MAGICIANS_RED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());

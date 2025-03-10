@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
+import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
 import net.hydra.jojomod.event.powers.visagedata.DIOVisage;
 import net.hydra.jojomod.event.powers.visagedata.JotaroVisage;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
@@ -34,6 +35,10 @@ public class FabricItems {
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
     public static Item STAND_DISC_THE_WORLD = registerItem("the_world_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
+    public static Item MAX_STAND_DISC_MAGICIANS_RED = registerItem("max_magicians_red_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null)));
+    public static Item STAND_DISC_MAGICIANS_RED = registerItem("magicians_red_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null)));
     public static Item MAX_STAND_DISC_THE_WORLD = registerItem("max_the_world_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
     public static Item STAND_DISC_JUSTICE = registerItem("justice_disc",
@@ -233,6 +238,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_THE_WORLD);
                         entries.accept(STAND_DISC_JUSTICE);
                         entries.accept(MAX_STAND_DISC_JUSTICE);
+                        entries.accept(STAND_DISC_MAGICIANS_RED);
+                        entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
 
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -297,6 +304,9 @@ public class FabricItems {
         ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
         ((MaxStandDiscItem)MAX_STAND_DISC_THE_WORLD).baseDisc = ((StandDiscItem)STAND_DISC_THE_WORLD);
         ModItems.MAX_STAND_DISC_THE_WORLD = MAX_STAND_DISC_THE_WORLD;
+        ModItems.STAND_DISC_MAGICIANS_RED = STAND_DISC_MAGICIANS_RED;
+        ((MaxStandDiscItem)MAX_STAND_DISC_MAGICIANS_RED).baseDisc = ((StandDiscItem)STAND_DISC_MAGICIANS_RED);
+        ModItems.MAX_STAND_DISC_MAGICIANS_RED = MAX_STAND_DISC_MAGICIANS_RED;
         ModItems.STAND_DISC_JUSTICE = STAND_DISC_JUSTICE;
         ((MaxStandDiscItem)MAX_STAND_DISC_JUSTICE).baseDisc = ((StandDiscItem)STAND_DISC_JUSTICE);
         ModItems.MAX_STAND_DISC_JUSTICE = MAX_STAND_DISC_JUSTICE;
