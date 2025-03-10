@@ -24,12 +24,22 @@ public class PowersMagiciansRed extends PunchingStand{
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NO_CD);
+        if (this.isGuarding()){
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.NO_CD);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
+            }
+            setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.NO_CD);
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.NO_CD);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+            }
         }
-        setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
         setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
     }

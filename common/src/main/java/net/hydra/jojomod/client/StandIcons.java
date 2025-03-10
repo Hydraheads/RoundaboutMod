@@ -78,6 +78,14 @@ public class StandIcons {
             "textures/gui/icons/the_world/final_kick.png");
     public static final ResourceLocation THE_WORLD_AIR_TANKS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/air_tanks.png");
+    public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/fire_clear.png");
+    public static final ResourceLocation LIGHT_FIRE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/light_fire.png");
+    public static final ResourceLocation PROJECTILE_BURN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/projectile_burn.png");
+    public static final ResourceLocation RED_BIND = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/red_bind.png");
 
     public static final ResourceLocation LOCKED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/locked_2.png");
