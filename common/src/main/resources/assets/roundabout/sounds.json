@@ -5,6 +5,12 @@
       "roundabout:summon_stand"
     ]
   },
+  "summon_magician": {
+    "subtitle": "sounds.roundabout.summon_magician",
+    "sounds": [
+      "roundabout:summon_magician"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [
