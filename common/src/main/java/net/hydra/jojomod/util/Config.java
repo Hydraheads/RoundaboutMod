@@ -112,6 +112,10 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer theWorldAttacksOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer thrownBlocks;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer corpseDamageOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer corpseDamageOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer standGuardMultiplier;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -124,10 +128,6 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer maxKnivesInOneHit;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer matchDamage;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer corpseDamageOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer corpseDamageOnPlayers;
         @BooleanOption(group = "inherit", value = true)
         public Boolean standUserMobsTakePlayerDamageMultipliers;
     }
@@ -168,6 +168,12 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer objectThrow;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer mobThrow;
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        public Integer justiceFogClone;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer fogChain;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer magicianSnapFireAway;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDisc;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
@@ -180,10 +186,6 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer timeStopActionBonusTicks;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer timeStopTimeUsedMultiplier;
-        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
-        public Integer justiceFogClone;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer fogChain;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
     }

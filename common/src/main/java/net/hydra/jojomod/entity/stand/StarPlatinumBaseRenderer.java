@@ -2,7 +2,6 @@ package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,13 +12,15 @@ import org.jetbrains.annotations.Nullable;
 public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRenderer<StarPlatinumEntity>  {
 
     public static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum.png");
-    public static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_purple.png");
+    public static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_manga.png");
+    public static final ResourceLocation PART_3_MANGA_PURPLE_SKIN= new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_purple.png");
     public static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_ova.png");
     public static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_green.png");
     public static final ResourceLocation BASEBALL_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_baseball.png");
     public static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_part_4.png");
     public static final ResourceLocation PART_6_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_part_6.png");
     public static final ResourceLocation ATOMIC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_atomic.png");
+    public static final ResourceLocation MANGA_FIRST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_first_summon.png");
     public StarPlatinumBaseRenderer(EntityRendererProvider.Context context, StandModel<StarPlatinumEntity> entityModel, float f) {
         super(context, entityModel,f);
         this.addLayer(new StarPlatinumEyeLayer<>(this));
@@ -30,8 +31,10 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
         byte BT = entity.getSkin();
         if (BT == StarPlatinumEntity.PART_3_SKIN){
             return PART_3_SKIN;
-        } else if (BT == StarPlatinumEntity.PART_3_MANGA_SKIN){
+        } else if (BT == StarPlatinumEntity.MANGA_SKIN){
             return PART_3_MANGA_SKIN;
+        } else if (BT == StarPlatinumEntity.MANGA_PURPLE_SKIN){
+            return PART_3_MANGA_PURPLE_SKIN;
         } else if (BT == StarPlatinumEntity.OVA_SKIN){
             return OVA_SKIN;
         } else if (BT == StarPlatinumEntity.GREEN_SKIN){
@@ -44,6 +47,8 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
             return PART_6_SKIN;
         } else if (BT == StarPlatinumEntity.ATOMIC_SKIN){
             return ATOMIC_SKIN;
+        } else if (BT == StarPlatinumEntity.FIRST_SKIN){
+            return MANGA_FIRST_SKIN;
         }
         return PART_3_SKIN;
     }
