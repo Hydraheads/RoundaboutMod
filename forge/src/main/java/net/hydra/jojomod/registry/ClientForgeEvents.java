@@ -1,7 +1,6 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.shader.TSPostShader;
 import net.hydra.jojomod.entity.FogCloneRenderer;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
@@ -60,7 +59,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_LAYER, JusticeModel::getTexturedModelData);
-        event.registerLayerDefinition(ModEntityRendererClient.MAGICIANS_RED_LAYER, MagiciansRedModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.MAGICIANS_RED_LAYER, JusticePirateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_PIRATE_LAYER, JusticePirateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
@@ -70,8 +69,6 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.JOTARO_LAYER, JotaroModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerNPCModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
-
-        TSPostShader.bootstrapShaders();
     }
     @SubscribeEvent
     public static void registerParticleStuff(RegisterParticleProvidersEvent event) {

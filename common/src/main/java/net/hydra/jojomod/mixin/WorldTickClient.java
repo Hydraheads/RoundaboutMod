@@ -6,7 +6,6 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.shader.FogDataHolder;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.SetBlockInstance;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -488,13 +487,6 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                         .lerp(roundabout$fogSky, ((((roundabout$skyLerp + lerp) / roundabout$maxSkyLerp)) / 100) * 0.95);
 
                 cir.setReturnValue(interp);
-
-                FogDataHolder.shouldRenderFog = true;
-                FogDataHolder.fogColor.set((float) interp.x, (float) interp.y, (float) interp.z);
-
-                FogDataHolder.fogDensity = (roundabout$skyLerp / roundabout$maxSkyLerp);
-                FogDataHolder.fogNear = Mth.clamp(0.05f + (roundabout$skyLerp / roundabout$maxSkyLerp) * 0.5f, 0.05f, Float.MAX_VALUE);
-                FogDataHolder.fogFar = Mth.clamp(500.0f - (roundabout$skyLerp / roundabout$maxSkyLerp) * 5.0f, 12.0f, Float.MAX_VALUE);
             }
         }
     }

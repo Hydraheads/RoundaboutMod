@@ -1,15 +1,11 @@
 package net.hydra.jojomod.mixin;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.client.shader.DepthRenderTarget;
-import net.hydra.jojomod.client.shader.callback.ShaderEvents;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
-import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
@@ -26,7 +22,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
@@ -74,29 +69,6 @@ public abstract class ZLevelRenderer {
                     }
                 }
             }
-        }
-    }
-
-    @Inject(
-            method = "renderLevel",
-            /* opcode for GETFIELD */
-            slice = @Slice(from = @At(value = "FIELD:LAST", opcode = 0xb4, target = "Lnet/minecraft/client/renderer/LevelRenderer;transparencyChain:Lnet/minecraft/client/renderer/PostChain;")),
-            at = {
-                    @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/PostChain;process(F)V"),
-                    @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;depthMask(Z)V", ordinal = 1, shift = At.Shift.AFTER, remap = false)
-            }
-    )
-    private void hookPostLevelRender(PoseStack matrices, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci)
-    {
-        Minecraft client = Minecraft.getInstance();
-
-        DepthRenderTarget.getFrom(Minecraft.getInstance().getMainRenderTarget()).freezeDepthBuffer();
-
-        /* fix for fabulous rendertargets */
-        if (client.options.graphicsMode().get() == GraphicsStatus.FABULOUS)
-        {
-            ShaderEvents.invokeOnLevelRendered(matrices, partialTick, finishNanoTime, renderBlockOutline, camera, renderer, lightTexture, projectionMatrix);
-            this.renderBuffers.bufferSource().endBatch(RenderType.waterMask());
         }
     }
 }

@@ -48,13 +48,6 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
         this.owner = player;
         this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 154, 28));
 
-        // 2x2 crafting slot grid
-        for (int x = 0; x < 2; x++) {
-            for (int y = 0; y < 2; y++) {
-                this.addSlot(new Slot(this.craftSlots, y + x * 2, 98 + y * 18, 18 + x * 18));
-            }
-        }
-
         for (int slotIndex = 0; slotIndex < 4; slotIndex++) {
             final EquipmentSlot slot = SLOT_IDS[slotIndex];
             this.addSlot(new Slot(inventory, 39 - slotIndex, 8, 8 + slotIndex * 18) {
@@ -85,14 +78,6 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
                     return Pair.of(FogInventoryMenu.BLOCK_ATLAS, FogInventoryMenu.TEXTURE_EMPTY_SLOTS[slot.getIndex()]);
                 }
             });
-        }
-
-        // 3x9 grid of slots
-        // do not ask me what the magic numbers are for
-        for (int x = 0; x < 3; x++) {
-            for (int y = 0; y < 9; y++) {
-                this.addSlot(new Slot(inventory, y + (x + 1) * 9, 8 + y * 18, 84 + x * 18));
-            }
         }
 
         // hotbar slots (9x1)
@@ -160,65 +145,66 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player $$0, int $$1) {
-        ItemStack $$2 = ItemStack.EMPTY;
-        Slot $$3 = this.slots.get($$1);
-        if ($$3.hasItem()) {
-            ItemStack $$4 = $$3.getItem();
-            $$2 = $$4.copy();
-            EquipmentSlot $$5 = Mob.getEquipmentSlotForItem($$2);
-            if ($$1 == 0) {
-                if (!this.moveItemStackTo($$4, 9, 45, true)) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
+        ItemStack stack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(slotIndex);
+        if (slot.hasItem()) {
+            ItemStack slotStack = slot.getItem();
+            stack = slotStack.copy();
+            EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem(stack);
+
+            if (slotIndex == 0) {
+                if (!this.moveItemStackTo(slotStack, 9, 45, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                $$3.onQuickCraft($$4, $$2);
-            } else if ($$1 >= 1 && $$1 < 5) {
-                if (!this.moveItemStackTo($$4, 9, 45, false)) {
+                slot.onQuickCraft(slotStack, stack);
+            } else if (slotIndex >= 1 && slotIndex < 5) {
+                if (!this.moveItemStackTo(slotStack, 9, 45, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$1 >= 5 && $$1 < 9) {
-                if (!this.moveItemStackTo($$4, 9, 45, false)) {
+            } else if (slotIndex >= 5 && slotIndex < 9) {
+                if (!this.moveItemStackTo(slotStack, 9, 45, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$5.getType() == EquipmentSlot.Type.ARMOR && !this.slots.get(8 - $$5.getIndex()).hasItem()) {
-                int $$6 = 8 - $$5.getIndex();
-                if (!this.moveItemStackTo($$4, $$6, $$6 + 1, false)) {
+            } else if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR && !this.slots.get(8 - equipmentSlot.getIndex()).hasItem()) {
+                int $$6 = 8 - equipmentSlot.getIndex();
+                if (!this.moveItemStackTo(slotStack, $$6, $$6 + 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$5 == EquipmentSlot.OFFHAND && !this.slots.get(45).hasItem()) {
-                if (!this.moveItemStackTo($$4, 45, 46, false)) {
+            } else if (equipmentSlot == EquipmentSlot.OFFHAND && !this.slots.get(45).hasItem()) {
+                if (!this.moveItemStackTo(slotStack, 45, 46, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$1 >= 9 && $$1 < 36) {
-                if (!this.moveItemStackTo($$4, 36, 45, false)) {
+            } else if (slotIndex >= 9 && slotIndex < 36) {
+                if (!this.moveItemStackTo(slotStack, 36, 45, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if ($$1 >= 36 && $$1 < 45) {
-                if (!this.moveItemStackTo($$4, 9, 36, false)) {
+            } else if (slotIndex >= 36 && slotIndex < 45) {
+                if (!this.moveItemStackTo(slotStack, 9, 36, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo($$4, 9, 45, false)) {
+            } else if (!this.moveItemStackTo(slotStack, 9, 45, false)) {
                 return ItemStack.EMPTY;
             }
 
-            if ($$4.isEmpty()) {
-                $$3.setByPlayer(ItemStack.EMPTY);
+            if (slotStack.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                $$3.setChanged();
+                slot.setChanged();
             }
 
-            if ($$4.getCount() == $$2.getCount()) {
+            if (slotStack.getCount() == stack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            $$3.onTake($$0, $$4);
-            if ($$1 == 0) {
-                $$0.drop($$4, false);
+            slot.onTake(player, slotStack);
+            if (slotIndex == 0) {
+                player.drop(slotStack, false);
             }
         }
 
-        return $$2;
+        return stack;
     }
 
     @Override

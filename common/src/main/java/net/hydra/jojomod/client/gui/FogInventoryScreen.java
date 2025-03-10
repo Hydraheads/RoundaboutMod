@@ -674,9 +674,9 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     }
 
     @Override
-    protected void renderBg(GuiGraphics $$0, float $$1, int $$2, int $$3) {
+    protected void renderBg(GuiGraphics drawContext, float partialTick, int mouseX, int mouseY) {
 
-        $$0.blit(
+        drawContext.blit(
                 new ResourceLocation("textures/gui/container/creative_inventory/tab_" + selectedTab.getBackgroundSuffix()),
                 this.leftPos,
                 this.topPos,
@@ -685,12 +685,12 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                 this.imageWidth,
                 this.imageHeight
         );
-        this.searchBox.render($$0, $$2, $$3, $$1);
+        this.searchBox.render(drawContext, mouseX, mouseY, partialTick);
         int $$5 = this.leftPos + 175;
         int $$6 = this.topPos + 18;
         int $$7 = $$6 + 112;
         if (selectedTab.canScroll()) {
-            $$0.blit(CREATIVE_TABS_LOCATION, $$5, $$6 + (int)((float)($$7 - $$6 - 17) * this.scrollOffs), 232 + (this.canScroll() ? 0 : 12), 0, 12, 15);
+            drawContext.blit(CREATIVE_TABS_LOCATION, $$5, $$6 + (int)((float)($$7 - $$6 - 17) * this.scrollOffs), 232 + (this.canScroll() ? 0 : 12), 0, 12, 15);
         }
 
     }
