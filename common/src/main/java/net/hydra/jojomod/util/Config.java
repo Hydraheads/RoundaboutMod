@@ -140,8 +140,6 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer standPunch;
         @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
         public Integer finalStandPunchInString;
-       // @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
-        //public Integer justiceFogChain;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer finalPunchAndKickMinimum;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
@@ -178,6 +176,10 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer fogChain;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer magicianSnapFireAway;
+        @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
+        public Integer magicianLash;
+        @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
+        public Integer magicianLastLashInString;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDisc;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

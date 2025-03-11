@@ -8,10 +8,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.ShapeShifts;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -30,6 +27,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Objects;
 
 import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
@@ -182,7 +180,81 @@ public class PowersMagiciansRed extends PunchingStand{
         }
     }
     @Override
+    public void standPunch(){
+
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                this.attackTimeDuring = -10;
+
+                Entity targetEntity = getTargetEntity(this.self,-1);
+
+                List<Entity> listE = getTargetEntityList(this.self,-1);
+                int id = -1;
+                if (targetEntity != null){
+                    id = targetEntity.getId();
+                }
+                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(id, this.activePowerPhase);
+                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(targetEntity != null && listE.get(i).is(targetEntity))) {
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+
+            Entity targetEntity = getTargetEntity(this.self,-1);
+
+            List<Entity> listE = getTargetEntityList(this.self,-1);
+            punchImpact(targetEntity);
+            if (!listE.isEmpty()){
+                for (int i = 0; i< listE.size(); i++){
+                    if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                            this.setActivePowerPhase((byte) (this.getActivePowerPhase()+50));
+                            punchImpact(listE.get(i));
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    @Override
+    public boolean setPowerAttack(){
+        if (this.activePowerPhase >= 3){
+            this.activePowerPhase = 1;
+        } else {
+            this.activePowerPhase++;
+            if (this.activePowerPhase == 3) {
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianLastLashInString;
+            } else {
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianLash;
+            }
+
+        }
+
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.ATTACK);
+        this.setAttackTime(0);
+
+        animateStand(this.activePowerPhase);
+        poseStand(OffsetIndex.ATTACK);
+        return true;
+    }
+    boolean splash = false;
+    @Override
     public void punchImpact(Entity entity){
+        if (this.getActivePowerPhase() >= 50){
+            this.setActivePowerPhase((byte) (this.getActivePowerPhase()-50));
+            splash = true;
+        } else {
+            splash = false;
+        }
         this.setAttackTimeDuring(-10);
         if (entity != null) {
             float pow;
@@ -195,7 +267,11 @@ public class PowersMagiciansRed extends PunchingStand{
                 lasthit = true;
             } else {
                 pow = getPunchStrength(entity);
-                knockbackStrength = 0.2F;
+                knockbackStrength = 0.14F;
+            }
+
+            if (splash){
+                pow/=4;
             }
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE){
@@ -220,32 +296,34 @@ public class PowersMagiciansRed extends PunchingStand{
             }
         }
 
-        SoundEvent SE;
-        float pitch = 1F;
-        if (this.activePowerPhase >= this.activePowerPhaseMax) {
+        if (!splash) {
+            SoundEvent SE;
+            float pitch = 1F;
+            if (this.activePowerPhase >= this.activePowerPhaseMax) {
+
+                if (!this.self.level().isClientSide()) {
+                    Byte LastHitSound = this.getLastHitSound();
+                    this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
+                            true);
+                }
+
+                if (entity != null) {
+                    SE = ModSounds.FIRE_STRIKE_LAST_EVENT;
+                } else {
+                    SE = ModSounds.FIRE_WHOOSH_EVENT;
+                }
+            } else {
+                if (entity != null) {
+                    SE = ModSounds.FIRE_STRIKE_EVENT;
+                    pitch = 0.99F + 0.02F * activePowerPhase;
+                } else {
+                    SE = ModSounds.FIRE_WHOOSH_EVENT;
+                }
+            }
 
             if (!this.self.level().isClientSide()) {
-                Byte LastHitSound = this.getLastHitSound();
-                this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
-                        true);
+                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
             }
-
-            if (entity != null) {
-                SE = ModSounds.FIRE_STRIKE_LAST_EVENT;
-            } else {
-                SE = ModSounds.FIRE_WHOOSH_EVENT;
-            }
-        } else {
-            if (entity != null) {
-                SE = ModSounds.FIRE_STRIKE_EVENT;
-                pitch = 0.99F + 0.02F * activePowerPhase;
-            } else {
-                SE = ModSounds.FIRE_WHOOSH_EVENT;
-            }
-        }
-
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
