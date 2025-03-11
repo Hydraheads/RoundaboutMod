@@ -1253,15 +1253,12 @@ public class MainUtil {
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_SMELT) {
             if (player != null) {
-                Roundabout.LOGGER.info("Sigma ");
 
                  if (player.containerMenu instanceof FurnaceMenu fm) {
-                     Roundabout.LOGGER.info("Sigma Sigma");
                     Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
                     if (ct instanceof FurnaceBlockEntity fbe){
 
                         ((IAbstractFurnaceBlockEntity)fbe).roundabout$setFurnaceHeatingTime(1000);
-                    //Roundabout.LOGGER.info("Sigma Sigma Boy");
                     }
                  }
             }

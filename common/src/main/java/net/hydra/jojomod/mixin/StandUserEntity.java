@@ -1186,7 +1186,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$getStandPowers().getActivePowerPhaseMax();
     }
     public float roundabout$getStandReach(){
-        return this.roundabout$getStandPowers().getStandReach();
+        return this.roundabout$getStandPowers().getReach();
     }
     public boolean roundabout$isGuarding(){
         return this.roundabout$getStandPowers().isGuarding();

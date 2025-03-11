@@ -129,4 +129,10 @@ public class PowersMagiciansRed extends PunchingStand{
         this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway);
         return true;
     }
+
+    @Override
+    public float getReach(){
+        return 7;
+    }
+
 }

@@ -167,7 +167,7 @@ public class PunchingStand extends DashPreset {
             }
         } else {
             // This is less accurate raycasting as it is server sided but it is important for particle effects
-            float distMax = this.getDistanceOut(this.self, this.standReach, false);
+            float distMax = this.getDistanceOut(this.self, this.getReach(), false);
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {

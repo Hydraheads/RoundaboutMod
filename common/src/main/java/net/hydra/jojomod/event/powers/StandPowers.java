@@ -131,9 +131,7 @@ public class StandPowers {
     public int getAttackTimeMax(){
         return this.attackTimeMax;
     }
-    public float getStandReach(){
-        return this.standReach;
-    }
+
     public void setMaxAttackTime(int attackTimeMax){
         this.attackTimeMax = attackTimeMax;
     }
@@ -1195,7 +1193,10 @@ public class StandPowers {
      * Use the instance to time the effect appropriately*/
     public void tickStandRejection(MobEffectInstance effect){
     }
-    public float standReach = 5;
+
+    public float getReach(){
+        return 5;
+    }
 
     public int getTargetEntityId(){
         Entity targetEntity = getTargetEntity(this.self, -1);
@@ -1698,7 +1699,7 @@ public class StandPowers {
     public List<Entity> getTargetEntityList(LivingEntity User, float distMax){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.standReach, false);
+            distMax = this.getDistanceOut(User, this.getReach(), false);
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
@@ -1732,7 +1733,7 @@ public class StandPowers {
     public Entity getTargetEntity(LivingEntity User, float distMax){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.standReach, false);
+            distMax = this.getDistanceOut(User, this.getReach(), false);
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
@@ -1830,7 +1831,7 @@ public class StandPowers {
     public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.standReach, false);
+            distMax = this.getDistanceOut(User, this.getReach(), false);
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
@@ -1859,7 +1860,7 @@ public class StandPowers {
     public float getDistanceOut(LivingEntity entity, float range, boolean offset){
         float distanceFront = this.getRayDistance(entity, range);
         if (offset) {
-            Entity targetEntity = this.rayCastEntity(entity,this.standReach);
+            Entity targetEntity = this.rayCastEntity(entity,this.getReach());
             if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
                 distanceFront = targetEntity.distanceTo(entity);
             }
@@ -1872,7 +1873,7 @@ public class StandPowers {
     public float getDistanceOutAccurate(Entity entity, float range, boolean offset){
         float distanceFront = this.getRayDistance(entity, range);
         if (offset) {
-            Entity targetEntity = this.getTargetEntity(this.self,this.standReach);
+            Entity targetEntity = this.getTargetEntity(this.self,this.getReach());
             if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
                 distanceFront = targetEntity.distanceTo(entity);
             }
@@ -2102,7 +2103,7 @@ public class StandPowers {
                 if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID()){
                     if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
                         float distanceTo = value.distanceTo(User);
-                        float range = this.standReach;
+                        float range = this.getReach();
                         if (value instanceof StandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
                             range /= 2;
                         }
