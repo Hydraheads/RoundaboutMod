@@ -116,6 +116,9 @@ public class FabricSounds {
 
         addSound(ModSounds.EXPLOSIVE_PUNCH_ID, ModSounds.EXPLOSIVE_PUNCH_EVENT);
         addSound(ModSounds.SNAP_ID, ModSounds.SNAP_EVENT);
+        addSound(ModSounds.FIRE_WHOOSH_ID, ModSounds.FIRE_WHOOSH_EVENT);
+        addSound(ModSounds.FIRE_STRIKE_ID, ModSounds.FIRE_STRIKE_EVENT);
+        addSound(ModSounds.FIRE_STRIKE_LAST_ID, ModSounds.FIRE_STRIKE_LAST_EVENT);
         addSound(ModSounds.EXPLOSIVE_BAT_ID, ModSounds.EXPLOSIVE_BAT_EVENT);
         addSound(ModSounds.OVA_SUMMON_ID, ModSounds.OVA_SUMMON_EVENT);
         addSound(ModSounds.SUMMON_MAGICIAN_ID, ModSounds.SUMMON_MAGICIAN_EVENT);

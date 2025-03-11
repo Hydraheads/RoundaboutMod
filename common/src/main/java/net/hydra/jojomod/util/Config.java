@@ -116,6 +116,10 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer corpseDamageOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer corpseDamageOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer magicianAttackOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer magicianAttackOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer standGuardMultiplier;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

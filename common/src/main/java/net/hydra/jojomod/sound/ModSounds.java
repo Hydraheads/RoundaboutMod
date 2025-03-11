@@ -314,6 +314,15 @@ public class ModSounds {
     public static final String SNAP = "snap";
     public static final ResourceLocation SNAP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAP);
     public static SoundEvent SNAP_EVENT = SoundEvent.createVariableRangeEvent(SNAP_ID);
+    public static final String FIRE_WHOOSH = "fire_whoosh";
+    public static final ResourceLocation FIRE_WHOOSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRE_WHOOSH);
+    public static SoundEvent FIRE_WHOOSH_EVENT = SoundEvent.createVariableRangeEvent(FIRE_WHOOSH_ID);
+    public static final String FIRE_STRIKE = "fire_strike";
+    public static final ResourceLocation FIRE_STRIKE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRE_STRIKE);
+    public static SoundEvent FIRE_STRIKE_EVENT = SoundEvent.createVariableRangeEvent(FIRE_STRIKE_ID);
+    public static final String FIRE_STRIKE_LAST = "fire_strike_last";
+    public static final ResourceLocation FIRE_STRIKE_LAST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRE_STRIKE_LAST);
+    public static SoundEvent FIRE_STRIKE_LAST_EVENT = SoundEvent.createVariableRangeEvent(FIRE_STRIKE_LAST_ID);
     public static final String EXPLOSIVE_BAT = "explosive_bat";
     public static final ResourceLocation EXPLOSIVE_BAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BAT);
     public static SoundEvent EXPLOSIVE_BAT_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BAT_ID);
