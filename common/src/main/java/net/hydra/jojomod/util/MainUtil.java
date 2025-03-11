@@ -1260,6 +1260,7 @@ public class MainUtil {
                     Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
                     if (ct instanceof FurnaceBlockEntity fbe){
 
+                        ((IAbstractFurnaceBlockEntity)fbe).roundabout$setFurnaceHeatingTime(1000);
                     //Roundabout.LOGGER.info("Sigma Sigma Boy");
                     }
                  }

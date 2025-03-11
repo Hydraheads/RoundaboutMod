@@ -13,6 +13,7 @@
     "TimeStopWorld",
     "WorldTickServer",
     "ZAbstractArrow",
+    "ZAbstractFurnaceBlockEntity",
     "ZAbstractFurnaceMenu",
     "ZAbstractSchoolingFish",
     "ZAnimal",
