@@ -131,6 +131,10 @@ public class ForgeBlocks {
             ModBlocks::getFogCoatingBlock);
     public static final RegistryObject<Block> STEREO = BLOCKS.register("stereo",
             () -> ModBlocks.STEREO_PROPERTIES);
+    public static final RegistryObject<Block> STAND_FIRE = BLOCKS.register("stand_fire",
+            () -> ModBlocks.STAND_FIRE_PROPERTIES);
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",
             () -> BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stereo")));
+    public static final RegistryObject<BlockEntityType<StandFireBlockEntity>> STAND_FIRE_BLOCK_ENTITY = BLOCK_ENTITIES.register("stand_fire",
+            () -> BlockEntityType.Builder.of(StandFireBlockEntity::new, STEREO.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stand_fire")));
 }

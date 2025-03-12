@@ -49,6 +49,7 @@ public class FabricBlocks {
     public static final Block GODDESS_STATUE_BLOCK = registerBlockUnstackable("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
     , 1);
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
+    public static final Block STAND_FIRE = registerBlock("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
 
     public static final Block FOG_DIRT = registerBlockItemless("fog_dirt",ModBlocks.getFogBlock());
     public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating",ModBlocks.getFogCoatingBlock());
@@ -96,6 +97,8 @@ public class FabricBlocks {
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
+    public static final BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY =
+            registerBE("stand_fire",BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE));
 
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
@@ -136,7 +139,9 @@ public class FabricBlocks {
         ModBlocks.WIRE_TRAP = WIRE_TRAP;
         ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
         ModBlocks.STEREO = STEREO;
+        ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
+        ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_CLAY = FOG_CLAY;
