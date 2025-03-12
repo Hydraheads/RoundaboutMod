@@ -682,6 +682,7 @@ public class PowersJustice extends DashPreset {
             } if (Level > 3 || bypass){
                 $$1.add(JusticeEntity.WITHER);
                 $$1.add(JusticeEntity.TWILIGHT);
+                $$1.add(JusticeEntity.JOJONIUM);
             } if (Level > 4 || bypass){
                 $$1.add(JusticeEntity.TAROT);
                 $$1.add(JusticeEntity.PIRATE);

@@ -84,13 +84,14 @@ public class JusticeEntity extends StandEntity {
             OVA_SKIN = 4,
             BOGGED = 5,
             STRAY_SKIN = 6,
-            TAROT = 8,
             FLAMED = 7,
+            TAROT = 8,
             WITHER = 9,
             TWILIGHT = 10,
             PIRATE = 11,
             BLUE_FLAMED = 12,
-            DARK_MIRAGE = 13;
+            DARK_MIRAGE = 13,
+            JOJONIUM = 14;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -123,6 +124,8 @@ public class JusticeEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.justice.pirate");
         } else if (skinId == DARK_MIRAGE){
             return Component.translatable(  "skins.roundabout.justice.dark_mirage");
+        } else if (skinId == JOJONIUM){
+            return Component.translatable(  "skins.roundabout.justice.jojonium");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
