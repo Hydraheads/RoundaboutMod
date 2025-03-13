@@ -57,7 +57,7 @@ public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEnti
         if (lp != null && (!((StandUser)lp).roundabout$getStandDisc().isEmpty() ||
                 lp.isSpectator() || !ConfigManager.getClientConfig().onlyStandUsersCanSeeStands)) {
             int i = OverlayTexture.NO_OVERLAY;
-            itemRenderer.renderSingleBlock(ModBlocks.ORANGE_FIRE.defaultBlockState(), p_112235_, p_112236_, 15728880, i);
+            itemRenderer.renderSingleBlock(ModBlocks.ORANGE_FIRE.withPropertiesOf(p_112233_.getBlockState()), p_112235_, p_112236_, 15728880, i);
             //graphics.bufferSource.endbatch
         }
     }

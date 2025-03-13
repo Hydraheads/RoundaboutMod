@@ -32,6 +32,10 @@ public class ZFireBlock implements IFireBlock {
         return 0;
     }
     @Shadow
+    private int getIgniteOdds(BlockState $$0) {
+        return 0;
+    }
+    @Shadow
     protected boolean canBurn(BlockState $$0) {
         return true;
     }
@@ -47,6 +51,10 @@ public class ZFireBlock implements IFireBlock {
     @Override
     public int roundabout$getBurnOdds(BlockState $$0){
         return getBurnOdds($$0);
+    }
+    @Override
+    public int roundabout$getIgniteOdds(BlockState $$0){
+        return getIgniteOdds($$0);
     }
     @Override
     public boolean roundabout$canBurn(BlockState $$0) {
