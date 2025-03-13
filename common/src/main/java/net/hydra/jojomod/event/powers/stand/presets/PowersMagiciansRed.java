@@ -1,6 +1,8 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -13,18 +15,26 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -33,6 +43,8 @@ import java.util.Objects;
 import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
 
 public class PowersMagiciansRed extends PunchingStand{
+
+    public int snapNumber;
     public PowersMagiciansRed(LivingEntity self) {
         super(self);
     }
@@ -44,7 +56,7 @@ public class PowersMagiciansRed extends PunchingStand{
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (this.isGuarding()){
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
             }
@@ -85,6 +97,51 @@ public class PowersMagiciansRed extends PunchingStand{
     }
 
     public boolean hold3 = false;
+    public boolean hold1 = false;
+
+    public BlockPos getGrabBlock(){
+
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
+        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+        if (blockHit.getType() == HitResult.Type.BLOCK){
+            return blockHit.getBlockPos().relative(blockHit.getDirection());
+        }
+        return null;
+    }
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (!hold1) {
+                hold1 = true;
+                if (!isGuarding()) {
+                    if (isHoldingSneak()) {
+                        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                            BlockPos HR = getGrabBlock();
+                            if (HR != null) {
+                                this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            hold1 = false;
+        }
+    }
+    public BlockPos grabBlock = null;
+    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+        if (move == PowerIndex.POWER_1_SNEAK) {
+            this.grabBlock = blockPos;
+            return tryPower(move, forced);
+        }
+        return false;
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+    }
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (!isPiloting()) {
@@ -128,6 +185,8 @@ public class PowersMagiciansRed extends PunchingStand{
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_3) {
             return this.snap();
+        } else if (move == PowerIndex.POWER_1_SNEAK) {
+            return this.setFire();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -136,9 +195,18 @@ public class PowersMagiciansRed extends PunchingStand{
         this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                 this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway);
+        this.snapNumber++;
         return true;
     }
 
+    public boolean setFire(){
+        Roundabout.LOGGER.info("1");
+        if (grabBlock != null && tryPlaceBlock(grabBlock)){
+            Roundabout.LOGGER.info("2");
+            this.getSelf().level().setBlockAndUpdate(grabBlock, ModBlocks.STAND_FIRE.defaultBlockState());
+        }
+        return true;
+    }
     @Override
     public float getReach(){
         return 7;

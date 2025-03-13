@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -25,6 +26,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +35,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -46,8 +49,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import org.jetbrains.annotations.Nullable;
@@ -2167,6 +2173,7 @@ public class StandPowers {
         return false;
     }
 
+
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public boolean tryPower(int move, boolean forced){
         if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH) && this.attackTimeDuring  > -1){
@@ -2533,7 +2540,26 @@ public class StandPowers {
     public boolean dealWithProjectile(Entity ent){
         return false;
     }
+    public boolean getIsGamemodeApproriateForGrief(){
+        if ((!(this.getSelf() instanceof Player) || (((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
+                && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
+                && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+            return true;
+        }
+        return false;
+    }
 
+    public boolean tryPlaceBlock(BlockPos pos){
+        BlockState state = this.getSelf().level().getBlockState(pos);
+
+        if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !((this.getSelf() instanceof Player &&
+                (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
+                        this.getSelf()).gameMode.getGameModeForPlayer()))) ||
+                !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos)))){
+                    return true;
+        }
+        return false;
+    }
     public boolean heldDownSwitch = false;
     public void switchRowsKey(boolean keyIsDown, Options options){
         if (!heldDownSwitch){

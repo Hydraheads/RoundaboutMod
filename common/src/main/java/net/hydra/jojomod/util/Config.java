@@ -176,6 +176,8 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer fogChain;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer magicianSnapFireAway;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer magicianIgniteFire;
         @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
         public Integer magicianLash;
         @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
