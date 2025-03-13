@@ -70,6 +70,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> STAND_FIRE_BLOCK_ITEM = addToTab(ITEMS.register("stand_fire",
+            () -> new BlockItem(ForgeBlocks.STAND_FIRE.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToTab(ITEMS.register("locacaca_cactus",
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
