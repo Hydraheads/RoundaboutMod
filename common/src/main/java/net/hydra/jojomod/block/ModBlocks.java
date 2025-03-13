@@ -230,6 +230,7 @@ public class ModBlocks {
     }
 
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
+
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
     public static StandFireBlock STAND_FIRE_PROPERTIES = new StandFireBlock(
