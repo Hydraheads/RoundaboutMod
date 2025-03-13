@@ -51,14 +51,14 @@ public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEnti
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
-    public void render(StandFireBlockEntity p_112233_, float p_112234_, PoseStack p_112235_, MultiBufferSource p_112236_, int p_112237_, int p_112238_) {
+    public void render(StandFireBlockEntity fire, float partialTick, PoseStack matrices, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        Minecraft client = Minecraft.getInstance();
+        LocalPlayer lp = client.player;
 
-        LocalPlayer lp = Minecraft.getInstance().player;
         if (lp != null && (!((StandUser)lp).roundabout$getStandDisc().isEmpty() ||
-                lp.isSpectator() || !ConfigManager.getClientConfig().onlyStandUsersCanSeeStands)) {
-            int i = OverlayTexture.NO_OVERLAY;
-            itemRenderer.renderSingleBlock(ModBlocks.ORANGE_FIRE.withPropertiesOf(p_112233_.getBlockState()), p_112235_, p_112236_, 15728880, i);
-            //graphics.bufferSource.endbatch
+            lp.isSpectator() || !ConfigManager.getClientConfig().onlyStandUsersCanSeeStands))
+        {
+            itemRenderer.renderBatched(ModBlocks.ORANGE_FIRE.withPropertiesOf(fire.getBlockState()), fire.getBlockPos(), client.level, matrices, buffer.getBuffer(RenderType.cutout()), true, lp.getRandom());
         }
     }
 
