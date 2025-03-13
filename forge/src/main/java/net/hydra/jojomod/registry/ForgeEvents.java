@@ -131,6 +131,7 @@ public class ForgeEvents {
         ModBlocks.FOG_NETHER_BRICKS_COATING = ForgeBlocks.FOG_NETHER_BRICKS_COATING.get();
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
+        ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
 
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();

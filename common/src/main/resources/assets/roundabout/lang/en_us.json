@@ -123,6 +123,8 @@
   "block.roundabout.fog_block": "Foggy Block",
   "block.roundabout.fog_block.title": "Foggy",
   "block.roundabout.fog_block_coating.title": "Coating",
+  "block.roundabout.stand_fire": "Stand Fire",
+  "block.roundabout.colored_fire_orange": "Orange Colored Fire",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",

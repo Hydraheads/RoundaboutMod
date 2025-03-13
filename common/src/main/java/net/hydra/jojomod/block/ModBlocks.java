@@ -39,6 +39,7 @@ public class ModBlocks {
     public static Block GODDESS_STATUE_BLOCK;
     public static Block STEREO;
     public static Block STAND_FIRE;
+    public static Block ORANGE_FIRE;
     public static Block FOG_DIRT;
     public static Block FOG_DIRT_COATING;
     public static Block FOG_CLAY;
@@ -232,15 +233,13 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
     public static StandFireBlock STAND_FIRE_PROPERTIES = new StandFireBlock(
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.NONE)
-                    .noOcclusion()
-                    .pushReaction(PushReaction.DESTROY)
-                    .strength(0F, 0F)
-                    .sound(SoundType.EMPTY)
-                    .noCollission()
-                    .replaceable()
-        );
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
+                return 15;
+            }).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
+    public static FireBlock ORANGE_FIRE_PROPERTIES = new FireBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
+                return 15;
+            }).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
 
     public static void registerDynamicFogBlocks()
     {

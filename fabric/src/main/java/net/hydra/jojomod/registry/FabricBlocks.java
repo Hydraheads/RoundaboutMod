@@ -50,6 +50,7 @@ public class FabricBlocks {
     , 1);
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlock("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
+    public static final Block ORANGE_FIRE = registerBlock("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
 
     public static final Block FOG_DIRT = registerBlockItemless("fog_dirt",ModBlocks.getFogBlock());
     public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating",ModBlocks.getFogCoatingBlock());
@@ -140,6 +141,7 @@ public class FabricBlocks {
         ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
         ModBlocks.STEREO = STEREO;
         ModBlocks.STAND_FIRE = STAND_FIRE;
+        ModBlocks.ORANGE_FIRE = ORANGE_FIRE;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;

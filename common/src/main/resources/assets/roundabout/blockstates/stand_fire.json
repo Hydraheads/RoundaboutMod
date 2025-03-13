@@ -3,5 +3,6 @@
     "": {
       "model": "minecraft:block/air"
     }
-  }
+  },
+  "render_type": "cutout"
 }
