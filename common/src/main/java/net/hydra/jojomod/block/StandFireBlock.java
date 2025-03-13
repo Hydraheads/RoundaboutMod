@@ -71,7 +71,7 @@ public class StandFireBlock extends BaseEntityBlock {
     public static final BooleanProperty SOUTH;
     public static final BooleanProperty WEST;
     public static final BooleanProperty UP;
-    private static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION;
+    public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION;
     private static final VoxelShape UP_AABB;
     private static final VoxelShape WEST_AABB;
     private static final VoxelShape EAST_AABB;
@@ -126,7 +126,7 @@ public class StandFireBlock extends BaseEntityBlock {
         return this.getStateForPlacement($$0.getLevel(), $$0.getClickedPos());
     }
 
-    protected BlockState getStateForPlacement(BlockGetter $$0, BlockPos $$1) {
+    public BlockState getStateForPlacement(BlockGetter $$0, BlockPos $$1) {
         BlockPos $$2 = $$1.below();
         BlockState $$3 = $$0.getBlockState($$2);
         if (!this.canBurn($$3) && !$$3.isFaceSturdy($$0, $$2, Direction.UP)) {
@@ -253,62 +253,6 @@ public class StandFireBlock extends BaseEntityBlock {
                     $$3.nextFloat() * 0.7F + 0.3F,
                     false
             );
-        }
-
-        BlockPos $$4 = $$2.below();
-        BlockState $$5 = $$1.getBlockState($$4);
-        if (!this.canBurn($$5) && !$$5.isFaceSturdy($$1, $$4, Direction.UP)) {
-            if (this.canBurn($$1.getBlockState($$2.west()))) {
-                for (int $$10 = 0; $$10 < 2; $$10++) {
-                    double $$11 = (double)$$2.getX() + $$3.nextDouble() * 0.1F;
-                    double $$12 = (double)$$2.getY() + $$3.nextDouble();
-                    double $$13 = (double)$$2.getZ() + $$3.nextDouble();
-                    $$1.addParticle(ParticleTypes.LARGE_SMOKE, $$11, $$12, $$13, 0.0, 0.0, 0.0);
-                }
-            }
-
-            if (this.canBurn($$1.getBlockState($$2.east()))) {
-                for (int $$14 = 0; $$14 < 2; $$14++) {
-                    double $$15 = (double)($$2.getX() + 1) - $$3.nextDouble() * 0.1F;
-                    double $$16 = (double)$$2.getY() + $$3.nextDouble();
-                    double $$17 = (double)$$2.getZ() + $$3.nextDouble();
-                    $$1.addParticle(ParticleTypes.LARGE_SMOKE, $$15, $$16, $$17, 0.0, 0.0, 0.0);
-                }
-            }
-
-            if (this.canBurn($$1.getBlockState($$2.north()))) {
-                for (int $$18 = 0; $$18 < 2; $$18++) {
-                    double $$19 = (double)$$2.getX() + $$3.nextDouble();
-                    double $$20 = (double)$$2.getY() + $$3.nextDouble();
-                    double $$21 = (double)$$2.getZ() + $$3.nextDouble() * 0.1F;
-                    $$1.addParticle(ParticleTypes.LARGE_SMOKE, $$19, $$20, $$21, 0.0, 0.0, 0.0);
-                }
-            }
-
-            if (this.canBurn($$1.getBlockState($$2.south()))) {
-                for (int $$22 = 0; $$22 < 2; $$22++) {
-                    double $$23 = (double)$$2.getX() + $$3.nextDouble();
-                    double $$24 = (double)$$2.getY() + $$3.nextDouble();
-                    double $$25 = (double)($$2.getZ() + 1) - $$3.nextDouble() * 0.1F;
-                    $$1.addParticle(ParticleTypes.LARGE_SMOKE, $$23, $$24, $$25, 0.0, 0.0, 0.0);
-                }
-            }
-
-            if (this.canBurn($$1.getBlockState($$2.above()))) {
-                for (int $$26 = 0; $$26 < 2; $$26++) {
-                    double $$27 = (double)$$2.getX() + $$3.nextDouble();
-                    double $$28 = (double)($$2.getY() + 1) - $$3.nextDouble() * 0.1F;
-                    double $$29 = (double)$$2.getZ() + $$3.nextDouble();
-                    $$1.addParticle(ParticleTypes.LARGE_SMOKE, $$27, $$28, $$29, 0.0, 0.0, 0.0);
-                }
-            }
-        } else {
-            for (int $$6 = 0; $$6 < 3; $$6++) {
-                double $$7 = (double)$$2.getX() + $$3.nextDouble();
-                double $$8 = (double)$$2.getY() + $$3.nextDouble() * 0.5 + 0.5;
-                double $$9 = (double)$$2.getZ() + $$3.nextDouble();
-                $$1.addParticle(ParticleTypes.LARGE_SMOKE, $$7, $$8, $$9, 0.0, 0.0, 0.0);
-            }
         }
     }
 

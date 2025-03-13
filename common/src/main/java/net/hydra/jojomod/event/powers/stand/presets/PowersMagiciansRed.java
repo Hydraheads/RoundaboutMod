@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand.presets;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -107,6 +108,7 @@ public class PowersMagiciansRed extends PunchingStand{
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         if (blockHit.getType() == HitResult.Type.BLOCK){
+            grabBlock2 = blockHit.getBlockPos();
             return blockHit.getBlockPos().relative(blockHit.getDirection());
         }
         return null;
@@ -123,6 +125,7 @@ public class PowersMagiciansRed extends PunchingStand{
                             if (HR != null) {
                                 this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
                                 ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
                             }
                         }
@@ -134,10 +137,13 @@ public class PowersMagiciansRed extends PunchingStand{
         }
     }
     public BlockPos grabBlock = null;
+    public BlockPos grabBlock2 = null;
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
         if (move == PowerIndex.POWER_1_SNEAK) {
             this.grabBlock = blockPos;
             return tryPower(move, forced);
+        } else if (move == PowerIndex.SPECIAL) {
+            this.grabBlock2 = blockPos;
         }
         return false;
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
@@ -203,7 +209,7 @@ public class PowersMagiciansRed extends PunchingStand{
         Roundabout.LOGGER.info("1");
         if (grabBlock != null && tryPlaceBlock(grabBlock)){
             Roundabout.LOGGER.info("2");
-            this.getSelf().level().setBlockAndUpdate(grabBlock, ModBlocks.STAND_FIRE.defaultBlockState());
+            this.getSelf().level().setBlockAndUpdate(grabBlock, ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),grabBlock));
         }
         return true;
     }

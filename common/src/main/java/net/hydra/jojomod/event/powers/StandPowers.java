@@ -2550,13 +2550,15 @@ public class StandPowers {
     }
 
     public boolean tryPlaceBlock(BlockPos pos){
-        BlockState state = this.getSelf().level().getBlockState(pos);
+        if (!this.self.level().isClientSide()) {
+            BlockState state = this.getSelf().level().getBlockState(pos);
 
-        if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !((this.getSelf() instanceof Player &&
-                (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
-                        this.getSelf()).gameMode.getGameModeForPlayer()))) ||
-                !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos)))){
-                    return true;
+            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !((this.getSelf() instanceof Player &&
+                    (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
+                            this.getSelf()).gameMode.getGameModeForPlayer()))) ||
+                    !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos)))) {
+                return true;
+            }
         }
         return false;
     }
