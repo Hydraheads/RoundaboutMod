@@ -887,13 +887,13 @@ public class StandPowers {
                 amt *= 2;
             }
 
-            if (isDrowning && !ClientNetworking.getAppropriateConfig().chargeSettings.canRechargeWhileDrowning)
+            if (isDrowning && !ClientNetworking.getAppropriateConfig().cooldownsInTicks.canRechargeWhileDrowning)
             { amt = 0; }
         }
 
         for (CooldownInstance ci : StandCooldowns){
             if (ci.time >= 0){
-                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().chargeSettings.canRechargeWhileDrowning);
+                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().cooldownsInTicks.canRechargeWhileDrowning);
 
                 if (!ci.isFrozen())
                 { ci.time-=amt; }

@@ -98,8 +98,6 @@ import net.hydra.jojomod.util.annotation.*;
         public Boolean barragesAreAlwaysInterruptable;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean canRechargeWhileDrowning;
     }
     public static class DamageMultipliers {
         @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
@@ -196,6 +194,8 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer timeStopTimeUsedMultiplier;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean canRechargeWhileDrowning;
     }
     public static class TimeStopSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
