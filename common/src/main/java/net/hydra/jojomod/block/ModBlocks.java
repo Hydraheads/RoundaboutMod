@@ -235,11 +235,11 @@ public class ModBlocks {
     public static StandFireBlock STAND_FIRE_PROPERTIES = new StandFireBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
-            }).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static FireBlock ORANGE_FIRE_PROPERTIES = new FireBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
-            }).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
 
     public static void registerDynamicFogBlocks()
     {
