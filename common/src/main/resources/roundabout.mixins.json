@@ -97,6 +97,7 @@
     "ZEntityRenderDispatcher",
     "ZEntityRenderer",
     "ZFogRenderer",
+    "ZGameRenderer",
     "ZHeldItemLowering",
     "ZHumanoidArmorLayer",
     "ZHumanoidMobRenderer",

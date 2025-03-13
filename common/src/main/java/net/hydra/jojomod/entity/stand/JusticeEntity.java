@@ -127,7 +127,7 @@ public class JusticeEntity extends StandEntity {
         } else if (skinId == JOJONIUM){
             return Component.translatable(  "skins.roundabout.justice.jojonium");
         }
-        return Component.translatable(  "skins.roundabout.the_world.base");
+        return Component.translatable(  "skins.roundabout.justice.base");
     }
     public final AnimationState idleAnimation = new AnimationState();
     public final AnimationState idleAnimation2 = new AnimationState();
