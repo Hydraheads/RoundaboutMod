@@ -50,11 +50,9 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
 
     public JojoNPC AC = null;
 
-    public void render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
-        Player pl = $$0.getPlayer();
+    public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
+        Player pl = entity.getPlayer();
         if (pl != null) {
-
-
             ItemStack visage = ((IPlayerEntity)pl).roundabout$getMaskSlot();
             roundabout$initializeVisageModel(visage,pl);
 
@@ -68,14 +66,14 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
             }
             if (AC != null) {
                 AC.host = pl;
-                assertOnPlayerLike(AC, pl, $$1, $$2, $$3, $$4, $$5,
-                        $$0);
+                assertOnPlayerLike(AC, pl, entityYaw, partialTick, matrices, bufferSource, packedLight,
+                        entity);
             }
         }
 
 
 
-        super.render($$0, $$1, $$2, $$3, $$4, $$5);
+        super.render(entity, entityYaw, partialTick, matrices, bufferSource, packedLight);
     }
 
 

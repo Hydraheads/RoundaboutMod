@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TSShader extends GLResource {
+public class RShader extends GLResource {
     /* Type can be:
         * 1: Vertex Shader
         * 2: Fragment Shader
      */
     // TODO: support tesselation and geometry shaders
-    public TSShader(ResourceProvider provider, ResourceLocation location, int type) throws Exception {
+    public RShader(ResourceProvider provider, ResourceLocation location, int type) throws Exception {
         super(createShader(provider, location, type));
     }
 

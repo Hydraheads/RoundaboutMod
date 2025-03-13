@@ -5,11 +5,11 @@ import net.hydra.jojomod.Roundabout;
 import org.lwjgl.opengl.GL20C;
 import org.lwjgl.opengl.GL32C;
 
-public class TSShaderManager {
-    public static int roundabout$program = 0;
+public class RShaderProgram {
+    private int program = 0;
 
-    public static int createProgram(TSShader vertex, TSShader fragment) throws Exception {
-        int program = GlStateManager.glCreateProgram();
+    public RShaderProgram(RShader vertex, RShader fragment) throws Exception {
+        this.program = GlStateManager.glCreateProgram();
 
         GlStateManager._glBindAttribLocation(program, 0, "Position");
         GlStateManager._glBindAttribLocation(program, 1, "UV0");
@@ -28,7 +28,7 @@ public class TSShaderManager {
         }
 
         Roundabout.LOGGER.info("Created program successfully!");
-
-        return program;
     }
+
+    public int getProgram() {return this.program;}
 }

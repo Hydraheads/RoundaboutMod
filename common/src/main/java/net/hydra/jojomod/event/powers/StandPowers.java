@@ -569,13 +569,22 @@ public class StandPowers {
                 int b = (int) Math.round(blit);
                 RenderSystem.enableBlend();
                 context.setColor(1f, 1f, 1f, 1f);
-                context.blit(StandIcons.COOLDOWN_ICON, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
+
+                ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
+
+                if (cd.isFrozen())
+                    COOLDOWN_TEX = StandIcons.FROZEN_COOLDOWN_ICON;
+
+                context.blit(COOLDOWN_TEX, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
                 int num = ((int)(Math.floor((double) cd.time /20)+1));
                 int offset = x+3;
                 if (num <=9){
                     offset = x+7;
                 }
-                context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
+
+                if (!cd.isFrozen())
+                    context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
+
                 RenderSystem.disableBlend();
             }
             context.setColor(1f, 1f, 1f, 0.9f);
@@ -860,9 +869,15 @@ public class StandPowers {
             }
         }
     }
+
     public void tickCooldowns(){
         int amt = 1;
+        boolean isDrowning = false;
+
+        // Changes how fast the cooldowns should recharge
         if (this.self instanceof Player) {
+            isDrowning = (this.self.getAirSupply() <= 0);
+
             int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
             if (idle > 300) {
                 amt *= 4;
@@ -871,14 +886,22 @@ public class StandPowers {
             } else if (idle > 40) {
                 amt *= 2;
             }
+
+            if (isDrowning && !ClientNetworking.getAppropriateConfig().chargeSettings.canRechargeWhileDrowning)
+            { amt = 0; }
         }
-        for (byte i = 0; i < StandCooldowns.size(); i++){
-            CooldownInstance ci = StandCooldowns.get(i);
+
+        for (CooldownInstance ci : StandCooldowns){
             if (ci.time >= 0){
-                ci.time-=amt;
+                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().chargeSettings.canRechargeWhileDrowning);
+
+                if (!ci.isFrozen())
+                { ci.time-=amt; }
+
                 if (ci.time < -1){
                     ci.time=-1;
                 }
+
                 if (this.self instanceof Player) {
                     if ((((Player)this.self).isCreative() &&
                             ClientNetworking.getAppropriateConfig().cooldownsInTicks.creativeModeRefreshesCooldowns) && ci.time > 2){
