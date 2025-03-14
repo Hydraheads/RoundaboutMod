@@ -45,6 +45,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.Squid;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.boss.EnderDragonPart;
@@ -379,7 +380,7 @@ public class MainUtil {
             }
     }
     public static boolean hasBlueBlood(Entity target){
-        if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish){
+        if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){
             return true;
         } else {
             return false;
