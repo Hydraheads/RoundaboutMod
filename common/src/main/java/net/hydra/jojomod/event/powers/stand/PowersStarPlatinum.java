@@ -291,7 +291,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
+        return this.isDazed(this.getSelf()) || (slot == 3 && this.isGuarding() && ((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
                 || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0) && slot != 1) || ((hasBlock() || hasEntity()) && slot != 1
        ))));
     }

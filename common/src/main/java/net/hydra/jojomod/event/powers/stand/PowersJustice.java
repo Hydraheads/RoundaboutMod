@@ -927,7 +927,7 @@ public class PowersJustice extends DashPreset {
             if (keyIsDown) {
                 if (!inputDash) {
                     if (isHoldingSneak()) {
-                        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                        if (!this.onCooldown(PowerIndex.SKILL_3) && this.getSelf().onGround()) {
 
                             if (canExecuteMoveWithLevel(getFogCloneLevel())) {
                                 if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
@@ -1264,6 +1264,8 @@ public class PowersJustice extends DashPreset {
             if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 return true;
             }
+        } else if (slot == 3 && this.isHoldingSneak() && !isPiloting() && !this.getSelf().onGround()){
+            return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
     }
