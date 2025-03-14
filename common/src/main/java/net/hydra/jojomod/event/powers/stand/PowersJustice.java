@@ -967,21 +967,26 @@ public class PowersJustice extends DashPreset {
                     if (!hold2) {
                         hold2 = true;
                         if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                            StandEntity piloting = getPilotingStand();
-                            if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
-                                Vec3 vec3d = piloting.getEyePosition(0);
-                                Vec3 vec3d2 = piloting.getViewVector(0);
-                                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                                BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, piloting));
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, blockHit.getBlockPos());
-                            } else {
-                                Vec3 vec3d = this.self.getEyePosition(0);
-                                Vec3 vec3d2 = this.self.getViewVector(0);
-                                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                                BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2,blockHit.getBlockPos());
+                            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+                            if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+                                int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
+                                this.setCooldown(PowerIndex.SKILL_2, cdr);
+                                StandEntity piloting = getPilotingStand();
+                                if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
+                                    Vec3 vec3d = piloting.getEyePosition(0);
+                                    Vec3 vec3d2 = piloting.getViewVector(0);
+                                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                                    BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, piloting));
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, blockHit.getBlockPos());
+                                } else {
+                                    Vec3 vec3d = this.self.getEyePosition(0);
+                                    Vec3 vec3d2 = this.self.getViewVector(0);
+                                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                                    BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, blockHit.getBlockPos());
+                                }
                             }
                         }
                     }
@@ -1315,13 +1320,14 @@ public class PowersJustice extends DashPreset {
                 if (success) {
                     addEXP(4);
                     int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
-                            PowerIndex.SKILL_2, cdr);
                     this.setCooldown(PowerIndex.SKILL_2, cdr);
                     this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                             this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);
+                    return true;
                 }
             }
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                    PowerIndex.SKILL_2, 10);
         }
         return true;
     }
