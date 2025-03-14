@@ -58,6 +58,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import net.minecraft.world.inventory.FurnaceMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -65,6 +66,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -1254,9 +1256,9 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_SMELT) {
             if (player != null) {
 
-                 if (player.containerMenu instanceof FurnaceMenu fm) {
+                 if (player.containerMenu instanceof AbstractFurnaceMenu fm) {
                     Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
-                    if (ct instanceof FurnaceBlockEntity fbe){
+                    if (ct instanceof AbstractFurnaceBlockEntity fbe){
 
                         ((IAbstractFurnaceBlockEntity)fbe).roundabout$setFurnaceHeatingTime(1000);
                     }
