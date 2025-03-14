@@ -2102,6 +2102,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (!this.level().isClientSide()) {
+            if (this.isInWaterRainOrBubble()){
+                if (roundabout$remainingFireTicks >= 0) {
+                    roundabout$remainingFireTicks = -1;
+                    roundabout$setOnStandFire(StandFireType.FIRELESS.id);
+                }
+            }
+
             if (roundabout$remainingFireTicks > 0) {
                 //Roundabout.LOGGER.info(""+roundabout$remainingFireTicks);
                 if (roundabout$remainingFireTicks % 20 == 0 && !this.isInLava()) {

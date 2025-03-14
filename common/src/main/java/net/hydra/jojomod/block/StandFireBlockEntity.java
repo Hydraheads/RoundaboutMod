@@ -48,6 +48,12 @@ public class StandFireBlockEntity extends BlockEntity{
     public void tick(BlockState $$0, Level $$1, BlockPos $$2, StandFireBlockEntity sf, RandomSource $$3) {
         if (!$$1.isClientSide()) {
             if ($$0.getBlock() instanceof StandFireBlock fb) {
+                BlockState $$4 = $$1.getBlockState($$2.below());
+                boolean $$5 = $$4.is($$1.dimensionType().infiniburn());
+                if (!$$5 && $$1.isRaining() && fb.isNearRain($$1, $$2)) {
+                    $$1.removeBlock($$2, false);
+                    return;
+                }
                 if (nextTarget == 0) {
                     rollNextTarget();
                 }
@@ -85,8 +91,6 @@ public class StandFireBlockEntity extends BlockEntity{
                             $$1.removeBlock($$2, false);
                         }
 
-                        BlockState $$4 = $$1.getBlockState($$2.below());
-                        boolean $$5 = $$4.is($$1.dimensionType().infiniburn());
                         int $$6 = (Integer) $$0.getValue(StandFireBlock.AGE);
                         if (!$$5 && $$1.isRaining() && fb.isNearRain($$1, $$2) && $$3.nextFloat() < 0.2F + (float) $$6 * 0.03F) {
                             $$1.removeBlock($$2, false);

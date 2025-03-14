@@ -75,7 +75,7 @@ public abstract class ZScreenEffectRenderer {
 
         Player $$2 = $$0.player;
         if ($$2 != null) {
-            roundabout$renderFire($$0,$$1);
+            roundabout$renderFire($$0,$$1,$$2);
             StandUser standComp = ((StandUser) $$2);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
@@ -104,7 +104,11 @@ public abstract class ZScreenEffectRenderer {
     }
 
     @Unique
-    private static void roundabout$renderFire(Minecraft mc, PoseStack pose) {
+    private static void roundabout$renderFire(Minecraft mc, PoseStack pose, Player pl) {
+        byte bt = ((StandUser)pl).roundabout$getOnStandFire();
+        if (bt > 0){
+
+        }
         /**
         BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
