@@ -1251,7 +1251,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public boolean inhale(){
         StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
+        if (Objects.nonNull(stand) && !((TimeStop)this.getSelf().level()).inTimeStopRange(this.self))
+        {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_3);
             this.animateStand((byte)15);
