@@ -295,7 +295,7 @@ public class StandFireBlock extends BaseEntityBlock {
                     user.roundabout$setRemainingStandFireTicks(user.roundabout$getRemainingFireTicks() + 1);
                     if (user.roundabout$getRemainingFireTicks() == 0) {
                         if ($$1.getBlockEntity($$2) instanceof StandFireBlockEntity $$5) {
-                            user.roundabout$setSecondsOnStandFire(8);
+                            user.roundabout$setSecondsOnStandFire(4);
                             user.roundabout$setOnStandFire($$5.fireColorType);
                         }
                     }

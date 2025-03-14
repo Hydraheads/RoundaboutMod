@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -1664,7 +1665,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public boolean roundabout$isOnStandFire() {
         boolean $$0 = this.level() != null && this.level().isClientSide;
-        return !this.fireImmune() && (roundabout$remainingFireTicks > 0 || $$0 && this.getSharedFlag(0));
+        return  (roundabout$remainingFireTicks > 0 || $$0 && roundabout$getOnStandFire() > 0);
     }
 
     /**Prevent you from hearing every hit in a rush*/
@@ -2100,24 +2101,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ((IEntityAndData) this).roundabout$setRoundaboutJamBreath(false);
             }
         }
-        if (roundabout$remainingFireTicks > 0) {
+        if (!this.level().isClientSide()) {
+            if (roundabout$remainingFireTicks > 0) {
+                //Roundabout.LOGGER.info(""+roundabout$remainingFireTicks);
                 if (roundabout$remainingFireTicks % 20 == 0 && !this.isInLava()) {
                     float fireDamage = 1;
-                    if (this.roundabout$getStandPowers().getReducedDamage((LivingEntity)(Object)this)){
-                        fireDamage = (float) (fireDamage*(ClientNetworking.getAppropriateConfig().
-                                                        damageMultipliers.standFireOnPlayers*0.01));
+                    if (this.roundabout$getStandPowers().getReducedDamage((LivingEntity) (Object) this)) {
+                        fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
+                                damageMultipliers.standFireOnPlayers * 0.01));
                     } else {
-                        fireDamage = (float) (fireDamage*(ClientNetworking.getAppropriateConfig().
-                                                        damageMultipliers.standFireOnMobs*0.01));
+                        fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
+                                damageMultipliers.standFireOnMobs * 0.01));
                     }
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
                 }
 
                 roundabout$setRemainingStandFireTicks(roundabout$remainingFireTicks - 1);
 
-        }
-        if (roundabout$remainingFireTicks <= 0 && roundabout$getOnStandFire() > 0) {
-            roundabout$setOnStandFire(StandFireType.FIRELESS.id);
+            }
+            if (roundabout$remainingFireTicks <= 0) {
+                if (roundabout$getOnStandFire() > 0) {
+                    roundabout$setOnStandFire(StandFireType.FIRELESS.id);
+                }
+                if (roundabout$remainingFireTicks ==0) {
+                    roundabout$remainingFireTicks = -1;
+                }
+            }
         }
     }
 
