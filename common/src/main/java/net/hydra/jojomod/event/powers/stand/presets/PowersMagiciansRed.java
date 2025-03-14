@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -216,7 +217,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 double random = (Math.random() * 0.8) - 0.4;
                 double random2 = (Math.random() * 0.8) - 0.4;
                 double random3 = (Math.random() * 0.8) - 0.4;
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.FLAME, this.self.getX(),
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.ORANGE_FLAME, this.self.getX(),
                         this.self.getY() + this.self.getEyeHeight()*0.7, this.self.getZ(),
                         0,
                         -1*(this.self.getX() - grabBlock.getX())+0.5 + random,

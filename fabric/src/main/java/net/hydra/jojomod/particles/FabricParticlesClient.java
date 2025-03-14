@@ -3,6 +3,7 @@ package net.hydra.jojomod.particles;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.particle.EndRodParticle;
 import net.minecraft.client.particle.ExplodeParticle;
+import net.minecraft.client.particle.FlameParticle;
 
 public class FabricParticlesClient {
     public static void registerClientParticles(){
@@ -14,6 +15,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIR_CRACKLE, AirCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MENACING, MenacingParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VACUUM, VacuumParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ORANGE_FLAME, FlameParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FOG_CHAIN, VacuumParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.WARDEN_CLOCK, WardenClockParticle.Provider::new);
     }

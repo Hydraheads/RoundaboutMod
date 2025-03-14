@@ -204,6 +204,7 @@ public class ForgeEvents {
         ModParticles.AIR_CRACKLE = ForgeParticles.AIR_CRACKLE.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
+        ModParticles.ORANGE_FLAME = ForgeParticles.ORANGE_FLAME.get();
         ModParticles.FOG_CHAIN = ForgeParticles.FOG_CHAIN.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
 

@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.particles.*;
 import net.minecraft.client.particle.ExplodeParticle;
+import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -87,6 +88,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MENACING.get(), MenacingParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VACUUM.get(), VacuumParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ORANGE_FLAME.get(), FlameParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.FOG_CHAIN.get(), FogChainParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
     }
