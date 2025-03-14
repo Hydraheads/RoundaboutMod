@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -34,6 +35,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEntity> {
 
@@ -51,6 +54,12 @@ public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEnti
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
+    private boolean isFacingDown(StandFireBlockEntity fire)
+    {
+        BlockState s = fire.getBlockState();
+        return !(s.getValue(StandFireBlock.UP) || s.getValue(StandFireBlock.NORTH) || s.getValue(StandFireBlock.EAST) || s.getValue(StandFireBlock.SOUTH) || s.getValue(StandFireBlock.WEST));
+    }
+
     public void render(StandFireBlockEntity fire, float partialTick, PoseStack matrices, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         Minecraft client = Minecraft.getInstance();
         LocalPlayer lp = client.player;
@@ -58,7 +67,18 @@ public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEnti
         if (lp != null && (!((StandUser)lp).roundabout$getStandDisc().isEmpty() ||
             lp.isSpectator() || !ConfigManager.getClientConfig().onlyStandUsersCanSeeStands))
         {
+            matrices.pushPose();
+
+            BlockState aboveState = client.level.getBlockState(fire.getBlockPos().above());
+
+            if (!aboveState.isAir() && !(aboveState.getBlock() instanceof StandFireBlock) && isFacingDown(fire))
+            {
+                matrices.mulPose(Axis.ZP.rotationDegrees(180));
+                matrices.translate(-1.f, -1.f, 0.f);
+            }
+
             itemRenderer.renderBatched(ModBlocks.ORANGE_FIRE.withPropertiesOf(fire.getBlockState()), fire.getBlockPos(), client.level, matrices, buffer.getBuffer(RenderType.cutout()), true, lp.getRandom());
+            matrices.popPose();
         }
     }
 

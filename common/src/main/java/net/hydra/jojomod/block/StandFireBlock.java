@@ -126,23 +126,24 @@ public class StandFireBlock extends BaseEntityBlock {
         return this.getStateForPlacement($$0.getLevel(), $$0.getClickedPos());
     }
 
-    public BlockState getStateForPlacement(BlockGetter $$0, BlockPos $$1) {
-        BlockPos $$2 = $$1.below();
-        BlockState $$3 = $$0.getBlockState($$2);
-        if (!this.canBurn($$3) && !$$3.isFaceSturdy($$0, $$2, Direction.UP)) {
-            BlockState $$4 = this.defaultBlockState();
-            Direction[] var6 = Direction.values();
-            int var7 = var6.length;
+    public BlockState getStateForPlacement(BlockGetter getter, BlockPos pos) {
+        BlockPos belowPos = pos.below();
+        BlockState belowState = getter.getBlockState(belowPos);
+        if (!this.canBurn(belowState) && !belowState.isFaceSturdy(getter, belowPos, Direction.UP)) {
+            BlockState finalizedState = this.defaultBlockState();
+            Direction[] directions = Direction.values();
 
-            for(int var8 = 0; var8 < var7; ++var8) {
-                Direction $$5 = var6[var8];
-                BooleanProperty $$6 = (BooleanProperty)PROPERTY_BY_DIRECTION.get($$5);
-                if ($$6 != null) {
-                    $$4 = (BlockState)$$4.setValue($$6, this.canBurn($$0.getBlockState($$1.relative($$5))));
+            for (Direction direction : directions) {
+                BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction);
+                if (property != null) {
+                    finalizedState = finalizedState.setValue(property, this.canBurn(getter.getBlockState(pos.relative(direction))));
                 }
             }
 
-            return $$4;
+            // fix for upside down fire
+            finalizedState = finalizedState.setValue(UP, false);
+
+            return finalizedState;
         } else {
             return this.defaultBlockState();
         }
