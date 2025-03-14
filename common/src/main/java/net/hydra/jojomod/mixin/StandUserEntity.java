@@ -2113,7 +2113,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
                 }
 
-                this.setRemainingFireTicks(roundabout$remainingFireTicks - 1);
+                roundabout$setRemainingStandFireTicks(roundabout$remainingFireTicks - 1);
 
         }
         if (roundabout$remainingFireTicks <= 0 && roundabout$getOnStandFire() > 0) {
