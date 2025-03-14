@@ -42,10 +42,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.Squid;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.boss.EnderDragonPart;
@@ -351,7 +348,7 @@ public class MainUtil {
 
         if (Mob instanceof LivingEntity){
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
-                    || Mob instanceof Villager
+                    || Mob instanceof Villager || Mob instanceof WaterAnimal
                     || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player
                     || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
