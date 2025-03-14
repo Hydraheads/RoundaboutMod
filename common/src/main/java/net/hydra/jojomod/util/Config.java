@@ -56,6 +56,8 @@ import net.hydra.jojomod.util.annotation.*;
     public Integer justiceMaxCorpses;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer justiceStandUserMobMinionCount;
+    @IntOption(group = "inherit", value = 15, min = 0, max = 365)
+    public Integer basePunchAngle;
     @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")

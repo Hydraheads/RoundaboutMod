@@ -306,16 +306,19 @@ public class PunchingStand extends DashPreset {
             if (isPacketPlayer()){
                 //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
-                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(), this.activePowerPhase);
+                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(getPunchAngle()), this.activePowerPhase);
             }
         } else {
             /*Caps how far out the punch goes*/
-            Entity targetEntity = getTargetEntity(this.self,-1);
+            Entity targetEntity = getTargetEntity(this.self,-1,getPunchAngle());
             punchImpact(targetEntity);
         }
 
     }
 
+    public float getPunchAngle(){
+        return ClientNetworking.getAppropriateConfig().basePunchAngle;
+    }
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -344,7 +347,7 @@ public class PunchingStand extends DashPreset {
 
         } else {
             int barTexture = 0;
-            Entity TE = standUser.roundabout$getTargetEntity(playerEntity, -1);
+            Entity TE = standUser.roundabout$getStandPowers().getTargetEntity(playerEntity, -1, getPunchAngle());
             float attackTimeMax = standUser.roundabout$getAttackTimeMax();
             if (attackTimeMax > 0) {
                 float attackTime = standUser.roundabout$getAttackTime();

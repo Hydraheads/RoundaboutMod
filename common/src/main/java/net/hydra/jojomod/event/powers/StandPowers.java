@@ -1238,6 +1238,16 @@ public class StandPowers {
         return id;
     }
 
+    public int getTargetEntityId(float angle){
+        Entity targetEntity = getTargetEntity(this.self, -1, angle);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
     public int getTargetEntityId2(float distance){
         Entity targetEntity = getTargetEntity(this.self, distance);
         int id;
@@ -1726,6 +1736,9 @@ public class StandPowers {
 
     public Entity storeEnt = null;
     public List<Entity> getTargetEntityList(LivingEntity User, float distMax){
+        return getTargetEntityList(User,distMax,25);
+    }
+    public List<Entity> getTargetEntityList(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
@@ -1743,7 +1756,7 @@ public class StandPowers {
             List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax);
         if (targetEntity == null) {
-            targetEntity = StandAttackHitboxNear(User,listE,25);
+            targetEntity = StandAttackHitboxNear(User,listE,angle);
         }
         if (targetEntity instanceof StandEntity SE){
 
@@ -1759,7 +1772,11 @@ public class StandPowers {
 
         return listE;
     }
+
     public Entity getTargetEntity(LivingEntity User, float distMax){
+        return getTargetEntity(User,distMax, 25);
+    }
+    public Entity getTargetEntity(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
@@ -1776,7 +1793,7 @@ public class StandPowers {
             float halfReach = (float) (distMax*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax),25);
+                    pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
         }
         if (targetEntity instanceof StandEntity SE){
 
@@ -1874,7 +1891,7 @@ public class StandPowers {
             float halfReach = (float) (distMax*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
+                    pointVec.z, halfReach, halfReach, halfReach), distMax, angle),angle);
         }
         if (targetEntity instanceof StandEntity SE){
 
@@ -2014,6 +2031,9 @@ public class StandPowers {
     }
 
     public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return StandGrabHitbox(User,entities,maxDistance,25);
+    }
+    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
@@ -2023,7 +2043,6 @@ public class StandPowers {
                         ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value))){
                     hitEntities.remove(value);
                 } else {
-                    int angle = 25;
                     if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
                         hitEntities.remove(value);
                     }
