@@ -109,6 +109,7 @@ public interface StandUser {
     boolean roundabout$getSummonCD();
     int roundabout$getSummonCD2();
     byte roundabout$getOnStandFire();
+    boolean roundabout$isOnStandFire();
     void roundabout$setOnStandFire(byte onStandFire);
     void roundabout$setSecondsOnStandFire(int $$0);
     void roundabout$setRemainingStandFireTicks(int $$0);

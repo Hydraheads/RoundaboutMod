@@ -1659,6 +1659,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+    @Unique
+    @Override
+    public boolean roundabout$isOnStandFire() {
+        boolean $$0 = this.level() != null && this.level().isClientSide;
+        return !this.fireImmune() && (roundabout$remainingFireTicks > 0 || $$0 && this.getSharedFlag(0));
+    }
+
     /**Prevent you from hearing every hit in a rush*/
     @Inject(method = "playHurtSound", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$PlayHurtSound(DamageSource $$0, CallbackInfo ci) {
@@ -2107,6 +2115,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 this.setRemainingFireTicks(roundabout$remainingFireTicks - 1);
 
+        }
+        if (roundabout$remainingFireTicks <= 0 && roundabout$getOnStandFire() > 0) {
+            roundabout$setOnStandFire(StandFireType.FIRELESS.id);
         }
     }
 

@@ -1,7 +1,10 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +33,9 @@ public class StandFireBlockEntity extends BlockEntity{
     int iterated = 0;
     int hardcap = 1200;
 
+    public byte fireColorType = StandFireType.ORANGE.id;
     public int snapNumber = 0;
+    public int fireIDNumber = 0;
     public LivingEntity standUser = null;
 
     public static void tickFire(Level lvl, BlockPos bp, BlockState bs, StandFireBlockEntity sf) {
@@ -52,7 +57,15 @@ public class StandFireBlockEntity extends BlockEntity{
                     return;
                 } else if (standUser != null) {
                     if (((StandUser) standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
+                        int maxFlames = ClientNetworking.getAppropriateConfig().maxMagiciansRedFlames;
+                        int maxDist = ClientNetworking.getAppropriateConfig().maxMagiciansRedFlameDistance;
                         if (PM.snapNumber != snapNumber) {
+                            $$1.removeBlock($$2, false);
+                            return;
+                        } else if (maxFlames >= 0 && (PM.fireIDNumber - fireIDNumber) > maxFlames){
+                            $$1.removeBlock($$2, false);
+                            return;
+                        } else if (maxFlames >= 0 && MainUtil.cheapDistanceTo2($$2.getX(),$$2.getZ(),standUser.getX(),standUser.getZ()) > maxDist){
                             $$1.removeBlock($$2, false);
                             return;
                         }
@@ -130,13 +143,17 @@ public class StandFireBlockEntity extends BlockEntity{
                                                     $$17 /= 2;
                                                 }
 
-                                                if ($$17 > 0 && $$3.nextInt($$15) <= $$17 && (!$$1.isRaining() || !fb.isNearRain($$1, $$11))) {
-                                                    int $$18 = Math.min(15, $$6 + $$3.nextInt(5) / 4);
-                                                    $$1.setBlock($$11, fb.getStateWithAge($$1, $$11, $$18), 3);
-                                                    BlockEntity be = this.level.getBlockEntity($$11);
-                                                    if (be instanceof StandFireBlockEntity sfbe) {
-                                                        sfbe.snapNumber = this.snapNumber;
-                                                        sfbe.standUser = this.standUser;
+                                                if (standUser != null && ((StandUser)standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
+                                                    if ($$17 > 0 && $$3.nextInt($$15) <= $$17 && (!$$1.isRaining() || !fb.isNearRain($$1, $$11))) {
+                                                        int $$18 = Math.min(15, $$6 + $$3.nextInt(5) / 4);
+                                                        $$1.setBlock($$11, fb.getStateWithAge($$1, $$11, $$18), 3);
+                                                        BlockEntity be = this.level.getBlockEntity($$11);
+                                                        if (be instanceof StandFireBlockEntity sfbe) {
+                                                            sfbe.snapNumber = this.snapNumber;
+                                                            sfbe.standUser = this.standUser;
+                                                            sfbe.fireColorType = this.fireColorType;
+                                                            sfbe.fireIDNumber = PM.getNewFireId();
+                                                        }
                                                     }
                                                 }
                                             }

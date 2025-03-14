@@ -5,8 +5,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -92,6 +94,7 @@ public class StandFireBlock extends BaseEntityBlock {
     private static final int BURN_HARD = 5;
     private final Object2IntMap<Block> igniteOdds = new Object2IntOpenHashMap();
     private final Object2IntMap<Block> burnOdds = new Object2IntOpenHashMap();
+
 
     private boolean isFacingDown(BlockState s)
     {
@@ -188,12 +191,16 @@ public class StandFireBlock extends BaseEntityBlock {
         if ($$3.nextInt($$2) < $$5) {
             BlockState $$6 = $$0.getBlockState($$1);
             if ($$3.nextInt($$4 + 10) < 5 && !$$0.isRainingAt($$1)) {
-                int $$7 = Math.min($$4 + $$3.nextInt(5) / 4, 15);
-                $$0.setBlock($$1, this.getStateWithAge($$0, $$1, $$7), 3);
-                BlockEntity be = $$0.getBlockEntity($$1);
-                if (be instanceof StandFireBlockEntity sfbe) {
-                    sfbe.snapNumber = sfb.snapNumber;
-                    sfbe.standUser = sfb.standUser;
+                if (sfb.standUser != null && ((StandUser)sfb.standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
+                    int $$7 = Math.min($$4 + $$3.nextInt(5) / 4, 15);
+                    $$0.setBlock($$1, this.getStateWithAge($$0, $$1, $$7), 3);
+                    BlockEntity be = $$0.getBlockEntity($$1);
+                    if (be instanceof StandFireBlockEntity sfbe) {
+                        sfbe.snapNumber = sfb.snapNumber;
+                        sfbe.standUser = sfb.standUser;
+                        sfbe.fireColorType = sfb.fireColorType;
+                        sfbe.fireIDNumber = PM.getNewFireId();
+                    }
                 }
             } else {
                 $$0.removeBlock($$1, false);
@@ -287,7 +294,10 @@ public class StandFireBlock extends BaseEntityBlock {
                     StandUser user = ((StandUser) $$3);
                     user.roundabout$setRemainingStandFireTicks(user.roundabout$getRemainingFireTicks() + 1);
                     if (user.roundabout$getRemainingFireTicks() == 0) {
-                        user.roundabout$setSecondsOnStandFire(8);
+                        if ($$1.getBlockEntity($$2) instanceof StandFireBlockEntity $$5) {
+                            user.roundabout$setSecondsOnStandFire(8);
+                            user.roundabout$setOnStandFire($$5.fireColorType);
+                        }
                     }
                     float fd = 1;
                     if (user.roundabout$getStandPowers().getReducedDamage(LE)){

@@ -50,6 +50,7 @@ import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SI
 public class PowersMagiciansRed extends PunchingStand {
 
     public int snapNumber;
+    public int fireIDNumber;
     public PowersMagiciansRed(LivingEntity self) {
         super(self);
     }
@@ -103,6 +104,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public boolean hold3 = false;
     public boolean hold1 = false;
+
 
     public BlockPos getGrabBlock(){
 
@@ -225,15 +227,32 @@ public class PowersMagiciansRed extends PunchingStand {
                         -1*(this.self.getZ() - grabBlock.getZ())+0.5 + random3,
                         0.15);
             }
-            this.getSelf().level().setBlockAndUpdate(grabBlock, ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),grabBlock));
-            BlockEntity be = this.self.level().getBlockEntity(grabBlock);
-            if (be instanceof StandFireBlockEntity sfbe){
-                sfbe.standUser = this.self;
-                sfbe.snapNumber = this.snapNumber;
-            }
+            createStandFire(grabBlock);
         }
         return true;
     }
+
+    public int getNewFireId(){
+        this.fireIDNumber++;
+        return this.fireIDNumber;
+    }
+
+    public void createStandFire(BlockPos pos){
+        this.fireIDNumber++;
+        this.getSelf().level().setBlockAndUpdate(pos, ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),pos));
+        BlockEntity be = this.self.level().getBlockEntity(pos);
+        if (be instanceof StandFireBlockEntity sfbe){
+            sfbe.standUser = this.self;
+            sfbe.snapNumber = this.snapNumber;
+            sfbe.fireIDNumber = this.fireIDNumber;
+            sfbe.fireColorType = getFireColor();
+        }
+    }
+
+    public byte getFireColor(){
+        return StandFireType.ORANGE.id;
+    }
+
     @Override
     public float getReach(){
         return 7;
