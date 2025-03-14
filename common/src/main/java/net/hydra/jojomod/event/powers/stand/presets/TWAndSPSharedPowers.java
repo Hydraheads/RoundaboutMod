@@ -762,9 +762,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (this.forwardBarrage && !(this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2)){
                 this.forwardBarrage = false;
             }
-            if (impactSlowdown > -1){
+            if (impactSlowdown >= -1){
                 impactSlowdown--;
             }
+
             if (freezeAttackInput > -1){
                 freezeAttackInput--;
             }
@@ -919,6 +920,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         return true;
     }
+
     public boolean vault() {
         animateStand((byte) 15);
         this.poseStand(OffsetIndex.GUARD);
@@ -935,6 +937,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         return true;
     }
+
     public boolean fallBrace() {
         if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {
             impactBrace = false;

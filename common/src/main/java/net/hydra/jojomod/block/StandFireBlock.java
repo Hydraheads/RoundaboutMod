@@ -57,7 +57,7 @@ public class StandFireBlock extends BaseEntityBlock {
     public StandFireBlock(Properties $$0) {
         super($$0);
         this.fireDamage = 1;
-        this.registerDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateDefinition.any()).setValue(AGE, 0)).setValue(NORTH, false)).setValue(EAST, false)).setValue(SOUTH, false)).setValue(WEST, false)).setValue(UP, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0).setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(UP, false));
         this.shapesCache = ImmutableMap.copyOf((Map)this.stateDefinition.getPossibleStates().stream().filter(($$0x) -> {
             return (Integer)$$0x.getValue(AGE) == 0;
         }).collect(Collectors.toMap(Function.identity(), StandFireBlock::calculateShape)));
@@ -89,25 +89,31 @@ public class StandFireBlock extends BaseEntityBlock {
     private final Object2IntMap<Block> igniteOdds = new Object2IntOpenHashMap();
     private final Object2IntMap<Block> burnOdds = new Object2IntOpenHashMap();
 
-    private static VoxelShape calculateShape(BlockState $$0x) {
+    private boolean isFacingDown(BlockState s)
+    {
+        return !(s.getValue(StandFireBlock.UP) || s.getValue(StandFireBlock.NORTH) || s.getValue(StandFireBlock.EAST) || s.getValue(StandFireBlock.SOUTH) || s.getValue(StandFireBlock.WEST));
+    }
+
+    private static VoxelShape calculateShape(BlockState state) {
         VoxelShape $$1 = Shapes.empty();
-        if ((Boolean)$$0x.getValue(UP)) {
+
+        if ((Boolean)state.getValue(UP)) {
             $$1 = UP_AABB;
         }
 
-        if ((Boolean)$$0x.getValue(NORTH)) {
+        if ((Boolean)state.getValue(NORTH)) {
             $$1 = Shapes.or($$1, NORTH_AABB);
         }
 
-        if ((Boolean)$$0x.getValue(SOUTH)) {
+        if ((Boolean)state.getValue(SOUTH)) {
             $$1 = Shapes.or($$1, SOUTH_AABB);
         }
 
-        if ((Boolean)$$0x.getValue(EAST)) {
+        if ((Boolean)state.getValue(EAST)) {
             $$1 = Shapes.or($$1, EAST_AABB);
         }
 
-        if ((Boolean)$$0x.getValue(WEST)) {
+        if ((Boolean)state.getValue(WEST)) {
             $$1 = Shapes.or($$1, WEST_AABB);
         }
 
