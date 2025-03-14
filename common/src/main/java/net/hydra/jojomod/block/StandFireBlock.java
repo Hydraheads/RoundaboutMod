@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.hydra.jojomod.access.IFireBlock;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -274,14 +278,29 @@ public class StandFireBlock extends BaseEntityBlock {
 
     @Override
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
-        if (!$$3.fireImmune()) {
-            $$3.setRemainingFireTicks($$3.getRemainingFireTicks() + 1);
-            if ($$3.getRemainingFireTicks() == 0) {
-                $$3.setSecondsOnFire(8);
+        if (!$$1.isClientSide() && $$1.getBlockEntity($$2) instanceof StandFireBlockEntity fb) {
+
+            if (fb.standUser != null && fb.standUser.is($$3)){
+                $$1.removeBlock($$2, false);
+            } else {
+                if ($$3 instanceof LivingEntity LE) {
+                    StandUser user = ((StandUser) $$3);
+                    user.roundabout$setRemainingStandFireTicks(user.roundabout$getRemainingFireTicks() + 1);
+                    if (user.roundabout$getRemainingFireTicks() == 0) {
+                        user.roundabout$setSecondsOnStandFire(8);
+                    }
+                    float fd = 1;
+                    if (user.roundabout$getStandPowers().getReducedDamage(LE)){
+                        fd = (float) (fd*(ClientNetworking.getAppropriateConfig().
+                                damageMultipliers.standFireOnPlayers*0.01));
+                    } else {
+                        fd = (float) (fd*(ClientNetworking.getAppropriateConfig().
+                                damageMultipliers.standFireOnMobs*0.01));
+                    }
+                    LE.hurt(ModDamageTypes.of($$1, ModDamageTypes.STAND_FIRE), fd);
+                }
             }
         }
-
-        $$3.hurt($$1.damageSources().inFire(), this.fireDamage);
         super.entityInside($$0, $$1, $$2, $$3);
     }
 

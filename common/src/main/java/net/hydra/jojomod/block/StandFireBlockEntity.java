@@ -28,7 +28,7 @@ public class StandFireBlockEntity extends BlockEntity{
     int ticksStored = 0;
     int nextTarget = 0;
     int iterated = 0;
-    int hardcap = 12000;
+    int hardcap = 1200;
 
     public int snapNumber = 0;
     public LivingEntity standUser = null;
@@ -59,6 +59,9 @@ public class StandFireBlockEntity extends BlockEntity{
                     } else {
                         standUser = null;
                     }
+                } else {
+                    //$$1.removeBlock($$2, false);
+                    return;
                 }
 
                 if (this.ticksStored >= nextTarget) {

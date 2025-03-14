@@ -15,6 +15,7 @@
     "roundabout:harpoon",
     "roundabout:knife",
     "roundabout:gas_explosion",
-    "roundabout:stand_virus"
+    "roundabout:stand_virus",
+    "roundabout:stand_fire"
   ]
 }

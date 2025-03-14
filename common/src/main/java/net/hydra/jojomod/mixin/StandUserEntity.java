@@ -51,6 +51,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -104,6 +105,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow
     public abstract boolean isAlive();
+
+    @Unique
+    public int roundabout$remainingFireTicks = -1;
 
     @Shadow
     @javax.annotation.Nullable
@@ -168,6 +172,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$LOCACACA_CURSE = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$ON_STAND_FIRE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$BLEED_LEVEL = SynchedEntityData.defineId(LivingEntity.class,
@@ -246,8 +253,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public LivingEntity roundabout$getThrower() {
         return this.roundabout$thrower;
     }
+    @Unique
+    @Override
+    public void roundabout$setSecondsOnStandFire(int $$0) {
+        int $$1 = $$0 * 20;
 
+        if (roundabout$remainingFireTicks < $$1) {
+            this.setRemainingFireTicks($$1);
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setRemainingStandFireTicks(int $$0) {
+        roundabout$remainingFireTicks = $$0;
+    }
 
+    @Unique
+    @Override
+    public int roundabout$getRemainingFireTicks() {
+        return roundabout$remainingFireTicks;
+    }
     /**
      * These variables control if someone is dazed, stunned, frozen, or controlled.
      **/
@@ -746,6 +771,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public void roundabout$setOnStandFire(byte onStandFire) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$ON_STAND_FIRE, onStandFire);
+        }
+    }
+    @Unique
+    @Override
     public void roundabout$setBleedLevel(int bleedLevel) {
         if (!(this.level().isClientSide)) {
             this.getEntityData().set(ROUNDABOUT$BLEED_LEVEL, bleedLevel);
@@ -764,6 +796,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public byte roundabout$getLocacacaCurse() {
         if (getEntityData().hasItem(ROUNDABOUT$LOCACACA_CURSE)) {
             return this.getEntityData().get(ROUNDABOUT$LOCACACA_CURSE);
+        } else {
+            return 0;
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getOnStandFire() {
+        if (getEntityData().hasItem(ROUNDABOUT$ON_STAND_FIRE)) {
+            return this.getEntityData().get(ROUNDABOUT$ON_STAND_FIRE);
         } else {
             return 0;
         }
@@ -1459,6 +1500,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_ID, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_TS_DAMAGE, (byte) 0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ON_STAND_FIRE, (byte) 0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
@@ -2042,7 +2084,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
-
     @Inject(method = "baseTick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$BreathingCancel2(CallbackInfo ci){
         boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopSettings.preventsBreathing;
@@ -2050,6 +2091,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (((IEntityAndData) this).roundabout$getRoundaboutJamBreath()) {
                 ((IEntityAndData) this).roundabout$setRoundaboutJamBreath(false);
             }
+        }
+        if (roundabout$remainingFireTicks > 0) {
+                if (roundabout$remainingFireTicks % 20 == 0 && !this.isInLava()) {
+                    float fireDamage = 1;
+                    if (this.roundabout$getStandPowers().getReducedDamage((LivingEntity)(Object)this)){
+                        fireDamage = (float) (fireDamage*(ClientNetworking.getAppropriateConfig().
+                                                        damageMultipliers.standFireOnPlayers*0.01));
+                    } else {
+                        fireDamage = (float) (fireDamage*(ClientNetworking.getAppropriateConfig().
+                                                        damageMultipliers.standFireOnMobs*0.01));
+                    }
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
+                }
+
+                this.setRemainingFireTicks(roundabout$remainingFireTicks - 1);
+
         }
     }
 
@@ -2083,7 +2140,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
-
+    @Override
+    @Unique
+    public void roundabout$clearFire() {
+        this.setRemainingFireTicks(0);
+    }
     @Shadow
     public boolean canBreatheUnderwater() {
         return false;

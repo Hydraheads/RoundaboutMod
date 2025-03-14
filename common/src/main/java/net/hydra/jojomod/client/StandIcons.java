@@ -1,9 +1,13 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.Roundabout;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 
 public class StandIcons {
+    public static final Material STAND_FIRE = new Material(TextureAtlas.LOCATION_BLOCKS,
+            new ResourceLocation(Roundabout.MOD_ID,"block/fire_0"));
 
     public static final ResourceLocation JOJO_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons.png");
