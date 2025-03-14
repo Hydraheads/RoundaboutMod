@@ -259,7 +259,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         int $$1 = $$0 * 20;
 
         if (roundabout$remainingFireTicks < $$1) {
-            this.setRemainingFireTicks($$1);
+            roundabout$setRemainingStandFireTicks($$1);
         }
     }
     @Unique
