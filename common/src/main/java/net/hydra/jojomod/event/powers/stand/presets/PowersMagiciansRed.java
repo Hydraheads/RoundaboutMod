@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
+import net.hydra.jojomod.block.StandFireBlockEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -34,6 +35,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -43,7 +46,7 @@ import java.util.Objects;
 
 import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
 
-public class PowersMagiciansRed extends PunchingStand{
+public class PowersMagiciansRed extends PunchingStand {
 
     public int snapNumber;
     public PowersMagiciansRed(LivingEntity self) {
@@ -64,7 +67,7 @@ public class PowersMagiciansRed extends PunchingStand{
             setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.NO_CD);
         } else {
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
                 setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
@@ -206,10 +209,27 @@ public class PowersMagiciansRed extends PunchingStand{
     }
 
     public boolean setFire(){
-        Roundabout.LOGGER.info("1");
         if (grabBlock != null && tryPlaceBlock(grabBlock)){
-            Roundabout.LOGGER.info("2");
+            this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                    this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 2.0F, 2F);
+            for (int j = 0; j < 10; j++) {
+                double random = (Math.random() * 0.8) - 0.4;
+                double random2 = (Math.random() * 0.8) - 0.4;
+                double random3 = (Math.random() * 0.8) - 0.4;
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.FLAME, this.self.getX(),
+                        this.self.getY() + this.self.getEyeHeight()*0.7, this.self.getZ(),
+                        0,
+                        -1*(this.self.getX() - grabBlock.getX())+0.5 + random,
+                        -1*(this.self.getY() - grabBlock.getY())-0.5 + random2,
+                        -1*(this.self.getZ() - grabBlock.getZ())+0.5 + random3,
+                        0.15);
+            }
             this.getSelf().level().setBlockAndUpdate(grabBlock, ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),grabBlock));
+            BlockEntity be = this.self.level().getBlockEntity(grabBlock);
+            if (be instanceof StandFireBlockEntity sfbe){
+                sfbe.standUser = this.self;
+                sfbe.snapNumber = this.snapNumber;
+            }
         }
         return true;
     }

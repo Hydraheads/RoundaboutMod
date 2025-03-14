@@ -173,13 +173,18 @@ public class StandFireBlock extends BaseEntityBlock {
         return ((IFireBlock)Blocks.FIRE).roundabout$getIgniteOdds($$0);
     }
 
-    public void checkBurnOut(Level $$0, BlockPos $$1, int $$2, RandomSource $$3, int $$4) {
+    public void checkBurnOut(Level $$0, BlockPos $$1, int $$2, RandomSource $$3, int $$4, StandFireBlockEntity sfb) {
         int $$5 = this.getBurnOdds($$0.getBlockState($$1));
         if ($$3.nextInt($$2) < $$5) {
             BlockState $$6 = $$0.getBlockState($$1);
             if ($$3.nextInt($$4 + 10) < 5 && !$$0.isRainingAt($$1)) {
                 int $$7 = Math.min($$4 + $$3.nextInt(5) / 4, 15);
                 $$0.setBlock($$1, this.getStateWithAge($$0, $$1, $$7), 3);
+                BlockEntity be = $$0.getBlockEntity($$1);
+                if (be instanceof StandFireBlockEntity sfbe) {
+                    sfbe.snapNumber = sfb.snapNumber;
+                    sfbe.standUser = sfb.standUser;
+                }
             } else {
                 $$0.removeBlock($$1, false);
             }

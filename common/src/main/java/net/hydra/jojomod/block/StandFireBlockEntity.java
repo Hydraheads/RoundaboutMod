@@ -30,8 +30,8 @@ public class StandFireBlockEntity extends BlockEntity{
     int iterated = 0;
     int hardcap = 12000;
 
-    int snapNumber = 0;
-    LivingEntity standUser = null;
+    public int snapNumber = 0;
+    public LivingEntity standUser = null;
 
     public static void tickFire(Level lvl, BlockPos bp, BlockState bs, StandFireBlockEntity sf) {
         sf.tick(bs, lvl, bp, sf, lvl.getRandom());
@@ -102,12 +102,12 @@ public class StandFireBlockEntity extends BlockEntity{
 
                             boolean $$9 = $$1.getBiome($$2).is(BiomeTags.INCREASED_FIRE_BURNOUT);
                             int $$10 = $$9 ? -50 : 0;
-                            fb.checkBurnOut($$1, $$2.east(), 300 + $$10, $$3, $$6);
-                            fb.checkBurnOut($$1, $$2.west(), 300 + $$10, $$3, $$6);
-                            fb.checkBurnOut($$1, $$2.below(), 250 + $$10, $$3, $$6);
-                            fb.checkBurnOut($$1, $$2.above(), 250 + $$10, $$3, $$6);
-                            fb.checkBurnOut($$1, $$2.north(), 300 + $$10, $$3, $$6);
-                            fb.checkBurnOut($$1, $$2.south(), 300 + $$10, $$3, $$6);
+                            fb.checkBurnOut($$1, $$2.east(), 300 + $$10, $$3, $$6,this);
+                            fb.checkBurnOut($$1, $$2.west(), 300 + $$10, $$3, $$6,this);
+                            fb.checkBurnOut($$1, $$2.below(), 250 + $$10, $$3, $$6,this);
+                            fb.checkBurnOut($$1, $$2.above(), 250 + $$10, $$3, $$6,this);
+                            fb.checkBurnOut($$1, $$2.north(), 300 + $$10, $$3, $$6,this);
+                            fb.checkBurnOut($$1, $$2.south(), 300 + $$10, $$3, $$6,this);
                             BlockPos.MutableBlockPos $$11 = new BlockPos.MutableBlockPos();
 
                             for (int $$12 = -1; $$12 <= 1; ++$$12) {
@@ -130,6 +130,11 @@ public class StandFireBlockEntity extends BlockEntity{
                                                 if ($$17 > 0 && $$3.nextInt($$15) <= $$17 && (!$$1.isRaining() || !fb.isNearRain($$1, $$11))) {
                                                     int $$18 = Math.min(15, $$6 + $$3.nextInt(5) / 4);
                                                     $$1.setBlock($$11, fb.getStateWithAge($$1, $$11, $$18), 3);
+                                                    BlockEntity be = this.level.getBlockEntity($$11);
+                                                    if (be instanceof StandFireBlockEntity sfbe) {
+                                                        sfbe.snapNumber = this.snapNumber;
+                                                        sfbe.standUser = this.standUser;
+                                                    }
                                                 }
                                             }
                                         }
