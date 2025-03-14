@@ -812,7 +812,7 @@ public class PowersJustice extends DashPreset {
                 //this.playStandUserOnlySoundsIfNearby(SoundIndex.CACKLE, 200, true,
                         //true);
                 this.self.level().playSound(null, JE.getX(),JE.getY(),
-                        JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 100.0F, 1F);
+                        JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 15.0F, 1F);
             }
             return;
         }
