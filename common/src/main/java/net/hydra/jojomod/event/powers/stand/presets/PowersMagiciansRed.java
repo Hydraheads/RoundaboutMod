@@ -66,7 +66,7 @@ public class PowersMagiciansRed extends PunchingStand {
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
             }
-            setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.EXTRA);
         } else {
             if (isHoldingSneak()) {
                 setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
@@ -231,7 +231,7 @@ public class PowersMagiciansRed extends PunchingStand {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand != null && grabBlock != null) {
                 for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 110; j++) {
+                    for (int j = 0; j < 90; j++) {
                         double spd = (1 - ((double) i / 6))*0.4;
                         double random = (Math.random() * 14) - 7;
                         double random2 = (Math.random() * 14) - 7;
