@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL20C;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -105,53 +108,43 @@ public abstract class ZScreenEffectRenderer {
 
     @Unique
     private static void roundabout$renderFire(Minecraft mc, PoseStack pose, Player pl) {
-        byte bt = ((StandUser)pl).roundabout$getOnStandFire();
-        if (bt > 0){
+        byte bt = ((StandUser) pl).roundabout$getOnStandFire();
+        if (bt > 0) {
+            BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.depthFunc(GL20C.GL_ALWAYS);
+            RenderSystem.depthMask(false);
+            RenderSystem.enableBlend();
 
+            RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+
+            // Rotates every 2 ticks through the 32 frames
+            int frame = (int)(mc.level.getGameTime() / 2) % 32;
+            float frameHeight = 1.0F / 32;
+
+            float u0 = 0.0F;
+            float u1 = 1.0F;
+            float v0 = frame * frameHeight;
+            float v1 = (frame + 1) * frameHeight;
+
+            for (int i = 0; i < 2; ++i) {
+                pose.pushPose();
+                pose.translate((float) (-(i * 2 - 1)) * 0.24F, -0.3F, 0.0F);
+                pose.mulPose(Axis.YP.rotationDegrees((float) (i * 2 - 1) * 10.0F));
+                Matrix4f matrix4f = pose.last().pose();
+
+                bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+                bufferbuilder.vertex(matrix4f, -0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u0, v1).endVertex();
+                bufferbuilder.vertex(matrix4f,  0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u1, v1).endVertex();
+                bufferbuilder.vertex(matrix4f,  0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u1, v0).endVertex();
+                bufferbuilder.vertex(matrix4f, -0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u0, v0).endVertex();
+                BufferUploader.drawWithShader(bufferbuilder.end());
+                pose.popPose();
+            }
+
+            RenderSystem.disableBlend();
+            RenderSystem.depthMask(true);
+            RenderSystem.depthFunc(GL20C.GL_LEQUAL);
         }
-        /**
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-        RenderSystem.depthFunc(519);
-        RenderSystem.depthMask(false);
-        RenderSystem.enableBlend();
-        TextureAtlasSprite textureatlassprite = StandIcons.STAND_FIRE.sprite();
-        RenderSystem.setShaderTexture(0, textureatlassprite.atlasLocation());
-        float f = textureatlassprite.getU0();
-        float f1 = textureatlassprite.getU1();
-        float f2 = (f + f1) / 2.0F;
-        float f3 = textureatlassprite.getV0();
-        float f4 = textureatlassprite.getV1();
-        float f5 = (f3 + f4) / 2.0F;
-        float f6 = textureatlassprite.uvShrinkRatio();
-        float f7 = Mth.lerp(f6, f, f2);
-        float f8 = Mth.lerp(f6, f1, f2);
-        float f9 = Mth.lerp(f6, f3, f5);
-        float f10 = Mth.lerp(f6, f4, f5);
-        float f11 = 1.0F;
-
-        for(int i = 0; i < 2; ++i) {
-            pose.pushPose();
-            float f12 = -0.5F;
-            float f13 = 0.5F;
-            float f14 = -0.5F;
-            float f15 = 0.5F;
-            float f16 = -0.5F;
-            pose.translate((float)(-(i * 2 - 1)) * 0.24F, -0.3F, 0.0F);
-            pose.mulPose(Axis.YP.rotationDegrees((float)(i * 2 - 1) * 10.0F));
-            Matrix4f matrix4f = pose.last().pose();
-            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
-            bufferbuilder.vertex(matrix4f, -0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(f8, f10).endVertex();
-            bufferbuilder.vertex(matrix4f, 0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(f7, f10).endVertex();
-            bufferbuilder.vertex(matrix4f, 0.5F, 0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(f7, f9).endVertex();
-            bufferbuilder.vertex(matrix4f, -0.5F, 0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(f8, f9).endVertex();
-            BufferUploader.drawWithShader(bufferbuilder.end());
-            pose.popPose();
-        }
-
-        RenderSystem.disableBlend();
-        RenderSystem.depthMask(true);
-        RenderSystem.depthFunc(515);
-         **/
     }
 }
