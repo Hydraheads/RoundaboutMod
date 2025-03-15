@@ -105,12 +105,20 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean hold3 = false;
     public boolean hold1 = false;
 
-
+    public BlockPos getGrabPos(float range) {
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        return new BlockPos((int) vec3d3.x, (int) vec3d3.y, (int) vec3d3.z);
+    }
     public BlockPos getGrabBlock(){
+        return getGrabBlock(5);
+    }
+    public BlockPos getGrabBlock(float range){
 
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         if (blockHit.getType() == HitResult.Type.BLOCK){
@@ -150,6 +158,9 @@ public class PowersMagiciansRed extends PunchingStand {
             return tryPower(move, forced);
         } else if (move == PowerIndex.SPECIAL) {
             this.grabBlock2 = blockPos;
+        } else if (move == PowerIndex.POWER_3_BLOCK) {
+            this.grabBlock = blockPos;
+            return tryPower(move, forced);
         }
         return false;
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
@@ -160,6 +171,14 @@ public class PowersMagiciansRed extends PunchingStand {
             if (keyIsDown) {
                 if (!inputDash) {
                     if (this.isGuarding()) {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                            this.setCooldown(PowerIndex.SKILL_EXTRA, 100);
+
+                            BlockPos HR = getGrabPos(20);
+                            if (HR != null) {
+                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
+                            }
+                        }
                         inputDash = true;
                     } else if (isHoldingSneak()) {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
@@ -199,8 +218,36 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.snap();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return this.setFire();
+        } else if (move == PowerIndex.POWER_3_BLOCK) {
+            return this.fireBlast();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public boolean fireBlast(){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                    this.self.getZ(), ModSounds.FIRE_BLAST_EVENT, this.self.getSoundSource(), 2.0F, 1F);
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null && grabBlock != null) {
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 110; j++) {
+                        double spd = (1 - ((double) i / 6))*0.4;
+                        double random = (Math.random() * 14) - 7;
+                        double random2 = (Math.random() * 14) - 7;
+                        double random3 = (Math.random() * 14) - 7;
+                        ((ServerLevel) stand.level()).sendParticles(ModParticles.ORANGE_FLAME, stand.getX(),
+                                stand.getY() + stand.getEyeHeight()*0.8, stand.getZ(),
+                                0,
+                                (-3 * (stand.getX() - grabBlock.getX()) + 0.5 + random) * spd,
+                                (-3 * (stand.getY() - grabBlock.getY()) - 1 + random2) * spd,
+                                (-3 * (stand.getZ() - grabBlock.getZ()) + 0.5 + random3) * spd,
+                                0.15);
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public boolean snap(){

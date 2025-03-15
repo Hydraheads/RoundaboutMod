@@ -17,6 +17,12 @@
       "roundabout:fire_whoosh"
     ]
   },
+  "fire_blast": {
+    "subtitle": "sounds.roundabout.fire_blast",
+    "sounds": [
+      "roundabout:fire_blast"
+    ]
+  },
   "fire_strike": {
     "subtitle": "sounds.roundabout.fire_strike",
     "sounds": [
