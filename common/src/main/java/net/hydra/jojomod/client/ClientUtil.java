@@ -62,6 +62,11 @@ public class ClientUtil {
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
         }
     }
+
+    public static boolean canSeeStands(Player lp){
+        return !(lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
+                !lp.isSpectator()) && ConfigManager.getClientConfig().onlyStandUsersCanSeeStands);
+    }
     public static boolean checkIfClientHoldingBag() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

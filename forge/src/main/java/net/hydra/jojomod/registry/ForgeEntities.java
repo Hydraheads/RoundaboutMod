@@ -150,6 +150,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can").toString())
             );
+    public static final RegistryObject<EntityType<CrossfireHurricaneEntity>> CROSSFIRE_HURRICANE =
+            ENTITY_TYPES.register("crossfire_hurricane", () ->
+                    EntityType.Builder.<CrossfireHurricaneEntity>of(CrossfireHurricaneEntity::new, MobCategory.MISC).sized(1.5f, 1.5f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "crossfire_hurricane").toString())
+            );
     public static final RegistryObject<EntityType<GasolineSplatterEntity>> GASOLINE_SPLATTER =
             ENTITY_TYPES.register("gasoline_splatter", () ->
                     EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).

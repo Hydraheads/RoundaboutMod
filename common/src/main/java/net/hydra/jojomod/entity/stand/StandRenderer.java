@@ -104,8 +104,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         }
 
         maxfade*= 0.01F;
-        if (lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
-                !lp.isSpectator()) && !mobEntity.forceVisible && ConfigManager.getClientConfig().onlyStandUsersCanSeeStands){
+        if (!ClientUtil.canSeeStands(lp) && !mobEntity.forceVisible){
             mobEntity.fadePercent = MainUtil.controlledLerp(ClientUtil.getDelta(), (mobEntity.fadePercent), 0, 0.72f);
         } else {
             float opacity = getStandOpacity(mobEntity);

@@ -30,6 +30,7 @@ public class ModEntities {
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;
+    public static EntityType<CrossfireHurricaneEntity> CROSSFIRE_HURRICANE;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
 
@@ -48,6 +49,7 @@ public class ModEntities {
     public static EntityType<FallenSpider> FALLEN_SPIDER;
     public static EntityType<FallenVillager> FALLEN_VILLAGER;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
+    public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane.png");
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");
