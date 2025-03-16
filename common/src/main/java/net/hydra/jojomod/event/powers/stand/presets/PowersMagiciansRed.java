@@ -33,6 +33,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
@@ -42,6 +44,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,7 +69,7 @@ public class PowersMagiciansRed extends PunchingStand {
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
             }
-            setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.EXTRA);
+            setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
         } else {
             if (isHoldingSneak()) {
                 setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
@@ -174,7 +177,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
                             this.setCooldown(PowerIndex.SKILL_EXTRA, 100);
 
-                            BlockPos HR = getGrabPos(20);
+                            BlockPos HR = getGrabPos(10);
                             if (HR != null) {
                                 ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
                             }
@@ -245,9 +248,32 @@ public class PowersMagiciansRed extends PunchingStand {
                                 0.15);
                     }
                 }
+                burnProjectiles(this.self,DamageHandler.genHitbox(this.self, grabBlock.getX(), grabBlock.getY(),
+                        grabBlock.getZ(), 10, 10, 10), 20, 25);
             }
         }
         return true;
+    }
+
+    public List<Entity> burnProjectiles(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if (!value.isRemoved() && value instanceof Projectile && !(value instanceof Fireball)){
+                if (angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle){
+                    hitEntities.remove(value);
+                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, value.getX(),
+                            value.getY(), value.getZ(),
+                            20,
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.03);
+                    value.discard();
+                }
+            }
+        }
+        return hitEntities;
     }
 
     public boolean snap(){
