@@ -13,4 +13,9 @@ public abstract class RegistryMixin implements DynamicWorldAccessor {
     public void roundabout$setFrozen(boolean frozen) {
         this.frozen = frozen;
     }
+
+    @Override
+    public boolean roundabout$isFrozen() {
+        return this.frozen;
+    }
 }

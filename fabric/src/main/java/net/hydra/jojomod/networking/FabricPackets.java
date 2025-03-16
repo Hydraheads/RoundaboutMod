@@ -180,6 +180,14 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
+    public void sendNewDynamicWorld(ServerPlayer sp, String name) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        buf.writeUtf(name);
+
+        ServerPlayNetworking.send(sp, ModMessages.DYNAMIC_WORLD_SYNC, buf);
+    }
+
+    @Override
     public void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f vec) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
 

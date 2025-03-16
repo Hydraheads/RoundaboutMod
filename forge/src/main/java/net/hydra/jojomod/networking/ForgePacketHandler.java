@@ -229,6 +229,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeSendConfigPacket::toBytes)
                 .consumerMainThread(ForgeSendConfigPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeDynamicWorldSync.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeDynamicWorldSync::new)
+                .encoder(ForgeDynamicWorldSync::toBytes)
+                .consumerMainThread(ForgeDynamicWorldSync::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message){

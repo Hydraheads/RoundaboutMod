@@ -2,14 +2,14 @@ package net.hydra.jojomod.world;
 
 import com.mojang.serialization.Lifecycle;
 import net.hydra.jojomod.Roundabout;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderOwner;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.LevelStem;
 
@@ -23,10 +23,12 @@ public class DynamicWorld {
         DynamicWorldAccessor accessor = DynamicWorldAccessor.getFrom(server);
         ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
 
-        RegistryAccess registry = server.registries().compositeAccess();
-        MappedRegistry<LevelStem> manager = ((MappedRegistry<LevelStem>)registry.lookupOrThrow(Registries.DIMENSION));
+        var manager = getLevelStemRegistry(server);
 
-        DynamicWorldAccessor.getFrom(manager).roundabout$setFrozen(false);
+        DynamicWorldAccessor managerAccessor = DynamicWorldAccessor.getFrom(manager);
+        boolean isFrozen = managerAccessor.roundabout$isFrozen();
+
+        managerAccessor.roundabout$setFrozen(false);
 
         var key = ResourceKey.create(Registries.LEVEL_STEM, LEVEL_KEY.location());
         if (!manager.containsKey(key))
@@ -34,7 +36,7 @@ public class DynamicWorld {
             manager.register(key, new LevelStem(server.overworld().getLevel().dimensionTypeRegistration(), server.overworld().getChunkSource().getGenerator()), Lifecycle.stable());
         }
 
-        DynamicWorldAccessor.getFrom(manager).roundabout$setFrozen(true);
+        managerAccessor.roundabout$setFrozen(isFrozen);
 
         level = new ServerLevel(
                 server,
@@ -53,10 +55,22 @@ public class DynamicWorld {
 
         accessor.roundabout$addWorld(LEVEL_KEY, level);
         level.tick(()->true);
+
+        for (ServerPlayer sp : server.getPlayerList().getPlayers())
+        {
+            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name);
+        }
     }
 
     public ServerLevel getLevel()
     {
         return this.level;
+    }
+
+    private static MappedRegistry<LevelStem> getLevelStemRegistry(MinecraftServer server) {
+        RegistryAccess registryManager = server.registryAccess();
+        var temp = registryManager.registryOrThrow(Registries.LEVEL_STEM);
+
+        return (MappedRegistry<LevelStem>) temp;
     }
 }
