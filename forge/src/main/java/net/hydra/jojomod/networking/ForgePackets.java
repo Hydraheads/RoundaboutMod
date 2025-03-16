@@ -1,5 +1,8 @@
 package net.hydra.jojomod.networking;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.networking.c2s.*;
 import net.hydra.jojomod.networking.s2c.*;
@@ -8,6 +11,7 @@ import net.hydra.jojomod.util.Networking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -102,12 +106,21 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgeS2CPowerInventorySettingsPacket(anchorPlace,
                 distanceOut, idleOpacity, combatOpacity, enemyOpacity), sp);
     }
+
+    private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setPrettyPrinting()
+            .create();
+
     @Override
     public void sendConfig(ServerPlayer sp) {
         String serialized = ConfigManager.serializeConfig();
         ForgePacketHandler.sendToClient(new ForgeSendConfigPacket(Networking.isDedicated(),serialized), sp);
     }
 
+    @Override
+    public void sendNewDynamicWorld(ServerPlayer sp, String name) {
+        ForgePacketHandler.sendToClient(new ForgeSendConfigPacket(Networking.isDedicated(), GSON.toJson(name)), sp);
+    }
 
     @Override
     public void StandGuardCancelClientPacket() {

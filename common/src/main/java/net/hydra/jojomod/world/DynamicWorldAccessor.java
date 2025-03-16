@@ -35,4 +35,5 @@ public interface DynamicWorldAccessor {
     { return ((DynamicWorldAccessor) registry); }
 
     void roundabout$setFrozen(boolean frozen);
+    boolean roundabout$isFrozen();
 }

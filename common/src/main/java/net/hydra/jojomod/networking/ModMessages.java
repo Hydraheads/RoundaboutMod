@@ -49,4 +49,5 @@ public class ModMessages {
     public static final ResourceLocation SEND_BUNDLE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"bundle_s2c_packet");
     public static final ResourceLocation CONFIG_SYNC = new ResourceLocation(Roundabout.MOD_ID,"config_sync");
 
+    public static final ResourceLocation DYNAMIC_WORLD_SYNC = Roundabout.location("sync_d4c_worlds");
 }

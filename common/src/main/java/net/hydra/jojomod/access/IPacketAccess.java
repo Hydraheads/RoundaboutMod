@@ -42,6 +42,8 @@ public interface IPacketAccess {
                                    float combatOpacity, float enemyOpacity);
     void sendConfig(ServerPlayer sp);
 
+    void sendNewDynamicWorld(ServerPlayer sp, String name);
+
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();
     void StandPowerPacket(byte power);
