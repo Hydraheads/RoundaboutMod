@@ -63,14 +63,78 @@ public class PowersMagiciansRed extends PunchingStand {
             hurricaneSpecialRotation();
         }
     }
+    public void addHurricaneSpecial(CrossfireHurricaneEntity che){
+        if (hurricaneSpecial == null) {
+            hurricaneSpecial = new ArrayList<>();
+        }
+        hurricaneSpecial.add(che);
+    }
+    public int spinint = 0;
     public void hurricaneSpecialRotation() {
+        spinint+=4;
         if (hurricaneSpecial == null) {
             hurricaneSpecial = new ArrayList<>();
         }
         List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
         };
         if (!hurricaneSpecial2.isEmpty()) {
-
+            int totalnumber = hurricaneSpecial2.size();
+            for (CrossfireHurricaneEntity value : hurricaneSpecial2) {
+                int size = value.getSize();
+                double distanceUp = 1;
+                if (size< 60){
+                    size++;
+                    value.setSize(size);
+                }
+                distanceUp += ((double) size /30);
+                double offset = 0;
+                int number = value.getCrossNumber();
+                if (number == 1){
+                    offset = 0;
+                } else if (number == 2){
+                    offset = switch (totalnumber) {
+                        case 3 -> 0;
+                        case 4 -> 90;
+                        default -> offset;
+                    };
+                } else if (number == 3){
+                    offset = switch (totalnumber) {
+                        case 2 -> 0;
+                        case 3 -> 120;
+                        case 4 -> 180;
+                        default -> offset;
+                    };
+                } else if (number == 4){
+                    offset = switch (totalnumber) {
+                        case 1 -> 0;
+                        case 2 -> 180;
+                        case 3 -> 240;
+                        case 4 -> 270;
+                        default -> offset;
+                    };
+                }
+                offset+=spinint;
+                if (offset > 360) {
+                    offset -= 360;
+                } else if (offset < 0) {
+                    offset += 360;
+                }
+                offset = (offset - 180) * Math.PI;
+                double distanceOut = 3.2;
+                double x1 = this.self.getX() - -1 * (distanceOut * (Math.sin(offset / 180)));
+                double y1 = this.self.getY() + distanceUp;
+                double z1 = this.self.getZ() - (distanceOut * (Math.cos(offset / 180)));
+                if (this.self.level().isClientSide()){
+                    value.setOldPosAndRot();
+                    //Roundabout.LOGGER.info("hi");
+                } else {
+                    value.setOldPosAndRot();
+                    //Roundabout.LOGGER.info("bye");
+                }
+                value.actuallyTick();
+                value.storeVec = new Vec3(x1,y1,z1);
+                    value.setPos(x1, y1, z1);
+            }
         }
     }
     public int snapNumber;
@@ -296,7 +360,6 @@ public class PowersMagiciansRed extends PunchingStand {
                 createStandFire(blockPosForSpecial.north().east());
                 createStandFire(blockPosForSpecial.south().west());
                 createStandFire(blockPosForSpecial.south().east());
-            } else if (this.attackTimeDuring == 4) {
                 sendSpecialParticle(blockPosForSpecial.east().east().north());
                 sendSpecialParticle(blockPosForSpecial.east().east().south());
                 sendSpecialParticle(blockPosForSpecial.west().west().north());
@@ -305,7 +368,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 sendSpecialParticle(blockPosForSpecial.north().north().west());
                 sendSpecialParticle(blockPosForSpecial.south().south().east());
                 sendSpecialParticle(blockPosForSpecial.south().south().west());
-            } else if (this.attackTimeDuring == 7) {
+            } else if (this.attackTimeDuring == 6) {
                 createStandFire(blockPosForSpecial.east().east().north());
                 createStandFire(blockPosForSpecial.east().east().south());
                 createStandFire(blockPosForSpecial.west().west().north());
@@ -352,6 +415,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean crossfireSpecial(){
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_2_SNEAK);
+        spinint = 0;
         if (!this.self.level().isClientSide()) {
             blockPosForSpecial = this.self.blockPosition();
             sendSpecialParticle(blockPosForSpecial.east().east());
@@ -363,8 +427,25 @@ public class PowersMagiciansRed extends PunchingStand {
             sendSpecialParticle(blockPosForSpecial.south().west());
             sendSpecialParticle(blockPosForSpecial.south().east());
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 0.8F);
+            generateCrossfire(1); generateCrossfire(2);
+            generateCrossfire(3); generateCrossfire(4);
+
         }
         return true;
+    }
+
+    public void generateCrossfire(int crossNumber){
+        CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+        if (cross != null){
+            cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+            cross.setUser(this.self);
+
+            if (hurricaneSpecial == null) {hurricaneSpecial = new ArrayList<>();}
+            cross.setCrossNumber(crossNumber);
+            hurricaneSpecial.add(cross);
+
+            this.getSelf().level().addFreshEntity(cross);
+        }
     }
     public boolean crossfire(){
         if (!this.self.level().isClientSide()) {

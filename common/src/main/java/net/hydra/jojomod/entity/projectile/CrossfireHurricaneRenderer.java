@@ -25,12 +25,14 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     }
 
     public void render(CrossfireHurricaneEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
+            //$$0.xOld = Mth.lerp($$2, $$0.xlast, $$0.getX());
         if (ClientUtil.canSeeStands(Minecraft.getInstance().player)) {
             $$3.pushPose();
-            $$3.translate(0f,2f,0f);
+            float rsize = $$0.getSize() * 0.04f;
+            $$3.translate(0f,1.96f+rsize,0f);
             $$3.mulPose(Axis.ZP.rotationDegrees(-180));
             $$3.mulPose(Axis.YP.rotationDegrees(Mth.lerp($$2, $$0.yRotO, $$0.getYRot())));
-            float fsize = $$0.getSize() * 0.1f;
+            float fsize = $$0.getSize() * 0.035f;
             $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
             VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);
             this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
