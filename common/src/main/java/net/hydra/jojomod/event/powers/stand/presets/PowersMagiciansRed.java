@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -52,6 +53,24 @@ import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SI
 
 public class PowersMagiciansRed extends PunchingStand {
 
+    public CrossfireHurricaneEntity hurricane;
+    private List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
+
+    public void tickPowerEnd(){
+        if (hurricaneSpecial != null && !hurricaneSpecial.isEmpty()){
+            hurricaneSpecialRotation();
+        }
+    }
+    public void hurricaneSpecialRotation() {
+        if (hurricaneSpecial == null) {
+            hurricaneSpecial = new ArrayList<>();
+        }
+        List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
+        };
+        if (!hurricaneSpecial2.isEmpty()) {
+
+        }
+    }
     public int snapNumber;
     public int fireIDNumber;
     public PowersMagiciansRed(LivingEntity self) {

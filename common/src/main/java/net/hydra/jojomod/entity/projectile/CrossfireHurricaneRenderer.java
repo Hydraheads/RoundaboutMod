@@ -30,7 +30,8 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             $$3.translate(0f,2f,0f);
             $$3.mulPose(Axis.ZP.rotationDegrees(-180));
             $$3.mulPose(Axis.YP.rotationDegrees(Mth.lerp($$2, $$0.yRotO, $$0.getYRot())));
-            $$3.scale(1.1f, 1.1f, 1.1f);
+            float fsize = $$0.getSize() * 0.1f;
+            $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
             VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);
             this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             $$3.popPose();
