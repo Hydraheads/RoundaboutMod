@@ -27,6 +27,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -277,24 +278,91 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.setPowerOther(move,lastMove);
     }
 
-    public boolean crossfireSpecial(){
+    @Override
+    public void updateUniqueMoves(){
+        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+            this.updateCrossfireSpecial();
+        }
+    }
+    public BlockPos blockPosForSpecial = BlockPos.ZERO;
+    public void updateCrossfireSpecial(){
         if (!this.self.level().isClientSide()) {
-            createStandFire(this.self.blockPosition().east().east());
-            createStandFire(this.self.blockPosition().east().east().north());
-            createStandFire(this.self.blockPosition().east().east().south());
-            createStandFire(this.self.blockPosition().west().west());
-            createStandFire(this.self.blockPosition().west().west().north());
-            createStandFire(this.self.blockPosition().west().west().south());
-            createStandFire(this.self.blockPosition().north().north());
-            createStandFire(this.self.blockPosition().north().north().east());
-            createStandFire(this.self.blockPosition().north().north().west());
-            createStandFire(this.self.blockPosition().south().south());
-            createStandFire(this.self.blockPosition().south().south().east());
-            createStandFire(this.self.blockPosition().south().south().west());
-            createStandFire(this.self.blockPosition().north().west());
-            createStandFire(this.self.blockPosition().north().east());
-            createStandFire(this.self.blockPosition().south().west());
-            createStandFire(this.self.blockPosition().south().east());
+            if (this.attackTimeDuring == 3) {
+                createStandFire(blockPosForSpecial.east().east());
+                createStandFire(blockPosForSpecial.west().west());
+                createStandFire(blockPosForSpecial.north().north());
+                createStandFire(blockPosForSpecial.south().south());
+                createStandFire(blockPosForSpecial.north().west());
+                createStandFire(blockPosForSpecial.north().east());
+                createStandFire(blockPosForSpecial.south().west());
+                createStandFire(blockPosForSpecial.south().east());
+            } else if (this.attackTimeDuring == 4) {
+                sendSpecialParticle(blockPosForSpecial.east().east().north());
+                sendSpecialParticle(blockPosForSpecial.east().east().south());
+                sendSpecialParticle(blockPosForSpecial.west().west().north());
+                sendSpecialParticle(blockPosForSpecial.west().west().south());
+                sendSpecialParticle(blockPosForSpecial.north().north().east());
+                sendSpecialParticle(blockPosForSpecial.north().north().west());
+                sendSpecialParticle(blockPosForSpecial.south().south().east());
+                sendSpecialParticle(blockPosForSpecial.south().south().west());
+            } else if (this.attackTimeDuring == 7) {
+                createStandFire(blockPosForSpecial.east().east().north());
+                createStandFire(blockPosForSpecial.east().east().south());
+                createStandFire(blockPosForSpecial.west().west().north());
+                createStandFire(blockPosForSpecial.west().west().south());
+                createStandFire(blockPosForSpecial.north().north().east());
+                createStandFire(blockPosForSpecial.north().north().west());
+                createStandFire(blockPosForSpecial.south().south().east());
+                createStandFire(blockPosForSpecial.south().south().west());
+            }
+        }
+    }
+    public SimpleParticleType getFlameParticle(){
+        return ModParticles.ORANGE_FLAME;
+    }
+    public void sendSpecialParticle(BlockPos pos){
+        if (!this.self.level().isClientSide()) {
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.5,
+                    pos.getY(), pos.getZ()+0.5,
+                    0,
+                    0, 1, 0,
+                    0.16);
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.25,
+                    pos.getY(), pos.getZ()+0.25,
+                    0,
+                    0, 1, 0,
+                    0.16);
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.25,
+                    pos.getY(), pos.getZ()+0.75,
+                    0,
+                    0, 1, 0,
+                    0.16);
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.75,
+                    pos.getY(), pos.getZ()+0.25,
+                    0,
+                    0, 1, 0,
+                    0.16);
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.75,
+                    pos.getY(), pos.getZ()+0.75,
+                    0,
+                    0, 1, 0,
+                    0.16);
+        }
+    }
+    public boolean crossfireSpecial(){
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.POWER_2_SNEAK);
+        if (!this.self.level().isClientSide()) {
+            blockPosForSpecial = this.self.blockPosition();
+            sendSpecialParticle(blockPosForSpecial.east().east());
+            sendSpecialParticle(blockPosForSpecial.west().west());
+            sendSpecialParticle(blockPosForSpecial.north().north());
+            sendSpecialParticle(blockPosForSpecial.south().south());
+            sendSpecialParticle(blockPosForSpecial.north().west());
+            sendSpecialParticle(blockPosForSpecial.north().east());
+            sendSpecialParticle(blockPosForSpecial.south().west());
+            sendSpecialParticle(blockPosForSpecial.south().east());
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 0.8F);
         }
         return true;
     }
