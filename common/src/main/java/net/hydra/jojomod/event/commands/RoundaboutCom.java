@@ -9,10 +9,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.sun.jdi.BooleanType;
 import com.sun.jdi.connect.Connector;
 import net.hydra.jojomod.RoundaboutCommands;
+import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.GameModeArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 
@@ -81,6 +83,14 @@ public class RoundaboutCom {
                                         EntityArgument.getEntities(context, "targets")))
                         )
                 );
+        dispatcher.register(Commands.literal("roundaboutGenerateD4CWorld")
+                .requires(commandSourceStack ->
+                        commandSourceStack.hasPermission(2))
+                .executes(context->{
+                    DynamicWorld w = DynamicWorld.generateD4CWorld(context.getSource().getServer());
+                    context.getSource().sendSuccess(()->Component.literal("Generated D4C world \"" + w.getName() + "\""), true);
+                    return 0;
+                }));
     }
 
 }

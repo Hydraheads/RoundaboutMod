@@ -14,12 +14,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.LevelStem;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class DynamicWorld {
     private ServerLevel level;
+    private final String name;
 
     public DynamicWorld(MinecraftServer server, String name)
     {
+        this.name = name;
+
         DynamicWorldAccessor accessor = DynamicWorldAccessor.getFrom(server);
         ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
 
@@ -67,10 +71,54 @@ public class DynamicWorld {
         return this.level;
     }
 
+    public String getName()
+    {
+        return this.name;
+    }
+
     private static MappedRegistry<LevelStem> getLevelStemRegistry(MinecraftServer server) {
         RegistryAccess registryManager = server.registryAccess();
         var temp = registryManager.registryOrThrow(Registries.LEVEL_STEM);
 
         return (MappedRegistry<LevelStem>) temp;
+    }
+
+    private static String generateRandomStringByWords(int numWords) {
+        String[] words = {
+                "boat",
+                "ship",
+                "airplane",
+                "sword",
+                "car",
+                "train",
+                "bike",
+                "rocket",
+                "submarine",
+                "zeppelin",
+                "spiral-staircase",
+                "desolation-row",
+                "fig-tart",
+                "rhinoceros-beetle",
+                "singularity-point",
+                "giotto",
+                "angel",
+                "hydrangea",
+                "secret-emperor"
+        };
+
+        Random random = new Random();
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < numWords; i++) {
+            if (i > 0) result.append("-");
+            result.append(words[random.nextInt(words.length)]);
+        }
+
+        return result.toString();
+    }
+
+    public static DynamicWorld generateD4CWorld(MinecraftServer server)
+    {
+        return new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999));
     }
 }
