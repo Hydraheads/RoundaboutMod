@@ -818,7 +818,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void tickMobAI(LivingEntity attackTarget){
         if (this.attackTimeDuring <= -1) {
             if (this.getSelf().fallDistance > 4 && !(this.getSelf() instanceof FlyingMob) && !this.getSelf().isNoGravity()
-                    && !(this.getSelf().noPhysics)) {
+                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
                 /**Fall Brace AI*/
                 ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
                 if (this.getSelf() instanceof Mob MB){

@@ -44,6 +44,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
@@ -916,8 +917,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if (this.attackTimeDuring <= -1) {
-            if (this.getSelf().fallDistance > 4 && !(this.getSelf() instanceof FlyingMob) && !this.getSelf().isNoGravity()
-                    && !(this.getSelf().noPhysics)) {
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
                 /**Fall Brace AI*/
                 ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
                 if (this.getSelf() instanceof Mob MB){
