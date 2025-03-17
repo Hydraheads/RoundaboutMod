@@ -56,10 +56,10 @@ import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SI
 public class PowersMagiciansRed extends PunchingStand {
 
     public CrossfireHurricaneEntity hurricane;
-    private List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
+    public List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
 
     public void tickPowerEnd(){
-        if (hurricaneSpecial != null && !hurricaneSpecial.isEmpty()){
+        if (hurricaneSpecial != null && !hurricaneSpecial.isEmpty() && !this.self.level().isClientSide()){
             hurricaneSpecialRotation();
         }
     }
@@ -80,62 +80,66 @@ public class PowersMagiciansRed extends PunchingStand {
         if (!hurricaneSpecial2.isEmpty()) {
             int totalnumber = hurricaneSpecial2.size();
             for (CrossfireHurricaneEntity value : hurricaneSpecial2) {
-                int size = value.getSize();
-                double distanceUp = 1;
-                if (size< 60){
-                    size++;
-                    value.setSize(size);
-                }
-                distanceUp += ((double) size /30);
-                double offset = 0;
-                int number = value.getCrossNumber();
-                if (number == 1){
-                    offset = 0;
-                } else if (number == 2){
-                    offset = switch (totalnumber) {
-                        case 3 -> 0;
-                        case 4 -> 90;
-                        default -> offset;
-                    };
-                } else if (number == 3){
-                    offset = switch (totalnumber) {
-                        case 2 -> 0;
-                        case 3 -> 120;
-                        case 4 -> 180;
-                        default -> offset;
-                    };
-                } else if (number == 4){
-                    offset = switch (totalnumber) {
-                        case 1 -> 0;
-                        case 2 -> 180;
-                        case 3 -> 240;
-                        case 4 -> 270;
-                        default -> offset;
-                    };
-                }
-                offset+=spinint;
-                if (offset > 360) {
-                    offset -= 360;
-                } else if (offset < 0) {
-                    offset += 360;
-                }
-                offset = (offset - 180) * Math.PI;
-                double distanceOut = 3.2;
-                double x1 = this.self.getX() - -1 * (distanceOut * (Math.sin(offset / 180)));
-                double y1 = this.self.getY() + distanceUp;
-                double z1 = this.self.getZ() - (distanceOut * (Math.cos(offset / 180)));
-                if (this.self.level().isClientSide()){
-                    value.setOldPosAndRot();
-                    //Roundabout.LOGGER.info("hi");
-                } else {
-                    value.setOldPosAndRot();
-                    //Roundabout.LOGGER.info("bye");
-                }
-                value.actuallyTick();
-                value.storeVec = new Vec3(x1,y1,z1);
-                    value.setPos(x1, y1, z1);
+                transformHurricane(value, totalnumber, this.self.getX(), this.self.getY(), this.self.getZ());
             }
         }
+    }
+
+    public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ){
+        int size = value.getSize();
+        double distanceUp = 1;
+        if (size< 60){
+            size++;
+            value.setSize(size);
+        }
+        distanceUp += ((double) size /30);
+        double offset = 0;
+        int number = value.getCrossNumber();
+        if (number == 1){
+            offset = 0;
+        } else if (number == 2){
+            offset = switch (totalnumber) {
+                case 3 -> 0;
+                case 4 -> 90;
+                default -> offset;
+            };
+        } else if (number == 3){
+            offset = switch (totalnumber) {
+                case 2 -> 0;
+                case 3 -> 120;
+                case 4 -> 180;
+                default -> offset;
+            };
+        } else if (number == 4){
+            offset = switch (totalnumber) {
+                case 1 -> 0;
+                case 2 -> 180;
+                case 3 -> 240;
+                case 4 -> 270;
+                default -> offset;
+            };
+        }
+        offset+=spinint;
+        if (offset > 360) {
+            offset -= 360;
+        } else if (offset < 0) {
+            offset += 360;
+        }
+        offset = (offset - 180) * Math.PI;
+        double distanceOut = 3.2;
+        double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
+        double y1 = entityY + distanceUp;
+        double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));
+        if (this.self.level().isClientSide()){
+            value.setOldPosAndRot();
+            //Roundabout.LOGGER.info("hi");
+        } else {
+            value.setOldPosAndRot();
+            //Roundabout.LOGGER.info("bye");
+        }
+        value.actuallyTick();
+        value.storeVec = new Vec3(x1,y1,z1);
+        value.setPos(x1, y1, z1);
     }
     public int snapNumber;
     public int fireIDNumber;
