@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -88,17 +89,19 @@ public class PowersMagiciansRed extends PunchingStand {
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
             }
+            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
             setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
         } else {
             if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SPECIAL, PowerIndex.SKILL_2);
                 setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
                 setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
             } else {
+                setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE, PowerIndex.SKILL_2);
                 setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
             }
         }
-        setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
     }
     @Override
@@ -124,8 +127,9 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.getSoundFromByte(soundChoice);
     }
 
-    public boolean hold3 = false;
     public boolean hold1 = false;
+    public boolean hold2 = false;
+    public boolean hold3 = false;
 
     public BlockPos getGrabPos(float range) {
         Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -170,6 +174,29 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         } else {
             hold1 = false;
+        }
+    }
+    @Override
+    public void buttonInput2(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (!hold2) {
+                hold2 = true;
+                if (!isGuarding()) {
+                    if (isHoldingSneak()) {
+                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                             this.setCooldown(PowerIndex.SKILL_2, 40);
+                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+                        }
+                    } else {
+                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                            this.setCooldown(PowerIndex.SKILL_2, 40);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                        }
+                    }
+                }
+            }
+        } else {
+            hold2 = false;
         }
     }
     public BlockPos grabBlock = null;
@@ -242,11 +269,47 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.setFire();
         } else if (move == PowerIndex.POWER_3_BLOCK) {
             return this.fireBlast();
+        } else if (move == PowerIndex.POWER_2) {
+            return this.crossfire();
+        } else if (move == PowerIndex.POWER_2_SNEAK) {
+            return this.crossfireSpecial();
         }
         return super.setPowerOther(move,lastMove);
     }
 
-    public boolean fireBlast(){
+    public boolean crossfireSpecial(){
+        if (!this.self.level().isClientSide()) {
+            createStandFire(this.self.blockPosition().east().east());
+            createStandFire(this.self.blockPosition().east().east().north());
+            createStandFire(this.self.blockPosition().east().east().south());
+            createStandFire(this.self.blockPosition().west().west());
+            createStandFire(this.self.blockPosition().west().west().north());
+            createStandFire(this.self.blockPosition().west().west().south());
+            createStandFire(this.self.blockPosition().north().north());
+            createStandFire(this.self.blockPosition().north().north().east());
+            createStandFire(this.self.blockPosition().north().north().west());
+            createStandFire(this.self.blockPosition().south().south());
+            createStandFire(this.self.blockPosition().south().south().east());
+            createStandFire(this.self.blockPosition().south().south().west());
+            createStandFire(this.self.blockPosition().north().west());
+            createStandFire(this.self.blockPosition().north().east());
+            createStandFire(this.self.blockPosition().south().west());
+            createStandFire(this.self.blockPosition().south().east());
+        }
+        return true;
+    }
+    public boolean crossfire(){
+        if (!this.self.level().isClientSide()) {
+            CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+            if (cross != null){
+                cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                cross.setUser(this.self);
+                this.getSelf().level().addFreshEntity(cross);
+            }
+        }
+        return true;
+    }
+    public boolean fireBlast() {
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                     this.self.getZ(), ModSounds.FIRE_BLAST_EVENT, this.self.getSoundSource(), 2.0F, 1F);
@@ -254,12 +317,12 @@ public class PowersMagiciansRed extends PunchingStand {
             if (stand != null && grabBlock != null) {
                 for (int i = 0; i < 4; i++) {
                     for (int j = 0; j < 90; j++) {
-                        double spd = (1 - ((double) i / 6))*0.4;
+                        double spd = (1 - ((double) i / 6)) * 0.4;
                         double random = (Math.random() * 14) - 7;
                         double random2 = (Math.random() * 14) - 7;
                         double random3 = (Math.random() * 14) - 7;
                         ((ServerLevel) stand.level()).sendParticles(ModParticles.ORANGE_FLAME, stand.getX(),
-                                stand.getY() + stand.getEyeHeight()*0.8, stand.getZ(),
+                                stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
                                 0,
                                 (-3 * (stand.getX() - grabBlock.getX()) + 0.5 + random) * spd,
                                 (-3 * (stand.getY() - grabBlock.getY()) - 1 + random2) * spd,
@@ -267,7 +330,7 @@ public class PowersMagiciansRed extends PunchingStand {
                                 0.15);
                     }
                 }
-                burnProjectiles(this.self,DamageHandler.genHitbox(this.self, grabBlock.getX(), grabBlock.getY(),
+                burnProjectiles(this.self, DamageHandler.genHitbox(this.self, grabBlock.getX(), grabBlock.getY(),
                         grabBlock.getZ(), 10, 10, 10), 20, 25);
             }
         }
