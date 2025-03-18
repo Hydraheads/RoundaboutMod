@@ -96,12 +96,12 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ){
         int size = value.getSize();
-        double distanceUp = 1;
-        if (size< 40){
-            size++;
+        double distanceUp = 0.3;
+        if (size< 30){
+            size+= value.getAccrualRate();
             value.setSize(size);
         }
-        distanceUp += ((double) size /40);
+        distanceUp += ((double) size /20);
         double offset = 0;
         int number = value.getCrossNumber();
         if (this.self.level().isClientSide()) {
@@ -140,7 +140,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         double offset2 = offset;
         offset = (offset - 180) * Math.PI;
-        double distanceOut = 2.3;
+        double distanceOut = 2;
         double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
         double y1 = entityY + distanceUp;
         double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));

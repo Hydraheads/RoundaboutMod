@@ -108,6 +108,15 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     public void setSize(int idd) {
         this.getEntityData().set(SIZE, idd);
     }
+
+    public float getRenderSize() {
+        return renderSize;
+    }
+    public void setRenderSize(float renderSize) {
+        this.renderSize = renderSize;
+    }
+    public float renderSize = 0;
+    public float lastRenderSize = 0;
     public int getCrossNumber() {
         return this.getEntityData().get(CROSS_NUMBER);
     }
@@ -145,22 +154,25 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
         super.tick();
 
-        /***
-        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.crossfireFlameParticlesPerTick; i++) {
+        if (this.tickCount % 4 == 1)
+        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.crossfireHurricaneFlameParticlesPerTick; i++) {
             this.level()
                     .addParticle(
                             ModParticles.ORANGE_FLAME,
-                            this.getRandomX(1.1),
-                            this.getRandomY(),
-                            this.getRandomZ(1.1),
+                            this.getRandomX(0.4),
+                            this.getRandomY(0.4)+this.getBbHeight()/2,
+                            this.getRandomZ(0.4),
                             0,
                             0,
                             0
                     );
         }
-         **/
     }
 
+
+    public double getRandomY(double $$0) {
+        return this.getY((2.0 * this.random.nextDouble() - 1.0) * $$0);
+    }
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
     }
@@ -218,6 +230,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             standUser = LE;
         }
         return standUser;
+    }
+
+    public int getAccrualRate(){
+        return 1;
     }
     public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
         if (ent instanceof CrossfireHurricaneEntity cfhe) {

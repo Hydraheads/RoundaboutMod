@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -35,13 +37,18 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
         this.model = new CrossfireHurricaneModel($$0.bakeLayer(ModEntityRendererClient.CROSSFIRE_LAYER));
     }
 
-    
+
 
     public void render(CrossfireHurricaneEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         if (ClientUtil.canSeeStands(Minecraft.getInstance().player)) {
+            RenderSystem.enableBlend();
 
             $$3.pushPose();
-            float rsize = $$0.getSize() * 0.04f;
+            float rsize = $$0.getSize();
+            if ($$0.getRenderSize() < rsize){
+                $$0.setRenderSize(Math.min((float) ($$0.getRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize));
+            }
+            rsize = $$0.getRenderSize() * 0.04f;
             $$3.translate(0f,1.96f+rsize,0f);
 
             $$3.mulPose(Axis.ZP.rotationDegrees(-180));
@@ -49,10 +56,11 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             $$3.mulPose(Axis.YP.rotationDegrees(Mth.rotLerp($$2, $$0.yRotO, $$0.getYRot())));
             float fsize = $$0.getSize() * 0.035f;
             $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
-            VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);
-            this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
+            this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, $$5);
+            RenderSystem.disableBlend();
         }
     }
 
