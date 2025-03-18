@@ -2102,7 +2102,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (!this.level().isClientSide()) {
-            if (this.isInWaterRainOrBubble()){
+            if (this.isInWaterRainOrBubble() || (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative())){
                 if (roundabout$remainingFireTicks >= 0) {
                     roundabout$remainingFireTicks = -1;
                     roundabout$setOnStandFire(StandFireType.FIRELESS.id);
@@ -2130,7 +2130,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (roundabout$getOnStandFire() > 0) {
                     roundabout$setOnStandFire(StandFireType.FIRELESS.id);
                 }
-                if (roundabout$remainingFireTicks ==0) {
+                if (roundabout$remainingFireTicks == 0) {
                     roundabout$remainingFireTicks = -1;
                 }
             }

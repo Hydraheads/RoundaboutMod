@@ -307,7 +307,7 @@ public class StandFireBlock extends BaseEntityBlock {
                         fd = (float) (fd*(ClientNetworking.getAppropriateConfig().
                                 damageMultipliers.standFireOnMobs*0.01));
                     }
-                    LE.hurt(ModDamageTypes.of($$1, ModDamageTypes.STAND_FIRE), fd);
+                    LE.hurt(ModDamageTypes.of($$1, ModDamageTypes.STAND_FIRE, fb.standUser), fd);
                 }
             }
         }
