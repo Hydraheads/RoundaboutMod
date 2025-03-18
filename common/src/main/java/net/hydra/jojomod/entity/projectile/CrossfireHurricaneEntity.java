@@ -1,7 +1,12 @@
 package net.hydra.jojomod.entity.projectile;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.entity.client.PreRenderEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
+import net.hydra.jojomod.util.ConfigManager;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,9 +26,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class CrossfireHurricaneEntity extends AbstractHurtingProjectile {
+public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implements PreRenderEntity {
     public CrossfireHurricaneEntity(EntityType<? extends CrossfireHurricaneEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -52,12 +59,13 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile {
     }
     @Override
     public boolean isControlledByLocalInstance() {
-
+        /**
         if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
             if (this.getCrossNumber() > 0) {
                 return true;
             }
         }
+         **/
         return super.isControlledByLocalInstance();
     }
 
@@ -76,6 +84,14 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile {
             this.yRotO = this.getYRot();
             this.xRotO = this.getXRot();
         }
+    }
+
+    public double renderRotation = 0;
+    public double lastRenderRotation = 0;
+
+    public void setRenderRotation(double rotation){
+        lastRenderRotation = renderRotation;
+        renderRotation = rotation;
     }
     public Vec3 storeVec;
     public void setUser(LivingEntity User) {
@@ -128,7 +144,23 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile {
             }
         }
         super.tick();
+
+        /***
+        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.crossfireFlameParticlesPerTick; i++) {
+            this.level()
+                    .addParticle(
+                            ModParticles.ORANGE_FLAME,
+                            this.getRandomX(1.1),
+                            this.getRandomY(),
+                            this.getRandomZ(1.1),
+                            0,
+                            0,
+                            0
+                    );
+        }
+         **/
     }
+
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
     }
@@ -187,7 +219,30 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile {
         }
         return standUser;
     }
-
+    public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
+        if (ent instanceof CrossfireHurricaneEntity cfhe) {
+            LivingEntity user = cfhe.getStandUser();
+            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                if (cfhe.getCrossNumber() > 0) {
+                    if (PMR.hurricaneSpecial == null) {
+                        PMR.hurricaneSpecial = new ArrayList<>();
+                    }
+                    List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(PMR.hurricaneSpecial) {
+                    };
+                    if (!hurricaneSpecial2.isEmpty()) {
+                        PMR.spinint = PMR.lastSpinInt + ($$4 * PMR.maxSpinint);
+                        int totalnumber = hurricaneSpecial2.size();
+                        double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
+                        double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
+                        double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
+                        PMR.transformHurricane(cfhe, totalnumber, lerpX,
+                                lerpY, lerpZ);
+                    }
+                }
+            }
+        }
+        return false;
+    }
     @Override
 
     protected boolean shouldBurn() {

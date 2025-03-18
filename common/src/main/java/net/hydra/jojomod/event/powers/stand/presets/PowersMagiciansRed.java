@@ -59,8 +59,12 @@ public class PowersMagiciansRed extends PunchingStand {
     public List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
 
     public void tickPowerEnd(){
-        if (hurricaneSpecial != null && !hurricaneSpecial.isEmpty() && !this.self.level().isClientSide()){
-            hurricaneSpecialRotation();
+        if (hurricaneSpecial != null && !hurricaneSpecial.isEmpty()){
+            if (!this.self.level().isClientSide()) {
+                hurricaneSpecialRotation();
+            } else {
+                lastSpinInt+= maxSpinint;
+            }
         }
     }
     public void addHurricaneSpecial(CrossfireHurricaneEntity che){
@@ -69,9 +73,10 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         hurricaneSpecial.add(che);
     }
-    public int spinint = 0;
+    public double spinint = 0;
+    public double lastSpinInt = 0;
+    public double maxSpinint = 4;
     public void hurricaneSpecialRotation() {
-        spinint+=4;
         if (hurricaneSpecial == null) {
             hurricaneSpecial = new ArrayList<>();
         }
@@ -92,54 +97,63 @@ public class PowersMagiciansRed extends PunchingStand {
             size++;
             value.setSize(size);
         }
-        distanceUp += ((double) size /30);
+        distanceUp += ((double) size /50);
         double offset = 0;
         int number = value.getCrossNumber();
-        if (number == 1){
-            offset = 0;
-        } else if (number == 2){
-            offset = switch (totalnumber) {
-                case 3 -> 0;
-                case 4 -> 90;
-                default -> offset;
-            };
-        } else if (number == 3){
-            offset = switch (totalnumber) {
-                case 2 -> 0;
-                case 3 -> 120;
-                case 4 -> 180;
-                default -> offset;
-            };
-        } else if (number == 4){
-            offset = switch (totalnumber) {
-                case 1 -> 0;
-                case 2 -> 180;
-                case 3 -> 240;
-                case 4 -> 270;
-                default -> offset;
-            };
+        if (this.self.level().isClientSide()) {
+            if (number == 1) {
+                offset = 0;
+            } else if (number == 2) {
+                offset = switch (totalnumber) {
+                    case 3 -> 0;
+                    case 4 -> 90;
+                    default -> offset;
+                };
+            } else if (number == 3) {
+                offset = switch (totalnumber) {
+                    case 2 -> 0;
+                    case 3 -> 120;
+                    case 4 -> 180;
+                    default -> offset;
+                };
+            } else if (number == 4) {
+                offset = switch (totalnumber) {
+                    case 1 -> 0;
+                    case 2 -> 180;
+                    case 3 -> 240;
+                    case 4 -> 270;
+                    default -> offset;
+                };
+            }
+            offset += spinint;
+            if (offset > 360) {
+                offset -= 360;
+            } else if (offset < 0) {
+                offset += 360;
+            }
+        } else {
+            offset = this.self.getYRot()%360;
         }
-        offset+=spinint;
-        if (offset > 360) {
-            offset -= 360;
-        } else if (offset < 0) {
-            offset += 360;
-        }
+        double offset2 = offset;
         offset = (offset - 180) * Math.PI;
-        double distanceOut = 3.2;
+        double distanceOut = 2.6;
         double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
         double y1 = entityY + distanceUp;
         double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));
-        if (this.self.level().isClientSide()){
-            value.setOldPosAndRot();
-            //Roundabout.LOGGER.info("hi");
-        } else {
+        if (!this.self.level().isClientSide()){
             value.setOldPosAndRot();
             //Roundabout.LOGGER.info("bye");
         }
         value.actuallyTick();
         value.storeVec = new Vec3(x1,y1,z1);
-        value.setPos(x1, y1, z1);
+        if (this.self.level().isClientSide()) {
+            value.setYRot((float) offset2);
+            value.yRotO = (float) offset2;
+            value.xOld = x1; value.yOld = y1; value.zOld = z1;
+            value.absMoveTo(x1,y1,z1);
+        } else {
+            value.setPos(x1, y1, z1);
+        }
     }
     public int snapNumber;
     public int fireIDNumber;

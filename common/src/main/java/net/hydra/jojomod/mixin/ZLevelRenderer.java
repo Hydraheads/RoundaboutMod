@@ -2,6 +2,8 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.entity.client.PreRenderEntity;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -29,14 +31,29 @@ import javax.annotation.Nullable;
 @Mixin(LevelRenderer.class)
 public abstract class ZLevelRenderer {
 
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow
+    @Final
+    private Minecraft minecraft;
     @Shadow
     @Nullable
     private ClientLevel level;
-    @Shadow @Final private RenderBuffers renderBuffers;
+    @Shadow
+    @Final
+    private RenderBuffers renderBuffers;
 
-    @Shadow protected abstract void renderHitOutline(PoseStack $$0, VertexConsumer $$1, Entity $$2, double $$3, double $$4, double $$5, BlockPos $$6, BlockState $$7);
+    @Shadow
+    protected abstract void renderHitOutline(PoseStack $$0, VertexConsumer $$1, Entity $$2, double $$3, double $$4, double $$5, BlockPos $$6, BlockState $$7);
 
+    @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
+            at = @At(value = "HEAD"),
+            cancellable = true)
+    private void roundabout$renderEntity(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci){
+        if ($$0 instanceof PreRenderEntity pre){
+            if (pre.preRender($$0,$$1,$$2,$$3,$$4,$$5,$$6)){
+                ci.cancel();
+            }
+        }
+    }
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 1,shift = At.Shift.BEFORE),
             cancellable = true)
