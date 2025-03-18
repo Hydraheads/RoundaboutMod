@@ -86,17 +86,17 @@ public class ScissorItem extends TieredItem implements Vanishable {
             $$0.hurtAndBreak(1, $$4, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         }
 
-        return !$$2.is(BlockTags.LEAVES)
-                && !$$2.is(Blocks.COBWEB)
-                && !$$2.is(Blocks.GRASS)
-                && !$$2.is(Blocks.FERN)
-                && !$$2.is(Blocks.DEAD_BUSH)
-                && !$$2.is(Blocks.HANGING_ROOTS)
-                && !$$2.is(Blocks.VINE)
-                && !$$2.is(Blocks.TRIPWIRE)
-                && !$$2.is(BlockTags.WOOL)
-                ? super.mineBlock($$0, $$1, $$2, $$3, $$4)
-                : true;
+        return $$2.is(BlockTags.LEAVES)
+                || $$2.is(Blocks.COBWEB)
+                || $$2.is(Blocks.GRASS)
+                || $$2.is(Blocks.FERN)
+                || $$2.is(Blocks.DEAD_BUSH)
+                || $$2.is(Blocks.HANGING_ROOTS)
+                || $$2.is(Blocks.VINE)
+                || $$2.is(Blocks.TRIPWIRE)
+                || $$2.is(BlockTags.WOOL)
+                ? true
+                : super.mineBlock($$0, $$1, $$2, $$3, $$4);
     }
 
     @Override
@@ -106,15 +106,10 @@ public class ScissorItem extends TieredItem implements Vanishable {
 
     @Override
     public float getDestroySpeed(ItemStack $$0, BlockState $$1) {
-        if ($$1.is(BlockTags.LEAVES)) {
-            return 3.0F;
-        } else if ($$1.is(Blocks.COBWEB)) {
-            return 12.0F;
-        } else if ($$1.is(BlockTags.WOOL)) {
-            return 4.0F;
-        } else {
-            return !$$1.is(Blocks.VINE) && !$$1.is(Blocks.GLOW_LICHEN) ? super.getDestroySpeed($$0, $$1) : 2.0F;
-        }
+        if ($$1.is(BlockTags.LEAVES)) return 3.0F;
+        if ($$1.is(Blocks.COBWEB)) return 12.0F; 
+        if ($$1.is(BlockTags.WOOL)) return 4.0F;
+        return $$1.is(Blocks.VINE) || $$1.is(Blocks.GLOW_LICHEN) ? 2.0F : super.getDestroySpeed($$0, $$1);
     }
 
     @Override

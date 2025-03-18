@@ -33,15 +33,13 @@ public class GlaiveItem extends SwordItem {
 
     public GlaiveItem(Tier $$0, float $$1, float $$2, Properties $$3, float chargeDamage) {
         super($$0, (int) $$1, $$2, $$3);
-        this.chargeDamage =chargeDamage;
+        this.chargeDamage = chargeDamage;
     }
 
     public GlaiveItem(Tier $$0, int $$1, float $$2, Properties $$3, float chargeDamage) {
         super($$0, $$1, $$2, $$3);
-        this.chargeDamage =chargeDamage;
+        this.chargeDamage = chargeDamage;
     }
-
-
 
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
@@ -56,16 +54,11 @@ public class GlaiveItem extends SwordItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        if ($$1.getAttackStrengthScale(1) >= 1F) {
-            $$1.startUsingItem($$2);
-                if ($$1.getUseItem() == $$3 && $$1.getUseItemRemainingTicks() == $$1.getUseItem().getUseDuration()) {
-                    if ($$0.isClientSide) {
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND);
-                    }
-                    return InteractionResultHolder.success($$3);
-                }
-        }
-        return InteractionResultHolder.fail($$3);
+        if ($$1.getAttackStrengthScale(1) < 1F) return InteractionResultHolder.fail($$3);
+        $$1.startUsingItem($$2);
+        if ($$1.getUseItem() != $$3 || $$1.getUseItemRemainingTicks() != $$1.getUseItem().getUseDuration()) return InteractionResultHolder.fail($$3);
+        if ($$0.isClientSide) ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND);
+        return InteractionResultHolder.success($$3);
     }
 
 
@@ -94,38 +87,36 @@ public class GlaiveItem extends SwordItem {
     }
 
     public void glaiveAttack(ItemStack $$0, Level $$1, ServerPlayer player, Entity target){
-        if (player.getInventory().contains($$0)) {
-            $$1.playSound(null, player, ModSounds.GLAIVE_ATTACK_EVENT, SoundSource.PLAYERS, 1F, 1F);
-            if (target != null) {
-                float power = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
-                float $$2;
-                if (target instanceof LivingEntity) {
-                    $$2 = EnchantmentHelper.getDamageBonus($$0, ((LivingEntity) target).getMobType());
-                } else {
-                    $$2 = EnchantmentHelper.getDamageBonus($$0, MobType.UNDEFINED);
+        if (!player.getInventory().contains($$0)) return;
+        $$1.playSound(null, player, ModSounds.GLAIVE_ATTACK_EVENT, SoundSource.PLAYERS, 1F, 1F);
+        if (target != null) {
+            float power = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+            float $$2;
+            if (target instanceof LivingEntity) {
+                $$2 = EnchantmentHelper.getDamageBonus($$0, ((LivingEntity) target).getMobType());
+            } else {
+                $$2 = EnchantmentHelper.getDamageBonus($$0, MobType.UNDEFINED);
+            }
+            power += $$2 + this.chargeDamage;
+            if (target.hurt(ModDamageTypes.of($$1, ModDamageTypes.GLAIVE, player), power)) {
+                if (!player.isCreative()) {
+                    ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem($$0)));
+                    item.hurt(1, $$1.getRandom(), player);
                 }
-                power += $$2;
-                power += this.chargeDamage;
-                if (target.hurt(ModDamageTypes.of($$1, ModDamageTypes.GLAIVE, player), power)) {
-                    if (!player.isCreative()) {
-                        ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem($$0)));
-                        item.hurt(1, $$1.getRandom(), player);
-                    }
-                    if (target instanceof LivingEntity) {
-                        ((LivingEntity) target).knockback(0.35f, player.getX() - target.getX(), player.getZ() - target.getZ());
-                        if (MainUtil.getMobBleed(target)) {
-                            if ($$0.getItem() instanceof GlaiveItem GI && GI.getTier() == Tiers.WOOD){
-                                MainUtil.makeBleed(target,0,400, player);
-                            } else {
-                                MainUtil.makeBleed(target,1,400, player);
-                                MainUtil.makeMobBleed(target);
-                            }
+                if (target instanceof LivingEntity) {
+                    ((LivingEntity) target).knockback(0.35f, player.getX() - target.getX(), player.getZ() - target.getZ());
+                    if (MainUtil.getMobBleed(target)) {
+                        if ($$0.getItem() instanceof GlaiveItem GI && GI.getTier() == Tiers.WOOD){
+                            MainUtil.makeBleed(target,0,400, player);
+                        } else {
+                            MainUtil.makeBleed(target,1,400, player);
+                            MainUtil.makeMobBleed(target);
                         }
                     }
-                } else {
-                    if (target instanceof LivingEntity) {
-                        MainUtil.knockShield(target, 200);
-                    }
+                }
+            } else {
+                if (target instanceof LivingEntity) {
+                    MainUtil.knockShield(target, 200);
                 }
             }
         }

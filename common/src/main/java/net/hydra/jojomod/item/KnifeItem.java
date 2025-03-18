@@ -56,7 +56,7 @@ public class KnifeItem extends Item{
         if ($$2 instanceof Player $$4) {
             int $$5 = this.getUseDuration($$0) - $$3;
             int itemTime = 10;
-            if ($$0.is(ModItems.KNIFE)){itemTime=5;}
+            if ($$0.is(ModItems.KNIFE)) itemTime=5;
             if ($$5 >= itemTime) {
                 if (!$$1.isClientSide) {
                     $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
@@ -104,10 +104,7 @@ public class KnifeItem extends Item{
 
     @Override
     public int getEnchantmentValue() {
-        return
-                1;
+        return 1;
     }
-
-
 
 }

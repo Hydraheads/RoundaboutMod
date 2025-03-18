@@ -29,11 +29,8 @@ public class MaxStandDiscItem extends StandDiscItem{
         $$2.add(this.getDisplayName2().withStyle(ChatFormatting.AQUA));
         $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
         CompoundTag $$4 = $$0.getTagElement("Memory");
-        if ($$4 != null && $$1 != null) {
-            if ($$4.contains("Skin")) {
-                byte skin = ($$4.getByte("Skin"));
-                $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
-            }
-        }
+        if ($$4 == null || $$1 == null || !$$4.contains("Skin")) return;
+        byte skin = ($$4.getByte("Skin"));
+        $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
     }
 }
