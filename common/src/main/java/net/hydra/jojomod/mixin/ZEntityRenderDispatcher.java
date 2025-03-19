@@ -1,18 +1,28 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IEntityRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -22,9 +32,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import org.lwjgl.opengl.GL20C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -45,6 +57,72 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
         }
     }
+    @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE",
+    target="Lnet/minecraft/client/renderer/entity/EntityRenderer;render(Lnet/minecraft/world/entity/Entity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+    shift = At.Shift.AFTER), cancellable = true)
+    protected <E extends Entity>  void roundabout$renderFlame(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
+        if ($$0 instanceof LivingEntity LE){
+            if (roundabout$displayFireAnimation(LE)){
+                roundabout$renderFlame($$6, $$7, LE);
+            }
+        }
+    }
+    private void roundabout$renderFlame(PoseStack $$0, MultiBufferSource $$1, LivingEntity $$2) {
+
+        /**
+        byte bt = ((StandUser) $$2).roundabout$getOnStandFire();
+        if (bt > 0) {
+            $$0.pushPose();
+            BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.depthFunc(GL20C.GL_ALWAYS);
+            RenderSystem.depthMask(false);
+            RenderSystem.enableBlend();
+
+            RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+
+            // Rotates every 2 ticks through the 32 frames
+            int frame = 0;
+            if (Minecraft.getInstance().level != null ){
+                frame =(int) (Minecraft.getInstance().level.getGameTime() / 2) % 32;
+            }
+            float $$5 = $$2.getBbWidth() * 1.4F;
+            $$0.scale($$5, $$5, $$5);
+            float frameHeight = 1.0F / 32;
+            float $$6 = 0.5F;
+            float $$7 = 0.0F;
+            float $$8 = $$2.getBbHeight() / $$5;
+            float $$9 = 0.0F;
+
+            float u0 = 0.0F;
+            float u1 = 1.0F;
+            float v0 = frame * frameHeight;
+            float v1 = (frame + 1) * frameHeight;
+            float $$10 = 0.0F;
+            int $$11 = 0;
+            VertexConsumer $$12 = $$1.getBuffer(Sheets.cutoutBlockSheet());
+
+            for (PoseStack.Pose $$13 = $$0.last(); $$8 > 0.0F; $$11++) {
+
+                fireVertex($$13, $$12, $$6 - 0.0F, 0.0F - $$9, $$10, u0, v1);
+                fireVertex($$13, $$12, -$$6 - 0.0F, 0.0F - $$9, $$10, u1, v1);
+                fireVertex($$13, $$12, -$$6 - 0.0F, 1.4F - $$9, $$10, u1, v0);
+                fireVertex($$13, $$12, $$6 - 0.0F, 1.4F - $$9, $$10, u0, v0);
+                $$8 -= 0.45F;
+                $$9 -= 0.45F;
+                $$6 *= 0.9F;
+                $$10 += 0.03F;
+            }
+
+            $$0.popPose();
+        }
+         **/
+    }
+
+    @Unique
+    public boolean roundabout$displayFireAnimation(LivingEntity LE) {
+        return ((StandUser)LE).roundabout$isOnStandFire() && !LE.isSpectator();
+    }
     @Shadow
     private static void renderBlockShadow(
             PoseStack.Pose $$0, VertexConsumer $$1, ChunkAccess $$2, LevelReader $$3, BlockPos $$4, double $$5, double $$6, double $$7, float $$8, float $$9
@@ -52,6 +130,12 @@ public abstract class ZEntityRenderDispatcher {
 
     @Shadow public abstract <T extends Entity> EntityRenderer<? super T> getRenderer(T $$0);
 
+
+    @Shadow public Camera camera;
+
+    @Shadow
+    private static void fireVertex(PoseStack.Pose $$0, VertexConsumer $$1, float $$2, float $$3, float $$4, float $$5, float $$6) {
+    }
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
     private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
