@@ -71,6 +71,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         return super.isControlledByLocalInstance();
     }
 
+    @Override
+    public boolean isPickable() {
+        return false;
+    }
+
 
     public void setOldPosAndRot2() {
         if (storeVec != null) {
@@ -123,6 +128,12 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     public void setRenderSize(float renderSize) {
         this.renderSize = renderSize;
     }
+    public float getLastRenderSize() {
+        return lastRenderSize;
+    }
+    public void setLastRenderSize(float renderSize) {
+        this.lastRenderSize = renderSize;
+    }
     public float renderSize = 0;
     public float lastRenderSize = 0;
     public int getCrossNumber() {
@@ -160,21 +171,30 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 }
             }
         }
-        if (this.level().isClientSide() && !ClientUtil.checkIfGamePaused()){
-            int ticks = ConfigManager.getClientConfig().particleSettings.cfhTicksPerFlameParticle;
-            if (ticks > -1 && this.tickCount % ticks == 0)
-                //for (int i = 0; i < 1; i++) {
+        if (this.level().isClientSide()){
+            if (lastRenderSize < getMaxSize()) {
+                lastRenderSize += getAccrualRate();
+            } else {
+                lastRenderSize = getMaxSize();
+            }
+            renderSize = lastRenderSize;
+            if (!ClientUtil.checkIfGamePaused()) {
+                int ticks = ConfigManager.getClientConfig().particleSettings.cfhTicksPerFlameParticle;
+                if (ticks > -1 && this.tickCount % ticks == 0)
+                    //for (int i = 0; i < 1; i++) {
                     this.level()
                             .addParticle(
                                     ModParticles.ORANGE_FLAME,
                                     this.getRandomX(0.26),
-                                    this.getRandomY(0.26)+this.getBbHeight()*0.55,
+                                    this.getRandomY(0.26) + this.getBbHeight() * 0.55,
                                     this.getRandomZ(0.26),
                                     0,
                                     0,
                                     0
                             );
                 //}
+            }
+        } else {
         }
         super.tick();
     }

@@ -129,7 +129,8 @@ public abstract class ZScreenEffectRenderer {
 
             for (int i = 0; i < 2; ++i) {
                 pose.pushPose();
-                pose.translate((float) (-(i * 2 - 1)) * 0.24F, -0.3F, 0.0F);
+                //changed from 0.3 to -0.45 for lower fire
+                pose.translate((float) (-(i * 2 - 1)) * 0.24F, -0.45F, 0.0F);
                 pose.mulPose(Axis.YP.rotationDegrees((float) (i * 2 - 1) * 10.0F));
                 Matrix4f matrix4f = pose.last().pose();
 
