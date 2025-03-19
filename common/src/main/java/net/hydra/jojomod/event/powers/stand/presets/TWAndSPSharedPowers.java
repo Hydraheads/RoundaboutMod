@@ -787,6 +787,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (impactBrace){
                 if (((StandUser) this.getSelf()).roundabout$getActive()){
                     if (this.getSelf().onGround()) {
+                        impactBrace = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA_FINISH, true);
                         if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
@@ -939,8 +940,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     public boolean fallBrace() {
+        impactBrace= false;
         if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {
-            impactBrace = false;
 
             cancelConsumableItem(this.getSelf());
             this.setAttackTimeDuring(-15);
