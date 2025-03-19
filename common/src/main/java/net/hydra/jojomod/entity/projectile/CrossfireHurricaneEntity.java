@@ -154,6 +154,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         tick();
         isTickable = false;
     }
+    public int saneAgeTicking;
     public void tick() {
         if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
 
@@ -171,7 +172,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 }
             }
         }
-        if (this.level().isClientSide()){
+        if (this.level().isClientSide() && this.saneAgeTicking != this.tickCount){
             if (lastRenderSize < getMaxSize()) {
                 lastRenderSize += getAccrualRate();
             } else {
@@ -195,6 +196,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             }
         } else {
         }
+        saneAgeTicking = this.tickCount;
         super.tick();
     }
 
