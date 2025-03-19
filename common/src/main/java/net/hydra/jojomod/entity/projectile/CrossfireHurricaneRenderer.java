@@ -47,12 +47,10 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             if ($$0.getRenderSize() < rsize){
                 $$0.setRenderSize(Math.min((float) ($$0.getLastRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize));
             }
-            rsize = $$0.getRenderSize() * 0.04f;
-            $$3.translate(0f,1.96f+rsize,0f);
 
-            $$3.mulPose(Axis.ZP.rotationDegrees(-180));
+            //$$3.mulPose(Axis.ZP.rotationDegrees(-180));
             //$$3.mulPose(Axis.YP.rotationDegrees((float) Mth.rotLerp($$2, (float) $$0.renderRotation, (float) $$0.lastRenderRotation)));
-            $$3.mulPose(Axis.YP.rotationDegrees(Mth.rotLerp($$2, $$0.yRotO, $$0.getYRot())));
+            $$3.mulPose(Axis.YP.rotationDegrees(-1*(Mth.rotLerp($$2, $$0.yRotO, $$0.getYRot()))));
             float fsize = $$0.getRenderSize() * 0.035f;
             $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));

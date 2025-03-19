@@ -60,6 +60,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public void tickPowerEnd(){
         if (hurricaneSpecial != null && !hurricaneSpecial.isEmpty()){
+            removeHurricanes();
             if (!this.self.level().isClientSide()) {
                 hurricaneSpecialRotation();
             } else {
@@ -85,24 +86,36 @@ public class PowersMagiciansRed extends PunchingStand {
         if (!hurricaneSpecial2.isEmpty()) {
             int totalnumber = hurricaneSpecial2.size();
             for (CrossfireHurricaneEntity value : hurricaneSpecial2) {
-                if (value.isRemoved() || !value.isAlive()){
+                transformHurricane(value, totalnumber, this.self.getX(), this.self.getY(), this.self.getZ(),value.getSize());
+            }
+        }
+    }
+    public void removeHurricanes(){
+        if (hurricaneSpecial == null) {
+            hurricaneSpecial = new ArrayList<>();
+        }
+        List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
+        };
+        if (!hurricaneSpecial2.isEmpty()) {
+            int totalnumber = hurricaneSpecial2.size();
+            for (CrossfireHurricaneEntity value : hurricaneSpecial2) {
+                if (value.isRemoved() || !value.isAlive()) {
                     value.initialized = false;
                     hurricaneSpecial.remove(value);
                 }
-                transformHurricane(value, totalnumber, this.self.getX(), this.self.getY(), this.self.getZ());
             }
         }
     }
 
     public int maxSizeForSpecial = 30;
-    public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ){
+    public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ, double rsize){
         int size = value.getSize();
         double distanceUp = 0.3;
-        if (size< maxSizeForSpecial){
+        if (size< value.getMaxSize()){
             size+= value.getAccrualRate();
             value.setSize(size);
         }
-        distanceUp += ((double) size /20);
+        distanceUp += ((double) rsize /20);
         double offset = 0;
         int number = value.getCrossNumber();
         if (this.self.level().isClientSide()) {

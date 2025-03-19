@@ -177,7 +177,6 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             } else {
                 lastRenderSize = getMaxSize();
             }
-            renderSize = lastRenderSize;
             if (!ClientUtil.checkIfGamePaused()) {
                 int ticks = ConfigManager.getClientConfig().particleSettings.cfhTicksPerFlameParticle;
                 if (ticks > -1 && this.tickCount % ticks == 0)
@@ -283,7 +282,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                         double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
                         double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
                         PMR.transformHurricane(cfhe, totalnumber, lerpX,
-                                lerpY, lerpZ);
+                                lerpY, lerpZ, getRenderSize());
                     }
                 }
             }
