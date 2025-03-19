@@ -56,7 +56,7 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             float fsize = $$0.getRenderSize() * 0.035f;
             $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
-            this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.55f);
+            this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.57f);
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, 15728880);
         }
@@ -64,10 +64,19 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
 
 
 
+    public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3.png");
 
     @Override
     public ResourceLocation getTextureLocation(CrossfireHurricaneEntity var1) {
-        return ModEntities.CROSSFIRE_HURRICANE_TEXTURE;
+        int tc = var1.tickCount%16;
+        if ((tc >2 && tc < 5) || (tc > 9 && tc < 12)){
+            return CROSSFIRE_HURRICANE_2_TEXTURE;
+        } if (tc >4 && tc < 10){
+            return CROSSFIRE_HURRICANE_3_TEXTURE;
+        }
+        return CROSSFIRE_HURRICANE_TEXTURE;
     }
 
 
