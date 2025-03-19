@@ -236,6 +236,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 $$1.add(TheWorldEntity.ARCADE_SKIN);
             } if (Level > 3 || bypass){
                 $$1.add(TheWorldEntity.OVA_SKIN);
+                $$1.add(TheWorldEntity.AGOGO_SKIN);
             } if (Level > 4 || bypass){
                 $$1.add(TheWorldEntity.DARK_SKIN);
             } if (Level > 5 || bypass){

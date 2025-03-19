@@ -22,6 +22,7 @@ public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
     private static final ResourceLocation DARK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_dark.png");
     private static final ResourceLocation AQUA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_aqua.png");
     private static final ResourceLocation ARCADE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_arcade.png");
+    private static final ResourceLocation AGOGO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_agogo.png");
     public TheWorldRenderer(EntityRendererProvider.Context context) {
         super(context, new TheWorldModel<>(context.bakeLayer(ModEntityRendererClient.THE_WORLD_LAYER)),0f);
         this.addLayer(new TheWorldOverHeavenEyeLayer<>(this));
@@ -52,6 +53,8 @@ public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
             return AQUA_SKIN;
         } else if (BT == TheWorldEntity.ARCADE_SKIN){
             return ARCADE_SKIN;
+        } else if (BT == TheWorldEntity.AGOGO_SKIN){
+            return AGOGO_SKIN;
         }
         return PART_3_SKIN;
     }
