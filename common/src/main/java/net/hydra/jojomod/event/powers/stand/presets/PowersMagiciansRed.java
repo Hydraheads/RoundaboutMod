@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
@@ -69,18 +70,20 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public void addHurricaneSpecial(CrossfireHurricaneEntity che){
-        if (hurricaneSpecial == null) {
-            hurricaneSpecial = new ArrayList<>();
-        }
+        hurricaneInit();
         hurricaneSpecial.add(che);
     }
     public double spinint = 0;
     public double lastSpinInt = 0;
     public double maxSpinint = 4;
-    public void hurricaneSpecialRotation() {
+
+    public void hurricaneInit(){
         if (hurricaneSpecial == null) {
             hurricaneSpecial = new ArrayList<>();
         }
+    }
+    public void hurricaneSpecialRotation() {
+        hurricaneInit();
         List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
         };
         if (!hurricaneSpecial2.isEmpty()) {
@@ -91,9 +94,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public void removeHurricanes(){
-        if (hurricaneSpecial == null) {
-            hurricaneSpecial = new ArrayList<>();
-        }
+        hurricaneInit();
         List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
         };
         if (!hurricaneSpecial2.isEmpty()) {
@@ -269,9 +270,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public boolean hasHurricaneSpecial(){
-        if (hurricaneSpecial == null) {
-            hurricaneSpecial = new ArrayList<>();
-        }
+        hurricaneInit();
         List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
         };
         if (!hurricaneSpecial2.isEmpty()) {
@@ -545,7 +544,7 @@ public class PowersMagiciansRed extends PunchingStand {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if (!value.isRemoved() && value instanceof Projectile && !(value instanceof Fireball)){
+            if (!value.isRemoved() && value instanceof Projectile && !(value instanceof Fireball) && !(value instanceof UnburnableProjectile)){
                 if (angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle){
                     hitEntities.remove(value);
                     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, value.getX(),
@@ -562,11 +561,27 @@ public class PowersMagiciansRed extends PunchingStand {
         return hitEntities;
     }
 
+    public void clearAllHurricanes(){
+        hurricaneInit();
+
+        List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
+        };
+        if (!hurricaneSpecial2.isEmpty()) {
+            int totalnumber = hurricaneSpecial2.size();
+            for (CrossfireHurricaneEntity value : hurricaneSpecial2) {
+                value.discard();
+            }
+        }
+        if (!hurricaneSpecial.isEmpty()) {
+            hurricaneSpecial.clear();
+        }
+    }
     public boolean snap(){
         this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                 this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway);
         this.snapNumber++;
+        clearAllHurricanes();
         return true;
     }
 

@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implements PreRenderEntity {
+public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implements PreRenderEntity, UnburnableProjectile {
     public CrossfireHurricaneEntity(EntityType<? extends CrossfireHurricaneEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
