@@ -22,7 +22,7 @@ public class CrossfireHurricaneModel<T extends CrossfireHurricaneEntity> extends
     private final ModelPart Root;
 
     public CrossfireHurricaneModel(ModelPart root) {
-        super(RenderType::entitySolid);
+        super(RenderType::entityTranslucent);
         this.Root = root;
         this.Fire_Ankh = root.getChild("Fire_Ankh");
         this.Square = this.Fire_Ankh.getChild("Square");

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -42,6 +43,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CROSS_NUMBER = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> SIZE = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MAX_SIZE = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);
 
     public LivingEntity standUser;
     public UUID standUserUUID;
@@ -108,6 +110,12 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     public void setSize(int idd) {
         this.getEntityData().set(SIZE, idd);
     }
+    public int getMaxSize() {
+        return this.getEntityData().get(MAX_SIZE);
+    }
+    public void setMaxSize(int idd) {
+        this.getEntityData().set(MAX_SIZE, idd);
+    }
 
     public float getRenderSize() {
         return renderSize;
@@ -152,21 +160,23 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 }
             }
         }
-        super.tick();
-
-        if (this.tickCount % 4 == 1)
-        for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.crossfireHurricaneFlameParticlesPerTick; i++) {
-            this.level()
-                    .addParticle(
-                            ModParticles.ORANGE_FLAME,
-                            this.getRandomX(0.4),
-                            this.getRandomY(0.4)+this.getBbHeight()/2,
-                            this.getRandomZ(0.4),
-                            0,
-                            0,
-                            0
-                    );
+        if (this.level().isClientSide() && !ClientUtil.checkIfGamePaused()){
+            int ticks = ConfigManager.getClientConfig().particleSettings.cfhTicksPerFlameParticle;
+            if (ticks > -1 && this.tickCount % ticks == 0)
+                //for (int i = 0; i < 1; i++) {
+                    this.level()
+                            .addParticle(
+                                    ModParticles.ORANGE_FLAME,
+                                    this.getRandomX(0.26),
+                                    this.getRandomY(0.26)+this.getBbHeight()*0.55,
+                                    this.getRandomZ(0.26),
+                                    0,
+                                    0,
+                                    0
+                            );
+                //}
         }
+        super.tick();
     }
 
 
@@ -194,6 +204,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SIZE, 0);
         this.entityData.define(CROSS_NUMBER, 0);
+        this.entityData.define(MAX_SIZE, 0);
     }
 
     @Override

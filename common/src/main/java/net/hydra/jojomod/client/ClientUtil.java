@@ -77,7 +77,9 @@ public class ClientUtil {
         }
         return false;
     }
-
+    public static boolean checkIfGamePaused() {
+        return Minecraft.getInstance().isPaused();
+    }
     public static boolean checkIfStandIsYoursAndFirstPerson(StandEntity stand) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

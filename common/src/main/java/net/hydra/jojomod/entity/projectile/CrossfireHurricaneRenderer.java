@@ -41,10 +41,9 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
 
     public void render(CrossfireHurricaneEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         if (ClientUtil.canSeeStands(Minecraft.getInstance().player)) {
-            RenderSystem.enableBlend();
 
             $$3.pushPose();
-            float rsize = $$0.getSize();
+            float rsize = $$0.getMaxSize();
             if ($$0.getRenderSize() < rsize){
                 $$0.setRenderSize(Math.min((float) ($$0.getRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize));
             }
@@ -57,10 +56,9 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             float fsize = $$0.getSize() * 0.035f;
             $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
-            this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
+            this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.55f);
             $$3.popPose();
-            super.render($$0, $$1, $$2, $$3, $$4, $$5);
-            RenderSystem.disableBlend();
+            super.render($$0, $$1, $$2, $$3, $$4, 15728880);
         }
     }
 
