@@ -329,11 +329,13 @@ public class PowersMagiciansRed extends PunchingStand {
         if (keyIsDown) {
             if (!hold2) {
                 hold2 = true;
-                if (hasHurricaneSpecial() && !isChargingCrossfire()){
-                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                        this.setCooldown(PowerIndex.SKILL_EXTRA_2, 4);
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+                if (hasHurricaneSpecial()){
+                    if (!isChargingCrossfire()) {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 4);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+                        }
                     }
                 } else {
                     if (!isGuarding()) {
