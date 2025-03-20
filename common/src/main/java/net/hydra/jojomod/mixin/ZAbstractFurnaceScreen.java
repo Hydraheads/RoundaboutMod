@@ -42,7 +42,7 @@ public abstract class ZAbstractFurnaceScreen<T extends AbstractFurnaceMenu> exte
             StandUser user = ((StandUser) pl);
             StandPowers powers = user.roundabout$getStandPowers();
 
-            if (powers.canLightFurnace()){
+            if (powers.canLightFurnace() && user.roundabout$getSealedTicks() <= -1){
                 context.blit(StandIcons.FURNACE, i-150, j, 0, 0, 0, 0);
                 int leftGearPos = i +80;
                 int topGearPos = j+55;
