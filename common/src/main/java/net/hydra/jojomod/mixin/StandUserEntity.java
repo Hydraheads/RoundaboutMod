@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -109,6 +110,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public int roundabout$remainingFireTicks = -1;
+    @Unique
+    public LivingEntity roundabout$fireStarter;
+    @Unique
+    public int roundabout$fireStarterID;
 
     @Shadow
     @javax.annotation.Nullable
@@ -153,6 +158,29 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     @Unique
     private LivingEntity roundabout$thrower;
+    @Nullable
+    @Override
+    @Unique
+    public LivingEntity roundabout$getFireStarter(){
+        return roundabout$fireStarter;
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setFireStarter(LivingEntity le){
+        roundabout$fireStarter = le;
+    }
+    @Override
+    @Unique
+    public int roundabout$getFireStarterID(){
+        return roundabout$fireStarterID;
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setFireStarterID(int le){
+        roundabout$fireStarterID = le;
+    }
 
     @Nullable
     @Unique
@@ -775,6 +803,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setOnStandFire(byte onStandFire) {
         if (!(this.level().isClientSide)) {
             this.getEntityData().set(ROUNDABOUT$ON_STAND_FIRE, onStandFire);
+            if (onStandFire == StandFireType.FIRELESS.id){
+                this.roundabout$fireStarter = null;
+            }
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setOnStandFire(byte onStandFire, LivingEntity LE) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$ON_STAND_FIRE, onStandFire);
+            if (onStandFire == StandFireType.FIRELESS.id){
+                this.roundabout$fireStarter = null;
+            } else {
+                if (LE != null && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersMagiciansRed pm){
+
+                    this.roundabout$fireStarter = LE;
+                    this.roundabout$fireStarterID = pm.snapNumber;
+                }
+            }
         }
     }
     @Unique
@@ -2102,7 +2149,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (!this.level().isClientSide()) {
-            if (this.isInWaterRainOrBubble() || (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative())){
+            if (this.isInWaterRainOrBubble() || (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative())
+            || (roundabout$fireStarter != null && ((StandUser)roundabout$fireStarter).roundabout$getStandPowers() instanceof
+                    PowersMagiciansRed PM && PM.snapNumber > roundabout$fireStarterID)){
                 if (roundabout$remainingFireTicks >= 0) {
                     roundabout$remainingFireTicks = -1;
                     roundabout$setOnStandFire(StandFireType.FIRELESS.id);
