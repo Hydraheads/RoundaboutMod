@@ -18,6 +18,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -238,6 +239,13 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             radialExplosion(null);
             this.discard();
         }
+    }
+    public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
+        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
+        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
+        Vec3 $$9 = $$0.getDeltaMovement();
     }
     @Override
     protected void onHitEntity(EntityHitResult $$0) {

@@ -578,7 +578,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
-        ankh.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 0.6F, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 1.2F, 0);
         this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                 this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 4.0F, 0.9F);
     }
