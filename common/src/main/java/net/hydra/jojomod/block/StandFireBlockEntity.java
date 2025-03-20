@@ -79,7 +79,7 @@ public class StandFireBlockEntity extends BlockEntity{
                         standUser = null;
                     }
                 } else {
-                    //$$1.removeBlock($$2, false);
+                    $$1.removeBlock($$2, false);
                     return;
                 }
 

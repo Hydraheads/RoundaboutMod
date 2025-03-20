@@ -1,28 +1,20 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.StandFireBlockEntity;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Options;
@@ -35,27 +27,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
 
 public class PowersMagiciansRed extends PunchingStand {
 
@@ -118,9 +102,8 @@ public class PowersMagiciansRed extends PunchingStand {
         List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
         };
         if (!hurricaneSpecial2.isEmpty()) {
-            int totalnumber = hurricaneSpecial2.size();
             for (CrossfireHurricaneEntity value : hurricaneSpecial2) {
-                if (value.isRemoved() || !value.isAlive()) {
+                if (value.isRemoved() || !value.isAlive() || value.getCrossNumber() <= 0) {
                     value.initialized = false;
                     hurricaneSpecial.remove(value);
                 }
@@ -346,18 +329,26 @@ public class PowersMagiciansRed extends PunchingStand {
         if (keyIsDown) {
             if (!hold2) {
                 hold2 = true;
-                if (!isGuarding()) {
-                    if (isHoldingSneak()) {
-                        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-                             this.setCooldown(PowerIndex.SKILL_2_SNEAK, 600);
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
-                        }
-                    } else {
-                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                            this.setCooldown(PowerIndex.SKILL_2, 160);
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                if (hasHurricaneSpecial() && !isChargingCrossfire()){
+                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                        this.setCooldown(PowerIndex.SKILL_EXTRA_2, 4);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+                    }
+                } else {
+                    if (!isGuarding()) {
+                        if (isHoldingSneak()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+                                this.setCooldown(PowerIndex.SKILL_2_SNEAK, 600);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+                            }
+                        } else {
+                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                                this.setCooldown(PowerIndex.SKILL_2, 160);
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                            }
                         }
                     }
                 }
@@ -446,8 +437,10 @@ public class PowersMagiciansRed extends PunchingStand {
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.crossfireSpecial();
         } else if (move == PowerIndex.LEAD_IN) {
-            ticksUntilHurricaneEnds = 140;
+            ticksUntilHurricaneEnds = 160;
             return this.setPowerNone();
+        } else if (move == PowerIndex.POWER_2_BONUS) {
+            return this.shootAnkhConfirm();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -540,6 +533,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public boolean crossfireSpecial(){
         if (!hasHurricaneSpecial()) {
+            ticksUntilHurricaneEnds = -1;
             this.animateStand((byte)15);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             this.setAttackTimeDuring(0);
@@ -580,8 +574,34 @@ public class PowersMagiciansRed extends PunchingStand {
             this.getSelf().level().addFreshEntity(cross);
         }
     }
+    public void shootAnkh(CrossfireHurricaneEntity ankh){
+        ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
+        ankh.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 0.6F, 0);
+        this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 4.0F, 0.9F);
+    }
+    public boolean shootAnkhConfirm(){
+        if (!this.self.level().isClientSide()) {
+            if (hasHurricaneSpecial()){
+                List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
+                };
+                if (!hurricaneSpecial2.isEmpty()) {
+                    CrossfireHurricaneEntity cfh = hurricaneSpecial2.get(0);
+                    if (cfh != null && !cfh.isRemoved() && cfh.isAlive()){
+                        cfh.setCrossNumber(0);
+                        hurricaneSpecial2.remove(0);
+                        shootAnkh(cfh);
+                    }
+                }
+                hurricaneSpecial = hurricaneSpecial2;
+                return false;
+            }
+        }
+        return true;
+    }
     public boolean crossfire(){
         if (!this.self.level().isClientSide() && !hasHurricaneSpecial()) {
+            ticksUntilHurricaneEnds = -1;
             CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
             if (cross != null){
                 cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());

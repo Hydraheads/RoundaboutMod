@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
@@ -59,6 +60,19 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 standUserUUID = LE.getUUID();
             }
         }
+    }
+
+    @Override
+    public boolean isInWater() {
+        return false;
+    }
+
+    public boolean isEffectivelyInWater() {
+        return this.wasTouchingWater;
+    }
+    @Override
+    protected float getInertia() {
+        return 1F;
     }
     @Override
     public boolean isControlledByLocalInstance() {
@@ -157,11 +171,18 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
     public int saneAgeTicking;
     public void tick() {
+        boolean client = this.level().isClientSide();
+        if (!client){
+            if (isEffectivelyInWater()){
+                this.discard();
+            }
+        }
+
         if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
 
             if (this.getCrossNumber() > 0){
                 this.setDeltaMovement(Vec3.ZERO);
-                if (this.level().isClientSide()){
+                if (client){
 
                     if (!initialized){
                         initialized = true;
@@ -173,7 +194,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 }
             }
         }
-        if (this.level().isClientSide() && this.saneAgeTicking != this.tickCount){
+        if (client && this.saneAgeTicking != this.tickCount){
             if (lastRenderSize < getMaxSize()) {
                 lastRenderSize += getAccrualRate();
             } else {
@@ -199,6 +220,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
         saneAgeTicking = this.tickCount;
         super.tick();
+        if (!client){
+            if (isEffectivelyInWater()){
+                this.discard();
+            }
+        }
     }
 
 
@@ -207,6 +233,24 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        if (this.getCrossNumber() <= 0){
+            //this is where ankh go boom boom
+            radialExplosion(null);
+            this.discard();
+        }
+    }
+    @Override
+    protected void onHitEntity(EntityHitResult $$0) {
+        if (this.getCrossNumber() <= 0){
+            Entity $$1 = $$0.getEntity();
+            if (getUserID() != $$1.getId() && !($$1 instanceof MagiciansRedEntity)) {
+                radialExplosion(null);
+                this.discard();
+            }
+        }
+    }
+    public void radialExplosion(LivingEntity mainTarget){
+
     }
 
     @Override
@@ -214,10 +258,6 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());
     }
 
-    @Override
-    protected void onHitEntity(EntityHitResult $$0) {
-
-    }
 
 
     @Override
