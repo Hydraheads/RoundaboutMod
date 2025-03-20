@@ -582,6 +582,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
+        ankh.setXRot(this.getSelf().getXRot()%360);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 1.2F, 0);
         this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                 this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 4.0F, 0.9F);
@@ -740,6 +741,15 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
 
+    public float getHurricaneDirectDamage(Entity entity, CrossfireHurricaneEntity cfh){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 7* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnMobs*0.01)));
+        }
+    }
     public float getHurricaneDamage(Entity entity, CrossfireHurricaneEntity cfh){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().

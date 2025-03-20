@@ -1593,7 +1593,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$ApplyArmorToDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> ci){
         if ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.CORPSE) ||
-                $$0.is(ModDamageTypes.CORPSE_ARROW) ||  $$0.is(ModDamageTypes.STAND_RUSH) ||
+                $$0.is(ModDamageTypes.CORPSE_ARROW) ||  $$0.is(ModDamageTypes.STAND_RUSH) ||  $$0.is(ModDamageTypes.CROSSFIRE) ||
                 $$0.is(ModDamageTypes.CORPSE_EXPLOSION)) {
             ci.setReturnValue($$1);
         }
@@ -1890,7 +1890,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setStand(null);
         }
         if (!this.isRemoved() && !this.dead) {
-            if ($$0.is(ModDamageTypes.STAND_FIRE)){
+            if ($$0.is(ModDamageTypes.STAND_FIRE) || $$0.is(ModDamageTypes.CROSSFIRE) || roundabout$isOnStandFire()){
                 this.setRemainingFireTicks(1);
             }
         }

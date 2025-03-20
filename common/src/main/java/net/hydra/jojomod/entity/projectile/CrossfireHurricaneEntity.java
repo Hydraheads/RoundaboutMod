@@ -6,10 +6,13 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -239,6 +242,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         if (this.getCrossNumber() <= 0){
             //this is where ankh go boom boom
             radialExplosion(null);
+
             this.discard();
         }
     }
@@ -261,8 +265,54 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
     public void radialExplosion(LivingEntity mainTarget){
         if (!this.level().isClientSide()){
-            this.level().playSound(null, this.blockPosition(),  ModSounds.CROSSFIRE_EXPLODE_EVENT,
-                    SoundSource.PLAYERS, 2F, 1F);
+            LivingEntity user = this.getStandUser();
+            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                this.level().playSound(null, this.blockPosition(), ModSounds.CROSSFIRE_EXPLODE_EVENT,
+                        SoundSource.PLAYERS, 2F, 1F);
+                ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
+                        this.getY(), this.getZ(),
+                        200,
+                        0.01, 0.01, 0.01,
+                        0.1);
+                if (mainTarget != null) {
+                        getEntity(mainTarget, true, PMR);
+                }
+
+                List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
+                        this.getZ(), 2, 2, 2);
+                if (!entityList.isEmpty()){
+                    for (Entity value : entityList) {
+                        if (!(mainTarget != null && value.is(mainTarget))){
+                            getEntity(value, false, PMR);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
+        float dmg = 1;
+        float strength = 0.91F;
+        if (direct){
+            dmg = PMR.getHurricaneDirectDamage(gotten,this);
+            strength*=2;
+        } else {
+            dmg = PMR.getHurricaneDamage(gotten,this);
+
+        }
+
+        if (gotten.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, this.standUser),
+                dmg)) {
+            float degrees = MainUtil.getLookAtEntityYaw(this,gotten);
+            MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-40 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+            if (gotten instanceof LivingEntity LE) {
+                ((StandUser) LE).roundabout$setOnStandFire((byte) 1, standUser);
+                ((StandUser) LE).roundabout$setSecondsOnStandFire(10);
+            }
         }
     }
 
