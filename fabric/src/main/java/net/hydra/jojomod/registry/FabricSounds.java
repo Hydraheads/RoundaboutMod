@@ -61,6 +61,9 @@ public class FabricSounds {
         addSound(ModSounds.OVA_SHORT_TS_ID, ModSounds.OVA_SHORT_TS_EVENT);
         addSound(ModSounds.OVA_LONG_TS_ID, ModSounds.OVA_LONG_TS_EVENT);
         addSound(ModSounds.OVA_SP_TS_ID, ModSounds.OVA_SP_TS_EVENT);
+        addSound(ModSounds.CROSSFIRE_SHOOT_ID, ModSounds.CROSSFIRE_SHOOT_EVENT);
+        addSound(ModSounds.CROSSFIRE_EXPLODE_ID, ModSounds.CROSSFIRE_EXPLODE_EVENT);
+        addSound(ModSounds.MAGICIANS_RED_CRY_ID, ModSounds.MAGICIANS_RED_CRY_EVENT);
 
         addSound(ModSounds.LEVELUP_ID, ModSounds.LEVELUP_EVENT);
 

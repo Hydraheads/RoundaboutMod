@@ -123,6 +123,12 @@ public class ForgeSounds {
             register(ModSounds.FIRE_BLAST, ModSounds.FIRE_BLAST_ID);
     public static final RegistryObject<SoundEvent> FIRE_WHOOSH_EVENT =
             register(ModSounds.FIRE_WHOOSH, ModSounds.FIRE_WHOOSH_ID);
+    public static final RegistryObject<SoundEvent> CROSSFIRE_SHOOT_EVENT =
+            register(ModSounds.CROSSFIRE_SHOOT, ModSounds.CROSSFIRE_SHOOT_ID);
+    public static final RegistryObject<SoundEvent> CROSSFIRE_EXPLODE_EVENT =
+            register(ModSounds.CROSSFIRE_EXPLODE, ModSounds.CROSSFIRE_EXPLODE_ID);
+    public static final RegistryObject<SoundEvent> MAGICIANS_RED_CRY_EVENT =
+            register(ModSounds.MAGICIANS_RED_CRY, ModSounds.MAGICIANS_RED_CRY_ID);
     public static final RegistryObject<SoundEvent> FIRE_STRIKE_EVENT =
             register(ModSounds.FIRE_STRIKE, ModSounds.FIRE_STRIKE_ID);
     public static final RegistryObject<SoundEvent> FIRE_STRIKE_LAST_EVENT =

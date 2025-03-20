@@ -317,6 +317,15 @@ public class ModSounds {
     public static final String FIRE_BLAST = "fire_blast";
     public static final ResourceLocation FIRE_BLAST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRE_BLAST);
     public static SoundEvent FIRE_BLAST_EVENT = SoundEvent.createVariableRangeEvent(FIRE_BLAST_ID);
+    public static final String CROSSFIRE_SHOOT = "crossfire_shoot";
+    public static final ResourceLocation CROSSFIRE_SHOOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CROSSFIRE_SHOOT);
+    public static SoundEvent CROSSFIRE_SHOOT_EVENT = SoundEvent.createVariableRangeEvent(CROSSFIRE_SHOOT_ID);
+    public static final String CROSSFIRE_EXPLODE = "crossfire_explode";
+    public static final ResourceLocation CROSSFIRE_EXPLODE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CROSSFIRE_EXPLODE);
+    public static SoundEvent CROSSFIRE_EXPLODE_EVENT = SoundEvent.createVariableRangeEvent(CROSSFIRE_EXPLODE_ID);
+    public static final String MAGICIANS_RED_CRY = "magicians_red_cry";
+    public static final ResourceLocation MAGICIANS_RED_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MAGICIANS_RED_CRY);
+    public static SoundEvent MAGICIANS_RED_CRY_EVENT = SoundEvent.createVariableRangeEvent(MAGICIANS_RED_CRY_ID);
     public static final String FIRE_WHOOSH = "fire_whoosh";
     public static final ResourceLocation FIRE_WHOOSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRE_WHOOSH);
     public static SoundEvent FIRE_WHOOSH_EVENT = SoundEvent.createVariableRangeEvent(FIRE_WHOOSH_ID);

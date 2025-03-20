@@ -35,6 +35,24 @@
       "roundabout:fire_strike_last"
     ]
   },
+  "crossfire_shoot": {
+    "subtitle": "sounds.roundabout.crossfire_shoot",
+    "sounds": [
+      "roundabout:crossfire_shoot"
+    ]
+  },
+  "crossfire_explode": {
+    "subtitle": "sounds.roundabout.crossfire_explode",
+    "sounds": [
+      "roundabout:crossfire_explode"
+    ]
+  },
+  "magicians_red_cry": {
+    "subtitle": "sounds.roundabout.magicians_red_cry",
+    "sounds": [
+      "roundabout:magicians_red_cry"
+    ]
+  },
   "snap": {
     "subtitle": "sounds.roundabout.snap",
     "sounds": [

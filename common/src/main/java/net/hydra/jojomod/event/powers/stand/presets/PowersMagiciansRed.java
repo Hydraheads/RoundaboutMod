@@ -253,6 +253,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModSounds.SUMMON_MAGICIAN_EVENT;
         } else if (soundChoice == LAST_HIT_1_NOISE) {
             return ModSounds.FIRE_STRIKE_LAST_EVENT;
+        } else if (soundChoice == CRY_1_NOISE) {
+            return ModSounds.MAGICIANS_RED_CRY_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -421,6 +423,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.tryPower(move,forced);
     }
     public static final byte LAST_HIT_1_NOISE = 120;
+    public static final byte CRY_1_NOISE = 100;
 
     @Override
     public boolean canLightFurnace(){
@@ -556,6 +559,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 generateCrossfire(2, maxSizeForSpecial);
                 generateCrossfire(3, maxSizeForSpecial);
                 generateCrossfire(4, maxSizeForSpecial);
+                playStandUserOnlySoundsIfNearby(CRY_1_NOISE, 27, false,true);
 
             }
         }
@@ -593,6 +597,8 @@ public class PowersMagiciansRed extends PunchingStand {
                         cfh.setCrossNumber(0);
                         hurricaneSpecial2.remove(0);
                         shootAnkh(cfh);
+                        this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
+                                SoundSource.PLAYERS, 2F, 1F);
                     }
                 }
                 hurricaneSpecial = hurricaneSpecial2;
@@ -732,6 +738,18 @@ public class PowersMagiciansRed extends PunchingStand {
     public float getReach(){
         return 7;
     }
+
+
+    public float getHurricaneDamage(Entity entity, CrossfireHurricaneEntity cfh){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 7* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnMobs*0.01)));
+        }
+    }
+
 
     @Override
     public float getPunchStrength(Entity entity){

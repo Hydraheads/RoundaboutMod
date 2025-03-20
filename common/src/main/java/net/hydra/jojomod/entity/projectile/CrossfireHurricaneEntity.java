@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -18,6 +19,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -258,7 +260,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
     }
     public void radialExplosion(LivingEntity mainTarget){
-
+        if (!this.level().isClientSide()){
+            this.level().playSound(null, this.blockPosition(),  ModSounds.CROSSFIRE_EXPLODE_EVENT,
+                    SoundSource.PLAYERS, 2F, 1F);
+        }
     }
 
     @Override
