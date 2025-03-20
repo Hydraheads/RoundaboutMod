@@ -45,7 +45,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public CrossfireHurricaneEntity hurricane;
     public List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
-    public int endChargingSpecial = 30;
+    public int endChargingSpecial = 26;
     public void tickPower() {
         super.tickPower();
         if (!this.self.level().isClientSide()) {
@@ -123,7 +123,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         return super.cancelSprintJump();
     }
-    public int maxSizeForSpecial = 30;
+    public int maxSizeForSpecial = 26;
     public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ, double rsize){
         int size = value.getSize();
         double distanceUp = 0.3;

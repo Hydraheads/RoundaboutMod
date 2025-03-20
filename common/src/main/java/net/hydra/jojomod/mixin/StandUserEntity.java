@@ -1686,7 +1686,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 return;
             }
         }
-        if ($$0.getDirectEntity() != null) {
+        if ($$0.getDirectEntity() != null && !$$0.is(ModDamageTypes.STAND_FIRE)) {
            if (this.roundabout$getStandPowers().preCanInterruptPower($$0.getDirectEntity(),MainUtil.isStandDamage($$0))) {
                 this.roundabout$tryPower(PowerIndex.NONE, true);
                 if (!(((LivingEntity)(Object)this) instanceof Player)){
