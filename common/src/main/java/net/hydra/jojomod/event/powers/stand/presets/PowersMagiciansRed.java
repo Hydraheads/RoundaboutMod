@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -36,6 +37,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -58,7 +60,10 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public CrossfireHurricaneEntity hurricane;
     public List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
-
+    public int endChargingSpecial = 30;
+    public void tickPower() {
+        super.tickPower();
+    }
     public void tickPowerEnd(){
         if (hurricaneSpecial != null && !hurricaneSpecial.isEmpty()){
             removeHurricanes();
@@ -107,7 +112,19 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
     }
-
+    public float inputSpeedModifiers(float basis){
+        if (this.hasHurricane()){
+            basis *= 0.6f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.hasHurricane()){
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
     public int maxSizeForSpecial = 30;
     public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ, double rsize){
         int size = value.getSize();
@@ -185,7 +202,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        boolean secondSkillLocked =hasHurricaneSpecial();
+        boolean secondSkillLocked =hasHurricaneSpecial() || this.isChargingCrossfire();
         if (this.isGuarding()){
             if (isHoldingSneak()) {
                 setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
@@ -269,6 +286,9 @@ public class PowersMagiciansRed extends PunchingStand {
         return null;
     }
 
+    public boolean hasHurricane(){
+        return hasHurricaneSpecial();
+    }
     public boolean hasHurricaneSpecial(){
         hurricaneInit();
         List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
@@ -278,20 +298,25 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         return false;
     }
+    public boolean isChargingCrossfire(){
+        return (activePower == PowerIndex.POWER_2_SNEAK || activePower == PowerIndex.POWER_2);
+    }
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (!hold1) {
                 hold1 = true;
-                if (!isGuarding()) {
-                    if (isHoldingSneak()) {
-                        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                            BlockPos HR = getGrabBlock();
-                            if (HR != null) {
-                                this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
-                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                if (!isChargingCrossfire()) {
+                    if (!isGuarding()) {
+                        if (isHoldingSneak()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                                BlockPos HR = getGrabBlock();
+                                if (HR != null) {
+                                    this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
+                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                                }
                             }
                         }
                     }
@@ -310,11 +335,13 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (isHoldingSneak()) {
                         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
                              this.setCooldown(PowerIndex.SKILL_2_SNEAK, 500);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                              ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
                         }
                     } else {
                         if (!this.onCooldown(PowerIndex.SKILL_2)) {
                             this.setCooldown(PowerIndex.SKILL_2, 160);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
                         }
                     }
@@ -343,31 +370,48 @@ public class PowersMagiciansRed extends PunchingStand {
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (!inputDash) {
-                if (this.isGuarding()) {
-                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                        this.setCooldown(PowerIndex.SKILL_EXTRA, 100);
+                if (!isChargingCrossfire()) {
+                    if (this.isGuarding()) {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                            this.setCooldown(PowerIndex.SKILL_EXTRA, 100);
 
-                        BlockPos HR = getGrabPos(10);
-                        if (HR != null) {
-                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
+                            BlockPos HR = getGrabPos(10);
+                            if (HR != null) {
+                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
+                            }
                         }
+                        inputDash = true;
+                    } else if (isHoldingSneak()) {
+                        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                        }
+                        inputDash = true;
+                    } else {
+                        super.buttonInput3(keyIsDown, options);
                     }
-                    inputDash = true;
-                } else if (isHoldingSneak()) {
-                    if (!this.onCooldown(PowerIndex.SKILL_3)) {
-                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
-                    }
-                    inputDash = true;
-                } else {
-                    super.buttonInput3(keyIsDown, options);
                 }
             }
         } else {
             inputDash = false;
         }
     }
+    @Override
+    public void buttonInput4(boolean keyIsDown, Options options) {
+        if (!isChargingCrossfire()) {
 
+        }
+    }
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+
+        if ((this.activePower == PowerIndex.POWER_2
+        || this.activePower == PowerIndex.POWER_2_SNEAK)
+        && move != PowerIndex.POWER_2_BONUS && move != PowerIndex.LEAD_IN) {
+            this.clearAllHurricanes();
+        }
+        return super.tryPower(move,forced);
+    }
     public static final byte LAST_HIT_1_NOISE = 120;
 
     @Override
@@ -386,6 +430,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.crossfire();
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.crossfireSpecial();
+        } else if (move == PowerIndex.LEAD_IN) {
+            return this.setPowerNone();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -426,6 +472,19 @@ public class PowersMagiciansRed extends PunchingStand {
                 createStandFire(blockPosForSpecial.north().north().west());
                 createStandFire(blockPosForSpecial.south().south().east());
                 createStandFire(blockPosForSpecial.south().south().west());
+            } else if (this.attackTimeDuring >= endChargingSpecial){
+                if (!(this.self instanceof Player)){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN,true);
+                }
+            }
+        } else {
+            if (this.attackTimeDuring >= endChargingSpecial) {
+                if (this.self instanceof Player) {
+                    if (isPacketPlayer()) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.LEAD_IN);
+                    }
+                }
             }
         }
     }
@@ -463,6 +522,8 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public boolean crossfireSpecial(){
         if (!hasHurricaneSpecial()) {
+            this.animateStand((byte)15);
+            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2_SNEAK);
             spinint = 0;
@@ -814,5 +875,11 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
     }
-
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (this.isChargingCrossfire()){
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
 }
