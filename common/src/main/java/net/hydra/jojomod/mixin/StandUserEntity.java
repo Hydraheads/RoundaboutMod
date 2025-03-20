@@ -84,6 +84,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow protected boolean dead;
+
     @Shadow public abstract float getYHeadRot();
 
     @Shadow public float yHeadRot;
@@ -1883,7 +1885,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci){
         StandEntity stnd = roundabout$getStand();
         if (stnd != null){
+            stnd.setMaster(null);
+            stnd.setFollowing(null);
             roundabout$setStand(null);
+        }
+        if (!this.isRemoved() && !this.dead) {
+            if ($$0.is(ModDamageTypes.STAND_FIRE)){
+                this.setRemainingFireTicks(1);
+            }
         }
     }
 
