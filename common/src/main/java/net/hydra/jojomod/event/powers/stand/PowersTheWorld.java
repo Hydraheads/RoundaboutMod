@@ -571,15 +571,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (this.chargedFinal >= maxSuperHitTime){
                 ret +=1;
             }
-            ret *= levelupDamageMod(levelupDamageMod((float) (ClientNetworking.getAppropriateConfig().
-                                damageMultipliers.theWorldAttacksOnPlayers*0.01)));
         } else {
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
             if (this.chargedFinal >= maxSuperHitTime){
                 ret +=2;
             }
-            ret *= levelupDamageMod(levelupDamageMod((float) (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
         }
         return ret;
     }
