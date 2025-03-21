@@ -25,6 +25,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -245,7 +246,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
             }
             if (secondSkillLocked){
-                setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SHOT, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SHOT, PowerIndex.SKILL_2);
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
             }
@@ -292,6 +293,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModSounds.FIRE_STRIKE_LAST_EVENT;
         } else if (soundChoice == CRY_1_NOISE) {
             return ModSounds.MAGICIANS_RED_CRY_EVENT;
+        } else if (soundChoice == CRY_2_NOISE) {
+            return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -387,6 +390,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                     }
                 } else if (hasHurricaneSingle() || isChargingCrossfireSingle()){
+                    this.setCooldown(PowerIndex.SKILL_2, 100);
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                 } else {
@@ -399,7 +403,7 @@ public class PowersMagiciansRed extends PunchingStand {
                             }
                         } else {
                             if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                                this.setCooldown(PowerIndex.SKILL_2, 160);
+                                this.setCooldown(PowerIndex.SKILL_2, 40);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
                             }
@@ -474,6 +478,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public static final byte LAST_HIT_1_NOISE = 120;
     public static final byte CRY_1_NOISE = 100;
+    public static final byte CRY_2_NOISE = 101;
 
     @Override
     public boolean canLightFurnace(){
@@ -658,8 +663,6 @@ public class PowersMagiciansRed extends PunchingStand {
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
         ankh.setXRot(this.getSelf().getXRot()%360);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 1.2F, 0);
-        this.self.level().playSound(null, this.self.getX(), this.self.getY(),
-                this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 4.0F, 0.9F);
     }
     public boolean shootAnkhConfirm(){
         if (!this.self.level().isClientSide()) {
@@ -700,6 +703,8 @@ public class PowersMagiciansRed extends PunchingStand {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
             if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 1.2F);
+                playStandUserOnlySoundsIfNearby(CRY_2_NOISE, 27, false,true);
                 ticksUntilHurricaneEnds = -1;
                 CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
                 if (cross != null) {
@@ -780,6 +785,12 @@ public class PowersMagiciansRed extends PunchingStand {
 
         if (hurricane != null){
             hurricane.discard();
+        }
+
+
+        if (this.getSelf() instanceof ServerPlayer && this.isChargingCrossfireSingle()) {
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                    PowerIndex.SKILL_2, 60);
         }
     }
     public boolean snap(){

@@ -53,6 +53,12 @@
       "roundabout:magicians_red_cry"
     ]
   },
+  "magicians_red_cry_2": {
+    "subtitle": "sounds.roundabout.magicians_red_cry_2",
+    "sounds": [
+      "roundabout:magicians_red_cry_2"
+    ]
+  },
   "snap": {
     "subtitle": "sounds.roundabout.snap",
     "sounds": [
