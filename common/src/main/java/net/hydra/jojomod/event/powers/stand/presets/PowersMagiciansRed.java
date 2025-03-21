@@ -346,7 +346,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return (activePower == PowerIndex.POWER_2_SNEAK || activePower == PowerIndex.POWER_2);
     }
     public boolean isChargingCrossfireSpecial(){
-        return (activePower == PowerIndex.POWER_2);
+        return (activePower == PowerIndex.POWER_2_SNEAK);
     }
     public boolean isChargingCrossfireSingle(){
         return (activePower == PowerIndex.POWER_2);
@@ -472,7 +472,9 @@ public class PowersMagiciansRed extends PunchingStand {
         if ((this.activePower == PowerIndex.POWER_2
         || this.activePower == PowerIndex.POWER_2_SNEAK)
         && move != PowerIndex.POWER_2_BONUS && move != PowerIndex.LEAD_IN) {
-            this.clearAllHurricanes();
+            if (hasHurricaneSingle() || hasHurricaneSpecial()) {
+                this.clearAllHurricanes();
+            }
         }
         return super.tryPower(move,forced);
     }
@@ -769,6 +771,9 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public void clearAllHurricanes(){
+        clearAllHurricanes(false);
+    }
+    public void clearAllHurricanes(boolean cancel){
         hurricaneInit();
 
         List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
@@ -787,10 +792,11 @@ public class PowersMagiciansRed extends PunchingStand {
             hurricane.discard();
         }
 
-
-        if (this.getSelf() instanceof ServerPlayer && this.isChargingCrossfireSingle()) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
-                    PowerIndex.SKILL_2, 60);
+        if (!cancel) {
+            if (this.getSelf() instanceof ServerPlayer && this.isChargingCrossfireSingle()) {
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                        PowerIndex.SKILL_2, 60);
+            }
         }
     }
     public boolean snap(){
