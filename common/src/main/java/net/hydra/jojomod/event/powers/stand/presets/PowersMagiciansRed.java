@@ -47,8 +47,19 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public CrossfireHurricaneEntity hurricane;
     public List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
-    public int endChargingSpecial = 26;
-    public int endChargingCrossfire = 60;
+    public static int getChargingCrossfireSpecial(){
+        return 26;
+    }
+    public static int getChargingCrossfireSpecialSize(){
+        return 26;
+    }
+    public static int getChargingCrossfire(){
+        return 60;
+    }
+
+    public static int getChargingCrossfireSize(){
+        return 60;
+    }
     public void tickPower() {
         super.tickPower();
         if (!this.self.level().isClientSide()) {
@@ -99,7 +110,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public void hurricaneRotation() {
-        transformHurricane(this.hurricane, 1, this.self.getX(), this.self.getY(), this.self.getZ(),maxChargeSingleSize);
+        transformHurricane(this.hurricane, 1, this.self.getX(), this.self.getY(), this.self.getZ(),getChargingCrossfireSize());
     }
     public void hurricaneSpecialRotation() {
         hurricaneInit();
@@ -145,7 +156,6 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         return super.cancelSprintJump();
     }
-    public int maxSizeForSpecial = 26;
     public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ, double rsize){
         if (value != null) {
             int size = value.getSize();
@@ -476,6 +486,12 @@ public class PowersMagiciansRed extends PunchingStand {
                 this.clearAllHurricanes();
             }
         }
+        if (this.getActivePower() == PowerIndex.POWER_2) {
+                stopSoundsIfNearby(CRY_2_NOISE, 100, false);
+        } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+            stopSoundsIfNearby(CRY_1_NOISE, 100, false);
+        }
+
         return super.tryPower(move,forced);
     }
     public static final byte LAST_HIT_1_NOISE = 120;
@@ -512,6 +528,14 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.setPowerOther(move,lastMove);
     }
 
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == CRY_2_NOISE) {
+            return CRY_2_NOISE;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
+    }
+
     public int ticksUntilHurricaneEnds = -1;
 
     @Override
@@ -524,13 +548,13 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public void updateCrossfire(){
         if (!this.self.level().isClientSide()) {
-            if (this.attackTimeDuring >= endChargingCrossfire){
+            if (this.attackTimeDuring >= getChargingCrossfire()){
                 if (!(this.self instanceof Player)){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN,true);
                 }
             }
         } else {
-            if (this.attackTimeDuring == endChargingCrossfire) {
+            if (this.attackTimeDuring == getChargingCrossfire()) {
                 if (this.self instanceof Player) {
                     if (isPacketPlayer()) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.LEAD_IN);
@@ -543,14 +567,14 @@ public class PowersMagiciansRed extends PunchingStand {
     public void updateCrossfireSpecial(){
         if (!this.self.level().isClientSide()) {
             if (this.attackTimeDuring == 4) {
-                createStandFire(blockPosForSpecial.east().east());
-                createStandFire(blockPosForSpecial.west().west());
-                createStandFire(blockPosForSpecial.north().north());
-                createStandFire(blockPosForSpecial.south().south());
-                createStandFire(blockPosForSpecial.north().west());
-                createStandFire(blockPosForSpecial.north().east());
-                createStandFire(blockPosForSpecial.south().west());
-                createStandFire(blockPosForSpecial.south().east());
+                createStandFire2(blockPosForSpecial.east().east());
+                createStandFire2(blockPosForSpecial.west().west());
+                createStandFire2(blockPosForSpecial.north().north());
+                createStandFire2(blockPosForSpecial.south().south());
+                createStandFire2(blockPosForSpecial.north().west());
+                createStandFire2(blockPosForSpecial.north().east());
+                createStandFire2(blockPosForSpecial.south().west());
+                createStandFire2(blockPosForSpecial.south().east());
             } else if (this.attackTimeDuring == 5) {
                 sendSpecialParticle(blockPosForSpecial.east().east().north());
                 sendSpecialParticle(blockPosForSpecial.east().east().south());
@@ -561,21 +585,21 @@ public class PowersMagiciansRed extends PunchingStand {
                 sendSpecialParticle(blockPosForSpecial.south().south().east());
                 sendSpecialParticle(blockPosForSpecial.south().south().west());
             } else if (this.attackTimeDuring == 9) {
-                createStandFire(blockPosForSpecial.east().east().north());
-                createStandFire(blockPosForSpecial.east().east().south());
-                createStandFire(blockPosForSpecial.west().west().north());
-                createStandFire(blockPosForSpecial.west().west().south());
-                createStandFire(blockPosForSpecial.north().north().east());
-                createStandFire(blockPosForSpecial.north().north().west());
-                createStandFire(blockPosForSpecial.south().south().east());
-                createStandFire(blockPosForSpecial.south().south().west());
-            } else if (this.attackTimeDuring >= endChargingSpecial){
+                createStandFire2(blockPosForSpecial.east().east().north());
+                createStandFire2(blockPosForSpecial.east().east().south());
+                createStandFire2(blockPosForSpecial.west().west().north());
+                createStandFire2(blockPosForSpecial.west().west().south());
+                createStandFire2(blockPosForSpecial.north().north().east());
+                createStandFire2(blockPosForSpecial.north().north().west());
+                createStandFire2(blockPosForSpecial.south().south().east());
+                createStandFire2(blockPosForSpecial.south().south().west());
+            } else if (this.attackTimeDuring >= getChargingCrossfireSpecial()){
                 if (!(this.self instanceof Player)){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN,true);
                 }
             }
         } else {
-            if (this.attackTimeDuring >= endChargingSpecial) {
+            if (this.attackTimeDuring >= getChargingCrossfireSpecial()) {
                 if (this.self instanceof Player) {
                     if (isPacketPlayer()) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN, true);
@@ -636,10 +660,10 @@ public class PowersMagiciansRed extends PunchingStand {
                 sendSpecialParticle(blockPosForSpecial.south().west());
                 sendSpecialParticle(blockPosForSpecial.south().east());
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 0.8F);
-                generateCrossfire(1, maxSizeForSpecial);
-                generateCrossfire(2, maxSizeForSpecial);
-                generateCrossfire(3, maxSizeForSpecial);
-                generateCrossfire(4, maxSizeForSpecial);
+                generateCrossfire(1, getChargingCrossfireSpecialSize());
+                generateCrossfire(2, getChargingCrossfireSpecialSize());
+                generateCrossfire(3, getChargingCrossfireSpecialSize());
+                generateCrossfire(4, getChargingCrossfireSpecialSize());
                 playStandUserOnlySoundsIfNearby(CRY_1_NOISE, 27, false,true);
 
             }
@@ -697,7 +721,6 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         return true;
     }
-    public int maxChargeSingleSize = 60;
     public boolean crossfire(){
         if (!hasHurricaneSingle()) {
             this.animateStand((byte) 15);
@@ -713,7 +736,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                     cross.setUser(this.self);
                     cross.setCrossNumber(5);
-                    cross.setMaxSize(maxChargeSingleSize);
+                    cross.setMaxSize(getChargingCrossfireSize());
                     hurricane = cross;
                     this.getSelf().level().addFreshEntity(cross);
                 }
@@ -827,6 +850,11 @@ public class PowersMagiciansRed extends PunchingStand {
             createStandFire(grabBlock);
         }
         return true;
+    }
+    public void createStandFire2(BlockPos pos){
+        if (pos != null && tryPlaceBlock(pos)){
+            createStandFire(pos);
+        }
     }
 
     public int getNewFireId(){

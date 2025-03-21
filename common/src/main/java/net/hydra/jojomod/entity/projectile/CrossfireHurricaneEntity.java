@@ -14,6 +14,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -247,6 +248,42 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             //this is where ankh go boom boom
             radialExplosion(null);
 
+            if (!this.level().isClientSide()) {
+                LivingEntity user = this.getStandUser();
+                int size = this.getSize();
+                if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                    BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
+                    PMR.createStandFire2(pos);
+                    if (size >= PowersMagiciansRed.getChargingCrossfireSize()) {
+                        PMR.createStandFire2(pos.west().west());
+                        PMR.createStandFire2(pos.west().north());
+                        PMR.createStandFire2(pos.west().south());
+                        PMR.createStandFire2(pos.east().east());
+                        PMR.createStandFire2(pos.east().north());
+                        PMR.createStandFire2(pos.east().south());
+                        PMR.createStandFire2(pos.north().north());
+                        PMR.createStandFire2(pos.above().above());
+                        PMR.createStandFire2(pos.below().below());
+
+                        PMR.createStandFire2(pos.west().above());
+                        PMR.createStandFire2(pos.north().above());
+                        PMR.createStandFire2(pos.south().above());
+                        PMR.createStandFire2(pos.east().above());
+
+                        PMR.createStandFire2(pos.west().below());
+                        PMR.createStandFire2(pos.north().below());
+                        PMR.createStandFire2(pos.south().below());
+                        PMR.createStandFire2(pos.east().below());
+                    } if (size >= PowersMagiciansRed.getChargingCrossfireSpecialSize()) {
+                        PMR.createStandFire2(pos.west());
+                        PMR.createStandFire2(pos.north());
+                        PMR.createStandFire2(pos.south());
+                        PMR.createStandFire2(pos.east());
+                        PMR.createStandFire2(pos.above());
+                        PMR.createStandFire2(pos.below());
+                    }
+                }
+            }
             this.discard();
         }
     }
