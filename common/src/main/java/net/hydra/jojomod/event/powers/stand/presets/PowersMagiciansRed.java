@@ -61,6 +61,10 @@ public class PowersMagiciansRed extends PunchingStand {
                             1.2, 1.2, 1.2,
                             0.005);
                     clearAllHurricanes();
+
+                    if (this.isChargingCrossfireSingle()){
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                    }
                 }
             }
         }
@@ -383,7 +387,6 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                     }
                 } else if (hasHurricaneSingle() || isChargingCrossfireSingle()){
-                    Roundabout.LOGGER.info("1");
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                 } else {
@@ -520,7 +523,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
             }
         } else {
-            if (this.attackTimeDuring >= endChargingCrossfire) {
+            if (this.attackTimeDuring == endChargingCrossfire) {
                 if (this.self instanceof Player) {
                     if (isPacketPlayer()) {
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.LEAD_IN);
@@ -676,7 +679,6 @@ public class PowersMagiciansRed extends PunchingStand {
                 hurricaneSpecial = hurricaneSpecial2;
                 return false;
             } else if (hasHurricaneSingle()){
-                Roundabout.LOGGER.info("2");
                 CrossfireHurricaneEntity cfh = hurricane;
                 if (cfh != null && !cfh.isRemoved() && cfh.isAlive()){
                     cfh.setCrossNumber(0);
@@ -685,6 +687,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
                             SoundSource.PLAYERS, 2F, 1F);
                 }
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
             }
         }
         return true;
