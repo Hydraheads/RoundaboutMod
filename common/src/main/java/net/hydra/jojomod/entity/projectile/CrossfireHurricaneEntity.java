@@ -333,26 +333,28 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
 
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
-        float dmg = 1;
-        float strength = 0.91F;
-        if (direct){
-            dmg = PMR.getHurricaneDirectDamage(gotten,this);
-            strength*=2;
-        } else {
-            dmg = PMR.getHurricaneDamage(gotten,this);
+        if (gotten !=null && gotten.getId() != getUserID()) {
+            float dmg = 1;
+            float strength = 0.91F;
+            if (direct) {
+                dmg = PMR.getHurricaneDirectDamage(gotten, this);
+                strength *= 2;
+            } else {
+                dmg = PMR.getHurricaneDamage(gotten, this);
 
-        }
+            }
 
-        if (gotten.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, this.standUser),
-                dmg)) {
-            float degrees = MainUtil.getLookAtEntityYaw(this,gotten);
-            MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
-                    Mth.sin(degrees * ((float) Math.PI / 180)),
-                    Mth.sin(-40 * ((float) Math.PI / 180)),
-                    -Mth.cos(degrees * ((float) Math.PI / 180)));
-            if (gotten instanceof LivingEntity LE) {
-                ((StandUser) LE).roundabout$setOnStandFire((byte) 1, standUser);
-                ((StandUser) LE).roundabout$setSecondsOnStandFire(10);
+            if (gotten.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, this.standUser),
+                    dmg)) {
+                float degrees = MainUtil.getLookAtEntityYaw(this, gotten);
+                MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
+                        Mth.sin(degrees * ((float) Math.PI / 180)),
+                        Mth.sin(-40 * ((float) Math.PI / 180)),
+                        -Mth.cos(degrees * ((float) Math.PI / 180)));
+                if (gotten instanceof LivingEntity LE) {
+                    ((StandUser) LE).roundabout$setOnStandFire((byte) 1, standUser);
+                    ((StandUser) LE).roundabout$setSecondsOnStandFire(10);
+                }
             }
         }
     }
