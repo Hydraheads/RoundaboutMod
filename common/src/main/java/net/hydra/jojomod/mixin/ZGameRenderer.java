@@ -13,17 +13,4 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class ZGameRenderer {
-    @Inject(method="reloadShaders", at=@At("HEAD"))
-    private void reloadShaders(ResourceProvider provider, CallbackInfo ci)
-    {
-        Roundabout.LOGGER.info("Reloading shaders...");
-        try {
-            RShader fragment = new RShader(provider, new ResourceLocation("roundabout", "shaders/fog.fsh"), 2);
-            RShader vertex = new RShader(provider, new ResourceLocation("roundabout", "shaders/fog.vsh"), 1);
-
-            new RShaderProgram(vertex, fragment);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
