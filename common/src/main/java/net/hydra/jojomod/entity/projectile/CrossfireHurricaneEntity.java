@@ -334,6 +334,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
 
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
         if (gotten !=null && gotten.getId() != getUserID()) {
+            int size = this.getSize();
             float dmg = 1;
             float strength = 0.91F;
             if (direct) {
@@ -354,6 +355,17 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 if (gotten instanceof LivingEntity LE) {
                     ((StandUser) LE).roundabout$setOnStandFire((byte) 1, standUser);
                     ((StandUser) LE).roundabout$setSecondsOnStandFire(10);
+                }
+            } else if (gotten instanceof LivingEntity LE && LE.isBlocking()) {
+                int breakShield = 0;
+                if (size >= PowersMagiciansRed.getChargingCrossfireSize()){
+                    breakShield = (int) (10+ size*2);
+
+                } else if (size >= PowersMagiciansRed.getChargingCrossfireSpecialSize()){
+                    breakShield = (int) (10+ (size*0.5));
+                }
+                if (breakShield > 0) {
+                    MainUtil.knockShieldPlusStand(LE, breakShield);
                 }
             }
         }
