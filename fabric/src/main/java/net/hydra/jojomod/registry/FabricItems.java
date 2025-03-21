@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
@@ -45,6 +46,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
     public static Item MAX_STAND_DISC_JUSTICE= registerItem("max_justice_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
+    public static Item STAND_DISC_D4C = registerItem("d4c_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+    public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -240,6 +245,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_JUSTICE);
                         entries.accept(STAND_DISC_MAGICIANS_RED);
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
+                        entries.accept(STAND_DISC_D4C);
+                        entries.accept(MAX_STAND_DISC_D4C);
 
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -310,6 +317,9 @@ public class FabricItems {
         ModItems.STAND_DISC_JUSTICE = STAND_DISC_JUSTICE;
         ((MaxStandDiscItem)MAX_STAND_DISC_JUSTICE).baseDisc = ((StandDiscItem)STAND_DISC_JUSTICE);
         ModItems.MAX_STAND_DISC_JUSTICE = MAX_STAND_DISC_JUSTICE;
+        ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
+        ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
+        ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
@@ -349,6 +359,7 @@ public class FabricItems {
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_STAR_PLATINUM);
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_THE_WORLD);
         ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_JUSTICE);
+        ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);
 
         registerPotions();
     }

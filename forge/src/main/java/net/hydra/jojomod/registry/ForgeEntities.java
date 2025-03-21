@@ -108,6 +108,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "magicians_red").toString())
             );
+    public static final RegistryObject<EntityType<D4CEntity>> D4C =
+            ENTITY_TYPES.register("d4c", () ->
+                    EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
+            );
     public static final RegistryObject<EntityType<JusticePirateEntity>> JUSTICE_PIRATE =
             ENTITY_TYPES.register("justice_pirate", () ->
                     EntityType.Builder.of(JusticePirateEntity::new, MobCategory.MISC).sized(ModEntities.justiceWidth, ModEntities.justiceHeight).

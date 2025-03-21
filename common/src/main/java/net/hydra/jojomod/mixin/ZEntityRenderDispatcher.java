@@ -1,34 +1,25 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IEntityRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -68,8 +59,6 @@ public abstract class ZEntityRenderDispatcher {
         }
     }
     private void roundabout$renderFlame(PoseStack $$0, MultiBufferSource $$1, LivingEntity $$2) {
-
-        /**
         byte bt = ((StandUser) $$2).roundabout$getOnStandFire();
         if (bt > 0) {
             $$0.pushPose();
@@ -100,14 +89,17 @@ public abstract class ZEntityRenderDispatcher {
             float v1 = (frame + 1) * frameHeight;
             float $$10 = 0.0F;
             int $$11 = 0;
-            VertexConsumer $$12 = $$1.getBuffer(Sheets.cutoutBlockSheet());
+            VertexConsumer vertexConsumer = $$1.getBuffer(Sheets.cutoutBlockSheet());
 
-            for (PoseStack.Pose $$13 = $$0.last(); $$8 > 0.0F; $$11++) {
+            for (PoseStack.Pose matrices = $$0.last(); $$8 > 0.0F; $$11++) {
 
-                fireVertex($$13, $$12, $$6 - 0.0F, 0.0F - $$9, $$10, u0, v1);
-                fireVertex($$13, $$12, -$$6 - 0.0F, 0.0F - $$9, $$10, u1, v1);
-                fireVertex($$13, $$12, -$$6 - 0.0F, 1.4F - $$9, $$10, u1, v0);
-                fireVertex($$13, $$12, $$6 - 0.0F, 1.4F - $$9, $$10, u0, v0);
+                bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+                fireVertex(bufferbuilder, matrices, $$6 - 0.0F, 0.0F - $$9, $$10, u0, v1);
+                fireVertex(bufferbuilder, matrices,-$$6 - 0.0F, 0.0F - $$9, $$10, u1, v1);
+                fireVertex(bufferbuilder, matrices, -$$6 - 0.0F, 1.4F - $$9, $$10, u1, v0);
+                fireVertex(bufferbuilder, matrices, $$6 - 0.0F, 1.4F - $$9, $$10, u0, v0);
+                BufferUploader.drawWithShader(bufferbuilder.end());
+
                 $$8 -= 0.45F;
                 $$9 -= 0.45F;
                 $$6 *= 0.9F;
@@ -116,7 +108,6 @@ public abstract class ZEntityRenderDispatcher {
 
             $$0.popPose();
         }
-         **/
     }
 
     @Unique
@@ -133,8 +124,8 @@ public abstract class ZEntityRenderDispatcher {
 
     @Shadow public Camera camera;
 
-    @Shadow
-    private static void fireVertex(PoseStack.Pose $$0, VertexConsumer $$1, float $$2, float $$3, float $$4, float $$5, float $$6) {
+    private static void fireVertex(BufferBuilder bufferBuilder, PoseStack.Pose matrices, float x, float y, float z, float u, float v) {
+        bufferBuilder.vertex(matrices.pose(), -0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u, v).endVertex();
     }
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
