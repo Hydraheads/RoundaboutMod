@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.StandFireBlockEntity;
@@ -46,6 +47,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public CrossfireHurricaneEntity hurricane;
     public List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
     public int endChargingSpecial = 26;
+    public int endChargingCrossfire = 60;
     public void tickPower() {
         super.tickPower();
         if (!this.self.level().isClientSide()) {
@@ -71,6 +73,11 @@ public class PowersMagiciansRed extends PunchingStand {
             } else {
                 lastSpinInt+= maxSpinint;
             }
+        } else if (hurricane != null){
+            removeHurricanes();
+            if (!this.self.level().isClientSide()) {
+                hurricaneRotation();
+            }
         }
     }
     public void addHurricaneSpecial(CrossfireHurricaneEntity che){
@@ -85,6 +92,9 @@ public class PowersMagiciansRed extends PunchingStand {
         if (hurricaneSpecial == null) {
             hurricaneSpecial = new ArrayList<>();
         }
+    }
+    public void hurricaneRotation() {
+        transformHurricane(this.hurricane, 1, this.self.getX(), this.self.getY(), this.self.getZ(),maxChargeSingleSize);
     }
     public void hurricaneSpecialRotation() {
         hurricaneInit();
@@ -109,8 +119,15 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
             }
         }
+        if (hurricane != null && (hurricane.isRemoved() || !hurricane.isAlive() || hurricane.getCrossNumber() <= 0)){
+            hurricane.initialized = false;
+            hurricane = null;
+        }
     }
     public float inputSpeedModifiers(float basis){
+        if (this.hasHurricaneSingle()){
+            basis *= 0.5f;
+        }
         if (this.hasHurricane() || isChargingCrossfire()){
             basis *= 0.6f;
         }
@@ -125,68 +142,84 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public int maxSizeForSpecial = 26;
     public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ, double rsize){
-        int size = value.getSize();
-        double distanceUp = 0.3;
-        if (size< value.getMaxSize()){
-            size+= value.getAccrualRate();
-            value.setSize(size);
-        }
-        distanceUp += ((double) rsize /20);
-        double offset = 0;
-        int number = value.getCrossNumber();
-        if (this.self.level().isClientSide()) {
-            if (number == 1) {
-                offset = 0;
-            } else if (number == 2) {
-                offset = switch (totalnumber) {
-                    case 3 -> 0;
-                    case 4 -> 90;
-                    default -> offset;
-                };
-            } else if (number == 3) {
-                offset = switch (totalnumber) {
-                    case 2 -> 0;
-                    case 3 -> 120;
-                    case 4 -> 180;
-                    default -> offset;
-                };
-            } else if (number == 4) {
-                offset = switch (totalnumber) {
-                    case 1 -> 0;
-                    case 2 -> 180;
-                    case 3 -> 240;
-                    case 4 -> 270;
-                    default -> offset;
-                };
+        if (value != null) {
+            int size = value.getSize();
+            double distanceUp = 0.3;
+            if (size < value.getMaxSize()) {
+                size += value.getAccrualRate();
+                value.setSize(size);
             }
-            offset += spinint;
-            if (offset > 360) {
-                offset -= 360;
-            } else if (offset < 0) {
-                offset += 360;
+            distanceUp += ((double) rsize / 20);
+            double offset = 0;
+            int number = value.getCrossNumber();
+            if (this.self.level().isClientSide()) {
+                if (number == 1) {
+                    offset = 0;
+                } else if (number == 5) {
+                    offset = this.self.getYRot() % 360;
+                } else if (number == 2) {
+                    offset = switch (totalnumber) {
+                        case 3 -> 0;
+                        case 4 -> 90;
+                        default -> offset;
+                    };
+                } else if (number == 3) {
+                    offset = switch (totalnumber) {
+                        case 2 -> 0;
+                        case 3 -> 120;
+                        case 4 -> 180;
+                        default -> offset;
+                    };
+                } else if (number == 4) {
+                    offset = switch (totalnumber) {
+                        case 1 -> 0;
+                        case 2 -> 180;
+                        case 3 -> 240;
+                        case 4 -> 270;
+                        default -> offset;
+                    };
+                }
+                if (number != 5) {
+                    offset += spinint;
+                }
+                if (offset > 360) {
+                    offset -= 360;
+                } else if (offset < 0) {
+                    offset += 360;
+                }
+            } else {
+                offset = this.self.getYRot() % 360;
             }
-        } else {
-            offset = this.self.getYRot()%360;
-        }
-        double offset2 = offset;
-        offset = (offset - 180) * Math.PI;
-        double distanceOut = 2;
-        double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
-        double y1 = entityY + distanceUp;
-        double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));
-        if (!this.self.level().isClientSide()){
-            value.setOldPosAndRot();
-            //Roundabout.LOGGER.info("bye");
-        }
-        value.actuallyTick();
-        value.storeVec = new Vec3(x1,y1,z1);
-        if (this.self.level().isClientSide()) {
-            value.setYRot((float) offset2);
-            value.yRotO = (float) offset2;
-            value.xOld = x1; value.yOld = y1; value.zOld = z1;
-            value.absMoveTo(x1,y1,z1);
-        } else {
-            value.setPos(x1, y1, z1);
+            double offset2 = offset;
+            offset = (offset - 180) * Math.PI;
+            double distanceOut = 2;
+            if (number == 5) {
+                distanceUp *= 0.25F;
+            }
+            double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
+            double y1 = entityY + distanceUp;
+            double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));
+            if (!this.self.level().isClientSide()) {
+                value.setOldPosAndRot();
+                //Roundabout.LOGGER.info("bye");
+            }
+            value.actuallyTick();
+            value.storeVec = new Vec3(x1, y1, z1);
+            if (this.self.level().isClientSide()) {
+                value.setYRot((float) offset2);
+                value.yRotO = (float) offset2;
+                value.xOld = x1;
+                value.yOld = y1;
+                value.zOld = z1;
+                value.absMoveTo(x1, y1, z1);
+            } else {
+                value.setYRot((float) offset2);
+                value.yRotO = (float) offset2;
+                value.xOld = x1;
+                value.yOld = y1;
+                value.zOld = z1;
+                value.setPos(x1, y1, z1);
+            }
         }
     }
     public int snapNumber;
@@ -200,7 +233,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        boolean secondSkillLocked =hasHurricaneSpecial() || this.isChargingCrossfire();
+        boolean secondSkillLocked =hasHurricaneSpecial() || this.isChargingCrossfire() || hasHurricaneSingle();
         if (this.isGuarding()){
             if (isHoldingSneak()) {
                 setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
@@ -287,7 +320,11 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public boolean hasHurricane(){
-        return hasHurricaneSpecial();
+        return hasHurricaneSpecial() || hasHurricaneSingle();
+    }
+
+    public boolean hasHurricaneSingle(){
+        return (this.hurricane != null && this.hurricane.isAlive());
     }
     public boolean hasHurricaneSpecial(){
         hurricaneInit();
@@ -301,12 +338,18 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean isChargingCrossfire(){
         return (activePower == PowerIndex.POWER_2_SNEAK || activePower == PowerIndex.POWER_2);
     }
+    public boolean isChargingCrossfireSpecial(){
+        return (activePower == PowerIndex.POWER_2);
+    }
+    public boolean isChargingCrossfireSingle(){
+        return (activePower == PowerIndex.POWER_2);
+    }
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (!hold1) {
                 hold1 = true;
-                if (!isChargingCrossfire()) {
+                if (!isChargingCrossfire() && !hasHurricaneSingle()) {
                     if (!isGuarding()) {
                         if (isHoldingSneak()) {
                             if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
@@ -331,7 +374,7 @@ public class PowersMagiciansRed extends PunchingStand {
         if (keyIsDown) {
             if (!hold2) {
                 hold2 = true;
-                if (hasHurricaneSpecial()){
+                if (hasHurricaneSpecial()) {
                     if (!isChargingCrossfire()) {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                             this.setCooldown(PowerIndex.SKILL_EXTRA_2, 4);
@@ -339,6 +382,10 @@ public class PowersMagiciansRed extends PunchingStand {
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                         }
                     }
+                } else if (hasHurricaneSingle() || isChargingCrossfireSingle()){
+                    Roundabout.LOGGER.info("1");
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                 } else {
                     if (!isGuarding()) {
                         if (isHoldingSneak()) {
@@ -380,7 +427,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (!inputDash) {
-                if (!isChargingCrossfire()) {
+                if (!isChargingCrossfire() && !hasHurricaneSingle()) {
                     if (this.isGuarding()) {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
                             this.setCooldown(PowerIndex.SKILL_EXTRA, 100);
@@ -408,7 +455,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
-        if (!isChargingCrossfire()) {
+        if (!isChargingCrossfire() && !hasHurricaneSingle()) {
 
         }
     }
@@ -442,8 +489,13 @@ public class PowersMagiciansRed extends PunchingStand {
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.crossfireSpecial();
         } else if (move == PowerIndex.LEAD_IN) {
-            ticksUntilHurricaneEnds = 160;
-            return this.setPowerNone();
+            if (hasHurricaneSpecial()) {
+                ticksUntilHurricaneEnds = 160;
+                return this.setPowerNone();
+            } else {
+                ticksUntilHurricaneEnds = 80;
+                return false;
+            }
         } else if (move == PowerIndex.POWER_2_BONUS) {
             return this.shootAnkhConfirm();
         }
@@ -456,6 +508,25 @@ public class PowersMagiciansRed extends PunchingStand {
     public void updateUniqueMoves(){
         if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
             this.updateCrossfireSpecial();
+        } else if (this.getActivePower() == PowerIndex.POWER_2) {
+            this.updateCrossfire();
+        }
+    }
+    public void updateCrossfire(){
+        if (!this.self.level().isClientSide()) {
+            if (this.attackTimeDuring >= endChargingCrossfire){
+                if (!(this.self instanceof Player)){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN,true);
+                }
+            }
+        } else {
+            if (this.attackTimeDuring >= endChargingCrossfire) {
+                if (this.self instanceof Player) {
+                    if (isPacketPlayer()) {
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.LEAD_IN);
+                    }
+                }
+            }
         }
     }
     public BlockPos blockPosForSpecial = BlockPos.ZERO;
@@ -604,18 +675,38 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
                 hurricaneSpecial = hurricaneSpecial2;
                 return false;
+            } else if (hasHurricaneSingle()){
+                Roundabout.LOGGER.info("2");
+                CrossfireHurricaneEntity cfh = hurricane;
+                if (cfh != null && !cfh.isRemoved() && cfh.isAlive()){
+                    cfh.setCrossNumber(0);
+                    shootAnkh(cfh);
+                    hurricane = null;
+                    this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
+                            SoundSource.PLAYERS, 2F, 1F);
+                }
             }
         }
         return true;
     }
+    public int maxChargeSingleSize = 60;
     public boolean crossfire(){
-        if (!this.self.level().isClientSide() && !hasHurricaneSpecial()) {
-            ticksUntilHurricaneEnds = -1;
-            CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
-            if (cross != null){
-                cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
-                cross.setUser(this.self);
-                this.getSelf().level().addFreshEntity(cross);
+        if (!hasHurricaneSingle()) {
+            this.animateStand((byte) 15);
+            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_2);
+            if (!this.self.level().isClientSide()) {
+                ticksUntilHurricaneEnds = -1;
+                CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+                if (cross != null) {
+                    cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                    cross.setUser(this.self);
+                    cross.setCrossNumber(5);
+                    cross.setMaxSize(maxChargeSingleSize);
+                    hurricane = cross;
+                    this.getSelf().level().addFreshEntity(cross);
+                }
             }
         }
         return true;
@@ -682,6 +773,10 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         if (!hurricaneSpecial.isEmpty()) {
             hurricaneSpecial.clear();
+        }
+
+        if (hurricane != null){
+            hurricane.discard();
         }
     }
     public boolean snap(){
@@ -945,7 +1040,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (this.isChargingCrossfire()){
+        if (this.isChargingCrossfireSpecial() || (slot != 2 && (isChargingCrossfireSingle() || hasHurricaneSingle()))){
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);

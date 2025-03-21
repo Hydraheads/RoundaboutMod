@@ -191,8 +191,12 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 if (client){
 
                     if (!initialized){
-                        initialized = true;
-                        PMR.addHurricaneSpecial(this);
+                        if (this.getCrossNumber() < 5) {
+                            initialized = true;
+                            PMR.addHurricaneSpecial(this);
+                        } else {
+                            PMR.hurricane = this;
+                        }
                     }
                 }
                 if (!isTickable) {
@@ -376,18 +380,27 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             LivingEntity user = cfhe.getStandUser();
             if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 if (cfhe.getCrossNumber() > 0) {
-                    if (PMR.hurricaneSpecial == null) {
-                        PMR.hurricaneSpecial = new ArrayList<>();
-                    }
-                    List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(PMR.hurricaneSpecial) {
-                    };
-                    if (!hurricaneSpecial2.isEmpty()) {
-                        PMR.spinint = PMR.lastSpinInt + ($$4 * PMR.maxSpinint);
-                        int totalnumber = hurricaneSpecial2.size();
+                    if (cfhe.getCrossNumber() < 5) {
+                        if (PMR.hurricaneSpecial == null) {
+                            PMR.hurricaneSpecial = new ArrayList<>();
+                        }
+                        List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(PMR.hurricaneSpecial) {
+                        };
+                        if (!hurricaneSpecial2.isEmpty()) {
+                            PMR.spinint = PMR.lastSpinInt + ($$4 * PMR.maxSpinint);
+                            int totalnumber = hurricaneSpecial2.size();
+                            double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
+                            double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
+                            double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
+                            PMR.transformHurricane(cfhe, totalnumber, lerpX,
+                                    lerpY, lerpZ, getRenderSize());
+                        }
+                    } else {
+
                         double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
                         double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
                         double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
-                        PMR.transformHurricane(cfhe, totalnumber, lerpX,
+                        PMR.transformHurricane(cfhe, 1, lerpX,
                                 lerpY, lerpZ, getRenderSize());
                     }
                 }
