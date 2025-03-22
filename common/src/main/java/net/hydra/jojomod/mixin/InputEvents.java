@@ -888,9 +888,10 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             StandUser standComp = ((StandUser) player);
+            StandPowers powers = standComp.roundabout$getStandPowers();
             if (!this.options.keyUse.isDown() && !roundabout$sameKeyOne(KeyInputRegistry.guardKey)) {
                 if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() ||
-                        standComp.roundabout$getStandPowers().clickRelease()) {
+                        powers.clickRelease()) {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                         * This delay exists so you can't right click left click chain for instant full power punches.*/
                    if (standComp.roundabout$getActivePowerPhase() > 0 ) {
@@ -901,7 +902,6 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
-            StandPowers powers = standComp.roundabout$getStandPowers();
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();

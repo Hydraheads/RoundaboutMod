@@ -914,10 +914,45 @@ public class PowersMagiciansRed extends PunchingStand {
             this.getSelf().level().addFreshEntity(cross);
         }
     }
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (keyIsDown) {
+            if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
+                if (isHoldingSneak()){
+                    this.tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.RANGED_BARRAGE_CHARGE_2);
+                } else {
+                    this.tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.RANGED_BARRAGE_CHARGE);
+                }
+            }
+        }
+    }
+    @Override
+    public boolean clickRelease(){
+        if (!canGuard()){
+            return true;
+        }
+        return super.clickRelease();
+    }
+    @Override
+    public boolean canGuard(){
+        return this.activePower != PowerIndex.RANGED_BARRAGE_CHARGE && this.activePower != PowerIndex.RANGED_BARRAGE &&
+                this.activePower != PowerIndex.RANGED_BARRAGE_CHARGE_2 && this.activePower != PowerIndex.RANGED_BARRAGE_2;
+    }
+
+    @Override
+    public boolean canInterruptPower() {
+        if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2) {
+            return true;
+        }
+        return super.canInterruptPower();
+    }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
         ankh.setXRot(this.getSelf().getXRot()%360);
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.0F, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.1F, 0);
     }
     public boolean shootAnkhConfirm(){
         if (!this.self.level().isClientSide()) {

@@ -51,6 +51,10 @@ public class PowerIndex {
     public static final byte POWER_2_BLOCK= 45;
     public static final byte POWER_3_BLOCK= 46;
     public static final byte POWER_4_BLOCK= 47;
+    public static final byte RANGED_BARRAGE_CHARGE = 48;
+    public static final byte RANGED_BARRAGE = 49;
+    public static final byte RANGED_BARRAGE_CHARGE_2 = 50;
+    public static final byte RANGED_BARRAGE_2 = 51;
 
     /**Even more basic, refers to the buttons for cooldowns*/
     public static final byte NO_CD = -1;

@@ -59,9 +59,12 @@ public class PunchingStand extends DashPreset {
 
     public boolean wentForCharge = false;
 
+    public boolean canGuard(){
+        return !this.isBarraging() && !this.isClashing();
+    }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
+        if (!this.isGuarding() && canGuard()) {
             ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
             return true;
