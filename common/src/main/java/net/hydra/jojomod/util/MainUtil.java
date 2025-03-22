@@ -159,7 +159,8 @@ public class MainUtil {
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
         if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
-        if (player.getInventory().contains(stack) || stack.is(ModItems.CREATIVE_BODY_BAG)) {
+            boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
+        if (player.getInventory().contains(stack) || offh || stack.is(ModItems.CREATIVE_BODY_BAG)) {
             ItemStack item;
             int zombies = 1;
             int skeletons = 1;
@@ -167,7 +168,11 @@ public class MainUtil {
             int villagers = 1;
             int creepers = 1;
             if (!stack.is(ModItems.CREATIVE_BODY_BAG)){
-                item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+                if (offh) {
+                    item = player.getOffhandItem();
+                } else {
+                    item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+                }
                 CompoundTag $$1 = item.getOrCreateTagElement("bodies");
                 zombies = $$1.getInt("zombie");
                 skeletons = $$1.getInt("skeleton");
@@ -214,7 +219,11 @@ public class MainUtil {
                     fm.setYBodyRot(player.yBodyRot % 360);
                     player.level().addFreshEntity(fm);
                     if (!stack.is(ModItems.CREATIVE_BODY_BAG)) {
-                        item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+                        if (offh){
+                            item =player.getOffhandItem();
+                        } else {
+                            item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+                        }
                         if (!player.isCreative() && player instanceof ServerPlayer SP) {
                             if (context == Corpses.ZOMBIE.id) {
                                 item.getOrCreateTagElement("bodies").putInt("zombie", zombies);
