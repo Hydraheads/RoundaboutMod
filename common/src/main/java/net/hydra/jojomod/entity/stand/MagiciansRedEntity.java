@@ -18,6 +18,7 @@ public class MagiciansRedEntity extends StandEntity {
         return getSkinNameT(skinId);
     }
     public final AnimationState finalKick = new AnimationState();
+    public final AnimationState finalPunch = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
     public static Component getSkinNameT(byte skinId){
         return Component.translatable(  "skins.roundabout.magicians_red.base");
@@ -36,6 +37,11 @@ public class MagiciansRedEntity extends StandEntity {
                 this.finalKick.startIfStopped(this.tickCount);
             } else {
                 this.finalKick.stop();
+            }
+            if (this.getAnimation() == 87) {
+                this.finalPunch.startIfStopped(this.tickCount);
+            } else {
+                this.finalPunch.stop();
             }
         }
     }

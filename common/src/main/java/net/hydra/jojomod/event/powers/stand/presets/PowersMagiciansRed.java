@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.StandFireBlockEntity;
@@ -11,13 +10,11 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -298,6 +295,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
     }
+
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -580,9 +578,9 @@ public class PowersMagiciansRed extends PunchingStand {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring >= maxSuperHitTime &&
                     (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
+                int atd = this.getAttackTimeDuring();
                 ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
                 if (this.self.level().isClientSide()){
-                    int atd = this.getAttackTimeDuring();
                     ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                 }
             }
@@ -730,8 +728,12 @@ public class PowersMagiciansRed extends PunchingStand {
         animateStand((byte) 85);
     }
 
-    public void animateFinalAttackHit(){
-        animateStand((byte) 86);
+    public void animateKickAttackHit(){
+        if (chargedFinal >= maxSuperHitTime) {
+            animateStand((byte) 86);
+        } else {
+            animateStand((byte) 87);
+        }
     }
 
     @Override
@@ -756,13 +758,17 @@ public class PowersMagiciansRed extends PunchingStand {
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
         chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
-        animateFinalAttackHit();
+        animateKickAttackHit();
         //playBarrageCrySound();
         return true;
     }
 
     public float getKickAttackKnockback(){
-        return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
+        if (chargedFinal >= maxSuperHitTime) {
+            return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
+        } else {
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*1.5F);
+        }
     }
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
@@ -871,7 +877,11 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public void standFinalAttack(){
 
-        this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum + chargedFinal);
+        if (chargedFinal >= maxSuperHitTime) {
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianKickMinimum + chargedFinal * 1.5));
+        } else {
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianKickMinimum + chargedFinal));
+        }
         this.setAttackTime(0);
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
 
@@ -907,7 +917,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
         ankh.setXRot(this.getSelf().getXRot()%360);
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.1F, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.0F, 0);
     }
     public boolean shootAnkhConfirm(){
         if (!this.self.level().isClientSide()) {
@@ -1099,6 +1109,9 @@ public class PowersMagiciansRed extends PunchingStand {
 
     @Override
     public float getReach(){
+        if (this.isHoldingSneak()){
+            return 5;
+        }
         return 7;
     }
 

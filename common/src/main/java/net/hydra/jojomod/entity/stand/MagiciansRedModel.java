@@ -103,6 +103,7 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.finalKickWindup, TheWorldAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
         this.animate(pEntity.finalKick, TheWorldAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
+        this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
     }
 
     @Override
