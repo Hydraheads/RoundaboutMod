@@ -50,6 +50,7 @@ public abstract class ZModelBakery {
         this.topLevelModels.get(ModItemModels.FOG_BLOCK_ICON).resolveParents(this::getModel);
     }
 
+    /**
     @ModifyVariable(method="getModel", at=@At("HEAD"),ordinal = 0)
     private ResourceLocation roundabout$fogModelResourceKey(ResourceLocation key)
     {
@@ -57,4 +58,5 @@ public abstract class ZModelBakery {
             return Roundabout.location("block/fog_block");
         return key;
     }
+    **/
 }

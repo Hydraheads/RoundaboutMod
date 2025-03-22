@@ -142,6 +142,6 @@ public class ForgeBlocks {
 
     static
     {
-        ModBlocks.registerDynamicFogBlocks();
+        //ModBlocks.registerDynamicFogBlocks();
     }
 }
