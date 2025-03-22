@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
@@ -299,7 +300,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         if (this.getCrossNumber() <= 0){
             Entity $$1 = $$0.getEntity();
             if (getUserID() != $$1.getId() && !($$1 instanceof MagiciansRedEntity)) {
-                radialExplosion(null);
+                if ($$1 instanceof LivingEntity LE){
+                    radialExplosion(LE);
+                } else {
+                    radialExplosion(null);
+                }
                 this.discard();
             }
         }
@@ -323,7 +328,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                         this.getZ(), 2, 2, 2);
                 if (!entityList.isEmpty()){
                     for (Entity value : entityList) {
-                        if (!(mainTarget != null && value.is(mainTarget))){
+                        if (!(mainTarget != null && value.is(mainTarget)) && value.isPickable()){
                             getEntity(value, false, PMR);
                         }
                     }
@@ -336,12 +341,12 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         if (gotten !=null && gotten.getId() != getUserID()) {
             int size = this.getSize();
             float dmg = 1;
-            float strength = 0.91F;
+            float strength = 0.85F;
             if (direct) {
-                dmg = PMR.getHurricaneDirectDamage(gotten, this);
+                dmg = PMR.getHurricaneDirectDamage(gotten, this,size);
                 strength *= 2;
             } else {
-                dmg = PMR.getHurricaneDamage(gotten, this);
+                dmg = PMR.getHurricaneDamage(gotten, this,size);
 
             }
 
@@ -350,11 +355,17 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 float degrees = MainUtil.getLookAtEntityYaw(this, gotten);
                 MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
                         Mth.sin(degrees * ((float) Math.PI / 180)),
-                        Mth.sin(-40 * ((float) Math.PI / 180)),
+                        Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
-                    ((StandUser) LE).roundabout$setOnStandFire((byte) 1, standUser);
-                    ((StandUser) LE).roundabout$setSecondsOnStandFire(10);
+                    StandUser userLE = ((StandUser) LE);
+                    int ticks = 21;
+                    ticks += size*3;
+                    if (userLE.roundabout$getRemainingFireTicks() > -1){
+                        ticks+=userLE.roundabout$getRemainingFireTicks();
+                    }
+                    userLE.roundabout$setOnStandFire(PMR.getFireColor(), standUser);
+                    userLE.roundabout$setRemainingStandFireTicks(ticks);
                 }
             } else if (gotten instanceof LivingEntity LE && LE.isBlocking()) {
                 int breakShield = 0;

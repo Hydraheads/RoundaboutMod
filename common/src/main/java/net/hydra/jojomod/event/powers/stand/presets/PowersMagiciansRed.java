@@ -688,7 +688,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
         ankh.setXRot(this.getSelf().getXRot()%360);
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 1.2F, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.1F, 0);
     }
     public boolean shootAnkhConfirm(){
         if (!this.self.level().isClientSide()) {
@@ -884,21 +884,21 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
 
-    public float getHurricaneDirectDamage(Entity entity, CrossfireHurricaneEntity cfh){
+    public float getHurricaneDirectDamage(Entity entity, CrossfireHurricaneEntity cfh, float size){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) (0.5+((size/60)* 6) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 7* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) (1+(((size)/60)* 16) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnMobs*0.01)));
         }
     }
-    public float getHurricaneDamage(Entity entity, CrossfireHurricaneEntity cfh){
+    public float getHurricaneDamage(Entity entity, CrossfireHurricaneEntity cfh, float size){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) (0.5+((size/60)* 3) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 7* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) (1+((size/60)* 9) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnMobs*0.01)));
         }
     }

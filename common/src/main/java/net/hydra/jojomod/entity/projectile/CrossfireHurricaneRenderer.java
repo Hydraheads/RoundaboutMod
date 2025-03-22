@@ -68,10 +68,10 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
 
     @Override
     public ResourceLocation getTextureLocation(CrossfireHurricaneEntity var1) {
-        int tc = var1.tickCount%16;
-        if ((tc >2 && tc < 6) || (tc > 9 && tc < 13)){
+        int tc = var1.tickCount%9;
+        if (tc >2){
             return CROSSFIRE_HURRICANE_2_TEXTURE;
-        } if (tc >4 && tc < 10){
+        } if (tc >5){
             return CROSSFIRE_HURRICANE_3_TEXTURE;
         }
         return CROSSFIRE_HURRICANE_TEXTURE;
