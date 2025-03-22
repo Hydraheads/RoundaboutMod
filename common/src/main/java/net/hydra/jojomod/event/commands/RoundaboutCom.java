@@ -10,11 +10,15 @@ import com.sun.jdi.BooleanType;
 import com.sun.jdi.connect.Connector;
 import net.hydra.jojomod.RoundaboutCommands;
 import net.hydra.jojomod.world.DynamicWorld;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.GameModeArgument;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 
@@ -88,7 +92,15 @@ public class RoundaboutCom {
                         commandSourceStack.hasPermission(2))
                 .executes(context->{
                     DynamicWorld w = DynamicWorld.generateD4CWorld(context.getSource().getServer());
-                    context.getSource().sendSuccess(()->Component.literal("Generated D4C world \"" + w.getName() + "\""), true);
+                    Component worldText = ComponentUtils.wrapInSquareBrackets(
+                            Component.literal(w.getName())
+                    ).withStyle(
+                            style->style.withColor(ChatFormatting.GREEN)
+                                    .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/execute in roundabout:" + w.getName() + " run tp @s ~ ~ ~"))
+                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("commands.roundabout.d4c_world.tooltip")))
+                    );
+
+                    context.getSource().sendSuccess(()->Component.translatable("commands.roundabaout.d4c_world", worldText), false);
                     return 0;
                 }));
     }
