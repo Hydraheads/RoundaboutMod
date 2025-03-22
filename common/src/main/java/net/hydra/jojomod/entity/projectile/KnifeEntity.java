@@ -149,6 +149,10 @@ public class KnifeEntity extends AbstractArrow {
         SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
         Vec3 DM = $$1.getDeltaMovement();
         if ($$1.hurt($$5, $$2)) {
+
+            if ($$4 instanceof LivingEntity LE) {
+                LE.setLastHurtMob($$1);
+            }
                 if (MainUtil.getMobBleed($$1)){
                     ((StandUser)$$1).roundabout$setBleedLevel(0);
                     ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);

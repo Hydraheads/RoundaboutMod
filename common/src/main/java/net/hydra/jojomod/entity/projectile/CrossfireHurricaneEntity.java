@@ -184,6 +184,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             if (isEffectivelyInWater()){
                 this.discard();
             }
+            if (this.getStandUser() != null){
+                if (MainUtil.cheapDistanceTo2(this.getX(),this.getZ(),this.standUser.getX(),this.standUser.getZ()) > 80){
+                    this.discard();
+                }
+            }
         }
 
         if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){

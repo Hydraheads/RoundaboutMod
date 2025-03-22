@@ -133,6 +133,9 @@ public class MatchEntity extends ThrowableItemProjectile {
                 return;
             }
 
+            if ($$4 instanceof LivingEntity LE) {
+                LE.setLastHurtMob($$1);
+            }
             if ($$1 instanceof LivingEntity $$7) {
                 $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
             }
