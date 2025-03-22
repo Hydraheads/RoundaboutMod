@@ -295,19 +295,63 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
     }
+    public boolean isRangedBarrageCharging(){
+        return (this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
+    }
+    public boolean isRangedBarrage2Charging(){
+        return (this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
+    }
+    public boolean isRangedBarraging(){
+        return (this.activePower == PowerIndex.RANGED_BARRAGE || this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
+    }
+    public int getRangedBarrageWindup(){
+        return ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum;
+    }
+    public int getRangedBarrageWindup2(){
+        return ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
+    }
+
+    public int getRangedBarrageLength(){
+        return 60;
+    }
+
+
+    public int getRangedBarrage2Length(){
+        return 60;
+    }
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
+        StandPowers powers = standUser.roundabout$getStandPowers();
         boolean standOn = standUser.roundabout$getActive();
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
-            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
+        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+        } else if (standOn && this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 && attackTimeDuring > -1) {
+                int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getRangedBarrage2Length()) * 15);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (standOn && this.getActivePower() == PowerIndex.RANGED_BARRAGE && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getRangedBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (standOn && isRangedBarrage2Charging()) {
+            int ClashTime = Math.round(((float) attackTimeDuring / getRangedBarrageWindup2()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+        } else if (standOn && isRangedBarrageCharging()) {
+            int ClashTime = Math.round(((float) attackTimeDuring / getRangedBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
         } else {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
@@ -335,6 +379,10 @@ public class PowersMagiciansRed extends PunchingStand {
         } else if (soundChoice == CRY_1_NOISE) {
             return ModSounds.MAGICIANS_RED_CRY_EVENT;
         } else if (soundChoice == CRY_2_NOISE) {
+            return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
+        } else if (soundChoice == RANGED_CHARGE_1) {
+            return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
+        } else if (soundChoice == RANGED_CHARGE_2) {
             return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
@@ -528,6 +576,8 @@ public class PowersMagiciansRed extends PunchingStand {
     public static final byte LAST_HIT_1_NOISE = 120;
     public static final byte CRY_1_NOISE = 100;
     public static final byte CRY_2_NOISE = 101;
+    public static final byte RANGED_CHARGE_1 = 102;
+    public static final byte RANGED_CHARGE_2 = 104;
 
     @Override
     public boolean canLightFurnace(){
@@ -559,14 +609,70 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.setPowerKickAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.RANGED_BARRAGE_CHARGE){
+            return this.setPowerRangedBarrageCharge();
+        } else if (move == PowerIndex.RANGED_BARRAGE_CHARGE_2){
+            return this.setPowerRangedBarrageCharge2();
+        } else if (move == PowerIndex.RANGED_BARRAGE) {
+            return this.setPowerRangedBarrage();
+        } else if (move == PowerIndex.RANGED_BARRAGE_2) {
+            return this.setPowerRangedBarrage2();
         }
         return super.setPowerOther(move,lastMove);
     }
-
+    @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.RANGED_BARRAGE ||
+        activePower == PowerIndex.RANGED_BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
+    public boolean setPowerRangedBarrage() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.RANGED_BARRAGE);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.setAttackTimeMax(this.getRangedBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        animateStand((byte) 80);
+        return true;
+    }
+    public boolean setPowerRangedBarrage2() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.RANGED_BARRAGE_2);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.setAttackTimeMax(this.getRangedBarrage2RecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        animateStand((byte) 80);
+        return true;
+    }
+    public int getRangedBarrageRecoilTime(){
+        return 35;
+    }
+    public int getRangedBarrage2RecoilTime(){
+        return 35;
+    }
+    public void updateRangedBarrageCharge(){
+        if (this.attackTimeDuring >= this.getRangedBarrageWindup()) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE, true);
+        }
+    }
+    public void updateRangedBarrageCharge2(){
+        if (this.attackTimeDuring >= this.getRangedBarrageWindup2()) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_2, true);
+        }
+    }
+    @Override
+    public int getKickBarrageWindup(){
+        return ClientNetworking.getAppropriateConfig().chargeSettings.kickBarrageWindup;
+    }
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         if (soundChoice == CRY_2_NOISE) {
             return CRY_2_NOISE;
+        } else if (soundChoice == RANGED_CHARGE_1 ||
+        soundChoice == RANGED_CHARGE_2) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
         }
         return super.getSoundCancelingGroupByte(soundChoice);
     }
@@ -591,6 +697,10 @@ public class PowersMagiciansRed extends PunchingStand {
     public void updateUniqueMoves(){
         if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
             this.updateCrossfireSpecial();
+        } else if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE) {
+            updateRangedBarrageCharge();
+        } else if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2) {
+            updateRangedBarrageCharge2();
         } else if (this.getActivePower() == PowerIndex.POWER_2) {
             this.updateCrossfire();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
@@ -1272,6 +1382,40 @@ public class PowersMagiciansRed extends PunchingStand {
         animateStand(this.activePowerPhase);
         poseStand(OffsetIndex.ATTACK);
         return true;
+    }
+    public boolean setPowerRangedBarrageCharge() {
+        animateStand((byte) 11);
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.RANGED_BARRAGE_CHARGE);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.clashDone = false;
+        playRangedBarrageChargeSound();
+        return true;
+    }
+    public boolean setPowerRangedBarrageCharge2() {
+        animateStand((byte) 11);
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.RANGED_BARRAGE_CHARGE);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.clashDone = false;
+        playRangedBarrageChargeSound2();
+        return true;
+    }
+    public void playRangedBarrageChargeSound(){
+        if (!this.self.level().isClientSide()) {
+            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+            if (barrageChargeSound != null) {
+                playSoundsIfNearby(RANGED_CHARGE_1, 27, false);
+            }
+        }
+    }
+    public void playRangedBarrageChargeSound2(){
+        if (!this.self.level().isClientSide()) {
+            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+            if (barrageChargeSound != null) {
+                playSoundsIfNearby(RANGED_CHARGE_2, 27, false);
+            }
+        }
     }
     boolean splash = false;
     @Override
