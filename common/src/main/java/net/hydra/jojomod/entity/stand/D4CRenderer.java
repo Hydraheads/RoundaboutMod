@@ -13,7 +13,7 @@ public class D4CRenderer extends StandRenderer<D4CEntity> {
 
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c.png");
     public D4CRenderer(EntityRendererProvider.Context context) {
-        super(context, new D4CModel<>(context.bakeLayer(ModEntityRendererClient.MAGICIANS_RED_LAYER)), 0.f);
+        super(context, new D4CModel<>(context.bakeLayer(ModEntityRendererClient.D4C_LAYER)), 0.f);
     }
 
     @Override public ResourceLocation getTextureLocation(D4CEntity entity) { return MANGA_SKIN; }
