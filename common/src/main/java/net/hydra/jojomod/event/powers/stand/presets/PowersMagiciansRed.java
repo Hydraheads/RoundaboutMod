@@ -11,13 +11,16 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -29,11 +32,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
@@ -146,12 +151,23 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         if (this.hasHurricane() || isChargingCrossfire()){
             basis *= 0.6f;
+        } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            if (this.getSelf().isCrouching()) {
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1 / f;
+                basis *= g;
+            }
+            basis *= 0.3f;
         }
         return super.inputSpeedModifiers(basis);
     }
+
+    public SoundEvent getKickAttackSound(){
+        return ModSounds.FINAL_KICK_EVENT;
+    }
     @Override
     public boolean cancelSprintJump(){
-        if (this.hasHurricane() || isChargingCrossfire()){
+        if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             return true;
         }
         return super.cancelSprintJump();
@@ -281,6 +297,23 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
+    }
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        StandUser standUser = ((StandUser) playerEntity);
+        boolean standOn = standUser.roundabout$getActive();
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
     }
     @Override
     public StandEntity getNewStandEntity(){
@@ -524,6 +557,10 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         } else if (move == PowerIndex.POWER_2_BONUS) {
             return this.shootAnkhConfirm();
+        } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
+            return this.setPowerKickAttack();
+        } else if (move == PowerIndex.SNEAK_ATTACK){
+            return this.setPowerSuperHit();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -538,12 +575,30 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public int ticksUntilHurricaneEnds = -1;
 
+
+    public void updateKickAttackCharge(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring >= maxSuperHitTime &&
+                    (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
+                ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                if (this.self.level().isClientSide()){
+                    int atd = this.getAttackTimeDuring();
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                }
+            }
+        }
+    }
+
     @Override
     public void updateUniqueMoves(){
         if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
             this.updateCrossfireSpecial();
         } else if (this.getActivePower() == PowerIndex.POWER_2) {
             this.updateCrossfire();
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
+            updateKickAttack();
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            updateKickAttackCharge();
         }
     }
     public void updateCrossfire(){
@@ -671,6 +726,170 @@ public class PowersMagiciansRed extends PunchingStand {
         return true;
     }
 
+    public void animateFinalAttack(){
+        animateStand((byte) 85);
+    }
+
+    public void animateFinalAttackHit(){
+        animateStand((byte) 86);
+    }
+
+    @Override
+    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+        if (move == PowerIndex.SNEAK_ATTACK) {
+            this.chargedFinal = chargeTime;
+        }
+        return super.tryChargedPower(move, forced, chargeTime);
+    }
+    public int chargedFinal;
+    public boolean setPowerKickAttack() {
+        animateFinalAttack();
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
+        this.poseStand(OffsetIndex.GUARD);
+        this.clashDone = false;
+        return true;
+    }
+    public static int maxSuperHitTime = 25;
+    public boolean setPowerSuperHit() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.SNEAK_ATTACK);
+        this.poseStand(OffsetIndex.ATTACK);
+        chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
+        animateFinalAttackHit();
+        //playBarrageCrySound();
+        return true;
+    }
+
+    public float getKickAttackKnockback(){
+        return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
+    }
+    public float getKickAttackStrength(Entity entity){
+        float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
+        if (this.getReducedDamage(entity)){
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+        } else {
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+1;
+        }
+    }
+    public void kickAttackImpact(Entity entity){
+        this.setAttackTimeDuring(-20);
+        if (entity != null) {
+            float pow;
+            float knockbackStrength;
+            pow = getKickAttackStrength(entity);
+            knockbackStrength = getKickAttackKnockback();
+            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                if (entity instanceof LivingEntity LE) {
+                    if (chargedFinal >= maxSuperHitTime) {
+                        addEXP(5, LE);
+                    }
+                }
+                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+            } else {
+                if (chargedFinal >= maxSuperHitTime) {
+                    knockShield2(entity, getKickAttackKnockShieldTime());
+                }
+            }
+        } else {
+            // This is less accurate raycasting as it is server sided but it is important for particle effects
+            float distMax = this.getDistanceOut(this.self, this.getReach(), false);
+            float halfReach = (float) (distMax * 0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
+            if (!this.self.level().isClientSide) {
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                        1, 0.0, 0.0, 0.0, 1);
+            }
+        }
+
+        SoundEvent SE;
+        float pitch = 1F;
+        if (entity != null) {
+            SE = getKickAttackSound();
+            pitch = 1.2F;
+        } else {
+            SE = ModSounds.PUNCH_2_SOUND_EVENT;
+        }
+
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
+    }
+
+
+    public boolean holdDownClick = false;
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (!consumeClickInput) {
+            if (holdDownClick) {
+                if (keyIsDown) {
+
+                } else {
+                    if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        int atd = this.getAttackTimeDuring();
+                        this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                    }
+                    holdDownClick = false;
+                }
+            } else {
+                if (keyIsDown) {
+                    Minecraft mc = Minecraft.getInstance();
+                    if (!isHoldingSneak()) {
+                        super.buttonInputAttack(keyIsDown, options);
+                    } else {
+                        if (this.canAttack()) {
+                            this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                            holdDownClick = true;
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                        } else {
+                            super.buttonInputAttack(keyIsDown, options);
+                        }
+                    }
+                }
+            }
+        } else {
+            if (!keyIsDown) {
+                consumeClickInput = false;
+            }
+        }
+    }
+
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
+            kickAttackImpact(target);
+        }
+    }
+    public void updateKickAttack(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring == 5) {
+                this.standFinalAttack();
+            }
+        }
+    }
+
+    public void standFinalAttack(){
+
+        this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum + chargedFinal);
+        this.setAttackTime(0);
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
+                this.attackTimeDuring = -10;
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId(), PacketDataIndex.INT_STAND_ATTACK);
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+            Entity targetEntity = getTargetEntity(this.self,-1);
+            kickAttackImpact(targetEntity);
+        }
+    }
+    public int getKickAttackKnockShieldTime(){
+        return 100;
+    }
     public void generateCrossfire(int crossNumber, int maxSize){
         CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
         if (cross != null){

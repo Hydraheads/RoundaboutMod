@@ -268,6 +268,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                         PMR.createStandFire2(pos.east().north());
                         PMR.createStandFire2(pos.east().south());
                         PMR.createStandFire2(pos.north().north());
+                        PMR.createStandFire2(pos.south().south());
                         PMR.createStandFire2(pos.above().above());
                         PMR.createStandFire2(pos.below().below());
 
