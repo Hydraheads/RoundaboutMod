@@ -137,6 +137,13 @@ public class FabricEntities {
                         EntityType.Builder.of(MagiciansRedEntity::new, MobCategory.MISC).
                                 sized(0.75F, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":magicians_red")
                 );
+        public static final EntityType<D4CEntity> D4C =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("d4c"),
+                        EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":d4c")
+                );
         public static final EntityType<JusticePirateEntity> JUSTICE_PIRATE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -216,6 +223,7 @@ public class FabricEntities {
                 ModEntities.STAR_PLATINUM_BASEBALL = STAR_PLATINUM_BASEBALL;
                 ModEntities.JUSTICE = JUSTICE;
                 ModEntities.MAGICIANS_RED = MAGICIANS_RED;
+                ModEntities.D4C = D4C;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -259,6 +267,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());

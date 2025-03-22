@@ -190,6 +190,6 @@ public class FabricBlocks {
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
 
-        //ModBlocks.registerDynamicFogBlocks();
+        ModBlocks.registerDynamicFogBlocks();
     }
 }

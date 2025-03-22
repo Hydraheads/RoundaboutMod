@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ModItemModels;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
@@ -46,5 +48,13 @@ public abstract class ZModelBakery {
         this.topLevelModels.get(ModItemModels.STAND_ARROW_CROSSBOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BEETLE_CROSSBOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.FOG_BLOCK_ICON).resolveParents(this::getModel);
+    }
+
+    @ModifyVariable(method="getModel", at=@At("HEAD"),ordinal = 0)
+    private ResourceLocation roundabout$fogModelResourceKey(ResourceLocation key)
+    {
+        if (key.getPath().startsWith("fog_") && key.getNamespace().equals(Roundabout.MOD_ID))
+            return Roundabout.location("block/fog_block");
+        return key;
     }
 }
