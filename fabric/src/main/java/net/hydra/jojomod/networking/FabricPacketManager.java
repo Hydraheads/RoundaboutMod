@@ -2,10 +2,7 @@ package net.hydra.jojomod.networking;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.hydra.jojomod.networking.packet.c2s.ConfigC2S;
-import net.hydra.jojomod.networking.packet.c2s.MoveSyncPacket;
-import net.hydra.jojomod.networking.packet.c2s.StandAbilityPacket;
-import net.hydra.jojomod.networking.packet.c2s.UtilC2S;
+import net.hydra.jojomod.networking.packet.c2s.*;
 import net.hydra.jojomod.networking.packet.s2c.*;
 
 public class FabricPacketManager {
@@ -32,6 +29,8 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INVENTORY_C2S_PACKET, UtilC2S::inventoryChange);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.ITEM_CONTEXT_C2S_PACKET, UtilC2S::itemChange);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.HANDSHAKE, ConfigC2S::Handshake);
+
+        ServerPlayNetworking.registerGlobalReceiver(ModMessages.REQUEST_NEW_DYNAMIC_WORLD, RequestDynamicWorldC2S::createNewWorld);
     }
     //Server to Client
     public static void registerS2CPackets(){
