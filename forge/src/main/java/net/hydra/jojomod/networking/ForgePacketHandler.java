@@ -122,6 +122,11 @@ public class ForgePacketHandler {
                 .encoder(ForgeHandshakePacket::toBytes)
                 .consumerMainThread(ForgeHandshakePacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ForgeRequestDynamicWorldC2S.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ForgeRequestDynamicWorldC2S::new)
+                .encoder(ForgeRequestDynamicWorldC2S::toBytes)
+                .consumerMainThread(ForgeRequestDynamicWorldC2S::handle)
+                .add();
 
         /**Server to Client Packets*/
         INSTANCE.messageBuilder(ForgeGenericIntPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)

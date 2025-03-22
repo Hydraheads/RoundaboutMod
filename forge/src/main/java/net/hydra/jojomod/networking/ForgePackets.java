@@ -212,4 +212,8 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToServer(new ForgeHandshakePacket());
     }
 
+    @Override
+    public void registerNewWorld() {
+        ForgePacketHandler.sendToServer(new ForgeRequestDynamicWorldC2S());
+    }
 }

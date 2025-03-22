@@ -121,4 +121,11 @@ public class DynamicWorld {
     {
         return new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999));
     }
+
+    public static DynamicWorld generateD4CWorld(MinecraftServer server, ServerPlayer player)
+    {
+        DynamicWorld world = new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999));
+        player.changeDimension(world.getLevel());
+        return world;
+    }
 }

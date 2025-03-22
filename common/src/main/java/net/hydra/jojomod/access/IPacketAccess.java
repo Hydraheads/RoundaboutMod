@@ -65,4 +65,6 @@ public interface IPacketAccess {
     void inventoryToServer(int slotNum, ItemStack stack, byte context);
     void itemContextToServer(byte context, ItemStack stack, byte context2, Vector3f vec);
     void handshake();
+
+    void registerNewWorld();
 }
