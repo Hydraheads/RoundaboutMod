@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -63,12 +65,10 @@ public abstract class ZEntityRenderDispatcher {
         if (bt > 0) {
             $$0.pushPose();
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-            RenderSystem.depthFunc(GL20C.GL_ALWAYS);
-            RenderSystem.depthMask(false);
+            RenderSystem.depthMask(true);
             RenderSystem.enableBlend();
 
-            RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+            $$0.mulPose(Axis.YP.rotationDegrees(-$$2.getYRot()));
 
             // Rotates every 2 ticks through the 32 frames
             int frame = 0;
@@ -89,15 +89,19 @@ public abstract class ZEntityRenderDispatcher {
             float v1 = (frame + 1) * frameHeight;
             float $$10 = 0.0F;
             int $$11 = 0;
-            VertexConsumer vertexConsumer = $$1.getBuffer(Sheets.cutoutBlockSheet());
+            VertexConsumer vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_0.png")));
 
             for (PoseStack.Pose matrices = $$0.last(); $$8 > 0.0F; $$11++) {
 
+                RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
-                fireVertex(bufferbuilder, matrices, $$6 - 0.0F, 0.0F - $$9, $$10, u0, v1);
-                fireVertex(bufferbuilder, matrices,-$$6 - 0.0F, 0.0F - $$9, $$10, u1, v1);
-                fireVertex(bufferbuilder, matrices, -$$6 - 0.0F, 1.4F - $$9, $$10, u1, v0);
-                fireVertex(bufferbuilder, matrices, $$6 - 0.0F, 1.4F - $$9, $$10, u0, v0);
+                fireVertex(vertexConsumer, matrices, $$6 - 0.0F, 0.0F - $$9, $$10, u0, v1);
+                fireVertex(vertexConsumer, matrices,-$$6 - 0.0F, 0.0F - $$9, $$10, u1, v1);
+                fireVertex(vertexConsumer, matrices, -$$6 - 0.0F, 1.4F - $$9, $$10, u1, v0);
+                fireVertex(vertexConsumer, matrices, $$6 - 0.0F, 1.4F - $$9, $$10, u0, v0);
+
                 BufferUploader.drawWithShader(bufferbuilder.end());
 
                 $$8 -= 0.45F;
@@ -124,8 +128,14 @@ public abstract class ZEntityRenderDispatcher {
 
     @Shadow public Camera camera;
 
-    private static void fireVertex(BufferBuilder bufferBuilder, PoseStack.Pose matrices, float x, float y, float z, float u, float v) {
-        bufferBuilder.vertex(matrices.pose(), -0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u, v).endVertex();
+    private static void fireVertex(VertexConsumer vertexConsumer, PoseStack.Pose matrices, float x, float y, float z, float u, float v) {
+        vertexConsumer.vertex(matrices.pose(), x, y, z)
+                .color(255, 255, 255, 255)
+                .uv(u, v)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(15728880)
+                .normal(matrices.normal(), 0.0F, 1.0F, 0.0F)
+                .endVertex();
     }
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
