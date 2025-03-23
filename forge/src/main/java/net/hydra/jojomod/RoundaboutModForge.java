@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.networking.ForgePacketHandler;
 import net.hydra.jojomod.registry.*;
+import net.hydra.jojomod.util.BlockBlacklist;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.Networking;
 import net.minecraft.server.network.ServerConnectionListener;
@@ -44,6 +45,11 @@ public class RoundaboutModForge {
                 FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-clientOnly.json"));
         //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeCommonConfig.SPEC, "roundabout-client.toml");
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeCommonConfig.SPEC, "roundabout-common.toml");
+
+        BlockBlacklist.load(
+                FMLPaths.CONFIGDIR.get(),
+                "roundabout-block_blacklist"
+        );
 
         ForgeEffects.POTION_EFFECTS.register(bus);
         ForgeEntities.ENTITY_TYPES.register(bus);

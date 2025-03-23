@@ -11,6 +11,7 @@ import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.particles.FabricParticles;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.BlockBlacklist;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.Networking;
 import net.hydra.jojomod.world.FabricGamerules;
@@ -35,6 +36,11 @@ public class RoundaboutFabric implements ModInitializer {
                 FabricLoader.getInstance()
                         .getConfigDir()
                         .resolve(Roundabout.MOD_ID + "-clientOnly.json"));
+
+        BlockBlacklist.load(
+                FabricLoader.getInstance().getConfigDir(),
+                "roundabout-block_blacklist"
+        );
 
         FabricLootTables.modifyLootTables();
 
