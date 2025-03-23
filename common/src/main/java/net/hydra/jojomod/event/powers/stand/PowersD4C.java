@@ -119,4 +119,10 @@ public class PowersD4C extends PunchingStand {
 
         return (!bottom.isAir() && !top.isAir()) && (bottom.isSolid() && bottom.isSolid());
     };
+
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
 }

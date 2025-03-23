@@ -1169,6 +1169,10 @@ public class StandPowers {
             }
         }
     }
+
+    public boolean isWip(){
+        return false;
+    }
     public void updateAttack(){
     }
 

@@ -299,7 +299,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return (this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
     }
     public boolean isRangedBarrage2Charging(){
-        return (this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
+        return (this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE_2);
     }
     public boolean isRangedBarraging(){
         return (this.activePower == PowerIndex.RANGED_BARRAGE || this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
@@ -656,6 +656,11 @@ public class PowersMagiciansRed extends PunchingStand {
         if (this.attackTimeDuring >= this.getRangedBarrageWindup()) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE, true);
         }
+    }
+
+    @Override
+    public boolean isWip(){
+        return true;
     }
     public void updateRangedBarrageCharge2(){
         if (this.attackTimeDuring >= this.getRangedBarrageWindup2()) {
@@ -1395,7 +1400,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean setPowerRangedBarrageCharge2() {
         animateStand((byte) 11);
         this.attackTimeDuring = 0;
-        this.setActivePower(PowerIndex.RANGED_BARRAGE_CHARGE);
+        this.setActivePower(PowerIndex.RANGED_BARRAGE_CHARGE_2);
         this.poseStand(OffsetIndex.ATTACK);
         this.clashDone = false;
         playRangedBarrageChargeSound2();

@@ -35,5 +35,9 @@ public class MaxStandDiscItem extends StandDiscItem{
                 $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
             }
         }
+
+        if(this.standPowers != null && this.standPowers.isWip()){
+            $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
+        }
     }
 }

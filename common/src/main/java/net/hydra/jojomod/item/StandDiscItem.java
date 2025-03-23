@@ -87,6 +87,10 @@ public class StandDiscItem extends Item {
         } else {
             $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level",1).withStyle(ChatFormatting.GRAY));
         }
+
+        if(this.standPowers != null && this.standPowers.isWip()){
+            $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
+        }
     }
 
     public MutableComponent getDisplayName2() {
