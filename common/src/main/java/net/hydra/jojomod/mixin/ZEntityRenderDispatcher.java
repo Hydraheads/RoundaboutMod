@@ -68,7 +68,7 @@ public abstract class ZEntityRenderDispatcher {
             RenderSystem.depthMask(true);
             RenderSystem.enableBlend();
 
-            $$0.mulPose(Axis.YP.rotationDegrees(-$$2.getYRot()));
+            $$0.mulPose(Axis.YP.rotationDegrees(-this.camera.getYRot()));
 
             // Rotates every 2 ticks through the 32 frames
             int frame = 0;
