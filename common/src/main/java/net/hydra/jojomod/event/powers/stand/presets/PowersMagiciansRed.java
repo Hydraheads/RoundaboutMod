@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.StandFireBlockEntity;
@@ -15,6 +16,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -32,6 +34,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -44,6 +48,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersMagiciansRed extends PunchingStand {
 
@@ -155,6 +160,13 @@ public class PowersMagiciansRed extends PunchingStand {
                 basis *= g;
             }
             basis *= 0.3f;
+        } else if (this.activePower == PowerIndex.RANGED_BARRAGE_2) {
+            if (this.getSelf().isCrouching()) {
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1 / f;
+                basis *= g;
+            }
+            basis *= 0.75f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -164,7 +176,8 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean cancelSprintJump(){
-        if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+        if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE
+                || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2){
             return true;
         }
         return super.cancelSprintJump();
@@ -756,27 +769,27 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public void flamethrowerImpact(){
+        boolean lastHit = (this.attackTimeDuring >= this.getRangedBarrage2Length());
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                this.attackTimeDuring = -10;
                 float distMax = (float) getBlockDistanceOut(this.self,this.getReach());
-                Entity targetEntity = getTargetEntity(this.self,distMax);
 
                 List<Entity> listE = getTargetEntityList(this.self,distMax);
-                int id = -1;
-                if (targetEntity != null){
-                    id = targetEntity.getId();
-                }
-                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(id, this.activePowerPhase);
                 if (!listE.isEmpty()){
                     for (int i = 0; i< listE.size(); i++){
-                        if (!(targetEntity != null && listE.get(i).is(targetEntity))) {
-                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < distMax) {
-                                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
+                        if (!(listE.get(i) instanceof StandEntity SE && !SE.canBeHitByStands()) && listE.get(i).distanceTo(this.self) < distMax) {
+                            if (lastHit){
+                                ModPacketHandler.PACKET_ACCESS.intToServerPacket(listE.get(i).getId(), PacketDataIndex.INT_STAND_ATTACK_2);
+                            } else {
+                                ModPacketHandler.PACKET_ACCESS.intToServerPacket(listE.get(i).getId(), PacketDataIndex.INT_STAND_ATTACK);
                             }
                         }
                     }
                 }
+                if (this.attackTimeDuring == this.getRangedBarrage2Length()){
+                    this.attackTimeDuring = -10;
+                }
+
             }
         } else {
             /*Caps how far out the punch goes*/
@@ -1064,8 +1077,123 @@ public class PowersMagiciansRed extends PunchingStand {
     public void handleStandAttack(Player player, Entity target){
         if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
             kickAttackImpact(target);
+        } else if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_2){
+            rangedBarrageImpact(target,false);
         }
     }
+    @Override
+    public void handleStandAttack2(Player player, Entity target){
+        if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_2){
+            rangedBarrageImpact(target,true);
+        }
+    }
+
+    public boolean crossfireDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
+        if (DamageHandler.CrossfireDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    private float getRangedBarrage2HitStrength(Entity entity){
+        float barrageLength = this.getRangedBarrage2Length();
+        float power;
+        if (this.getReducedDamage(entity)){
+            power = 7/barrageLength;
+        } else {
+            power = 15/barrageLength;
+        }
+        /*Barrage hits are incapable of killing their target until the last hit.*/
+        if (entity instanceof LivingEntity){
+            if (power >= ((LivingEntity) entity).getHealth()){
+                if (entity instanceof Player) {
+                    power = 0.00001F;
+                } else {
+                    power = 0F;
+                }
+            }
+        }
+        return power;
+    }
+
+    public void rangedBarrageImpact(Entity entity, boolean finalHit){
+        if (entity != null && moveStarted){
+            moveStarted = false;
+
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)){
+                stand.setXRot(getLookAtEntityPitch(stand, entity));
+                stand.setYRot(getLookAtEntityYaw(stand, entity));
+            }
+        }
+
+        if (this.activePower == PowerIndex.RANGED_BARRAGE_2) {
+            if (bonusBarrageConditions()) {
+                if (entity != null) {
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                        initiateClash(entity);
+                    } else {
+                        float pow;
+                        float knockbackStrength = 0;
+                        /**By saving the velocity before hitting, we can let people approach barraging foes
+                         * through shields.*/
+                        Vec3 prevVelocity = entity.getDeltaMovement();
+                            pow = this.getRangedBarrage2HitStrength(entity);
+                            knockbackStrength = 0.0003F;
+
+
+                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                            if (entity instanceof LivingEntity LE) {
+                                if (entity instanceof Player PE){
+                                    ((IPlayerEntity) PE).roundabout$setCameraHits(2);
+                                }
+                                int ticks = 0;
+                                StandUser su = (StandUser) LE;
+                                if (su.roundabout$getRemainingFireTicks() > -1){
+                                    ticks+=su.roundabout$getRemainingFireTicks();
+                                    ticks+=2;
+                                } else {
+                                    ticks+=60;
+                                }
+                                su.roundabout$setOnStandFire(this.getFireColor(), this.self);
+                                su.roundabout$setRemainingStandFireTicks(ticks);
+                            }
+                            entity.setDeltaMovement(prevVelocity);
+                        } else {
+                           entity.setDeltaMovement(prevVelocity);
+                        }
+                    }
+                }
+
+                if (finalHit) {
+                    animateStand((byte) 43);
+                    this.attackTimeDuring = -10;
+                }
+            } else {
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        }
+    }
+
+
     public void updateKickAttack(){
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring == 5) {

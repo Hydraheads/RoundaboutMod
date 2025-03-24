@@ -364,6 +364,9 @@ public class JusticeEntity extends StandEntity {
         }
         this.calculateEntityAnimation(this instanceof FlyingAnimal);
     }
+
+
+
     @Override
     public Vec3 getIdleOffset(LivingEntity standUser) {
         if (this.getSkin() != DARK_MIRAGE) {

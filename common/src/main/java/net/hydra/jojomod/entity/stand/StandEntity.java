@@ -3,10 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.util.ConfigManager;
@@ -829,6 +826,22 @@ public abstract class StandEntity extends Mob{
         super.remove($$0);
     }
 
+    public boolean canBeHitByStands(){
+        return (isRemoteControlled() || this.getFollowing() != this.getUser());
+    }
+    public boolean isRemoteControlled(){
+        Entity ent = this.getUser();
+        if (ent != null) {
+            if (ent instanceof Player PE) {
+                StandUser user = ((StandUser) PE);
+                StandPowers powers = user.roundabout$getStandPowers();
+                if (powers.isPiloting()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public boolean removeWhenFarAway(double $$0) {
