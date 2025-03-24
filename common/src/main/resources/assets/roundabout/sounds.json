@@ -65,6 +65,12 @@
       "roundabout:magicians_red_charge"
     ]
   },
+  "flamethrower": {
+    "subtitle": "sounds.roundabout.flamethrower",
+    "sounds": [
+      "roundabout:flamethrower"
+    ]
+  },
   "snap": {
     "subtitle": "sounds.roundabout.snap",
     "sounds": [

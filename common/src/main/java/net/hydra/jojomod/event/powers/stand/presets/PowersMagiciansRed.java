@@ -308,6 +308,14 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
     }
+    public void playFlamethrowerSound(){
+        if (!this.self.level().isClientSide()) {
+            double rand = Math.random();
+            byte barrageCrySound;
+            barrageCrySound = FLAMETHROWER_NOISE;
+            playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
+        }
+    }
     public boolean isRangedBarrageCharging(){
         return (this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
     }
@@ -397,6 +405,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModSounds.MAGICIANS_RED_CHARGE_EVENT;
         } else if (soundChoice == RANGED_CHARGE_2) {
             return ModSounds.MAGICIANS_RED_CHARGE_EVENT;
+        } else if (soundChoice == FLAMETHROWER_NOISE) {
+            return ModSounds.FLAMETHROWER_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -602,6 +612,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public static final byte CRY_2_NOISE = 101;
     public static final byte RANGED_CHARGE_1 = 102;
     public static final byte RANGED_CHARGE_2 = 104;
+    public static final byte FLAMETHROWER_NOISE = 105;
 
     @Override
     public boolean canLightFurnace(){
@@ -665,6 +676,7 @@ public class PowersMagiciansRed extends PunchingStand {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.RANGED_BARRAGE_2);
         this.poseStand(OffsetIndex.ATTACK);
+        playFlamethrowerSound();
         this.setAttackTimeMax(this.getRangedBarrage2RecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         animateStand((byte) 80);
@@ -700,7 +712,8 @@ public class PowersMagiciansRed extends PunchingStand {
         if (soundChoice == CRY_2_NOISE) {
             return CRY_2_NOISE;
         } else if (soundChoice == RANGED_CHARGE_1 ||
-        soundChoice == RANGED_CHARGE_2) {
+        soundChoice == RANGED_CHARGE_2 ||
+                soundChoice == FLAMETHROWER_NOISE) {
             return SoundIndex.BARRAGE_SOUND_GROUP;
         }
         return super.getSoundCancelingGroupByte(soundChoice);
@@ -747,12 +760,12 @@ public class PowersMagiciansRed extends PunchingStand {
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
         } else {
-            if (this.attackTimeDuring > this.getBarrageLength()) {
+            if (this.attackTimeDuring > this.getRangedBarrageLength()) {
                 this.attackTimeDuring = -20;
             } else {
                 if (this.attackTimeDuring > 0) {
                     this.setAttackTime((getBarrageRecoilTime() - 1) -
-                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                            Math.round(((float) this.attackTimeDuring / this.getRangedBarrageLength())
                                     * (getBarrageRecoilTime() - 1)));
 
                     standBarrageHit();
@@ -761,38 +774,39 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public void updateRangedBarrage2(){
-        if (!this.self.level().isClientSide()){
-            //particle spew code here
-            StandEntity stand = this.getStandEntity(this.self);
-            if (stand != null) {
-                Vec3 vector = getRayBlock(this.self,this.getReach());
-                if (vector != null) {
-                    for (int i = 0; i < 6; i++) {
-                        double spd = (1 - ((double) i / 7)) * 0.4;
-                        double random = (Math.random() * 7) - 3.5;
-                        double random2 = (Math.random() * 7) - 3.5;
-                        double random3 = (Math.random() * 7) - 3.5;
-                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
-                                stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
-                                0,
-                                (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
-                                (-3 * (stand.getY() - vector.y()) - 1 + random2) * spd,
-                                (-3 * (stand.getZ() - vector.z()) + 0.5 + random3) * spd,
-                                0.15);
-                    }
-                }
-            }
-        }
 
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
         } else {
-            if (this.attackTimeDuring > this.getBarrageLength()) {
+            if (this.attackTimeDuring > this.getRangedBarrage2Length()) {
                 this.attackTimeDuring = -20;
             } else {
                 if (this.attackTimeDuring > 0) {
+
+                    if (!this.self.level().isClientSide()){
+                        //particle spew code here
+                        StandEntity stand = this.getStandEntity(this.self);
+                        if (stand != null) {
+                            Vec3 vector = getRayBlock(this.self,this.getReach());
+                            if (vector != null) {
+                                for (int i = 0; i < 6; i++) {
+                                    double spd = (1 - ((double) i / 7)) * 0.5;
+                                    double random = (Math.random() * 6) - 3;
+                                    double random2 = (Math.random() * 6) - 3;
+                                    double random3 = (Math.random() * 6) - 3;
+                                    ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                                            stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
+                                            0,
+                                            (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
+                                            (-3 * (stand.getY() - vector.y()) - 1 + random2) * spd,
+                                            (-3 * (stand.getZ() - vector.z()) + 0.5 + random3) * spd,
+                                            0.15);
+                                }
+                            }
+                        }
+                    }
                     this.setAttackTime((getBarrageRecoilTime() - 1) -
-                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                            Math.round(((float) this.attackTimeDuring / this.getRangedBarrage2Length())
                                     * (getBarrageRecoilTime() - 1)));
 
                     flamethrowerImpact();
