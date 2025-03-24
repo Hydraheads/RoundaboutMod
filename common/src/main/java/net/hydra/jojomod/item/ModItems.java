@@ -63,5 +63,6 @@ public class ModItems {
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();
+    public static ArrayList<StandDiscItem> STAND_ARROW_POOL_FOR_MOBS = Lists.newArrayList();
 
 }

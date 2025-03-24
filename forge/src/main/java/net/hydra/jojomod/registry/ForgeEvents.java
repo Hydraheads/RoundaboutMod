@@ -191,9 +191,6 @@ public class ForgeEvents {
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
-        ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
-        ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
-        ModItems.STAND_ARROW_POOL.add((StandDiscItem)ForgeItems.STAND_DISC_JUSTICE.get());
 
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(Potions.AWKWARD, ModItems.LOCACACA_PIT, ForgeItems.HEX_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.REDSTONE, ForgeItems.HEX_POTION_EXTENDED.get()));

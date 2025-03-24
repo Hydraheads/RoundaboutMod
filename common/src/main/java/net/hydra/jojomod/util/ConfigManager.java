@@ -57,6 +57,7 @@ public abstract class ConfigManager {
         if (getConfig().standArrowPool != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
+            ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
             for (String disc : getConfig().standArrowPool)
             {
@@ -73,6 +74,7 @@ public abstract class ConfigManager {
                     continue;
 
                 ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
+                ModItems.STAND_ARROW_POOL_FOR_MOBS.add((StandDiscItem) i);
             }
         }
     }

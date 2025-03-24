@@ -356,9 +356,6 @@ public class FabricItems {
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
 
-        ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_STAR_PLATINUM);
-        ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_THE_WORLD);
-        ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_JUSTICE);
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);
 
         registerPotions();
