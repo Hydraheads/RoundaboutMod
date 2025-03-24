@@ -750,6 +750,28 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public void updateRangedBarrage2(){
+        if (!this.self.level().isClientSide()){
+            //particle spew code here
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 vector = getRayBlock(this.self,this.getReach());
+                if (vector != null) {
+                    for (int i = 0; i < 6; i++) {
+                        double spd = (1 - ((double) i / 7)) * 0.4;
+                        double random = (Math.random() * 7) - 3.5;
+                        double random2 = (Math.random() * 7) - 3.5;
+                        double random3 = (Math.random() * 7) - 3.5;
+                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                                stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
+                                0,
+                                (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
+                                (-3 * (stand.getY() - vector.y()) - 1 + random2) * spd,
+                                (-3 * (stand.getZ() - vector.z()) + 0.5 + random3) * spd,
+                                0.15);
+                    }
+                }
+            }
+        }
 
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
@@ -1347,7 +1369,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         double random = (Math.random() * 14) - 7;
                         double random2 = (Math.random() * 14) - 7;
                         double random3 = (Math.random() * 14) - 7;
-                        ((ServerLevel) stand.level()).sendParticles(ModParticles.ORANGE_FLAME, stand.getX(),
+                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
                                 stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
                                 0,
                                 (-3 * (stand.getX() - grabBlock.getX()) + 0.5 + random) * spd,
@@ -1430,7 +1452,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 double random = (Math.random() * 0.8) - 0.4;
                 double random2 = (Math.random() * 0.8) - 0.4;
                 double random3 = (Math.random() * 0.8) - 0.4;
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.ORANGE_FLAME, this.self.getX(),
+                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
                         this.self.getY() + this.self.getEyeHeight()*0.7, this.self.getZ(),
                         0,
                         -1*(this.self.getX() - grabBlock.getX())+0.5 + random,
