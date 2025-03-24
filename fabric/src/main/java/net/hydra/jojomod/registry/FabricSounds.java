@@ -67,6 +67,7 @@ public class FabricSounds {
         addSound(ModSounds.MAGICIANS_RED_CRY_2_ID, ModSounds.MAGICIANS_RED_CRY_2_EVENT);
         addSound(ModSounds.MAGICIANS_RED_CHARGE_ID, ModSounds.MAGICIANS_RED_CHARGE_EVENT);
         addSound(ModSounds.FLAMETHROWER_ID, ModSounds.FLAMETHROWER_EVENT);
+        addSound(ModSounds.STAND_FLAME_HIT_ID, ModSounds.STAND_FLAME_HIT_EVENT);
 
         addSound(ModSounds.LEVELUP_ID, ModSounds.LEVELUP_EVENT);
 

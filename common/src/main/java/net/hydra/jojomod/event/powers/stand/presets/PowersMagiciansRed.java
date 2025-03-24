@@ -851,7 +851,11 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                         if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < distMax) {
                             this.setActivePowerPhase((byte) (this.getActivePowerPhase()+50));
-                            punchImpact(listE.get(i));
+                            if (lastHit) {
+                                rangedBarrageImpact(listE.get(i), true);
+                            } else {
+                                rangedBarrageImpact(listE.get(i), false);
+                            }
                         }
                     }
                 }
@@ -1208,6 +1212,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
 
                         if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+
                             if (entity instanceof LivingEntity LE) {
                                 if (entity instanceof Player PE){
                                     ((IPlayerEntity) PE).roundabout$setCameraHits(2);
@@ -1224,8 +1229,16 @@ public class PowersMagiciansRed extends PunchingStand {
                                 su.roundabout$setRemainingStandFireTicks(ticks);
                             }
                             entity.setDeltaMovement(prevVelocity);
+                            if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
+                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                                this.lastHurtTick = this.self.tickCount;
+                            }
                         } else {
                            entity.setDeltaMovement(prevVelocity);
+                            if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
+                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                                this.lastHurtTick = this.self.tickCount;
+                            }
                         }
                     }
                 }
@@ -1239,7 +1252,7 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
     }
-
+    public int lastHurtTick = 0;
 
     public void updateKickAttack(){
         if (this.attackTimeDuring > -1) {

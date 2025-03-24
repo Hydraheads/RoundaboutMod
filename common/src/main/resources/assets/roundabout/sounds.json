@@ -65,6 +65,12 @@
       "roundabout:magicians_red_charge"
     ]
   },
+  "stand_flame_hit": {
+    "subtitle": "sounds.roundabout.stand_flame_hit",
+    "sounds": [
+      "roundabout:stand_flame_hit"
+    ]
+  },
   "flamethrower": {
     "subtitle": "sounds.roundabout.flamethrower",
     "sounds": [
