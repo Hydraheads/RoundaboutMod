@@ -2,6 +2,10 @@ package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.util.annotation.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 @Groups({
         "toggles",
         "vanilla",
@@ -62,6 +66,13 @@ import net.hydra.jojomod.util.annotation.*;
     public Integer maxMagiciansRedFlameDistance;
     @IntOption(group = "inherit", value = 15, min = 0, max = 365)
     public Integer basePunchAngle;
+    public Set<String> standArrowPool = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:star_platinum_disc",
+                    "roundabout:the_world_disc",
+                    "roundabout:justice_disc"
+            )
+    );
     @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
@@ -244,6 +255,4 @@ import net.hydra.jojomod.util.annotation.*;
         public Integer blockRangeNegativeOneIsInfinite;
 
     }
-
-
 }

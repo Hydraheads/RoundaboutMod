@@ -90,7 +90,7 @@ public class RoundaboutModForge {
 
 
     public void entityLifeCycle(ServerStartedEvent event) {
-        Networking.setServer(event.getServer());
+        Roundabout.onServerStarted(event.getServer());
     }
 
 }

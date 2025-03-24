@@ -26,7 +26,7 @@ public class RoundaboutFabric implements ModInitializer {
     public void onInitialize() {
         Roundabout.LOGGER.info("Loading Roundabout (Fabric)");
 
-        ServerLifecycleEvents.SERVER_STARTED.register(Networking::setServer);
+        ServerLifecycleEvents.SERVER_STARTED.register(Roundabout::onServerStarted);
         ConfigManager.loadConfigs(FabricLoader.getInstance()
                 .getConfigDir()
                 .resolve(Roundabout.MOD_ID + ".json"),

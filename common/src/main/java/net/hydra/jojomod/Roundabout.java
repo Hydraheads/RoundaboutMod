@@ -1,7 +1,10 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.platform.Services;
+import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.Networking;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +32,12 @@ public class Roundabout {
         if (Services.PLATFORM.isModLoaded("roundabout")) {
             LOGGER.info("Hello to roundabout");
         }
+    }
+
+    public static void onServerStarted(MinecraftServer server)
+    {
+        Networking.setServer(server);
+        ConfigManager.loadStandArrowPool();
     }
 
     public static ResourceLocation location(String path) {

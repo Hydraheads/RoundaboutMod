@@ -72,16 +72,23 @@ public class StandArrowItem extends RoundaboutArrowItem {
         return InteractionResultHolder.fail($$3);
     }
 
-    public void rollStand(Level $$0, Player $$1, ItemStack $$2) {
-        if (!$$0.isClientSide()) {
-            $$0.playSound(null, $$1.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.5F, 1.3F);
-            ItemStack stack = rerollStand($$2);
-            $$1.awardStat(Stats.ITEM_USED.get(this));
-            ((ServerLevel) $$0).sendParticles(ParticleTypes.HAPPY_VILLAGER, $$1.getX(),
-                $$1.getY() + $$1.getEyeHeight(), $$1.getZ(),
+    public void rollStand(Level level, Player player, ItemStack itemStack) {
+        if (!level.isClientSide()) {
+            level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.5F, 1.3F);
+            ItemStack stack = rerollStand(itemStack);
+            player.awardStat(Stats.ITEM_USED.get(this));
+            ((ServerLevel) level).sendParticles(ParticleTypes.HAPPY_VILLAGER, player.getX(),
+                player.getY() + player.getEyeHeight(), player.getZ(),
                 15, 1, 1, 1, 1);
+
+            if (stack == null)
+            {
+                player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.noStandsInPool").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.AQUA), true);
+                return;
+            }
+
             if (stack.getItem() instanceof StandDiscItem SD){
-                $$1.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
+                player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
             }
         }
     }
@@ -189,7 +196,10 @@ public class StandArrowItem extends RoundaboutArrowItem {
         }
     }
 
-    public static ItemStack rerollStand(ItemStack $$0){
+    public static @Nullable ItemStack rerollStand(ItemStack $$0){
+        if (ModItems.STAND_ARROW_POOL.isEmpty())
+            return null;
+
         CompoundTag tag = $$0.getOrCreateTagElement("StandDisc");
         int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
         Item item = ModItems.STAND_ARROW_POOL.get(index);

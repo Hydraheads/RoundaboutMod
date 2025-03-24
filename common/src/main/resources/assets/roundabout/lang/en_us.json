@@ -70,6 +70,7 @@
   "item.roundabout.stand_arrow.reroll": "Crouch to use %1$s experience",
   "item.roundabout.stand_arrow.reroll2": "level for a different stand!",
   "item.roundabout.stand_arrow.rerollOutcome": "Arrow Holds: ",
+  "item.roundabout.stand_arrow.noStandsInPool": "No stands in arrow pool!",
   "item.roundabout.stand_arrow.magnet": "Vibrates near worthy mobs.",
 
   "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",

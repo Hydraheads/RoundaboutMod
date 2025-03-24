@@ -5,17 +5,24 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.annotation.BooleanOption;
 import net.hydra.jojomod.util.annotation.FloatOption;
 import net.hydra.jojomod.util.annotation.IntOption;
 import net.hydra.jojomod.util.annotation.NestedOption;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
 import net.hydra.jojomod.util.option.Reflection;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 public abstract class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -43,6 +50,31 @@ public abstract class ConfigManager {
         loadLocalConfig();
         loadServerConfig();
         loaded = true;
+    }
+
+    public static void loadStandArrowPool()
+    {
+        if (getConfig().standArrowPool != null)
+        {
+            ModItems.STAND_ARROW_POOL.clear();
+
+            for (String disc : getConfig().standArrowPool)
+            {
+                String[] split = disc.split(":");
+
+                if (split.length != 2)
+                    continue;
+
+                ResourceLocation identifier = new ResourceLocation(split[0], split[1]);
+
+                Item i = BuiltInRegistries.ITEM.get(identifier);
+
+                if (i.getClass() != StandDiscItem.class)
+                    continue;
+
+                ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
+            }
+        }
     }
 
     private static void loadClientConfig() {
