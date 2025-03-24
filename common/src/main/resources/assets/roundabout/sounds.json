@@ -59,6 +59,12 @@
       "roundabout:magicians_red_cry_2"
     ]
   },
+  "magicians_red_charge": {
+    "subtitle": "sounds.roundabout.magicians_red_charge",
+    "sounds": [
+      "roundabout:magicians_red_charge"
+    ]
+  },
   "snap": {
     "subtitle": "sounds.roundabout.snap",
     "sounds": [

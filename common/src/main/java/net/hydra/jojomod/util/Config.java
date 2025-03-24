@@ -105,6 +105,10 @@ import java.util.Set;
         public Integer barrageWindup;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer kickBarrageWindup;
+        @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
+        public Integer magiciansRedFireballsWindup;
+        @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
+        public Integer magiciansRedFlamethrowerWindup;
         @BooleanOption(group = "inherit", value = true)
         public Boolean mobsInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)

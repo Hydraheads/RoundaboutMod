@@ -329,6 +329,9 @@ public class ModSounds {
     public static final String MAGICIANS_RED_CRY_2 = "magicians_red_cry_2";
     public static final ResourceLocation MAGICIANS_RED_CRY_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MAGICIANS_RED_CRY_2);
     public static SoundEvent MAGICIANS_RED_CRY_2_EVENT = SoundEvent.createVariableRangeEvent(MAGICIANS_RED_CRY_2_ID);
+    public static final String MAGICIANS_RED_CHARGE = "magicians_red_charge";
+    public static final ResourceLocation MAGICIANS_RED_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MAGICIANS_RED_CHARGE);
+    public static SoundEvent MAGICIANS_RED_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(MAGICIANS_RED_CHARGE_ID);
     public static final String FIRE_WHOOSH = "fire_whoosh";
     public static final ResourceLocation FIRE_WHOOSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRE_WHOOSH);
     public static SoundEvent FIRE_WHOOSH_EVENT = SoundEvent.createVariableRangeEvent(FIRE_WHOOSH_ID);

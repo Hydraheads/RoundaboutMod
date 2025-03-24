@@ -318,10 +318,10 @@ public class PowersMagiciansRed extends PunchingStand {
         return (this.activePower == PowerIndex.RANGED_BARRAGE || this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
     }
     public int getRangedBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum;
+        return ClientNetworking.getAppropriateConfig().chargeSettings.magiciansRedFireballsWindup;
     }
     public int getRangedBarrageWindup2(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
+        return ClientNetworking.getAppropriateConfig().chargeSettings.magiciansRedFlamethrowerWindup;
     }
 
     public int getRangedBarrageLength(){
@@ -394,9 +394,9 @@ public class PowersMagiciansRed extends PunchingStand {
         } else if (soundChoice == CRY_2_NOISE) {
             return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
         } else if (soundChoice == RANGED_CHARGE_1) {
-            return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
+            return ModSounds.MAGICIANS_RED_CHARGE_EVENT;
         } else if (soundChoice == RANGED_CHARGE_2) {
-            return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
+            return ModSounds.MAGICIANS_RED_CHARGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -582,6 +582,17 @@ public class PowersMagiciansRed extends PunchingStand {
                 stopSoundsIfNearby(CRY_2_NOISE, 100, false);
         } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
             stopSoundsIfNearby(CRY_1_NOISE, 100, false);
+        }
+
+        if (!this.self.level().isClientSide &&
+                (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2)
+                && (move != PowerIndex.RANGED_BARRAGE_2)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
+        if (!this.self.level().isClientSide &&
+                (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE)
+                && (move != PowerIndex.RANGED_BARRAGE)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
 
         return super.tryPower(move,forced);
@@ -1293,7 +1304,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     @Override
     public boolean canInterruptPower() {
-        if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2) {
+        if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2) {
             return true;
         }
         return super.canInterruptPower();
@@ -1656,6 +1667,16 @@ public class PowersMagiciansRed extends PunchingStand {
             if (barrageChargeSound != null) {
                 playSoundsIfNearby(RANGED_CHARGE_2, 27, false);
             }
+        }
+    }
+
+    public float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice == RANGED_CHARGE_1) {
+            return 1 / ((float) this.getRangedBarrageWindup() / 20);
+        } else if (soundChoice == RANGED_CHARGE_2){
+                return 1/((float) this.getRangedBarrageWindup2() /20);
+        } else {
+            return super.getSoundPitchFromByte(soundChoice);
         }
     }
     boolean splash = false;
