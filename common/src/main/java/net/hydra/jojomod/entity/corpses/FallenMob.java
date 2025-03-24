@@ -88,7 +88,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             //insert code for cool particles and sfx
             if (!this.level().isClientSide()) {
                 this.level().playSound(null, this.getX(), this.getY(),
-                        this.getZ(), ModSounds.INHALE_EVENT, this.getSoundSource(), 100.0F, (float) (0.7F + (Math.random() * 0.05)));
+                        this.getZ(), ModSounds.INHALE_EVENT, this.getSoundSource(), 1, (float) (0.7F + (Math.random() * 0.05)));
                 ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
                         this.getY()+this.getEyeHeight(), this.getZ(),
                         11, 0.3, 0.3, 0.3, 0.3);
