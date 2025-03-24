@@ -1907,6 +1907,20 @@ public class StandPowers {
         return targetEntity;
     }
 
+    public double getBlockDistanceOut(LivingEntity entity, double range){
+        Vec3 vec3dST = entity.getEyePosition(0);
+        Vec3 vec3d2ST = entity.getViewVector(0);
+        Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * range, vec3d2ST.y * range, vec3d2ST.z * range);
+
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3dST, vec3d3ST,
+                ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
+        double bhit = Math.sqrt(blockHit.distanceTo(entity));
+        if (bhit < range){
+            range = bhit;
+        }
+
+        return range;
+    }
     public float getDistanceOut(LivingEntity entity, float range, boolean offset){
         float distanceFront = this.getRayDistance(entity, range);
         if (offset) {

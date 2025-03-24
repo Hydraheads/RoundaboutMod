@@ -473,7 +473,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (hasHurricaneSpecial()) {
                     if (!isChargingCrossfire()) {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 4);
+                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 7);
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                         }
@@ -712,6 +712,90 @@ public class PowersMagiciansRed extends PunchingStand {
             updateKickAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             updateKickAttackCharge();
+        } else if (this.getActivePower() == PowerIndex.RANGED_BARRAGE){
+            updateRangedBarrage();
+        } else if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_2){
+            updateRangedBarrage2();
+        }
+    }
+    public void updateRangedBarrage(){
+
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                    * (getBarrageRecoilTime() - 1)));
+
+                    standBarrageHit();
+                }
+            }
+        }
+    }
+    public void updateRangedBarrage2(){
+
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                    * (getBarrageRecoilTime() - 1)));
+
+                    flamethrowerImpact();
+                }
+            }
+        }
+    }
+
+    public void flamethrowerImpact(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                this.attackTimeDuring = -10;
+                float distMax = (float) getBlockDistanceOut(this.self,this.getReach());
+                Entity targetEntity = getTargetEntity(this.self,distMax);
+
+                List<Entity> listE = getTargetEntityList(this.self,distMax);
+                int id = -1;
+                if (targetEntity != null){
+                    id = targetEntity.getId();
+                }
+                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(id, this.activePowerPhase);
+                if (!listE.isEmpty()){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(targetEntity != null && listE.get(i).is(targetEntity))) {
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < distMax) {
+                                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+
+            float distMax = (float) getBlockDistanceOut(this.self,this.getReach());
+            Entity targetEntity = getTargetEntity(this.self,distMax);
+
+            List<Entity> listE = getTargetEntityList(this.self,distMax);
+            punchImpact(targetEntity);
+            if (!listE.isEmpty()){
+                for (int i = 0; i< listE.size(); i++){
+                    if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < distMax) {
+                            this.setActivePowerPhase((byte) (this.getActivePowerPhase()+50));
+                            punchImpact(listE.get(i));
+                        }
+                    }
+                }
+            }
         }
     }
     public void updateCrossfire(){
@@ -1328,18 +1412,19 @@ public class PowersMagiciansRed extends PunchingStand {
             if (isPacketPlayer()){
                 this.attackTimeDuring = -10;
 
-                Entity targetEntity = getTargetEntity(this.self,-1);
+                float distMax = (float) getBlockDistanceOut(this.self,this.getReach());
+                Entity targetEntity = getTargetEntity(this.self,distMax);
 
-                List<Entity> listE = getTargetEntityList(this.self,-1);
+                List<Entity> listE = getTargetEntityList(this.self,distMax);
                 int id = -1;
                 if (targetEntity != null){
                     id = targetEntity.getId();
                 }
                 ModPacketHandler.PACKET_ACCESS.StandPunchPacket(id, this.activePowerPhase);
-                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect){
+                if (!listE.isEmpty()){
                     for (int i = 0; i< listE.size(); i++){
-                        if (!(targetEntity != null && listE.get(i).is(targetEntity))) {
-                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                        if (!(targetEntity != null && listE.get(i).is(targetEntity)) && listE.get(i).distanceTo(this.self) < distMax) {
+                            if (!(listE.get(i) instanceof StandEntity)) {
                                 ModPacketHandler.PACKET_ACCESS.StandPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
                             }
                         }
@@ -1349,14 +1434,15 @@ public class PowersMagiciansRed extends PunchingStand {
         } else {
             /*Caps how far out the punch goes*/
 
-            Entity targetEntity = getTargetEntity(this.self,-1);
+            float distMax = (float) getBlockDistanceOut(this.self,this.getReach());
+            Entity targetEntity = getTargetEntity(this.self,distMax);
 
-            List<Entity> listE = getTargetEntityList(this.self,-1);
+            List<Entity> listE = getTargetEntityList(this.self,distMax);
             punchImpact(targetEntity);
             if (!listE.isEmpty()){
                 for (int i = 0; i< listE.size(); i++){
-                    if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
-                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                    if (!(storeEnt != null && listE.get(i).is(storeEnt) && listE.get(i).distanceTo(this.self) < distMax)) {
+                        if (!(listE.get(i) instanceof StandEntity)) {
                             this.setActivePowerPhase((byte) (this.getActivePowerPhase()+50));
                             punchImpact(listE.get(i));
                         }
