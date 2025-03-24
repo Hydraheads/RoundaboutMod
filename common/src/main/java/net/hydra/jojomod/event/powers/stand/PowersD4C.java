@@ -37,19 +37,25 @@ public class PowersD4C extends PunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
-        setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
-
-        if (isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NO_CD);
+        if (!isHoldingSneak())
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.SKILL_1);
         else
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_DIMENSION_KIDNAP, PowerIndex.SKILL_1_SNEAK);
 
-
-        if (!isBetweenTwoThings(this.getSelf()))
-            setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4, true);
+        if (!isHoldingSneak())
+            setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2);
         else
-            setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+            setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK);
+
+        if (!isHoldingSneak())
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+        else
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3_SNEAK);
+
+        if (!isHoldingSneak())
+            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+        else
+            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4_SNEAK);
     }
 
     @Override
@@ -101,6 +107,14 @@ public class PowersD4C extends PunchingStand {
             Roundabout.LOGGER.info("AAA");
 
         return super.tryPower(move, forced);
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (activeP == PowerIndex.SKILL_4 || activeP == PowerIndex.SKILL_4_SNEAK)
+            return !(isBetweenTwoThings(this.getSelf()));
+
+        return super.isAttackIneptVisually(activeP, slot);
     }
 
     @Override
