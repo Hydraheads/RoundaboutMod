@@ -57,7 +57,6 @@ public abstract class ConfigManager {
         if (getConfig().standArrowPool != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
-            ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
             for (String disc : getConfig().standArrowPool)
             {
@@ -74,6 +73,26 @@ public abstract class ConfigManager {
                     continue;
 
                 ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
+            }
+        }
+        if (getConfig().naturalStandUserMobPool != null)
+        {
+            ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
+
+            for (String disc : getConfig().naturalStandUserMobPool)
+            {
+                String[] split = disc.split(":");
+
+                if (split.length != 2)
+                    continue;
+
+                ResourceLocation identifier = new ResourceLocation(split[0], split[1]);
+
+                Item i = BuiltInRegistries.ITEM.get(identifier);
+
+                if (i.getClass() != StandDiscItem.class)
+                    continue;
+
                 ModItems.STAND_ARROW_POOL_FOR_MOBS.add((StandDiscItem) i);
             }
         }

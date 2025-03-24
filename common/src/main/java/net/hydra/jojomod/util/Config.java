@@ -73,6 +73,13 @@ import java.util.Set;
                     "roundabout:justice_disc"
             )
     );
+    public Set<String> naturalStandUserMobPool = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:star_platinum_disc",
+                    "roundabout:the_world_disc",
+                    "roundabout:justice_disc"
+            )
+    );
     @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
