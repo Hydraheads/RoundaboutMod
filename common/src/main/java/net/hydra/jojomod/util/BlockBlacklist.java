@@ -34,13 +34,13 @@ public class BlockBlacklist {
         try {
             Path blacklistPath = path.resolve(filename+".json");
 
-            if (!Files.exists(path.resolve(filename+".json")))
+            if (!Files.exists(blacklistPath))
             {
                 // writes the default data to the file if it doesn't already exist
                 Files.write(blacklistPath, GSON.toJson(data).getBytes());
             }
             else {
-                data = GSON.fromJson(Files.newBufferedReader(path), BlacklistData.class);
+                data = GSON.fromJson(Files.newBufferedReader(blacklistPath), BlacklistData.class);
                 if (data.blockTags == null || data.blockIdentifiers == null)
                 {
                     shouldBlacklistBlocks = false;
