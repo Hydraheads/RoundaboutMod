@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.StandFireballEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -167,6 +169,8 @@ public class PowersMagiciansRed extends PunchingStand {
                 basis *= g;
             }
             basis *= 0.75f;
+        } else if (this.activePower == PowerIndex.RANGED_BARRAGE || this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE){
+            basis *= 0.5f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -177,7 +181,8 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public boolean cancelSprintJump(){
         if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE
-                || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2){
+                || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
+                || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE){
             return true;
         }
         return super.cancelSprintJump();
@@ -333,7 +338,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public int getRangedBarrageLength(){
-        return 60;
+        return 26;
     }
 
 
@@ -580,6 +585,15 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (move == PowerIndex.SPECIAL_CHARGED){
+
+            if (!this.self.level().isClientSide()){
+                if (this.activePower==PowerIndex.RANGED_BARRAGE){
+                    fireballSpitGo();
+                }
+            }
+            return true;
+        }
 
         if ((this.activePower == PowerIndex.POWER_2
         || this.activePower == PowerIndex.POWER_2_SNEAK)
@@ -666,7 +680,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean setPowerRangedBarrage() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.RANGED_BARRAGE);
-        this.poseStand(OffsetIndex.ATTACK);
+        this.poseStand(OffsetIndex.GUARD);
         this.setAttackTimeMax(this.getRangedBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         animateStand((byte) 80);
@@ -768,8 +782,49 @@ public class PowersMagiciansRed extends PunchingStand {
                             Math.round(((float) this.attackTimeDuring / this.getRangedBarrageLength())
                                     * (getBarrageRecoilTime() - 1)));
 
-                    standBarrageHit();
+                    fireballSpit();
                 }
+            }
+        }
+    }
+
+    public boolean isReadyToShoot(){
+        return (attackTimeDuring == 1 || attackTimeDuring == 6 || attackTimeDuring == 11
+                || attackTimeDuring == 16 || attackTimeDuring == 21 || attackTimeDuring == 26);
+    }
+    public void fireballSpit(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                if (isReadyToShoot()){
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_CHARGED);
+                }
+
+                if (this.attackTimeDuring == this.getRangedBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
+
+            }
+        } else {
+            if (isReadyToShoot()){
+                fireballSpitGo();
+            }
+
+            if (this.attackTimeDuring == this.getRangedBarrageLength()){
+                this.attackTimeDuring = -10;
+            }
+        }
+    }
+    public void fireballSpitGo(){
+        if (!this.self.level().isClientSide()) {
+            StandFireballEntity fireball = ModEntities.STAND_FIREBALL.create(this.getSelf().level());
+            if (fireball != null) {
+                fireball.absMoveTo(this.getSelf().getX(), this.self.getY()+(0.5*this.self.getBbHeight()), this.getSelf().getZ());
+                fireball.setUser(this.self);
+
+                this.getSelf().level().addFreshEntity(fireball);
+
+                fireball.setXRot(this.getSelf().getXRot() % 360);
+                fireball.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.4F, 0);
             }
         }
     }
@@ -1334,7 +1389,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
         ankh.setXRot(this.getSelf().getXRot()%360);
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.1F, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.05F, 0);
     }
     public boolean shootAnkhConfirm(){
         if (!this.self.level().isClientSide()) {
