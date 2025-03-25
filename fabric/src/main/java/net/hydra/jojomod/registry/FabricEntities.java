@@ -191,7 +191,14 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "crossfire_hurricane"),
                         EntityType.Builder.<CrossfireHurricaneEntity>of(CrossfireHurricaneEntity::new, MobCategory.MISC).
-                                sized(1.5f, 1.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":crossfire_hurricane")
+                                sized(1.5f, 1.5f).clientTrackingRange(15).build(Roundabout.MOD_ID+":crossfire_hurricane")
+                );
+        public static final EntityType<StandFireballEntity> STAND_FIREBALL =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "stand_fireball"),
+                        EntityType.Builder.<StandFireballEntity>of(StandFireballEntity::new, MobCategory.MISC).
+                                sized(1f, 1f).clientTrackingRange(15).build(Roundabout.MOD_ID+":stand_fireball")
                 );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(
@@ -230,6 +237,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
                 ModEntities.CROSSFIRE_HURRICANE = CROSSFIRE_HURRICANE;
+                ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.STAND_ARROW = STAND_ARROW;

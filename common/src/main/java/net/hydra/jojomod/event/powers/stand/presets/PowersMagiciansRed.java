@@ -1551,6 +1551,15 @@ public class PowersMagiciansRed extends PunchingStand {
                     damageMultipliers.magicianAttackOnMobs*0.01)));
         }
     }
+    public float getFireballDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) (1.5 * (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) (4* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnMobs*0.01)));
+        }
+    }
 
 
     @Override

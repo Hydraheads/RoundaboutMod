@@ -32,6 +32,7 @@ public class ModEntities {
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;
     public static EntityType<CrossfireHurricaneEntity> CROSSFIRE_HURRICANE;
+    public static EntityType<StandFireballEntity> STAND_FIREBALL;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
 
