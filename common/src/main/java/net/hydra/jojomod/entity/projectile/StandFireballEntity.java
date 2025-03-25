@@ -197,13 +197,12 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
         if (!this.level().isClientSide()){
             LivingEntity user = this.getStandUser();
             if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-                this.level().playSound(null, this.blockPosition(), ModSounds.CROSSFIRE_EXPLODE_EVENT,
-                        SoundSource.PLAYERS, 2F, 1F);
+                this.level().playSound(null, this.blockPosition(), ModSounds.FIREBALL_HIT_EVENT, SoundSource.PLAYERS, 2.5F, (float)(0.99F + Math.random()*0.02));
                 ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
                         this.getY(), this.getZ(),
-                        200,
-                        0.01, 0.01, 0.01,
-                        0.1);
+                        100,
+                        0.005, 0.01, 0.005,
+                        0.02);
                 if (mainTarget != null) {
                     getEntity(mainTarget, PMR);
                 }
@@ -241,6 +240,10 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
 
     @Override
     protected ParticleOptions getTrailParticle() {
+        LivingEntity user = this.getStandUser();
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            return PMR.getFlameParticle();
+        }
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());
     }
 

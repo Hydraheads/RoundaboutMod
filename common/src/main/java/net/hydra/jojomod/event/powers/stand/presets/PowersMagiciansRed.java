@@ -338,9 +338,12 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public int getRangedBarrageLength(){
-        return 26;
+        return 18;
     }
-
+    public boolean isReadyToShoot(){
+        return (attackTimeDuring == 2 || attackTimeDuring == 6 || attackTimeDuring == 10
+                || attackTimeDuring == 14 || attackTimeDuring == 18);
+    }
 
     public int getRangedBarrage2Length(){
         return 60;
@@ -697,7 +700,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return true;
     }
     public int getRangedBarrageRecoilTime(){
-        return 35;
+        return 60;
     }
     public int getRangedBarrage2RecoilTime(){
         return 35;
@@ -788,10 +791,6 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
 
-    public boolean isReadyToShoot(){
-        return (attackTimeDuring == 1 || attackTimeDuring == 6 || attackTimeDuring == 11
-                || attackTimeDuring == 16 || attackTimeDuring == 21 || attackTimeDuring == 26);
-    }
     public void fireballSpit(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){
@@ -817,14 +816,17 @@ public class PowersMagiciansRed extends PunchingStand {
     public void fireballSpitGo(){
         if (!this.self.level().isClientSide()) {
             StandFireballEntity fireball = ModEntities.STAND_FIREBALL.create(this.getSelf().level());
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIREBALL_SHOOT_EVENT, SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
             if (fireball != null) {
-                fireball.absMoveTo(this.getSelf().getX(), this.self.getY()+(0.5*this.self.getBbHeight()), this.getSelf().getZ());
+                Vec3 vec3dST = this.self.getEyePosition(0).subtract(0,this.self.getEyeHeight()*0.25,0);
+                Vec3 vec3d2ST = this.self.getViewVector(0);
+                Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * 1.1, vec3d2ST.y * 1.1, vec3d2ST.z * 1.1);
+                fireball.absMoveTo(vec3d3ST.x(), vec3d3ST.y(), vec3d3ST.z());
                 fireball.setUser(this.self);
 
-                this.getSelf().level().addFreshEntity(fireball);
-
                 fireball.setXRot(this.getSelf().getXRot() % 360);
-                fireball.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.4F, 0);
+                fireball.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.35F, 0);
+                this.getSelf().level().addFreshEntity(fireball);
             }
         }
     }

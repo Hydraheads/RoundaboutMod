@@ -335,6 +335,12 @@ public class ModSounds {
     public static final String STAND_FLAME_HIT = "stand_flame_hit";
     public static final ResourceLocation STAND_FLAME_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAND_FLAME_HIT);
     public static SoundEvent STAND_FLAME_HIT_EVENT = SoundEvent.createVariableRangeEvent(STAND_FLAME_HIT_ID);
+    public static final String FIREBALL_SHOOT = "fireball_shoot";
+    public static final ResourceLocation FIREBALL_SHOOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIREBALL_SHOOT);
+    public static SoundEvent FIREBALL_SHOOT_EVENT = SoundEvent.createVariableRangeEvent(FIREBALL_SHOOT_ID);
+    public static final String FIREBALL_HIT = "fireball_hit";
+    public static final ResourceLocation FIREBALL_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIREBALL_HIT);
+    public static SoundEvent FIREBALL_HIT_EVENT = SoundEvent.createVariableRangeEvent(FIREBALL_HIT_ID);
     public static final String FLAMETHROWER = "flamethrower";
     public static final ResourceLocation FLAMETHROWER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLAMETHROWER);
     public static SoundEvent FLAMETHROWER_EVENT = SoundEvent.createVariableRangeEvent(FLAMETHROWER_ID);

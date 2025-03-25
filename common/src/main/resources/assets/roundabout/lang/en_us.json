@@ -270,6 +270,8 @@
   "sounds.roundabout.magicians_red_charge":  "Charging Flames",
   "sounds.roundabout.flamethrower":  "Fire stream",
   "sounds.roundabout.stand_flame_hit":  "Burn",
+  "sounds.roundabout.fireball_shoot":  "Fireball shoot",
+  "sounds.roundabout.fireball_hit":  "Fireball explode",
 
   "sounds.roundabout.unlock_skin":  "Skin Unlocked!",
   "sounds.roundabout.ova_platinum_barrage":  "ORA",

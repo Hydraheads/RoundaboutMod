@@ -36,10 +36,10 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
             //$$3.mulPose(Axis.ZP.rotationDegrees(-180));
             //$$3.mulPose(Axis.YP.rotationDegrees((float) Mth.rotLerp($$2, (float) $$0.renderRotation, (float) $$0.lastRenderRotation)));
             $$3.mulPose(Axis.YP.rotationDegrees($$0.getYRot()));
-            $$3.mulPose(Axis.XP.rotationDegrees($$0.getXRot()));
-            $$3.scale(3.5f, 3.5f, 3.5f);
+            $$3.mulPose(Axis.ZP.rotationDegrees($$0.getXRot()));
+            $$3.scale(2.6f, 2.6f, 2.6f);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
-            this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.57f);
+            this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.4f);
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, 15728880);
         }

@@ -164,7 +164,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<StandFireballEntity>> STAND_FIREBALL =
             ENTITY_TYPES.register("stand_fireball", () ->
-                    EntityType.Builder.<StandFireballEntity>of(StandFireballEntity::new, MobCategory.MISC).sized(1, 1).
+                    EntityType.Builder.<StandFireballEntity>of(StandFireballEntity::new, MobCategory.MISC).sized(0.9F, 0.9F).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "stand_fireball").toString())
             );
