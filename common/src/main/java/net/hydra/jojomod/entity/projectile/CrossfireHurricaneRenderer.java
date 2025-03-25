@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -41,7 +42,9 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
 
     public void render(CrossfireHurricaneEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         if (ClientUtil.canSeeStands(Minecraft.getInstance().player)) {
-
+            if (((TimeStop)$$0.level()).inTimeStopRange($$0)){
+                $$2 = 0;
+            }
             $$3.pushPose();
             float rsize = $$0.getMaxSize();
             if ($$0.getRenderSize() < rsize){

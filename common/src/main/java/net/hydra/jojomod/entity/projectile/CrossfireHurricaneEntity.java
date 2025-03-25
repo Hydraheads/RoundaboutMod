@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ConfigManager;
@@ -448,6 +449,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
     public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
         if (ent instanceof CrossfireHurricaneEntity cfhe) {
+
+            if (((TimeStop)ent.level()).inTimeStopRange(ent)){
+                $$4 = 0;
+            }
             LivingEntity user = cfhe.getStandUser();
             if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 if (cfhe.getCrossNumber() > 0) {
