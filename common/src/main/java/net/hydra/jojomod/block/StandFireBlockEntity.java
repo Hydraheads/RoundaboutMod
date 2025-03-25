@@ -61,7 +61,7 @@ public class StandFireBlockEntity extends BlockEntity{
                 if (iterated >= hardcap) {
                     $$1.removeBlock($$2, false);
                     return;
-                } else if (standUser != null) {
+                } else if (standUser != null && standUser.isAlive() && !standUser.isRemoved()) {
                     if (((StandUser) standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
                         int maxFlames = ClientNetworking.getAppropriateConfig().maxMagiciansRedFlames;
                         int maxDist = ClientNetworking.getAppropriateConfig().maxMagiciansRedFlameDistance;
