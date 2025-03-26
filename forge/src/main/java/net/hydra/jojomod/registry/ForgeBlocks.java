@@ -135,6 +135,14 @@ public class ForgeBlocks {
             () -> ModBlocks.STAND_FIRE_PROPERTIES);
     public static final RegistryObject<Block> ORANGE_FIRE = BLOCKS.register("colored_fire_orange",
             () -> ModBlocks.ORANGE_FIRE_PROPERTIES);
+    public static final RegistryObject<Block> BLUE_FIRE = BLOCKS.register("colored_fire_blue",
+            () -> ModBlocks.BLUE_FIRE_PROPERTIES);
+    public static final RegistryObject<Block> PURPLE_FIRE = BLOCKS.register("colored_fire_purple",
+            () -> ModBlocks.PURPLE_FIRE_PROPERTIES);
+    public static final RegistryObject<Block> GREEN_FIRE = BLOCKS.register("colored_fire_green",
+            () -> ModBlocks.GREEN_FIRE_PROPERTIES);
+    public static final RegistryObject<Block> DREAD_FIRE = BLOCKS.register("colored_fire_dread",
+            () -> ModBlocks.DREAD_FIRE_PROPERTIES);
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",
             () -> BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stereo")));
     public static final RegistryObject<BlockEntityType<StandFireBlockEntity>> STAND_FIRE_BLOCK_ENTITY = BLOCK_ENTITIES.register("stand_fire",

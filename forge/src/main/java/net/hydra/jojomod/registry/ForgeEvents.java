@@ -133,6 +133,10 @@ public class ForgeEvents {
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
+        ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
+        ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
+        ModBlocks.GREEN_FIRE = ForgeBlocks.GREEN_FIRE.get();
+        ModBlocks.DREAD_FIRE = ForgeBlocks.DREAD_FIRE.get();
 
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
@@ -206,6 +210,10 @@ public class ForgeEvents {
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
         ModParticles.ORANGE_FLAME = ForgeParticles.ORANGE_FLAME.get();
+        ModParticles.BLUE_FLAME = ForgeParticles.BLUE_FLAME.get();
+        ModParticles.PURPLE_FLAME = ForgeParticles.PURPLE_FLAME.get();
+        ModParticles.GREEN_FLAME = ForgeParticles.GREEN_FLAME.get();
+        ModParticles.DREAD_FLAME = ForgeParticles.DREAD_FLAME.get();
         ModParticles.FOG_CHAIN = ForgeParticles.FOG_CHAIN.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
 

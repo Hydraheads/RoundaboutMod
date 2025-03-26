@@ -63,7 +63,7 @@ public class StandFireBlock extends BaseEntityBlock {
     public StandFireBlock(Properties $$0) {
         super($$0);
         this.fireDamage = 1;
-        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0).setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(UP, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0).setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(UP, false).setValue(COLOR,0));
         this.shapesCache = ImmutableMap.copyOf((Map)this.stateDefinition.getPossibleStates().stream().filter(($$0x) -> {
             return (Integer)$$0x.getValue(AGE) == 0;
         }).collect(Collectors.toMap(Function.identity(), StandFireBlock::calculateShape)));
@@ -72,6 +72,7 @@ public class StandFireBlock extends BaseEntityBlock {
 
     public static final int MAX_AGE = 15;
     public static final IntegerProperty AGE;
+    public static final IntegerProperty COLOR= ModBlocks.COLOR;
     public static final BooleanProperty NORTH;
     public static final BooleanProperty EAST;
     public static final BooleanProperty SOUTH;
@@ -193,7 +194,8 @@ public class StandFireBlock extends BaseEntityBlock {
             if ($$3.nextInt($$4 + 10) < 5 && !$$0.isRainingAt($$1)) {
                 if (sfb.standUser != null && ((StandUser)sfb.standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
                     int $$7 = Math.min($$4 + $$3.nextInt(5) / 4, 15);
-                    $$0.setBlock($$1, this.getStateWithAge($$0, $$1, $$7), 3);
+                    int color = sfb.getBlockState().getValue(COLOR);
+                    $$0.setBlock($$1, this.getStateWithAge($$0, $$1, $$7).setValue(COLOR,color), 3);
                     BlockEntity be = $$0.getBlockEntity($$1);
                     if (be instanceof StandFireBlockEntity sfbe) {
                         sfbe.snapNumber = sfb.snapNumber;
@@ -386,7 +388,7 @@ public class StandFireBlock extends BaseEntityBlock {
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
-        $$0.add(new Property[]{AGE, NORTH, EAST, SOUTH, WEST, UP});
+        $$0.add(new Property[]{AGE, NORTH, EAST, SOUTH, WEST, UP, COLOR});
     }
 
     private void setFlammable(Block $$0, int $$1, int $$2) {

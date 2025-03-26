@@ -12,12 +12,26 @@ import org.jetbrains.annotations.Nullable;
 public class MagiciansRedRenderer extends StandRenderer<MagiciansRedEntity> {
 
     private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red.png");
+    private static final ResourceLocation BLUE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_blue.png");
+    private static final ResourceLocation PURPLE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_purple.png");
+    private static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_green.png");
+    private static final ResourceLocation DREAD_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_dread.png");
     public MagiciansRedRenderer(EntityRendererProvider.Context context) {
         super(context, new MagiciansRedModel<>(context.bakeLayer(ModEntityRendererClient.MAGICIANS_RED_LAYER)),0f);
     }
 
     @Override
     public ResourceLocation getTextureLocation(MagiciansRedEntity entity) {
+        byte BT = entity.getSkin();
+        if (BT == MagiciansRedEntity.BLUE_SKIN){
+            return BLUE_SKIN;
+        } else if (BT == MagiciansRedEntity.PURPLE_SKIN){
+            return PURPLE_SKIN;
+        } else if (BT == MagiciansRedEntity.GREEN_SKIN){
+            return GREEN_SKIN;
+        } else if (BT == MagiciansRedEntity.DREAD_SKIN){
+            return DREAD_SKIN;
+        }
             return PART_3_SKIN;
     }
 

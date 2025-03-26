@@ -17,13 +17,29 @@ public class MagiciansRedEntity extends StandEntity {
     public Component getSkinName(byte skinId) {
         return getSkinNameT(skinId);
     }
+    public static Component getSkinNameT(byte skinId){
+        if (skinId == PART_3_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.base");
+        } else if (skinId == BLUE_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.blue");
+        } else if (skinId == PURPLE_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.purple");
+        } else if (skinId == GREEN_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.green");
+        } else if (skinId == DREAD_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.dread");
+        }
+        return Component.translatable(  "skins.roundabout.magicians_red.base");
+    }
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
-    public static Component getSkinNameT(byte skinId){
-        return Component.translatable(  "skins.roundabout.magicians_red.base");
-    }
-
+    public static final byte
+            PART_3_SKIN = 1,
+            BLUE_SKIN = 2,
+            PURPLE_SKIN = 3,
+            GREEN_SKIN = 4,
+            DREAD_SKIN = 5;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();

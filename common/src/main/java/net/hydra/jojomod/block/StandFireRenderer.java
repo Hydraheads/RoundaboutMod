@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -77,7 +78,7 @@ public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEnti
                 matrices.translate(-1.f, -1.f, 0.f);
             }
 
-            itemRenderer.renderBatched(ModBlocks.ORANGE_FIRE.withPropertiesOf(fire.getBlockState()), fire.getBlockPos(), client.level, matrices, buffer.getBuffer(RenderType.cutout()), true, lp.getRandom());
+            itemRenderer.renderBatched(StandFireType.getFireBlockByType(fire.getBlockState().getValue(StandFireBlock.COLOR).byteValue()).withPropertiesOf(fire.getBlockState()), fire.getBlockPos(), client.level, matrices, buffer.getBuffer(RenderType.cutout()), true, lp.getRandom());
             matrices.popPose();
         }
     }

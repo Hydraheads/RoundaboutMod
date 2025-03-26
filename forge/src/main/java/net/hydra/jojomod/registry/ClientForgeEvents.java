@@ -95,6 +95,10 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.MENACING.get(), MenacingParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VACUUM.get(), VacuumParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ORANGE_FLAME.get(), FlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BLUE_FLAME.get(), FlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PURPLE_FLAME.get(), FlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GREEN_FLAME.get(), FlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.DREAD_FLAME.get(), FlameParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.FOG_CHAIN.get(), FogChainParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
     }

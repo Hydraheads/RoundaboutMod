@@ -17,4 +17,7 @@ public class ModParticles {
     public static SimpleParticleType POINTER;
     public static SimpleParticleType ORANGE_FLAME;
     public static SimpleParticleType BLUE_FLAME;
+    public static SimpleParticleType PURPLE_FLAME;
+    public static SimpleParticleType GREEN_FLAME;
+    public static SimpleParticleType DREAD_FLAME;
 }

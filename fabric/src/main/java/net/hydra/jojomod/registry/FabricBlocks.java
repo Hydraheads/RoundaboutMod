@@ -51,6 +51,10 @@ public class FabricBlocks {
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlock("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
     public static final Block ORANGE_FIRE = registerBlock("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
+    public static final Block BLUE_FIRE = registerBlock("colored_fire_blue",ModBlocks.BLUE_FIRE_PROPERTIES);
+    public static final Block PURPLE_FIRE = registerBlock("colored_fire_purple",ModBlocks.PURPLE_FIRE_PROPERTIES);
+    public static final Block GREEN_FIRE = registerBlock("colored_fire_green",ModBlocks.GREEN_FIRE_PROPERTIES);
+    public static final Block DREAD_FIRE = registerBlock("colored_fire_dread",ModBlocks.DREAD_FIRE_PROPERTIES);
 
     public static final Block FOG_DIRT = registerBlockItemless("fog_dirt",ModBlocks.getFogBlock());
     public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating",ModBlocks.getFogCoatingBlock());
@@ -142,6 +146,10 @@ public class FabricBlocks {
         ModBlocks.STEREO = STEREO;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;
+        ModBlocks.BLUE_FIRE = BLUE_FIRE;
+        ModBlocks.PURPLE_FIRE = PURPLE_FIRE;
+        ModBlocks.GREEN_FIRE = GREEN_FIRE;
+        ModBlocks.DREAD_FIRE = DREAD_FIRE;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;

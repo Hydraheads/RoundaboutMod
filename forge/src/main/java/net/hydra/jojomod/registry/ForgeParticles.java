@@ -41,6 +41,22 @@ public class ForgeParticles {
             "orange_flame",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> BLUE_FLAME = PARTICLES.register(
+            "blue_flame",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PURPLE_FLAME = PARTICLES.register(
+            "purple_flame",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GREEN_FLAME = PARTICLES.register(
+            "green_flame",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> DREAD_FLAME = PARTICLES.register(
+            "dread_flame",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> FOG_CHAIN = PARTICLES.register(
             "fog_chain",
             () -> new SimpleParticleType(true)

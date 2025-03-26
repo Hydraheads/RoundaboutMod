@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -12,13 +13,16 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -41,8 +45,10 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -394,7 +400,29 @@ public class PowersMagiciansRed extends PunchingStand {
     public Component getSkinName(byte skinId){
         return JusticeEntity.getSkinNameT(skinId);
     }
-
+    @Override
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(MagiciansRedEntity.PART_3_SKIN);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(MagiciansRedEntity.BLUE_SKIN);
+            } if (Level > 2 || bypass){
+                $$1.add(MagiciansRedEntity.PURPLE_SKIN);
+            } if (Level > 3 || bypass){
+                $$1.add(MagiciansRedEntity.GREEN_SKIN);
+            } if (Level > 4 || bypass){
+                $$1.add(MagiciansRedEntity.DREAD_SKIN);
+            } if (Level > 5 || bypass){
+            } if (Level > 6 || bypass){
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+            }
+        }
+        return $$1;
+    }
     @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
@@ -983,6 +1011,16 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public SimpleParticleType getFlameParticle(){
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == MagiciansRedEntity.BLUE_SKIN){
+            return ModParticles.BLUE_FLAME;
+        } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
+            return ModParticles.PURPLE_FLAME;
+        } else if (skn == MagiciansRedEntity.GREEN_SKIN){
+            return ModParticles.GREEN_FLAME;
+        } else if (skn == MagiciansRedEntity.DREAD_SKIN){
+            return ModParticles.DREAD_FLAME;
+        }
         return ModParticles.ORANGE_FLAME;
     }
     public void sendSpecialParticle(BlockPos pos){
@@ -1567,7 +1605,8 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public void createStandFire(BlockPos pos){
         this.fireIDNumber++;
-        this.getSelf().level().setBlockAndUpdate(pos, ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),pos));
+        this.getSelf().level().setBlockAndUpdate(pos, ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),pos).
+                setValue(StandFireBlock.COLOR,(int)this.getFireColor()));
         BlockEntity be = this.self.level().getBlockEntity(pos);
         if (be instanceof StandFireBlockEntity sfbe){
             sfbe.standUser = this.self;
@@ -1578,7 +1617,31 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public byte getFireColor(){
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == MagiciansRedEntity.BLUE_SKIN){
+            return StandFireType.BLUE.id;
+        } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
+            return StandFireType.PURPLE.id;
+        } else if (skn == MagiciansRedEntity.GREEN_SKIN){
+            return StandFireType.GREEN.id;
+        } else if (skn == MagiciansRedEntity.DREAD_SKIN){
+            return StandFireType.DREAD.id;
+        }
         return StandFireType.ORANGE.id;
+    }
+
+    public Block getFireColorBlock(){
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == MagiciansRedEntity.BLUE_SKIN){
+            return ModBlocks.BLUE_FIRE;
+        } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
+            return ModBlocks.PURPLE_FIRE;
+        } else if (skn == MagiciansRedEntity.GREEN_SKIN){
+            return ModBlocks.GREEN_FIRE;
+        } else if (skn == MagiciansRedEntity.DREAD_SKIN){
+            return ModBlocks.DREAD_FIRE;
+        }
+        return ModBlocks.ORANGE_FIRE;
     }
 
     @Override

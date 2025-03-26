@@ -28,6 +28,10 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.LOCACACA_BLOCK, ModBlocks.NEW_LOCACACA_BLOCK, ModBlocks.LOCACACA_CACTUS,
                 ModBlocks.GODDESS_STATUE_BLOCK,
                 ModBlocks.ORANGE_FIRE,
+                ModBlocks.BLUE_FIRE,
+                ModBlocks.PURPLE_FIRE,
+                ModBlocks.GREEN_FIRE,
+                ModBlocks.DREAD_FIRE,
                 ModBlocks.BLOOD_SPLATTER,
                 ModBlocks.BLUE_BLOOD_SPLATTER,
                 ModBlocks.ENDER_BLOOD_SPLATTER);

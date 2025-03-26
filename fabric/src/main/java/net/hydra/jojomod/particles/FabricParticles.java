@@ -18,6 +18,10 @@ public class FabricParticles {
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
     public static final SimpleParticleType ORANGE_FLAME = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLUE_FLAME = FabricParticleTypes.simple();
+    public static final SimpleParticleType PURPLE_FLAME = FabricParticleTypes.simple();
+    public static final SimpleParticleType GREEN_FLAME = FabricParticleTypes.simple();
+    public static final SimpleParticleType DREAD_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType FOG_CHAIN = FabricParticleTypes.simple();
     public static final SimpleParticleType WARDEN_CLOCK = FabricParticleTypes.simple();
     public static void registerParticles(){
@@ -32,6 +36,10 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "fog_chain"), FOG_CHAIN);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "warden_clock"), WARDEN_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "orange_flame"), ORANGE_FLAME);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_flame"), BLUE_FLAME);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "purple_flame"), PURPLE_FLAME);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "green_flame"), GREEN_FLAME);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "dread_flame"), DREAD_FLAME);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -44,5 +52,9 @@ public class FabricParticles {
         ModParticles.WARDEN_CLOCK = WARDEN_CLOCK;
         ModParticles.POINTER = POINTER;
         ModParticles.ORANGE_FLAME = ORANGE_FLAME;
+        ModParticles.BLUE_FLAME = BLUE_FLAME;
+        ModParticles.PURPLE_FLAME = PURPLE_FLAME;
+        ModParticles.GREEN_FLAME = GREEN_FLAME;
+        ModParticles.DREAD_FLAME = DREAD_FLAME;
     }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_side",
+  "textures": {
+    "fire": "roundabout:block/stand_fire_dread_1"
+  }
+}

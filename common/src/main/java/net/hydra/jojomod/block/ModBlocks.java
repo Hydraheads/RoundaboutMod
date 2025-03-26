@@ -22,6 +22,7 @@ public class ModBlocks {
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static final BooleanProperty DECAY = BooleanProperty.create("decay");
     public static final BooleanProperty IN_FOG = BooleanProperty.create("in_fog");
+    public static final IntegerProperty COLOR = IntegerProperty.create("color", 0, 12);
     public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
     public static Block LOCACACA_CACTUS;
@@ -40,6 +41,10 @@ public class ModBlocks {
     public static Block STEREO;
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
+    public static Block BLUE_FIRE;
+    public static Block PURPLE_FIRE;
+    public static Block GREEN_FIRE;
+    public static Block DREAD_FIRE;
     public static Block FOG_DIRT;
     public static Block FOG_DIRT_COATING;
     public static Block FOG_CLAY;
@@ -238,6 +243,22 @@ public class ModBlocks {
                 return 15;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static FireBlock ORANGE_FIRE_PROPERTIES = new FireBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
+                return 15;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+    public static FireBlock BLUE_FIRE_PROPERTIES = new FireBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
+                return 15;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+    public static FireBlock PURPLE_FIRE_PROPERTIES = new FireBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
+                return 15;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+    public static FireBlock GREEN_FIRE_PROPERTIES = new FireBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
+                return 15;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+    public static FireBlock DREAD_FIRE_PROPERTIES = new FireBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
