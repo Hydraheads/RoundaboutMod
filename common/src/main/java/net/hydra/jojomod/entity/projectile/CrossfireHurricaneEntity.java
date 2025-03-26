@@ -248,6 +248,12 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
     }
 
+    public LivingEntity getUser(){
+        if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            return LE;
+        }
+        return null;
+    }
 
     public double getRandomY(double $$0) {
         return this.getY((2.0 * this.random.nextDouble() - 1.0) * $$0);

@@ -178,6 +178,13 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
             }
             this.discard();
     }
+
+    public LivingEntity getUser(){
+        if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            return LE;
+        }
+        return null;
+    }
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));

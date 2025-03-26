@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
+import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
@@ -68,17 +69,78 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_3_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_dread.png");
 
-    @Override
-    public ResourceLocation getTextureLocation(CrossfireHurricaneEntity var1) {
-        int tc = var1.tickCount%9;
-        if (tc >5){
-            return CROSSFIRE_HURRICANE_3_TEXTURE;
-        } else if (tc >2){
-            return CROSSFIRE_HURRICANE_2_TEXTURE;
+
+    public ResourceLocation getThird(CrossfireHurricaneEntity var1){
+        LivingEntity user = var1.getUser();
+        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+            byte sft = PMR.getFireColor();
+            if (sft == StandFireType.BLUE.id){
+                return CROSSFIRE_HURRICANE_3_BLUE_TEXTURE;
+            } else if (sft == StandFireType.PURPLE.id){
+                return CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE;
+            } else if (sft == StandFireType.GREEN.id){
+                return CROSSFIRE_HURRICANE_3_GREEN_TEXTURE;
+            } else if (sft == StandFireType.DREAD.id){
+                return CROSSFIRE_HURRICANE_3_DREAD_TEXTURE;
+            }
+        }
+        return CROSSFIRE_HURRICANE_3_TEXTURE;
+    }
+    public ResourceLocation getFirst(CrossfireHurricaneEntity var1){
+        LivingEntity user = var1.getUser();
+        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+            byte sft = PMR.getFireColor();
+            if (sft == StandFireType.BLUE.id){
+                return CROSSFIRE_HURRICANE_BLUE_TEXTURE;
+            } else if (sft == StandFireType.PURPLE.id){
+                return CROSSFIRE_HURRICANE_PURPLE_TEXTURE;
+            } else if (sft == StandFireType.GREEN.id){
+                return CROSSFIRE_HURRICANE_GREEN_TEXTURE;
+            } else if (sft == StandFireType.DREAD.id){
+                return CROSSFIRE_HURRICANE_DREAD_TEXTURE;
+            }
         }
         return CROSSFIRE_HURRICANE_TEXTURE;
     }
-
+    public ResourceLocation getSecond(CrossfireHurricaneEntity var1){
+        LivingEntity user = var1.getUser();
+        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+            byte sft = PMR.getFireColor();
+            if (sft == StandFireType.BLUE.id){
+                return CROSSFIRE_HURRICANE_2_BLUE_TEXTURE;
+            } else if (sft == StandFireType.PURPLE.id){
+                return CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE;
+            } else if (sft == StandFireType.GREEN.id){
+                return CROSSFIRE_HURRICANE_2_GREEN_TEXTURE;
+            } else if (sft == StandFireType.DREAD.id){
+                return CROSSFIRE_HURRICANE_2_DREAD_TEXTURE;
+            }
+        }
+        return CROSSFIRE_HURRICANE_2_TEXTURE;
+    }
+    @Override
+    public ResourceLocation getTextureLocation(CrossfireHurricaneEntity var1) {
+        int tc = var1.tickCount % 5;
+        if (tc > 3) {
+            return getThird(var1);
+        }
+        if (tc > 1) {
+            return getSecond(var1);
+        }
+        return getFirst(var1);
+    }
 
 }

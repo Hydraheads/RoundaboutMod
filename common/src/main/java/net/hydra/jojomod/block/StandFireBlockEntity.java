@@ -92,9 +92,11 @@ public class StandFireBlockEntity extends BlockEntity{
                     if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
                         if (!$$0.canSurvive($$1, $$2)) {
                             $$1.removeBlock($$2, false);
+                            return;
                         }
 
                         int $$6 = (Integer) $$0.getValue(StandFireBlock.AGE);
+                        int color = (Integer) $$0.getValue(StandFireBlock.COLOR);
                         if (!$$5 && $$1.isRaining() && fb.isNearRain($$1, $$2) && $$3.nextFloat() < 0.2F + (float) $$6 * 0.03F) {
                             $$1.removeBlock($$2, false);
                         } else {
@@ -102,7 +104,6 @@ public class StandFireBlockEntity extends BlockEntity{
                             if ($$6 != $$7) {
                                 iterated++;
                                 if (standUser == null) {
-                                    int color = (Integer) $$0.getValue(StandFireBlock.COLOR);
                                     $$0 = (BlockState) $$0.setValue(StandFireBlock.AGE, $$7).setValue(StandFireBlock.COLOR, color);
                                     $$1.setBlock($$2, $$0, 4);
                                 }
@@ -154,7 +155,6 @@ public class StandFireBlockEntity extends BlockEntity{
                                                 if (standUser != null && ((StandUser)standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
                                                     if ($$17 > 0 && $$3.nextInt($$15) <= $$17 && (!$$1.isRaining() || !fb.isNearRain($$1, $$11))) {
                                                         int $$18 = Math.min(15, $$6 + $$3.nextInt(5) / 4);
-                                                        int color = (Integer) $$0.getValue(StandFireBlock.COLOR);
                                                         $$1.setBlock($$11, fb.getStateWithAge($$1, $$11, $$18).setValue(StandFireBlock.COLOR, color), 3);
                                                         BlockEntity be = this.level.getBlockEntity($$11);
                                                         if (be instanceof StandFireBlockEntity sfbe) {
