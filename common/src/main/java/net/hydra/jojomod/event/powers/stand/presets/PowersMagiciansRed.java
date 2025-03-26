@@ -1421,7 +1421,8 @@ public class PowersMagiciansRed extends PunchingStand {
 
     @Override
     public boolean canInterruptPower() {
-        if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2) {
+        if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
+                || this.getActivePower() == PowerIndex.RANGED_BARRAGE) {
             return true;
         }
         return super.canInterruptPower();

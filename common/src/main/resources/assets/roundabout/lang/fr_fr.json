@@ -148,12 +148,12 @@
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Forgée avec une Hache en fer",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.additions_slot_description": "Lingot de fer",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.ingredients": "Lingot de fer",
-
+  
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Épée en fer",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Forgée avec une Épée en fer",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.additions_slot_description": "Lingot d'or",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.ingredients": "Lingot d'or",
-
+  
   "item.minecraft.potion.effect.roundabout.hex": "Potion de mauvais sort",
   "item.minecraft.lingering_potion.effect.roundabout.hex": "Potion de mauvais sort persistante",
   "item.minecraft.splash_potion.effect.roundabout.hex": "Potion de mauvais sort jetable",
@@ -212,6 +212,8 @@
   "commands.roundabout.argument.standtype.valid_2": "Set Stand of %s to %s",
   "commands.roundabout.argument.standtype.invalid": "Type de Stand inconnue : %s",
   "commands.roundabout.argument.standtype.invalid_2": "Must enter a stand type, or 'none'.",
+  "commands.roundabaout.d4c_world": "Succès de la génération du monde \"%s\".",
+  "commands.roundabout.d4c_world.tooltip": "Cliquer pour vous y téléporté.",
 
   "sounds.roundabout.stand_arrow_charge":  "La Flèche de Stand est attirée",
   "sounds.roundabout.stand_arrow_use":  "Stand acquis!",
@@ -463,6 +465,7 @@
   "leveling.roundabout.levelup.max.skins": "Dévelopement Maximal : Nouveau Skin!",
   "leveling.roundabout.levelup.max.moves": "Dévelopement Maximal : Nouvelle capacité !",
   "leveling.roundabout.levelup.max.both": "Dévelopement Maximal : Nouvelle capacité & Skin!",
+  "leveling.roundabout.disc_wip": "En cours de développement, Pas disponible en Survie",
 
   "gamerule.roundaboutStandGriefing": "Actions destructrice des Stands",
   "gamerule.roundaboutStandGriefing.description": "Contrôle si les Stands peuvent intéragir avec les blocs ou non",
@@ -529,7 +532,7 @@
   "skins.roundabout.justice.jojonium": "Jojonium",
 
   "skins.roundabout.magicians_red.base": "Partie 3",
-
+  
   "skins.roundabout.d4c.base": "Manga",
 
   "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Over Heaven Débloqué !",
