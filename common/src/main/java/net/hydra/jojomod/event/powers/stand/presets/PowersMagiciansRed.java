@@ -950,9 +950,28 @@ public class PowersMagiciansRed extends PunchingStand {
     public void updateCrossfire(){
         if (!this.self.level().isClientSide()) {
             if (this.attackTimeDuring >= getChargingCrossfire()){
+                if (this.attackTimeDuring == getChargingCrossfire()){
+                    this.self.level().playSound(null, this.self.blockPosition(),  SoundEvents.FIRECHARGE_USE,
+                            SoundSource.PLAYERS, 1F, 2F);
+
+                    ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                            this.self.getEyeY(), this.self.getZ(),
+                            20,
+                            0.1, 0.4, 0.1,
+                            0.01);
+                }
                 if (!(this.self instanceof Player)){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN,true);
                 }
+            } else if (this.attackTimeDuring == getChargingCrossfireSpecialSize()){
+
+                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                        this.self.getEyeY(), this.self.getZ(),
+                        10,
+                        0.1, 0.4, 0.1,
+                        0.01);
+                this.self.level().playSound(null, this.self.blockPosition(),  SoundEvents.FIRECHARGE_USE,
+                        SoundSource.PLAYERS, 1F, 1.5F);
             }
         } else {
             if (this.attackTimeDuring == getChargingCrossfire()) {
