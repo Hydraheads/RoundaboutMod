@@ -70,7 +70,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             }
         }
     }
-
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
     @Override
     public boolean isInWater() {
         return false;

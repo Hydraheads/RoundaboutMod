@@ -246,6 +246,10 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
     }
 
     @Override
+    public boolean fireImmune() {
+        return true;
+    }
+    @Override
     protected ParticleOptions getTrailParticle() {
         LivingEntity user = this.getStandUser();
         if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
