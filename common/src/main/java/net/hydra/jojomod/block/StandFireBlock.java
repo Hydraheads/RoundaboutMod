@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.portal.PortalShape;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -317,7 +318,9 @@ public class StandFireBlock extends BaseEntityBlock {
                         fd = (float) (fd*(ClientNetworking.getAppropriateConfig().
                                 damageMultipliers.standFireOnMobs*0.01));
                     }
+                    Vec3 prevVelocity = LE.getDeltaMovement();
                     LE.hurt(ModDamageTypes.of($$1, ModDamageTypes.STAND_FIRE, fb.standUser), fd);
+                    LE.setDeltaMovement(prevVelocity);
                 }
             }
         }
