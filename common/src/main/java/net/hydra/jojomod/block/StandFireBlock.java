@@ -130,7 +130,8 @@ public class StandFireBlock extends BaseEntityBlock {
     }
 
     public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
-        return this.canSurvive($$0, $$3, $$4) ? this.getStateWithAge($$3, $$4, (Integer)$$0.getValue(AGE)) : Blocks.AIR.defaultBlockState();
+        int color = $$0.getValue(COLOR);
+        return this.canSurvive($$0, $$3, $$4) ? this.getStateWithAge($$3, $$4, (Integer)$$0.getValue(AGE)).setValue(COLOR,color) : Blocks.AIR.defaultBlockState();
     }
 
     public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
