@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.StandFireType;
@@ -195,7 +196,9 @@ public class StandFireBlock extends BaseEntityBlock {
                 if (sfb.standUser != null && ((StandUser)sfb.standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
                     int $$7 = Math.min($$4 + $$3.nextInt(5) / 4, 15);
                     int color = sfb.getBlockState().getValue(COLOR);
-                    $$0.setBlock($$1, this.getStateWithAge($$0, $$1, $$7).setValue(COLOR,color), 3);
+                    BlockState bs = this.getStateWithAge($$0, $$1, $$7);
+                    bs = bs.setValue(COLOR,color);
+                    $$0.setBlockAndUpdate($$1, bs);
                     BlockEntity be = $$0.getBlockEntity($$1);
                     if (be instanceof StandFireBlockEntity sfbe) {
                         sfbe.snapNumber = sfb.snapNumber;

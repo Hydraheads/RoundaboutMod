@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -105,7 +106,7 @@ public class StandFireBlockEntity extends BlockEntity{
                                 iterated++;
                                 if (standUser == null) {
                                     $$0 = (BlockState) $$0.setValue(StandFireBlock.AGE, $$7).setValue(StandFireBlock.COLOR, color);
-                                    $$1.setBlock($$2, $$0, 4);
+                                    $$1.setBlockAndUpdate($$2, $$0);
                                 }
                             }
 
@@ -155,7 +156,8 @@ public class StandFireBlockEntity extends BlockEntity{
                                                 if (standUser != null && ((StandUser)standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
                                                     if ($$17 > 0 && $$3.nextInt($$15) <= $$17 && (!$$1.isRaining() || !fb.isNearRain($$1, $$11))) {
                                                         int $$18 = Math.min(15, $$6 + $$3.nextInt(5) / 4);
-                                                        $$1.setBlock($$11, fb.getStateWithAge($$1, $$11, $$18).setValue(StandFireBlock.COLOR, color), 3);
+                                                        Roundabout.LOGGER.info("3 Smurf: "+color);
+                                                        $$1.setBlockAndUpdate($$11, fb.getStateWithAge($$1, $$11, $$18).setValue(StandFireBlock.COLOR, color));
                                                         BlockEntity be = this.level.getBlockEntity($$11);
                                                         if (be instanceof StandFireBlockEntity sfbe) {
                                                             sfbe.snapNumber = this.snapNumber;

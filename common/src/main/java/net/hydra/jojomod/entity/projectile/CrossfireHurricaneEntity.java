@@ -223,19 +223,23 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             }
             if (!ClientUtil.checkIfGamePaused()) {
                 int ticks = ConfigManager.getClientConfig().particleSettings.cfhTicksPerFlameParticle;
-                if (ticks > -1 && this.tickCount % ticks == 0)
-                    //for (int i = 0; i < 1; i++) {
-                    this.level()
-                            .addParticle(
-                                    ModParticles.ORANGE_FLAME,
-                                    this.getRandomX(0.26),
-                                    this.getRandomY(0.26) + this.getBbHeight() * 0.55,
-                                    this.getRandomZ(0.26),
-                                    0,
-                                    0,
-                                    0
-                            );
-                //}
+                if (ticks > -1 && this.tickCount % ticks == 0) {
+                    LivingEntity lv = this.getUser();
+                    if (lv != null && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersMagiciansRed MR) {
+                        //for (int i = 0; i < 1; i++) {
+                        this.level()
+                                .addParticle(
+                                        MR.getFlameParticle(),
+                                        this.getRandomX(0.26),
+                                        this.getRandomY(0.26) + this.getBbHeight() * 0.55,
+                                        this.getRandomZ(0.26),
+                                        0,
+                                        0,
+                                        0
+                                );
+                    }
+                    //}
+                }
             }
         } else {
         }
