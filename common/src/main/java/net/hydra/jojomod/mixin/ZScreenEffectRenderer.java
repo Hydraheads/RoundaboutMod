@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
@@ -116,7 +117,17 @@ public abstract class ZScreenEffectRenderer {
             RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
 
-            RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+            if (bt == StandFireType.BLUE.id){
+                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_blue_0.png"));
+            } else if (bt == StandFireType.PURPLE.id){
+                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_purple_0.png"));
+            } else if (bt == StandFireType.GREEN.id){
+                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_green_0.png"));
+            } else if (bt == StandFireType.DREAD.id){
+                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_dread_0.png"));
+            } else {
+                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+            }
 
             // Rotates every 2 ticks through the 32 frames
             int frame = (int)(mc.level.getGameTime() / 2) % 32;

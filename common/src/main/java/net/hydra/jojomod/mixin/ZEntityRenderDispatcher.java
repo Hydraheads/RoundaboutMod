@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
@@ -89,12 +90,35 @@ public abstract class ZEntityRenderDispatcher {
             float v1 = (frame + 1) * frameHeight;
             float $$10 = 0.0F;
             int $$11 = 0;
-            VertexConsumer vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_0.png")));
+            VertexConsumer vertexConsumer;
+
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            if (bt == StandFireType.BLUE.id){
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_blue_0.png")));
+            } else if (bt == StandFireType.PURPLE.id){
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_purple_0.png")));
+            } else if (bt == StandFireType.GREEN.id){
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_green_0.png")));
+            } else if (bt == StandFireType.DREAD.id){
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_dread_0.png")));
+            } else {
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_0.png")));
+            }
 
             for (PoseStack.Pose matrices = $$0.last(); $$8 > 0.0F; $$11++) {
 
                 RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+                if (bt == StandFireType.BLUE.id){
+                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_blue_0.png"));
+                } else if (bt == StandFireType.PURPLE.id){
+                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_purple_0.png"));
+                } else if (bt == StandFireType.GREEN.id){
+                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_green_0.png"));
+                } else if (bt == StandFireType.DREAD.id){
+                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_dread_0.png"));
+                } else {
+                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+                }
 
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
                 fireVertex(vertexConsumer, matrices, $$6 - 0.0F, 0.0F - $$9, $$10, u0, v1);
