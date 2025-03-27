@@ -9,8 +9,10 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -521,16 +523,22 @@ public class PowersMagiciansRed extends PunchingStand {
         if (keyIsDown) {
             if (!hold1) {
                 hold1 = true;
-                if (!isChargingCrossfire() && !hasHurricaneSingle()) {
-                    if (!isGuarding()) {
-                        if (isHoldingSneak()) {
-                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                                BlockPos HR = getGrabBlock();
-                                if (HR != null) {
-                                    this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
-                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                if (canShootConcealedCrossfire()){
+                    this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+                } else {
+                    if (!isChargingCrossfire() && !hasHurricaneSingle()) {
+                        if (!isGuarding()) {
+                            if (isHoldingSneak()) {
+                                if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                                    BlockPos HR = getGrabBlock();
+                                    if (HR != null) {
+                                        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
+                                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                                    }
                                 }
                             }
                         }
@@ -645,7 +653,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
         if ((this.activePower == PowerIndex.POWER_2
         || this.activePower == PowerIndex.POWER_2_SNEAK)
-        && move != PowerIndex.POWER_2_BONUS && move != PowerIndex.LEAD_IN) {
+        && move != PowerIndex.POWER_2_BONUS && move != PowerIndex.LEAD_IN && move != PowerIndex.POWER_1_BONUS) {
             if (hasHurricaneSingle() || hasHurricaneSpecial()) {
                 this.clearAllHurricanes();
             }
@@ -686,6 +694,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.snap();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return this.setFire();
+        } else if (move == PowerIndex.POWER_1_BONUS) {
+            return this.crossfireBlock();
         } else if (move == PowerIndex.POWER_3_BLOCK) {
             return this.fireBlast();
         } else if (move == PowerIndex.POWER_2) {
@@ -1495,6 +1505,22 @@ public class PowersMagiciansRed extends PunchingStand {
                             SoundSource.PLAYERS, 2F, 1F);
                 }
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+            }
+        }
+        return true;
+    }
+    public boolean crossfireBlock(){
+        if (canShootConcealedCrossfire()){
+            this.animateStand((byte) 15);
+            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            this.setAttackTimeDuring(-15);
+            this.setActivePower(PowerIndex.POWER_1_BONUS);
+            if (!this.self.level().isClientSide()) {
+                ConcealedFlameObjectEntity thrownBlockOrItem = new ConcealedFlameObjectEntity(this.getSelf(), this.getSelf().level(), this.self.getMainHandItem());
+                thrownBlockOrItem.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(),
+                        this.getSelf().getYRot(), 0, 0.12F, 0);
+                this.getSelf().level().addFreshEntity(thrownBlockOrItem);
+                clearAllHurricanes();
             }
         }
         return true;

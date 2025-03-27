@@ -9,6 +9,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -28,8 +31,14 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.UUID;
+
 public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
     private void initDataTrackerRoundabout(CallbackInfo ci) {
+    }
+    @Override
+    protected float getGravity() {
+        return 0.0F;
     }
 
     public ConcealedFlameObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
@@ -39,36 +48,68 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
     public ConcealedFlameObjectEntity(LivingEntity living, Level $$1) {
         super(ModEntities.CONCEALED_FLAME_OBJECT, living, $$1);
     }
-
-    public ConcealedFlameObjectEntity(LivingEntity living, Level $$1, ItemStack itemStack, boolean places) {
+    public LivingEntity getUser(){
+        if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            return LE;
+        }
+        return null;
+    }
+    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(ConcealedFlameObjectEntity.class, EntityDataSerializers.INT);
+    public int getUserID() {
+        return this.getEntityData().get(USER_ID);
+    }
+    public ConcealedFlameObjectEntity(LivingEntity living, Level $$1, ItemStack itemStack) {
         super(ModEntities.CONCEALED_FLAME_OBJECT, living, $$1);
+        this.setUser(living);
         this.setItem(itemStack);
     }
 
+    public LivingEntity standUser;
+    public UUID standUserUUID;
+    public void setUser(LivingEntity User) {
+        standUser = User;
+        this.getEntityData().set(USER_ID, User.getId());
+        if (!this.level().isClientSide()){
+            standUserUUID = User.getUUID();
+        }
+    }
+    public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
+        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
+        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
+        Vec3 $$9 = $$0.getDeltaMovement();
+    }
 
-    public ConcealedFlameObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
+    public ConcealedFlameObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack) {
         super(ModEntities.CONCEALED_FLAME_OBJECT, p_36862_, p_36863_, p_36864_, world);
         this.setItem(itemStack);
     }
 
     @Override
     public void tick(){
-        Entity $$0 = this.getOwner();
-        if (this.level().isClientSide || ($$0 == null || !$$0.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
+        Entity $$0 = this.getUser();
+            Vec3 delta = this.getDeltaMovement();
             super.tick();
+            this.setDeltaMovement(delta);
 
-            if (!this.level().isClientSide()) {
+            if (!this.level().isClientSide() && this.tickCount %2 == 0) {
                 if ($$0 instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     Vec3 $$2 = this.getDeltaMovement();
                     double $$3 = this.getX() + $$2.x;
                     double $$4 = this.getY() + $$2.y;
                     double $$5 = this.getZ() + $$2.z;
                     this.level().addParticle(PMR.getFlameParticle(), $$3, $$4 + 0.5, $$5, 0.0, 0.0, 0.0);
+
+                    ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), $$3,
+                            $$4 + 0.5, $$5,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0.15);
                 }
             }
-        } else {
-            this.discard();
-        }
     }
 
     @Override
@@ -88,6 +129,7 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(USER_ID, -1);
     }
     @Override
     protected Item getDefaultItem() {
@@ -172,18 +214,19 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
         if ($$1 instanceof LivingEntity LE){
         }
 
-        Entity $$4 = this.getOwner();
+        if (!this.level().isClientSide) {
+            Entity $$4 = this.getOwner();
 
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.THROWN_OBJECT, $$4);
+            DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.THROWN_OBJECT, $$4);
 
 
-
-        if ($$1.hurt($$5, 10)) {
-            if ($$1.getType() == EntityType.ENDERMAN) {
-                return;
+            if ($$1.hurt($$5, 10)) {
+                if ($$1.getType() == EntityType.ENDERMAN) {
+                    return;
+                }
             }
+            this.discard();
         }
-        this.discard();
 
     }
 

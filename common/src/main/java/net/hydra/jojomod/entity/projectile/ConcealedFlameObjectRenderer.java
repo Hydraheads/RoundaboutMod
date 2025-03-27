@@ -47,7 +47,7 @@ public class ConcealedFlameObjectRenderer<T extends Entity>
         }
         poseStack.pushPose();
         if (MainUtil.isThrownBlockItem(item.getItem())){
-            poseStack.scale((float) (this.scale*3), (float) (this.scale*3), (float) (this.scale*3));
+            poseStack.scale((float) (this.scale*3.5), (float) (this.scale*3.5), (float) (this.scale*3.5));
         } else {
             poseStack.scale(this.scale, this.scale, this.scale);
             poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
