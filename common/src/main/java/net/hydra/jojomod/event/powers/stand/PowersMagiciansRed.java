@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -297,26 +298,44 @@ public class PowersMagiciansRed extends PunchingStand {
             }
             setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
         } else {
+            boolean candoNumber1 = true;
             if (isHoldingSneak()) {
                 if (secondSkillLocked){
+                    if (canShootConcealedCrossfire()){
+                        setSkillIcon(context, x, y, 1, StandIcons.CONCEALED_HURRICANE, PowerIndex.NO_CD);
+                        candoNumber1 = false;
+                    }
                     setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SHOT, PowerIndex.NO_CD);
                 } else {
                     setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SPECIAL, PowerIndex.SKILL_2_SNEAK);
                 }
-                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
+                if (candoNumber1) {
+                    setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
+                }
                 setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
             } else {
                 if (secondSkillLocked){
+                    if (canShootConcealedCrossfire()){
+                        setSkillIcon(context, x, y, 1, StandIcons.CONCEALED_HURRICANE, PowerIndex.NO_CD);
+                        candoNumber1 = false;
+                    }
                     setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SHOT, PowerIndex.NO_CD);
                 } else {
                     setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE, PowerIndex.SKILL_2);
                 }
-                setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
+                if (candoNumber1) {
+                    setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
+                }
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
             }
         }
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
     }
+
+    public boolean canShootConcealedCrossfire(){
+        return hasHurricaneSingle() && !this.self.getMainHandItem().isEmpty() && MainUtil.isThrownBlockItem(this.self.getMainHandItem().getItem());
+    }
+
     public void playFlamethrowerSound(){
         if (!this.self.level().isClientSide()) {
             double rand = Math.random();
@@ -1931,6 +1950,9 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (this.isChargingCrossfireSpecial() || (slot != 2 && (isChargingCrossfireSingle() || hasHurricaneSingle()))){
+            if (canShootConcealedCrossfire() && slot == 1){
+                return false;
+            }
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
