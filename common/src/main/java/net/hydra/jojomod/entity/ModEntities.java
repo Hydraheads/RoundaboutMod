@@ -40,6 +40,7 @@ public class ModEntities {
 
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
+    public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
     public static EntityType<OVAEnyaNPC> OVA_ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;

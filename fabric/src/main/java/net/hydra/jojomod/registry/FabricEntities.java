@@ -221,6 +221,13 @@ public class FabricEntities {
                         EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_object")
                 );
+        public static final EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "concealed_flame_object"),
+                        EntityType.Builder.<ConcealedFlameObjectEntity>of(ConcealedFlameObjectEntity::new, MobCategory.MISC).
+                                sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":concealed_flame_object")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -243,6 +250,7 @@ public class FabricEntities {
                 ModEntities.STAND_ARROW = STAND_ARROW;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
+                ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
                 ModEntities.FALLEN_SKELETON = FALLEN_SKELETON;

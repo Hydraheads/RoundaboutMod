@@ -1,20 +1,12 @@
 package net.hydra.jojomod.entity.projectile;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
+import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -36,8 +28,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class StandFireballEntity extends AbstractHurtingProjectile implements UnburnableProjectile {

@@ -1,34 +1,24 @@
 package net.hydra.jojomod.entity.projectile;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
-import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
+import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurricaneEntity> {
 

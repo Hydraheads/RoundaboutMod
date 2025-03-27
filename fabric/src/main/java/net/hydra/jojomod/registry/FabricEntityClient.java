@@ -56,6 +56,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STAND_FIREBALL, StandFireballRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.CONCEALED_FLAME_OBJECT, ConcealedFlameObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.OVA_ENYA, OVAEnyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOTARO, JotaroRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);

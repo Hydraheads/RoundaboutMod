@@ -186,4 +186,10 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "thrown_object").toString())
             );
+    public static final RegistryObject<EntityType<ConcealedFlameObjectEntity>> CONCEALED_FLAME_OBJECT =
+            ENTITY_TYPES.register("concealed_flame_object", () ->
+                    EntityType.Builder.<ConcealedFlameObjectEntity>of(ConcealedFlameObjectEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "concealed_flame_object").toString())
+            );
 }

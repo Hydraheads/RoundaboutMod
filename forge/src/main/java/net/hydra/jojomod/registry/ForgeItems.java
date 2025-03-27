@@ -5,7 +5,7 @@ import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
-import net.hydra.jojomod.event.powers.stand.presets.PowersMagiciansRed;
+import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.event.powers.visagedata.DIOVisage;
 import net.hydra.jojomod.event.powers.visagedata.JotaroVisage;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
