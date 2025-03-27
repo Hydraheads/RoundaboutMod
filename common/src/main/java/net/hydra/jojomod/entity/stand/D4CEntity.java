@@ -9,7 +9,18 @@ import net.minecraft.world.level.Level;
 public class D4CEntity extends StandEntity {
     public D4CEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
 
-    @Override public Component getSkinName(byte skinId) { return Component.translatable("skins.roundabout.d4c.base"); }
+    public static final byte
+        MANGA_SKIN = 0,
+        WONDER_FESTIVAL = 1;
+
+    @Override public Component getSkinName(byte skinId) {
+        if (skinId == MANGA_SKIN)
+            return Component.translatable("skins.roundabout.d4c.base");
+        else if (skinId == WONDER_FESTIVAL) {
+            return Component.translatable("skins.roundabout.d4c.wonder_festival");
+        }
+        return null;
+    }
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();

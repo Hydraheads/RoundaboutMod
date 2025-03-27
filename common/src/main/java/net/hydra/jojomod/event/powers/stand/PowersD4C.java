@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -18,6 +19,9 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class PowersD4C extends PunchingStand {
@@ -138,5 +142,13 @@ public class PowersD4C extends PunchingStand {
     @Override
     public boolean isWip(){
         return true;
+    }
+
+    @Override
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                D4CEntity.MANGA_SKIN,
+                D4CEntity.WONDER_FESTIVAL
+        );
     }
 }

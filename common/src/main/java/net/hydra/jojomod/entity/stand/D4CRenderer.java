@@ -12,11 +12,23 @@ import org.jetbrains.annotations.Nullable;
 public class D4CRenderer extends StandRenderer<D4CEntity> {
 
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c.png");
+    private static final ResourceLocation WONDER_FESTIVAL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c_wf.png");
+
     public D4CRenderer(EntityRendererProvider.Context context) {
         super(context, new D4CModel<>(context.bakeLayer(ModEntityRendererClient.D4C_LAYER)), 0.f);
     }
 
-    @Override public ResourceLocation getTextureLocation(D4CEntity entity) { return MANGA_SKIN; }
+    @Override public ResourceLocation getTextureLocation(D4CEntity entity) {
+        switch (entity.getSkin())
+        {
+            case (D4CEntity.MANGA_SKIN):
+                return MANGA_SKIN;
+            case (D4CEntity.WONDER_FESTIVAL):
+                return WONDER_FESTIVAL;
+            default:
+                return null;
+        }
+    }
 
     @Override
     public void render(D4CEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
