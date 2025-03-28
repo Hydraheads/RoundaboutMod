@@ -4,6 +4,8 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -14,6 +16,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -86,14 +89,31 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
         this.setItem(itemStack);
     }
 
+    public boolean isEffectivelyInWater() {
+        return this.wasTouchingWater;
+    }
     @Override
     public void tick(){
+        boolean client = this.level().isClientSide();
+        if (!client){
+            if (isEffectivelyInWater()){
+                this.discard();
+            }
+            if (this.getUser() != null){
+                if (MainUtil.cheapDistanceTo2(this.getX(),this.getZ(),this.standUser.getX(),this.standUser.getZ()) > 80
+                        || !this.getUser().isAlive() || this.getUser().isRemoved()){
+                    this.discard();
+                }
+            } else {
+                this.discard();
+            }
+        }
         Entity $$0 = this.getUser();
             Vec3 delta = this.getDeltaMovement();
             super.tick();
             this.setDeltaMovement(delta);
 
-            if (!this.level().isClientSide() && this.tickCount %2 == 0) {
+            if (!client && this.tickCount %2 == 0) {
                 if ($$0 instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     Vec3 $$2 = this.getDeltaMovement();
                     double $$3 = this.getX() + $$2.x;
@@ -129,6 +149,7 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(SIZE, 0);
         this.entityData.define(USER_ID, -1);
     }
     @Override
@@ -207,6 +228,44 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
         }
     }
 
+    public void setSize(int idd) {
+        this.getEntityData().set(SIZE, idd);
+    }
+    public int getSize() {
+        return this.getEntityData().get(SIZE);
+    }
+    private static final EntityDataAccessor<Integer> SIZE =
+            SynchedEntityData.defineId(ConcealedFlameObjectEntity.class, EntityDataSerializers.INT);
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        LivingEntity user = this.getUser();
+
+        if (source.getEntity() != null && user != null &&
+                ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if (source.getEntity().is(getUser())) {
+                burst(PMR);
+                this.discard();
+            } else {
+                burst(PMR);
+                CrossfireHurricaneEntity.blastEntity(source.getEntity(), this,
+                        this.getSize(), user, true, PMR);
+                this.discard();
+            }
+        }
+        return true;
+    }
+
+    public void burst(PowersMagiciansRed PMR){
+        if (!this.level().isClientSide()) {
+            this.level().playSound(null, this.blockPosition(), ModSounds.CROSSFIRE_EXPLODE_EVENT,
+                    SoundSource.PLAYERS, 2F, 1F);
+            ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
+                    this.getY()+0.5, this.getZ(),
+                    200,
+                    0.01, 0.01, 0.01,
+                    0.1);
+        }
+    }
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {

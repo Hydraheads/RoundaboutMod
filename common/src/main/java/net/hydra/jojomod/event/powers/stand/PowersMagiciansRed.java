@@ -524,7 +524,7 @@ public class PowersMagiciansRed extends PunchingStand {
             if (!hold1) {
                 hold1 = true;
                 if (canShootConcealedCrossfire()){
-                    this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
+                    this.setCooldown(PowerIndex.SKILL_2, 100);
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
                 } else {
@@ -1516,9 +1516,15 @@ public class PowersMagiciansRed extends PunchingStand {
             this.setAttackTimeDuring(-15);
             this.setActivePower(PowerIndex.POWER_1_BONUS);
             if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 ConcealedFlameObjectEntity thrownBlockOrItem = new ConcealedFlameObjectEntity(this.getSelf(), this.getSelf().level(), this.self.getMainHandItem());
+                thrownBlockOrItem.setPos(thrownBlockOrItem.position().subtract(0,this.self.getBbHeight()*0.3,0));
                 thrownBlockOrItem.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(),
                         this.getSelf().getYRot(), 0, 0.12F, 0);
+                if (this.hurricane != null){
+
+                    thrownBlockOrItem.setSize(this.hurricane.getSize());
+                }
                 this.getSelf().level().addFreshEntity(thrownBlockOrItem);
                 clearAllHurricanes();
             }
@@ -1716,7 +1722,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
 
-    public float getHurricaneDirectDamage(Entity entity, CrossfireHurricaneEntity cfh, float size){
+    public float getHurricaneDirectDamage(Entity entity, float size){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) (0.5+((size/60)* 6) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01)));
@@ -1725,7 +1731,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     damageMultipliers.magicianAttackOnMobs*0.01)));
         }
     }
-    public float getHurricaneDamage(Entity entity, CrossfireHurricaneEntity cfh, float size){
+    public float getHurricaneDamage(Entity entity,  float size){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) (0.5+((size/60)* 3) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01)));

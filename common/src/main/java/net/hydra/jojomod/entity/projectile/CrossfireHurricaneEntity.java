@@ -29,6 +29,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
@@ -357,48 +358,51 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
     }
 
+    public static void blastEntity(Entity gotten, Projectile proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR){
+
+        float dmg = 1;
+        float strength = 0.85F;
+        if (direct) {
+            dmg = PMR.getHurricaneDirectDamage(gotten, size);
+            strength *= 2;
+        } else {
+            dmg = PMR.getHurricaneDamage(gotten, size);
+        }
+        if (gotten.hurt(ModDamageTypes.of(gotten.level(), ModDamageTypes.CROSSFIRE, user),
+                dmg)) {
+            float degrees = MainUtil.getLookAtEntityYaw(proj, gotten);
+            MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-17 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+            if (gotten instanceof LivingEntity LE) {
+                StandUser userLE = ((StandUser) LE);
+                int ticks = 21;
+                ticks += size*3;
+                if (userLE.roundabout$getRemainingFireTicks() > -1){
+                    ticks+=userLE.roundabout$getRemainingFireTicks();
+                }
+                userLE.roundabout$setOnStandFire(PMR.getFireColor(), user);
+                userLE.roundabout$setRemainingStandFireTicks(ticks);
+            }
+        } else if (gotten instanceof LivingEntity LE && LE.isBlocking()) {
+            int breakShield = 0;
+            if (size >= PowersMagiciansRed.getChargingCrossfireSize()){
+                breakShield = (int) (10+ size*2);
+
+            } else if (size >= PowersMagiciansRed.getChargingCrossfireSpecialSize()){
+                breakShield = (int) (10+ (size*0.5));
+            }
+            if (breakShield > 0) {
+                MainUtil.knockShieldPlusStand(LE, breakShield);
+            }
+        }
+    }
+
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
         if (gotten !=null && gotten.getId() != getUserID()) {
             int size = this.getSize();
-            float dmg = 1;
-            float strength = 0.85F;
-            if (direct) {
-                dmg = PMR.getHurricaneDirectDamage(gotten, this,size);
-                strength *= 2;
-            } else {
-                dmg = PMR.getHurricaneDamage(gotten, this,size);
-
-            }
-
-            if (gotten.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, this.standUser),
-                    dmg)) {
-                float degrees = MainUtil.getLookAtEntityYaw(this, gotten);
-                MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
-                        Mth.sin(degrees * ((float) Math.PI / 180)),
-                        Mth.sin(-17 * ((float) Math.PI / 180)),
-                        -Mth.cos(degrees * ((float) Math.PI / 180)));
-                if (gotten instanceof LivingEntity LE) {
-                    StandUser userLE = ((StandUser) LE);
-                    int ticks = 21;
-                    ticks += size*3;
-                    if (userLE.roundabout$getRemainingFireTicks() > -1){
-                        ticks+=userLE.roundabout$getRemainingFireTicks();
-                    }
-                    userLE.roundabout$setOnStandFire(PMR.getFireColor(), standUser);
-                    userLE.roundabout$setRemainingStandFireTicks(ticks);
-                }
-            } else if (gotten instanceof LivingEntity LE && LE.isBlocking()) {
-                int breakShield = 0;
-                if (size >= PowersMagiciansRed.getChargingCrossfireSize()){
-                    breakShield = (int) (10+ size*2);
-
-                } else if (size >= PowersMagiciansRed.getChargingCrossfireSpecialSize()){
-                    breakShield = (int) (10+ (size*0.5));
-                }
-                if (breakShield > 0) {
-                    MainUtil.knockShieldPlusStand(LE, breakShield);
-                }
-            }
+            blastEntity(gotten,this,size,this.standUser,direct,PMR);
         }
     }
 
