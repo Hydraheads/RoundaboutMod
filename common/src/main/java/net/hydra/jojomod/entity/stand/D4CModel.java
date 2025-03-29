@@ -1,10 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.RenderType;
+import org.jetbrains.annotations.Nullable;
 
 public class D4CModel<T extends D4CEntity> extends StandModel<T> {
     public D4CModel(ModelPart root) {
@@ -172,7 +175,7 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
     }
 
 
-    StandPowers Power = new PowersTheWorld(null);
+    StandPowers Power = new PowersD4C(null);
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {

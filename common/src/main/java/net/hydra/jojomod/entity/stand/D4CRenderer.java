@@ -15,7 +15,7 @@ public class D4CRenderer extends StandRenderer<D4CEntity> {
     private static final ResourceLocation WONDER_FESTIVAL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c_wf.png");
 
     public D4CRenderer(EntityRendererProvider.Context context) {
-        super(context, new D4CModel<>(context.bakeLayer(ModEntityRendererClient.D4C_LAYER)), 0.f);
+        super(context, new D4CModel<>(context.bakeLayer(ModEntityRendererClient.D4C_LAYER)), 0f);
     }
 
     @Override public ResourceLocation getTextureLocation(D4CEntity entity) {
@@ -41,8 +41,9 @@ public class D4CRenderer extends StandRenderer<D4CEntity> {
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
+    @Nullable
     @Override
-    protected @Nullable RenderType getRenderType(D4CEntity entity, boolean shouldRender, boolean translucent, boolean showOutline) {
-        return super.getRenderType(entity, shouldRender, translucent, showOutline);
+    protected RenderType getRenderType(D4CEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
+        return super.getRenderType(entity, showBody, true, showOutline);
     }
 }
