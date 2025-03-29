@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -36,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
-public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
+public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implements UnburnableProjectile {
     private void initDataTrackerRoundabout(CallbackInfo ci) {
     }
     @Override
@@ -240,9 +241,9 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile {
     public boolean hurt(DamageSource source, float amount) {
         LivingEntity user = this.getUser();
 
-        if (source.getEntity() != null && user != null &&
+        if (source.getDirectEntity() != null && user != null &&
                 ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-            if (source.getEntity().is(getUser())) {
+            if (source.getDirectEntity().is(getUser())) {
                 burst(PMR);
                 this.discard();
             } else {
