@@ -299,6 +299,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
             }
             setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
         } else {
             boolean candoNumber1 = true;
             if (isHoldingSneak()) {
@@ -315,6 +316,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
                 }
                 setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
+                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.NO_CD);
             } else {
                 if (secondSkillLocked){
                     if (canShootConcealedCrossfire()){
@@ -329,9 +331,9 @@ public class PowersMagiciansRed extends PunchingStand {
                     setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
                 }
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+                setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
             }
         }
-        setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
     }
 
     public boolean canShootConcealedCrossfire(){
