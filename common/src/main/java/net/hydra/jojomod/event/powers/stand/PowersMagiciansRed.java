@@ -287,20 +287,8 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         boolean secondSkillLocked =hasHurricaneSpecial() || this.isChargingCrossfire() || hasHurricaneSingle();
-        if (this.isGuarding()){
-            if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
-            } else {
-                setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
-            }
-            if (secondSkillLocked){
-                setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SHOT, PowerIndex.SKILL_2);
-            } else {
-                setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
-            }
-            setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
-            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
-        } else {
+        boolean hasSingle =isChargingCrossfireSingle() || hasHurricaneSingle();
+
             boolean candoNumber1 = true;
             if (isHoldingSneak()) {
                 if (secondSkillLocked){
@@ -315,8 +303,14 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (candoNumber1) {
                     setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
                 }
-                setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
-                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.NO_CD);
+                if (this.isGuarding()) {
+                    setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
+                } else if (hasSingle){
+                    setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_EXTRA);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
+                }
+                setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
             } else {
                 if (secondSkillLocked){
                     if (canShootConcealedCrossfire()){
@@ -330,10 +324,16 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (candoNumber1) {
                     setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
                 }
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
-                setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
+
+                if (this.isGuarding()){
+                    setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
+                } else if (hasSingle){
+                    setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_EXTRA);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+                }
+                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.NO_CD);
             }
-        }
     }
 
     public boolean canShootConcealedCrossfire(){
@@ -1983,7 +1983,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (this.isChargingCrossfireSpecial() || (slot != 2 && (isChargingCrossfireSingle() || hasHurricaneSingle()))){
+        if (this.isChargingCrossfireSpecial() || (slot != 2 && slot != 3 && (isChargingCrossfireSingle() || hasHurricaneSingle()))){
             if (canShootConcealedCrossfire() && slot == 1){
                 return false;
             }

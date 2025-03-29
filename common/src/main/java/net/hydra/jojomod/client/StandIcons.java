@@ -96,6 +96,8 @@ public class StandIcons {
             "textures/gui/icons/magicians_red/crossfire_firestorm.png");
     public static final ResourceLocation FIRE_SLAM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fireslam.png");
+    public static final ResourceLocation HIDDEN_HURRICANE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/hidden_hurricane.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_SHOT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/crossfire_hurricane_shot.png");
     public static final ResourceLocation CONCEALED_HURRICANE = new ResourceLocation(Roundabout.MOD_ID,
