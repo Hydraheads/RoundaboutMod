@@ -115,6 +115,17 @@ public class PowersMagiciansRed extends PunchingStand {
                     }
                 }
             }
+
+            if (isLockedByWater()){
+                clearAllHurricanes();
+                if (isChargingCrossfire()){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                }
+            }
+            if ((isChargingCrossfireSingle() && (hurricane == null || hurricane.isRemoved()))
+            || isChargingCrossfireSpecial() && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())){
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+            }
         }
     }
     public void tickPowerEnd(){
@@ -142,6 +153,20 @@ public class PowersMagiciansRed extends PunchingStand {
             if (isUsingFirestorm()){
                 if (!this.self.level().isClientSide()) {
                     removeFirestorm();
+                }
+            }
+        }
+
+        if (!this.self.level().isClientSide()) {
+            if (this.isInRain() && !this.self.isUnderWater() && isUsingFirestorm()) {
+                if (this.self.tickCount % 2 == 0) {
+                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, this.self.getX(),
+                            this.self.getY() + this.self.getBbHeight(), this.self.getZ(),
+                            2,
+                            0.2,
+                            0,
+                            0.2,
+                            0.01);
                 }
             }
         }
@@ -579,23 +604,25 @@ public class PowersMagiciansRed extends PunchingStand {
         if (keyIsDown) {
             if (!hold1) {
                 hold1 = true;
-                if (canShootConcealedCrossfire()){
-                    this.setCooldown(PowerIndex.SKILL_2,  multiplyCooldown(100));
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
-                } else {
-                    if (!isChargingCrossfire() && !hasHurricaneSingle()) {
-                        if (!isGuarding()) {
-                            if (isHoldingSneak()) {
-                                if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                                    BlockPos HR = getGrabBlock();
-                                    if (HR != null) {
-                                        this.setCooldown(PowerIndex.SKILL_1_SNEAK,
-                                                multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire)
-                                        );
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
-                                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                if (!isLockedByWater()) {
+                    if (canShootConcealedCrossfire()) {
+                        this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+                    } else {
+                        if (!isChargingCrossfire() && !hasHurricaneSingle()) {
+                            if (!isGuarding()) {
+                                if (isHoldingSneak()) {
+                                    if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                                        BlockPos HR = getGrabBlock();
+                                        if (HR != null) {
+                                            this.setCooldown(PowerIndex.SKILL_1_SNEAK,
+                                                    multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire)
+                                            );
+                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
+                                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                                        }
                                     }
                                 }
                             }
@@ -612,31 +639,33 @@ public class PowersMagiciansRed extends PunchingStand {
         if (keyIsDown) {
             if (!hold2) {
                 hold2 = true;
-                if (hasHurricaneSpecial()) {
-                    if (!isChargingCrossfire()) {
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                            this.setCooldown(PowerIndex.SKILL_EXTRA_2,  multiplyCooldown(7));
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+                if (!isLockedByWater()) {
+                    if (hasHurricaneSpecial()) {
+                        if (!isChargingCrossfire()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                                this.setCooldown(PowerIndex.SKILL_EXTRA_2, multiplyCooldown(7));
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+                            }
                         }
-                    }
-                } else if (hasHurricaneSingle() || isChargingCrossfireSingle()){
-                    this.setCooldown(PowerIndex.SKILL_2,  multiplyCooldown(100));
+                    } else if (hasHurricaneSingle() || isChargingCrossfireSingle()) {
+                        this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
-                } else {
-                    if (!isGuarding()) {
-                        if (isHoldingSneak()) {
-                            if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-                                this.setCooldown(PowerIndex.SKILL_2_SNEAK,  multiplyCooldown(600));
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
-                            }
-                        } else {
-                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                                this.setCooldown(PowerIndex.SKILL_2,  multiplyCooldown(40));
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                    } else {
+                        if (!isGuarding()) {
+                            if (isHoldingSneak()) {
+                                if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+                                    this.setCooldown(PowerIndex.SKILL_2_SNEAK, multiplyCooldown(600));
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+                                }
+                            } else {
+                                if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                                    this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(40));
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                                }
                             }
                         }
                     }
@@ -667,15 +696,17 @@ public class PowersMagiciansRed extends PunchingStand {
             if (!inputDash) {
                 if (!isChargingCrossfire() && !hasHurricaneSingle()) {
                     if (this.isGuarding()) {
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                            this.setCooldown(PowerIndex.SKILL_EXTRA,  multiplyCooldown(100));
+                        if (!isLockedByWater()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                                this.setCooldown(PowerIndex.SKILL_EXTRA, multiplyCooldown(100));
 
-                            BlockPos HR = getGrabPos(10);
-                            if (HR != null) {
-                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
+                                BlockPos HR = getGrabPos(10);
+                                if (HR != null) {
+                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
+                                }
                             }
+                            inputDash = true;
                         }
-                        inputDash = true;
                     } else if (isHoldingSneak()) {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway);
@@ -696,6 +727,9 @@ public class PowersMagiciansRed extends PunchingStand {
     public void buttonInput4(boolean keyIsDown, Options options) {
         if (!isChargingCrossfire() && !hasHurricane()) {
             if (isHoldingSneak()) {
+                if (!isLockedByWater()) {
+
+                }
             } else {
                 if (keyIsDown) {
                     if (!hold4) {
@@ -2089,8 +2123,25 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
     }
+
+    public boolean isLockedByWater(){
+        if (this.self.isUnderWater()){
+            return true;
+        }
+        if (this.isInRain()){
+            if (!isUsingFirestorm()){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if ((this.self.isUnderWater() || this.isInRain()) && !(slot == 4 && !this.isHoldingSneak()) && !(slot == 3 && !this.isGuarding())){
+            if (!isUsingFirestorm() || this.self.isUnderWater()){
+                return true;
+            }
+        }
         if (this.isChargingCrossfireSpecial() || (slot != 2 && slot != 3 && (isChargingCrossfireSingle() || hasHurricaneSingle()))){
             if (canShootConcealedCrossfire() && slot == 1){
                 return false;
@@ -2098,5 +2149,12 @@ public class PowersMagiciansRed extends PunchingStand {
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
+    }
+
+
+    private boolean isInRain() {
+        BlockPos $$0 = this.self.blockPosition();
+        return this.self.level().isRainingAt($$0)
+                || this.self.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.self.getBoundingBox().maxY, (double)$$0.getZ()));
     }
 }
