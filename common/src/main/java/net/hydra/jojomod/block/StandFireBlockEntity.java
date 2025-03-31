@@ -154,7 +154,6 @@ public class StandFireBlockEntity extends BlockEntity{
                                                 if (standUser != null && ((StandUser)standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
                                                     if ($$17 > 0 && $$3.nextInt($$15) <= $$17 && (!$$1.isRaining() || !fb.isNearRain($$1, $$11))) {
                                                         int $$18 = Math.min(15, $$6 + $$3.nextInt(5) / 4);
-                                                        Roundabout.LOGGER.info("3 Smurf: "+color);
                                                         $$1.setBlockAndUpdate($$11, fb.getStateWithAge($$1, $$11, $$18).setValue(StandFireBlock.COLOR, color));
                                                         BlockEntity be = this.level.getBlockEntity($$11);
                                                         if (be instanceof StandFireBlockEntity sfbe) {

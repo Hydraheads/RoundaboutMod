@@ -121,6 +121,8 @@ public class ForgeSounds {
             register(ModSounds.EXPLOSIVE_PUNCH, ModSounds.EXPLOSIVE_PUNCH_ID);
     public static final RegistryObject<SoundEvent> FIRE_BLAST_EVENT =
             register(ModSounds.FIRE_BLAST, ModSounds.FIRE_BLAST_ID);
+    public static final RegistryObject<SoundEvent> FIRESTORM_EVENT =
+            register(ModSounds.FIRESTORM, ModSounds.FIRESTORM_ID);
     public static final RegistryObject<SoundEvent> FIRE_WHOOSH_EVENT =
             register(ModSounds.FIRE_WHOOSH, ModSounds.FIRE_WHOOSH_ID);
     public static final RegistryObject<SoundEvent> CROSSFIRE_SHOOT_EVENT =

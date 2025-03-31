@@ -11,6 +11,12 @@
       "roundabout:summon_magician"
     ]
   },
+  "firestorm": {
+    "subtitle": "sounds.roundabout.firestorm",
+    "sounds": [
+      "roundabout:firestorm"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [

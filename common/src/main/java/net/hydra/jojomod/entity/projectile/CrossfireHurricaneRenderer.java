@@ -123,11 +123,11 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     }
     @Override
     public ResourceLocation getTextureLocation(CrossfireHurricaneEntity var1) {
-        int tc = var1.tickCount % 5;
-        if (tc > 3) {
+        int tc = var1.tickCount % 9;
+        if (tc > 5) {
             return getThird(var1);
         }
-        if (tc > 1) {
+        if (tc > 2) {
             return getSecond(var1);
         }
         return getFirst(var1);

@@ -83,6 +83,19 @@ public class PowersMagiciansRed extends PunchingStand {
     public static int getMassiveCrossfireSize(){
         return 500;
     }
+
+    public float bumpDamage(float baseDamage, boolean isActive){
+        if (isActive) {
+            return baseDamage *= 1.3F;
+        }
+        return baseDamage;
+    }
+    public int multiplyCooldown(int cooldown){
+        if (isUsingFirestorm()){
+            return (int)(cooldown*2);
+        }
+        return cooldown;
+    }
     public void tickPower() {
         super.tickPower();
         if (!this.self.level().isClientSide()) {
@@ -125,6 +138,12 @@ public class PowersMagiciansRed extends PunchingStand {
                 transformGiantHurricane(bigAnkh);
             }
 
+        } else {
+            if (isUsingFirestorm()){
+                if (!this.self.level().isClientSide()) {
+                    removeFirestorm();
+                }
+            }
         }
     }
     public void addHurricaneSpecial(CrossfireHurricaneEntity che){
@@ -376,7 +395,6 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public void playFlamethrowerSound(){
         if (!this.self.level().isClientSide()) {
-            double rand = Math.random();
             byte barrageCrySound;
             barrageCrySound = FLAMETHROWER_NOISE;
             playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
@@ -498,6 +516,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModSounds.MAGICIANS_RED_CHARGE_EVENT;
         } else if (soundChoice == FLAMETHROWER_NOISE) {
             return ModSounds.FLAMETHROWER_EVENT;
+        } else if (soundChoice == FIRESTORM) {
+            return ModSounds.FIRESTORM_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -560,7 +580,7 @@ public class PowersMagiciansRed extends PunchingStand {
             if (!hold1) {
                 hold1 = true;
                 if (canShootConcealedCrossfire()){
-                    this.setCooldown(PowerIndex.SKILL_2, 100);
+                    this.setCooldown(PowerIndex.SKILL_2,  multiplyCooldown(100));
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
                 } else {
@@ -570,7 +590,9 @@ public class PowersMagiciansRed extends PunchingStand {
                                 if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
                                     BlockPos HR = getGrabBlock();
                                     if (HR != null) {
-                                        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire);
+                                        this.setCooldown(PowerIndex.SKILL_1_SNEAK,
+                                                multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianIgniteFire)
+                                        );
                                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
                                         ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
                                         ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
@@ -593,26 +615,26 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (hasHurricaneSpecial()) {
                     if (!isChargingCrossfire()) {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 7);
+                            this.setCooldown(PowerIndex.SKILL_EXTRA_2,  multiplyCooldown(7));
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                         }
                     }
                 } else if (hasHurricaneSingle() || isChargingCrossfireSingle()){
-                    this.setCooldown(PowerIndex.SKILL_2, 100);
+                    this.setCooldown(PowerIndex.SKILL_2,  multiplyCooldown(100));
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                 } else {
                     if (!isGuarding()) {
                         if (isHoldingSneak()) {
                             if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-                                this.setCooldown(PowerIndex.SKILL_2_SNEAK, 600);
+                                this.setCooldown(PowerIndex.SKILL_2_SNEAK,  multiplyCooldown(600));
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
                             }
                         } else {
                             if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                                this.setCooldown(PowerIndex.SKILL_2, 40);
+                                this.setCooldown(PowerIndex.SKILL_2,  multiplyCooldown(40));
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
                             }
@@ -646,7 +668,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (!isChargingCrossfire() && !hasHurricaneSingle()) {
                     if (this.isGuarding()) {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                            this.setCooldown(PowerIndex.SKILL_EXTRA, 100);
+                            this.setCooldown(PowerIndex.SKILL_EXTRA,  multiplyCooldown(100));
 
                             BlockPos HR = getGrabPos(10);
                             if (HR != null) {
@@ -731,6 +753,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public static final byte RANGED_CHARGE_1 = 102;
     public static final byte RANGED_CHARGE_2 = 104;
     public static final byte FLAMETHROWER_NOISE = 105;
+    public static final byte FIRESTORM = 106;
 
     @Override
     public boolean canLightFurnace(){
@@ -789,6 +812,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 icast.roundabout$addPermaCaster(this.getSelf());
                 if (bigAnkh == null || bigAnkh.isRemoved()){
                     CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+                    playSoundsIfNearby(FIRESTORM, 27, false);
                     if (cross != null) {
                         cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                         cross.setUser(this.self);
@@ -799,10 +823,16 @@ public class PowersMagiciansRed extends PunchingStand {
                     }
                 }
             } else {
-                icast.roundabout$removePermaCastingEntity(this.getSelf());
+                removeFirestorm();
             }
         }
         return true;
+    }
+
+    public void removeFirestorm(){
+        IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+        this.stopSoundsIfNearby(FIRESTORM, 100,false);
+        icast.roundabout$removePermaCastingEntity(this.getSelf());
     }
     @Override
     public void updateMovesFromPacket(byte activePower){
@@ -1509,6 +1539,7 @@ public class PowersMagiciansRed extends PunchingStand {
             if (hurricaneSpecial == null) {hurricaneSpecial = new ArrayList<>();}
             cross.setCrossNumber(crossNumber);
             cross.setMaxSize(maxSize);
+            cross.fireStormCreated = isUsingFirestorm();
             hurricaneSpecial.add(cross);
 
             this.getSelf().level().addFreshEntity(cross);
@@ -1624,6 +1655,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     cross.setUser(this.self);
                     cross.setCrossNumber(5);
                     cross.setMaxSize(getChargingCrossfireSize());
+                    cross.fireStormCreated = isUsingFirestorm();
                     hurricane = cross;
                     this.getSelf().level().addFreshEntity(cross);
                 }
@@ -1705,16 +1737,17 @@ public class PowersMagiciansRed extends PunchingStand {
         if (!cancel) {
             if (this.getSelf() instanceof ServerPlayer && this.isChargingCrossfireSingle()) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
-                        PowerIndex.SKILL_2, 60);
+                        PowerIndex.SKILL_2,  multiplyCooldown(60));
             }
         }
     }
     public boolean snap(){
         this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                 this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 2.0F, 1F);
-        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway);
+        this.setCooldown(PowerIndex.SKILL_3,  multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway));
         this.snapNumber++;
         clearAllHurricanes();
+        removeFirestorm();
         return true;
     }
 
@@ -1799,22 +1832,22 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
 
-    public float getHurricaneDirectDamage(Entity entity, float size){
+    public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) (0.5+((size/60)* 6) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 6) * (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
         } else {
-            return levelupDamageMod((float) (1+(((size)/60)* 16) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnMobs*0.01)));
+            return bumpDamage(levelupDamageMod((float) (1+(((size)/60)* 16) * (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnMobs*0.01))),fireStorm);
         }
     }
-    public float getHurricaneDamage(Entity entity,  float size){
+    public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) (0.5+((size/60)* 3) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 3) * (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
         } else {
-            return levelupDamageMod((float) (1+((size/60)* 9) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnMobs*0.01)));
+            return bumpDamage(levelupDamageMod((float) (1+((size/60)* 9) * (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.magicianAttackOnMobs*0.01))),fireStorm);
         }
     }
     public float getFireballDamage(Entity entity){

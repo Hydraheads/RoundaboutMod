@@ -260,9 +260,11 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             BlockState $$10 = this.getBlockState($$6);
             if (!$$10.isCollisionShapeFullBlock(this, $$6)) {
                 if (roundabout$canSpawn(this.random)) {
+                    /**
                     float randomX = (float) ((Math.random()* 0.1) - 0.05F);
                     float randomY = (float) ((Math.random()* 0.1) - 0.05F);
                     float randomZ = (float) ((Math.random()* 0.1) - 0.05F);
+                     **/
                     Vec3 pushVec = new Vec3((this.getSharedSpawnPos().getX()-$$6.getX()),
                             0,
                             this.getSharedSpawnPos().getZ()-$$6.getZ()).normalize();

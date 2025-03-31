@@ -70,6 +70,8 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
 
     public LivingEntity standUser;
     public UUID standUserUUID;
+
+    public boolean fireStormCreated = false;
     public void setUser(LivingEntity User) {
         standUser = User;
         this.getEntityData().set(USER_ID, User.getId());
@@ -249,7 +251,7 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
             } else {
                 burst(PMR);
                 CrossfireHurricaneEntity.blastEntity(source.getEntity(), this,
-                        this.getSize(), user, true, PMR);
+                        this.getSize(), user, true, PMR,fireStormCreated);
                 this.discard();
             }
         }

@@ -57,6 +57,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
 
     public LivingEntity standUser;
     public UUID standUserUUID;
+    public boolean fireStormCreated = false;
     public int getUserID() {
         return this.getEntityData().get(USER_ID);
     }
@@ -383,15 +384,16 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
     }
 
-    public static void blastEntity(Entity gotten, Projectile proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR){
+    public static void blastEntity(Entity gotten, Projectile proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR,
+                                   boolean fireStorm){
 
         float dmg = 1;
         float strength = 0.85F;
         if (direct) {
-            dmg = PMR.getHurricaneDirectDamage(gotten, size);
+            dmg = PMR.getHurricaneDirectDamage(gotten, size,fireStorm);
             strength *= 2;
         } else {
-            dmg = PMR.getHurricaneDamage(gotten, size);
+            dmg = PMR.getHurricaneDamage(gotten, size,fireStorm);
         }
         if (gotten.hurt(ModDamageTypes.of(gotten.level(), ModDamageTypes.CROSSFIRE, user),
                 dmg)) {
@@ -427,7 +429,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
         if (gotten !=null && gotten.getId() != getUserID()) {
             int size = this.getSize();
-            blastEntity(gotten,this,size,this.standUser,direct,PMR);
+            blastEntity(gotten,this,size,this.standUser,direct,PMR,fireStormCreated);
         }
     }
 

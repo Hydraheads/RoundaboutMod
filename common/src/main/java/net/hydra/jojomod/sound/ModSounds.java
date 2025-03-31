@@ -317,6 +317,9 @@ public class ModSounds {
     public static final String FIRE_BLAST = "fire_blast";
     public static final ResourceLocation FIRE_BLAST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRE_BLAST);
     public static SoundEvent FIRE_BLAST_EVENT = SoundEvent.createVariableRangeEvent(FIRE_BLAST_ID);
+    public static final String FIRESTORM = "firestorm";
+    public static final ResourceLocation FIRESTORM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIRESTORM);
+    public static SoundEvent FIRESTORM_EVENT = SoundEvent.createVariableRangeEvent(FIRESTORM_ID);
     public static final String CROSSFIRE_SHOOT = "crossfire_shoot";
     public static final ResourceLocation CROSSFIRE_SHOOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CROSSFIRE_SHOOT);
     public static SoundEvent CROSSFIRE_SHOOT_EVENT = SoundEvent.createVariableRangeEvent(CROSSFIRE_SHOOT_ID);
