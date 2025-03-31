@@ -262,6 +262,42 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
+    public LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos, byte permacast){
+        if (!((Level) (Object) this).isClientSide) {
+            if (roundabout$PermaCastingEntities == null){
+                roundabout$PermaCastingEntities = ImmutableList.of();
+            }
+            if (!roundabout$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    LivingEntity it = $$1.get(i);
+                    if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == permacast &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                        return it;
+                    }
+                }
+            }
+        } else {
+            if (roundabout$PermaCastingEntitiesClient == null){
+                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            }
+            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    PermanentZoneCastInstance it = $$1.get(i);
+                    if (it.context == permacast &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
+                        Entity it2 = ((Level) (Object) this).getEntity(it.id);
+                        if (it2 instanceof LivingEntity){
+                            return (LivingEntity) it2;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    @Override
     public LivingEntity roundabout$inPermaCastFogRangeEntity(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
             if (roundabout$PermaCastingEntities == null){
@@ -303,6 +339,39 @@ public class PermaCastWorld implements IPermaCasting {
         return roundabout$inPermaCastFogRangeEntity(new Vec3i((int) entity.getX(),
                 (int) entity.getY(),
                 (int) entity.getZ()));
+    }
+    @Override
+    public boolean roundabout$inPermaCastRange(Vec3i pos, byte type){
+        if (!((Level) (Object) this).isClientSide) {
+            if (roundabout$PermaCastingEntities == null){
+                roundabout$PermaCastingEntities = ImmutableList.of();
+            }
+            if (!roundabout$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    LivingEntity it = $$1.get(i);
+                    if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == type &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            if (roundabout$PermaCastingEntitiesClient == null){
+                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            }
+            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    PermanentZoneCastInstance it = $$1.get(i);
+                    if (it.context == type &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
     @Override
     public boolean roundabout$inPermaCastFogRange(Vec3i pos){

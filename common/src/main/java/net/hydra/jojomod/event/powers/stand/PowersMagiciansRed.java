@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -62,6 +64,8 @@ import java.util.Objects;
 public class PowersMagiciansRed extends PunchingStand {
 
     public CrossfireHurricaneEntity hurricane;
+
+    public CrossfireHurricaneEntity bigAnkh;
     public List<CrossfireHurricaneEntity> hurricaneSpecial = new ArrayList<>();
     public static int getChargingCrossfireSpecial(){
         return 26;
@@ -75,6 +79,9 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public static int getChargingCrossfireSize(){
         return 60;
+    }
+    public static int getMassiveCrossfireSize(){
+        return 500;
     }
     public void tickPower() {
         super.tickPower();
@@ -110,6 +117,14 @@ public class PowersMagiciansRed extends PunchingStand {
             if (!this.self.level().isClientSide()) {
                 hurricaneRotation();
             }
+        }
+        if (bigAnkh != null){
+            if (bigAnkh.isRemoved()){
+                bigAnkh =null;
+            } else {
+                transformGiantHurricane(bigAnkh);
+            }
+
         }
     }
     public void addHurricaneSpecial(CrossfireHurricaneEntity che){
@@ -179,6 +194,10 @@ public class PowersMagiciansRed extends PunchingStand {
         } else if (this.activePower == PowerIndex.RANGED_BARRAGE || this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE){
             basis *= 0.5f;
         }
+
+        if (isUsingFirestorm()){
+            basis *= 0.7f;
+        }
         return super.inputSpeedModifiers(basis);
     }
 
@@ -193,6 +212,13 @@ public class PowersMagiciansRed extends PunchingStand {
             return true;
         }
         return super.cancelSprintJump();
+    }
+    public void transformGiantHurricane(CrossfireHurricaneEntity value){
+        int size = value.getSize();
+        if (size < value.getMaxSize()) {
+            size += value.getAccrualRate();
+            value.setSize(size);
+        }
     }
     public void transformHurricane(CrossfireHurricaneEntity value, int totalnumber, double entityX, double entityY, double entityZ, double rsize){
         if (value != null) {
@@ -310,7 +336,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
                 }
-                setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.NO_CD);
             } else {
                 if (secondSkillLocked){
                     if (canShootConcealedCrossfire()){
@@ -332,8 +358,16 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
                 }
-                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.NO_CD);
+                if (isUsingFirestorm()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM_END, PowerIndex.NO_CD);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
+                }
             }
+    }
+
+    public boolean isUsingFirestorm(){
+        return ((IPermaCasting) this.getSelf().level()).roundabout$isPermaCastingEntity(this.self);
     }
 
     public boolean canShootConcealedCrossfire(){
@@ -635,10 +669,22 @@ public class PowersMagiciansRed extends PunchingStand {
             inputDash = false;
         }
     }
+    public boolean hold4 = false;
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
-        if (!isChargingCrossfire() && !hasHurricaneSingle()) {
-
+        if (!isChargingCrossfire() && !hasHurricane()) {
+            if (isHoldingSneak()) {
+            } else {
+                if (keyIsDown) {
+                    if (!hold4) {
+                        hold4 = true;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
+                    }
+                } else {
+                    hold4 = false;
+                }
+            }
         }
     }
     @Override
@@ -726,8 +772,37 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.setPowerRangedBarrage();
         } else if (move == PowerIndex.RANGED_BARRAGE_2) {
             return this.setPowerRangedBarrage2();
+        } else if (move == PowerIndex.POWER_4_SNEAK){
+            return this.toggleBigAnkh();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    @Override
+    public byte getPermaCastContext(){
+        return PermanentZoneCastInstance.FIRESTORM;
+    }
+    public boolean toggleBigAnkh() {
+        if (!this.getSelf().level().isClientSide()) {
+            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+            if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+                icast.roundabout$addPermaCaster(this.getSelf());
+                if (bigAnkh == null || bigAnkh.isRemoved()){
+                    CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+                    if (cross != null) {
+                        cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                        cross.setUser(this.self);
+                        cross.setCrossNumber(6);
+                        cross.setMaxSize(getMassiveCrossfireSize());
+                        bigAnkh = cross;
+                        this.getSelf().level().addFreshEntity(cross);
+                    }
+                }
+            } else {
+                icast.roundabout$removePermaCastingEntity(this.getSelf());
+            }
+        }
+        return true;
     }
     @Override
     public void updateMovesFromPacket(byte activePower){

@@ -6,7 +6,8 @@ public class PermanentZoneCastInstance {
      * The id component of the user.
      */
     public static byte
-            FOG_FIELD = 1;
+            FOG_FIELD = 1,
+            FIRESTORM = 2;
     /**
      * The id component of the user.
      */

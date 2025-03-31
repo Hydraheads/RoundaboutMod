@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
@@ -196,23 +197,47 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             }
         }
 
-        if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        LivingEntity le = this.getStandUser();
+        if (le != null){
+            if (((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                int crossnum = this.getCrossNumber();
+                if (crossnum > 0 && crossnum < 6) {
+                    this.setDeltaMovement(Vec3.ZERO);
+                    if (client) {
 
-            if (this.getCrossNumber() > 0){
-                this.setDeltaMovement(Vec3.ZERO);
-                if (client){
+                        if (!initialized) {
+                            if (crossnum < 5) {
+                                initialized = true;
+                                PMR.addHurricaneSpecial(this);
+                            } else {
+                                PMR.hurricane = this;
+                            }
+                        }
+                    }
+                    if (!isTickable && this.getCrossNumber() <6) {
+                        return;
+                    }
 
-                    if (!initialized){
-                        if (this.getCrossNumber() < 5) {
-                            initialized = true;
-                            PMR.addHurricaneSpecial(this);
+                } else {
+                    if (crossnum == 6){
+
+                        IPermaCasting icast = ((IPermaCasting) le.level());
+                        if (!icast.roundabout$isPermaCastingEntity(le)) {
+                            this.discard();
                         } else {
-                            PMR.hurricane = this;
+                            if (!client) {
+                                if (this.getSize() < this.getMaxSize()) {
+                                    this.setDeltaMovement(0, 0.2, 0);
+                                } else {
+                                    this.setDeltaMovement(0, 0, 0);
+                                }
+                            }
                         }
                     }
                 }
-                if (!isTickable) {
-                return;
+            } else {
+                if (!client) {
+                    this.discard();
                 }
             }
         }
@@ -459,6 +484,9 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
 
     public int getAccrualRate(){
+        if (this.getCrossNumber() == 6){
+            return 10;
+        }
         return 1;
     }
     public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
@@ -485,13 +513,15 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                             PMR.transformHurricane(cfhe, totalnumber, lerpX,
                                     lerpY, lerpZ, getRenderSize());
                         }
-                    } else {
+                    } else if (cfhe.getCrossNumber() == 5){
 
                         double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
                         double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
                         double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
                         PMR.transformHurricane(cfhe, 1, lerpX,
                                 lerpY, lerpZ, getRenderSize());
+                    } else if (cfhe.getCrossNumber() == 6){
+                        PMR.transformGiantHurricane(cfhe);
                     }
                 }
             }

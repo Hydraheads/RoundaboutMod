@@ -7,9 +7,11 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SetBlockInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
@@ -22,6 +24,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.CubicSampler;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,6 +37,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.entity.EntityTickList;
@@ -244,6 +248,45 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 ci.cancel();
             }
         }
+    }
+
+    /**Here is where we generate all the lovely Magician's Red flame particles when firestorm is active*/
+
+    @Inject(method = "doAnimateTick(IIIILnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/BlockPos$MutableBlockPos;)V", at = @At(value = "TAIL"), cancellable = true)
+    private void roundabout$doAnimateTick(int $$0, int $$1, int $$2, int $$3, RandomSource $$4, Block $$5, BlockPos.MutableBlockPos $$6, CallbackInfo ci) {
+
+        LivingEntity roundabout$spawnMRTicks = (((IPermaCasting)this).roundabout$inPermaCastRangeEntity(new Vec3i($$6.getX(),$$6.getY(),$$6.getZ()), PermanentZoneCastInstance.FIRESTORM));
+        if (roundabout$spawnMRTicks != null && ((StandUser)roundabout$spawnMRTicks).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+            BlockState $$10 = this.getBlockState($$6);
+            if (!$$10.isCollisionShapeFullBlock(this, $$6)) {
+                if (roundabout$canSpawn(this.random)) {
+                    float randomX = (float) ((Math.random()* 0.1) - 0.05F);
+                    float randomY = (float) ((Math.random()* 0.1) - 0.05F);
+                    float randomZ = (float) ((Math.random()* 0.1) - 0.05F);
+                    Vec3 pushVec = new Vec3((this.getSharedSpawnPos().getX()-$$6.getX()),
+                            0,
+                            this.getSharedSpawnPos().getZ()-$$6.getZ()).normalize();
+                    /**
+                    Vec3 pushVec = new Vec3((roundabout$spawnMRTicks.getX()-$$6.getX()),
+                            (roundabout$spawnMRTicks.getY()-$$6.getY()),
+                            (roundabout$spawnMRTicks.getZ()-$$6.getZ())).normalize();
+                     **/
+                    this.addParticle(
+                            PMR.getFlameParticle(),
+                            (double)$$6.getX() + this.random.nextDouble(),
+                            (double)$$6.getY() + this.random.nextDouble(),
+                            (double)$$6.getZ() + this.random.nextDouble(),
+                            0.5*pushVec.x,
+                            0.2,
+                            0.5*pushVec.z
+                    );
+                }
+            }
+        }
+    }
+
+    public boolean roundabout$canSpawn(RandomSource $$0) {
+        return $$0.nextFloat() <= 0.01;
     }
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {

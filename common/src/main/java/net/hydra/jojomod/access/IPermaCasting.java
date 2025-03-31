@@ -17,6 +17,7 @@ public interface IPermaCasting {
     boolean roundabout$isPermaCastingEntity(LivingEntity entity);
     LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos);
     LivingEntity roundabout$inPermaCastRangeEntity(Entity entity);
+    LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos, byte permacast);
     LivingEntity roundabout$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos);
     PermanentZoneCastInstance roundabout$getPermaCastingInstanceClient(Vec3 pos);
     boolean roundabout$inPermaCastRange(Entity entity);
@@ -30,6 +31,7 @@ public interface IPermaCasting {
 
     boolean roundabout$inPermaCastFogRange(Entity entity);
     boolean roundabout$inPermaCastFogRange(Vec3i pos);
+    boolean roundabout$inPermaCastRange(Vec3i pos, byte type);
     LivingEntity roundabout$inPermaCastFogRangeEntity(Entity entity);
     LivingEntity roundabout$inPermaCastFogRangeEntity(Vec3i pos);
 }
