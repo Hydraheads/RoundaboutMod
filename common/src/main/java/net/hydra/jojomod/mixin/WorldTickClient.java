@@ -279,7 +279,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                             (double)$$6.getY() + this.random.nextDouble(),
                             (double)$$6.getZ() + this.random.nextDouble(),
                             0.5*pushVec.x,
-                            0.2,
+                            -0.2,
                             0.5*pushVec.z
                     );
                 }
