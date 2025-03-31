@@ -287,8 +287,9 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
     }
 
+    @Unique
     public boolean roundabout$canSpawn(RandomSource $$0) {
-        return $$0.nextFloat() <= 0.01;
+        return $$0.nextFloat() <= ConfigManager.getClientConfig().particleSettings.magiciansRedFirestormEmbersRate;
     }
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {

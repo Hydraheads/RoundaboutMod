@@ -59,6 +59,8 @@ public class ClientConfig {
         public Integer cfhTicksPerFlameParticle;
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer bodyBagHoldingParticlesPerFiveTicks;
+        @FloatOption(group = "inherit", value = 0.01F, min = 0, max = 1)
+        public Float magiciansRedFirestormEmbersRate;
 
     }
 
