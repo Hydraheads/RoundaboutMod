@@ -722,6 +722,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
+                    inputDash = true;
                 }
             }
         } else {
@@ -1672,16 +1673,23 @@ public class PowersMagiciansRed extends PunchingStand {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
                 groundent.setPos(this.self.position());
+                groundent.fireStormCreated = isUsingFirestorm();
                 if (this.hurricane != null){
 
                     groundent.setSize(this.hurricane.getSize());
                 }
                 this.getSelf().level().addFreshEntity(groundent);
+                if (groundHurricane != null && !groundHurricane.isRemoved()){
+                    groundHurricane.discard();
+                }
+                groundHurricane = groundent;
                 clearAllHurricanes();
             }
         }
         return true;
     }
+
+    public GroundHurricaneEntity groundHurricane = null;
 
     public boolean crossfireBlock(){
         if (canShootConcealedCrossfire()){
@@ -1695,6 +1703,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 thrownBlockOrItem.setPos(thrownBlockOrItem.position().subtract(0,this.self.getBbHeight()*0.3,0));
                 thrownBlockOrItem.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(),
                         this.getSelf().getYRot(), 0, 0.12F, 0);
+                thrownBlockOrItem.fireStormCreated = isUsingFirestorm();
                 if (this.hurricane != null){
 
                     thrownBlockOrItem.setSize(this.hurricane.getSize());
@@ -1814,6 +1823,9 @@ public class PowersMagiciansRed extends PunchingStand {
         this.snapNumber++;
         clearAllHurricanes();
         removeFirestorm();
+        if (groundHurricane != null && !groundHurricane.isRemoved()){
+            groundHurricane.discard();
+        }
         return true;
     }
 

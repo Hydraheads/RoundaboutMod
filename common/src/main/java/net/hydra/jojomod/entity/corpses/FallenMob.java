@@ -204,10 +204,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
 
 
-        float $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
         float $$2 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         if ($$0 instanceof LivingEntity) {
-            $$1 += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity)$$0).getMobType());
             $$2 += (float)EnchantmentHelper.getKnockbackBonus(this);
         }
 

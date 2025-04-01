@@ -384,7 +384,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
     }
 
-    public static void blastEntity(Entity gotten, Projectile proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR,
+    public static void blastEntity(Entity gotten, Entity proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR,
                                    boolean fireStorm){
 
         float dmg = 1;
