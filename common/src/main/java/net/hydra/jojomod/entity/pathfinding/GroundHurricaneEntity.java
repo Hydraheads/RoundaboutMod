@@ -1,0 +1,110 @@
+package net.hydra.jojomod.entity.pathfinding;
+
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.UUID;
+
+public class GroundHurricaneEntity extends PathfinderMob {
+    public GroundHurricaneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
+    public GroundHurricaneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1, LivingEntity user) {
+        super($$0, $$1);
+        this.setUser(user);
+    }
+    public static AttributeSupplier.Builder createStandAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
+                0.2F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);
+    }
+    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(GroundHurricaneEntity.class, EntityDataSerializers.INT);
+
+    public LivingEntity standUser;
+    public UUID standUserUUID;
+    public boolean fireStormCreated = false;
+    public void setUser(LivingEntity User) {
+        standUser = User;
+        this.getEntityData().set(USER_ID, User.getId());
+        if (!this.level().isClientSide()){
+            standUserUUID = User.getUUID();
+        }
+    }
+    public LivingEntity getUser(){
+        if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            return LE;
+        }
+        return null;
+    }
+    public int getUserID() {
+        return this.getEntityData().get(USER_ID);
+    }
+    @Override
+    public boolean isPickable() {
+        return false;
+    }
+
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
+    public boolean isEffectivelyInWater() {
+        return this.wasTouchingWater;
+    }
+
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(USER_ID, -1);
+    }
+    @Override
+    public void tick() {
+        boolean client = this.level().isClientSide();
+        if (!client) {
+            if (isEffectivelyInWater()) {
+                this.discard();
+            }
+            if (this.getUser() != null) {
+                if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), this.standUser.getX(), this.standUser.getZ()) > 80
+                        || !this.getUser().isAlive() || this.getUser().isRemoved()) {
+                    this.discard();
+                }
+            } else {
+                this.discard();
+            }
+        }
+        super.tick();
+        Entity $$0 = this.getUser();
+        if (!client && this.tickCount %2 == 0) {
+            if ($$0 instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                Vec3 $$2 = this.getDeltaMovement();
+                double $$3 = this.getX() + $$2.x;
+                double $$4 = this.getY() + $$2.y;
+                double $$5 = this.getZ() + $$2.z;
+                this.level().addParticle(PMR.getFlameParticle(), $$3, $$4 + 0.5, $$5, 0.0, 0.0, 0.0);
+
+                ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), $$3,
+                        $$4 + 0.5, $$5,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0.15);
+            }
+        }
+    }
+}

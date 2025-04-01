@@ -287,10 +287,13 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
     }
 
+    /**The rate of particles for magician's red embers while ankh is active*/
     @Unique
     public boolean roundabout$canSpawn(RandomSource $$0) {
         return $$0.nextFloat() <= ConfigManager.getClientConfig().particleSettings.magiciansRedFirestormEmbersRate;
     }
+
+    /**Code to tick stands on the client*/
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
@@ -302,6 +305,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
     }
 
+    /**Forcefully hold entities in place, but visually for the client*/
     @Unique
     public void roundabout$StoreOldPositionsForTS(Entity entity){
         ((IEntityAndData) entity).roundabout$setRoundaboutPrevX(entity.getX());
@@ -337,6 +341,8 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             }
         }
     }
+
+    /**When a stand is literally a passenger, allows it to still tick*/
     @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$TickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof LivingEntity LE) {

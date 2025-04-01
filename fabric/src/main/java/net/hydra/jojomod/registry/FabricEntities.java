@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
+import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -228,6 +229,13 @@ public class FabricEntities {
                         EntityType.Builder.<ConcealedFlameObjectEntity>of(ConcealedFlameObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":concealed_flame_object")
                 );
+        public static final EntityType<GroundHurricaneEntity> GROUND_HURRICANE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "ground_hurricane"),
+                        EntityType.Builder.<GroundHurricaneEntity>of(GroundHurricaneEntity::new, MobCategory.MISC).
+                                sized(0.2f, 0.2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":ground_hurricane")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -251,6 +259,7 @@ public class FabricEntities {
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
+                ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
                 ModEntities.FALLEN_SKELETON = FALLEN_SKELETON;
@@ -287,6 +296,9 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
+
+
+                FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());
 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,

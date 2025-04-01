@@ -4,6 +4,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
+import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -41,6 +42,7 @@ public class ModEntities {
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
+    public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;
     public static EntityType<OVAEnyaNPC> OVA_ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
