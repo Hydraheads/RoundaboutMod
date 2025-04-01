@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
@@ -694,7 +695,8 @@ public class PowersMagiciansRed extends PunchingStand {
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (!inputDash) {
-                if (!isChargingCrossfire() && !hasHurricaneSingle()) {
+                boolean hasSingle =isChargingCrossfireSingle() || hasHurricaneSingle();
+                if (!isChargingCrossfire() && !hasSingle) {
                     if (this.isGuarding()) {
                         if (!isLockedByWater()) {
                             if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
@@ -716,6 +718,10 @@ public class PowersMagiciansRed extends PunchingStand {
                     } else {
                         super.buttonInput3(keyIsDown, options);
                     }
+                } else if (hasSingle){
+                    this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
                 }
             }
         } else {
@@ -817,6 +823,8 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         } else if (move == PowerIndex.POWER_2_BONUS) {
             return this.shootAnkhConfirm();
+        } else if (move == PowerIndex.POWER_3_BONUS){
+            return this.buryCrossfire();
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerKickAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
@@ -1620,6 +1628,7 @@ public class PowersMagiciansRed extends PunchingStand {
         ankh.setXRot(this.getSelf().getXRot()%360);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.05F, 0);
     }
+
     public boolean shootAnkhConfirm(){
         if (!this.self.level().isClientSide()) {
             if (hasHurricaneSpecial()){
@@ -1651,6 +1660,29 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         return true;
     }
+
+    public boolean buryCrossfire(){
+        boolean hasSingle =isChargingCrossfireSingle() || hasHurricaneSingle();
+        if (hasSingle) {
+            this.animateStand((byte) 15);
+            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            this.setAttackTimeDuring(-15);
+            this.setActivePower(PowerIndex.POWER_3_BONUS);
+            if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+                GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
+                groundent.setPos(this.self.position());
+                if (this.hurricane != null){
+
+                    groundent.setSize(this.hurricane.getSize());
+                }
+                this.getSelf().level().addFreshEntity(groundent);
+                clearAllHurricanes();
+            }
+        }
+        return true;
+    }
+
     public boolean crossfireBlock(){
         if (canShootConcealedCrossfire()){
             this.animateStand((byte) 15);

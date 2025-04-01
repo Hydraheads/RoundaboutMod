@@ -2055,7 +2055,7 @@ public class StandPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.showVehicleHealth() || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
+                if (!value.showVehicleHealth() || (!value.isPickable() && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
                         || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
                 || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
                         ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value))){
@@ -2166,7 +2166,7 @@ public class StandPowers {
 
         if (entities != null){
             for (Entity value : entities) {
-                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID()){
+                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (value.isPickable() || value instanceof StandEntity)){
                     if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
                         float distanceTo = value.distanceTo(User);
                         float range = this.getReach();

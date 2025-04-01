@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -27,10 +27,24 @@ public class GroundHurricaneEntity extends PathfinderMob {
         super($$0, $$1);
         this.setUser(user);
     }
+
+    int lifeSpan = 200;
+    public GroundHurricaneEntity(Level $$1, LivingEntity user) {
+        super(ModEntities.GROUND_HURRICANE, $$1);
+        this.setUser(user);
+    }
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
                 0.2F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
+    public void setSize(int idd) {
+        this.getEntityData().set(SIZE, idd);
+    }
+    public int getSize() {
+        return this.getEntityData().get(SIZE);
+    }
+    private static final EntityDataAccessor<Integer> SIZE =
+            SynchedEntityData.defineId(GroundHurricaneEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(GroundHurricaneEntity.class, EntityDataSerializers.INT);
 
     public LivingEntity standUser;
@@ -67,10 +81,19 @@ public class GroundHurricaneEntity extends PathfinderMob {
 
 
     @Override
+    protected void registerGoals() {
+        this.addBehaviourGoals();
+    }
+    protected void addBehaviourGoals() {
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, false));
+    }
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(SIZE, 0);
         this.entityData.define(USER_ID, -1);
     }
+
     @Override
     public void tick() {
         boolean client = this.level().isClientSide();
@@ -95,15 +118,17 @@ public class GroundHurricaneEntity extends PathfinderMob {
                 double $$3 = this.getX() + $$2.x;
                 double $$4 = this.getY() + $$2.y;
                 double $$5 = this.getZ() + $$2.z;
+                float xrand = (float) (Math.random()*1 - 0.5);
+                float zrand = (float) (Math.random()*1 - 0.5);
                 this.level().addParticle(PMR.getFlameParticle(), $$3, $$4 + 0.5, $$5, 0.0, 0.0, 0.0);
 
                 ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), $$3,
-                        $$4 + 0.5, $$5,
+                        $$4 + 0.1, $$5,
                         0,
-                        0,
-                        0,
-                        0,
-                        0.15);
+                        xrand,
+                        0.5,
+                        zrand,
+                        0.1);
             }
         }
     }
