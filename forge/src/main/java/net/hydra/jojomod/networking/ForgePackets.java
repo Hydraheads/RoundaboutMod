@@ -8,14 +8,19 @@ import net.hydra.jojomod.networking.c2s.*;
 import net.hydra.jojomod.networking.s2c.*;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.Networking;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.level.LevelEvent;
 import org.joml.Vector3f;
 
 public class ForgePackets implements IPacketAccess {
@@ -118,8 +123,11 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void sendNewDynamicWorld(ServerPlayer sp, String name) {
-        ForgePacketHandler.sendToClient(new ForgeSendConfigPacket(Networking.isDedicated(), GSON.toJson(name)), sp);
+    @SuppressWarnings("deprecation") // markWorldsDirty
+    public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level) {
+        MinecraftForge.EVENT_BUS.post(new LevelEvent.Load(level));
+        level.getServer().markWorldsDirty();
+        ForgePacketHandler.sendToClient(new ForgeDynamicWorldSync(name), sp);
     }
 
     @Override

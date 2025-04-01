@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -180,7 +181,7 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void sendNewDynamicWorld(ServerPlayer sp, String name) {
+    public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level) {
         FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeUtf(name);
 

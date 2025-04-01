@@ -3,6 +3,7 @@ package net.hydra.jojomod.access;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +43,7 @@ public interface IPacketAccess {
                                    float combatOpacity, float enemyOpacity);
     void sendConfig(ServerPlayer sp);
 
-    void sendNewDynamicWorld(ServerPlayer sp, String name);
+    void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level);
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();

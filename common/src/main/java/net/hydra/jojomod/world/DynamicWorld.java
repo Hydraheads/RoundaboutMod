@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.BorderChangeListener;
 import net.minecraft.world.level.dimension.LevelStem;
 
 import java.util.ArrayList;
@@ -53,16 +54,17 @@ public class DynamicWorld {
                 false, // isDebug
                 accessor.roundabout$getObfuscatedSeed(),
                 new ArrayList<>(),
-                true, // shouldTickWorld
+                false, // shouldTickWorld
                 null
         );
 
+        server.overworld().getWorldBorder().addListener(new BorderChangeListener.DelegateBorderChangeListener(level.getWorldBorder()));
         accessor.roundabout$addWorld(LEVEL_KEY, level);
         level.tick(()->true);
 
         for (ServerPlayer sp : server.getPlayerList().getPlayers())
         {
-            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name);
+            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name, level);
         }
     }
 
