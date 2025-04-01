@@ -126,6 +126,7 @@
     "ZScreenEffectRenderer",
     "ZScreenShaking",
     "ZTimeStopTextureFreeze",
+    "ZWindowMixin",
     "ZWorldRenderer"
   ],
   "server": [

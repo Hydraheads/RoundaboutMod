@@ -1,9 +1,7 @@
 package net.hydra.jojomod.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -19,6 +17,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL20C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -88,4 +88,29 @@ public abstract class ZLevelRenderer {
             }
         }
     }
+
+    // test the shader
+//    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER, ordinal = 0))
+//    private void roundabout$renderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
+//    {
+//        if (RCoreShader.roundabout$timestopProgram == null)
+//            return;
+//
+//        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+//        RenderSystem.setShader(()-> RCoreShader.roundabout$timestopProgram);
+//        RenderSystem.depthFunc(GL20C.GL_ALWAYS);
+//        RenderSystem.depthMask(false);
+//        RenderSystem.enableBlend();
+//
+//        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+//        bufferbuilder.vertex(-0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 0).endVertex();
+//        bufferbuilder.vertex(0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 1).endVertex();
+//        bufferbuilder.vertex(0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1, 1).endVertex();
+//        bufferbuilder.vertex(-0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1, 0).endVertex();
+//        BufferUploader.drawWithShader(bufferbuilder.end());
+//
+//        RenderSystem.disableBlend();
+//        RenderSystem.depthMask(true);
+//        RenderSystem.depthFunc(GL20C.GL_LEQUAL);
+//    }
 }
