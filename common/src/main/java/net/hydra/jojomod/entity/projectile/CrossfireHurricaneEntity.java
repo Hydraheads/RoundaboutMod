@@ -503,23 +503,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
         super.addAdditionalSaveData($$0);
-        if (standUser != null) {
-            $$0.putUUID("standUser", standUser.getUUID());
-        }
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         super.readAdditionalSaveData($$0);
-        if ($$0.hasUUID("standUser")) {
-            standUserUUID = $$0.getUUID("standUser");
-            if (!this.level().isClientSide()) {
-                Entity ett = ((ServerLevel) this.level()).getEntity(standUserUUID);
-                if (ett instanceof LivingEntity lett) {
-                    standUser = lett;
-                    this.setUserID(lett.getId());
-                }
-            }
-        }
     }
     public LivingEntity getStandUser(){
         if (standUser != null){
