@@ -81,6 +81,9 @@ public class PowersMagiciansRed extends PunchingStand {
     public static int getChargingCrossfireSize(){
         return 60;
     }
+    public static int getKamikazeSize(){
+        return 100;
+    }
     public static int getMassiveCrossfireSize(){
         return 500;
     }
@@ -536,6 +539,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModSounds.MAGICIANS_RED_CRY_EVENT;
         } else if (soundChoice == CRY_2_NOISE) {
             return ModSounds.MAGICIANS_RED_CRY_2_EVENT;
+        } else if (soundChoice == CRY_3_NOISE) {
+            return ModSounds.MAGICIANS_RED_CRY_3_EVENT;
         } else if (soundChoice == RANGED_CHARGE_1) {
             return ModSounds.MAGICIANS_RED_CHARGE_EVENT;
         } else if (soundChoice == RANGED_CHARGE_2) {
@@ -735,7 +740,15 @@ public class PowersMagiciansRed extends PunchingStand {
         if (!isChargingCrossfire() && !hasHurricane()) {
             if (isHoldingSneak()) {
                 if (!isLockedByWater()) {
-
+                    if (keyIsDown) {
+                        if (!hold4) {
+                            hold4 = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
+                        }
+                    } else {
+                        hold4 = false;
+                    }
                 }
             } else {
                 if (keyIsDown) {
@@ -791,6 +804,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public static final byte LAST_HIT_1_NOISE = 120;
     public static final byte CRY_1_NOISE = 100;
     public static final byte CRY_2_NOISE = 101;
+    public static final byte CRY_3_NOISE = 107;
     public static final byte RANGED_CHARGE_1 = 102;
     public static final byte RANGED_CHARGE_2 = 104;
     public static final byte FLAMETHROWER_NOISE = 105;
@@ -840,10 +854,51 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.setPowerRangedBarrage2();
         } else if (move == PowerIndex.POWER_4_SNEAK){
             return this.toggleBigAnkh();
+        } else if (move == PowerIndex.POWER_4){
+            return this.kamikaze();
+        } else if (move == PowerIndex.POWER_4_BONUS){
+            return this.kamikazeCharge();
         }
         return super.setPowerOther(move,lastMove);
     }
 
+    public CrossfireHurricaneEntity kamikaze;
+    public boolean kamikazeCharge(){
+        this.animateStand((byte) 15);
+        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.POWER_4_BONUS);
+        if (!this.self.level().isClientSide()) {
+            playStandUserOnlySoundsIfNearby(CRY_3_NOISE, 27, false,true);
+        }
+        return true;
+    }
+    public boolean kamikaze(){
+        this.animateStand((byte) 15);
+        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.POWER_4);
+        if (!this.self.level().isClientSide()) {
+            clearEverything();
+
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+                if (cross != null) {
+                    cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                    cross.setUser(this.self);
+                    cross.setCrossNumber(7);
+                    cross.setMaxSize(getKamikazeSize());
+                    cross.setSize(getKamikazeSize());
+                    kamikaze = cross;
+                    shootAnkhSpeed(kamikaze,0.8F);
+                    this.getSelf().level().addFreshEntity(cross);
+                    this.poseStand(OffsetIndex.LOOSE);
+                }
+            }
+        }
+        return true;
+    }
     @Override
     public byte getPermaCastContext(){
         return PermanentZoneCastInstance.FIRESTORM;
@@ -975,6 +1030,18 @@ public class PowersMagiciansRed extends PunchingStand {
             updateRangedBarrage();
         } else if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_2){
             updateRangedBarrage2();
+        } else if (this.getActivePower() == PowerIndex.POWER_4_BONUS){
+
+            if (this.attackTimeDuring >= 10) {
+                if (this.self instanceof Player) {
+                    if (isPacketPlayer()) {
+                        ((StandUser) this.self).roundabout$tryPower(PowerIndex.POWER_4, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
+                    }
+                } else {
+                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.POWER_4, true);
+                }
+            }
         }
     }
     public void updateRangedBarrage(){
@@ -1625,9 +1692,12 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.canInterruptPower();
     }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
+        shootAnkhSpeed(ankh, 1.05F);
+    }
+    public void shootAnkhSpeed(CrossfireHurricaneEntity ankh, float speed){
         ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
         ankh.setXRot(this.getSelf().getXRot()%360);
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.05F, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
 
     public boolean shootAnkhConfirm(){
@@ -1820,13 +1890,17 @@ public class PowersMagiciansRed extends PunchingStand {
         this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                 this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         this.setCooldown(PowerIndex.SKILL_3,  multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianSnapFireAway));
+        clearEverything();
+        return true;
+    }
+
+    public void clearEverything(){
         this.snapNumber++;
         clearAllHurricanes();
         removeFirestorm();
         if (groundHurricane != null && !groundHurricane.isRemoved()){
             groundHurricane.discard();
         }
-        return true;
     }
 
     public boolean setFire(){

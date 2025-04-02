@@ -65,6 +65,12 @@
       "roundabout:magicians_red_cry_2"
     ]
   },
+  "magicians_red_cry_3": {
+    "subtitle": "sounds.roundabout.magicians_red_cry_3",
+    "sounds": [
+      "roundabout:magicians_red_cry_3"
+    ]
+  },
   "magicians_red_charge": {
     "subtitle": "sounds.roundabout.magicians_red_charge",
     "sounds": [

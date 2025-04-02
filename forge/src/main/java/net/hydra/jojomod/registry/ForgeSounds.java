@@ -133,6 +133,8 @@ public class ForgeSounds {
             register(ModSounds.MAGICIANS_RED_CRY, ModSounds.MAGICIANS_RED_CRY_ID);
     public static final RegistryObject<SoundEvent> MAGICIANS_RED_CRY_2_EVENT =
             register(ModSounds.MAGICIANS_RED_CRY_2, ModSounds.MAGICIANS_RED_CRY_2_ID);
+    public static final RegistryObject<SoundEvent> MAGICIANS_RED_CRY_3_EVENT =
+            register(ModSounds.MAGICIANS_RED_CRY_3, ModSounds.MAGICIANS_RED_CRY_3_ID);
     public static final RegistryObject<SoundEvent> MAGICIANS_RED_CHARGE_EVENT =
             register(ModSounds.MAGICIANS_RED_CHARGE, ModSounds.MAGICIANS_RED_CHARGE_ID);
     public static final RegistryObject<SoundEvent> FLAMETHROWER_EVENT =

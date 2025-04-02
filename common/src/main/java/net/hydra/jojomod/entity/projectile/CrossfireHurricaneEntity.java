@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -225,6 +226,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                         IPermaCasting icast = ((IPermaCasting) le.level());
                         if (!icast.roundabout$isPermaCastingEntity(le)) {
                             this.discard();
+                            return;
                         } else {
                             if (!client) {
                                 if (this.getSize() < this.getMaxSize()) {
@@ -234,11 +236,18 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                                 }
                             }
                         }
+                    } else if (crossnum == 7){
+                        StandEntity stand = ((StandUser)le).roundabout$getStand();
+                        if (stand == null){
+                            this.discard();
+                            return;
+                        }
                     }
                 }
             } else {
                 if (!client) {
                     this.discard();
+                    return;
                 }
             }
         }
@@ -275,6 +284,23 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         if (!client){
             if (isEffectivelyInWater()){
                 this.discard();
+                return;
+            }
+        }
+
+        if (le != null) {
+            if (((StandUser) this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                int crossnum = this.getCrossNumber();
+                if (crossnum == 7) {
+                    StandEntity stand = ((StandUser)le).roundabout$getStand();
+                    if (stand == null){
+                        this.discard();
+                        return;
+                    } else {
+                        stand.absMoveTo(this.getX(),this.getY(),this.getZ());
+                        stand.setXRot(this.getXRot());
+                    }
+                }
             }
         }
     }
@@ -291,7 +317,8 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (this.getCrossNumber() <= 0){
+        int crossno = this.getCrossNumber();
+        if (crossno <= 0 || crossno == 7){
             //this is where ankh go boom boom
             radialExplosion(null);
 
@@ -344,7 +371,8 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        if (this.getCrossNumber() <= 0){
+        int crossno = this.getCrossNumber();
+        if (crossno <= 0 || crossno == 7){
             Entity $$1 = $$0.getEntity();
             if (getUserID() != $$1.getId() && !($$1 instanceof MagiciansRedEntity)) {
                 if ($$1 instanceof LivingEntity LE){
