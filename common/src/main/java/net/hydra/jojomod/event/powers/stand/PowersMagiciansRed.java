@@ -89,7 +89,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public float bumpDamage(float baseDamage, boolean isActive){
         if (isActive) {
-            return baseDamage *= 1.3F;
+            return baseDamage * 1.4F;
         }
         return baseDamage;
     }

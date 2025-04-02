@@ -105,11 +105,20 @@ public class GroundHurricaneEntity extends PathfinderMob {
         if (!this.level().isClientSide()) {
             this.level().playSound(null, this.blockPosition(), ModSounds.CROSSFIRE_EXPLODE_EVENT,
                     SoundSource.PLAYERS, 2F, 1F);
-            ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
-                    this.getY()+0.5, this.getZ(),
-                    200,
-                    0.01, 0.01, 0.01,
-                    0.1);
+
+            if (fireStormCreated){
+                ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
+                        this.getY() + 0.5, this.getZ(),
+                        250,
+                        0.01, 0.01, 0.01,
+                        0.15);
+            } else {
+                ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
+                        this.getY() + 0.5, this.getZ(),
+                        200,
+                        0.01, 0.01, 0.01,
+                        0.1);
+            }
         }
     }
     @Override
