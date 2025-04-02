@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
@@ -50,6 +51,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     protected CrossfireHurricaneEntity(EntityType<? extends CrossfireHurricaneEntity> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
+    }
+    public CrossfireHurricaneEntity(LivingEntity $$1, Level $$2) {
+        this(ModEntities.CROSSFIRE_HURRICANE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
+        this.setOwner($$1);
     }
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CROSS_NUMBER = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);

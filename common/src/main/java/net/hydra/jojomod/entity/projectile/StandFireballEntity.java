@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
@@ -119,8 +121,13 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
     }
     public boolean initialized = false;
 
-    protected StandFireballEntity(EntityType<? extends StandFireballEntity> $$0, LivingEntity $$1, Level $$2) {
+    protected StandFireballEntity(EntityType<StandFireballEntity> $$0, LivingEntity $$1, Level $$2) {
         this($$0, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
+        this.setOwner($$1);
+    }
+
+    public StandFireballEntity(LivingEntity $$1, Level $$2) {
+        this(ModEntities.STAND_FIREBALL, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
 

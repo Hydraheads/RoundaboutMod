@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -920,7 +921,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
             StandEntity stand = this.getStandEntity(this.self);
             if (stand != null) {
-                CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+                CrossfireHurricaneEntity cross = new CrossfireHurricaneEntity(this.self,this.self.level());
                 if (cross != null) {
                     cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                     cross.setUser(this.self);
@@ -946,7 +947,7 @@ public class PowersMagiciansRed extends PunchingStand {
             if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 icast.roundabout$addPermaCaster(this.getSelf());
                 if (bigAnkh == null || bigAnkh.isRemoved()){
-                    CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+                    CrossfireHurricaneEntity cross = new CrossfireHurricaneEntity(this.self,this.self.level());;
                     playSoundsIfNearby(FIRESTORM, 27, false);
                     if (cross != null) {
                         cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
@@ -1124,7 +1125,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public void fireballSpitGo(){
         if (!this.self.level().isClientSide()) {
-            StandFireballEntity fireball = ModEntities.STAND_FIREBALL.create(this.getSelf().level());
+            StandFireballEntity fireball = new StandFireballEntity(this.self,this.self.level());
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIREBALL_SHOOT_EVENT, SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
             if (fireball != null) {
                 Vec3 vec3dST = this.self.getEyePosition(0).subtract(0,this.self.getEyeHeight()*0.25,0);
@@ -1678,7 +1679,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return 100;
     }
     public void generateCrossfire(int crossNumber, int maxSize){
-        CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+        CrossfireHurricaneEntity cross = new CrossfireHurricaneEntity(this.self,this.self.level());;
         if (cross != null){
             cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
             cross.setUser(this.self);
@@ -1831,7 +1832,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 1.2F);
                 playStandUserOnlySoundsIfNearby(CRY_2_NOISE, 27, false,true);
                 ticksUntilHurricaneEnds = -1;
-                CrossfireHurricaneEntity cross = ModEntities.CROSSFIRE_HURRICANE.create(this.getSelf().level());
+                CrossfireHurricaneEntity cross = new CrossfireHurricaneEntity(this.self,this.self.level());
                 if (cross != null) {
                     cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                     cross.setUser(this.self);
