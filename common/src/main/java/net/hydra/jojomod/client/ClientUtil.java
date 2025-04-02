@@ -60,6 +60,11 @@ public class ClientUtil {
             }
         } else if (context== PacketDataIndex.S2C_INT_ATD){
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
+        } else if (context == PacketDataIndex.S2C_INT_SEAL){
+            if (data > 0){
+                ((StandUser) player).roundabout$setMaxSealedTicks(data);
+                ((StandUser) player).roundabout$setSealedTicks(data);
+            }
         }
     }
 

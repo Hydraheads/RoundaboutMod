@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -172,6 +173,10 @@ public class JusticeEntity extends StandEntity {
                 user.roundabout$setMaxSealedTicks(400);
                 user.roundabout$setSealedTicks(400);
                 user.roundabout$setDrowning(true);
+                if (!this.level().isClientSide() && user instanceof Player PE){
+                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) PE),
+                            PacketDataIndex.S2C_INT_SEAL, 400);
+                }
                 user.roundabout$setActive(false);
             }
             this.discard();

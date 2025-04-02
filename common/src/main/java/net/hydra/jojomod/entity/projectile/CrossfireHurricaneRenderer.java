@@ -48,7 +48,9 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             float fsize = $$0.getRenderSize() * 0.035f;
             $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
-            this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.57f);
+            if ($$0.getCrossNumber() != 7) {
+                this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.57f);
+            }
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, 15728880);
         }

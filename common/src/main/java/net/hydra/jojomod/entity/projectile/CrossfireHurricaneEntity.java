@@ -183,6 +183,24 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         isTickable = false;
     }
     public int saneAgeTicking;
+
+    @Override
+    public void remove(RemovalReason $$0) {
+        int crossnum = this.getCrossNumber();
+        if (crossnum == 7 && !this.level().isClientSide()) {
+            LivingEntity le = this.getStandUser();
+            if (le != null) {
+                if (((StandUser) this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                    PMR.sealFromKamikaze();
+                    StandEntity stand = ((StandUser)le).roundabout$getStand();
+                    if (stand != null){
+                        stand.discard();
+                    }
+                }
+            }
+        }
+        super.remove($$0);
+    }
     public void tick() {
         boolean client = this.level().isClientSide();
         if (!client){

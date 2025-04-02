@@ -66,6 +66,7 @@ public class PacketDataIndex {
     public static final byte S2C_INT_GRAB_ITEM = 4;
     public static final byte S2C_INT_ATD = 5;
     public static final byte S2C_POWER_INVENTORY = 6;
+    public static final byte S2C_INT_SEAL = 7;
 
     /**S2C BUNDLE packets*/
     public static final byte S2C_BUNDLE_POWER_INV = 1;

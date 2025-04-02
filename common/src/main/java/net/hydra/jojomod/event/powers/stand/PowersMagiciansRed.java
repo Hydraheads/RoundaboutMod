@@ -82,7 +82,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return 60;
     }
     public static int getKamikazeSize(){
-        return 100;
+        return 120;
     }
     public static int getMassiveCrossfireSize(){
         return 500;
@@ -384,7 +384,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
                 }
-                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.SKILL_4);
             } else {
                 if (secondSkillLocked){
                     if (canShootConcealedCrossfire()){
@@ -742,9 +742,12 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (!isLockedByWater()) {
                     if (keyIsDown) {
                         if (!hold4) {
-                            hold4 = true;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
+                            if (!this.onCooldown(PowerIndex.SKILL_4)) {
+                                hold4 = true;
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
+                                this.setCooldown(PowerIndex.SKILL_4, 800);
+                            }
                         }
                     } else {
                         hold4 = false;
@@ -765,6 +768,14 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (move == PowerIndex.GUARD && this.getActivePower()==PowerIndex.POWER_4){
+            if (!this.self.level().isClientSide()){
+                if (kamikaze != null){
+                    kamikaze.setCrossNumber(0);
+                    kamikaze.discard();
+                }
+            }
+        }
         if (move == PowerIndex.SPECIAL_CHARGED){
 
             if (!this.self.level().isClientSide()){
@@ -862,14 +873,42 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.setPowerOther(move,lastMove);
     }
 
+    public void sealFromKamikaze(){
+        int sealTime = 400;
+        StandUser user = ((StandUser) this.self);
+        if (this.self instanceof Player PE && PE.isCreative() && sealTime > 20){
+            sealTime = 20;
+        }
+        user.roundabout$setMaxSealedTicks(sealTime);
+        user.roundabout$setSealedTicks(sealTime);
+
+        if (!this.self.level().isClientSide() && user instanceof Player PE){
+            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) PE),
+                    PacketDataIndex.S2C_INT_SEAL, sealTime);
+        }
+        user.roundabout$setActive(false);
+    }
+
     public CrossfireHurricaneEntity kamikaze;
     public boolean kamikazeCharge(){
         this.animateStand((byte) 15);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_4_BONUS);
+
         if (!this.self.level().isClientSide()) {
             playStandUserOnlySoundsIfNearby(CRY_3_NOISE, 27, false,true);
+
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                        stand.getY(), stand.getZ(),
+                        80,
+                        0.5,
+                        0.5,
+                        0.5,
+                        0.15);
+            }
         }
         return true;
     }
@@ -2264,6 +2303,9 @@ public class PowersMagiciansRed extends PunchingStand {
             if (canShootConcealedCrossfire() && slot == 1){
                 return false;
             }
+            return true;
+        }
+        if (activeP == PowerIndex.POWER_4){
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
