@@ -14,8 +14,6 @@ import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
-import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -500,7 +498,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public Component getSkinName(byte skinId){
-        return JusticeEntity.getSkinNameT(skinId);
+        return MagiciansRedEntity.getSkinNameT(skinId);
     }
     @Override
     public List<Byte> getSkinList(){
