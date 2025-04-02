@@ -166,34 +166,6 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
     }
     Direction tempDirection = Direction.UP;
 
-    public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state){
-
-        if ((state.isAir() || state.canBeReplaced()) && (this.getOwner() != null && !((this.getOwner() instanceof Player &&
-                (((Player) this.getOwner()).blockActionRestricted(this.getOwner().level(), pos, ((ServerPlayer)
-                        this.getOwner()).gameMode.getGameModeForPlayer()))) ||
-                !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos)))){
-
-            if (this.getItem().getItem() instanceof BlockItem) {
-                Direction direction = this.getDirection();
-                if (direction.getAxis() == Direction.Axis.X){
-                    direction = direction.getOpposite();
-                }
-                if (((BlockItem) this.getItem().getItem()).getBlock() instanceof RotatedPillarBlock){
-                    direction = $$0.getDirection();
-                }
-
-                if (((BlockItem)this.getItem().getItem()).place(new DirectionalPlaceContext(this.level(),
-                        pos,
-                        direction, this.getItem(),
-                        direction)) != InteractionResult.FAIL){
-                    this.tempDirection = direction;
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
 
     //@SuppressWarnings("deprecation")
     @Override

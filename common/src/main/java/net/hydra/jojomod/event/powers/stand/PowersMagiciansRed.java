@@ -1808,7 +1808,7 @@ public class PowersMagiciansRed extends PunchingStand {
             this.setActivePower(PowerIndex.POWER_1_BONUS);
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
-                ConcealedFlameObjectEntity thrownBlockOrItem = new ConcealedFlameObjectEntity(this.getSelf(), this.getSelf().level(), this.self.getMainHandItem());
+                ConcealedFlameObjectEntity thrownBlockOrItem = new ConcealedFlameObjectEntity(this.getSelf(), this.getSelf().level(), this.self.getMainHandItem().copy());
                 thrownBlockOrItem.setPos(thrownBlockOrItem.position().subtract(0,this.self.getBbHeight()*0.3,0));
                 thrownBlockOrItem.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(),
                         this.getSelf().getYRot(), 0, 0.12F, 0);
@@ -1818,6 +1818,8 @@ public class PowersMagiciansRed extends PunchingStand {
                     thrownBlockOrItem.setSize(this.hurricane.getSize());
                 }
                 this.getSelf().level().addFreshEntity(thrownBlockOrItem);
+
+                this.self.getMainHandItem().shrink(1);
                 clearAllHurricanes();
             }
         }
