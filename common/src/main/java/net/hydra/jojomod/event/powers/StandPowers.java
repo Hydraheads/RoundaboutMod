@@ -1019,14 +1019,17 @@ public class StandPowers {
                 damageMultipliers.bonusStandDmgByMaxLevel;
 
         if (percent > 0  && this.self instanceof Player PE && this.getMaxLevel() >= 1){
-            int level = ((IPlayerEntity) PE).roundabout$getStandLevel();
-            ItemStack sdisc = ((StandUser)PE).roundabout$getStandDisc();
-            if (!sdisc.isEmpty() && sdisc.getItem() instanceof MaxStandDiscItem){
-                level = getMaxLevel();
+            int maxlevel = getMaxLevel();
+            if (maxlevel > 1) {
+                int level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+                ItemStack sdisc = ((StandUser)PE).roundabout$getStandDisc();
+                if (!sdisc.isEmpty() && sdisc.getItem() instanceof MaxStandDiscItem){
+                    level =maxlevel;
+                }
+                    damage *= (float) (1 +
+                            ((((maxlevel - 1) - ((float) ((maxlevel - 1) - (level - 1)))) / (maxlevel - 1) *
+                                    (0.01 * percent))));
             }
-            damage *= (float) (1+
-                                ((((this.getMaxLevel()-1) - ((float) ((this.getMaxLevel()-1) - (level-1))))/(this.getMaxLevel()-1)*
-                                        (0.01*percent))));
         }
         return damage;
     }
