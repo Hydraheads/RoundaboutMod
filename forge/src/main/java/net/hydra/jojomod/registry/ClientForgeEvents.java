@@ -6,6 +6,7 @@ import net.hydra.jojomod.block.StandFireRenderer;
 import net.hydra.jojomod.entity.FogCloneRenderer;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
+import net.hydra.jojomod.entity.client.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.pathfinding.NoRenderer;
@@ -84,6 +85,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerNPCModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
 
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }

@@ -99,6 +99,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         return cooldown;
     }
+
     public void tickPower() {
         super.tickPower();
         if (!this.self.level().isClientSide()) {

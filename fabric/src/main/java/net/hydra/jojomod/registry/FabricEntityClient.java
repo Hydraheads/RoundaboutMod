@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.FogCloneRenderer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
+import net.hydra.jojomod.entity.client.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.pathfinding.NoRenderer;
@@ -89,6 +90,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEVE_LAYER, PlayerNPCModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
         BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
 }
