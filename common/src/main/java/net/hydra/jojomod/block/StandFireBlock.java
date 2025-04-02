@@ -125,8 +125,12 @@ public class StandFireBlock extends BaseEntityBlock {
     }
 
     public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
-        int color = $$0.getValue(COLOR);
-        return this.canSurvive($$0, $$3, $$4) ? this.getStateWithAge($$3, $$4, (Integer)$$0.getValue(AGE)).setValue(COLOR,color) : Blocks.AIR.defaultBlockState();
+        if ($$0.is(ModBlocks.STAND_FIRE)) {
+            int color = $$0.getValue(COLOR);
+            return this.canSurvive($$0, $$3, $$4) ? this.getStateWithAge($$3, $$4, (Integer) $$0.getValue(AGE)).setValue(COLOR, color) : Blocks.AIR.defaultBlockState();
+        } else {
+            return Blocks.AIR.defaultBlockState();
+        }
     }
 
     public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
@@ -191,16 +195,20 @@ public class StandFireBlock extends BaseEntityBlock {
             if ($$3.nextInt($$4 + 10) < 5 && !$$0.isRainingAt($$1)) {
                 if (sfb.standUser != null && ((StandUser)sfb.standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
                     int $$7 = Math.min($$4 + $$3.nextInt(5) / 4, 15);
-                    int color = sfb.getBlockState().getValue(COLOR);
-                    BlockState bs = this.getStateWithAge($$0, $$1, $$7);
-                    bs = bs.setValue(COLOR,color);
-                    $$0.setBlockAndUpdate($$1, bs);
-                    BlockEntity be = $$0.getBlockEntity($$1);
-                    if (be instanceof StandFireBlockEntity sfbe) {
-                        sfbe.snapNumber = sfb.snapNumber;
-                        sfbe.standUser = sfb.standUser;
-                        sfbe.fireColorType = sfb.fireColorType;
-                        sfbe.fireIDNumber = PM.getNewFireId();
+                    if (sfb.getBlockState().is(ModBlocks.STAND_FIRE)) {
+                        int color = sfb.getBlockState().getValue(COLOR);
+                        BlockState bs = this.getStateWithAge($$0, $$1, $$7);
+                        if (bs.is(ModBlocks.STAND_FIRE)) {
+                            bs = bs.setValue(COLOR, color);
+                            $$0.setBlockAndUpdate($$1, bs);
+                            BlockEntity be = $$0.getBlockEntity($$1);
+                            if (be instanceof StandFireBlockEntity sfbe) {
+                                sfbe.snapNumber = sfb.snapNumber;
+                                sfbe.standUser = sfb.standUser;
+                                sfbe.fireColorType = sfb.fireColorType;
+                                sfbe.fireIDNumber = PM.getNewFireId();
+                            }
+                        }
                     }
                 }
             } else {
