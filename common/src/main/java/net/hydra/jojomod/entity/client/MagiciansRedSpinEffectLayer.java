@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StandModel;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -29,9 +30,26 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class MagiciansRedSpinEffectLayer<T extends StandEntity> extends RenderLayer<T, StandModel<T>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/orange_flame_spin.png");
+    public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/blue_flame_spin.png");
+    public static final ResourceLocation TEXTURE_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/purple_flame_spin.png");
+    public static final ResourceLocation TEXTURE_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/green_flame_spin.png");
+    public static final ResourceLocation TEXTURE_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/dread_flame_spin.png");
     public static final String BOX = "box";
     private final ModelPart box;
 
+    public ResourceLocation getMRTextureLocation(MagiciansRedEntity entity) {
+        byte BT = entity.getSkin();
+        if (BT == MagiciansRedEntity.BLUE_SKIN){
+            return TEXTURE_BLUE;
+        } else if (BT == MagiciansRedEntity.PURPLE_SKIN){
+            return TEXTURE_PURPLE;
+        } else if (BT == MagiciansRedEntity.GREEN_SKIN){
+            return TEXTURE_GREEN;
+        } else if (BT == MagiciansRedEntity.DREAD_SKIN){
+            return TEXTURE_DREAD;
+        }
+        return TEXTURE;
+    }
     public MagiciansRedSpinEffectLayer(RenderLayerParent<T, StandModel<T>> $$0, EntityModelSet $$1) {
         super($$0);
         ModelPart $$2 = $$1.bakeLayer(ModEntityRendererClient.MR_SPIN_LAYER);
@@ -50,8 +68,8 @@ public class MagiciansRedSpinEffectLayer<T extends StandEntity> extends RenderLa
         if (user != null) {
             StandUser standUser = (StandUser) user;
             if (standUser.roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-                if ($$3.getOffsetType() == OffsetIndex.LOOSE) {
-                    VertexConsumer $$10 = $$1.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+                if ($$3.getOffsetType() == OffsetIndex.LOOSE && !$$3.getDisplay()) {
+                    VertexConsumer $$10 = $$1.getBuffer(RenderType.entityCutoutNoCull(getMRTextureLocation((MagiciansRedEntity) $$3)));
 
                     for (int $$11 = 0; $$11 < 3; ++$$11) {
                         $$0.pushPose();

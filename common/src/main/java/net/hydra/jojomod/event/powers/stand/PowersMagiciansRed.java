@@ -768,7 +768,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
-        if (move == PowerIndex.GUARD && this.getActivePower()==PowerIndex.POWER_4){
+        if ((move == PowerIndex.GUARD || move == PowerIndex.NONE) && this.getActivePower()==PowerIndex.POWER_4){
             if (!this.self.level().isClientSide()){
                 if (kamikaze != null){
                     kamikaze.setCrossNumber(0);
