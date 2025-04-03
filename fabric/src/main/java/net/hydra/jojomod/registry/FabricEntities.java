@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -194,6 +195,13 @@ public class FabricEntities {
                         EntityType.Builder.<CrossfireHurricaneEntity>of(CrossfireHurricaneEntity::new, MobCategory.MISC).
                                 sized(1.5f, 1.5f).clientTrackingRange(15).build(Roundabout.MOD_ID+":crossfire_hurricane")
                 );
+        public static final EntityType<LifeTrackerEntity> LIFE_TRACKER =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "life_tracker"),
+                        EntityType.Builder.<LifeTrackerEntity>of(LifeTrackerEntity::new, MobCategory.MISC).
+                                sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":life_tracker")
+                );
         public static final EntityType<StandFireballEntity> STAND_FIREBALL =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -252,6 +260,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
                 ModEntities.CROSSFIRE_HURRICANE = CROSSFIRE_HURRICANE;
+                ModEntities.LIFE_TRACKER = LIFE_TRACKER;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;

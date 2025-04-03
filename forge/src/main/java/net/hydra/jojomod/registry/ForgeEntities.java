@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -162,6 +163,12 @@ public class ForgeEntities {
                     EntityType.Builder.<CrossfireHurricaneEntity>of(CrossfireHurricaneEntity::new, MobCategory.MISC).sized(1.5f, 1.5f).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "crossfire_hurricane").toString())
+            );
+    public static final RegistryObject<EntityType<LifeTrackerEntity>> LIFE_TRACKER =
+            ENTITY_TYPES.register("life_tracker", () ->
+                    EntityType.Builder.<LifeTrackerEntity>of(LifeTrackerEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "life_tracker").toString())
             );
     public static final RegistryObject<EntityType<StandFireballEntity>> STAND_FIREBALL =
             ENTITY_TYPES.register("stand_fireball", () ->

@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
@@ -384,7 +385,11 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
                 }
-                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.SKILL_4);
+                if (this.isGuarding()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.LIFE_TRACKER, PowerIndex.NO_CD);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.SKILL_4);
+                }
             } else {
                 if (secondSkillLocked){
                     if (canShootConcealedCrossfire()){
@@ -406,7 +411,9 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
                 }
-                if (isUsingFirestorm()) {
+                if (this.isGuarding()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.LIFE_TRACKER, PowerIndex.NO_CD);
+                } else if (isUsingFirestorm()) {
                     setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM_END, PowerIndex.NO_CD);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
@@ -1799,6 +1806,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public GroundHurricaneEntity groundHurricane = null;
+    public LifeTrackerEntity tracker = null;
 
     public boolean crossfireBlock(){
         if (canShootConcealedCrossfire()){

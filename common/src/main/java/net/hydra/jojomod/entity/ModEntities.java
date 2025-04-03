@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -33,6 +34,7 @@ public class ModEntities {
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;
     public static EntityType<CrossfireHurricaneEntity> CROSSFIRE_HURRICANE;
+    public static EntityType<LifeTrackerEntity> LIFE_TRACKER;
     public static EntityType<StandFireballEntity> STAND_FIREBALL;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
