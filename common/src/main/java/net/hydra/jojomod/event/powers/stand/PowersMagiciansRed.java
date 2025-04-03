@@ -1202,6 +1202,9 @@ public class PowersMagiciansRed extends PunchingStand {
     public void lassoImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            if (entity instanceof LivingEntity LE){
+                ((StandUser)LE).roundabout$setBoundTo(this.self);
+            }
             knockShield2(entity, 100);
         }
 

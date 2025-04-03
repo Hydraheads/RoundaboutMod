@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +25,15 @@ public interface StandUser {
 
     int roundabout$getDetectTicks();
     void roundabout$setDetectTicks(int life);
+    Entity roundabout$getBoundTo();
+    void roundabout$setBoundTo(Entity $$0);
+    int roundabout$getBoundToID();
+
+    void roundabout$setBoundToID(int bound);
+    boolean roundabout$isStringBound();
+    boolean roundabout$canBeBound(Player $$0);
+    void roundabout$dropString();
+    void roundabout$tickString();
 
     void roundabout$updateStandOutPosition(StandEntity passenger, Entity.MoveFunction positionUpdater);
     void roundabout$removeStandOut();

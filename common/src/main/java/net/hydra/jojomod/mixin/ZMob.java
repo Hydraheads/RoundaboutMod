@@ -69,6 +69,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public boolean roundabout$isWorthy() {
         return this.getEntityData().get(ROUNDABOUT$IS_WORTHY);
     }
+
+    @Override
+    @Unique
+    public GoalSelector roundabout$getGoalSelector() {
+        return goalSelector;
+    }
     @Override
     @Unique
     public void roundabout$setWorthy(boolean $$0) {

@@ -28,6 +28,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -45,6 +46,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
@@ -209,6 +211,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$BLEED_LEVEL = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_BOUND_TO = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
@@ -553,6 +558,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    @javax.annotation.Nullable
+    private Entity roundabout$stringHolder;
+
+    @Unique
     @Override
     public int roundabout$getDetectTicks(){
         return roundabout$detectTicks;
@@ -562,6 +571,111 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setDetectTicks(int life){
         roundabout$detectTicks = life;
     }
+
+    @Unique
+    @Override
+    public boolean roundabout$canBeBound(Player $$0) {
+        return !this.roundabout$isStringBound() && !(this instanceof Enemy);
+    }
+    @Unique
+    @Override
+    public void roundabout$tickString() {
+        if (!this.level().isClientSide) {
+            if (this.roundabout$stringHolder != null) {
+                if (!this.isAlive() || !roundabout$stringHolder.isAlive()|| roundabout$stringHolder.level() != this.level()) {
+                    roundabout$dropString();
+                } else {
+                    LivingEntity live = ((LivingEntity)(Object)this);
+                    if (live instanceof Mob mb){
+                        mb.restrictTo(roundabout$stringHolder.blockPosition(), 5);
+                    }
+                    float f = this.distanceTo(roundabout$stringHolder);
+                    if (live instanceof TamableAnimal tm && tm.isInSittingPose()) {
+                        if (f > 10.0F) {
+                            this.roundabout$dropString();
+                        }
+
+                        return;
+                    }
+
+                    if (f > 10.0F) {
+                        this.roundabout$dropString();
+                        if (live instanceof Mob mb) {
+                            ((IMob)mb).roundabout$getGoalSelector().disableControlFlag(Goal.Flag.MOVE);
+                        }
+                    } else if (f > 6.0F) {
+                        double d0 = (roundabout$stringHolder.getX() - this.getX()) / (double)f;
+                        double d1 = (roundabout$stringHolder.getY() - this.getY()) / (double)f;
+                        double d2 = (roundabout$stringHolder.getZ() - this.getZ()) / (double)f;
+                        this.setDeltaMovement(this.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.4D, d0), Math.copySign(d1 * d1 * 0.4D, d1), Math.copySign(d2 * d2 * 0.4D, d2)));
+                        this.checkSlowFallDistance();
+                    } else {
+                        if (live instanceof Mob mb) {
+                            ((IMob)mb).roundabout$getGoalSelector().enableControlFlag(Goal.Flag.MOVE);
+                            float f1 = 2.0F;
+                            Vec3 vec3 = (new Vec3(roundabout$stringHolder.getX() - this.getX(),
+                                    roundabout$stringHolder.getY() - this.getY(),
+                                    roundabout$stringHolder.getZ() - this.getZ())).normalize().scale((double) Math.max(f - 2.0F, 0.0F));
+                            float speed = 1;
+                            mb.getNavigation().moveTo(this.getX() + vec3.x, this.getY() + vec3.y, this.getZ() + vec3.z, speed);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$dropString() {
+        roundabout$setBoundTo(null);
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$isStringBound() {
+        return roundabout$getBoundTo() != null;
+    }
+
+    @Unique
+    @Override
+    @javax.annotation.Nullable
+    public Entity roundabout$getBoundTo() {
+        if (this.roundabout$getBoundToID() != 0 && this.level().isClientSide) {
+            this.roundabout$stringHolder = this.level().getEntity(this.roundabout$getBoundToID());
+        }
+
+        return this.roundabout$stringHolder;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setBoundToID(int bound) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$IS_BOUND_TO, bound);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getBoundToID() {
+            return this.getEntityData().get(ROUNDABOUT$IS_BOUND_TO);
+    }
+    @Unique
+    @Override
+    public void roundabout$setBoundTo(Entity $$0) {
+        if ($$0 != null){
+            this.roundabout$stringHolder = $$0;
+            roundabout$setBoundToID($$0.getId());
+
+            if (this.isPassenger()) {
+                this.stopRiding();
+            }
+        } else {
+
+            this.roundabout$stringHolder = null;
+            roundabout$setBoundToID(-1);
+        }
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
         //if (StandID > -1) {
@@ -845,13 +959,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
-    public void roundabout$setBleedLevel(int bleedLevel) {
-        if (!(this.level().isClientSide)) {
-            this.getEntityData().set(ROUNDABOUT$BLEED_LEVEL, bleedLevel);
-        }
-    }
-    @Unique
-    @Override
     public void roundabout$setOnlyBleeding(boolean only) {
         if (!(this.level().isClientSide)) {
             this.getEntityData().set(ROUNDABOUT$ONLY_BLEEDING, only);
@@ -874,6 +981,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return this.getEntityData().get(ROUNDABOUT$ON_STAND_FIRE);
         } else {
             return 0;
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setBleedLevel(int bleedLevel) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$BLEED_LEVEL, bleedLevel);
         }
     }
     @Unique
@@ -1569,6 +1683,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ON_STAND_FIRE, (byte) 0);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
+        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
         ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
@@ -2144,6 +2259,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tickTail(CallbackInfo ci) {
         ((IEntityAndData)this).roundabout$tickQVec();
+        roundabout$tickString();
     }
 
     @Shadow
