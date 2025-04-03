@@ -28,6 +28,30 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
             "textures/entity/life_detector/life_detector_2.png");
     private static final ResourceLocation MAIN_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/life_detector/life_detector_3.png");
+    private static final ResourceLocation BLUE_TRACKER_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/blue_detector.png");
+    private static final ResourceLocation BLUE_TRACKER_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/blue_detector_2.png");
+    private static final ResourceLocation BLUE_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/blue_detector_3.png");
+    private static final ResourceLocation PURPLE_TRACKER_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/purple_detector.png");
+    private static final ResourceLocation PURPLE_TRACKER_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/purple_detector_2.png");
+    private static final ResourceLocation PURPLE_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/purple_detector_3.png");
+    private static final ResourceLocation GREEN_TRACKER_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/green_detector.png");
+    private static final ResourceLocation GREEN_TRACKER_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/green_detector_2.png");
+    private static final ResourceLocation GREEN_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/green_detector_3.png");
+    private static final ResourceLocation DREAD_TRACKER_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/dread_detector.png");
+    private static final ResourceLocation DREAD_TRACKER_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/dread_detector_2.png");
+    private static final ResourceLocation DREAD_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/dread_detector_3.png");
     private final LifeTrackerModel<LifeTrackerEntity> model;
 
     public LifeTrackerRenderer(EntityRendererProvider.Context p_174100_) {
@@ -57,9 +81,13 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
         if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
+                return BLUE_TRACKER_3;
             } else if (sft == StandFireType.PURPLE.id){
+                return PURPLE_TRACKER_3;
             } else if (sft == StandFireType.GREEN.id){
+                return GREEN_TRACKER_3;
             } else if (sft == StandFireType.DREAD.id){
+                return DREAD_TRACKER_3;
             }
         }
         return MAIN_TRACKER_3;
@@ -69,9 +97,13 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
         if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
+                return BLUE_TRACKER_1;
             } else if (sft == StandFireType.PURPLE.id){
+                return PURPLE_TRACKER_1;
             } else if (sft == StandFireType.GREEN.id){
+                return GREEN_TRACKER_1;
             } else if (sft == StandFireType.DREAD.id){
+                return DREAD_TRACKER_1;
             }
         }
         return MAIN_TRACKER_1;
@@ -81,9 +113,13 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
         if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
+                return BLUE_TRACKER_2;
             } else if (sft == StandFireType.PURPLE.id){
+                return PURPLE_TRACKER_2;
             } else if (sft == StandFireType.GREEN.id){
+                return GREEN_TRACKER_2;
             } else if (sft == StandFireType.DREAD.id){
+                return DREAD_TRACKER_2;
             }
         }
         return MAIN_TRACKER_2;

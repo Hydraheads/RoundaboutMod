@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -38,7 +39,8 @@ public class LifeTrackerEntity extends LivingEntity {
             }
             if (user != null) {
                 if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), user.getX(), user.getZ()) > 80
-                        || !user.isAlive() || user.isRemoved()) {
+                        || !user.isAlive() || user.isRemoved() || !(((StandUser)user).roundabout$getStandPowers()
+                instanceof PowersMagiciansRed)) {
                     this.discard();
                     return;
                 }
