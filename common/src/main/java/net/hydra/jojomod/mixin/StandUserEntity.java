@@ -650,9 +650,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void roundabout$setBoundToID(int bound) {
-        if (!(this.level().isClientSide)) {
             this.getEntityData().set(ROUNDABOUT$IS_BOUND_TO, bound);
-        }
     }
     @Unique
     @Override

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -103,6 +104,8 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public void tickPower() {
         super.tickPower();
+
+        offloadLead();
         if (!this.self.level().isClientSide()) {
             if (ticksUntilHurricaneEnds > -1) {
                 ticksUntilHurricaneEnds--;
@@ -654,10 +657,11 @@ public class PowersMagiciansRed extends PunchingStand {
                                         }
                                     }
                                 } else {
-
-                                    if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                    if (!this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != PowerIndex.POWER_1) {
+                                        if (leaded == null){
                                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                                        }
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                                     }
                                 }
                             } else {
@@ -809,7 +813,7 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
 
-        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1 && move != PowerIndex.POWER_1) {
             this.stopSoundsIfNearby(BIND_CHARGE_NOISE, 100,true);
         }
 
@@ -915,13 +919,26 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.setPowerOther(move,lastMove);
     }
 
+    public void offloadLead(){
+        if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).roundabout$isStringBound()) || !(((StandUser)leaded).roundabout$getBoundTo().is(this.self)))){
+            leaded = null;
+            Roundabout.LOGGER.info("oops");
+        }
+    }
+
     public boolean redBindCharge() {
-        this.animateStand((byte) 15);
-        this.poseStand(OffsetIndex.GUARD);
-        this.setAttackTimeDuring(0);
-        this.setActivePower(PowerIndex.POWER_1);
-        if (!this.getSelf().level().isClientSide()) {
-            playSoundsIfNearby(BIND_CHARGE_NOISE, 27, false);
+        offloadLead();
+        if (leaded != null){
+            ((StandUser)leaded).roundabout$dropString();
+            leaded = null;
+        } else {
+            this.animateStand((byte) 15);
+            this.poseStand(OffsetIndex.GUARD);
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1);
+            if (!this.getSelf().level().isClientSide()) {
+                playSoundsIfNearby(BIND_CHARGE_NOISE, 27, false);
+            }
         }
         return true;
     }
@@ -966,6 +983,7 @@ public class PowersMagiciansRed extends PunchingStand {
         user.roundabout$setActive(false);
     }
 
+    public LivingEntity leaded;
     public CrossfireHurricaneEntity kamikaze;
     public boolean kamikazeCharge(){
         this.animateStand((byte) 15);
@@ -1178,13 +1196,21 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
 
+
+
+
     public void lasso(){
         /*By setting this to -10, there is a delay between the stand retracting*/
 
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId2(4), PacketDataIndex.INT_STAND_ATTACK);
+                Entity ent = getTargetEntity(this.self, 4);
+                if (ent instanceof LivingEntity LE) {
+                    leaded = LE;
+                    ((StandUser)LE).roundabout$setBoundTo(this.self);
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(LE.getId(), PacketDataIndex.INT_STAND_ATTACK);
+                }
             }
         } else {
             /*Caps how far out the punch goes*/
@@ -1198,6 +1224,7 @@ public class PowersMagiciansRed extends PunchingStand {
         if (entity != null) {
             if (entity instanceof LivingEntity LE){
                 ((StandUser)LE).roundabout$setBoundTo(this.self);
+                leaded = LE;
             }
             knockShield2(entity, 100);
         }
@@ -2287,24 +2314,31 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean setPowerAttack(){
-        if (this.activePowerPhase >= 3){
-            this.activePowerPhase = 1;
+        offloadLead();
+        if (leaded != null){
+
         } else {
-            this.activePowerPhase++;
-            if (this.activePowerPhase == 3) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianLastLashInString;
+
+
+            if (this.activePowerPhase >= 3) {
+                this.activePowerPhase = 1;
             } else {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianLash;
+                this.activePowerPhase++;
+                if (this.activePowerPhase == 3) {
+                    this.attackTimeMax = ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianLastLashInString;
+                } else {
+                    this.attackTimeMax = ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianLash;
+                }
+
             }
 
+            this.attackTimeDuring = 0;
+            this.setActivePower(PowerIndex.ATTACK);
+            this.setAttackTime(0);
+
+            animateStand(this.activePowerPhase);
+            poseStand(OffsetIndex.ATTACK);
         }
-
-        this.attackTimeDuring = 0;
-        this.setActivePower(PowerIndex.ATTACK);
-        this.setAttackTime(0);
-
-        animateStand(this.activePowerPhase);
-        poseStand(OffsetIndex.ATTACK);
         return true;
     }
     public boolean setPowerRangedBarrageCharge() {
