@@ -382,7 +382,12 @@ public class PowersMagiciansRed extends PunchingStand {
                     setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE_SPECIAL, PowerIndex.SKILL_2_SNEAK);
                 }
                 if (candoNumber1) {
-                    setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
+
+                    if (this.isGuarding()) {
+                        setSkillIcon(context, x, y, 1, StandIcons.LIFE_TRACKER, PowerIndex.NO_CD);
+                    } else {
+                        setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
+                    }
                 }
                 if (this.isGuarding()) {
                     setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
@@ -391,11 +396,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.SNAP_ICON, PowerIndex.SKILL_3);
                 }
-                if (this.isGuarding()) {
-                    setSkillIcon(context, x, y, 4, StandIcons.LIFE_TRACKER, PowerIndex.NO_CD);
-                } else {
-                    setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.SKILL_4);
-                }
+                setSkillIcon(context, x, y, 4, StandIcons.FIRE_SLAM, PowerIndex.SKILL_4);
             } else {
                 if (secondSkillLocked){
                     if (canShootConcealedCrossfire()){
@@ -407,7 +408,12 @@ public class PowersMagiciansRed extends PunchingStand {
                     setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE, PowerIndex.SKILL_2);
                 }
                 if (candoNumber1) {
-                    setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.SKILL_1);
+
+                    if (this.isGuarding()) {
+                        setSkillIcon(context, x, y, 1, StandIcons.LIFE_TRACKER, PowerIndex.NO_CD);
+                    } else {
+                        setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.SKILL_1);
+                    }
                 }
 
                 if (this.isGuarding()){
@@ -417,9 +423,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
                 }
-                if (this.isGuarding()) {
-                    setSkillIcon(context, x, y, 4, StandIcons.LIFE_TRACKER, PowerIndex.NO_CD);
-                } else if (isUsingFirestorm()) {
+                if (isUsingFirestorm()) {
                     setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM_END, PowerIndex.NO_CD);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
@@ -656,6 +660,9 @@ public class PowersMagiciansRed extends PunchingStand {
                                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                                     }
                                 }
+                            } else {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BLOCK);
                             }
                         }
                     }
@@ -763,20 +770,7 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
         if (!isChargingCrossfire() && !hasHurricane()) {
-            if (this.isGuarding()) {
-                if (!isLockedByWater()) {
-                    if (keyIsDown) {
-                        if (!hold4) {
-                            hold4 = true;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BLOCK, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BLOCK);
-                            this.setCooldown(PowerIndex.SKILL_4, 800);
-                        }
-                    } else {
-                        hold4 = false;
-                    }
-                }
-            } else if (isHoldingSneak()) {
+            if (isHoldingSneak()) {
                 if (!isLockedByWater()) {
                     if (keyIsDown) {
                         if (!hold4) {
@@ -913,7 +907,7 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.kamikaze();
         } else if (move == PowerIndex.POWER_4_BONUS){
             return this.kamikazeCharge();
-        } else if (move == PowerIndex.POWER_4_BLOCK){
+        } else if (move == PowerIndex.POWER_1_BLOCK){
             return this.toggleLifeTracker();
         } else if (move == PowerIndex.POWER_1){
             return this.redBindCharge();
@@ -936,7 +930,7 @@ public class PowersMagiciansRed extends PunchingStand {
         this.animateStand((byte) 15);
         this.poseStand(OffsetIndex.GUARD);
         this.setAttackTimeDuring(-15);
-        this.setActivePower(PowerIndex.POWER_4_BLOCK);
+        this.setActivePower(PowerIndex.POWER_1_BLOCK);
         if (!this.getSelf().level().isClientSide()) {
             if (tracker == null || tracker.isRemoved()){
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
