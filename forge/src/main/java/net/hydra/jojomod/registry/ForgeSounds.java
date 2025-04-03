@@ -145,6 +145,8 @@ public class ForgeSounds {
             register(ModSounds.FIREBALL_SHOOT, ModSounds.FIREBALL_SHOOT_ID);
     public static final RegistryObject<SoundEvent> STAND_FIREBALL_HIT =
             register(ModSounds.FIREBALL_HIT, ModSounds.FIREBALL_HIT_ID);
+    public static final RegistryObject<SoundEvent> LASSO =
+            register(ModSounds.LASSO, ModSounds.LASSO_ID);
     public static final RegistryObject<SoundEvent> FIRE_STRIKE_EVENT =
             register(ModSounds.FIRE_STRIKE, ModSounds.FIRE_STRIKE_ID);
     public static final RegistryObject<SoundEvent> FIRE_STRIKE_LAST_EVENT =

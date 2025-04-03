@@ -107,6 +107,12 @@
       "roundabout:snap"
     ]
   },
+  "lasso": {
+    "subtitle": "sounds.roundabout.lasso",
+    "sounds": [
+      "roundabout:lasso"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [

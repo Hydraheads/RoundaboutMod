@@ -347,6 +347,9 @@ public class ModSounds {
     public static final String FIREBALL_HIT = "fireball_hit";
     public static final ResourceLocation FIREBALL_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FIREBALL_HIT);
     public static SoundEvent FIREBALL_HIT_EVENT = SoundEvent.createVariableRangeEvent(FIREBALL_HIT_ID);
+    public static final String LASSO = "lasso";
+    public static final ResourceLocation LASSO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LASSO);
+    public static SoundEvent LASSO_EVENT = SoundEvent.createVariableRangeEvent(LASSO_ID);
     public static final String FLAMETHROWER = "flamethrower";
     public static final ResourceLocation FLAMETHROWER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLAMETHROWER);
     public static SoundEvent FLAMETHROWER_EVENT = SoundEvent.createVariableRangeEvent(FLAMETHROWER_ID);

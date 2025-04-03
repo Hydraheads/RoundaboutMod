@@ -13,7 +13,6 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -24,6 +23,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -242,6 +242,12 @@ public class PowersMagiciansRed extends PunchingStand {
             basis *= 0.75f;
         } else if (this.activePower == PowerIndex.RANGED_BARRAGE || this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE){
             basis *= 0.5f;
+        } else if (this.getActivePower()==PowerIndex.POWER_1){
+            if (this.getSelf().isCrouching()){
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1/f;
+                basis *= g;
+            }
         }
 
         if (isUsingFirestorm()){
@@ -401,7 +407,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     setSkillIcon(context, x, y, 2, StandIcons.CROSSFIRE_HURRICANE, PowerIndex.SKILL_2);
                 }
                 if (candoNumber1) {
-                    setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.NO_CD);
+                    setSkillIcon(context, x, y, 1, StandIcons.RED_BIND, PowerIndex.SKILL_1);
                 }
 
                 if (this.isGuarding()){
@@ -495,7 +501,11 @@ public class PowersMagiciansRed extends PunchingStand {
             int ClashTime = Math.round(((float) attackTimeDuring / getRangedBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-
+        } else if (this.getActivePower() == PowerIndex.POWER_1){
+            Entity TE = this.getTargetEntity(playerEntity, 4F);
+            if (TE != null) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
         } else {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
@@ -556,6 +566,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModSounds.FLAMETHROWER_EVENT;
         } else if (soundChoice == FIRESTORM) {
             return ModSounds.FIRESTORM_EVENT;
+        }  else if (soundChoice == BIND_CHARGE_NOISE) {
+            return ModSounds.IMPALE_CHARGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -636,6 +648,12 @@ public class PowersMagiciansRed extends PunchingStand {
                                             ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
                                             ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
                                         }
+                                    }
+                                } else {
+
+                                    if (!this.onCooldown(PowerIndex.SKILL_1)) {
+                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                                     }
                                 }
                             }
@@ -796,6 +814,11 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
             }
         }
+
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1) {
+            this.stopSoundsIfNearby(BIND_CHARGE_NOISE, 100,true);
+        }
+
         if (move == PowerIndex.SPECIAL_CHARGED){
 
             if (!this.self.level().isClientSide()){
@@ -835,11 +858,12 @@ public class PowersMagiciansRed extends PunchingStand {
     public static final byte LAST_HIT_1_NOISE = 120;
     public static final byte CRY_1_NOISE = 100;
     public static final byte CRY_2_NOISE = 101;
-    public static final byte CRY_3_NOISE = 107;
     public static final byte RANGED_CHARGE_1 = 102;
     public static final byte RANGED_CHARGE_2 = 104;
     public static final byte FLAMETHROWER_NOISE = 105;
     public static final byte FIRESTORM = 106;
+    public static final byte CRY_3_NOISE = 107;
+    public static final byte BIND_CHARGE_NOISE = 108;
 
     @Override
     public boolean canLightFurnace(){
@@ -891,9 +915,23 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.kamikazeCharge();
         } else if (move == PowerIndex.POWER_4_BLOCK){
             return this.toggleLifeTracker();
+        } else if (move == PowerIndex.POWER_1){
+            return this.redBindCharge();
         }
         return super.setPowerOther(move,lastMove);
     }
+
+    public boolean redBindCharge() {
+        this.animateStand((byte) 15);
+        this.poseStand(OffsetIndex.GUARD);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.POWER_1);
+        if (!this.getSelf().level().isClientSide()) {
+            playSoundsIfNearby(BIND_CHARGE_NOISE, 27, false);
+        }
+        return true;
+    }
+
     public boolean toggleLifeTracker() {
         this.animateStand((byte) 15);
         this.poseStand(OffsetIndex.GUARD);
@@ -1126,8 +1164,64 @@ public class PowersMagiciansRed extends PunchingStand {
                     ((StandUser) this.self).roundabout$tryPower(PowerIndex.POWER_4, true);
                 }
             }
+        } else if (this.getActivePower() == PowerIndex.POWER_1){
+            updateRedBindCharge();
         }
     }
+    public void updateRedBindCharge(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 24) {
+                this.lasso();
+            } else {
+                if (!this.getSelf().level().isClientSide()) {
+                    if(this.attackTimeDuring%4==0) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                                this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
+                                1, 0.2, 0.2, 0.2, 0.05);
+                    }
+                }
+            }
+        }
+    }
+
+    public void lasso(){
+        /*By setting this to -10, there is a delay between the stand retracting*/
+
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                this.setAttackTimeDuring(-20);
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId2(4), PacketDataIndex.INT_STAND_ATTACK);
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+            Entity targetEntity = getTargetEntity(this.self,4);
+            lassoImpact(targetEntity);
+        }
+    }
+
+    public void lassoImpact(Entity entity){
+        this.setAttackTimeDuring(-20);
+        if (entity != null) {
+            knockShield2(entity, 100);
+        }
+
+        if (this.getSelf() instanceof Player) {
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 40);
+        }
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.impaleAttack);
+        SoundEvent SE;
+        float pitch = 1F;
+        if (entity != null) {
+            SE = ModSounds.LASSO_EVENT;
+        } else {
+            SE = ModSounds.PUNCH_2_SOUND_EVENT;
+        }
+
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
+    }
+
     public void updateRangedBarrage(){
 
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
@@ -1572,6 +1666,8 @@ public class PowersMagiciansRed extends PunchingStand {
             kickAttackImpact(target);
         } else if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_2){
             rangedBarrageImpact(target,false);
+        } else if (this.getActivePower() == PowerIndex.POWER_1){
+            lassoImpact(target);
         }
     }
     @Override
@@ -1772,8 +1868,15 @@ public class PowersMagiciansRed extends PunchingStand {
         if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE) {
             return true;
+        } else if (this.getActivePower() == PowerIndex.POWER_1) {
+            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFail;
+            if (this.getSelf() instanceof Player) {
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
+            }
+            this.setCooldown(PowerIndex.SKILL_1, cdr);
+            return true;
         }
-        return super.canInterruptPower();
+            return super.canInterruptPower();
     }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         shootAnkhSpeed(ankh, 1.05F);

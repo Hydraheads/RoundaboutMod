@@ -218,6 +218,8 @@ import java.util.Set;
         public Integer magicianLash;
         @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
         public Integer magicianLastLashInString;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer magicianRedBindFail;
         @IntOption(group = "inherit", value = 6000, min = 0, max = 72000)
         public Integer d4cDimensionHopToNewDimension;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)

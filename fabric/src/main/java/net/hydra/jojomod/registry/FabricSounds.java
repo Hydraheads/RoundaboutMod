@@ -71,6 +71,7 @@ public class FabricSounds {
         addSound(ModSounds.STAND_FLAME_HIT_ID, ModSounds.STAND_FLAME_HIT_EVENT);
         addSound(ModSounds.FIREBALL_SHOOT_ID, ModSounds.FIREBALL_SHOOT_EVENT);
         addSound(ModSounds.FIREBALL_HIT_ID, ModSounds.FIREBALL_HIT_EVENT);
+        addSound(ModSounds.LASSO_ID, ModSounds.LASSO_EVENT);
 
         addSound(ModSounds.LEVELUP_ID, ModSounds.LEVELUP_EVENT);
 
