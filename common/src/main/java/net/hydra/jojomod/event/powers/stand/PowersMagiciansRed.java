@@ -745,7 +745,20 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
         if (!isChargingCrossfire() && !hasHurricane()) {
-            if (isHoldingSneak()) {
+            if (this.isGuarding()) {
+                if (!isLockedByWater()) {
+                    if (keyIsDown) {
+                        if (!hold4) {
+                            hold4 = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BLOCK, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BLOCK);
+                            this.setCooldown(PowerIndex.SKILL_4, 800);
+                        }
+                    } else {
+                        hold4 = false;
+                    }
+                }
+            } else if (isHoldingSneak()) {
                 if (!isLockedByWater()) {
                     if (keyIsDown) {
                         if (!hold4) {
@@ -876,10 +889,35 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.kamikaze();
         } else if (move == PowerIndex.POWER_4_BONUS){
             return this.kamikazeCharge();
+        } else if (move == PowerIndex.POWER_4_BLOCK){
+            return this.toggleLifeTracker();
         }
         return super.setPowerOther(move,lastMove);
     }
-
+    public boolean toggleLifeTracker() {
+        this.animateStand((byte) 15);
+        this.poseStand(OffsetIndex.GUARD);
+        this.setAttackTimeDuring(-15);
+        this.setActivePower(PowerIndex.POWER_4_BLOCK);
+        if (!this.getSelf().level().isClientSide()) {
+            if (tracker == null || tracker.isRemoved()){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                LifeTrackerEntity cross = ModEntities.LIFE_TRACKER.create(this.getSelf().level());
+                if (cross != null) {
+                    tracker = cross;
+                    cross.absMoveTo(this.self.getX(), this.self.getY()+(this.self.getBbHeight()/2), this.self.getZ());
+                    cross.setUser(this.self);
+                    cross.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 0.2f, 0);
+                    this.self.level().addFreshEntity(cross);
+                }
+            } else {
+                tracker.discard();
+                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                        this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 1F, 1.1F);
+            }
+        }
+        return true;
+    }
     public void sealFromKamikaze(){
         int sealTime = 400;
         StandUser user = ((StandUser) this.self);
@@ -1949,6 +1987,9 @@ public class PowersMagiciansRed extends PunchingStand {
         removeFirestorm();
         if (groundHurricane != null && !groundHurricane.isRemoved()){
             groundHurricane.discard();
+        }
+        if (tracker != null && !tracker.isRemoved()){
+            tracker.discard();
         }
     }
 

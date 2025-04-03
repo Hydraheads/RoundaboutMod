@@ -22,6 +22,9 @@ public interface StandUser {
 
     int roundabout$increaseAirSupply(int $$0);
 
+    int roundabout$getDetectTicks();
+    void roundabout$setDetectTicks(int life);
+
     void roundabout$updateStandOutPosition(StandEntity passenger, Entity.MoveFunction positionUpdater);
     void roundabout$removeStandOut();
     void roundabout$setDI(byte forward, byte strafe);

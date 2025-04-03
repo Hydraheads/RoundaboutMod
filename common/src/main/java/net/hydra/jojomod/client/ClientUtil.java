@@ -164,6 +164,14 @@ public class ClientUtil {
                 }
             }
         }
+
+        if (entity instanceof LivingEntity LE){
+            int yes = ((StandUser)LE).roundabout$getDetectTicks();
+            if (yes > -1){
+                return 16285219;
+            }
+        }
+
         return  -1;
     }
     public static int wasFrozen = 0;

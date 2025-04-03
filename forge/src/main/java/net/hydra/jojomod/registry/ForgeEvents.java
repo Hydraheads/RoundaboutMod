@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -57,6 +58,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillager.createAttributes().build());
         event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
+        event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent

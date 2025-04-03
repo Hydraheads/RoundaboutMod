@@ -120,6 +120,14 @@ public abstract class InputEvents implements IInputEvents {
             }
         }
 
+        if ($$0 instanceof LivingEntity LE){
+            int yes = ((StandUser)LE).roundabout$getDetectTicks();
+            if (yes > -1){
+                ci.setReturnValue(true);
+            }
+        }
+
+
     }
     @Shadow
     @Final

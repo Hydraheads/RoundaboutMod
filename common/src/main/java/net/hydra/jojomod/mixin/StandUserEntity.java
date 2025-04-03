@@ -127,6 +127,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$leapTicks = -1;
     @Unique
+    private int roundabout$detectTicks = -1;
+    @Unique
     private final int roundabout$maxLeapTicks = 60;
 
     public StandUserEntity(EntityType<?> $$0, Level $$1) {
@@ -549,6 +551,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean roundabout$getDrowning(){
         return roundabout$isDrown;
     }
+
+    @Unique
+    @Override
+    public int roundabout$getDetectTicks(){
+        return roundabout$detectTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setDetectTicks(int life){
+        roundabout$detectTicks = life;
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
         //if (StandID > -1) {
@@ -557,6 +570,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
                             OffsetIndex.OffsetStyle(this.roundabout$getStand().getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
                 this.roundabout$summonStand(this.level(),true,false);
+            }
+        } else {
+            int dt = roundabout$detectTicks;
+            if (dt > -1){
+                dt--;
+                roundabout$detectTicks = dt;
             }
         }
 
