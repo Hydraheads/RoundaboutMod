@@ -185,7 +185,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                                     }
                                 }
                             } else {
-                                PE.displayClientMessage(Component.translatable("container.enchant.level.requirement", 15).withStyle(ChatFormatting.RED), true);
+                                PE.displayClientMessage(Component.translatable("container.enchant.level.requirement", get).withStyle(ChatFormatting.RED), true);
                             }
                         }
                     }
