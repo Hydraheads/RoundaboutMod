@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.Utils.ForgeBrewingRecipes;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -59,6 +60,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
+        event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -261,6 +263,7 @@ public class ForgeEvents {
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();
+        ModEntities.D4C_CLONE = ForgeEntities.D4C_CLONE.get();
 
         ForgeItems.assignStupidForge();
     }

@@ -59,6 +59,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -679,4 +680,8 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         int i = p_149995_ - 300;
         return i >= 0 && i < this.inventory.getContainerSize() ? SlotAccess.forContainer(this.inventory, i) : super.getSlot(p_149995_);
     }
+
+    private Vector3f sizeOffset = new Vector3f(0.f, 0.f, 0.f);
+    public void setSizeOffset(Vector3f value) { this.sizeOffset = value; }
+    public Vector3f getSizeOffset() { return this.sizeOffset; }
 }

@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -17,7 +18,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Vector3f;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -62,14 +65,52 @@ public class PowersD4C extends PunchingStand {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4_SNEAK);
     }
 
+    private boolean held1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
 
     }
 
+    private boolean held2 = false;
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
+        if (keyIsDown && !held2 && !(this.onCooldown(PowerIndex.SKILL_2)))
+        {            held3 = true;
 
+            if (isBetweenTwoThings(this.getSelf()))
+            {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                this.setCooldown(PowerIndex.SKILL_2, 80);
+            }
+        }
+        else if (!keyIsDown)
+        {
+            held3 = false;
+        }
+    }
+
+    private boolean spawnClone()
+    {
+        if (!(this.getSelf() instanceof Player PE))
+            return false;
+
+        D4CCloneEntity entity = ModEntities.D4C_CLONE.create(this.getSelf().level());
+        if (entity == null) {Roundabout.LOGGER.error("Error in PowersD4C: clone entity was null after attempting to create it!"); return false; }
+
+        entity.absMoveTo(
+                this.getSelf().getX(),
+                this.getSelf().getY(),
+                this.getSelf().getZ()
+        );
+
+        entity.setPlayer(PE);
+        entity.setYRot(this.getSelf().getYRot());
+        entity.setXRot(this.getSelf().getXRot());
+
+        this.getSelf().level().addFreshEntity(entity);
+
+        return true;
     }
 
     private boolean held3 = false;
@@ -99,6 +140,8 @@ public class PowersD4C extends PunchingStand {
                 this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
+
+                //ModPacketHandler.PACKET_ACCESS.registerNewWorld();
             }
         }
         else if (!keyIsDown)
@@ -107,16 +150,17 @@ public class PowersD4C extends PunchingStand {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
-        if (this.activePower == PowerIndex.POWER_4)
-            Roundabout.LOGGER.info("AAA");
-
         return super.tryPower(move, forced);
     }
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (activeP == PowerIndex.SKILL_4 || activeP == PowerIndex.SKILL_4_SNEAK)
-            return !(isBetweenTwoThings(this.getSelf()));
+        switch (activeP)
+        {
+            case PowerIndex.SKILL_4, PowerIndex.SKILL_4_SNEAK, PowerIndex.SKILL_2 -> {
+                return !(isBetweenTwoThings(this.getSelf()));
+            }
+        }
 
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -150,5 +194,13 @@ public class PowersD4C extends PunchingStand {
                 D4CEntity.MANGA_SKIN,
                 D4CEntity.WONDER_FESTIVAL
         );
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.POWER_2) {
+            return this.spawnClone();
+        }
+        return super.setPowerOther(move, lastMove);
     }
 }

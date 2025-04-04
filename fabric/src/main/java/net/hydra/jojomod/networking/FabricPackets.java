@@ -10,11 +10,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import javax.swing.text.html.parser.Entity;
@@ -181,9 +183,12 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level) {
+    public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player) {
         FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeUtf(name);
+
+        if (player != null)
+            buf.writeInt(player.getId());
 
         ServerPlayNetworking.send(sp, ModMessages.DYNAMIC_WORLD_SYNC, buf);
     }
@@ -370,5 +375,12 @@ public class FabricPackets implements IPacketAccess {
     @Override
     public void registerNewWorld() {
         ClientPlayNetworking.send(ModMessages.REQUEST_NEW_DYNAMIC_WORLD, PacketByteBufs.create());
+    }
+
+    @Override
+    public void requestTeleportToWorld(String world) {
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+        buffer.writeUtf(world);
+        ClientPlayNetworking.send(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, PacketByteBufs.create());
     }
 }

@@ -13,15 +13,22 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.BorderChangeListener;
 import net.minecraft.world.level.dimension.LevelStem;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class DynamicWorld {
     private ServerLevel level;
     private final String name;
 
-    public DynamicWorld(MinecraftServer server, String name)
+    public static HashMap<String, ServerLevel> levels = new HashMap<>();
+
+    /**
+     * @param server The server to register the world to.
+     * @param name The name of the dimension (roundabout:name)
+     * @param player The player the dynamic world is for. Will send a packet to them letting them know the dimension is ready.
+     */
+    public DynamicWorld(MinecraftServer server, String name, @Nullable ServerPlayer player)
     {
         this.name = name;
 
@@ -60,11 +67,13 @@ public class DynamicWorld {
 
         server.overworld().getWorldBorder().addListener(new BorderChangeListener.DelegateBorderChangeListener(level.getWorldBorder()));
         accessor.roundabout$addWorld(LEVEL_KEY, level);
+
         level.tick(()->true);
 
+        levels.put(name, level);
         for (ServerPlayer sp : server.getPlayerList().getPlayers())
         {
-            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name, level);
+            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name, level, player);
         }
     }
 
@@ -121,13 +130,12 @@ public class DynamicWorld {
 
     public static DynamicWorld generateD4CWorld(MinecraftServer server)
     {
-        return new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999));
+        return new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999), null);
     }
 
     public static DynamicWorld generateD4CWorld(MinecraftServer server, ServerPlayer player)
     {
-        DynamicWorld world = new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999));
-        player.changeDimension(world.getLevel());
+        DynamicWorld world = new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999), player);
         return world;
     }
 }

@@ -13,14 +13,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.LevelEvent;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class ForgePackets implements IPacketAccess {
@@ -124,10 +127,15 @@ public class ForgePackets implements IPacketAccess {
 
     @Override
     @SuppressWarnings("deprecation") // markWorldsDirty
-    public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level) {
+    public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player) {
         MinecraftForge.EVENT_BUS.post(new LevelEvent.Load(level));
         level.getServer().markWorldsDirty();
-        ForgePacketHandler.sendToClient(new ForgeDynamicWorldSync(name), sp);
+
+        int id = -1;
+        if (player != null)
+            id = player.getId();
+
+        ForgePacketHandler.sendToClient(new ForgeDynamicWorldSync(name, String.valueOf(id)), sp);
     }
 
     @Override
@@ -223,5 +231,10 @@ public class ForgePackets implements IPacketAccess {
     @Override
     public void registerNewWorld() {
         ForgePacketHandler.sendToServer(new ForgeRequestDynamicWorldC2S());
+    }
+
+    @Override
+    public void requestTeleportToWorld(String world) {
+        ForgePacketHandler.sendToServer(new ForgeRequestTeleportC2S(world));
     }
 }
