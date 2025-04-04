@@ -460,6 +460,15 @@
   "ability.roundabout.fog_pilot": "Justice Control",
   "ability.roundabout.fog_pilot.desc": "Switch to the perspective of Justice, and fly around the foggy sky. On top of surveying the area, you can command corpses from above to move around (use key) and attack (attack key) your targets, after highlighting the target you are mousing over (attack key). Interact with creeper corpses you control to blow them up. Press again to return to your body.",
 
+  "ability.roundabout.red_lash": "Fire Strike",
+  "ability.roundabout.red_lash.desc": "Uses Red Bind's flame rope offensively to lash opponents, has increased reach! Hold it down for a 3 hit-combo!",
+  "ability.roundabout.flame_kick": "Flame Kick / Flame Punch",
+  "ability.roundabout.flame_kick.desc": "Hold and release to throw a super powerful kick! The longer you hold it down, the stronger it is. Once it charges fully, it releases automatically. Releasing it early throws a punch instead.",
+  "ability.roundabout.fireball_barrage": "Barrage of Fireballs",
+  "ability.roundabout.fireball_barrage.desc": "Rapidly shoots a sequence of fireballs that knock enemies back with an explosive force, can start stand fires where they land.",
+  "ability.roundabout.flamethrower": "Flamethrower",
+  "ability.roundabout.flamethrower.desc": "A stream of fire that can damage multiple targets at once, setting them on stand fire.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",

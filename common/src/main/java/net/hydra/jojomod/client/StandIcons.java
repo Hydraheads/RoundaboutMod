@@ -112,6 +112,16 @@ public class StandIcons {
             "textures/gui/icons/magicians_red/projectile_burn.png");
     public static final ResourceLocation RED_BIND = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/red_bind.png");
+    public static final ResourceLocation RED_LASH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/red_lash.png");
+    public static final ResourceLocation MAGICIANS_RED_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/guard.png");
+    public static final ResourceLocation MAGICIANS_FLAME_KICK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/flame_kick.png");
+    public static final ResourceLocation FLAMETHROWER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/flamethrower.png");
+    public static final ResourceLocation FIREBALL_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/fireball_barrage.png");
 
     public static final ResourceLocation LOCKED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/locked_2.png");
