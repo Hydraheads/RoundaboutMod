@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -376,11 +377,16 @@ public class StandFireBlock extends BaseEntityBlock {
     }
 
 
+    @SuppressWarnings("deprecation")
     public void onPlace(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
+        Roundabout.LOGGER.info("1");
         if (!$$3.is($$0.getBlock())) {
+            Roundabout.LOGGER.info("2");
             if (inPortalDimension($$1)) {
+                Roundabout.LOGGER.info("3");
                 Optional<PortalShape> $$5 = PortalShape.findEmptyPortalShape($$1, $$2, Direction.Axis.X);
                 if ($$5.isPresent()) {
+                    Roundabout.LOGGER.info("4");
                     $$5.get().createPortalBlocks();
                     return;
                 }

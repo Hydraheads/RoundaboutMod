@@ -51,6 +51,7 @@
     "ZNearestAttackableTargetGoal",
     "ZPanicGoal",
     "ZPassengers",
+    "ZPortalShape",
     "ZPrimedTnt",
     "ZProjectile",
     "ZProjectileAtk",

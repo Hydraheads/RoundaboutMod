@@ -59,6 +59,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -2225,10 +2226,12 @@ public class PowersMagiciansRed extends PunchingStand {
         return this.fireIDNumber;
     }
 
+    @SuppressWarnings("deprecation")
     public void createStandFire(BlockPos pos){
         this.fireIDNumber++;
-        this.getSelf().level().setBlockAndUpdate(pos, ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),pos).
-                setValue(StandFireBlock.COLOR,(int)this.getFireColor()));
+        BlockState state = ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),pos).
+                setValue(StandFireBlock.COLOR,(int)this.getFireColor());
+        this.getSelf().level().setBlockAndUpdate(pos, state);
         BlockEntity be = this.self.level().getBlockEntity(pos);
         if (be instanceof StandFireBlockEntity sfbe){
             sfbe.standUser = this.self;
@@ -2236,6 +2239,7 @@ public class PowersMagiciansRed extends PunchingStand {
             sfbe.fireIDNumber = this.fireIDNumber;
             sfbe.fireColorType = getFireColor();
         }
+        //ModBlocks.STAND_FIRE.onPlace(state, this.self.level(), pos, ModBlocks.STAND_FIRE.defaultBlockState(),true);
     }
 
     public byte getFireColor(){
