@@ -135,6 +135,13 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                     }
                 }
+
+
+                if (leaded != null){
+                    if (leaded.isInWaterOrRain() && this.self.isInWaterOrRain()){
+                        clearLeaded();
+                    }
+                }
             } else {
                 drillTime = -1;
                 drillT = false;
