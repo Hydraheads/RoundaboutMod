@@ -18,9 +18,11 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -217,7 +219,8 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
 
         if (source.getEntity() != null && user != null &&
                 ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-            if (source.getEntity().is(getUser())) {
+            if (source.getEntity().is(getUser()) ||
+                    (source.getEntity().distanceTo(this) > 7 && source.is(DamageTypeTags.IS_PROJECTILE))) {
                 burst(PMR);
                 this.discard();
             } else {
