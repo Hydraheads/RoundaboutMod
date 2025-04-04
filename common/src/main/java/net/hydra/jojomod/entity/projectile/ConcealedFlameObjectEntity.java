@@ -215,9 +215,9 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
     public boolean hurt(DamageSource source, float amount) {
         LivingEntity user = this.getUser();
 
-        if (source.getDirectEntity() != null && user != null &&
+        if (source.getEntity() != null && user != null &&
                 ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-            if (source.getDirectEntity().is(getUser())) {
+            if (source.getEntity().is(getUser())) {
                 burst(PMR);
                 this.discard();
             } else {
