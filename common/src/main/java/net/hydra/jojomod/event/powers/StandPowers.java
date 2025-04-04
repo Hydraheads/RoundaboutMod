@@ -1330,7 +1330,7 @@ public class StandPowers {
     public boolean isDazed(LivingEntity entity){
         return this.getUserData(entity).roundabout$isDazed();
     }
-    private void setDazed(LivingEntity entity, byte dazeTime){
+    public void setDazed(LivingEntity entity, byte dazeTime){
         if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
             /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
             return;
@@ -2593,7 +2593,9 @@ public class StandPowers {
         if (!this.self.level().isClientSide()) {
             BlockState state = this.getSelf().level().getBlockState(pos);
 
-            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !((this.getSelf() instanceof Player &&
+            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() &&
+                    this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+                    !((this.getSelf() instanceof Player &&
                     (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
                             this.getSelf()).gameMode.getGameModeForPlayer()))) ||
                     !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos)))) {

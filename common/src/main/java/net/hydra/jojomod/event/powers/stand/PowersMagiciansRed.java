@@ -45,8 +45,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -107,6 +111,37 @@ public class PowersMagiciansRed extends PunchingStand {
 
         offloadLead();
         if (!this.self.level().isClientSide()) {
+            if (leaded != null) {
+                if (((leaded instanceof Enemy) ||
+                        (leaded instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(this.self))) ||
+                        (leaded instanceof Player) ||
+                        !((StandUser)leaded).roundabout$getStandDisc().isEmpty()){
+                    lassoTime--;
+                    if (lassoTime <= -1){
+                        ((StandUser)leaded).roundabout$dropString();
+                        leaded = null;
+                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1,
+                                ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFail);
+                    }
+                }
+
+                if (leaded != null){
+                    if (drillTime > -1){
+                        drillTime--;
+                        if (drillTime <= -1){
+                            clearLeaded();
+                        } else {
+                            redBindDrill();
+                        }
+                    }
+                }
+            } else {
+                drillTime = -1;
+                drillT = false;
+                lassoTime = -1;
+            }
+
+
             if (ticksUntilHurricaneEnds > -1) {
                 ticksUntilHurricaneEnds--;
                 if (ticksUntilHurricaneEnds <= -1) {
@@ -660,6 +695,8 @@ public class PowersMagiciansRed extends PunchingStand {
                                     if (!this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != PowerIndex.POWER_1) {
                                         if (leaded == null){
                                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                                        } else {
+                                            this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindManualRelease);
                                         }
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                                     }
@@ -804,12 +841,18 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
-        if ((move == PowerIndex.GUARD || move == PowerIndex.NONE) && this.getActivePower()==PowerIndex.POWER_4){
+        if ((move == PowerIndex.GUARD || move == PowerIndex.NONE)){
             if (!this.self.level().isClientSide()){
-                if (kamikaze != null){
-                    kamikaze.setCrossNumber(0);
-                    kamikaze.discard();
+                if (this.getActivePower()==PowerIndex.POWER_4) {
+                    if (kamikaze != null) {
+                        kamikaze.setCrossNumber(0);
+                        kamikaze.discard();
+                    }
                 }
+            }
+            if (move == PowerIndex.GUARD ||
+                    !((StandUser)this.self).roundabout$getActive()) {
+                clearLeaded();
             }
         }
 
@@ -915,6 +958,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.toggleLifeTracker();
         } else if (move == PowerIndex.POWER_1){
             return this.redBindCharge();
+        } else if (move == PowerIndex.EXTRA_2) {
+            return this.doRedBindAttack();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -922,7 +967,6 @@ public class PowersMagiciansRed extends PunchingStand {
     public void offloadLead(){
         if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).roundabout$isStringBound()) || !(((StandUser)leaded).roundabout$getBoundTo().is(this.self)))){
             leaded = null;
-            Roundabout.LOGGER.info("oops");
         }
     }
 
@@ -990,8 +1034,13 @@ public class PowersMagiciansRed extends PunchingStand {
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_4_BONUS);
+        if (leaded != null){
+            setDazed(leaded, (byte) 0);
+            clearLeaded();
+        }
 
         if (!this.self.level().isClientSide()) {
+
             playStandUserOnlySoundsIfNearby(CRY_3_NOISE, 27, false,true);
 
             StandEntity stand = this.getStandEntity(this.self);
@@ -1201,7 +1250,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public void lasso(){
         /*By setting this to -10, there is a delay between the stand retracting*/
-
+        drillT = false;
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
@@ -1210,6 +1259,8 @@ public class PowersMagiciansRed extends PunchingStand {
                     leaded = LE;
                     ((StandUser)LE).roundabout$setBoundTo(this.self);
                     ModPacketHandler.PACKET_ACCESS.intToServerPacket(LE.getId(), PacketDataIndex.INT_STAND_ATTACK);
+                } else {
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(-1, PacketDataIndex.INT_STAND_ATTACK);
                 }
             }
         } else {
@@ -1219,12 +1270,14 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
 
+    public int lassoTime= -1;
     public void lassoImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
             if (entity instanceof LivingEntity LE){
                 ((StandUser)LE).roundabout$setBoundTo(this.self);
                 leaded = LE;
+                lassoTime = 200;
             }
             knockShield2(entity, 100);
         }
@@ -1645,7 +1698,6 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
 
-
     public boolean holdDownClick = false;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
@@ -1664,7 +1716,13 @@ public class PowersMagiciansRed extends PunchingStand {
             } else {
                 if (keyIsDown) {
                     Minecraft mc = Minecraft.getInstance();
-                    if (!isHoldingSneak()) {
+
+                    offloadLead();
+                    if (leaded != null && !drillT) {
+                        this.tryPower(PowerIndex.EXTRA_2, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_2);
+                        consumeClickInput = true;
+                    } else if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
                         if (this.canAttack()) {
@@ -2118,6 +2176,15 @@ public class PowersMagiciansRed extends PunchingStand {
         if (tracker != null && !tracker.isRemoved()){
             tracker.discard();
         }
+        clearLeaded();
+    }
+
+    public void clearLeaded(){
+        if (leaded != null){
+            this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindManualRelease);
+            ((StandUser)leaded).roundabout$dropString();
+            leaded = null;
+        }
     }
 
     public boolean setFire(){
@@ -2312,14 +2379,47 @@ public class PowersMagiciansRed extends PunchingStand {
         }
 
     }
+
+    @Override
+    public boolean setPowerGuard() {
+        return super.setPowerGuard();
+    }
+
+    public int drillTime = -1;
+    public boolean drillT = false;
+    public boolean doRedBindAttack(){
+        drillT = true;
+        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindAttack);
+        if (!this.self.level().isClientSide()){
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 1F, 1F);
+            drillTime = 80;
+            ((StandUser)leaded).roundabout$setRedBound(true);
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), leaded.getX(),
+                    leaded.getY()+(leaded.getBbHeight()*0.5), leaded.getZ(),
+                    10,
+                    0.25, 0.25, 0.25,
+                    0.005);
+        }
+        return true;
+    }
+
+    public void redBindDrill(){
+        offloadLead();
+        if (leaded != null) {
+            setDazed( leaded, (byte) 3);
+            leaded.setDeltaMovement(leaded.getDeltaMovement().x(),0.03,leaded.getDeltaMovement().z());
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), leaded.getX(),
+                    leaded.getY()+(leaded.getBbHeight()*0.7), leaded.getZ(),
+                    2,
+                    0.25, 0.3, 0.25,
+                    0.005);
+        }
+    }
+
+
+    /** Red Bind attack inserted here*/
     @Override
     public boolean setPowerAttack(){
-        offloadLead();
-        if (leaded != null){
-
-        } else {
-
-
             if (this.activePowerPhase >= 3) {
                 this.activePowerPhase = 1;
             } else {
@@ -2338,7 +2438,6 @@ public class PowersMagiciansRed extends PunchingStand {
 
             animateStand(this.activePowerPhase);
             poseStand(OffsetIndex.ATTACK);
-        }
         return true;
     }
     public boolean setPowerRangedBarrageCharge() {

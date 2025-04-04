@@ -102,6 +102,7 @@ public interface StandUser {
     int roundabout$getRestrainedTicks();
     void roundabout$setRestrainedTicks(int restrain);
     void roundabout$setDazed(byte dazeTime);
+    void roundabout$setRedBound(boolean roundabout$isRedBound);
     void roundabout$setDazeTime(byte dazeTime);
 
     void roundabout$tryPower(int move, boolean forced);

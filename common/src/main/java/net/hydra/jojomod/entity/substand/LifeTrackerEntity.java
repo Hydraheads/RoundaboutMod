@@ -51,7 +51,7 @@ public class LifeTrackerEntity extends LivingEntity {
         } else {
             if (user != null) {
                 AABB $$0 = this.getBoundingBox().inflate(15, 15, 15);
-                List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
+                List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.plsWorkTargetting, this, $$0);
                 for (LivingEntity $$3 : $$1) {
                     if (!$$3.is(user) && !($$3 instanceof StandEntity)) {
                         ((StandUser) $$3).roundabout$setDetectTicks(2);

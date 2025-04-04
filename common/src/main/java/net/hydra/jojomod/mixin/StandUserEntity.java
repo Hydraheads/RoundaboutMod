@@ -628,6 +628,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$dropString() {
         roundabout$setBoundTo(null);
+        roundabout$setRedBound(false);
     }
 
     @Unique
@@ -676,6 +677,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
+
+
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand() && (this.roundabout$getStand() == null ||
@@ -1189,7 +1192,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$dazeTime = dazeTime;
         this.roundabout$syncDaze();
     }
-
+    @Unique
+    @Override
+    public void roundabout$setRedBound(boolean roundabout$isRedBound){
+        this.roundabout$isRedBound = roundabout$isRedBound;
+    }
+    public boolean roundabout$isRedBound = false;
     @Unique
     public boolean roundabout$getActive() {
         if (((LivingEntity) (Object) this).getEntityData().hasItem(ROUNDABOUT$STAND_ACTIVE) &&
@@ -1979,6 +1987,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
                     ci.cancel();
                 }
+            }
+
+
+            Entity bound = roundabout$getBoundTo();
+            if (bound != null && !$$0.isIndirect() && !$$0.is(ModDamageTypes.STAND_FIRE)){
+                roundabout$dropString();
             }
         }
     }
