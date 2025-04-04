@@ -67,9 +67,10 @@
   "item.roundabout.stand_arrow.haveStand": "Vous avez déjà un Stand, pour le retirer utiliser un Disque Stand",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquis ! Pressez le bouton d'invocation!",
   "item.roundabout.stand_arrow.bowTip": "Dans la main secondaire, les arcs l'utilise comme une munition.",
-  "item.roundabout.stand_arrow.reroll": "Accroupissez-vous pour utiliser 1 niveau",
+  "item.roundabout.stand_arrow.reroll": "Accroupissez-vous pour utiliser %1$s niveau",
   "item.roundabout.stand_arrow.reroll2": "d'expérience pour changer le Stand!",
   "item.roundabout.stand_arrow.rerollOutcome": "La Flèche contient: ",
+  "item.roundabout.stand_arrow.noStandsInPool": "Aucun Stand dans les possibilités de la flèche !",
   "item.roundabout.stand_arrow.magnet": "Vibre proche de créature digne.",
 
   "item.roundabout.worthy_arrow.info": "Objet pour créatif, rends digne.",
@@ -148,12 +149,12 @@
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Forgée avec une Hache en fer",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.additions_slot_description": "Lingot de fer",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.ingredients": "Lingot de fer",
-  
+
   "roundabout:item.roundabout.smithing_template.luck_upgrade.applies_to": "Épée en fer",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.base_slot_description": "Forgée avec une Épée en fer",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.additions_slot_description": "Lingot d'or",
   "roundabout:item.roundabout.smithing_template.luck_upgrade.ingredients": "Lingot d'or",
-  
+
   "item.minecraft.potion.effect.roundabout.hex": "Potion de mauvais sort",
   "item.minecraft.lingering_potion.effect.roundabout.hex": "Potion de mauvais sort persistante",
   "item.minecraft.splash_potion.effect.roundabout.hex": "Potion de mauvais sort jetable",
@@ -168,10 +169,9 @@
 
   "death.attack.stand": "%1$s est mort à cause d'une force mystérieuse en combattant (un(e)) %2$s",
   "death.attack.stand_rush": "%1$s a été tabasser par %2$s",
-  "death.attack.stand_fire": "%1$s s'est grillé",
+  "death.attack.stand_fire": "%1$s a été griller",
   "death.attack.stand_fire.player": "%1$s s'est fait griller par %2$s",
-  "death.attack.crossfire": "%1$s a été envoyé en enfer",
-  "death.attack.crossfire.player": "%1$s a été envoyé en enfer par %2$s",
+  "death.attack.crossfire": "%1$s a été envoyé en enfer par %2$s",
   "death.attack.star_finger": "%1$s a été transformé(e) en sashimi durant un combat contre (un(e)) %2$s",
   "death.attack.penetrating_stand": "%1$s a été retiré(e) par %2$s",
   "death.attack.corpse": "%1$s a été soumis à la justice par %2$s",
@@ -263,9 +263,17 @@
   "sounds.roundabout.fire_strike":  "Attaque de flamme",
   "sounds.roundabout.fire_strike_last":  "Attaque de flamme",
   "sounds.roundabout.crossfire_explode":  "Explosion de flamme",
-  "sounds.roundabout.crossfire_shoot":  "Tirre de flamme",
+  "sounds.roundabout.crossfire_shoot":  "Tire de flamme",
   "sounds.roundabout.magicians_red_cry":  "Crie d'oiseau",
   "sounds.roundabout.magicians_red_cry_2":  "Crie d'oiseau",
+  "sounds.roundabout.magicians_red_cry_3":  "Crie d'oiseau",
+  "sounds.roundabout.magicians_red_charge":  "Charging Flames",
+  "sounds.roundabout.flamethrower":  "Souffle de flamme",
+  "sounds.roundabout.stand_flame_hit":  "Brûlure",
+  "sounds.roundabout.fireball_shoot":  "Tire de boule de feu",
+  "sounds.roundabout.fireball_hit":  "Explosion de boule de feu",
+  "sounds.roundabout.firestorm":  "Tempête de flamme",
+  "sounds.roundabout.lasso": "Lasso",
 
   "sounds.roundabout.unlock_skin":  "Skin Débloqué(s) !",
   "sounds.roundabout.ova_platinum_barrage":  "ORA",
@@ -532,8 +540,13 @@
   "skins.roundabout.justice.jojonium": "Jojonium",
 
   "skins.roundabout.magicians_red.base": "Partie 3",
-  
+  "skins.roundabout.magicians_red.blue": "Bleu",
+  "skins.roundabout.magicians_red.purple": "Violet",
+  "skins.roundabout.magicians_red.green": "Vert",
+  "skins.roundabout.magicians_red.dread": "Terreur",
+
   "skins.roundabout.d4c.base": "Manga",
+  "skins.roundabout.d4c.wonder_festival": "Wonder Festival",
 
   "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Over Heaven Débloqué !",
   "unlock_skin.roundabout.star_platinum.atomic": "Skin Star Platinum: Atomic Débloqué !",
