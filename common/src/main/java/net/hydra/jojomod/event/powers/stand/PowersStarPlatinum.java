@@ -732,7 +732,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if (value.isInvulnerable() || (!value.isAttackable() && !(value instanceof StandEntity)) || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())
+            if (value.isInvulnerable() || ((!value.isAttackable() || !value.isPickable()) && !(value instanceof StandEntity)) || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())
             || (value instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().getUUID() == this.self.getUUID())){
                 hitEntities.remove(value);
             } else {
