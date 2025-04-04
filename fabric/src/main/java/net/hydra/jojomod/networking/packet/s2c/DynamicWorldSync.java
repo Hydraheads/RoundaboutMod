@@ -23,7 +23,7 @@ public class DynamicWorldSync {
 
         player.connection.levels().add(LEVEL_KEY);
 
-        if (buf.readInt() == player.getId())
-            ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(name);
+//        if (buf.readInt() == player.getId())
+//            ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(name);
     }
 }

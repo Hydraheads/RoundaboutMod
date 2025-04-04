@@ -49,10 +49,10 @@ public class ForgeDynamicWorldSync {
 
             localPlayer.connection.levels().add(LEVEL_KEY);
 
-            if (player == localPlayer.getId())
-            {
-                ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(serial);
-            }
+//            if (player == localPlayer.getId())
+//            {
+//                ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(serial);
+//            }
         });
 
         return true;
