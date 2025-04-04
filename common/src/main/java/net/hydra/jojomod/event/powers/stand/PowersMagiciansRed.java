@@ -2625,47 +2625,41 @@ public class PowersMagiciansRed extends PunchingStand {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.red_lash",
-                "instruction.roundabout.red_lash", StandIcons.RED_LASH,0,level,bypas));
+                "instruction.roundabout.press_attack", StandIcons.RED_LASH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
-                "instruction.roundabout.guard", StandIcons.MAGICIANS_RED_GUARD,0,level,bypas));
+                "instruction.roundabout.hold_block", StandIcons.MAGICIANS_RED_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.flame_kick",
-                "instruction.roundabout.flame_kick", StandIcons.MAGICIANS_FLAME_KICK,0,level,bypas));
+                "instruction.roundabout.hold_attack_crouch", StandIcons.MAGICIANS_FLAME_KICK,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.fireball_barrage",
-                "instruction.roundabout.fireball_barrage", StandIcons.FIREBALL_BARRAGE,0,level,bypas));
+                "instruction.roundabout.barrage", StandIcons.FIREBALL_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.flamethrower",
-                "instruction.roundabout.flamethrower", StandIcons.FLAMETHROWER,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
-                "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.star_finger",
-                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_FINGER,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.impale",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_IMPALE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.scope",
-                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_SCOPE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.block_grab",
-                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_GRAB_BLOCK,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.item_grab",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_GRAB_ITEM,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.mob_grab",
-                "instruction.roundabout.press_skill_near_mob", StandIcons.STAR_PLATINUM_GRAB_MOB,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.phase_grab",
-                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_PHASE_GRAB,2,level,bypas));
+                "instruction.roundabout.kick_barrage", StandIcons.FLAMETHROWER,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.furnace",
+                "instruction.roundabout.passive", StandIcons.FURNACE_ABILITY,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.red_bind",
+                "instruction.roundabout.press_skill", StandIcons.RED_BIND,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.flame_creation",
+                "instruction.roundabout.press_skill_crouch", StandIcons.LIGHT_FIRE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.life_detector",
+                "instruction.roundabout.press_skill_block", StandIcons.LIFE_TRACKER,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.crossfire",
+                "instruction.roundabout.press_skill", StandIcons.CROSSFIRE_HURRICANE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.crossfire_block",
+                "instruction.roundabout.press_skill", StandIcons.CONCEALED_HURRICANE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.crossfire_ground",
+                "instruction.roundabout.press_skill", StandIcons.HIDDEN_HURRICANE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.crossfire_special",
+                "instruction.roundabout.press_skill_crouch", StandIcons.CROSSFIRE_HURRICANE_SPECIAL,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.fall_brace",
-                "instruction.roundabout.press_skill_falling", StandIcons.STAR_PLATINUM_FALL_CATCH,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
-                "instruction.roundabout.press_skill_air", StandIcons.STAR_PLATINUM_LEDGE_GRAB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.stand_leap",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_STAR_PLATINUM,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.stand_leap_rebound",
-                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,0, "ability.roundabout.inhale",
-                "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_INHALE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,0, "ability.roundabout.time_stop",
-                "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_TIME_STOP,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.roundabout.time_stop_impulse",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_TIME_STOP_IMPULSE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.MAGICIANS_RED_LEDGE_GRAB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.projectile_burn",
+                "instruction.roundabout.press_skill_block", StandIcons.PROJECTILE_BURN,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.crossfire_firestorm",
+                "instruction.roundabout.press_skill", StandIcons.CROSSFIRE_FIRESTORM,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.fire_slam",
+                "instruction.roundabout.press_skill_crouch", StandIcons.FIRE_SLAM,4,level,bypas));
         return $$1;
     }
 

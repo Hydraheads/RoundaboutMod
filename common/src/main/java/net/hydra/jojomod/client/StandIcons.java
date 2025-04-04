@@ -122,6 +122,10 @@ public class StandIcons {
             "textures/gui/icons/magicians_red/flamethrower.png");
     public static final ResourceLocation FIREBALL_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fireball_barrage.png");
+    public static final ResourceLocation FURNACE_ABILITY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/furnace.png");
+    public static final ResourceLocation MAGICIANS_RED_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/stand_ledge_grab.png");
 
     public static final ResourceLocation LOCKED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/locked_2.png");
