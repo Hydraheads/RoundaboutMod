@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.access.IMinecartTNT;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -68,6 +69,7 @@ public class GasolineSplatterEntity extends ThrowableItemProjectile {
 
             if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof CampfireBlock ||
                     this.level().getBlockState(bPos).getBlock() instanceof FireBlock ||
+                    this.level().getBlockState(bPos).getBlock() instanceof StandFireBlock ||
                     this.level().getBlockState(bPos).getFluidState().is(Fluids.LAVA) ||
                     this.level().getBlockState(bPos).getFluidState().is(Fluids.FLOWING_LAVA)
             ){

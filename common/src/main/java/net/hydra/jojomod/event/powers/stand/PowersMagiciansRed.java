@@ -12,9 +12,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
-import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
-import net.hydra.jojomod.entity.projectile.StandFireballEntity;
+import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
@@ -2130,6 +2128,15 @@ public class PowersMagiciansRed extends PunchingStand {
                             0.1,
                             0.1,
                             0.03);
+
+                    if (value instanceof GasolineSplatterEntity || value instanceof GasolineCanEntity){
+                        ((ServerLevel) value.level()).sendParticles(ParticleTypes.FLAME, value.getX(), value.getY()+value.getEyeHeight(), value.getZ(),
+                                40, 0.0, 0.2, 0.0, 0.2);
+                        ((ServerLevel) value.level()).sendParticles(ParticleTypes.EXPLOSION, value.getX(), value.getY()+value.getEyeHeight(), value.getZ(),
+                                1, 0.5, 0.5, 0.5, 0.2);
+                        MainUtil.gasExplode(null, (ServerLevel) value.level(), value.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier()*10);
+                    }
+
                     value.discard();
                 }
             }
@@ -2226,7 +2233,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return this.fireIDNumber;
     }
 
-    @SuppressWarnings("deprecation")
+
     public void createStandFire(BlockPos pos){
         this.fireIDNumber++;
         BlockState state = ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),pos).
@@ -2239,7 +2246,7 @@ public class PowersMagiciansRed extends PunchingStand {
             sfbe.fireIDNumber = this.fireIDNumber;
             sfbe.fireColorType = getFireColor();
         }
-        //ModBlocks.STAND_FIRE.onPlace(state, this.self.level(), pos, ModBlocks.STAND_FIRE.defaultBlockState(),true);
+
     }
 
     public byte getFireColor(){

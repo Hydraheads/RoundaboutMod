@@ -8,6 +8,8 @@ import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -82,6 +84,19 @@ public class StandFireBlockEntity extends BlockEntity{
                     }
                 } else {
                     $$1.removeBlock($$2, false);
+                    return;
+                }
+
+                BlockPos below = $$2.below();
+                BlockState checkGas = $$1.getBlockState(below);
+                if (checkGas.is(ModBlocks.GASOLINE_SPLATTER)){
+                    $$1.removeBlock($$2, false);
+                    $$1.removeBlock(below, false);
+                    ((ServerLevel)$$1).sendParticles(ParticleTypes.FLAME, below.getX(), below.getY(), below.getZ(),
+                            40, 0.0, 0.2, 0.0, 0.2);
+                    ((ServerLevel) $$1).sendParticles(ParticleTypes.EXPLOSION, below.getX(), below.getY(), below.getZ(),
+                            1, 0.5, 0.5, 0.5, 0.2);
+                    MainUtil.gasExplode(null, (ServerLevel) $$1, below, 0, 2, 4, MainUtil.gasDamageMultiplier()*10);
                     return;
                 }
 

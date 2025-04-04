@@ -6,12 +6,17 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.GasolineSplatterEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -324,6 +329,15 @@ public class StandFireBlock extends BaseEntityBlock {
                     Vec3 prevVelocity = LE.getDeltaMovement();
                     LE.hurt(ModDamageTypes.of($$1, ModDamageTypes.STAND_FIRE, fb.standUser), fd);
                     LE.setDeltaMovement(prevVelocity);
+                } else if ($$3 instanceof GasolineSplatterEntity || $$3 instanceof GasolineCanEntity){
+                    if (!$$3.isRemoved()) {
+                        ((ServerLevel) $$1).sendParticles(ParticleTypes.FLAME, $$3.getX(), $$3.getY() + $$3.getEyeHeight(), $$3.getZ(),
+                                40, 0.0, 0.2, 0.0, 0.2);
+                        ((ServerLevel) $$1).sendParticles(ParticleTypes.EXPLOSION, $$3.getX(), $$3.getY() + $$3.getEyeHeight(), $$3.getZ(),
+                                1, 0.5, 0.5, 0.5, 0.2);
+                        MainUtil.gasExplode(null, (ServerLevel) $$3.level(), $$3.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier() * 14);
+                        $$3.discard();
+                    }
                 }
             }
         }
