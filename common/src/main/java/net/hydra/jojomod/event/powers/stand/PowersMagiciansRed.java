@@ -2426,12 +2426,14 @@ public class PowersMagiciansRed extends PunchingStand {
         offloadLead();
         if (leaded != null) {
             setDazed( leaded, (byte) 3);
-            leaded.setDeltaMovement(leaded.getDeltaMovement().x(),0.03,leaded.getDeltaMovement().z());
+            leaded.hurtMarked = true;
+            leaded.setDeltaMovement(leaded.getDeltaMovement().x(),0.028,leaded.getDeltaMovement().z());
             ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), leaded.getX(),
                     leaded.getY()+(leaded.getBbHeight()*0.7), leaded.getZ(),
                     2,
                     0.25, 0.3, 0.25,
                     0.005);
+            leaded.hasImpulse = true;
         }
     }
 
