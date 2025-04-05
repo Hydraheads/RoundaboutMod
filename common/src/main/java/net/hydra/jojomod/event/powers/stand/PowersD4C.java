@@ -7,19 +7,23 @@ import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ClientConfig;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.lang.reflect.Array;
@@ -74,14 +78,38 @@ public class PowersD4C extends PunchingStand {
     private boolean held2 = false;
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
-        if (keyIsDown && !held2 && !(this.onCooldown(PowerIndex.SKILL_2)))
-        {            held3 = true;
+        if (keyIsDown && !held2)
+        {
+            held3 = true;
 
-            if (isBetweenTwoThings(this.getSelf()))
+            if (!isHoldingSneak() && !(this.onCooldown(PowerIndex.SKILL_2)))
             {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
-                this.setCooldown(PowerIndex.SKILL_2, 80);
+                if (isBetweenTwoThings(this.getSelf()))
+                {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                    this.setCooldown(PowerIndex.SKILL_2, 80);
+                }
+            }
+            else
+            {
+                if (!(this.onCooldown(PowerIndex.SKILL_2_SNEAK)))
+                {
+                    Entity TE = MainUtil.getTargetEntity(this.getSelf(), 100, 10);
+                    if (TE instanceof D4CCloneEntity clone)
+                    {
+                        if (clone.player != this.getSelf())
+                            return;
+
+                        // there isnt a data index for what i want and im too lazy to add one so here, update move, it probably fits
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(clone.getId(), PacketDataIndex.INT_UPDATE_MOVE);
+
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+
+                        this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
+                    }
+                }
             }
         }
         else if (!keyIsDown)
@@ -111,6 +139,31 @@ public class PowersD4C extends PunchingStand {
         this.getSelf().level().addFreshEntity(entity);
 
         return true;
+    }
+
+    private void swapClone(D4CCloneEntity clone)
+    {
+        if (!(this.getSelf() instanceof Player PE))
+            return;
+
+        if (clone.player != PE)
+            return;
+
+        Vec3 clonePos = clone.position();
+        float cloneXRot = clone.getXRot();
+        float cloneYRot = clone.getYRot();
+
+        clone.teleportTo(
+                this.getSelf().getX(),
+                this.getSelf().getY(),
+                this.getSelf().getZ()
+        );
+
+        clone.setYRot(this.getSelf().getYRot());
+        clone.setXRot(this.getSelf().getXRot());
+
+        PE.teleportTo(clonePos.x, clonePos.y, clonePos.z);
+        PE.moveTo(clonePos.x, clonePos.y, clonePos.z, cloneXRot, cloneYRot);
     }
 
     private boolean held3 = false;
@@ -198,9 +251,24 @@ public class PowersD4C extends PunchingStand {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.POWER_2) {
-            return this.spawnClone();
+        switch (move)
+        {
+            case PowerIndex.POWER_2 -> {
+                return this.spawnClone();
+            }
         }
+
         return super.setPowerOther(move, lastMove);
+    }
+
+    @Override
+    public void updateIntMove(int in) {
+        Entity targeted = this.getSelf().level().getEntity(in);
+        if (targeted instanceof D4CCloneEntity clone)
+        {
+            this.swapClone(clone);
+        }
+
+        super.updateIntMove(in);
     }
 }

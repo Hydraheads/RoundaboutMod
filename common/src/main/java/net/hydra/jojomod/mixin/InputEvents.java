@@ -13,7 +13,9 @@ import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.client.gui.PauseTSScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
@@ -89,6 +91,19 @@ public abstract class InputEvents implements IInputEvents {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+
+            if (standComp.roundabout$getStand() instanceof D4CEntity)
+            {
+                if ($$0 instanceof D4CCloneEntity clone)
+                {
+                    if (player.isCrouching() && clone.player != null && clone.player.equals(player))
+                    {
+                        ci.setReturnValue(true);
+                        return;
+                    }
+                }
+            }
+
             if (powers.isPiloting()) {
                 LivingEntity ent = powers.getPilotingStand();
                 if (ent != null && powers instanceof PowersJustice){
