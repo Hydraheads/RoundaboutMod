@@ -922,23 +922,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return true;
     }
 
-    public boolean vault() {
-        animateStand((byte) 15);
-        this.poseStand(OffsetIndex.GUARD);
-        cancelConsumableItem(this.getSelf());
-        this.setAttackTimeDuring(-7);
-        this.setActivePower(PowerIndex.VAULT);
-        this.getSelf().resetFallDistance();
-        if (!this.getSelf().level().isClientSide()) {
-            if (Math.random() > 0.85){
-                addEXP(1);
-            }
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
-
-        }
-        return true;
-    }
-
     public boolean fallBrace() {
         impactBrace= false;
         if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {
@@ -1686,32 +1669,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return false;
     }
 
-    @SuppressWarnings("deprecation")
-    public boolean doVault(){
-        Vec3 vec3d = this.getSelf().getEyePosition(0);
-        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
-                && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
-            if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                    /*Stand vaulting*/
-                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
-                    double mag = this.getSelf().getPosition(0).distanceTo(
-                            new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
-                    MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                            (blockHit.getLocation().x - this.getSelf().getX()) / mag,
-                            0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
-                            (blockHit.getLocation().z - this.getSelf().getZ()) / mag
-                    );
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
-                return true;
-            }
-            return true;
-        }
-        return false;
-    }
 
 
     public void standRebound(){
@@ -1752,19 +1709,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
 
-    @SuppressWarnings("deprecation")
-    public boolean canVault(){
-        Vec3 vec3d = this.getSelf().getEyePosition(0);
-        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
-                && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public boolean timeStopStartedBarrage = false;
     @Override

@@ -439,7 +439,10 @@ public class PowersMagiciansRed extends PunchingStand {
                         setSkillIcon(context, x, y, 1, StandIcons.LIGHT_FIRE, PowerIndex.SKILL_1_SNEAK);
                     }
                 }
-                if (this.isGuarding()) {
+
+                if (!this.getSelf().onGround() && canVault()){
+                    setSkillIcon(context, x, y, 3, StandIcons.MAGICIANS_RED_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                } else if (this.isGuarding()) {
                     setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
                 } else if (hasSingle){
                     setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_EXTRA);
@@ -466,7 +469,9 @@ public class PowersMagiciansRed extends PunchingStand {
                     }
                 }
 
-                if (this.isGuarding()){
+                if (!this.getSelf().onGround() && canVault()){
+                    setSkillIcon(context, x, y, 3, StandIcons.MAGICIANS_RED_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                } else if (this.isGuarding()){
                     setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
                 } else if (hasSingle){
                     setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_EXTRA);
@@ -806,7 +811,11 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                         inputDash = true;
                     } else {
-                        super.buttonInput3(keyIsDown, options);
+                        if (this.self.onGround()) {
+                            super.buttonInput3(keyIsDown, options);
+                        } else {
+                            doVault();
+                        }
                     }
                 } else if (hasSingle){
                     this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
@@ -932,6 +941,8 @@ public class PowersMagiciansRed extends PunchingStand {
             return this.crossfireBlock();
         } else if (move == PowerIndex.POWER_3_BLOCK) {
             return this.fireBlast();
+        } else if (move == PowerIndex.VAULT){
+            return this.vault();
         } else if (move == PowerIndex.POWER_2) {
             return this.crossfire();
         } else if (move == PowerIndex.POWER_2_SNEAK) {

@@ -194,8 +194,8 @@ public abstract class ZLevelRenderer {
         float f6 = p_174311_ > 0.0F ? p_174311_ * f * f : p_174311_ - p_174311_ * (1.0F - f) * (1.0F - f);
         float f7 = p_174312_ * f;
         float width = 0.05F;
-        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - 1.8F, f7 + p_174320_ + width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
-        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - 1.8F, f7 - p_174320_ - width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
+        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - 1.93F, f7 + p_174320_ + width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
+        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - 1.93F, f7 - p_174320_ - width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
     }
 
     @Unique
