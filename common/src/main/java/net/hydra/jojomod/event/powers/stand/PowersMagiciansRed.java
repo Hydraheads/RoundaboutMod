@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -42,12 +43,14 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -120,8 +123,10 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (lassoTime <= -1){
                         ((StandUser)leaded).roundabout$dropString();
                         leaded = null;
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1,
-                                ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFail);
+                        if (this.self instanceof ServerPlayer SP) {
+                            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(SP, PowerIndex.SKILL_1,
+                                    ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFail);
+                        }
                     }
                 }
 
@@ -2505,6 +2510,20 @@ public class PowersMagiciansRed extends PunchingStand {
             return super.getSoundPitchFromByte(soundChoice);
         }
     }
+
+
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            double dist = attackTarget.distanceTo(this.getSelf());
+            //boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (dist <= 8 && this.activePower == PowerIndex.NONE && leaded == null) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+            }
+        }
+    }
+
     boolean splash = false;
     @Override
     public void punchImpact(Entity entity){
