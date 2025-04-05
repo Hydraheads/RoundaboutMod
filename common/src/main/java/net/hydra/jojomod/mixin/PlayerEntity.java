@@ -480,6 +480,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+    @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
+        if (!this.isInvulnerableTo($$0)) {
+
+            Entity bound = ((StandUser)this).roundabout$getBoundTo();
+            if (bound != null && !$$0.isIndirect() && !$$0.is(ModDamageTypes.STAND_FIRE)){
+                ((StandUser)this).roundabout$dropString();
+            }
+        }
+    }
 
     @Unique
     public Poses roundabout$standPos = null;
