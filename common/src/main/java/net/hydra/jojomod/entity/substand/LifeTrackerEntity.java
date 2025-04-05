@@ -63,6 +63,9 @@ public class LifeTrackerEntity extends LivingEntity {
     }
 
     @Override
+    public void push(Entity $$0) {
+    }
+    @Override
     public HumanoidArm getMainArm() {
         return null;
     }
