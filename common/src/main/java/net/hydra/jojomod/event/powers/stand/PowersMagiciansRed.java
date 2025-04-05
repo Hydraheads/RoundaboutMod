@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
@@ -50,8 +51,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -645,6 +649,9 @@ public class PowersMagiciansRed extends PunchingStand {
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         if (blockHit.getType() == HitResult.Type.BLOCK){
             grabBlock2 = blockHit.getBlockPos();
+            if (this.self.level().getBlockState(grabBlock2).is(Blocks.CAMPFIRE)){
+                return blockHit.getBlockPos();
+            }
             return blockHit.getBlockPos().relative(blockHit.getDirection());
         }
         return null;
@@ -2211,22 +2218,29 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public boolean setFire(){
-        if (grabBlock != null && tryPlaceBlock(grabBlock)){
-            this.self.level().playSound(null, this.self.getX(), this.self.getY(),
-                    this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 2.0F, 2F);
-            for (int j = 0; j < 10; j++) {
-                double random = (Math.random() * 0.8) - 0.4;
-                double random2 = (Math.random() * 0.8) - 0.4;
-                double random3 = (Math.random() * 0.8) - 0.4;
-                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
-                        this.self.getY() + this.self.getEyeHeight()*0.7, this.self.getZ(),
-                        0,
-                        -1*(this.self.getX() - grabBlock.getX())+0.5 + random,
-                        -1*(this.self.getY() - grabBlock.getY())-0.5 + random2,
-                        -1*(this.self.getZ() - grabBlock.getZ())+0.5 + random3,
-                        0.15);
+        if (grabBlock != null){
+            BlockState state = this.self.level().getBlockState(grabBlock);
+            if (state.is(Blocks.CAMPFIRE)){
+                if (!state.getValue(CampfireBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)){
+                    this.getSelf().level().setBlockAndUpdate(grabBlock, state.setValue(CampfireBlock.LIT,true));
+                }
+            } else if (tryPlaceBlock(grabBlock)) {
+                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                        this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 2.0F, 2F);
+                for (int j = 0; j < 10; j++) {
+                    double random = (Math.random() * 0.8) - 0.4;
+                    double random2 = (Math.random() * 0.8) - 0.4;
+                    double random3 = (Math.random() * 0.8) - 0.4;
+                    ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                            this.self.getY() + this.self.getEyeHeight() * 0.7, this.self.getZ(),
+                            0,
+                            -1 * (this.self.getX() - grabBlock.getX()) + 0.5 + random,
+                            -1 * (this.self.getY() - grabBlock.getY()) - 0.5 + random2,
+                            -1 * (this.self.getZ() - grabBlock.getZ()) + 0.5 + random3,
+                            0.15);
+                }
+                createStandFire(grabBlock);
             }
-            createStandFire(grabBlock);
         }
         return true;
     }
