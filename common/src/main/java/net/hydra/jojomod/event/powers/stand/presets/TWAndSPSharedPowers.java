@@ -1159,6 +1159,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                     playBarrageBlockEndNoise(0, entity);
                                 }
                             } else {
+                                playBarrageBlockNoise();
                                 entity.setDeltaMovement(prevVelocity);
                             }
                         }

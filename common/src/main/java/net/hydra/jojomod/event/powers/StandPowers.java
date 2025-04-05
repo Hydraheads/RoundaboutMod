@@ -1346,6 +1346,15 @@ public class StandPowers {
         }
         this.getUserData(entity).roundabout$setDazed(dazeTime);
     }
+    public void setDazedSafely(LivingEntity entity, byte dazeTime){
+        if (dazeTime > 0){
+            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 14);
+        } else {
+            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 0);
+        }
+        this.getUserData(entity).roundabout$setDazed(dazeTime);
+    }
 
     public boolean knockShield(Entity entity, int duration){
 
@@ -1590,6 +1599,7 @@ public class StandPowers {
                                 }
                             } else {
                                 entity.setDeltaMovement(prevVelocity);
+                                playBarrageBlockNoise();
                             }
                         }
                     }
