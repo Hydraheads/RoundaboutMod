@@ -82,7 +82,9 @@ public class GroundHurricaneEntity extends PathfinderMob {
     public boolean isEffectivelyInWater() {
         return this.wasTouchingWater;
     }
-
+    public boolean isInvulnerable() {
+        return true;
+    }
 
     @Override
     protected void registerGoals() {
