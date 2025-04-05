@@ -136,9 +136,6 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
     public void tick() {
         boolean client = this.level().isClientSide();
         if (!client){
-            if (isEffectivelyInWater()){
-                this.discard();
-            }
             if (this.getStandUser() != null){
                 if (MainUtil.cheapDistanceTo2(this.getX(),this.getZ(),this.standUser.getX(),this.standUser.getZ()) > 80
                         || !this.getStandUser().isAlive() || this.getStandUser().isRemoved()){
@@ -150,11 +147,6 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
         }
 
         super.tick();
-        if (!client){
-            if (isEffectivelyInWater()){
-                this.discard();
-            }
-        }
     }
 
 

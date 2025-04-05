@@ -73,11 +73,11 @@ public class PowersMagiciansRed extends PunchingStand {
         return 26;
     }
     public static int getChargingCrossfire(){
-        return 60;
+        return 52;
     }
 
     public static int getChargingCrossfireSize(){
-        return 60;
+        return 52;
     }
     public static int getKamikazeSize(){
         return 120;
@@ -147,12 +147,14 @@ public class PowersMagiciansRed extends PunchingStand {
             if (ticksUntilHurricaneEnds > -1) {
                 ticksUntilHurricaneEnds--;
                 if (ticksUntilHurricaneEnds <= -1) {
-                    this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 2F, 0.8F);
-                    ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
-                            this.self.getY()+(this.self.getBbHeight()*0.5), this.self.getZ(),
-                            20,
-                            1.2, 1.2, 1.2,
-                            0.005);
+                    if (hasHurricane()) {
+                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 2F, 0.8F);
+                        ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                                this.self.getY() + (this.self.getBbHeight() * 0.5), this.self.getZ(),
+                                20,
+                                1.2, 1.2, 1.2,
+                                0.005);
+                    }
                     clearAllHurricanes();
 
                     if (this.isChargingCrossfireSingle()){
@@ -943,7 +945,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 ticksUntilHurricaneEnds = 160;
                 return this.setPowerNone();
             } else {
-                ticksUntilHurricaneEnds = 80;
+                ticksUntilHurricaneEnds = 20;
                 return false;
             }
         } else if (move == PowerIndex.POWER_2_BONUS) {
@@ -1229,7 +1231,7 @@ public class PowersMagiciansRed extends PunchingStand {
             updateRangedBarrage2();
         } else if (this.getActivePower() == PowerIndex.POWER_4_BONUS){
 
-            if (this.attackTimeDuring >= 10) {
+            if (this.attackTimeDuring >= 12) {
                 if (this.self instanceof Player) {
                     if (isPacketPlayer()) {
                         ((StandUser) this.self).roundabout$tryPower(PowerIndex.POWER_4, true);
@@ -2302,6 +2304,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
+        if (size >=52){size=60;}
         if (this.getReducedDamage(entity)){
             return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 3) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
