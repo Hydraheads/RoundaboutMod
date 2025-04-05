@@ -1,8 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -24,7 +22,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -44,15 +41,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Rabbit;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.monster.hoglin.Hoglin;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -125,7 +115,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         leaded = null;
                         if (this.self instanceof ServerPlayer SP) {
                             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(SP, PowerIndex.SKILL_1,
-                                    ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFail);
+                                    ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }
                 }
@@ -690,7 +680,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 hold1 = true;
                 if (!isLockedByWater()) {
                     if (canShootConcealedCrossfire()) {
-                        this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
+                        this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedAnkhConcealed));
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
                     } else {
@@ -739,26 +729,27 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (hasHurricaneSpecial()) {
                         if (!isChargingCrossfire()) {
                             if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                                this.setCooldown(PowerIndex.SKILL_EXTRA_2, multiplyCooldown(7));
+                                this.setCooldown(PowerIndex.SKILL_EXTRA_2, 8);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                             }
                         }
                     } else if (hasHurricaneSingle() || isChargingCrossfireSingle()) {
-                        this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
+                        this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedAnkhSuccess));
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
                     } else {
                         if (!isGuarding()) {
                             if (isHoldingSneak()) {
                                 if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-                                    this.setCooldown(PowerIndex.SKILL_2_SNEAK, multiplyCooldown(600));
+                                    this.setCooldown(PowerIndex.SKILL_2_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedHurricaneSpecial));
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
                                 }
                             } else {
                                 if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                                    this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(40));
+
+                                    this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedAnkhFail));
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
                                 }
@@ -795,7 +786,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (this.isGuarding()) {
                         if (!isLockedByWater()) {
                             if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                                this.setCooldown(PowerIndex.SKILL_EXTRA, multiplyCooldown(100));
+                                this.setCooldown(PowerIndex.SKILL_EXTRA, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedProjectileBurn));
 
                                 BlockPos HR = getGrabPos(10);
                                 if (HR != null) {
@@ -818,7 +809,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                     }
                 } else if (hasSingle){
-                    this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(100));
+                    this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedAnkhHidden));
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
                     inputDash = true;
@@ -840,7 +831,7 @@ public class PowersMagiciansRed extends PunchingStand {
                                 hold4 = true;
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
-                                this.setCooldown(PowerIndex.SKILL_4, 800);
+                                this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedFlameCrash);
                             }
                         }
                     } else {
@@ -1284,6 +1275,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     ModPacketHandler.PACKET_ACCESS.intToServerPacket(LE.getId(), PacketDataIndex.INT_STAND_ATTACK);
                 } else {
                     ModPacketHandler.PACKET_ACCESS.intToServerPacket(-1, PacketDataIndex.INT_STAND_ATTACK);
+                    this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                 }
             }
         } else {
@@ -1305,10 +1297,7 @@ public class PowersMagiciansRed extends PunchingStand {
             knockShield2(entity, 100);
         }
 
-        if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 40);
-        }
-        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.impaleAttack);
+        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
         SoundEvent SE;
         float pitch = 1F;
         if (entity != null) {
@@ -1974,7 +1963,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE) {
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1) {
-            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFail;
+            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
@@ -2186,7 +2175,7 @@ public class PowersMagiciansRed extends PunchingStand {
         if (!cancel) {
             if (this.getSelf() instanceof ServerPlayer && this.isChargingCrossfireSingle()) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
-                        PowerIndex.SKILL_2,  multiplyCooldown(60));
+                        PowerIndex.SKILL_2,  multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedAnkhFail));
             }
         }
     }
@@ -2424,7 +2413,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean drillT = false;
     public boolean doRedBindAttack(){
         drillT = true;
-        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindAttack);
+        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindDazeAttack);
         if (!this.self.level().isClientSide()){
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 1F, 1F);
             drillTime = 80;

@@ -1,5 +1,7 @@
 package net.hydra.jojomod.util;
 
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.util.annotation.*;
 
 import java.util.Arrays;
@@ -218,12 +220,26 @@ import java.util.Set;
         public Integer magicianLash;
         @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
         public Integer magicianLastLashInString;
-        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
-        public Integer magicianRedBindFail;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer magicianRedBindFailOrMiss;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer magicianRedBindManualRelease;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer magicianRedBindDazeAttack;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer magicianRedAnkhSuccess;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer magicianRedAnkhConcealed;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer magicianRedAnkhHidden;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer magicianRedAnkhFail;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer magicianRedHurricaneSpecial;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer magicianRedProjectileBurn;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
-        public Integer magicianRedBindAttack;
+        public Integer magicianRedFlameCrash;
         @IntOption(group = "inherit", value = 6000, min = 0, max = 72000)
         public Integer d4cDimensionHopToNewDimension;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
