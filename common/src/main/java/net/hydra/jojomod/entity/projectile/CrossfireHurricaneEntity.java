@@ -209,6 +209,9 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     public void tick() {
         boolean client = this.level().isClientSide();
         if (!client){
+            if (isEffectivelyInWater()){
+                tickWater();
+            }
             if (this.getStandUser() != null){
                 if (MainUtil.cheapDistanceTo2(this.getX(),this.getZ(),this.standUser.getX(),this.standUser.getZ()) > 80
                 || !this.getStandUser().isAlive() || this.getStandUser().isRemoved()){
@@ -301,6 +304,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
         saneAgeTicking = this.tickCount;
         super.tick();
+        if (!client){
+            if (isEffectivelyInWater()){
+                tickWater();
+            }
+        }
 
         if (le != null) {
             if (((StandUser) this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
@@ -515,6 +523,14 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
 
     public boolean markCharged = false;
+
+    public int inWaterTicks=0;
+    public void tickWater(){
+        inWaterTicks++;
+        if (inWaterTicks > 40){
+            this.discard();
+        }
+    }
 
     public float getAccrualRate(){
         if (this.getCrossNumber() == 6){

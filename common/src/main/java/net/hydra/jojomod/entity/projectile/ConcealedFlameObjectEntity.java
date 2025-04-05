@@ -97,12 +97,20 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
     public boolean isEffectivelyInWater() {
         return this.wasTouchingWater;
     }
+
+    public int inWaterTicks=0;
+    public void tickWater(){
+        inWaterTicks++;
+        if (inWaterTicks > 40){
+            this.discard();
+        }
+    }
     @Override
     public void tick(){
         boolean client = this.level().isClientSide();
         if (!client){
             if (isEffectivelyInWater()){
-                this.discard();
+                tickWater();
             }
             if (this.getUser() != null){
                 if (MainUtil.cheapDistanceTo2(this.getX(),this.getZ(),this.standUser.getX(),this.standUser.getZ()) > 80

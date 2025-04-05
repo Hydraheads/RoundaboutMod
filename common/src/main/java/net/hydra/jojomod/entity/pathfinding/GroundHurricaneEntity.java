@@ -138,9 +138,6 @@ public class GroundHurricaneEntity extends PathfinderMob {
         boolean client = this.level().isClientSide();
         LivingEntity $$0 = this.getUser();
         if (!client) {
-            if (isEffectivelyInWater()) {
-                this.discard();
-            }
             if ($$0 != null) {
                 if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), this.standUser.getX(), this.standUser.getZ()) > 80
                         || !this.getUser().isAlive() || this.getUser().isRemoved()) {
