@@ -2216,7 +2216,8 @@ public class StandPowers {
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     public boolean tryPower(int move, boolean forced){
-        if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH) && this.attackTimeDuring  > -1){
+        if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
+        && move != PowerIndex.BARRAGE_CHARGE && move != PowerIndex.GUARD) && this.attackTimeDuring  > -1){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
 
@@ -2592,15 +2593,14 @@ public class StandPowers {
     public boolean tryPlaceBlock(BlockPos pos){
         if (!this.self.level().isClientSide()) {
             BlockState state = this.getSelf().level().getBlockState(pos);
-
-            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() &&
-                    this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
-                    !((this.getSelf() instanceof Player &&
-                    (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
-                            this.getSelf()).gameMode.getGameModeForPlayer()))) ||
-                    !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos)))) {
-                return true;
-            }
+                if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() &&
+                        this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+                        !((this.getSelf() instanceof Player &&
+                                (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
+                                        this.getSelf()).gameMode.getGameModeForPlayer()))) ||
+                                (this.getSelf() instanceof Player && !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos))))) {
+                    return true;
+                }
         }
         return false;
     }

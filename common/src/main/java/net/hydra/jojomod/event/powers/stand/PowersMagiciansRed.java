@@ -906,12 +906,12 @@ public class PowersMagiciansRed extends PunchingStand {
 
         if (!this.self.level().isClientSide &&
                 (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2)
-                && (move != PowerIndex.RANGED_BARRAGE_2)){
+                && (move != PowerIndex.RANGED_BARRAGE_2 && move != PowerIndex.RANGED_BARRAGE_CHARGE_2 && move != PowerIndex.GUARD)){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
         if (!this.self.level().isClientSide &&
                 (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE)
-                && (move != PowerIndex.RANGED_BARRAGE)){
+                && (move != PowerIndex.RANGED_BARRAGE && move != PowerIndex.RANGED_BARRAGE_CHARGE && move != PowerIndex.GUARD)){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
 
@@ -2529,8 +2529,8 @@ public class PowersMagiciansRed extends PunchingStand {
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
             double dist = attackTarget.distanceTo(this.getSelf());
             //boolean isCreeper = this.getSelf() instanceof Creeper;
-            if (dist <= 8 && this.activePower == PowerIndex.NONE && leaded == null) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+            if (dist <= 8 && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
             }
         }
     }
