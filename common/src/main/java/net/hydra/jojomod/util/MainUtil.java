@@ -640,7 +640,13 @@ public class MainUtil {
     public static double fixAngle(float angle){
        return (Math.abs(angle) % 360);
     }
+    public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
+        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+        takeUnresistableKnockbackWithY(entity,strength,x,y,z);
+    }
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);

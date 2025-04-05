@@ -447,11 +447,6 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
         if (gotten.hurt(ModDamageTypes.of(gotten.level(), ModDamageTypes.CROSSFIRE, user),
                 dmg)) {
-            float degrees = MainUtil.getLookAtEntityYaw(proj, gotten);
-            MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
-                    Mth.sin(degrees * ((float) Math.PI / 180)),
-                    Mth.sin(-17 * ((float) Math.PI / 180)),
-                    -Mth.cos(degrees * ((float) Math.PI / 180)));
             if (gotten instanceof LivingEntity LE) {
                 StandUser userLE = ((StandUser) LE);
                 int ticks = 21;
@@ -465,15 +460,21 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         } else if (gotten instanceof LivingEntity LE && LE.isBlocking()) {
             int breakShield = 0;
             if (size >= PowersMagiciansRed.getChargingCrossfireSize()){
-                breakShield = (int) (10+ size*2);
+                breakShield = (120);
 
             } else if (size >= PowersMagiciansRed.getChargingCrossfireSpecialSize()){
-                breakShield = (int) (10+ (size*0.5));
+                //breakShield = (int) (10+ (size*0.5));
             }
             if (breakShield > 0) {
                 MainUtil.knockShieldPlusStand(LE, breakShield);
             }
         }
+
+        float degrees = MainUtil.getLookAtEntityYaw(proj, gotten);
+        MainUtil.takeKnockbackWithY(gotten, strength,
+                Mth.sin(degrees * ((float) Math.PI / 180)),
+                Mth.sin(-17 * ((float) Math.PI / 180)),
+                -Mth.cos(degrees * ((float) Math.PI / 180)));
     }
 
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){

@@ -945,7 +945,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 ticksUntilHurricaneEnds = 160;
                 return this.setPowerNone();
             } else {
-                ticksUntilHurricaneEnds = 20;
+                ticksUntilHurricaneEnds = 30;
                 return false;
             }
         } else if (move == PowerIndex.POWER_2_BONUS) {
