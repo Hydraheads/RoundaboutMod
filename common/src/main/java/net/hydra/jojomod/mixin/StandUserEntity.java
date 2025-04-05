@@ -2318,7 +2318,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide()) {
             if (this.isInWaterRainOrBubble() || (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative())
             || (roundabout$fireStarter != null && ((StandUser)roundabout$fireStarter).roundabout$getStandPowers() instanceof
-                    PowersMagiciansRed PM && PM.snapNumber > roundabout$fireStarterID)){
+                    PowersMagiciansRed PM && (PM.snapNumber != roundabout$fireStarterID))){
                 if (roundabout$remainingFireTicks >= 0) {
                     roundabout$remainingFireTicks = -1;
                     roundabout$setOnStandFire(StandFireType.FIRELESS.id);
