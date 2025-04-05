@@ -1822,20 +1822,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 ci.setReturnValue(true);
                 return;
-            }
-        } else if ($$0.is(ModDamageTypes.STAND_FIRE)) {
-            float power = MainUtil.gasDamageMultiplier()*10;
-            this.roundabout$setGasolineTime(-1);
-            if (!this.level().isClientSide) {
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
-                        40, 0.0, 0.2, 0.0, 0.2);
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
-                        1, 0.5, 0.5, 0.5, 0.2);
-                MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, power);
-            }
+            } else if ($$0.is(ModDamageTypes.STAND_FIRE)) {
+                float power = MainUtil.gasDamageMultiplier()*10;
+                this.roundabout$setGasolineTime(-1);
+                if (!this.level().isClientSide) {
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                            40, 0.0, 0.2, 0.0, 0.2);
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                            1, 0.5, 0.5, 0.5, 0.2);
+                    MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, power);
+                }
 
-            ci.setReturnValue(true);
-            return;
+                ci.setReturnValue(true);
+                return;
+            }
         }
         if ($$0.getDirectEntity() != null && !$$0.is(ModDamageTypes.STAND_FIRE)) {
            if (this.roundabout$getStandPowers().preCanInterruptPower($$0.getDirectEntity(),MainUtil.isStandDamage($$0))) {
