@@ -24,6 +24,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.lang.reflect.Array;
@@ -53,10 +54,15 @@ public class PowersD4C extends PunchingStand {
         else
             setSkillIcon(context, x, y, 1, StandIcons.D4C_DIMENSION_KIDNAP, PowerIndex.SKILL_1_SNEAK);
 
-        if (!isHoldingSneak())
+        if (!isHoldingSneak() && !isGuarding())
             setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2);
-        else
+        else if (!isGuarding()) {
             setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK);
+        }
+        else
+        {
+            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
+        }
 
         if (!isHoldingSneak())
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
@@ -76,8 +82,19 @@ public class PowersD4C extends PunchingStand {
     }
 
     private boolean held2 = false;
+    @Nullable
+    public D4CCloneEntity targetingClone = null;
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
+        if (isHoldingSneak() && !isGuarding())
+        {
+            if (MainUtil.getTargetEntity(this.getSelf(), 100, 2) instanceof D4CCloneEntity clone)
+            {
+                targetingClone = clone;
+            }
+        }
+        else { targetingClone = null; }
+
         if (keyIsDown && !held2)
         {
             held3 = true;
@@ -95,19 +112,20 @@ public class PowersD4C extends PunchingStand {
             {
                 if (!(this.onCooldown(PowerIndex.SKILL_2_SNEAK)))
                 {
-                    Entity TE = MainUtil.getTargetEntity(this.getSelf(), 100, 10);
-                    if (TE instanceof D4CCloneEntity clone)
+                    //Entity TE = MainUtil.getTargetEntity(this.getSelf(), 100, 10);
+                    if (targetingClone != null)
                     {
-                        if (clone.player != this.getSelf())
+                        if (targetingClone.player != this.getSelf())
                             return;
 
                         // there isnt a data index for what i want and im too lazy to add one so here, update move, it probably fits
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(clone.getId(), PacketDataIndex.INT_UPDATE_MOVE);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(targetingClone.getId(), PacketDataIndex.INT_UPDATE_MOVE);
 
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
 
                         this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
+                        this.targetingClone = null;
                     }
                 }
             }

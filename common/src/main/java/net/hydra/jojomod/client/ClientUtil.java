@@ -170,7 +170,13 @@ public class ClientUtil {
             {
                 if (entity instanceof D4CCloneEntity clone && clone.player != null && clone.player.equals(player) && player.isCrouching())
                 {
-                    return 16777215;
+                    if (clone.isSelected())
+                    {
+                        return 16701501;
+                    }
+                    else {
+                        return 16777215;
+                    }
                 }
             }
         }
