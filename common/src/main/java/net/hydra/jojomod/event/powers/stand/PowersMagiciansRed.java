@@ -112,6 +112,9 @@ public class PowersMagiciansRed extends PunchingStand {
 
         offloadLead();
         if (!this.self.level().isClientSide()) {
+            if (this.activePower == PowerIndex.MINING){
+                spewFlamesMining();
+            }
             if (leaded != null) {
                 if (((leaded instanceof Enemy) ||
                         (leaded instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(this.self))) ||
@@ -305,6 +308,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 float g = 1/f;
                 basis *= g;
             }
+            basis *= 0.9f;
         }
 
         if (isUsingFirestorm()){
@@ -1459,6 +1463,55 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
     }
+
+    public void spewFlamesMining(){
+        if (!this.self.level().isClientSide()){
+            //particle spew code here
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 vector = getRayBlock(this.self,this.getReach());
+                if (vector != null) {
+                    for (int i = 0; i < 2; i++) {
+                        double spd = (1 - ((double) i / 7)) * 1;
+                        double random = (Math.random() * 2.2) - 1.1;
+                        double random2 = (Math.random() * 2.2) - 1.1;
+                        double random3 = (Math.random() * 2.2) - 1.1;
+                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                                stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
+                                0,
+                                (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
+                                (-3 * ((stand.getY() + stand.getEyeHeight()) - vector.y())  + random2) * spd,
+                                (-3 * (stand.getZ() - vector.z()) + 0.5 + random3) * spd,
+                                0.15);
+                    }
+                }
+            }
+        }
+    }
+    public void spewFlames(){
+        if (!this.self.level().isClientSide()){
+            //particle spew code here
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 vector = getRayBlock(this.self,this.getReach());
+                if (vector != null) {
+                    for (int i = 0; i < 6; i++) {
+                        double spd = (1 - ((double) i / 7)) * 0.5;
+                        double random = (Math.random() * 6) - 3;
+                        double random2 = (Math.random() * 6) - 3;
+                        double random3 = (Math.random() * 6) - 3;
+                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                                stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
+                                0,
+                                (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
+                                (-3 * (stand.getY() - vector.y()) - 1 + random2) * spd,
+                                (-3 * (stand.getZ() - vector.z()) + 0.5 + random3) * spd,
+                                0.15);
+                    }
+                }
+            }
+        }
+    }
     public void updateRangedBarrage2(){
 
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
@@ -1469,28 +1522,7 @@ public class PowersMagiciansRed extends PunchingStand {
             } else {
                 if (this.attackTimeDuring > 0) {
 
-                    if (!this.self.level().isClientSide()){
-                        //particle spew code here
-                        StandEntity stand = this.getStandEntity(this.self);
-                        if (stand != null) {
-                            Vec3 vector = getRayBlock(this.self,this.getReach());
-                            if (vector != null) {
-                                for (int i = 0; i < 6; i++) {
-                                    double spd = (1 - ((double) i / 7)) * 0.5;
-                                    double random = (Math.random() * 6) - 3;
-                                    double random2 = (Math.random() * 6) - 3;
-                                    double random3 = (Math.random() * 6) - 3;
-                                    ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
-                                            stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
-                                            0,
-                                            (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
-                                            (-3 * (stand.getY() - vector.y()) - 1 + random2) * spd,
-                                            (-3 * (stand.getZ() - vector.z()) + 0.5 + random3) * spd,
-                                            0.15);
-                                }
-                            }
-                        }
-                    }
+                    spewFlames();
                     this.setAttackTime((getBarrageRecoilTime() - 1) -
                             Math.round(((float) this.attackTimeDuring / this.getRangedBarrage2Length())
                                     * (getBarrageRecoilTime() - 1)));

@@ -26,6 +26,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.stringtemplate.v4.ST;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientForgeEvents {
@@ -105,11 +106,11 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MENACING.get(), MenacingParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VACUUM.get(), VacuumParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.ORANGE_FLAME.get(), FlameParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.BLUE_FLAME.get(), FlameParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.PURPLE_FLAME.get(), FlameParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.GREEN_FLAME.get(), FlameParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.DREAD_FLAME.get(), FlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ORANGE_FLAME.get(), StandFlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BLUE_FLAME.get(), StandFlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PURPLE_FLAME.get(), StandFlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GREEN_FLAME.get(), StandFlameParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.DREAD_FLAME.get(), StandFlameParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.FOG_CHAIN.get(), FogChainParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
     }

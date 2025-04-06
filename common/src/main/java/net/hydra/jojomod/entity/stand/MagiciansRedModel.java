@@ -143,7 +143,6 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
-        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.finalKickWindup, TheWorldAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
         this.animate(pEntity.finalKick, TheWorldAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
         this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
@@ -158,6 +157,16 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         this.animate(pEntity.red_bind, MagiciansRedAnimations.Red_Bind_Grab, pAgeInTicks, 1f);
         this.animate(pEntity.fire_crash, MagiciansRedAnimations.Fire_Crash, pAgeInTicks, 1f);
         this.animate(pEntity.life_detector, MagiciansRedAnimations.Life_Detector_Creation, pAgeInTicks, 1.5f);
+
+        this.animate(pEntity.miningBarrageAnimationState, MagiciansRedAnimations.FLAMETHROWER_BARRAGE, pAgeInTicks, 1f);
+
+        this.animate(pEntity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, pAgeInTicks, 2.5f);
+        this.animate(pEntity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, pAgeInTicks, 1.8f);
+        this.animate(pEntity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, pAgeInTicks, 1f);
+        this.animate(pEntity.idleAnimationState2, StandAnimations.IDLE_2, pAgeInTicks, 1f);
+        this.animate(pEntity.idleAnimationState3, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
+        this.animate(pEntity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, pAgeInTicks, 1f);
+        this.animate(pEntity.blockAnimationState, StandAnimations.BLOCK, pAgeInTicks, 1f);
     }
 
     @Override

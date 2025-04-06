@@ -15,11 +15,11 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIR_CRACKLE, AirCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MENACING, MenacingParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VACUUM, VacuumParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.ORANGE_FLAME, FlameParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_FLAME, FlameParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.PURPLE_FLAME, FlameParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.GREEN_FLAME, FlameParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.DREAD_FLAME, FlameParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ORANGE_FLAME, StandFlameParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_FLAME, StandFlameParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PURPLE_FLAME, StandFlameParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GREEN_FLAME, StandFlameParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.DREAD_FLAME, StandFlameParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FOG_CHAIN, VacuumParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.WARDEN_CLOCK, WardenClockParticle.Provider::new);
     }
