@@ -1375,6 +1375,9 @@ public class PowersMagiciansRed extends PunchingStand {
         } else {
             /*Caps how far out the punch goes*/
             Entity targetEntity = getTargetEntity(this.self,4);
+            if (targetEntity == null){
+                this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+            }
             lassoImpact(targetEntity);
         }
     }
@@ -2698,13 +2701,31 @@ public class PowersMagiciansRed extends PunchingStand {
 
 
 
+    public int anticipationticks = 0;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
             double dist = attackTarget.distanceTo(this.getSelf());
-            //boolean isCreeper = this.getSelf() instanceof Creeper;
-            if (dist <= 8 && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+            if (this.activePower == PowerIndex.NONE) {
+                boolean isCreeper = this.getSelf() instanceof Creeper;
+                if (isCreeper) {
+                    if (leaded != null) {
+                        if (anticipationticks == 0){
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA_2, true);
+                            anticipationticks = -1;
+                        } else {
+                            anticipationticks--;
+                        }
+                    } else if (dist <= 5 && !this.onCooldown(PowerIndex.SKILL_1)) {
+                        anticipationticks = 4;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                    }
+                }
+                /**
+                 if (dist <= 8 && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())) {
+                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                 }
+                 **/
             }
         }
     }
