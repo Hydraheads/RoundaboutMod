@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
+import net.hydra.jojomod.entity.FogCloneEntity;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -62,6 +64,9 @@ public class LifeTrackerEntity extends LivingEntity {
         super.tick();
     }
 
+    @Override
+    public void doPush(Entity $$0) {
+    }
     @Override
     public void push(Entity $$0) {
     }

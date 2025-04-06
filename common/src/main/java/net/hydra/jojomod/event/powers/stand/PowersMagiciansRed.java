@@ -41,7 +41,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -2307,6 +2309,14 @@ public class PowersMagiciansRed extends PunchingStand {
         return 7;
     }
 
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 13) {
+
+            }
+        }
+    }
 
     public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
