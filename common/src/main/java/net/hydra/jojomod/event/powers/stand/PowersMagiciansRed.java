@@ -1152,7 +1152,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return true;
     }
     public boolean kamikaze(){
-        this.animateStand((byte) 51);
+        this.animateStand((byte) 50);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_4);
