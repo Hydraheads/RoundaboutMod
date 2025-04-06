@@ -22,7 +22,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -303,6 +309,11 @@ public class StandFireBlock extends BaseEntityBlock {
         if (!$$1.isClientSide() && $$1.getBlockEntity($$2) instanceof StandFireBlockEntity fb) {
 
             if (fb.standUser != null && (fb.standUser.is($$3) || ($$3.hasPassenger(fb.standUser)) ||
+
+                    (fb.standUser != null && !(fb.standUser instanceof Monster) && !($$3 instanceof Monster) &&
+                            !(fb.standUser instanceof Mob LE && LE.getTarget() !=null && LE.getTarget().is($$3))
+                    ) ||
+
                     ($$3 instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(fb.standUser)))){
                 $$1.removeBlock($$2, false);
             } else {
