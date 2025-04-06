@@ -79,8 +79,8 @@ public class D4CCloneRenderer <T extends D4CCloneEntity, M extends EntityModel<T
         }
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
         ve.setSwimming($$0.isSwimming());
-        ve.setItemInHand(InteractionHand.MAIN_HAND,$$0.getMainHandItem());
-        ve.setItemInHand(InteractionHand.OFF_HAND,$$0.getOffhandItem());
+        ve.setItemInHand(InteractionHand.MAIN_HAND,entityeah.getMainHandItem());
+        ve.setItemInHand(InteractionHand.OFF_HAND,entityeah.getOffhandItem());
         ve.setPose($$0.getPose());
         if (ve instanceof JojoNPC v2) {
             v2.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
