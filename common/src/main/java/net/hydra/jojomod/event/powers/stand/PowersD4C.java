@@ -19,6 +19,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -28,9 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class PowersD4C extends PunchingStand {
     public PowersD4C(LivingEntity self) {
@@ -170,18 +169,55 @@ public class PowersD4C extends PunchingStand {
         Vec3 clonePos = clone.position();
         float cloneXRot = clone.getXRot();
         float cloneYRot = clone.getYRot();
+        float cloneHealth = clone.getHealth();
 
-        clone.teleportTo(
-                this.getSelf().getX(),
-                this.getSelf().getY(),
-                this.getSelf().getZ()
-        );
+        List<MobEffectInstance> cloneEffects = new ArrayList<>();
+        for (MobEffectInstance effect : clone.getActiveEffects()) {
+            cloneEffects.add(new MobEffectInstance(effect));
+        }
 
-        clone.setYRot(this.getSelf().getYRot());
-        clone.setXRot(this.getSelf().getXRot());
+        List<MobEffectInstance> playerEffects = new ArrayList<>();
+        for (MobEffectInstance effect : PE.getActiveEffects()) {
+            playerEffects.add(new MobEffectInstance(effect));
+        }
+
+        clone.teleportTo(PE.getX(), PE.getY(), PE.getZ());
+        clone.setYRot(PE.getYRot());
+        clone.setXRot(PE.getXRot());
+        clone.setHealth(PE.getHealth());
 
         PE.teleportTo(clonePos.x, clonePos.y, clonePos.z);
         PE.moveTo(clonePos.x, clonePos.y, clonePos.z, cloneXRot, cloneYRot);
+        PE.setHealth(cloneHealth);
+
+        for (MobEffectInstance effect : clone.getActiveEffects()) {
+            clone.removeEffect(effect.getEffect());
+        }
+        for (MobEffectInstance effect : PE.getActiveEffects()) {
+            PE.removeEffect(effect.getEffect());
+        }
+
+        for (MobEffectInstance effect : cloneEffects) {
+            PE.addEffect(new MobEffectInstance(effect));
+        }
+        for (MobEffectInstance effect : playerEffects) {
+            clone.addEffect(new MobEffectInstance(effect));
+        }
+
+        StandUser SU = (StandUser) PE;
+        StandUser CSU = (StandUser) clone;
+
+        byte playerLocacacaCurse = SU.roundabout$getLocacacaCurse();
+        byte cloneLocacacaCurse = CSU.roundabout$getLocacacaCurse();
+
+        SU.roundabout$setLocacacaCurse(cloneLocacacaCurse);
+        CSU.roundabout$setLocacacaCurse(playerLocacacaCurse);
+
+        byte playerOnStandFire = SU.roundabout$getOnStandFire();
+        byte cloneOnStandFire = CSU.roundabout$getOnStandFire();
+
+        SU.roundabout$setOnStandFire(cloneOnStandFire);
+        CSU.roundabout$setOnStandFire(playerOnStandFire);
     }
 
     private boolean held3 = false;
