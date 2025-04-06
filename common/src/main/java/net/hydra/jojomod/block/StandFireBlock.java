@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -301,7 +302,8 @@ public class StandFireBlock extends BaseEntityBlock {
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if (!$$1.isClientSide() && $$1.getBlockEntity($$2) instanceof StandFireBlockEntity fb) {
 
-            if (fb.standUser != null && fb.standUser.is($$3)){
+            if (fb.standUser != null && (fb.standUser.is($$3) || ($$3.hasPassenger(fb.standUser)) ||
+                    ($$3 instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(fb.standUser)))){
                 $$1.removeBlock($$2, false);
             } else {
                 if ($$3 instanceof LivingEntity LE) {
