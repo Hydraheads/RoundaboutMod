@@ -50,10 +50,7 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.warden.Warden;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
@@ -358,7 +355,7 @@ public class MainUtil {
 
         if (Mob instanceof LivingEntity){
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
-                    || Mob instanceof Villager || Mob instanceof WaterAnimal
+                    || Mob instanceof Villager || Mob instanceof WaterAnimal || Mob instanceof WanderingTrader
                     || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player
                     || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
