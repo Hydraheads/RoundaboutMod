@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -45,6 +46,16 @@ public class LifeTrackerEntity extends LivingEntity {
                 instanceof PowersMagiciansRed)) {
                     this.discard();
                     return;
+                }
+
+                if (((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                    if (this.tickCount %4 == 0) {
+                        ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
+                                this.getY() + (this.getBbHeight() * 0.5), this.getZ(),
+                                1,
+                                0.25, 0.25, 0.25,
+                                0.005);
+                    }
                 }
             } else {
                 this.discard();
