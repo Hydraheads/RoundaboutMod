@@ -178,6 +178,12 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
                 if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
                     PMR.createStandFire2(pos);
+                    PMR.createStandFire2(pos.west());
+                    PMR.createStandFire2(pos.north());
+                    PMR.createStandFire2(pos.south());
+                    PMR.createStandFire2(pos.east());
+                    PMR.createStandFire2(pos.above());
+                    PMR.createStandFire2(pos.below());
                 }
             }
             this.discard();

@@ -2310,7 +2310,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 6) * (ClientNetworking.getAppropriateConfig().
+            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 5.8) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod((float) (1+(((size)/60)* 16) * (ClientNetworking.getAppropriateConfig().
@@ -2320,7 +2320,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
         if (size >=52){size=60;}
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 3) * (ClientNetworking.getAppropriateConfig().
+            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 2.8) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod((float) (1+((size/60)* 9) * (ClientNetworking.getAppropriateConfig().
