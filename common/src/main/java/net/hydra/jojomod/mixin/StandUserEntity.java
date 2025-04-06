@@ -50,6 +50,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
@@ -2073,7 +2074,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     } else if (ths instanceof Skeleton || ths instanceof Stray) {
                         marked = true;
                         mb = ModEntities.FALLEN_SKELETON.create(this.level());
-                    } else if (ths instanceof Villager || ths instanceof Witch || ths instanceof AbstractIllager) {
+                    } else if (ths instanceof Villager || ths instanceof Witch || ths instanceof AbstractIllager
+                            || ths instanceof WanderingTrader) {
                         marked = true;
                         mb = ModEntities.FALLEN_VILLAGER.create(this.level());
                     } else if (ths instanceof Spider && !(ths instanceof CaveSpider)) {

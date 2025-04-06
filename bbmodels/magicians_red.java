@@ -1,4 +1,4 @@
-// Made with Blockbench 4.12.3
+// Made with Blockbench 4.12.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
@@ -11,6 +11,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart head;
 	private final ModelPart head2;
 	private final ModelPart beak;
+	private final ModelPart beak_top;
+	private final ModelPart beak_bottom;
 	private final ModelPart extra_details;
 	private final ModelPart body;
 	private final ModelPart body2;
@@ -20,8 +22,28 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart right_arm;
 	private final ModelPart upper_right_arm;
 	private final ModelPart lower_right_arm;
+	private final ModelPart Fireballs;
+	private final ModelPart Fireball1;
+	private final ModelPart Fireball2;
+	private final ModelPart Fireball3;
+	private final ModelPart Fireball4;
+	private final ModelPart Fireball5;
+	private final ModelPart Fireball6;
+	private final ModelPart Fireball7;
+	private final ModelPart Fireball8;
+	private final ModelPart Fireball9;
 	private final ModelPart left_arm;
 	private final ModelPart lower_left_arm;
+	private final ModelPart Fireballs2;
+	private final ModelPart Fireball10;
+	private final ModelPart Fireball11;
+	private final ModelPart Fireball12;
+	private final ModelPart Fireball13;
+	private final ModelPart Fireball14;
+	private final ModelPart Fireball15;
+	private final ModelPart Fireball16;
+	private final ModelPart Fireball17;
+	private final ModelPart Fireball18;
 	private final ModelPart upper_left_arm;
 	private final ModelPart lower_chest;
 	private final ModelPart lower_torso;
@@ -40,6 +62,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.head = this.stand2.getChild("head");
 		this.head2 = this.head.getChild("head2");
 		this.beak = this.head2.getChild("beak");
+		this.beak_top = this.beak.getChild("beak_top");
+		this.beak_bottom = this.beak.getChild("beak_bottom");
 		this.extra_details = this.head2.getChild("extra_details");
 		this.body = this.stand2.getChild("body");
 		this.body2 = this.body.getChild("body2");
@@ -49,8 +73,28 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.right_arm = this.upper_chest.getChild("right_arm");
 		this.upper_right_arm = this.right_arm.getChild("upper_right_arm");
 		this.lower_right_arm = this.right_arm.getChild("lower_right_arm");
+		this.Fireballs = this.lower_right_arm.getChild("Fireballs");
+		this.Fireball1 = this.Fireballs.getChild("Fireball1");
+		this.Fireball2 = this.Fireballs.getChild("Fireball2");
+		this.Fireball3 = this.Fireballs.getChild("Fireball3");
+		this.Fireball4 = this.Fireballs.getChild("Fireball4");
+		this.Fireball5 = this.Fireballs.getChild("Fireball5");
+		this.Fireball6 = this.Fireballs.getChild("Fireball6");
+		this.Fireball7 = this.Fireballs.getChild("Fireball7");
+		this.Fireball8 = this.Fireballs.getChild("Fireball8");
+		this.Fireball9 = this.Fireballs.getChild("Fireball9");
 		this.left_arm = this.upper_chest.getChild("left_arm");
 		this.lower_left_arm = this.left_arm.getChild("lower_left_arm");
+		this.Fireballs2 = this.lower_left_arm.getChild("Fireballs2");
+		this.Fireball10 = this.Fireballs2.getChild("Fireball10");
+		this.Fireball11 = this.Fireballs2.getChild("Fireball11");
+		this.Fireball12 = this.Fireballs2.getChild("Fireball12");
+		this.Fireball13 = this.Fireballs2.getChild("Fireball13");
+		this.Fireball14 = this.Fireballs2.getChild("Fireball14");
+		this.Fireball15 = this.Fireballs2.getChild("Fireball15");
+		this.Fireball16 = this.Fireballs2.getChild("Fireball16");
+		this.Fireball17 = this.Fireballs2.getChild("Fireball17");
+		this.Fireball18 = this.Fireballs2.getChild("Fireball18");
 		this.upper_left_arm = this.left_arm.getChild("upper_left_arm");
 		this.lower_chest = this.torso.getChild("lower_chest");
 		this.lower_torso = this.lower_chest.getChild("lower_torso");
@@ -74,12 +118,15 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -24.15F, 0.0F));
 
-		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -7.85F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.85F, 0.0F));
 
-		PartDefinition beak = head2.addOrReplaceChild("beak", CubeListBuilder.create().texOffs(60, 17).addBox(-3.0F, -2.2375F, -3.0F, 6.0F, 1.0F, 3.0F, new CubeDeformation(0.1F))
-		.texOffs(49, 11).addBox(-2.0F, -1.1625F, -2.825F, 4.0F, 1.0F, 3.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, -1.0F, -4.0F));
+		PartDefinition beak = head2.addOrReplaceChild("beak", CubeListBuilder.create(), PartPose.offset(0.0F, 2.85F, -4.0F));
 
-		PartDefinition extra_details = head2.addOrReplaceChild("extra_details", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, 0.7886F, -5.0302F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -8.8761F, 1.0302F));
+		PartDefinition beak_top = beak.addOrReplaceChild("beak_top", CubeListBuilder.create().texOffs(60, 16).addBox(-2.5F, -2.2375F, -4.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition beak_bottom = beak.addOrReplaceChild("beak_bottom", CubeListBuilder.create().texOffs(48, 10).addBox(-2.0F, -1.1625F, -3.825F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition extra_details = head2.addOrReplaceChild("extra_details", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, 0.7886F, -5.0302F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -5.0261F, 1.0302F));
 
 		PartDefinition extra_details_r1 = extra_details.addOrReplaceChild("extra_details_r1", CubeListBuilder.create().texOffs(0, 22).addBox(-0.025F, -0.8167F, -7.5614F, 0.0F, 1.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.025F, 3.513F, 7.074F, 0.2618F, 0.0F, 0.0F));
 
@@ -103,13 +150,53 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(48, 34).addBox(-4.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(48, 18).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.001F))
-		.texOffs(16, 55).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
+		PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(48, 18).addBox(-2.0F, -0.5F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.001F))
+		.texOffs(16, 55).addBox(-2.0F, 0.5F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(-2.0F, 5.75F, 0.0F));
+
+		PartDefinition Fireballs = lower_right_arm.addOrReplaceChild("Fireballs", CubeListBuilder.create(), PartPose.offset(0.0F, 3.5F, -0.2F));
+
+		PartDefinition Fireball1 = Fireballs.addOrReplaceChild("Fireball1", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball2 = Fireballs.addOrReplaceChild("Fireball2", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball3 = Fireballs.addOrReplaceChild("Fireball3", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball4 = Fireballs.addOrReplaceChild("Fireball4", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball5 = Fireballs.addOrReplaceChild("Fireball5", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball6 = Fireballs.addOrReplaceChild("Fireball6", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball7 = Fireballs.addOrReplaceChild("Fireball7", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball8 = Fireballs.addOrReplaceChild("Fireball8", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball9 = Fireballs.addOrReplaceChild("Fireball9", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
 
 		PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
-		PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(44, 44).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.001F))
-		.texOffs(28, 50).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(2.0F, 5.5F, 0.0F));
+		PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(44, 44).addBox(-2.0F, -0.5F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.001F))
+		.texOffs(28, 50).addBox(-2.0F, 0.5F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(2.0F, 5.75F, 0.0F));
+
+		PartDefinition Fireballs2 = lower_left_arm.addOrReplaceChild("Fireballs2", CubeListBuilder.create(), PartPose.offset(-0.3F, 4.3F, -0.1F));
+
+		PartDefinition Fireball10 = Fireballs2.addOrReplaceChild("Fireball10", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball11 = Fireballs2.addOrReplaceChild("Fireball11", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball12 = Fireballs2.addOrReplaceChild("Fireball12", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball13 = Fireballs2.addOrReplaceChild("Fireball13", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball14 = Fireballs2.addOrReplaceChild("Fireball14", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball15 = Fireballs2.addOrReplaceChild("Fireball15", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball16 = Fireballs2.addOrReplaceChild("Fireball16", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball17 = Fireballs2.addOrReplaceChild("Fireball17", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
+
+		PartDefinition Fireball18 = Fireballs2.addOrReplaceChild("Fireball18", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
 
 		PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(48, 0).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 

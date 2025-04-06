@@ -34,6 +34,14 @@ public class MagiciansRedEntity extends StandEntity {
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
+    public final AnimationState lash1 = new AnimationState();
+    public final AnimationState lash2 = new AnimationState();
+    public final AnimationState lash3 = new AnimationState();
+    public final AnimationState flamethrower_charge = new AnimationState();
+    public final AnimationState flamethrower_shoot = new AnimationState();
+
+    public final AnimationState hideLash = new AnimationState();
+
     public static final byte
             PART_3_SKIN = 1,
             BLUE_SKIN = 2,
@@ -44,6 +52,43 @@ public class MagiciansRedEntity extends StandEntity {
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
+            byte animation = this.getAnimation();
+            if (animation > 40 && animation < 44) {
+                this.hideLash.stop();
+                if (animation == 41) {
+                    this.lash1.startIfStopped(this.tickCount);
+                } else {
+                    this.lash1.stop();
+                }
+                if (animation == 42) {
+                    this.lash2.startIfStopped(this.tickCount);
+                } else {
+                    this.lash2.stop();
+                }
+                if (animation == 43) {
+                    this.lash3.startIfStopped(this.tickCount);
+                } else {
+                    this.lash3.stop();
+                }
+            } else {
+                this.hideLash.startIfStopped(this.tickCount);
+                this.lash1.stop();
+                this.lash2.stop();
+                this.lash3.stop();
+            }
+
+            if (this.getAnimation() == 45) {
+                this.flamethrower_charge.startIfStopped(this.tickCount);
+            } else {
+                this.flamethrower_charge.stop();
+            }
+
+            if (this.getAnimation() == 46) {
+                this.flamethrower_shoot.startIfStopped(this.tickCount);
+            } else {
+                this.flamethrower_shoot.stop();
+            }
+
             if (this.getAnimation() == 85) {
                 this.finalKickWindup.startIfStopped(this.tickCount);
             } else {

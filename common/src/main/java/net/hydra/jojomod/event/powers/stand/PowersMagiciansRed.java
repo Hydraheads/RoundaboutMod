@@ -1162,7 +1162,7 @@ public class PowersMagiciansRed extends PunchingStand {
         playFlamethrowerSound();
         this.setAttackTimeMax(this.getRangedBarrage2RecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand((byte) 80);
+        animateStand((byte) 46);
         return true;
     }
     public int getRangedBarrageRecoilTime(){
@@ -2479,7 +2479,7 @@ public class PowersMagiciansRed extends PunchingStand {
             this.setActivePower(PowerIndex.ATTACK);
             this.setAttackTime(0);
 
-            animateStand(this.activePowerPhase);
+            animateStand((byte) (40+this.activePowerPhase));
             poseStand(OffsetIndex.ATTACK);
         return true;
     }
@@ -2499,6 +2499,7 @@ public class PowersMagiciansRed extends PunchingStand {
         this.poseStand(OffsetIndex.ATTACK);
         this.clashDone = false;
         playRangedBarrageChargeSound2();
+        animateStand((byte) 45);
         return true;
     }
     public void playRangedBarrageChargeSound(){
