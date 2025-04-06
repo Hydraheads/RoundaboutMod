@@ -25,6 +25,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -141,6 +142,13 @@ public class PowersMagiciansRed extends PunchingStand {
 
                 if (leaded != null){
                     if (leaded.isInWaterOrRain() && this.self.isInWaterOrRain()){
+                        clearLeaded();
+                    }
+                }
+
+                if (leaded !=null) {
+                    ItemStack useItem = this.self.getUseItem();
+                    if (useItem.is(ModItems.NEW_LOCACACA)){
                         clearLeaded();
                     }
                 }
