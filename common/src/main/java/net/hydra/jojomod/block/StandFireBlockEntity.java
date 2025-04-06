@@ -1,14 +1,17 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
@@ -47,8 +50,14 @@ public class StandFireBlockEntity extends BlockEntity{
     public byte getFireColorType(BlockState $$0){
         return $$0.getValue(StandFireBlock.COLOR).byteValue();
     }
-    public void rollNextTarget(){
-        nextTarget = (int) (20 + Math.round(Math.random()*20));
+    public void rollNextTarget(Level $$1, BlockPos $$2){
+        int mult = 20;
+        int base = 20;
+        if ((((IPermaCasting)$$1).roundabout$inPermaCastRange($$2, PermanentZoneCastInstance.FIRESTORM))){
+            mult = 10;
+            base = 10;
+        }
+        nextTarget = (int) (base + Math.round(Math.random()*mult));
     }
     public void tick(BlockState $$0, Level $$1, BlockPos $$2, StandFireBlockEntity sf, RandomSource $$3) {
         if (!$$1.isClientSide()) {
@@ -60,7 +69,7 @@ public class StandFireBlockEntity extends BlockEntity{
                     return;
                 }
                 if (nextTarget == 0) {
-                    rollNextTarget();
+                    rollNextTarget($$1,$$2);
                 }
                 ticksStored++;
                 if (iterated >= hardcap) {
@@ -103,7 +112,7 @@ public class StandFireBlockEntity extends BlockEntity{
 
                 if (this.ticksStored >= nextTarget) {
                     ticksStored = 0;
-                    rollNextTarget();
+                    rollNextTarget($$1,$$2);
                     if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
                         if (!$$0.canSurvive($$1, $$2)) {
                             $$1.removeBlock($$2, false);
