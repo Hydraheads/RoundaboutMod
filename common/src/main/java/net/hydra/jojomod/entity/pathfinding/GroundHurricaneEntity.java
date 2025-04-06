@@ -129,6 +129,9 @@ public class GroundHurricaneEntity extends PathfinderMob {
         if (user != null &&
                 ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
             burst(PMR);
+            if ($$0 instanceof LivingEntity LE){
+                PMR.addEXP(7,LE);
+            }
             CrossfireHurricaneEntity.blastEntity($$0, this,
                     this.getSize(), user, true, PMR,fireStormCreated);
         }

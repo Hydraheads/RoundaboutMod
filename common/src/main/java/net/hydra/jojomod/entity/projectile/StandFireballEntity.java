@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -30,6 +31,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.UUID;
 
 public class StandFireballEntity extends AbstractHurtingProjectile implements UnburnableProjectile {
@@ -178,12 +180,6 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
                 if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
                     PMR.createStandFire2(pos);
-                    PMR.createStandFire2(pos.west());
-                    PMR.createStandFire2(pos.north());
-                    PMR.createStandFire2(pos.south());
-                    PMR.createStandFire2(pos.east());
-                    PMR.createStandFire2(pos.above());
-                    PMR.createStandFire2(pos.below());
                 }
             }
             this.discard();
@@ -223,6 +219,15 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
                 if (mainTarget != null) {
                     getEntity(mainTarget, PMR);
                 }
+                List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
+                        this.getZ(), 2, 2, 2);
+                if (!entityList.isEmpty()){
+                    for (Entity value : entityList) {
+                        if (!(mainTarget != null && value.is(mainTarget)) && value.isPickable()){
+                            getEntity(value, PMR);
+                        }
+                    }
+                }
             }
         }
     }
@@ -241,6 +246,7 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
                         Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
+                    PMR.addEXP(3,LE);
                     StandUser userLE = ((StandUser) LE);
                     int ticks = 20;
                     if (userLE.roundabout$getRemainingFireTicks() > -1){

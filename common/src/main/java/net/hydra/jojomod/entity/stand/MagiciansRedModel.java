@@ -151,8 +151,8 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         this.animate(pEntity.lash2, MagiciansRedAnimations.FireLashCombo2, pAgeInTicks, 1.2f);
         this.animate(pEntity.lash3, MagiciansRedAnimations.FireLashCombo3, pAgeInTicks, 0.7f);
         this.animate(pEntity.hideLash, MagiciansRedAnimations.FireLashHidden, pAgeInTicks, 1f);
-        this.animate(pEntity.flamethrower_charge, MagiciansRedAnimations.FLAMETHROWER_WINDUP, pAgeInTicks, 1f);
-        this.animate(pEntity.flamethrower_shoot, MagiciansRedAnimations.FLAMETHROWER_BARRAGE, pAgeInTicks, 1f);
+        this.animate(pEntity.flamethrower_charge, MagiciansRedAnimations.Fireball_Windup, pAgeInTicks, 1f);
+        this.animate(pEntity.flamethrower_shoot, MagiciansRedAnimations.Fireball_Barrage, pAgeInTicks, 1f);
     }
 
     @Override

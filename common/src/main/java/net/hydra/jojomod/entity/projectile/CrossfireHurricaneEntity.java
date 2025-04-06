@@ -410,6 +410,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         if (!this.level().isClientSide()){
             LivingEntity user = this.getStandUser();
             if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                PMR.addEXP(2);
                 this.level().playSound(null, this.blockPosition(), ModSounds.CROSSFIRE_EXPLODE_EVENT,
                         SoundSource.PLAYERS, 2F, 1F);
                 ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
@@ -448,6 +449,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         if (gotten.hurt(ModDamageTypes.of(gotten.level(), ModDamageTypes.CROSSFIRE, user),
                 dmg)) {
             if (gotten instanceof LivingEntity LE) {
+                PMR.addEXP(2,LE);
                 StandUser userLE = ((StandUser) LE);
                 int ticks = 21;
                 ticks += size*3;

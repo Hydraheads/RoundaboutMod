@@ -233,6 +233,7 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
                 this.discard();
             } else {
                 burst(PMR);
+                PMR.addEXP(4);
                 CrossfireHurricaneEntity.blastEntity(source.getEntity(), this,
                         this.getSize(), user, true, PMR,fireStormCreated);
                 this.discard();

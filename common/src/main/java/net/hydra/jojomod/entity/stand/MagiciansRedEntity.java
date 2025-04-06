@@ -39,6 +39,9 @@ public class MagiciansRedEntity extends StandEntity {
     public final AnimationState lash3 = new AnimationState();
     public final AnimationState flamethrower_charge = new AnimationState();
     public final AnimationState flamethrower_shoot = new AnimationState();
+    public final AnimationState fireball_charge = new AnimationState();
+    public final AnimationState fireball_shoot = new AnimationState();
+    public final AnimationState red_bind = new AnimationState();
 
     public final AnimationState hideLash = new AnimationState();
 
@@ -87,6 +90,23 @@ public class MagiciansRedEntity extends StandEntity {
                 this.flamethrower_shoot.startIfStopped(this.tickCount);
             } else {
                 this.flamethrower_shoot.stop();
+            }
+
+            if (this.getAnimation() == 47) {
+                this.fireball_charge.startIfStopped(this.tickCount);
+            } else {
+                this.fireball_charge.stop();
+            }
+
+            if (this.getAnimation() == 48) {
+                this.fireball_shoot.startIfStopped(this.tickCount);
+            } else {
+                this.fireball_shoot.stop();
+            }
+            if (this.getAnimation() == 49) {
+                this.red_bind.startIfStopped(this.tickCount);
+            } else {
+                this.red_bind.stop();
             }
 
             if (this.getAnimation() == 85) {
