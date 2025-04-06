@@ -310,7 +310,7 @@ public class StandFireBlock extends BaseEntityBlock {
 
             if (fb.standUser != null && (fb.standUser.is($$3) || ($$3.hasPassenger(fb.standUser)) ||
 
-                    (fb.standUser != null && !(fb.standUser instanceof Monster) && !($$3 instanceof Monster) &&
+                    (fb.standUser != null && !(fb.standUser instanceof Player) && !(fb.standUser instanceof Monster) && !($$3 instanceof Monster) &&
                             !(fb.standUser instanceof Mob LE && LE.getTarget() !=null && LE.getTarget().is($$3))
                     ) ||
 
