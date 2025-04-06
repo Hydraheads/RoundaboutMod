@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -137,6 +138,18 @@ public class GroundHurricaneEntity extends PathfinderMob {
         }
         this.discard();
         return true;
+    }
+
+
+    @Override
+    public void doPush(Entity $$0) {
+    }
+    @Override
+    public void push(Entity $$0) {
+    }
+    @Override
+    public boolean isAttackable() {
+        return false;
     }
     @Override
     public void tick() {

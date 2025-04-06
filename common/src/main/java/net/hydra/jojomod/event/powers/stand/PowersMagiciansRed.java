@@ -47,15 +47,19 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -1571,12 +1575,11 @@ public class PowersMagiciansRed extends PunchingStand {
             Entity targetEntity = getTargetEntity(this.self,distMax);
 
             List<Entity> listE = getTargetEntityList(this.self,distMax);
-            punchImpact(targetEntity);
+            rangedBarrageImpact(targetEntity,lastHit);
             if (!listE.isEmpty()){
                 for (int i = 0; i< listE.size(); i++){
                     if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                         if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < distMax) {
-                            this.setActivePowerPhase((byte) (this.getActivePowerPhase()+50));
                             if (lastHit) {
                                 rangedBarrageImpact(listE.get(i), true);
                             } else {
@@ -1585,6 +1588,10 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                     }
                 }
+            }
+
+            if (this.attackTimeDuring == this.getRangedBarrage2Length()){
+                this.attackTimeDuring = -10;
             }
         }
     }
@@ -1722,6 +1729,7 @@ public class PowersMagiciansRed extends PunchingStand {
             this.setActivePower(PowerIndex.POWER_2_SNEAK);
             spinint = 0;
             if (!this.self.level().isClientSide()) {
+                this.setCooldown(PowerIndex.SKILL_2_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedHurricaneSpecial));
                 blockPosForSpecial = this.self.blockPosition();
                 sendSpecialParticle(blockPosForSpecial.east().east());
                 sendSpecialParticle(blockPosForSpecial.west().west());
@@ -2129,6 +2137,8 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean shootAnkhConfirm(){
         if (!this.self.level().isClientSide()) {
             if (hasHurricaneSpecial()){
+
+                this.setCooldown(PowerIndex.SKILL_EXTRA_2, 8);
                 List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(hurricaneSpecial) {
                 };
                 if (!hurricaneSpecial2.isEmpty()) {
@@ -2144,6 +2154,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 hurricaneSpecial = hurricaneSpecial2;
                 return false;
             } else if (hasHurricaneSingle()){
+                this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedAnkhSuccess));
                 CrossfireHurricaneEntity cfh = hurricane;
                 if (cfh != null && !cfh.isRemoved() && cfh.isAlive()){
                     cfh.setCrossNumber(0);
@@ -2166,6 +2177,7 @@ public class PowersMagiciansRed extends PunchingStand {
             this.setAttackTimeDuring(-15);
             this.setActivePower(PowerIndex.POWER_3_BONUS);
             if (!this.self.level().isClientSide()) {
+                this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedAnkhHidden));
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
                 groundent.setPos(this.self.position());
@@ -2485,7 +2497,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 5.8) * (ClientNetworking.getAppropriateConfig().
+            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 5.5) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod((float) (1+(((size)/60)* 16) * (ClientNetworking.getAppropriateConfig().
@@ -2495,7 +2507,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
         if (size >=52){size=60;}
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 2.8) * (ClientNetworking.getAppropriateConfig().
+            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 2.5) * (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod((float) (1+((size/60)* 9) * (ClientNetworking.getAppropriateConfig().
@@ -2727,12 +2739,41 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                     }
                 } else {
-                    if (dist <= 25) {
-                        if (this.self instanceof Monster) {
+
+                    if ((this.self instanceof Ravager || this.self instanceof Hoglin || this.self instanceof WitherBoss ||
+                            this.self instanceof EnderDragon || this.self instanceof Warden) && !isUsingFirestorm() &&
+                            !this.self.isUnderWater()){
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+                    }
+
+                    if (this.getActivePower() != PowerIndex.NONE
+                            || attackTarget.distanceTo(this.getSelf()) <= 7 || hasHurricane()){
+                        this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+                        float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                        this.getSelf().setYRot(yrot);
+                        this.getSelf().setYHeadRot(yrot);
+                    }
+                    if (dist <= 25 && !hasHurricane() && activePower == PowerIndex.NONE) {
+
+                        if ((this.self instanceof Raider || this.self instanceof Villager ||
+                        this.self instanceof Blaze || this.self instanceof Piglin || this.self instanceof EnderMan||
+                                this.self instanceof Hoglin || this.self instanceof ZombifiedPiglin || this.self instanceof PiglinBrute)
+                                && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)
+                        ){
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                        } else if (dist > 7 && !this.onCooldown(PowerIndex.SKILL_2)) {
                             double RNG = Math.random();
+                            if (RNG < 0.3){
+                                wentForCharge = true;
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
+                            } else {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                            }
                         }
                     }
-                    if (dist <= 7 && !hasHurricane()){
+
+
+                    if (dist <= 7 && !hasHurricane() && (activePower == PowerIndex.NONE || activePower == PowerIndex.ATTACK)){
                         Entity targetEntity = getTargetEntity(this.self, -1);
                         if (targetEntity != null && targetEntity.is(attackTarget)) {
                             if (this.attackTimeDuring <= -1) {
@@ -2740,13 +2781,14 @@ public class PowersMagiciansRed extends PunchingStand {
                                 if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
                                     wentForCharge = true;
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
-                                } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
-                                    if (RNG < 0.5 && (this.self instanceof Villager || this.self instanceof IronGolem ||
+                                } else if ((this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) &&
+                                        (this.activePower == PowerIndex.NONE || this.activePower == PowerIndex.ATTACK)) {
+                                    if (RNG < 0.5 && (this.self instanceof IronGolem ||
                                             this.self instanceof Ravager || this.self instanceof Piglin ||
                                             this.self instanceof ZombifiedPiglin ||this.self instanceof Hoglin ||
                                             this.self instanceof PiglinBrute)){
                                         wentForCharge = false;
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK, true);
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                                     } else {
                                         wentForCharge = false;
                                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
@@ -2756,6 +2798,20 @@ public class PowersMagiciansRed extends PunchingStand {
                         }
                     }
 
+                    if (hasHurricaneSingle()){
+                        if (hurricane.getSize() >= hurricane.getMaxSize()){
+                            double RNG = Math.random();
+                            if (RNG < 0.5 && (groundHurricane == null || groundHurricane.isRemoved())){
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                            } else {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                            }
+                        }
+                    } else if (hasHurricaneSpecial() && activePower == PowerIndex.NONE){
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                        }
+                    }
 
 
                 }

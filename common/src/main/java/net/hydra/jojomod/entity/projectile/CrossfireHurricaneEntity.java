@@ -31,6 +31,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -437,7 +440,13 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
 
     public static void blastEntity(Entity gotten, Entity proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR,
                                    boolean fireStorm){
-
+        if (!(user instanceof Player) && !(user instanceof Monster)){
+            if (!(gotten instanceof Monster)){
+                if (!(user instanceof Mob mb && mb.getTarget() !=null && mb.getTarget().is(gotten))){
+                    return;
+                }
+            }
+        }
         float dmg = 1;
         float strength = 0.85F;
         if (direct) {

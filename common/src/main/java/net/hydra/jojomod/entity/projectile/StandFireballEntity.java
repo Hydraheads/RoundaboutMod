@@ -23,6 +23,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -217,14 +220,14 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
                         0.005, 0.01, 0.005,
                         0.02);
                 if (mainTarget != null) {
-                    getEntity(mainTarget, PMR);
+                    getEntity(mainTarget, PMR, user);
                 }
                 List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
                         this.getZ(), 2, 2, 2);
                 if (!entityList.isEmpty()){
                     for (Entity value : entityList) {
                         if (!(mainTarget != null && value.is(mainTarget)) && value.isPickable()){
-                            getEntity(value, PMR);
+                            getEntity(value, PMR, user);
                         }
                     }
                 }
@@ -232,11 +235,17 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
         }
     }
 
-    public void getEntity(Entity gotten, PowersMagiciansRed PMR){
+    public void getEntity(Entity gotten, PowersMagiciansRed PMR, LivingEntity user){
         if (gotten !=null && gotten.getId() != getUserID()) {
             float dmg = PMR.getFireballDamage(gotten);
             float strength = 0.85F;
-
+            if (!(user instanceof Player) && !(user instanceof Monster)){
+                if (!(gotten instanceof Monster)){
+                    if (!(user instanceof Mob mb && mb.getTarget() !=null && mb.getTarget().is(gotten))){
+                        return;
+                    }
+                }
+            }
 
             if (gotten.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, this.standUser),
                     dmg)) {
