@@ -66,6 +66,31 @@ public class LifeTrackerEntity extends LivingEntity {
 
     @Override
     public void doPush(Entity $$0) {
+            if (!$$0.isPassengerOfSameVehicle(this)) {
+                if (!$$0.noPhysics && !this.noPhysics) {
+                    double $$1 = this.getX() - $$0.getX();
+                    double $$2 = this.getZ() - $$0.getZ();
+                    double $$3 = Mth.absMax($$1, $$2);
+                    if ($$3 >= 0.009999999776482582) {
+                        $$3 = Math.sqrt($$3);
+                        $$1 /= $$3;
+                        $$2 /= $$3;
+                        double $$4 = 1.0 / $$3;
+                        if ($$4 > 1.0) {
+                            $$4 = 1.0;
+                        }
+
+                        $$1 *= $$4;
+                        $$2 *= $$4;
+                        $$1 *= 0.25000000074505806;
+                        $$2 *= 0.25000000074505806;
+                        if (!this.isVehicle() && this.isPushable()) {
+                            this.push($$1, 0.0, $$2);
+                        }
+                    }
+
+                }
+            }
     }
     @Override
     public void push(Entity $$0) {

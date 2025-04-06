@@ -42,6 +42,8 @@ public class MagiciansRedEntity extends StandEntity {
     public final AnimationState fireball_charge = new AnimationState();
     public final AnimationState fireball_shoot = new AnimationState();
     public final AnimationState red_bind = new AnimationState();
+    public final AnimationState fire_crash = new AnimationState();
+    public final AnimationState life_detector = new AnimationState();
 
     public final AnimationState hideLash = new AnimationState();
 
@@ -107,6 +109,16 @@ public class MagiciansRedEntity extends StandEntity {
                 this.red_bind.startIfStopped(this.tickCount);
             } else {
                 this.red_bind.stop();
+            }
+            if (this.getAnimation() == 50) {
+                this.fire_crash.startIfStopped(this.tickCount);
+            } else {
+                this.fire_crash.stop();
+            }
+            if (this.getAnimation() == 51) {
+                this.life_detector.startIfStopped(this.tickCount);
+            } else {
+                this.life_detector.stop();
             }
 
             if (this.getAnimation() == 85) {

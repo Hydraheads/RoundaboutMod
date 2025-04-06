@@ -151,8 +151,13 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         this.animate(pEntity.lash2, MagiciansRedAnimations.FireLashCombo2, pAgeInTicks, 1.2f);
         this.animate(pEntity.lash3, MagiciansRedAnimations.FireLashCombo3, pAgeInTicks, 0.7f);
         this.animate(pEntity.hideLash, MagiciansRedAnimations.FireLashHidden, pAgeInTicks, 1f);
-        this.animate(pEntity.flamethrower_charge, MagiciansRedAnimations.Fireball_Windup, pAgeInTicks, 1f);
-        this.animate(pEntity.flamethrower_shoot, MagiciansRedAnimations.Fireball_Barrage, pAgeInTicks, 1f);
+        this.animate(pEntity.flamethrower_charge, MagiciansRedAnimations.FLAMETHROWER_WINDUP, pAgeInTicks, 1f);
+        this.animate(pEntity.flamethrower_shoot, MagiciansRedAnimations.FLAMETHROWER_BARRAGE, pAgeInTicks, 1f);
+        this.animate(pEntity.fireball_charge, MagiciansRedAnimations.Fireball_Windup, pAgeInTicks, 1f);
+        this.animate(pEntity.fireball_shoot, MagiciansRedAnimations.Fireball_Barrage, pAgeInTicks, 1f);
+        this.animate(pEntity.red_bind, MagiciansRedAnimations.Red_Bind_Grab, pAgeInTicks, 1f);
+        this.animate(pEntity.fire_crash, MagiciansRedAnimations.Fire_Crash, pAgeInTicks, 1f);
+        this.animate(pEntity.life_detector, MagiciansRedAnimations.Life_Detector_Creation, pAgeInTicks, 1.5f);
     }
 
     @Override
