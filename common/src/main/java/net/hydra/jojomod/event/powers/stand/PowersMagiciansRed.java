@@ -2312,8 +2312,17 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public void tickStandRejection(MobEffectInstance effect){
         if (!this.getSelf().level().isClientSide()) {
-            if (effect.getDuration() == 13) {
-
+            if (effect.getDuration() == 15) {
+                StandUser user = ((StandUser) this.self);
+                user.roundabout$setSecondsOnStandFire(20);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MAGICIANS_RED_CRY_3_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
+                user.roundabout$setOnStandFire((byte) 1, this.self);
+                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                        this.self.getY()+(this.self.getBbHeight()*0.5), this.self.getZ(),
+                        10,
+                        0.25, 0.25, 0.25,
+                        0.005);
             }
         }
     }
