@@ -42,7 +42,7 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             float rsize = $$0.getMaxSize();
             if ($$0.getRenderSize() < rsize){
                 if ($$0.getCrossNumber() == 6){
-                    $$0.setRenderSize((Math.min((float) ($$0.getLastRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize))*0.5F);
+                    $$0.setRenderSize((Math.min((float) ($$0.getLastRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize))*0.6F);
                 } else {
                     $$0.setRenderSize(Math.min((float) ($$0.getLastRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize));
                 }
@@ -56,7 +56,7 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
             if ($$0.getCrossNumber() != 7) {
                 if ($$0.getCrossNumber() == 6){
-                    this.model2.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.52f);
+                    this.model2.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.53f);
                 } else {
                     this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.57f);
                 }

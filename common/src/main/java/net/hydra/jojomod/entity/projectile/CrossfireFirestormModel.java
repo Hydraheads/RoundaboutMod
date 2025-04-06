@@ -39,9 +39,9 @@ public class CrossfireFirestormModel<T extends CrossfireHurricaneEntity> extends
         PartDefinition Square = Fire_Ankh.addOrReplaceChild("Square", CubeListBuilder.create(), PartPose.offset(1.2F, -6.0F, 0.0F));
 
         PartDefinition cube_r3 = Square.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(8, 7).addBox(-3.5F, -3.5F, -0.5F, 6.0F, 2.0F, 1.0F, new CubeDeformation(0.02F))
-                .texOffs(8, 14).addBox(-3.5F, -2.5F, -0.5F, 2.0F, 4.0F, 1.0F, new CubeDeformation(-0.002F))
-                .texOffs(14, 14).addBox(0.5F, -2.5F, -0.5F, 2.0F, 4.0F, 1.0F, new CubeDeformation(0.01F))
-                .texOffs(8, 4).addBox(-3.5F, 0.5F, -0.5F, 6.0F, 2.0F, 1.0F, new CubeDeformation(-0.001F)), PartPose.offsetAndRotation(0.0F, -9.6F, 0.0F, 0.0F, 0.0F, -0.7854F));
+                .texOffs(8, 14).addBox(-3.5F, -1.5F, -0.5F, 2.0F, 2.0F, 1.0F, new CubeDeformation(-0.002F))
+                .texOffs(14, 14).addBox(0.5F, -1.5F, -0.5F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.01F))
+                .texOffs(8, 4).addBox(-3.5F, 0.5F, -0.5F, 6.0F, 2.0F, 1.0F, new CubeDeformation(-0.001F)), PartPose.offsetAndRotation(0.0F, -9.7F, 0.0F, 0.0F, 0.0F, -0.7854F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
