@@ -23,10 +23,12 @@ import net.minecraft.world.entity.LivingEntity;
 public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurricaneEntity> {
 
     private final CrossfireHurricaneModel model;
+    private final CrossfireFirestormModel model2;
 
     public CrossfireHurricaneRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
         this.model = new CrossfireHurricaneModel($$0.bakeLayer(ModEntityRendererClient.CROSSFIRE_LAYER));
+        this.model2 = new CrossfireFirestormModel($$0.bakeLayer(ModEntityRendererClient.CROSSFIRE_FIRESTORM_LAYER));
     }
 
 
@@ -39,7 +41,11 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             $$3.pushPose();
             float rsize = $$0.getMaxSize();
             if ($$0.getRenderSize() < rsize){
-                $$0.setRenderSize(Math.min((float) ($$0.getLastRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize));
+                if ($$0.getCrossNumber() == 6){
+                    $$0.setRenderSize((Math.min((float) ($$0.getLastRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize))*0.5F);
+                } else {
+                    $$0.setRenderSize(Math.min((float) ($$0.getLastRenderSize() + ($$2 * (float)$$0.getAccrualRate())),rsize));
+                }
             }
 
             //$$3.mulPose(Axis.ZP.rotationDegrees(-180));
@@ -49,7 +55,11 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
             $$3.scale(1.1f+fsize, 1.1f+fsize, 1.1f+fsize);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
             if ($$0.getCrossNumber() != 7) {
-                this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.57f);
+                if ($$0.getCrossNumber() == 6){
+                    this.model2.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.52f);
+                } else {
+                    this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.57f);
+                }
             }
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, 15728880);
@@ -74,52 +84,129 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_dread.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_dread.png");
 
+    public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_BLUE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_BLUE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_BLUE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_PURPLE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_GREEN_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_GREEN_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_GREEN_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_dread.png");
+
+
 
     public ResourceLocation getThird(CrossfireHurricaneEntity var1){
         LivingEntity user = var1.getUser();
+        int crossno = var1.getCrossNumber();
         if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
-                return CROSSFIRE_HURRICANE_3_BLUE_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_3_BLUE_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_3_BLUE_TEXTURE;
+                }
             } else if (sft == StandFireType.PURPLE.id){
-                return CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE;
+                }
             } else if (sft == StandFireType.GREEN.id){
-                return CROSSFIRE_HURRICANE_3_GREEN_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_3_GREEN_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_3_GREEN_TEXTURE;
+                }
             } else if (sft == StandFireType.DREAD.id){
-                return CROSSFIRE_HURRICANE_3_DREAD_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_3_DREAD_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_3_DREAD_TEXTURE;
+                }
             }
+        }
+        if (crossno == 6){
+            return CROSSFIRE_HURRICANE_3_TEXTURE_B;
         }
         return CROSSFIRE_HURRICANE_3_TEXTURE;
     }
     public ResourceLocation getFirst(CrossfireHurricaneEntity var1){
         LivingEntity user = var1.getUser();
+        int crossno = var1.getCrossNumber();
         if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
-                return CROSSFIRE_HURRICANE_BLUE_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_BLUE_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_BLUE_TEXTURE;
+                }
             } else if (sft == StandFireType.PURPLE.id){
-                return CROSSFIRE_HURRICANE_PURPLE_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_PURPLE_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_PURPLE_TEXTURE;
+                }
             } else if (sft == StandFireType.GREEN.id){
-                return CROSSFIRE_HURRICANE_GREEN_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_GREEN_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_GREEN_TEXTURE;
+                }
             } else if (sft == StandFireType.DREAD.id){
-                return CROSSFIRE_HURRICANE_DREAD_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_DREAD_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_DREAD_TEXTURE;
+                }
             }
+        }
+        if (crossno == 6){
+            return CROSSFIRE_HURRICANE_TEXTURE_B;
         }
         return CROSSFIRE_HURRICANE_TEXTURE;
     }
     public ResourceLocation getSecond(CrossfireHurricaneEntity var1){
         LivingEntity user = var1.getUser();
+        int crossno = var1.getCrossNumber();
         if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
-                return CROSSFIRE_HURRICANE_2_BLUE_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_2_BLUE_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_2_BLUE_TEXTURE;
+                }
             } else if (sft == StandFireType.PURPLE.id){
-                return CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE;
+                }
             } else if (sft == StandFireType.GREEN.id){
-                return CROSSFIRE_HURRICANE_2_GREEN_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_2_GREEN_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_2_GREEN_TEXTURE;
+                }
             } else if (sft == StandFireType.DREAD.id){
-                return CROSSFIRE_HURRICANE_2_DREAD_TEXTURE;
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_2_DREAD_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_2_DREAD_TEXTURE;
+                }
             }
+        }
+        if (crossno == 6){
+            return CROSSFIRE_HURRICANE_2_TEXTURE_B;
         }
         return CROSSFIRE_HURRICANE_2_TEXTURE;
     }

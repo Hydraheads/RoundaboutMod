@@ -1813,7 +1813,7 @@ public class PowersMagiciansRed extends PunchingStand {
             int fireCount = 50;
             float firespeed =0.05F;
             if (chargedFinal >= maxSuperHitTime){
-                fireCount = 200;
+                fireCount = 100;
                 firespeed =0.1F;
             }
             ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), entity.getX(),
