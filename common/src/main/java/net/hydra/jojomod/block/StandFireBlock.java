@@ -274,8 +274,7 @@ public class StandFireBlock extends BaseEntityBlock {
     public static BlockState getState(BlockGetter $$0, BlockPos $$1) {
         BlockPos $$2 = $$1.below();
         BlockState $$3 = $$0.getBlockState($$2);
-        return SoulFireBlock.canSurviveOnBlock($$3) ? Blocks.SOUL_FIRE.defaultBlockState() :
-                ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement($$0, $$1);
+        return ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement($$0, $$1);
     }
 
     @Override
