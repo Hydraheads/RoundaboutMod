@@ -46,8 +46,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -2706,7 +2711,6 @@ public class PowersMagiciansRed extends PunchingStand {
     public void tickMobAI(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
             double dist = attackTarget.distanceTo(this.getSelf());
-            if (this.activePower == PowerIndex.NONE) {
                 boolean isCreeper = this.getSelf() instanceof Creeper;
                 if (isCreeper) {
                     if (leaded != null) {
@@ -2717,16 +2721,49 @@ public class PowersMagiciansRed extends PunchingStand {
                             anticipationticks--;
                         }
                     } else if (dist <= 5 && !this.onCooldown(PowerIndex.SKILL_1)) {
-                        anticipationticks = 4;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                        if (this.activePower == PowerIndex.NONE) {
+                            anticipationticks = 4;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                        }
                     }
+                } else {
+                    if (dist <= 25) {
+                        if (this.self instanceof Monster) {
+                            double RNG = Math.random();
+                        }
+                    }
+                    if (dist <= 7 && !hasHurricane()){
+                        Entity targetEntity = getTargetEntity(this.self, -1);
+                        if (targetEntity != null && targetEntity.is(attackTarget)) {
+                            if (this.attackTimeDuring <= -1) {
+                                double RNG = Math.random();
+                                if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
+                                    wentForCharge = true;
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
+                                } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                                    if (RNG < 0.5 && (this.self instanceof Villager || this.self instanceof IronGolem ||
+                                            this.self instanceof Ravager || this.self instanceof Piglin ||
+                                            this.self instanceof ZombifiedPiglin ||this.self instanceof Hoglin ||
+                                            this.self instanceof PiglinBrute)){
+                                        wentForCharge = false;
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK, true);
+                                    } else {
+                                        wentForCharge = false;
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+
                 }
                 /**
                  if (dist <= 8 && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())) {
                  ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                  }
                  **/
-            }
         }
     }
 

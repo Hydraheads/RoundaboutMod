@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -113,7 +114,8 @@ public class StandFireBlockEntity extends BlockEntity{
                 if (this.ticksStored >= nextTarget) {
                     ticksStored = 0;
                     rollNextTarget($$1,$$2);
-                    if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                    if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                    && (standUser instanceof Player || $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_MOB_STAND_FIRE_SPREADS))) {
                         if (!$$0.canSurvive($$1, $$2)) {
                             $$1.removeBlock($$2, false);
                             return;

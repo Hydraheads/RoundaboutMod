@@ -9,6 +9,8 @@ public class FabricGamerules {
     public static void registerGamerules(){
         ModGamerules.ROUNDABOUT_STAND_GRIEFING = GameRuleRegistry.register("roundaboutStandGriefing",
                 GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+        ModGamerules.ROUNDABOUT_STAND_GRIEFING = GameRuleRegistry.register("roundaboutMobStandFireSpreads",
+                GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(false));
         ModGamerules.ROUNDABOUT_STAND_LEVELING = GameRuleRegistry.register("roundaboutStandLeveling",
                 GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH = GameRuleRegistry.register("roundaboutKeepStandsOnDeath",
