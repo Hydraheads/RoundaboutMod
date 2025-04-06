@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -103,7 +104,7 @@ public class StandFireBlockEntity extends BlockEntity{
                 if (this.ticksStored >= nextTarget) {
                     ticksStored = 0;
                     rollNextTarget();
-                    if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
+                    if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
                         if (!$$0.canSurvive($$1, $$2)) {
                             $$1.removeBlock($$2, false);
                             return;
