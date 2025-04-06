@@ -21,6 +21,7 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
@@ -121,8 +122,7 @@ public class StandFireBlockEntity extends BlockEntity{
                     rollNextTarget($$1,$$2);
                     if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
                     && (standUser instanceof Player || ($$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_MOB_STAND_FIRE_SPREADS)
-                    && !(standUser instanceof TamableAnimal) && !(standUser instanceof AbstractVillager) && !(standUser instanceof IronGolem)
-                            && !(standUser instanceof SnowGolem)))) {
+                    && (standUser instanceof Monster)))) {
                         if (!$$0.canSurvive($$1, $$2)) {
                             $$1.removeBlock($$2, false);
                             return;
