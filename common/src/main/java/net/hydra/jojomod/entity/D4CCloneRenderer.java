@@ -81,7 +81,7 @@ public class D4CCloneRenderer <T extends D4CCloneEntity, M extends EntityModel<T
         ve.setSwimming($$0.isSwimming());
         ve.setItemInHand(InteractionHand.MAIN_HAND,entityeah.getMainHandItem());
         ve.setItemInHand(InteractionHand.OFF_HAND,entityeah.getOffhandItem());
-        ve.setPose($$0.getPose());
+        //ve.setPose($$0.getPose());
         if (ve instanceof JojoNPC v2) {
             v2.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
         }
@@ -156,8 +156,8 @@ public class D4CCloneRenderer <T extends D4CCloneEntity, M extends EntityModel<T
         $$6.xRotO = entityeah.xRotO;
         $$6.yRotO = entityeah.yRotO;
         $$6.tickCount = entityeah.tickCount;
-        $$6.attackAnim = user.attackAnim;
-        $$6.oAttackAnim = user.oAttackAnim;
+//        $$6.attackAnim = user.attackAnim;
+//        $$6.oAttackAnim = user.oAttackAnim;
         $$6.hurtDuration = entityeah.hurtDuration;
         $$6.hurtTime = entityeah.hurtTime;
 

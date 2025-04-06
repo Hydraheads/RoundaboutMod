@@ -81,6 +81,12 @@ public class D4CCloneEntity extends CloneEntity implements NeutralMob {
     }
 
     @Override
+    public void aiStep() {
+        this.updateSwingTime();
+        super.aiStep();
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::shouldAngerAt));
@@ -109,14 +115,20 @@ public class D4CCloneEntity extends CloneEntity implements NeutralMob {
 
         boolean hurt = target.hurt(this.damageSources().mobAttack(this), hurtAmount);
 
-        if (hurt && knockback > 0.0F && target instanceof LivingEntity) {
-            ((LivingEntity)target)
-                    .knockback(
-                            (double)(knockback * 0.5F),
-                            (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
-                            (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
-                    );
-            this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+        if (hurt)
+        {
+            this.swing(InteractionHand.MAIN_HAND, true);
+            this.setLastHurtMob(target);
+
+            if (knockback > 0.0F && target instanceof LivingEntity) {
+                ((LivingEntity)target)
+                        .knockback(
+                                (double)(knockback * 0.5F),
+                                (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
+                                (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
+                        );
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+            }
         }
 
         return hurt;

@@ -23,7 +23,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -83,6 +87,10 @@ public class PowersD4C extends PunchingStand {
     private boolean held2 = false;
     @Nullable
     public D4CCloneEntity targetingClone = null;
+    @Nullable public AABB miningBox = null;
+
+    @Nullable private BlockPos pos1 = null;
+
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (isHoldingSneak() && !isGuarding())
@@ -96,7 +104,37 @@ public class PowersD4C extends PunchingStand {
 
         if (keyIsDown && !held2)
         {
-            held3 = true;
+            held2 = true;
+
+            if (isGuarding())
+            {
+                if (pos1 == null && miningBox != null)
+                {
+                    miningBox = null;
+                    return;
+                }
+
+                if (miningBox == null)
+                {
+                    BlockHitResult result = getGrabBlock();
+                    if (pos1 == null)
+                    {
+                        if (result != null) {
+                            pos1 = result.getBlockPos();
+                        }
+                    }
+                    else
+                    {
+                        if (result != null)
+                        {
+                            miningBox = new AABB(pos1, result.getBlockPos());
+                            pos1 = null;
+                        }
+                    }
+                }
+
+                return;
+            }
 
             if (!isHoldingSneak() && !(this.onCooldown(PowerIndex.SKILL_2)))
             {
@@ -131,8 +169,20 @@ public class PowersD4C extends PunchingStand {
         }
         else if (!keyIsDown)
         {
-            held3 = false;
+            held2 = false;
         }
+    }
+
+    private BlockHitResult getGrabBlock(){
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
+        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+        if (blockHit.getType() == HitResult.Type.BLOCK){
+            return blockHit;
+        }
+        return null;
     }
 
     private boolean spawnClone()
