@@ -1806,8 +1806,21 @@ public class PowersMagiciansRed extends PunchingStand {
             } else {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getKickAttackKnockShieldTime());
+
                 }
             }
+
+            int fireCount = 50;
+            float firespeed =0.05F;
+            if (chargedFinal >= maxSuperHitTime){
+                fireCount = 200;
+                firespeed =0.1F;
+            }
+            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), entity.getX(),
+                    entity.getY() + (entity.getBbHeight() * 0.5), entity.getZ(),
+                    fireCount,
+                    0, 0, 0,
+                    firespeed);
         } else {
             // This is less accurate raycasting as it is server sided but it is important for particle effects
             float distMax = this.getDistanceOut(this.self, this.getReach(), false);

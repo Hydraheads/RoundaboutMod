@@ -53,7 +53,7 @@ public class LifeTrackerEntity extends LivingEntity {
                         ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
                                 this.getY() + (this.getBbHeight() * 0.5), this.getZ(),
                                 1,
-                                0.25, 0.25, 0.25,
+                                0.3, 0.3, 0.3,
                                 0.005);
                     }
                 }
