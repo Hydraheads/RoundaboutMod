@@ -12,10 +12,8 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
@@ -47,7 +45,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -66,13 +63,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -675,7 +670,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 $$1.add(MagiciansRedEntity.PURPLE_ABLAZE);
             } if (Level > 4 || bypass){
                 $$1.add(MagiciansRedEntity.GREEN_SKIN);
-                $$1.add(MagiciansRedEntity.GREEN_ABLAzE);
+                $$1.add(MagiciansRedEntity.GREEN_ABLAZE);
             } if (Level > 5 || bypass){
                 $$1.add(MagiciansRedEntity.BLUE_SKIN);
                 $$1.add(MagiciansRedEntity.BLUE_ABLAZE);
@@ -1731,7 +1726,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return switch (skn) {
             case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> ModParticles.BLUE_FLAME;
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModParticles.PURPLE_FLAME;
-            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAzE -> ModParticles.GREEN_FLAME;
+            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
             default -> ModParticles.ORANGE_FLAME;
         };
@@ -2472,7 +2467,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return switch (skn) {
             case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> StandFireType.BLUE.id;
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> StandFireType.PURPLE.id;
-            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAzE -> StandFireType.GREEN.id;
+            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> StandFireType.GREEN.id;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
             default -> StandFireType.ORANGE.id;
         };
@@ -2483,7 +2478,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return switch (skn) {
             case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> ModBlocks.BLUE_FIRE;
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModBlocks.PURPLE_FIRE;
-            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAzE -> ModBlocks.GREEN_FIRE;
+            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> ModBlocks.GREEN_FIRE;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModBlocks.DREAD_FIRE;
             default -> ModBlocks.ORANGE_FIRE;
         };

@@ -1,14 +1,8 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.ConfigManager;
-import net.hydra.jojomod.util.annotation.BooleanOption;
-import net.hydra.jojomod.util.annotation.FloatOption;
-import net.hydra.jojomod.util.annotation.IntOption;
-import net.hydra.jojomod.util.annotation.NestedOption;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
@@ -55,10 +49,12 @@ public class MagiciansRedEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.magicians_red.blue_ablaze");
         } else if (skinId == PURPLE_ABLAZE){
             return Component.translatable(  "skins.roundabout.magicians_red.purple_ablaze");
-        } else if (skinId == GREEN_ABLAzE){
+        } else if (skinId == GREEN_ABLAZE){
             return Component.translatable(  "skins.roundabout.magicians_red.green_ablaze");
         } else if (skinId == DREAD_ABLAZE){
             return Component.translatable(  "skins.roundabout.magicians_red.dread_ablaze");
+        } else if (skinId == SIDEKICK){
+            return Component.translatable(  "skins.roundabout.magicians_red.sidekick");
         }
         return Component.translatable(  "skins.roundabout.magicians_red.base");
     }
@@ -83,7 +79,7 @@ public class MagiciansRedEntity extends StandEntity {
     public boolean emitsFlameCycle(){
         byte skn = this.getSkin();
         return switch (skn) {
-            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAzE -> true;
+            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAZE -> true;
             default -> false;
         };
     }
@@ -106,7 +102,7 @@ public class MagiciansRedEntity extends StandEntity {
             return false;
         }
         return switch (skn) {
-            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAzE, MAGMA_SKIN, MANGA_SKIN -> true;
+            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAZE, MAGMA_SKIN, MANGA_SKIN -> true;
             default -> false;
         };
     }
@@ -131,8 +127,9 @@ public class MagiciansRedEntity extends StandEntity {
             LIGHTER_ABLAZE = 13,
             BLUE_ABLAZE = 14,
             PURPLE_ABLAZE = 15,
-            GREEN_ABLAzE = 16,
-            DREAD_ABLAZE = 17;
+            GREEN_ABLAZE = 16,
+            DREAD_ABLAZE = 17,
+            SIDEKICK = 18;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();

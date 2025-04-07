@@ -313,7 +313,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         stopSoundsIfNearby(STAR_FINGER, 100, false);
         stopSoundsIfNearby(STAR_FINGER_2, 100, false);
         stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
-        this.animateStand((byte)83);
+        if (this.getActivePower() == PowerIndex.POWER_1) {
+            this.animateStand((byte) 83);
+        }
         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
                 0.5F, (float) (1.5 + (Math.random() * 0.04)));
     }
