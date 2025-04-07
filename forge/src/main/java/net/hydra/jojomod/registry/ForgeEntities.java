@@ -117,6 +117,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "magicians_red").toString())
             );
+    public static final RegistryObject<EntityType<MagiciansRedEntity>> MAGICIANS_RED_OVA =
+            ENTITY_TYPES.register("magicians_red_ova", () ->
+                    EntityType.Builder.of(MagiciansRedEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "magicians_red_ova").toString())
+            );
     public static final RegistryObject<EntityType<D4CEntity>> D4C =
             ENTITY_TYPES.register("d4c", () ->
                     EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

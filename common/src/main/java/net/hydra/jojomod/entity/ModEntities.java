@@ -26,6 +26,7 @@ public class ModEntities {
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
     public static EntityType<JusticeEntity> JUSTICE;
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED;
+    public static EntityType<MagiciansRedEntity> MAGICIANS_RED_OVA;
     public static EntityType<D4CEntity> D4C;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;

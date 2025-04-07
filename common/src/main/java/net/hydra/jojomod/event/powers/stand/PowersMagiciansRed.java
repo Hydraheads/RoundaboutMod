@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
@@ -645,6 +646,9 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public StandEntity getNewStandEntity(){
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == MagiciansRedEntity.OVA_SKIN){
+            return ModEntities.MAGICIANS_RED_OVA.create(this.getSelf().level());
+        }
         return ModEntities.MAGICIANS_RED.create(this.getSelf().level());
     }
     @Override

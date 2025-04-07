@@ -481,7 +481,7 @@
   "ability.roundabout.crossfire.desc": "Begins charging a powerful ankh made of flames, which gains more power, knockback, and flame spread as it grows. Press again to shoot the ankh out.",
   "ability.roundabout.crossfire_block": "Concealed Crossfire Hurricane",
   "ability.roundabout.crossfire_block.desc": "If holding a block and charging a crossfire hurricane, this ability becomes available. Conceals the hurricane in a floating block, and if an enemy close by hits it, it explodes on them alone.",
-  "ability.roundabout.crossfire_ground": "Buried Crossfire Hurricane",
+  "ability.roundabout.crossfire_ground": "Crossfire Hurricane Variation",
   "ability.roundabout.crossfire_ground.desc": "If charging a crossfire hurricane, this ability becomes available. Buries the hurricane in the ground, it will seek out and explode your last target.",
   "ability.roundabout.crossfire_special": "Crossfire Hurricane Special",
   "ability.roundabout.crossfire_special.desc": "Creates a ring of stand fire around you, as well as four medium-sized crossfire hurricane ankhs which circle around you. Press again repeatedly to shoot out those ankhs.",
