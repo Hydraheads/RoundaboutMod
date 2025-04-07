@@ -657,13 +657,16 @@ public class PowersMagiciansRed extends PunchingStand {
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(MagiciansRedEntity.PURPLE_SKIN);
+                $$1.add(MagiciansRedEntity.MANGA_SKIN);
+                $$1.add(MagiciansRedEntity.LIGHTER_SKIN);
             } if (Level > 2 || bypass){
+                $$1.add(MagiciansRedEntity.OVA_SKIN);
             } if (Level > 3 || bypass){
-                $$1.add(MagiciansRedEntity.GREEN_SKIN);
+                $$1.add(MagiciansRedEntity.PURPLE_SKIN);
             } if (Level > 4 || bypass){
-                $$1.add(MagiciansRedEntity.BLUE_SKIN);
+                $$1.add(MagiciansRedEntity.GREEN_SKIN);
             } if (Level > 5 || bypass){
+                $$1.add(MagiciansRedEntity.BLUE_SKIN);
                 $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
             } if (Level > 6 || bypass){
                 $$1.add(MagiciansRedEntity.MAGMA_SKIN);
