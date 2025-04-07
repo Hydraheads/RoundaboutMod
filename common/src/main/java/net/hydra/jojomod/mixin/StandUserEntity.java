@@ -2327,29 +2327,33 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-            if (roundabout$remainingFireTicks > 0) {
-                //Roundabout.LOGGER.info(""+roundabout$remainingFireTicks);
-                if (roundabout$remainingFireTicks % 20 == 0 && !this.isInLava()) {
-                    float fireDamage = 1;
-                    if (this.roundabout$getStandPowers().getReducedDamage((LivingEntity) (Object) this)) {
-                        fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
-                                damageMultipliers.standFireOnPlayers * 0.01));
-                    } else {
-                        fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
-                                damageMultipliers.standFireOnMobs * 0.01));
+            if (!(!((TimeStop)this.level()).getTimeStoppingEntities().isEmpty()
+                    && ((TimeStop)this.level()).getTimeStoppingEntities().contains(((LivingEntity) (Object)this)))){
+                if (roundabout$remainingFireTicks > 0) {
+
+                    //Roundabout.LOGGER.info(""+roundabout$remainingFireTicks);
+                    if (roundabout$remainingFireTicks % 20 == 0 && !this.isInLava()) {
+                        float fireDamage = 1;
+                        if (this.roundabout$getStandPowers().getReducedDamage((LivingEntity) (Object) this)) {
+                            fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
+                                    damageMultipliers.standFireOnPlayers * 0.01));
+                        } else {
+                            fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
+                                    damageMultipliers.standFireOnMobs * 0.01));
+                        }
+                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
                     }
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
-                }
 
-                roundabout$setRemainingStandFireTicks(roundabout$remainingFireTicks - 1);
+                    roundabout$setRemainingStandFireTicks(roundabout$remainingFireTicks - 1);
 
-            }
-            if (roundabout$remainingFireTicks <= 0) {
-                if (roundabout$getOnStandFire() > 0) {
-                    roundabout$setOnStandFire(StandFireType.FIRELESS.id);
                 }
-                if (roundabout$remainingFireTicks == 0) {
-                    roundabout$remainingFireTicks = -1;
+                if (roundabout$remainingFireTicks <= 0) {
+                    if (roundabout$getOnStandFire() > 0) {
+                        roundabout$setOnStandFire(StandFireType.FIRELESS.id);
+                    }
+                    if (roundabout$remainingFireTicks == 0) {
+                        roundabout$remainingFireTicks = -1;
+                    }
                 }
             }
         }
