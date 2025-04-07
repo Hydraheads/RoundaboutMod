@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.annotation.BooleanOption;
 import net.hydra.jojomod.util.annotation.FloatOption;
 import net.hydra.jojomod.util.annotation.IntOption;
@@ -94,11 +95,11 @@ public class MagiciansRedEntity extends StandEntity {
         return false;
     }
     public boolean emitsLight(){
+        if (ConfigManager.getClientConfig().magiciansRedLashesMakeItEmmissive && (this.lash1.isStarted() || this.lash2.isStarted() || lash3.isStarted())){
+            return true;
+        }
         if (isPutOutByWater()){
                 return false;
-        }
-        if (this.lash1.isStarted() || this.lash2.isStarted() || lash3.isStarted()){
-            return true;
         }
         byte skn = this.getSkin();
         return switch (skn) {
