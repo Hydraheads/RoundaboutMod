@@ -50,6 +50,8 @@ import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
@@ -368,7 +370,7 @@ public class MainUtil {
         if (Mob instanceof LivingEntity){
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
                     || Mob instanceof Villager || Mob instanceof WaterAnimal || Mob instanceof WanderingTrader
-                    || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player
+                    || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player || Mob instanceof AbstractPiglin
                     || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
         return false;
