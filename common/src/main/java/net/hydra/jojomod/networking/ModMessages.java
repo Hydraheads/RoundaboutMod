@@ -50,6 +50,5 @@ public class ModMessages {
     public static final ResourceLocation CONFIG_SYNC = new ResourceLocation(Roundabout.MOD_ID,"config_sync");
 
     public static final ResourceLocation DYNAMIC_WORLD_SYNC = Roundabout.location("sync_d4c_worlds");
-    public static final ResourceLocation REQUEST_NEW_DYNAMIC_WORLD = Roundabout.location("request_d4c_world");
     public static final ResourceLocation REQUEST_TELEPORT_TO_DYNAMIC_WORLD = Roundabout.location("request_teleport_d4c_world");
 }

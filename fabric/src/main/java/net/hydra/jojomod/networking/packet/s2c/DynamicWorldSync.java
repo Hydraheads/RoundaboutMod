@@ -22,6 +22,7 @@ public class DynamicWorldSync {
         LocalPlayer player = client.player;
 
         player.connection.levels().add(LEVEL_KEY);
+        ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
 
 //        if (buf.readInt() == player.getId())
 //            ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(name);

@@ -30,8 +30,7 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.ITEM_CONTEXT_C2S_PACKET, UtilC2S::itemChange);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.HANDSHAKE, ConfigC2S::Handshake);
 
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.REQUEST_NEW_DYNAMIC_WORLD, RequestDynamicWorldC2S::createNewWorld);
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, RequestTeleportC2S::teleport);
+        ServerPlayNetworking.registerGlobalReceiver(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, AckDynamicWorld::teleport);
     }
     //Server to Client
     public static void registerS2CPackets(){

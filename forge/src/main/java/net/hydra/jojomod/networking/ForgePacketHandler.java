@@ -122,15 +122,10 @@ public class ForgePacketHandler {
                 .encoder(ForgeHandshakePacket::toBytes)
                 .consumerMainThread(ForgeHandshakePacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeRequestDynamicWorldC2S.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeRequestDynamicWorldC2S::new)
-                .encoder(ForgeRequestDynamicWorldC2S::toBytes)
-                .consumerMainThread(ForgeRequestDynamicWorldC2S::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeRequestTeleportC2S.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeRequestTeleportC2S::new)
-                .encoder(ForgeRequestTeleportC2S::toBytes)
-                .consumerMainThread(ForgeRequestTeleportC2S::handle)
+        INSTANCE.messageBuilder(ForgeAckDynamicWorld.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ForgeAckDynamicWorld::new)
+                .encoder(ForgeAckDynamicWorld::toBytes)
+                .consumerMainThread(ForgeAckDynamicWorld::handle)
                 .add();
 
         /**Server to Client Packets*/

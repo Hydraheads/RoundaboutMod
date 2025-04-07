@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -305,6 +306,22 @@ public class PowersD4C extends PunchingStand {
             held4 = false;
     }
 
+    /** Store player entity ids here while we wait for them to recieve the packet and load the dimension. */
+    public static HashMap<Integer, DynamicWorld> queuedWorldTransports = new HashMap<>();
+    private boolean teleportToD4CWorld()
+    {
+        if (this.getSelf().getServer() == null)
+            return false;
+
+        DynamicWorld world = DynamicWorld.generateD4CWorld(this.getSelf().getServer());
+        if (world.getLevel() != null)
+        {
+            queuedWorldTransports.put(this.getSelf().getId(), world);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
@@ -359,6 +376,9 @@ public class PowersD4C extends PunchingStand {
         {
             case PowerIndex.POWER_2 -> {
                 return this.spawnClone();
+            }
+            case PowerIndex.POWER_4 -> {
+                return this.teleportToD4CWorld();
             }
         }
 

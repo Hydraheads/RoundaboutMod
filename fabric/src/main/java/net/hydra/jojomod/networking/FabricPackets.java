@@ -373,14 +373,7 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void registerNewWorld() {
-        ClientPlayNetworking.send(ModMessages.REQUEST_NEW_DYNAMIC_WORLD, PacketByteBufs.create());
-    }
-
-    @Override
-    public void requestTeleportToWorld(String world) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeUtf(world);
+    public void ackRegisterWorld() {
         ClientPlayNetworking.send(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, PacketByteBufs.create());
     }
 }

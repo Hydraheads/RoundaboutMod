@@ -18,19 +18,15 @@ import java.util.function.Supplier;
 
 public class ForgeDynamicWorldSync {
     private final String serial;
-    private final int player;
 
-    public ForgeDynamicWorldSync(String serial, String player){
+    public ForgeDynamicWorldSync(String serial){
         this.serial = serial;
-        this.player = Integer.getInteger(player);
     }
     public ForgeDynamicWorldSync(FriendlyByteBuf buf){
         this.serial = buf.readUtf();
-        this.player = buf.readInt();
     }
     public void toBytes(FriendlyByteBuf buf){
         buf.writeUtf(serial);
-        buf.writeInt(player);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
@@ -48,11 +44,7 @@ public class ForgeDynamicWorldSync {
             }
 
             localPlayer.connection.levels().add(LEVEL_KEY);
-
-//            if (player == localPlayer.getId())
-//            {
-//                ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(serial);
-//            }
+            ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
         });
 
         return true;

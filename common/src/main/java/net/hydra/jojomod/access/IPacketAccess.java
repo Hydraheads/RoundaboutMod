@@ -2,14 +2,10 @@ package net.hydra.jojomod.access;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -70,6 +66,5 @@ public interface IPacketAccess {
     void itemContextToServer(byte context, ItemStack stack, byte context2, Vector3f vec);
     void handshake();
 
-    void registerNewWorld();
-    void requestTeleportToWorld(String world);
+    void ackRegisterWorld();
 }
