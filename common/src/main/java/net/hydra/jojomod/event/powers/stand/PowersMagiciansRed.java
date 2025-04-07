@@ -659,6 +659,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(MagiciansRedEntity.PART_3_SKIN);
+        $$1.add(MagiciansRedEntity.ABLAZE);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
@@ -666,20 +667,25 @@ public class PowersMagiciansRed extends PunchingStand {
             if (Level > 1 || bypass){
                 $$1.add(MagiciansRedEntity.MANGA_SKIN);
                 $$1.add(MagiciansRedEntity.LIGHTER_SKIN);
+                $$1.add(MagiciansRedEntity.LIGHTER_ABLAZE);
             } if (Level > 2 || bypass){
                 $$1.add(MagiciansRedEntity.OVA_SKIN);
             } if (Level > 3 || bypass){
                 $$1.add(MagiciansRedEntity.PURPLE_SKIN);
+                $$1.add(MagiciansRedEntity.PURPLE_ABLAZE);
             } if (Level > 4 || bypass){
                 $$1.add(MagiciansRedEntity.GREEN_SKIN);
+                $$1.add(MagiciansRedEntity.GREEN_ABLAzE);
             } if (Level > 5 || bypass){
                 $$1.add(MagiciansRedEntity.BLUE_SKIN);
+                $$1.add(MagiciansRedEntity.BLUE_ABLAZE);
                 $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
             } if (Level > 6 || bypass){
                 $$1.add(MagiciansRedEntity.MAGMA_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_SKIN);
+                $$1.add(MagiciansRedEntity.DREAD_ABLAZE);
             }
         }
         return $$1;
@@ -1721,16 +1727,14 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public SimpleParticleType getFlameParticle(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == MagiciansRedEntity.BLUE_SKIN || skn == MagiciansRedEntity.BLUE_ACE_SKIN){
-            return ModParticles.BLUE_FLAME;
-        } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
-            return ModParticles.PURPLE_FLAME;
-        } else if (skn == MagiciansRedEntity.GREEN_SKIN){
-            return ModParticles.GREEN_FLAME;
-        } else if (skn == MagiciansRedEntity.DREAD_SKIN || skn == MagiciansRedEntity.DREAD_BEAST_SKIN){
-            return ModParticles.DREAD_FLAME;
-        }
-        return ModParticles.ORANGE_FLAME;
+
+        return switch (skn) {
+            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> ModParticles.BLUE_FLAME;
+            case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModParticles.PURPLE_FLAME;
+            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAzE -> ModParticles.GREEN_FLAME;
+            case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
+            default -> ModParticles.ORANGE_FLAME;
+        };
     }
     public void sendSpecialParticle(BlockPos pos){
         if (!this.self.level().isClientSide()) {
@@ -2464,30 +2468,25 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public byte getFireColor(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == MagiciansRedEntity.BLUE_SKIN || skn == MagiciansRedEntity.BLUE_ACE_SKIN){
-            return StandFireType.BLUE.id;
-        } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
-            return StandFireType.PURPLE.id;
-        } else if (skn == MagiciansRedEntity.GREEN_SKIN){
-            return StandFireType.GREEN.id;
-        } else if (skn == MagiciansRedEntity.DREAD_SKIN || skn == MagiciansRedEntity.DREAD_BEAST_SKIN){
-            return StandFireType.DREAD.id;
-        }
-        return StandFireType.ORANGE.id;
+
+        return switch (skn) {
+            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> StandFireType.BLUE.id;
+            case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> StandFireType.PURPLE.id;
+            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAzE -> StandFireType.GREEN.id;
+            case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
+            default -> StandFireType.ORANGE.id;
+        };
     }
 
     public Block getFireColorBlock(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == MagiciansRedEntity.BLUE_SKIN || skn == MagiciansRedEntity.BLUE_ACE_SKIN){
-            return ModBlocks.BLUE_FIRE;
-        } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
-            return ModBlocks.PURPLE_FIRE;
-        } else if (skn == MagiciansRedEntity.GREEN_SKIN){
-            return ModBlocks.GREEN_FIRE;
-        } else if (skn == MagiciansRedEntity.DREAD_SKIN || skn == MagiciansRedEntity.DREAD_BEAST_SKIN){
-            return ModBlocks.DREAD_FIRE;
-        }
-        return ModBlocks.ORANGE_FIRE;
+        return switch (skn) {
+            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> ModBlocks.BLUE_FIRE;
+            case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModBlocks.PURPLE_FIRE;
+            case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAzE -> ModBlocks.GREEN_FIRE;
+            case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModBlocks.DREAD_FIRE;
+            default -> ModBlocks.ORANGE_FIRE;
+        };
     }
 
     @Override

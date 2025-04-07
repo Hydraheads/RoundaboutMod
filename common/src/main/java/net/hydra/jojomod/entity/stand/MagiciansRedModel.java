@@ -82,6 +82,18 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
 
         PartDefinition Fireball9 = Fireballs.addOrReplaceChild("Fireball9", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
 
+        PartDefinition Flames = lower_right_arm.addOrReplaceChild("Flames", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame1 = Flames.addOrReplaceChild("frame1", CubeListBuilder.create().texOffs(108, 0).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame2 = Flames.addOrReplaceChild("frame2", CubeListBuilder.create().texOffs(108, 11).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame3 = Flames.addOrReplaceChild("frame3", CubeListBuilder.create().texOffs(108, 22).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame4 = Flames.addOrReplaceChild("frame4", CubeListBuilder.create().texOffs(108, 33).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame5 = Flames.addOrReplaceChild("frame5", CubeListBuilder.create().texOffs(108, 44).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
         PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
         PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(44, 44).addBox(-2.0F, -0.5F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.001F))
@@ -107,6 +119,18 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
 
         PartDefinition Fireball18 = Fireballs2.addOrReplaceChild("Fireball18", CubeListBuilder.create().texOffs(1, 70).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(1.5F)), PartPose.offset(0.0F, -0.5F, 0.3F));
 
+        PartDefinition Flames2 = lower_left_arm.addOrReplaceChild("Flames2", CubeListBuilder.create(), PartPose.offset(0.3F, 0.0F, 0.0F));
+
+        PartDefinition frame6 = Flames2.addOrReplaceChild("frame6", CubeListBuilder.create().texOffs(108, 0).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame7 = Flames2.addOrReplaceChild("frame7", CubeListBuilder.create().texOffs(108, 11).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame8 = Flames2.addOrReplaceChild("frame8", CubeListBuilder.create().texOffs(108, 22).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame9 = Flames2.addOrReplaceChild("frame9", CubeListBuilder.create().texOffs(108, 33).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition frame10 = Flames2.addOrReplaceChild("frame10", CubeListBuilder.create().texOffs(108, 44).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
         PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(48, 0).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
@@ -122,6 +146,18 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         PartDefinition upper_right_leg = right_leg.addOrReplaceChild("upper_right_leg", CubeListBuilder.create().texOffs(32, 38).addBox(-2.0F, 1.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
                 .texOffs(16, 34).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
+        PartDefinition Flames3 = upper_right_leg.addOrReplaceChild("Flames3", CubeListBuilder.create(), PartPose.offset(0.0F, 4.2F, 0.2F));
+
+        PartDefinition frame11 = Flames3.addOrReplaceChild("frame11", CubeListBuilder.create().texOffs(87, 0).addBox(-10.9F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.21F)), PartPose.offset(8.3F, -8.7F, 0.0F));
+
+        PartDefinition frame12 = Flames3.addOrReplaceChild("frame12", CubeListBuilder.create().texOffs(87, 17).addBox(-10.9F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.21F)), PartPose.offset(8.3F, -8.7F, 0.0F));
+
+        PartDefinition frame13 = Flames3.addOrReplaceChild("frame13", CubeListBuilder.create().texOffs(87, 32).addBox(-10.9F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.21F)), PartPose.offset(8.3F, -8.7F, 0.0F));
+
+        PartDefinition frame14 = Flames3.addOrReplaceChild("frame14", CubeListBuilder.create().texOffs(87, 47).addBox(-10.9F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.21F)), PartPose.offset(8.3F, -8.7F, 0.0F));
+
+        PartDefinition frame15 = Flames3.addOrReplaceChild("frame15", CubeListBuilder.create().texOffs(87, 62).addBox(-10.9F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.21F)), PartPose.offset(8.3F, -8.7F, 0.0F));
+
         PartDefinition lower_right_leg = right_leg.addOrReplaceChild("lower_right_leg", CubeListBuilder.create().texOffs(0, 33).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 53).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.204F)), PartPose.offset(0.0F, 7.0F, 0.0F));
 
@@ -129,6 +165,18 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
 
         PartDefinition upper_left_leg = left_leg.addOrReplaceChild("upper_left_leg", CubeListBuilder.create().texOffs(16, 44).addBox(-2.0F, 1.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
                 .texOffs(32, 0).addBox(-2.0F, 1.0F, -1.9998F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition Flames4 = upper_left_leg.addOrReplaceChild("Flames4", CubeListBuilder.create(), PartPose.offset(0.3F, 4.2F, 0.2F));
+
+        PartDefinition frame16 = Flames4.addOrReplaceChild("frame16", CubeListBuilder.create().texOffs(87, 17).addBox(-6.6F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.2F)), PartPose.offset(4.0F, -8.7F, 0.0F));
+
+        PartDefinition frame17 = Flames4.addOrReplaceChild("frame17", CubeListBuilder.create().texOffs(87, 32).addBox(-6.6F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.2F)), PartPose.offset(4.0F, -8.7F, 0.0F));
+
+        PartDefinition frame18 = Flames4.addOrReplaceChild("frame18", CubeListBuilder.create().texOffs(87, 47).addBox(-6.6F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.2F)), PartPose.offset(4.0F, -8.7F, 0.0F));
+
+        PartDefinition frame19 = Flames4.addOrReplaceChild("frame19", CubeListBuilder.create().texOffs(87, 62).addBox(-6.6F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.2F)), PartPose.offset(4.0F, -8.7F, 0.0F));
+
+        PartDefinition frame20 = Flames4.addOrReplaceChild("frame20", CubeListBuilder.create().texOffs(87, 0).addBox(-6.6F, 2.6F, -2.7F, 5.0F, 10.0F, 5.0F, new CubeDeformation(-0.2F)), PartPose.offset(4.0F, -8.7F, 0.0F));
 
         PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(0, 43).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(44, 54).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.202F)), PartPose.offset(0.0F, 7.0F, 0.0F));
@@ -157,6 +205,9 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         this.animate(pEntity.red_bind, MagiciansRedAnimations.Red_Bind_Grab, pAgeInTicks, 1f);
         this.animate(pEntity.fire_crash, MagiciansRedAnimations.Fire_Crash, pAgeInTicks, 1f);
         this.animate(pEntity.life_detector, MagiciansRedAnimations.Life_Detector_Creation, pAgeInTicks, 1.5f);
+
+        this.animate(pEntity.hideFlames, MagiciansRedAnimations.FlamesHidden, pAgeInTicks, 1f);
+        this.animate(pEntity.cycleFlames, MagiciansRedAnimations.FlamesCycle, pAgeInTicks, 5f);
 
         this.animate(pEntity.miningBarrageAnimationState, MagiciansRedAnimations.FLAMETHROWER_BARRAGE, pAgeInTicks, 1f);
 

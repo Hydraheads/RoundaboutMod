@@ -3,6 +3,10 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.annotation.BooleanOption;
+import net.hydra.jojomod.util.annotation.FloatOption;
+import net.hydra.jojomod.util.annotation.IntOption;
+import net.hydra.jojomod.util.annotation.NestedOption;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -40,6 +44,18 @@ public class MagiciansRedEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.magicians_red.manga");
         } else if (skinId == OVA_SKIN){
             return Component.translatable(  "skins.roundabout.magicians_red.ova");
+        } else if (skinId == ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.ablaze");
+        } else if (skinId == LIGHTER_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.lighter_ablaze");
+        } else if (skinId == BLUE_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.blue_ablaze");
+        } else if (skinId == PURPLE_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.purple_ablaze");
+        } else if (skinId == GREEN_ABLAzE){
+            return Component.translatable(  "skins.roundabout.magicians_red.green_ablaze");
+        } else if (skinId == DREAD_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.dread_ablaze");
         }
         return Component.translatable(  "skins.roundabout.magicians_red.base");
     }
@@ -58,6 +74,16 @@ public class MagiciansRedEntity extends StandEntity {
     public final AnimationState life_detector = new AnimationState();
 
     public final AnimationState hideLash = new AnimationState();
+    public final AnimationState hideFlames = new AnimationState();
+    public final AnimationState cycleFlames = new AnimationState();
+
+    public boolean emitsFlameCycle(){
+        byte skn = this.getSkin();
+        return switch (skn) {
+            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAzE -> true;
+            default -> false;
+        };
+    }
 
     public static final byte
             PART_3_SKIN = 1,
@@ -70,11 +96,26 @@ public class MagiciansRedEntity extends StandEntity {
             MAGMA_SKIN = 8,
             MANGA_SKIN = 9,
             LIGHTER_SKIN = 10,
-            OVA_SKIN = 11;
+            OVA_SKIN = 11,
+            ABLAZE = 12,
+            LIGHTER_ABLAZE = 13,
+            BLUE_ABLAZE = 14,
+            PURPLE_ABLAZE = 15,
+            GREEN_ABLAzE = 16,
+            DREAD_ABLAZE = 17;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
+
+            if (emitsFlameCycle()){
+                this.cycleFlames.startIfStopped(this.tickCount);
+                this.hideFlames.stop();
+            } else {
+                this.cycleFlames.stop();
+                this.hideFlames.startIfStopped(this.tickCount);
+            }
+
             byte animation = this.getAnimation();
             if (animation > 40 && animation < 44) {
                 this.hideLash.stop();

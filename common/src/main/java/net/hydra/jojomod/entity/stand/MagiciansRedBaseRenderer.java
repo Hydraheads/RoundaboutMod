@@ -32,13 +32,13 @@ public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRender
     @Override
     public ResourceLocation getTextureLocation(MagiciansRedEntity entity) {
         byte BT = entity.getSkin();
-        if (BT == MagiciansRedEntity.BLUE_SKIN){
+        if (BT == MagiciansRedEntity.BLUE_SKIN|| BT == MagiciansRedEntity.BLUE_ABLAZE){
             return BLUE_SKIN;
-        } else if (BT == MagiciansRedEntity.PURPLE_SKIN){
+        } else if (BT == MagiciansRedEntity.PURPLE_SKIN|| BT == MagiciansRedEntity.PURPLE_ABLAZE){
             return PURPLE_SKIN;
-        } else if (BT == MagiciansRedEntity.GREEN_SKIN){
+        } else if (BT == MagiciansRedEntity.GREEN_SKIN|| BT == MagiciansRedEntity.GREEN_ABLAzE){
             return GREEN_SKIN;
-        } else if (BT == MagiciansRedEntity.DREAD_SKIN){
+        } else if (BT == MagiciansRedEntity.DREAD_SKIN|| BT == MagiciansRedEntity.DREAD_ABLAZE){
             return DREAD_SKIN;
         } else if (BT == MagiciansRedEntity.DREAD_BEAST_SKIN){
             return DREAD_BEAST_SKIN;
@@ -48,7 +48,7 @@ public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRender
             return MAGMA_SKIN;
         } else if (BT == MagiciansRedEntity.MANGA_SKIN){
             return MANGA_SKIN;
-        } else if (BT == MagiciansRedEntity.LIGHTER_SKIN){
+        } else if (BT == MagiciansRedEntity.LIGHTER_SKIN || BT == MagiciansRedEntity.LIGHTER_ABLAZE){
             return LIGHTER_SKIN;
         } else if (BT == MagiciansRedEntity.OVA_SKIN){
             return OVA_SKIN;
