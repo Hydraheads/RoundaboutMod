@@ -30,6 +30,8 @@ public class MagiciansRedEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.magicians_red.dread");
         } else if (skinId == BLUE_ACE_SKIN){
             return Component.translatable(  "skins.roundabout.magicians_red.blue_ace");
+        } else if (skinId == DREAD_BEAST_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.chagaroth");
         }
         return Component.translatable(  "skins.roundabout.magicians_red.base");
     }
@@ -55,7 +57,8 @@ public class MagiciansRedEntity extends StandEntity {
             PURPLE_SKIN = 3,
             GREEN_SKIN = 4,
             DREAD_SKIN = 5,
-            BLUE_ACE_SKIN = 6;
+            BLUE_ACE_SKIN = 6,
+            DREAD_BEAST_SKIN = 7;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();

@@ -45,7 +45,7 @@ public class MagiciansRedSpinEffectLayer<T extends StandEntity> extends RenderLa
             return TEXTURE_PURPLE;
         } else if (BT == MagiciansRedEntity.GREEN_SKIN){
             return TEXTURE_GREEN;
-        } else if (BT == MagiciansRedEntity.DREAD_SKIN){
+        } else if (BT == MagiciansRedEntity.DREAD_SKIN || BT == MagiciansRedEntity.DREAD_BEAST_SKIN){
             return TEXTURE_DREAD;
         }
         return TEXTURE;

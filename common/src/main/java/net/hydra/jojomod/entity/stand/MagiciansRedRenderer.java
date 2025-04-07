@@ -20,6 +20,7 @@ public class MagiciansRedRenderer extends StandRenderer<MagiciansRedEntity> {
     private static final ResourceLocation PURPLE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_purple.png");
     private static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_green.png");
     private static final ResourceLocation DREAD_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_dread.png");
+    private static final ResourceLocation DREAD_BEAST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_chagaroth.png");
     private static final ResourceLocation BLUE_ACE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_blue_ace.png");
     public MagiciansRedRenderer(EntityRendererProvider.Context context) {
         super(context, new MagiciansRedModel<>(context.bakeLayer(ModEntityRendererClient.MAGICIANS_RED_LAYER)),0f);
@@ -37,6 +38,8 @@ public class MagiciansRedRenderer extends StandRenderer<MagiciansRedEntity> {
             return GREEN_SKIN;
         } else if (BT == MagiciansRedEntity.DREAD_SKIN){
             return DREAD_SKIN;
+        } else if (BT == MagiciansRedEntity.DREAD_BEAST_SKIN){
+            return DREAD_BEAST_SKIN;
         } else if (BT == MagiciansRedEntity.BLUE_ACE_SKIN){
             return BLUE_ACE_SKIN;
         }

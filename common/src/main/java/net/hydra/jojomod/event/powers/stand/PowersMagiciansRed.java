@@ -667,6 +667,7 @@ public class PowersMagiciansRed extends PunchingStand {
             } if (Level > 6 || bypass){
                 $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_SKIN);
             }
         }
@@ -1686,7 +1687,7 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModParticles.PURPLE_FLAME;
         } else if (skn == MagiciansRedEntity.GREEN_SKIN){
             return ModParticles.GREEN_FLAME;
-        } else if (skn == MagiciansRedEntity.DREAD_SKIN){
+        } else if (skn == MagiciansRedEntity.DREAD_SKIN || skn == MagiciansRedEntity.DREAD_BEAST_SKIN){
             return ModParticles.DREAD_FLAME;
         }
         return ModParticles.ORANGE_FLAME;
@@ -2429,7 +2430,7 @@ public class PowersMagiciansRed extends PunchingStand {
             return StandFireType.PURPLE.id;
         } else if (skn == MagiciansRedEntity.GREEN_SKIN){
             return StandFireType.GREEN.id;
-        } else if (skn == MagiciansRedEntity.DREAD_SKIN){
+        } else if (skn == MagiciansRedEntity.DREAD_SKIN || skn == MagiciansRedEntity.DREAD_BEAST_SKIN){
             return StandFireType.DREAD.id;
         }
         return StandFireType.ORANGE.id;
@@ -2443,7 +2444,7 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModBlocks.PURPLE_FIRE;
         } else if (skn == MagiciansRedEntity.GREEN_SKIN){
             return ModBlocks.GREEN_FIRE;
-        } else if (skn == MagiciansRedEntity.DREAD_SKIN){
+        } else if (skn == MagiciansRedEntity.DREAD_SKIN || skn == MagiciansRedEntity.DREAD_BEAST_SKIN){
             return ModBlocks.DREAD_FIRE;
         }
         return ModBlocks.ORANGE_FIRE;
