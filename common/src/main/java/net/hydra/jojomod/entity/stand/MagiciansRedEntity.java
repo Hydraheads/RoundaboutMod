@@ -102,6 +102,9 @@ public class MagiciansRedEntity extends StandEntity {
                 return false;
         }
         byte skn = this.getSkin();
+        if (!ConfigManager.getClientConfig().magiciansRedTexturesMakeItEmmissive){
+            return false;
+        }
         return switch (skn) {
             case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAzE, MAGMA_SKIN, MANGA_SKIN -> true;
             default -> false;

@@ -28,6 +28,8 @@ public class ClientConfig {
     public Boolean pressingAbilityKeysSummonsStands;
     @IntOption(group = "inherit", value = 190)
     public Integer justiceFogBrightness;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean magiciansRedTexturesMakeItEmmissive;
     @BooleanOption(group = "inherit", value = false)
     public Boolean magiciansRedLashesMakeItEmmissive;
     @NestedOption(group = "modded")
