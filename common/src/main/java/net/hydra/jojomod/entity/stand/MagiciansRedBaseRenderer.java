@@ -67,6 +67,11 @@ public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRender
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
+    @Override
+    public boolean skipLighting(MagiciansRedEntity mr){
+        return mr.emitsLight();
+    }
+
     @Nullable
     @Override
     protected RenderType getRenderType(MagiciansRedEntity entity, boolean showBody, boolean translucent, boolean showOutline) {

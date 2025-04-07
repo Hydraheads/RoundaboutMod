@@ -85,6 +85,20 @@ public class MagiciansRedEntity extends StandEntity {
         };
     }
 
+    public boolean emitsLight(){
+        if (isInWaterOrRain()){
+            return false;
+        }
+        if (this.lash1.isStarted() || this.lash2.isStarted() || lash3.isStarted()){
+            return true;
+        }
+        byte skn = this.getSkin();
+        return switch (skn) {
+            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAzE, MAGMA_SKIN, MANGA_SKIN -> true;
+            default -> false;
+        };
+    }
+
     public static final byte
             PART_3_SKIN = 1,
             BLUE_SKIN = 2,
@@ -108,7 +122,7 @@ public class MagiciansRedEntity extends StandEntity {
         super.setupAnimationStates();
         if (this.getUser() != null) {
 
-            if (emitsFlameCycle()){
+            if (emitsFlameCycle() || isInWaterOrRain()){
                 this.cycleFlames.startIfStopped(this.tickCount);
                 this.hideFlames.stop();
             } else {

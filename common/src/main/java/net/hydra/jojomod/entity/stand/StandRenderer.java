@@ -115,15 +115,23 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
 
 
 
-        int plight = i;
-        var owner = mobEntity.getUser();
-        if (owner != null) {
-            int tlight = getTrueLight(owner,g);
-            if (plight < tlight && plight < 1){
-                plight = tlight;
+        if (skipLighting(mobEntity)){
+            super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, 15728880);
+        } else {
+            int plight = i;
+            var owner = mobEntity.getUser();
+            if (owner != null) {
+                int tlight = getTrueLight(owner,g);
+                if (plight < tlight && plight < 1){
+                    plight = tlight;
+                }
             }
+            super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, plight);
         }
-        super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, plight);
+    }
+
+    public boolean skipLighting(T entity){
+        return false;
     }
     public final int getTrueLight(Entity entity, float tickDelta) {
         BlockPos blockPos = BlockPos.containing(entity.getLightProbePosition(tickDelta));
