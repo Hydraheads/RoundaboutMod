@@ -17,6 +17,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -66,7 +67,7 @@ public class LifeTrackerEntity extends LivingEntity {
                 AABB $$0 = this.getBoundingBox().inflate(15, 15, 15);
                 List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.plsWorkTargetting, this, $$0);
                 for (LivingEntity $$3 : $$1) {
-                    if (!$$3.is(user) && !($$3 instanceof StandEntity)) {
+                    if (!$$3.is(user) && !($$3 instanceof StandEntity) && !($$3 instanceof ArmorStand) && !($$3 instanceof FallenMob)) {
                         ((StandUser) $$3).roundabout$setDetectTicks(2);
                     }
                 }

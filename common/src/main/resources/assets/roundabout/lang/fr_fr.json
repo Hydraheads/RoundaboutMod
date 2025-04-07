@@ -274,6 +274,7 @@
   "sounds.roundabout.fireball_hit":  "Explosion de boule de feu",
   "sounds.roundabout.firestorm":  "Tempête de flamme",
   "sounds.roundabout.lasso": "Lasso",
+  "sounds.roundabout.dread_summon": "Crie eldritchien",
 
   "sounds.roundabout.unlock_skin":  "Skin Débloqué(s) !",
   "sounds.roundabout.ova_platinum_barrage":  "ORA",
@@ -528,7 +529,7 @@
   "idle.roundabout.battle": "Prêt au combat",
 
   "idle.roundabout.floaty": "Flottant",
-  "idle.roundabout.star_platinum": "The Star",
+  "idle.roundabout.star_platinum": "L'Etoile",
 
   "idle.roundabout.passive_justice": "Au repos",
   "idle.roundabout.battle_justice": "Menaçant",
@@ -577,14 +578,21 @@
   "skins.roundabout.magicians_red.blue": "Bleu",
   "skins.roundabout.magicians_red.purple": "Violet",
   "skins.roundabout.magicians_red.green": "Vert",
+  "skins.roundabout.magicians_red.chagaroth": "Terreur Primordial",
   "skins.roundabout.magicians_red.dread": "Terreur",
+  "skins.roundabout.magicians_red.blue_ace": "Blue Ace",
+  "skins.roundabout.magicians_red.magma": "Magma",
+  "skins.roundabout.magicians_red.manga": "Manga",
+  "skins.roundabout.magicians_red.lighter": "Plus clair",
+  "skins.roundabout.magicians_red.ova": "OAV",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "Wonder Festival",
 
-  "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Over Heaven Débloqué !",
-  "unlock_skin.roundabout.star_platinum.atomic": "Skin Star Platinum: Atomic Débloqué !",
-  "unlock_skin.roundabout.justice.bad_bone": "Skin Justice: Bad to The Bone Débloqués !",
+  "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Skin Over Heaven Débloqué !",
+  "unlock_skin.roundabout.star_platinum.atomic": "Skin Star Platinum: Skin Atomic Débloqué !",
+  "unlock_skin.roundabout.justice.bad_bone": "Skin Justice: Skins Bad to The Bone Débloqués !",
+  "unlock_skin.roundabout.magicians_red.chagaroth": "Magician's : Skin de Terreur Débloqué !",
 
   "justice.morph.player": "Joueur",
   "justice.morph.villager": "Villageois",
