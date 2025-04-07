@@ -206,6 +206,8 @@ import java.util.Set;
         public Integer objectThrow;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer mobThrow;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer mobThrowAttack;
         @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
         public Integer justiceFogClone;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)

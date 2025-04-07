@@ -399,7 +399,13 @@ public class BlockGrabPreset extends PunchingStand{
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
                     if (!this.getSelf().level().isClientSide) {
-                        int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrow;
+                        int cdr = 0;
+                        if (this.getSelf() instanceof Player pl && pl.isCrouching()){
+                            cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrowAttack;
+                        } else {
+                            cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrow;
+                        }
+
                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
                         this.setCooldown(PowerIndex.SKILL_2, cdr);
                         Entity ent = standEntity.getFirstPassenger();
