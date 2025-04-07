@@ -665,6 +665,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 $$1.add(MagiciansRedEntity.LIGHTER_ABLAZE);
             } if (Level > 2 || bypass){
                 $$1.add(MagiciansRedEntity.OVA_SKIN);
+                $$1.add(MagiciansRedEntity.SIDEKICK);
             } if (Level > 3 || bypass){
                 $$1.add(MagiciansRedEntity.PURPLE_SKIN);
                 $$1.add(MagiciansRedEntity.PURPLE_ABLAZE);
