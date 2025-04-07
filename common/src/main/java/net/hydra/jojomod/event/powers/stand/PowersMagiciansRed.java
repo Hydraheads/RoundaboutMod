@@ -660,12 +660,13 @@ public class PowersMagiciansRed extends PunchingStand {
                 $$1.add(MagiciansRedEntity.PURPLE_SKIN);
             } if (Level > 2 || bypass){
             } if (Level > 3 || bypass){
-                $$1.add(MagiciansRedEntity.BLUE_SKIN);
-            } if (Level > 4 || bypass){
-            } if (Level > 5 || bypass){
                 $$1.add(MagiciansRedEntity.GREEN_SKIN);
-            } if (Level > 6 || bypass){
+            } if (Level > 4 || bypass){
+                $$1.add(MagiciansRedEntity.BLUE_SKIN);
+            } if (Level > 5 || bypass){
                 $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
+            } if (Level > 6 || bypass){
+                $$1.add(MagiciansRedEntity.MAGMA_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_SKIN);
@@ -1395,27 +1396,29 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public int lassoTime= -1;
     public void lassoImpact(Entity entity){
-        this.setAttackTimeDuring(-20);
-        if (entity != null) {
-            if (entity instanceof LivingEntity LE){
-                ((StandUser)LE).roundabout$setBoundTo(this.self);
-                leaded = LE;
-                lassoTime = 200;
+        if (this.activePower == PowerIndex.POWER_1) {
+            this.setAttackTimeDuring(-20);
+            if (entity != null) {
+                if (entity instanceof LivingEntity LE) {
+                    ((StandUser) LE).roundabout$setBoundTo(this.self);
+                    leaded = LE;
+                    lassoTime = 200;
+                }
+                knockShield2(entity, 100);
             }
-            knockShield2(entity, 100);
-        }
 
-        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
-        SoundEvent SE;
-        float pitch = 1F;
-        if (entity != null) {
-            SE = ModSounds.LASSO_EVENT;
-        } else {
-            SE = ModSounds.PUNCH_2_SOUND_EVENT;
-        }
+            this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+            SoundEvent SE;
+            float pitch = 1F;
+            if (entity != null) {
+                SE = ModSounds.LASSO_EVENT;
+            } else {
+                SE = ModSounds.PUNCH_2_SOUND_EVENT;
+            }
 
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            }
         }
     }
 
@@ -2618,19 +2621,19 @@ public class PowersMagiciansRed extends PunchingStand {
     public int drillTime = -1;
     public boolean drillT = false;
     public boolean doRedBindAttack(){
-        drillT = true;
-        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindDazeAttack);
-        if (!this.self.level().isClientSide()){
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 1F, 1F);
-            drillTime = 80;
-            addEXP(6,leaded);
-            ((StandUser)leaded).roundabout$setRedBound(true);
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), leaded.getX(),
-                    leaded.getY()+(leaded.getBbHeight()*0.5), leaded.getZ(),
-                    10,
-                    0.25, 0.25, 0.25,
-                    0.005);
-        }
+            drillT = true;
+            this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindDazeAttack);
+            if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                drillTime = 80;
+                addEXP(6, leaded);
+                ((StandUser) leaded).roundabout$setRedBound(true);
+                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), leaded.getX(),
+                        leaded.getY() + (leaded.getBbHeight() * 0.5), leaded.getZ(),
+                        10,
+                        0.25, 0.25, 0.25,
+                        0.005);
+            }
         return true;
     }
 
