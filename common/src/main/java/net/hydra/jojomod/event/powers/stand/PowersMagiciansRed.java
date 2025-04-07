@@ -657,16 +657,17 @@ public class PowersMagiciansRed extends PunchingStand {
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(MagiciansRedEntity.BLUE_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(MagiciansRedEntity.PURPLE_SKIN);
+            } if (Level > 2 || bypass){
             } if (Level > 3 || bypass){
-                $$1.add(MagiciansRedEntity.GREEN_SKIN);
+                $$1.add(MagiciansRedEntity.BLUE_SKIN);
             } if (Level > 4 || bypass){
-                $$1.add(MagiciansRedEntity.DREAD_SKIN);
             } if (Level > 5 || bypass){
+                $$1.add(MagiciansRedEntity.GREEN_SKIN);
             } if (Level > 6 || bypass){
+                $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(MagiciansRedEntity.DREAD_SKIN);
             }
         }
         return $$1;
@@ -1679,7 +1680,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public SimpleParticleType getFlameParticle(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == MagiciansRedEntity.BLUE_SKIN){
+        if (skn == MagiciansRedEntity.BLUE_SKIN || skn == MagiciansRedEntity.BLUE_ACE_SKIN){
             return ModParticles.BLUE_FLAME;
         } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
             return ModParticles.PURPLE_FLAME;
@@ -2422,7 +2423,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public byte getFireColor(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == MagiciansRedEntity.BLUE_SKIN){
+        if (skn == MagiciansRedEntity.BLUE_SKIN || skn == MagiciansRedEntity.BLUE_ACE_SKIN){
             return StandFireType.BLUE.id;
         } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
             return StandFireType.PURPLE.id;
@@ -2436,7 +2437,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public Block getFireColorBlock(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == MagiciansRedEntity.BLUE_SKIN){
+        if (skn == MagiciansRedEntity.BLUE_SKIN || skn == MagiciansRedEntity.BLUE_ACE_SKIN){
             return ModBlocks.BLUE_FIRE;
         } else if (skn == MagiciansRedEntity.PURPLE_SKIN){
             return ModBlocks.PURPLE_FIRE;

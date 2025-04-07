@@ -39,7 +39,7 @@ public class MagiciansRedSpinEffectLayer<T extends StandEntity> extends RenderLa
 
     public ResourceLocation getMRTextureLocation(MagiciansRedEntity entity) {
         byte BT = entity.getSkin();
-        if (BT == MagiciansRedEntity.BLUE_SKIN){
+        if (BT == MagiciansRedEntity.BLUE_SKIN || BT == MagiciansRedEntity.BLUE_ACE_SKIN){
             return TEXTURE_BLUE;
         } else if (BT == MagiciansRedEntity.PURPLE_SKIN){
             return TEXTURE_PURPLE;
