@@ -21,6 +21,9 @@ public class ModItemModels {
     public static ModelResourceLocation STAND_WORTHY_CROSSBOW =
             new ModelResourceLocation(Roundabout.MOD_ID, "crossbow_worthy_arrow", "inventory");
 
+    public static ModelResourceLocation DREAD_BOOK =
+            new ModelResourceLocation(Roundabout.MOD_ID, "dread_book", "inventory");
+
     public static HarpoonModel HARPOON_MODEL;
 
 }

@@ -28,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundHorseScreenOpenPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,6 +73,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -87,6 +89,16 @@ public class MainUtil {
         return start + (delta * (end - start))*multiplier;
     }
 
+    public static boolean isDreadBook(ItemStack stack) {
+        if (stack != null && !stack.isEmpty() && stack.is(Items.BOOK)){
+            Component name = stack.getHoverName();
+            String str = name.getString().toLowerCase();
+            if ("cha'garoth".equals(str) || "chagaroth".equals(str) || "dreadbeast".equals(str)){
+                return true;
+            }
+        }
+        return false;
+    }
     public static float controlledLerpAngleDegrees(float delta, float start, float end, float multiplier) {
         delta = Math.min(delta,1);
         return start + (delta * Mth.wrapDegrees(end - start))*multiplier;

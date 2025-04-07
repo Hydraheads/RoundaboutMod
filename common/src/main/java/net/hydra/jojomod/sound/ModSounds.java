@@ -377,6 +377,10 @@ public class ModSounds {
     public static final ResourceLocation FINAL_KICK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FINAL_KICK);
     public static SoundEvent FINAL_KICK_EVENT = SoundEvent.createVariableRangeEvent(FINAL_KICK_ID);
 
+    public static final String DREAD_SUMMON = "dread_summon";
+    public static final ResourceLocation DREAD_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DREAD_SUMMON);
+    public static SoundEvent DREAD_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(DREAD_SUMMON_ID);
+
     public static final String STAND_GUARD_SOUND = "stand_guard";
     public static final ResourceLocation STAND_GUARD_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAND_GUARD_SOUND);
     public static SoundEvent STAND_GUARD_SOUND_EVENT = SoundEvent.createVariableRangeEvent(STAND_GUARD_SOUND_ID);

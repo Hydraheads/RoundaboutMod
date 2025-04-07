@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
@@ -63,6 +64,8 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -1108,7 +1111,34 @@ public class PowersMagiciansRed extends PunchingStand {
         }
         return true;
     }
-
+    @Override
+    public void playSummonEffects(boolean forced){
+        if (!forced) {
+            Level lv = this.getSelf().level();
+            if ((this.getSelf()) instanceof Player PE){
+                StandUser user = ((StandUser)PE);
+                ItemStack stack = user.roundabout$getStandDisc();
+                if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_MAGICIANS_RED)){
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    if (!ipe.roundabout$getUnlockedBonusSkin() && MainUtil.isDreadBook(PE.getMainHandItem())){
+                        if (!lv.isClientSide()) {
+                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            lv.playSound(null, PE.getX(), PE.getY(),
+                                    PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                            lv.playSound(null, PE.getX(), PE.getY(),
+                                    PE.getZ(), ModSounds.DREAD_SUMMON_EVENT, PE.getSoundSource(), 3.0F, 1.0F);
+                            ((ServerLevel) lv).sendParticles(ModParticles.DREAD_FLAME, PE.getX(),
+                                    PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                                    10, 0.5, 0.5, 0.5, 0.2);
+                            user.roundabout$setStandSkin(MagiciansRedEntity.DREAD_BEAST_SKIN);
+                            ((ServerPlayer) ipe).displayClientMessage(
+                                    Component.translatable("unlock_skin.roundabout.magicians_red.chagaroth"), true);
+                        }
+                    }
+                }
+            }
+        }
+    }
     public boolean toggleLifeTracker() {
         this.animateStand((byte) 51);
         this.poseStand(OffsetIndex.GUARD);

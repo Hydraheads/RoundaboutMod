@@ -138,6 +138,7 @@ public class FabricSounds {
         addSound(ModSounds.SUMMON_JUSTICE_ID, ModSounds.SUMMON_JUSTICE_EVENT);
         addSound(ModSounds.SUMMON_JUSTICE_2_ID, ModSounds.SUMMON_JUSTICE_2_EVENT);
         addSound(ModSounds.FINAL_KICK_ID, ModSounds.FINAL_KICK_EVENT);
+        addSound(ModSounds.DREAD_SUMMON_ID, ModSounds.DREAD_SUMMON_EVENT);
 
         addSound(ModSounds.TIME_STOP_THE_WORLD_ID, ModSounds.TIME_STOP_THE_WORLD_EVENT);
         addSound(ModSounds.TIME_STOP_RESUME_THE_WORLD_ID, ModSounds.TIME_STOP_RESUME_THE_WORLD_EVENT);

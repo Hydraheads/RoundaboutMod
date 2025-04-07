@@ -113,6 +113,12 @@
       "roundabout:lasso"
     ]
   },
+  "dread_summon": {
+    "subtitle": "sounds.roundabout.dread_summon",
+    "sounds": [
+      "roundabout:dread_summon"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [

@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IItemRenderer;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
@@ -124,6 +125,10 @@ public class ZItemRenderer implements IItemRenderer {
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_BEETLE_CROSSBOW);
             } else if (CrossbowItem.containsChargedProjectile($$0,ModItems.WORTHY_ARROW)){
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_WORTHY_CROSSBOW);
+            }
+        }if ($$0.is(Items.BOOK)){
+            if (MainUtil.isDreadBook($$0)){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.DREAD_BOOK);
             }
         }
 

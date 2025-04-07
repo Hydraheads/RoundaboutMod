@@ -223,6 +223,8 @@ public class ForgeSounds {
             register(ModSounds.EXPLOSIVE_BAT, ModSounds.EXPLOSIVE_BAT_ID);
     public static final RegistryObject<SoundEvent> FINAL_KICK_EVENT =
             register(ModSounds.FINAL_KICK, ModSounds.FINAL_KICK_ID);
+    public static final RegistryObject<SoundEvent> DREAD_SUMMON_EVENT =
+            register(ModSounds.DREAD_SUMMON, ModSounds.DREAD_SUMMON_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_HIT2_EVENT =
             register(ModSounds.STAND_BARRAGE_HIT2, ModSounds.STAND_BARRAGE_HIT2_ID);
     public static final RegistryObject<SoundEvent> STAND_BARRAGE_END_EVENT =
