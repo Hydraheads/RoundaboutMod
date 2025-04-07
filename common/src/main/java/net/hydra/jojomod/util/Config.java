@@ -1,7 +1,5 @@
 package net.hydra.jojomod.util;
 
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.util.annotation.*;
 
 import java.util.Arrays;
@@ -68,18 +66,20 @@ import java.util.Set;
     public Integer maxMagiciansRedFlameDistance;
     @IntOption(group = "inherit", value = 15, min = 0, max = 365)
     public Integer basePunchAngle;
-    public Set<String> standArrowPool = new HashSet<>(
+    public Set<String> standArrowPoolv1 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
-                    "roundabout:justice_disc"
+                    "roundabout:justice_disc",
+                    "roundabout:magicians_red_disc"
             )
     );
-    public Set<String> naturalStandUserMobPool = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv1 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
-                    "roundabout:justice_disc"
+                    "roundabout:justice_disc",
+                    "roundabout:magicians_red_disc"
             )
     );
     @NestedOption(group = "modded")

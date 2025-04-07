@@ -15,14 +15,11 @@ import net.hydra.jojomod.util.option.ConfigOptionReference;
 import net.hydra.jojomod.util.option.Reflection;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public abstract class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -54,11 +51,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getConfig().standArrowPool != null)
+        if (getConfig().standArrowPoolv1 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getConfig().standArrowPool)
+            for (String disc : getConfig().standArrowPoolv1)
             {
                 String[] split = disc.split(":");
 
@@ -75,11 +72,11 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
             }
         }
-        if (getConfig().naturalStandUserMobPool != null)
+        if (getConfig().naturalStandUserMobPoolv1 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getConfig().naturalStandUserMobPool)
+            for (String disc : getConfig().naturalStandUserMobPoolv1)
             {
                 String[] split = disc.split(":");
 
