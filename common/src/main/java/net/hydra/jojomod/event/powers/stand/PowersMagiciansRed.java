@@ -2976,7 +2976,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
 
-    private boolean isInRain() {
+    public boolean isInRain() {
         BlockPos $$0 = this.self.blockPosition();
         return this.self.level().isRainingAt($$0)
                 || this.self.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.self.getBoundingBox().maxY, (double)$$0.getZ()));

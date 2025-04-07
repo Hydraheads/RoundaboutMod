@@ -3,10 +3,12 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.annotation.BooleanOption;
 import net.hydra.jojomod.util.annotation.FloatOption;
 import net.hydra.jojomod.util.annotation.IntOption;
 import net.hydra.jojomod.util.annotation.NestedOption;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -85,9 +87,15 @@ public class MagiciansRedEntity extends StandEntity {
         };
     }
 
+    public boolean isPutOutByWater(){
+        if (this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+            return this.getUser().isUnderWater() || PMR.isInRain();
+        }
+        return false;
+    }
     public boolean emitsLight(){
-        if (isInWaterOrRain()){
-            return false;
+        if (isPutOutByWater()){
+                return false;
         }
         if (this.lash1.isStarted() || this.lash2.isStarted() || lash3.isStarted()){
             return true;
@@ -98,7 +106,11 @@ public class MagiciansRedEntity extends StandEntity {
             default -> false;
         };
     }
-
+    private boolean isInRain() {
+        BlockPos $$0 = this.blockPosition();
+        return this.level().isRainingAt($$0)
+                || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
+    }
     public static final byte
             PART_3_SKIN = 1,
             BLUE_SKIN = 2,
@@ -122,7 +134,7 @@ public class MagiciansRedEntity extends StandEntity {
         super.setupAnimationStates();
         if (this.getUser() != null) {
 
-            if (emitsFlameCycle() && !isInWaterOrRain()){
+            if (emitsFlameCycle() && !isPutOutByWater()){
                 this.cycleFlames.startIfStopped(this.tickCount);
                 this.hideFlames.stop();
             } else {
