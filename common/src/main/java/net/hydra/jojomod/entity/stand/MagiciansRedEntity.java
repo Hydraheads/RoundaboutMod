@@ -122,7 +122,7 @@ public class MagiciansRedEntity extends StandEntity {
         super.setupAnimationStates();
         if (this.getUser() != null) {
 
-            if (emitsFlameCycle() || isInWaterOrRain()){
+            if (emitsFlameCycle() && !isInWaterOrRain()){
                 this.cycleFlames.startIfStopped(this.tickCount);
                 this.hideFlames.stop();
             } else {
