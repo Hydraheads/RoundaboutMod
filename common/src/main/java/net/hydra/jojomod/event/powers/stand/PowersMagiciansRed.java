@@ -688,6 +688,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
             } if (Level > 6 || bypass){
                 $$1.add(MagiciansRedEntity.MAGMA_SKIN);
+                $$1.add(MagiciansRedEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_SKIN);

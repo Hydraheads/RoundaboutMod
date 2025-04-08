@@ -25,6 +25,7 @@ public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRender
     private static final ResourceLocation LIGHTER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_lighter.png");
     private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_ova.png");
     private static final ResourceLocation SIDEKICK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_sidekicks.png");
+    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_beta.png");
     public MagiciansRedBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
         this.addLayer(new MagiciansRedSpinEffectLayer<>(this, context.getModelSet()));
@@ -55,6 +56,8 @@ public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRender
             return OVA_SKIN;
         } else if (BT == MagiciansRedEntity.SIDEKICK){
             return SIDEKICK_SKIN;
+        } else if (BT == MagiciansRedEntity.BETA){
+            return BETA_SKIN;
         }
             return PART_3_SKIN;
     }

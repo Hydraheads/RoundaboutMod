@@ -55,6 +55,8 @@ public class MagiciansRedEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.magicians_red.dread_ablaze");
         } else if (skinId == SIDEKICK){
             return Component.translatable(  "skins.roundabout.magicians_red.sidekick");
+        } else if (skinId == BETA){
+            return Component.translatable(  "skins.roundabout.magicians_red.beta");
         }
         return Component.translatable(  "skins.roundabout.magicians_red.base");
     }
@@ -129,7 +131,8 @@ public class MagiciansRedEntity extends StandEntity {
             PURPLE_ABLAZE = 15,
             GREEN_ABLAZE = 16,
             DREAD_ABLAZE = 17,
-            SIDEKICK = 18;
+            SIDEKICK = 18,
+            BETA = 19;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
