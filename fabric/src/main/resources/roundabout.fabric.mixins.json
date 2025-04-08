@@ -8,6 +8,7 @@
     "FabricServerPlayer"
   ],
   "client": [
+    "DimensionResourceKeyD4CFabric",
     "FabricFireBlock",
     "MixinTitleScreen"
   ],

@@ -9,6 +9,7 @@
     "ForgeServerPlayer"
   ],
   "client": [
+    "DimensionResourceKeyD4CForge",
     "ForgeClientPacketListener",
     "ForgeFireBlock",
     "ForgeForgeGui",
