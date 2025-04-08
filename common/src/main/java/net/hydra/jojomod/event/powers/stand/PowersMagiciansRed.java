@@ -1313,10 +1313,6 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
 
-    @Override
-    public boolean isWip(){
-        return true;
-    }
     public void updateRangedBarrageCharge2(){
         if (this.attackTimeDuring >= this.getRangedBarrageWindup2()) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_2, true);
