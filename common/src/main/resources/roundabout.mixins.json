@@ -84,6 +84,7 @@
     "dworlds.ServerAccessorMixin"
   ],
   "client": [
+    "GeckolibCompatAttempt",
     "HudRendering",
     "InputEvents",
     "PlayerEntityClient",
