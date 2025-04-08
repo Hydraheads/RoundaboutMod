@@ -26,6 +26,8 @@ public class ClientConfig {
     public Boolean showCreativeTextOnWorthinessArrow;
     @BooleanOption(group = "inherit", value = true)
     public Boolean pressingAbilityKeysSummonsStands;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean disableObviousExperimentalWarning;
     @IntOption(group = "inherit", value = 190)
     public Integer justiceFogBrightness;
     @BooleanOption(group = "inherit", value = true)

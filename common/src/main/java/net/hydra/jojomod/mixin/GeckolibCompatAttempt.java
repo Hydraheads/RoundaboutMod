@@ -23,7 +23,7 @@ public abstract class GeckolibCompatAttempt {
     @Shadow public abstract void register(ResourceLocation resourceLocation, AbstractTexture abstractTexture);
 
     @Inject(method = "getTexture(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/texture/AbstractTexture;", at = @At("HEAD"), cancellable = true)
-    private void wrapAnimatableTexture(ResourceLocation path, CallbackInfoReturnable<AbstractTexture> callback) {
+    private void roundabout$wrapAnimatableTexture(ResourceLocation path, CallbackInfoReturnable<AbstractTexture> callback) {
         if (path.getNamespace().contains(Roundabout.MOD_ID)){
             AbstractTexture $$1 = (AbstractTexture)this.byPath.get(path);
             if ($$1 == null) {
