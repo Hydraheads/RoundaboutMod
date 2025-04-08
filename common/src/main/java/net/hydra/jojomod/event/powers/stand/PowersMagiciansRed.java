@@ -316,7 +316,9 @@ public class PowersMagiciansRed extends PunchingStand {
                 float g = 1/f;
                 basis *= g;
             }
-            basis *= 0.9f;
+            basis *= 0.85f;
+        } else if (this.getActivePower()==PowerIndex.POWER_4_BONUS){
+            basis *= 0.1f;
         }
 
         if (isUsingFirestorm()){
@@ -332,7 +334,8 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean cancelSprintJump(){
         if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
-                || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE){
+                || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE
+                || this.getActivePower() == PowerIndex.POWER_4_BONUS){
             return true;
         }
         return super.cancelSprintJump();
@@ -1370,7 +1373,7 @@ public class PowersMagiciansRed extends PunchingStand {
             updateRangedBarrage2();
         } else if (this.getActivePower() == PowerIndex.POWER_4_BONUS){
 
-            if (this.attackTimeDuring >= 12) {
+            if (this.attackTimeDuring >= 16) {
                 if (this.self instanceof Player) {
                     if (isPacketPlayer()) {
                         ((StandUser) this.self).roundabout$tryPower(PowerIndex.POWER_4, true);
