@@ -116,6 +116,13 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public void tickPower() {
+        if (!this.self.level().isClientSide()) {
+            if (leaded != null) {
+                if (!hasStandActive(this.self)){
+                    clearLeaded();
+                }
+            }
+        }
         super.tickPower();
 
         offloadLead();
