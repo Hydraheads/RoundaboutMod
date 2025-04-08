@@ -470,7 +470,7 @@
   "ability.roundabout.flamethrower": "Flamethrower",
   "ability.roundabout.flamethrower.desc": "A stream of fire that can damage multiple targets at once, setting them on stand fire.",
   "ability.roundabout.furnace": "Ignition",
-  "ability.roundabout.furnace.desc": "Adds a button in the menus of furnace type blocks (furnace, blast furnace, smoker, and furnace). Pressing this button lights up the furnace with the stand's flames.",
+  "ability.roundabout.furnace.desc": "Adds a button in the menus of furnace type blocks (furnace, blast furnace, and smoker). Pressing this button lights up the furnace with the stand's flames.",
   "ability.roundabout.red_bind": "Red Bind",
   "ability.roundabout.red_bind.desc": "Winds up a lasso ability, you have to get within close range to land it. It allows you to walk mobs around as if pulling them with a lead. Attacking causes the target to rise up and be held in place for a few seconds or until hit, while blocking or pressing the button again cancels it.",
   "ability.roundabout.flame_creation": "Flame Creation",
