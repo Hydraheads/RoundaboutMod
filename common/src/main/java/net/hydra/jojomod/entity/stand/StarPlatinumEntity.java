@@ -33,7 +33,8 @@ public class StarPlatinumEntity extends StandEntity {
             PART_6_SKIN = 8,
             FIRST_SKIN = 9,
             ATOMIC_SKIN = 10,
-            JOJONIUM_SKIN = 11;
+            JOJONIUM_SKIN = 11,
+            BETA = 12;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -62,6 +63,8 @@ public class StarPlatinumEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.star_platinum.atomic");
         } else if (skinId == JOJONIUM_SKIN){
             return Component.translatable(  "skins.roundabout.star_platinum.jojonium");
+        } else if (skinId == BETA){
+            return Component.translatable(  "skins.roundabout.star_platinum.beta");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

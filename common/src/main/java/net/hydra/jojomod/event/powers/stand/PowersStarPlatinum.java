@@ -910,6 +910,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 $$1.add(StarPlatinumEntity.PART_6_SKIN);
                 $$1.add(StarPlatinumEntity.MANGA_PURPLE_SKIN);
                 $$1.add(StarPlatinumEntity.FIRST_SKIN);
+                $$1.add(StarPlatinumEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(StarPlatinumEntity.ATOMIC_SKIN);
             }

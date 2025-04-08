@@ -22,7 +22,8 @@ public class TheWorldEntity extends StandEntity {
             DARK_SKIN = 9,
             AQUA_SKIN = 10,
             ARCADE_SKIN = 11,
-            AGOGO_SKIN = 12;
+            AGOGO_SKIN = 12,
+            BETA = 13;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -53,6 +54,8 @@ public class TheWorldEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.the_world.arcade");
         } else if (skinId == AGOGO_SKIN){
             return Component.translatable(  "skins.roundabout.the_world.agogo");
+        } else if (skinId == BETA){
+            return Component.translatable(  "skins.roundabout.the_world.beta");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
