@@ -471,6 +471,9 @@ public class ModSounds {
     public static final String  ARCADE_URI = "arcade_uri";
     public static final ResourceLocation ARCADE_URI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_URI);
     public static SoundEvent ARCADE_URI_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_URI_ID);
+    public static final String  ARCADE_BARRAGE = "arcade_barrage";
+    public static final ResourceLocation ARCADE_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_BARRAGE);
+    public static SoundEvent ARCADE_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_BARRAGE_ID);
     public static final String  ARCADE_IMPALE = "arcade_impale";
     public static final ResourceLocation ARCADE_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_IMPALE);
     public static SoundEvent ARCADE_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_IMPALE_ID);

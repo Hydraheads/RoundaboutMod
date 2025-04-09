@@ -845,6 +845,12 @@
       "roundabout:arcade_timestop"
     ]
   },
+  "arcade_barrage": {
+    "subtitle": "sounds.roundabout.arcade_barrage",
+    "sounds": [
+      "roundabout:arcade_barrage"
+    ]
+  },
   "arcade_timestop_2": {
     "subtitle": "sounds.roundabout.arcade_timestop_2",
     "sounds": [

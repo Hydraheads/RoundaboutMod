@@ -794,7 +794,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         double rand = Math.random();
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == TheWorldEntity.ARCADE_SKIN){
-            return BARRAGE_NOISE_7;
+            return BARRAGE_NOISE_8;
         }
         if (skn == TheWorldEntity.OVA_SKIN){
             if (rand > 0.5) {
@@ -1131,7 +1131,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void playKickBarrageCrySound(){
         if (!this.self.level().isClientSide()) {
             byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-            if (bt == TheWorldEntity.OVA_SKIN || bt == TheWorldEntity.ARCADE_SKIN){
+            if (bt == TheWorldEntity.ARCADE_SKIN){
+                playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_7, 32, false,true);
+                return;
+            }
+            if (bt == TheWorldEntity.OVA_SKIN){
                 return;
             }
             if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
@@ -1157,6 +1161,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.OVA_BARRAGE_2_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_7) {
             return ModSounds.ARCADE_URI_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_8) {
+            return ModSounds.ARCADE_BARRAGE_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
             if (bt == TheWorldEntity.OVA_SKIN){
                 return ModSounds.OVA_SUMMON_THE_WORLD_EVENT;
@@ -1215,7 +1221,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (bt == TheWorldEntity.OVA_SKIN) {
                 return ModSounds.OVA_THE_WORLD_2_EVENT;
             } else if (bt == TheWorldEntity.ARCADE_SKIN){
-                return ModSounds.ARCADE_LONG_TS_EVENT;
+                return ModSounds.ARCADE_TIMESTOP_2_EVENT;
             } else if (bt == TheWorldEntity.OVER_HEAVEN){
                 return ModSounds.THE_WORLD_OVER_HEAVEN_EVENT;
             } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
