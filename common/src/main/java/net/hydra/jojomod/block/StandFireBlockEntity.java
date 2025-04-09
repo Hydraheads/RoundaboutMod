@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -122,7 +124,7 @@ public class StandFireBlockEntity extends BlockEntity{
                     rollNextTarget($$1,$$2);
                     if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
                     && (standUser instanceof Player || ($$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_MOB_STAND_FIRE_SPREADS)
-                    && (standUser instanceof Monster)))) {
+                    && (standUser instanceof Monster))) && !(standUser instanceof Player && ((ServerPlayer) standUser).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)    ) {
                         if (!$$0.canSurvive($$1, $$2)) {
                             $$1.removeBlock($$2, false);
                             return;
