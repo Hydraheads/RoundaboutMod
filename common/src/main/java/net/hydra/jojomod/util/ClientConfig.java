@@ -34,6 +34,8 @@ public class ClientConfig {
     public Boolean magiciansRedTexturesMakeItEmmissive;
     @BooleanOption(group = "inherit", value = false)
     public Boolean magiciansRedLashesMakeItEmmissive;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean magiciansRedRenderOnFireInFirstPerson;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")

@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
@@ -110,7 +111,7 @@ public abstract class ZScreenEffectRenderer {
     @Unique
     private static void roundabout$renderFire(Minecraft mc, PoseStack pose, Player pl) {
         byte bt = ((StandUser) pl).roundabout$getOnStandFire();
-        if (bt > 0) {
+        if (bt > 0 && ConfigManager.getClientConfig().magiciansRedRenderOnFireInFirstPerson) {
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
             RenderSystem.depthFunc(GL20C.GL_ALWAYS);
