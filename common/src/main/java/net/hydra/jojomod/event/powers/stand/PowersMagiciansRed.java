@@ -48,6 +48,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -62,16 +63,17 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -750,6 +752,10 @@ public class PowersMagiciansRed extends PunchingStand {
         if (blockHit.getType() == HitResult.Type.BLOCK){
             grabBlock2 = blockHit.getBlockPos();
             if (this.self.level().getBlockState(grabBlock2).is(Blocks.CAMPFIRE)){
+                return blockHit.getBlockPos();
+            } if (this.self.level().getBlockState(grabBlock2).is(Blocks.CANDLE)){
+                return blockHit.getBlockPos();
+            } if (this.self.level().getBlockState(grabBlock2).getBlock() instanceof TntBlock){
                 return blockHit.getBlockPos();
             }
             return blockHit.getBlockPos().relative(blockHit.getDirection());
@@ -2413,13 +2419,29 @@ public class PowersMagiciansRed extends PunchingStand {
             leaded = null;
         }
     }
-
+    private static void explode(Level $$0, BlockPos $$1, @Nullable LivingEntity $$2) {
+        if (!$$0.isClientSide) {
+            PrimedTnt $$3 = new PrimedTnt($$0, (double)$$1.getX() + 0.5, (double)$$1.getY(), (double)$$1.getZ() + 0.5, $$2);
+            $$0.addFreshEntity($$3);
+            $$0.playSound((Player)null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            $$0.gameEvent($$2, GameEvent.PRIME_FUSE, $$1);
+        }
+    }
     public boolean setFire(){
         if (grabBlock != null){
             BlockState state = this.self.level().getBlockState(grabBlock);
-            if (state.is(Blocks.CAMPFIRE)){
-                if (!state.getValue(CampfireBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)){
-                    this.getSelf().level().setBlockAndUpdate(grabBlock, state.setValue(CampfireBlock.LIT,true));
+            if (state.is(Blocks.CAMPFIRE)) {
+                if (!state.getValue(CampfireBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
+                    this.getSelf().level().setBlockAndUpdate(grabBlock, state.setValue(CampfireBlock.LIT, true));
+                }
+            } else if (state.getBlock() instanceof CandleBlock){
+                if (!state.getValue(CandleBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
+                    this.getSelf().level().setBlockAndUpdate(grabBlock, state.setValue(CandleBlock.LIT,true));
+                }
+            } else if (state.getBlock() instanceof TntBlock){
+                if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
+                    this.getSelf().level().setBlockAndUpdate(grabBlock, Blocks.AIR.defaultBlockState());
+                    explode(this.self.level(),grabBlock,this.self);
                 }
             } else if (tryPlaceBlock(grabBlock)) {
                 this.self.level().playSound(null, this.self.getX(), this.self.getY(),
