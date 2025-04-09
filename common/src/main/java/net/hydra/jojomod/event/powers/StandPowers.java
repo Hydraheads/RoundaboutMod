@@ -636,6 +636,10 @@ public class StandPowers {
             return ModSounds.OVA_SP_TS_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_9) {
             return ModSounds.OVA_SHORT_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_10) {
+            return ModSounds.ARCADE_SHORT_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_11) {
+            return ModSounds.ARCADE_TIMESTOP_EVENT;
         } else if (soundChoice == TIME_RESUME_NOISE){
             return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {
@@ -646,6 +650,8 @@ public class StandPowers {
             return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_RESUME_NOISE_2) {
             return ModSounds.OVA_TIME_RESUME_EVENT;
+        } else if (soundChoice == TIME_RESUME_NOISE_3) {
+            return ModSounds.ARCADE_TIME_RESUME_EVENT;
         } else if (soundChoice == SoundIndex.STAND_ARROW_CHARGE) {
             return ModSounds.STAND_ARROW_CHARGE_EVENT;
         } else if (soundChoice == SoundIndex.CACKLE) {
@@ -713,9 +719,11 @@ public class StandPowers {
     public static final byte TIME_STOP_NOISE_8 = TIME_STOP_NOISE+7;
     public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
     public static final byte TIME_STOP_NOISE_10 = TIME_STOP_NOISE+9;
-    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+13;
+    public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
+    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+15;
     public static final byte TIME_RESUME_NOISE = 60;
     public static final byte TIME_RESUME_NOISE_2 = 61;
+    public static final byte TIME_RESUME_NOISE_3 = 62;
     public boolean glowingEyes(){
         return false;
     }

@@ -96,6 +96,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 return LAST_HIT_8_NOISE;
             }
         }
+        if (skn == TheWorldEntity.ARCADE_SKIN){
+            if (rand > 0.66) {
+                return LAST_HIT_10_NOISE;
+            } else if (rand > 0.33) {
+                return LAST_HIT_11_NOISE;
+            } else {
+                return LAST_HIT_12_NOISE;
+            }
+        }
         if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
             if (rand > 0.66) {
                 return LAST_HIT_4_NOISE;
@@ -188,6 +197,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (!this.self.level().isClientSide()) {
 
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (skn == TheWorldEntity.ARCADE_SKIN){
+                playSoundsIfNearby(BARRAGE_NOISE_7, 27, false);
+            }
             if (skn == TheWorldEntity.OVA_SKIN){
                 playSoundsIfNearby(BARRAGE_NOISE_5, 27, false);
                 return;
@@ -781,6 +793,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public byte chooseBarrageSound(){
         double rand = Math.random();
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == TheWorldEntity.ARCADE_SKIN){
+            return BARRAGE_NOISE_7;
+        }
         if (skn == TheWorldEntity.OVA_SKIN){
             if (rand > 0.5) {
                 return BARRAGE_NOISE_5;
@@ -1083,6 +1098,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (bt == TheWorldEntity.OVA_SKIN) {
             playSoundsIfNearby(TIME_STOP_NOISE_7, 100, true);
+        } else if (bt == TheWorldEntity.ARCADE_SKIN) {
+                playSoundsIfNearby(TIME_STOP_NOISE_11, 100, true);
         } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
             playSoundsIfNearby(TIME_STOP_NOISE_5, 100, true);
         } else {
@@ -1095,6 +1112,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (bt == TheWorldEntity.OVA_SKIN) {
             return TIME_STOP_NOISE_9;
+        } else if (bt == TheWorldEntity.ARCADE_SKIN) {
+            return TIME_STOP_NOISE_10;
         }
         return TIME_STOP_NOISE_2;
     }
@@ -1103,6 +1122,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (bt == TheWorldEntity.OVA_SKIN) {
             return TIME_RESUME_NOISE_2;
+        } else if (bt == TheWorldEntity.ARCADE_SKIN) {
+            return TIME_RESUME_NOISE_3;
         }
         return TIME_RESUME_NOISE;
     }
@@ -1110,7 +1131,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void playKickBarrageCrySound(){
         if (!this.self.level().isClientSide()) {
             byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-            if (bt == TheWorldEntity.OVA_SKIN){
+            if (bt == TheWorldEntity.OVA_SKIN || bt == TheWorldEntity.ARCADE_SKIN){
                 return;
             }
             if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
@@ -1134,6 +1155,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.OVA_BARRAGE_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_6) {
             return ModSounds.OVA_BARRAGE_2_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_7) {
+            return ModSounds.ARCADE_URI_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
             if (bt == TheWorldEntity.OVA_SKIN){
                 return ModSounds.OVA_SUMMON_THE_WORLD_EVENT;
@@ -1156,6 +1179,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.OVA_MUDA_EVENT;
         } else if (soundChoice == LAST_HIT_8_NOISE) {
             return ModSounds.OVA_MUDA_2_EVENT;
+        } else if (soundChoice == LAST_HIT_10_NOISE) {
+            return ModSounds.ARCADE_MUDA_EVENT;
+        } else if (soundChoice == LAST_HIT_11_NOISE) {
+            return ModSounds.ARCADE_MUDA_2_EVENT;
+        } else if (soundChoice == LAST_HIT_12_NOISE) {
+            return ModSounds.ARCADE_MUDA_3_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == KICK_BARRAGE_NOISE) {
@@ -1175,6 +1204,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_VOICE){
             if (bt == TheWorldEntity.OVA_SKIN) {
                 return ModSounds.OVA_THE_WORLD_EVENT;
+            } else if (bt == TheWorldEntity.ARCADE_SKIN){
+                return ModSounds.ARCADE_TIMESTOP_2_EVENT;
             } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
                 return ModSounds.TWAU_THE_WORLD_EVENT;
             } else {
@@ -1183,6 +1214,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_VOICE_2){
             if (bt == TheWorldEntity.OVA_SKIN) {
                 return ModSounds.OVA_THE_WORLD_2_EVENT;
+            } else if (bt == TheWorldEntity.ARCADE_SKIN){
+                return ModSounds.ARCADE_LONG_TS_EVENT;
             } else if (bt == TheWorldEntity.OVER_HEAVEN){
                 return ModSounds.THE_WORLD_OVER_HEAVEN_EVENT;
             } else if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
@@ -1200,6 +1233,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.TIME_STOP_TICKING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public SoundEvent getImpaleSound(){
+
+        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (bt == TheWorldEntity.ARCADE_SKIN){
+            return ModSounds.ARCADE_IMPALE_EVENT;
+        }
+        return super.getImpaleSound();
     }
 
     //public void setSkillIcon(GuiGraphics context, int x, int y, ResourceLocation rl, boolean dull, @Nullable CooldownInstance cooldownInstance){
@@ -1349,4 +1392,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public static final byte LAST_HIT_7_NOISE = 126;
     public static final byte LAST_HIT_8_NOISE = 127;
 
+    public static final byte LAST_HIT_10_NOISE = 119;
+    public static final byte LAST_HIT_11_NOISE = 118;
+    public static final byte LAST_HIT_12_NOISE = 117;
 }

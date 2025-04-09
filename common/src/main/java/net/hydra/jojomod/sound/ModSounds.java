@@ -451,6 +451,41 @@ public class ModSounds {
     public static final String THE_WORLD_OVER_HEAVEN = "the_world_over_heaven";
     public static final ResourceLocation THE_WORLD_OVER_HEAVEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+THE_WORLD_OVER_HEAVEN);
     public static SoundEvent THE_WORLD_OVER_HEAVEN_EVENT = SoundEvent.createVariableRangeEvent(THE_WORLD_OVER_HEAVEN_ID);
+
+
+    public static final String  ARCADE_TIMESTOP = "arcade_timestop";
+    public static final ResourceLocation ARCADE_TIMESTOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_TIMESTOP);
+    public static SoundEvent ARCADE_TIMESTOP_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_TIMESTOP_ID);
+    public static final String  ARCADE_TIMESTOP_2 = "arcade_timestop_2";
+    public static final ResourceLocation ARCADE_TIMESTOP_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_TIMESTOP_2);
+    public static SoundEvent ARCADE_TIMESTOP_2_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_TIMESTOP_2_ID);
+    public static final String  ARCADE_MUDA = "arcade_muda";
+    public static final ResourceLocation ARCADE_MUDA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_MUDA);
+    public static SoundEvent ARCADE_MUDA_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_MUDA_ID);
+    public static final String  ARCADE_MUDA_2 = "arcade_muda_2";
+    public static final ResourceLocation ARCADE_MUDA_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_MUDA_2);
+    public static SoundEvent ARCADE_MUDA_2_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_MUDA_2_ID);
+    public static final String  ARCADE_MUDA_3 = "arcade_muda_3";
+    public static final ResourceLocation ARCADE_MUDA_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_MUDA_3);
+    public static SoundEvent ARCADE_MUDA_3_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_MUDA_3_ID);
+    public static final String  ARCADE_URI = "arcade_uri";
+    public static final ResourceLocation ARCADE_URI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_URI);
+    public static SoundEvent ARCADE_URI_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_URI_ID);
+    public static final String  ARCADE_IMPALE = "arcade_impale";
+    public static final ResourceLocation ARCADE_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_IMPALE);
+    public static SoundEvent ARCADE_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_IMPALE_ID);
+    public static final String  ARCADE_TIME_RESUME = "arcade_time_resume";
+    public static final ResourceLocation ARCADE_TIME_RESUME_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_TIME_RESUME);
+    public static SoundEvent ARCADE_TIME_RESUME_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_TIME_RESUME_ID);
+    public static final String  ARCADE_LONG_TS = "arcade_long_ts";
+    public static final ResourceLocation ARCADE_LONG_TS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_LONG_TS);
+    public static SoundEvent ARCADE_LONG_TS_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_LONG_TS_ID);
+    public static final String  ARCADE_SHORT_TS = "arcade_short_ts";
+    public static final ResourceLocation ARCADE_SHORT_TS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_SHORT_TS);
+    public static SoundEvent ARCADE_SHORT_TS_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_SHORT_TS_ID);
+
+
+
     public static final String UNLOCK_SKIN = "unlock_skin";
     public static final ResourceLocation UNLOCK_SKIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+UNLOCK_SKIN);
     public static SoundEvent UNLOCK_SKIN_EVENT = SoundEvent.createVariableRangeEvent(UNLOCK_SKIN_ID);

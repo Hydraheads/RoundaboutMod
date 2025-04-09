@@ -803,6 +803,66 @@
       "roundabout:the_world_over_heaven"
     ]
   },
+  "arcade_impale": {
+    "subtitle": "sounds.roundabout.arcade_impale",
+    "sounds": [
+      "roundabout:arcade_impale"
+    ]
+  },
+  "arcade_long_ts": {
+    "subtitle": "sounds.roundabout.arcade_long_ts",
+    "sounds": [
+      "roundabout:arcade_long_ts"
+    ]
+  },
+  "arcade_muda": {
+    "subtitle": "sounds.roundabout.arcade_muda",
+    "sounds": [
+      "roundabout:arcade_muda"
+    ]
+  },
+  "arcade_muda_2": {
+    "subtitle": "sounds.roundabout.arcade_muda_2",
+    "sounds": [
+      "roundabout:arcade_muda_2"
+    ]
+  },
+  "arcade_muda_3": {
+    "subtitle": "sounds.roundabout.arcade_muda_3",
+    "sounds": [
+      "roundabout:arcade_muda_3"
+    ]
+  },
+  "arcade_uri": {
+    "subtitle": "sounds.roundabout.arcade_uri",
+    "sounds": [
+      "roundabout:arcade_uri"
+    ]
+  },
+  "arcade_timestop": {
+    "subtitle": "sounds.roundabout.arcade_timestop",
+    "sounds": [
+      "roundabout:arcade_timestop"
+    ]
+  },
+  "arcade_timestop_2": {
+    "subtitle": "sounds.roundabout.arcade_timestop_2",
+    "sounds": [
+      "roundabout:arcade_timestop_2"
+    ]
+  },
+  "arcade_short_ts": {
+    "subtitle": "sounds.roundabout.arcade_short_ts",
+    "sounds": [
+      "roundabout:arcade_short_ts"
+    ]
+  },
+  "arcade_time_resume": {
+    "subtitle": "sounds.roundabout.arcade_time_resume",
+    "sounds": [
+      "roundabout:arcade_time_resume"
+    ]
+  },
   "unlock_skin": {
     "subtitle": "sounds.roundabout.unlock_skin",
     "sounds": [

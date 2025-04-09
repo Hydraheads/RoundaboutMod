@@ -349,6 +349,18 @@
   "sounds.roundabout.impale_hit":  "Impaled",
   "sounds.roundabout.explosive_bat":  "Home Run",
   "sounds.roundabout.fog_clone":  "Illusionary formation",
+
+  "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
+  "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
+  "sounds.roundabout.arcade_muda":  "[Arcade Muda]",
+  "sounds.roundabout.arcade_muda_2":  "[Arcade Muda]",
+  "sounds.roundabout.arcade_muda_3":  "[Arcade Muda]",
+  "sounds.roundabout.arcade_uri":  "[Arcade WRY]",
+  "sounds.roundabout.arcade_timestop_2":  "[The World]",
+  "sounds.roundabout.arcade_timestop":  "[Time Stop]",
+  "sounds.roundabout.arcade_short_ts":  "[Time Stop]",
+  "sounds.roundabout.arcade_time_resume":  "[Time Resume]",
+
   "sounds.roundabout.pop":  "Pop",
 
   "sounds.roundabout.star_platinum_ora_2":  "ORA",

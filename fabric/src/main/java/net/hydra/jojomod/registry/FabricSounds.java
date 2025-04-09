@@ -154,6 +154,17 @@ public class FabricSounds {
         addSound(ModSounds.TIME_STOP_IMPACT_ID, ModSounds.TIME_STOP_IMPACT_EVENT);
         addSound(ModSounds.TIME_STOP_IMPACT2_ID, ModSounds.TIME_STOP_IMPACT2_EVENT);
 
+        addSound(ModSounds.ARCADE_TIMESTOP_ID, ModSounds.ARCADE_TIMESTOP_EVENT);
+        addSound(ModSounds.ARCADE_TIMESTOP_2_ID, ModSounds.ARCADE_TIMESTOP_2_EVENT);
+        addSound(ModSounds.ARCADE_MUDA_ID, ModSounds.ARCADE_MUDA_EVENT);
+        addSound(ModSounds.ARCADE_MUDA_2_ID, ModSounds.ARCADE_MUDA_2_EVENT);
+        addSound(ModSounds.ARCADE_MUDA_3_ID, ModSounds.ARCADE_MUDA_3_EVENT);
+        addSound(ModSounds.ARCADE_IMPALE_ID, ModSounds.ARCADE_IMPALE_EVENT);
+        addSound(ModSounds.ARCADE_LONG_TS_ID, ModSounds.ARCADE_LONG_TS_EVENT);
+        addSound(ModSounds.ARCADE_SHORT_TS_ID, ModSounds.ARCADE_SHORT_TS_EVENT);
+        addSound(ModSounds.ARCADE_TIME_RESUME_ID, ModSounds.ARCADE_TIME_RESUME_EVENT);
+        addSound(ModSounds.ARCADE_URI_ID, ModSounds.ARCADE_URI_EVENT);
+
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);
 

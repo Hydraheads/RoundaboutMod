@@ -568,7 +568,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         SoundEvent SE;
         float pitch = 1F;
             if (entity != null) {
-                SE = ModSounds.IMPALE_HIT_EVENT;
+                SE = getImpaleSound();
                 pitch = 1.2F;
             } else {
                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
@@ -577,6 +577,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
+    }
+
+    public SoundEvent getImpaleSound(){
+        return ModSounds.IMPALE_HIT_EVENT;
+
     }
 
     public SoundEvent getFinalAttackSound(){
@@ -1284,7 +1289,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return SoundIndex.TIME_CHARGE_SOUND_GROUP;
         } else if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_ENDING_NOISE_2) {
             return SoundIndex.TIME_SOUND_GROUP;
-        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_8) {
+        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_9) {
             return SoundIndex.BARRAGE_SOUND_GROUP;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1
                 || soundChoice == KICK_BARRAGE_NOISE_2 || soundChoice == KICK_BARRAGE_NOISE
@@ -1958,7 +1963,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public void runExtraSoundCode(byte soundChoice) {
-        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_9) {
+        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_11) {
             if (this.getSelf().level().isClientSide) {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
@@ -1980,11 +1985,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public static final byte BARRAGE_NOISE_6 = BARRAGE_NOISE+5;
     public static final byte BARRAGE_NOISE_7 = BARRAGE_NOISE+7;
     public static final byte BARRAGE_NOISE_8 = BARRAGE_NOISE+8;
+    public static final byte BARRAGE_NOISE_9 = BARRAGE_NOISE+9;
     public static final byte TIME_STOP_CHARGE = 30;
     public static final byte TIME_STOP_VOICE = TIME_STOP_CHARGE+1;
     public static final byte TIME_STOP_VOICE_2 = TIME_STOP_CHARGE+2;
     public static final byte TIME_STOP_VOICE_3 = TIME_STOP_CHARGE+3;
-    public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+10;
-    public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+11;
+    public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+12;
+    public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+13;
     public static final byte IMPALE_NOISE = 105;
 }

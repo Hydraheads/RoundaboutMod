@@ -217,6 +217,30 @@ public class ForgeSounds {
             register(ModSounds.LEVELUP, ModSounds.LEVELUP_ID);
     public static final RegistryObject<SoundEvent> UNLOCK_SKIN_EVENT =
             register(ModSounds.UNLOCK_SKIN, ModSounds.UNLOCK_SKIN_ID);
+
+
+    public static final RegistryObject<SoundEvent> ARCADE_TIMESTOP_EVENT =
+            register(ModSounds.ARCADE_TIMESTOP, ModSounds.ARCADE_TIMESTOP_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_TIMESTOP_2_EVENT =
+            register(ModSounds.ARCADE_TIMESTOP_2, ModSounds.ARCADE_TIMESTOP_2_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_MUDA_EVENT =
+            register(ModSounds.ARCADE_MUDA, ModSounds.ARCADE_MUDA_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_MUDA_2_EVENT =
+            register(ModSounds.ARCADE_MUDA_2, ModSounds.ARCADE_MUDA_2_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_MUDA_3_EVENT =
+            register(ModSounds.ARCADE_MUDA_3, ModSounds.ARCADE_MUDA_3_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_URI_EVENT =
+            register(ModSounds.ARCADE_URI, ModSounds.ARCADE_URI_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_IMPALE_EVENT =
+            register(ModSounds.ARCADE_IMPALE, ModSounds.ARCADE_IMPALE_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_TIME_RESUME_EVENT =
+            register(ModSounds.ARCADE_TIME_RESUME, ModSounds.ARCADE_TIME_RESUME_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_LONG_TS_EVENT =
+            register(ModSounds.ARCADE_LONG_TS, ModSounds.ARCADE_LONG_TS_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_SHORT_TS_EVENT =
+            register(ModSounds.ARCADE_SHORT_TS, ModSounds.ARCADE_SHORT_TS_ID);
+
+
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =
             register(ModSounds.THE_WORLD_OVER_HEAVEN, ModSounds.THE_WORLD_OVER_HEAVEN_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BAT_EVENT =
