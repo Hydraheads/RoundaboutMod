@@ -2162,7 +2162,7 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public boolean canInterruptPower() {
         if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
-                || this.getActivePower() == PowerIndex.RANGED_BARRAGE) {
+                || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.POWER_4_BONUS) {
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1) {
             int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss;
