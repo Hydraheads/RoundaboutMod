@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -15,6 +16,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.ModItems;
@@ -2106,6 +2108,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
         private void roundabout$roundabouthurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersD4C powers)
+        {
+            Roundabout.LOGGER.info("meltDodgeTicks: {}", powers.meltDodgeTicks);
+            if (powers.meltDodgeTicks >= 0)
+            {
+                ci.setReturnValue(false);
+                return;
+            }
+        }
+
         if (roundabout$gasolineIFRAMES > 0 && $$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             ci.setReturnValue(false);
             return;

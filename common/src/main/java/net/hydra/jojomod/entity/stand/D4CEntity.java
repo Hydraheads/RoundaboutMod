@@ -1,5 +1,9 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -57,5 +61,21 @@ public class D4CEntity extends StandEntity {
                 this.kick_barrage_end.stop();
             }
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.level().isClientSide)
+            return;
+
+        if (!this.hasUser())
+            return;
+
+        if (((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks != -1)
+            ((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks += 1;
+
+        if (((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks >= ClientNetworking.getAppropriateConfig().cooldownsInTicks.meltDodgeTicks)
+            ((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks = -1;
     }
 }

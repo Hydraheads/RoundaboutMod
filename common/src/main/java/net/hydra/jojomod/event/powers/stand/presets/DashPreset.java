@@ -162,13 +162,18 @@ public class DashPreset extends StandPowers {
     public boolean inputDash = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
+        this.buttonInput3(keyIsDown, options, PowerIndex.POWER_3_SNEAK);
+    }
+
+    public void buttonInput3(boolean keyIsDown, Options options, byte powerIndex)
+    {
         if (keyIsDown) {
             if (!inputDash){
                 inputDash = true;
                 if (this.getSelf().level().isClientSide && !this.isClashing()) {
                     if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
                         if (!isHoldingSneak()) {
-                            if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                            if (this.getSelf().onGround() && !this.onCooldown(powerIndex)) {
                                 byte forward = 0;
                                 byte strafe = 0;
                                 if (options.keyUp.isDown()) forward++;
@@ -216,7 +221,7 @@ public class DashPreset extends StandPowers {
                                         cdTime = 160;
                                     }
                                 }
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, cdTime);
+                                this.setCooldown(powerIndex, cdTime);
                                 MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
                                         Mth.sin(degrees * ((float) Math.PI / 180)),
                                         Mth.sin(-20 * ((float) Math.PI / 180)),

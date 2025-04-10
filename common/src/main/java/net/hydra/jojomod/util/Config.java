@@ -262,6 +262,10 @@ import java.util.Set;
         public Boolean creativeModeRefreshesCooldowns;
         @BooleanOption(group = "inherit", value = true)
         public Boolean canRechargeWhileDrowning;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer meltDodgeTicks;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer meltDodgeCooldown;
     }
     public static class TimeStopSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

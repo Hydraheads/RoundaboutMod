@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
@@ -69,9 +71,9 @@ public class PowersD4C extends PunchingStand {
         }
 
         if (!isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         else
-            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3_SNEAK);
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
 
         if (!isHoldingSneak())
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
@@ -274,14 +276,21 @@ public class PowersD4C extends PunchingStand {
     private boolean held3 = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
-        if (keyIsDown && !held3)
-        {
-            held3 = true;
-            super.buttonInput3(keyIsDown, options);
-        }
-        else if (!keyIsDown)
-        {
-            held3 = false;
+        if (keyIsDown) {
+            if (!inputDash) {
+                if (isHoldingSneak()) {
+                    if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+
+                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.meltDodgeCooldown);
+                    }
+                    inputDash = true;
+                } else {
+                    super.buttonInput3(keyIsDown, options);
+                }
+            }
+        } else {
             inputDash = false;
         }
     }
@@ -322,6 +331,17 @@ public class PowersD4C extends PunchingStand {
         return false;
     }
 
+    private boolean meltDodge()
+    {
+        if (this.getSelf().level().isClientSide)
+            return false;
+
+        // serverside
+        meltDodgeTicks = 0;
+
+        return true;
+    }
+
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
@@ -338,6 +358,9 @@ public class PowersD4C extends PunchingStand {
 
         return super.isAttackIneptVisually(activeP, slot);
     }
+
+    /** if = -1, not meld dodging */
+    public int meltDodgeTicks = -1;
 
     @Override
     public void tickPower() {
@@ -376,6 +399,9 @@ public class PowersD4C extends PunchingStand {
         {
             case PowerIndex.POWER_2 -> {
                 return this.spawnClone();
+            }
+            case PowerIndex.POWER_3 -> {
+                return this.meltDodge();
             }
             case PowerIndex.POWER_4 -> {
                 return this.teleportToD4CWorld();
