@@ -279,7 +279,7 @@ public class PowersD4C extends PunchingStand {
         if (keyIsDown) {
             if (!inputDash) {
                 if (isHoldingSneak()) {
-                    if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                    if (!this.onCooldown(PowerIndex.SKILL_3) && isBetweenTwoThings(this.getSelf())) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
 
