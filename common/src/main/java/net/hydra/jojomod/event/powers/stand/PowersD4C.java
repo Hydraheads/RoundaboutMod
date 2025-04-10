@@ -351,7 +351,7 @@ public class PowersD4C extends PunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP)
         {
-            case PowerIndex.SKILL_4, PowerIndex.SKILL_4_SNEAK, PowerIndex.SKILL_2 -> {
+            case PowerIndex.SKILL_4, PowerIndex.SKILL_4_SNEAK, PowerIndex.SKILL_2, PowerIndex.SKILL_3 -> {
                 return !(isBetweenTwoThings(this.getSelf()));
             }
         }
