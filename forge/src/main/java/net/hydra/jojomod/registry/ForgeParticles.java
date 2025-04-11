@@ -57,6 +57,10 @@ public class ForgeParticles {
             "dread_flame",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> CREAM_FLAME = PARTICLES.register(
+            "cream_flame",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> FOG_CHAIN = PARTICLES.register(
             "fog_chain",
             () -> new SimpleParticleType(true)

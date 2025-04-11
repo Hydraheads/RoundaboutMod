@@ -126,6 +126,8 @@ public abstract class ZScreenEffectRenderer {
                 RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_green_0.png"));
             } else if (bt == StandFireType.DREAD.id){
                 RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_dread_0.png"));
+            } else if (bt == StandFireType.CREAM.id){
+                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_cream_0.png"));
             } else {
                 RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
             }

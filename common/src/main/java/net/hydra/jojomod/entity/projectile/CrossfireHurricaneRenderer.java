@@ -83,6 +83,9 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_dread.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_dread.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_CREAM_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_CREAM_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_CREAM_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_cream.png");
 
     public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2.png");
@@ -99,6 +102,9 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_dread.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_dread.png");
     public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_CREAM_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_CREAM_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_CREAM_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_cream.png");
 
 
 
@@ -130,6 +136,12 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
                     return CROSSFIRE_HURRICANE_3_DREAD_TEXTURE_B;
                 } else {
                     return CROSSFIRE_HURRICANE_3_DREAD_TEXTURE;
+                }
+            } else if (sft == StandFireType.CREAM.id){
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_3_CREAM_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_3_CREAM_TEXTURE;
                 }
             }
         }
@@ -167,6 +179,12 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
                 } else {
                     return CROSSFIRE_HURRICANE_DREAD_TEXTURE;
                 }
+            } else if (sft == StandFireType.CREAM.id){
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_CREAM_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_CREAM_TEXTURE;
+                }
             }
         }
         if (crossno == 6){
@@ -202,6 +220,12 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
                     return CROSSFIRE_HURRICANE_2_DREAD_TEXTURE_B;
                 } else {
                     return CROSSFIRE_HURRICANE_2_DREAD_TEXTURE;
+                }
+            } else if (sft == StandFireType.CREAM.id){
+                if (crossno == 6){
+                    return CROSSFIRE_HURRICANE_2_CREAM_TEXTURE_B;
+                } else {
+                    return CROSSFIRE_HURRICANE_2_CREAM_TEXTURE;
                 }
             }
         }

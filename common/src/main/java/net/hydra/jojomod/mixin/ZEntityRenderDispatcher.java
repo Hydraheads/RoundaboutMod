@@ -101,6 +101,8 @@ public abstract class ZEntityRenderDispatcher {
                 vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_green_0.png")));
             } else if (bt == StandFireType.DREAD.id){
                 vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_dread_0.png")));
+            } else if (bt == StandFireType.CREAM.id){
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_cream_0.png")));
             } else {
                 vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_0.png")));
             }
@@ -116,6 +118,8 @@ public abstract class ZEntityRenderDispatcher {
                     RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_green_0.png"));
                 } else if (bt == StandFireType.DREAD.id){
                     RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_dread_0.png"));
+                } else if (bt == StandFireType.CREAM.id){
+                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_cream_0.png"));
                 } else {
                     RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
                 }

@@ -689,6 +689,8 @@ public class PowersMagiciansRed extends PunchingStand {
                 $$1.add(MagiciansRedEntity.BLUE_ABLAZE);
                 $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
             } if (Level > 6 || bypass){
+                $$1.add(MagiciansRedEntity.JOJONIUM);
+                $$1.add(MagiciansRedEntity.JOJONIUM_ABLAZE);
                 $$1.add(MagiciansRedEntity.MAGMA_SKIN);
                 $$1.add(MagiciansRedEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1742,6 +1744,7 @@ public class PowersMagiciansRed extends PunchingStand {
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModParticles.PURPLE_FLAME;
             case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
+            case MagiciansRedEntity.JOJONIUM, MagiciansRedEntity.JOJONIUM_ABLAZE -> ModParticles.CREAM_FLAME;
             default -> ModParticles.ORANGE_FLAME;
         };
     }
@@ -2499,6 +2502,7 @@ public class PowersMagiciansRed extends PunchingStand {
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> StandFireType.PURPLE.id;
             case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> StandFireType.GREEN.id;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
+            case MagiciansRedEntity.JOJONIUM, MagiciansRedEntity.JOJONIUM_ABLAZE -> StandFireType.CREAM.id;
             default -> StandFireType.ORANGE.id;
         };
     }
@@ -2510,6 +2514,7 @@ public class PowersMagiciansRed extends PunchingStand {
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModBlocks.PURPLE_FIRE;
             case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> ModBlocks.GREEN_FIRE;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModBlocks.DREAD_FIRE;
+            case MagiciansRedEntity.JOJONIUM, MagiciansRedEntity.JOJONIUM_ABLAZE -> ModBlocks.CREAM_FIRE;
             default -> ModBlocks.ORANGE_FIRE;
         };
     }

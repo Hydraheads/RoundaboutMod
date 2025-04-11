@@ -32,6 +32,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.PURPLE_FIRE,
                 ModBlocks.GREEN_FIRE,
                 ModBlocks.DREAD_FIRE,
+                ModBlocks.CREAM_FIRE,
                 ModBlocks.BLOOD_SPLATTER,
                 ModBlocks.BLUE_BLOOD_SPLATTER,
                 ModBlocks.ENDER_BLOOD_SPLATTER);

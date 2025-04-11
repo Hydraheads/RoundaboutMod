@@ -210,6 +210,8 @@ public abstract class ZLevelRenderer {
                 return new Vec3(0.345F,1F,0.2F);
             } else if (sft == StandFireType.DREAD.id){
                 return new Vec3(0.788F,0,0);
+            } else if (sft == StandFireType.CREAM.id){
+                return new Vec3(0.949F,0.945F,0.718F);
             }
         }
         return new Vec3(0.969F,0.569F,0.102F);

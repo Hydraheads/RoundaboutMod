@@ -22,6 +22,7 @@ public class FabricParticles {
     public static final SimpleParticleType PURPLE_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType GREEN_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType DREAD_FLAME = FabricParticleTypes.simple();
+    public static final SimpleParticleType CREAM_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType FOG_CHAIN = FabricParticleTypes.simple();
     public static final SimpleParticleType WARDEN_CLOCK = FabricParticleTypes.simple();
     public static void registerParticles(){
@@ -40,6 +41,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "purple_flame"), PURPLE_FLAME);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "green_flame"), GREEN_FLAME);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "dread_flame"), DREAD_FLAME);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "cream_flame"), CREAM_FLAME);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -56,5 +58,6 @@ public class FabricParticles {
         ModParticles.PURPLE_FLAME = PURPLE_FLAME;
         ModParticles.GREEN_FLAME = GREEN_FLAME;
         ModParticles.DREAD_FLAME = DREAD_FLAME;
+        ModParticles.CREAM_FLAME = CREAM_FLAME;
     }
 }

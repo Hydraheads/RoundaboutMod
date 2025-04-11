@@ -64,6 +64,9 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
     public static final ResourceLocation STAND_FIREBALL_TEXTURE_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_dread.png");
     public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_dread.png");
     public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_dread.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_cream.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_cream.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_cream.png");
 
     public ResourceLocation getThird(StandFireballEntity var1){
         LivingEntity user = var1.getUser();
@@ -77,6 +80,8 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
                 return STAND_FIREBALL_TEXTURE_3_GREEN;
             } else if (sft == StandFireType.DREAD.id){
                 return STAND_FIREBALL_TEXTURE_3_DREAD;
+            } else if (sft == StandFireType.CREAM.id){
+                return STAND_FIREBALL_TEXTURE_3_CREAM;
             }
         }
         return STAND_FIREBALL_TEXTURE_3;
@@ -93,6 +98,8 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
                 return STAND_FIREBALL_TEXTURE_GREEN;
             } else if (sft == StandFireType.DREAD.id){
                 return STAND_FIREBALL_TEXTURE_DREAD;
+            } else if (sft == StandFireType.CREAM.id){
+                return STAND_FIREBALL_TEXTURE_CREAM;
             }
         }
         return STAND_FIREBALL_TEXTURE;
@@ -109,6 +116,8 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
                 return STAND_FIREBALL_TEXTURE_2_GREEN;
             } else if (sft == StandFireType.DREAD.id){
                 return STAND_FIREBALL_TEXTURE_2_DREAD;
+            } else if (sft == StandFireType.CREAM.id){
+                return STAND_FIREBALL_TEXTURE_2_CREAM;
             }
         }
         return STAND_FIREBALL_TEXTURE_2;

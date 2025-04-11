@@ -89,6 +89,7 @@
   "entity.roundabout.star_platinum": "Star Platinum",
   "entity.roundabout.star_platinum_baseball": "Star Platinum",
   "entity.roundabout.magicians_red": "Magician's Red",
+  "entity.roundabout.magicians_red_ova": "Magician's Red",
   "entity.roundabout.justice": "Justice",
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Dark Mirage",
@@ -557,7 +558,7 @@
   "skins.roundabout.star_platinum.part_4": "Part 4",
   "skins.roundabout.star_platinum.part_6": "Part 6",
   "skins.roundabout.star_platinum.atomic": "Atomic",
-  "skins.roundabout.star_platinum.jojonium": "Jojonium",
+  "skins.roundabout.star_platinum.jojonium": "JoJonium",
   "skins.roundabout.star_platinum.beta": "Beta",
 
   "skins.roundabout.the_world.base": "Part 3",
@@ -587,7 +588,7 @@
   "skins.roundabout.justice.twilight": "Twilight",
   "skins.roundabout.justice.pirate": "Pirate",
   "skins.roundabout.justice.dark_mirage": "Dark Mirage",
-  "skins.roundabout.justice.jojonium": "Jojonium",
+  "skins.roundabout.justice.jojonium": "JoJonium",
 
   "skins.roundabout.magicians_red.base": "Part 3",
   "skins.roundabout.magicians_red.blue": "Blue",
@@ -608,6 +609,8 @@
   "skins.roundabout.magicians_red.purple_ablaze": "Purple F",
   "skins.roundabout.magicians_red.sidekick": "Firekick",
   "skins.roundabout.magicians_red.beta": "Beta",
+  "skins.roundabout.magicians_red.jojonium": "JoJonium",
+  "skins.roundabout.magicians_red.jojonium_ablaze": "JoJonium F",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "Wonder Festival",

@@ -45,6 +45,7 @@ public class ModBlocks {
     public static Block PURPLE_FIRE;
     public static Block GREEN_FIRE;
     public static Block DREAD_FIRE;
+    public static Block CREAM_FIRE;
     public static Block FOG_DIRT;
     public static Block FOG_DIRT_COATING;
     public static Block FOG_CLAY;
@@ -259,6 +260,10 @@ public class ModBlocks {
                 return 15;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static FireBlock DREAD_FIRE_PROPERTIES = new FireBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
+                return 15;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+    public static FireBlock CREAM_FIRE_PROPERTIES = new FireBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));

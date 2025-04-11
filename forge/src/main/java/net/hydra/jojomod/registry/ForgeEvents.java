@@ -144,6 +144,7 @@ public class ForgeEvents {
         ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
         ModBlocks.GREEN_FIRE = ForgeBlocks.GREEN_FIRE.get();
         ModBlocks.DREAD_FIRE = ForgeBlocks.DREAD_FIRE.get();
+        ModBlocks.CREAM_FIRE = ForgeBlocks.CREAM_FIRE.get();
 
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
@@ -221,6 +222,7 @@ public class ForgeEvents {
         ModParticles.PURPLE_FLAME = ForgeParticles.PURPLE_FLAME.get();
         ModParticles.GREEN_FLAME = ForgeParticles.GREEN_FLAME.get();
         ModParticles.DREAD_FLAME = ForgeParticles.DREAD_FLAME.get();
+        ModParticles.CREAM_FLAME = ForgeParticles.CREAM_FLAME.get();
         ModParticles.FOG_CHAIN = ForgeParticles.FOG_CHAIN.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
 

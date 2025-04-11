@@ -20,6 +20,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PURPLE_FLAME, StandFlameParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GREEN_FLAME, StandFlameParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.DREAD_FLAME, StandFlameParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.CREAM_FLAME, StandFlameParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FOG_CHAIN, VacuumParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.WARDEN_CLOCK, WardenClockParticle.Provider::new);
     }

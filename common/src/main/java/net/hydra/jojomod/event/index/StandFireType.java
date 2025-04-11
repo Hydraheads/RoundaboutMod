@@ -9,7 +9,8 @@ public enum StandFireType {
     BLUE((byte) 2),
     PURPLE((byte) 3),
     GREEN((byte) 4),
-    DREAD((byte) 5);
+    DREAD((byte) 5),
+    CREAM((byte) 6);
 
     public static Block getFireBlockByType(byte Ftype){
         if (Ftype == BLUE.id){
@@ -20,6 +21,8 @@ public enum StandFireType {
             return ModBlocks.GREEN_FIRE;
         } else if (Ftype == DREAD.id){
             return ModBlocks.DREAD_FIRE;
+        } else if (Ftype == CREAM.id){
+            return ModBlocks.CREAM_FIRE;
         }
         return ModBlocks.ORANGE_FIRE;
     }

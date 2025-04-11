@@ -34,19 +34,22 @@ public class MagiciansRedSpinEffectLayer<T extends StandEntity> extends RenderLa
     public static final ResourceLocation TEXTURE_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/purple_flame_spin.png");
     public static final ResourceLocation TEXTURE_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/green_flame_spin.png");
     public static final ResourceLocation TEXTURE_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/dread_flame_spin.png");
+    public static final ResourceLocation TEXTURE_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/cream_flame_spin.png");
     public static final String BOX = "box";
     private final ModelPart box;
 
     public ResourceLocation getMRTextureLocation(MagiciansRedEntity entity) {
         byte BT = entity.getSkin();
-        if (BT == MagiciansRedEntity.BLUE_SKIN || BT == MagiciansRedEntity.BLUE_ACE_SKIN){
+        if (BT == MagiciansRedEntity.BLUE_SKIN || BT == MagiciansRedEntity.BLUE_ACE_SKIN|| BT == MagiciansRedEntity.BLUE_ABLAZE){
             return TEXTURE_BLUE;
-        } else if (BT == MagiciansRedEntity.PURPLE_SKIN){
+        } else if (BT == MagiciansRedEntity.PURPLE_SKIN|| BT == MagiciansRedEntity.PURPLE_ABLAZE){
             return TEXTURE_PURPLE;
-        } else if (BT == MagiciansRedEntity.GREEN_SKIN){
+        } else if (BT == MagiciansRedEntity.GREEN_SKIN|| BT == MagiciansRedEntity.GREEN_ABLAZE ){
             return TEXTURE_GREEN;
-        } else if (BT == MagiciansRedEntity.DREAD_SKIN || BT == MagiciansRedEntity.DREAD_BEAST_SKIN){
+        } else if (BT == MagiciansRedEntity.DREAD_SKIN || BT == MagiciansRedEntity.DREAD_BEAST_SKIN || BT == MagiciansRedEntity.DREAD_ABLAZE){
             return TEXTURE_DREAD;
+        } else if (BT == MagiciansRedEntity.JOJONIUM || BT == MagiciansRedEntity.JOJONIUM_ABLAZE){
+            return TEXTURE_CREAM;
         }
         return TEXTURE;
     }

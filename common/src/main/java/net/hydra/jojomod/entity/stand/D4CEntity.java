@@ -72,10 +72,12 @@ public class D4CEntity extends StandEntity {
         if (!this.hasUser())
             return;
 
-        if (((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks != -1)
-            ((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks += 1;
+        if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersD4C PD4C) {
+            if (PD4C.meltDodgeTicks != -1)
+                PD4C.meltDodgeTicks += 1;
 
-        if (((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks >= ClientNetworking.getAppropriateConfig().cooldownsInTicks.meltDodgeTicks)
-            ((PowersD4C)((StandUser)this.getUser()).roundabout$getStandPowers()).meltDodgeTicks = -1;
+            if (PD4C.meltDodgeTicks >= ClientNetworking.getAppropriateConfig().cooldownsInTicks.meltDodgeTicks)
+                PD4C.meltDodgeTicks = -1;
+        }
     }
 }

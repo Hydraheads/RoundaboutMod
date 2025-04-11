@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -52,6 +53,18 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
             "textures/entity/life_detector/dread_detector_2.png");
     private static final ResourceLocation DREAD_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/life_detector/dread_detector_3.png");
+    private static final ResourceLocation CREAM_TRACKER_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/cream_detector.png");
+    private static final ResourceLocation CREAM_TRACKER_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/cream_detector_2.png");
+    private static final ResourceLocation CREAM_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/cream_detector_3.png");
+    private static final ResourceLocation MANGA_TRACKER_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/manga_detector.png");
+    private static final ResourceLocation MANGA_TRACKER_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/manga_detector_2.png");
+    private static final ResourceLocation MANGA_TRACKER_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/life_detector/manga_detector_3.png");
     private final LifeTrackerModel<LifeTrackerEntity> model;
 
     public LifeTrackerRenderer(EntityRendererProvider.Context p_174100_) {
@@ -88,6 +101,10 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
                 return GREEN_TRACKER_3;
             } else if (sft == StandFireType.DREAD.id){
                 return DREAD_TRACKER_3;
+            } else if (sft == StandFireType.CREAM.id){
+                return CREAM_TRACKER_3;
+            } else if (((StandUser) user).roundabout$getStandSkin() == MagiciansRedEntity.MANGA_SKIN){
+                return MANGA_TRACKER_3;
             }
         }
         return MAIN_TRACKER_3;
@@ -104,6 +121,10 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
                 return GREEN_TRACKER_1;
             } else if (sft == StandFireType.DREAD.id){
                 return DREAD_TRACKER_1;
+            } else if (sft == StandFireType.CREAM.id){
+                return CREAM_TRACKER_1;
+            } else if (((StandUser) user).roundabout$getStandSkin() == MagiciansRedEntity.MANGA_SKIN){
+                return MANGA_TRACKER_1;
             }
         }
         return MAIN_TRACKER_1;
@@ -120,6 +141,10 @@ public class LifeTrackerRenderer extends EntityRenderer<LifeTrackerEntity> {
                 return GREEN_TRACKER_2;
             } else if (sft == StandFireType.DREAD.id){
                 return DREAD_TRACKER_2;
+            } else if (sft == StandFireType.CREAM.id){
+                return CREAM_TRACKER_2;
+            } else if (((StandUser) user).roundabout$getStandSkin() == MagiciansRedEntity.MANGA_SKIN){
+                return MANGA_TRACKER_2;
             }
         }
         return MAIN_TRACKER_2;
