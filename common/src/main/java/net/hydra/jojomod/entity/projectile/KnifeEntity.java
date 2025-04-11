@@ -131,7 +131,7 @@ public class KnifeEntity extends AbstractArrow {
         float $$2;
 
         if ($$1 instanceof Player) {
-            $$2 = (float) (2.1F * (ClientNetworking.getAppropriateConfig().damageMultipliers.knifeDamageOnPlayers *0.01));
+            $$2 = (float) (2.29 * (ClientNetworking.getAppropriateConfig().damageMultipliers.knifeDamageOnPlayers *0.01));
         } else {
             $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().damageMultipliers.knifeDamageOnMobs *0.01));;
         }
