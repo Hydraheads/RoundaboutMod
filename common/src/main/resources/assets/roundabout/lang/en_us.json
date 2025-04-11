@@ -362,6 +362,13 @@
   "sounds.roundabout.arcade_short_ts":  "[Time Stop]",
   "sounds.roundabout.arcade_time_resume":  "[Time Resume]",
   "sounds.roundabout.arcade_barrage":  "[Arcade Muda]",
+  "sounds.roundabout.arcade_star_platinum_barrage":  "[Arcade Ora]",
+  "sounds.roundabout.arcade_ora_1":  "[Arcade Ora]",
+  "sounds.roundabout.arcade_ora_2":  "[Arcade Ora]",
+  "sounds.roundabout.arcade_ora_3":  "[Arcade Ora]",
+  "sounds.roundabout.arcade_star_platinum_short_ts":  "[Time Stop]",
+  "sounds.roundabout.arcade_star_platinum_time_stop":  "[Star Platinum: The World]",
+  "sounds.roundabout.arcade_star_finger":  "[Star Finger]",
 
   "sounds.roundabout.pop":  "Pop",
 
@@ -560,6 +567,7 @@
   "skins.roundabout.star_platinum.atomic": "Atomic",
   "skins.roundabout.star_platinum.jojonium": "JoJonium",
   "skins.roundabout.star_platinum.beta": "Beta",
+  "skins.roundabout.star_platinum.arcade": "Arcade",
 
   "skins.roundabout.the_world.base": "Part 3",
   "skins.roundabout.the_world.manga": "Manga",

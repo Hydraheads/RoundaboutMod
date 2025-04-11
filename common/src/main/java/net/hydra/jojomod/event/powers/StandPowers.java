@@ -640,6 +640,8 @@ public class StandPowers {
             return ModSounds.ARCADE_SHORT_TS_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_11) {
             return ModSounds.ARCADE_TIMESTOP_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_12) {
+            return ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS_EVENT;
         } else if (soundChoice == TIME_RESUME_NOISE){
             return ModSounds.TIME_RESUME_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_2) {
@@ -720,7 +722,8 @@ public class StandPowers {
     public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
     public static final byte TIME_STOP_NOISE_10 = TIME_STOP_NOISE+9;
     public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
-    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+15;
+    public static final byte TIME_STOP_NOISE_12 = TIME_STOP_NOISE+11;
+    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+16;
     public static final byte TIME_RESUME_NOISE = 60;
     public static final byte TIME_RESUME_NOISE_2 = 61;
     public static final byte TIME_RESUME_NOISE_3 = 62;

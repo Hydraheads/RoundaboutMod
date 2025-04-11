@@ -488,6 +488,27 @@ public class ModSounds {
     public static SoundEvent ARCADE_SHORT_TS_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_SHORT_TS_ID);
 
 
+    public static final String  ARCADE_ORA = "arcade_ora_1";
+    public static final ResourceLocation ARCADE_ORA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_ORA);
+    public static SoundEvent ARCADE_ORA_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_ORA_ID);
+    public static final String  ARCADE_ORA_2 = "arcade_ora_2";
+    public static final ResourceLocation ARCADE_ORA_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_ORA_2);
+    public static SoundEvent ARCADE_ORA_2_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_ORA_2_ID);
+    public static final String  ARCADE_ORA_3 = "arcade_ora_3";
+    public static final ResourceLocation ARCADE_ORA_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_ORA_3);
+    public static SoundEvent ARCADE_ORA_3_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_ORA_3_ID);
+    public static final String  ARCADE_STAR_PLATINUM_BARRAGE = "arcade_star_platinum_barrage";
+    public static final ResourceLocation ARCADE_STAR_PLATINUM_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_STAR_PLATINUM_BARRAGE);
+    public static SoundEvent ARCADE_STAR_PLATINUM_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_STAR_PLATINUM_BARRAGE_ID);
+    public static final String  ARCADE_STAR_PLATINUM_TIME_STOP = "arcade_star_platinum_time_stop";
+    public static final ResourceLocation ARCADE_STAR_PLATINUM_TIME_STOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_STAR_PLATINUM_TIME_STOP);
+    public static SoundEvent ARCADE_STAR_PLATINUM_TIME_STOP_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_STAR_PLATINUM_TIME_STOP_ID);
+    public static final String  ARCADE_STAR_PLATINUM_SHORT_TS = "arcade_star_platinum_short_ts";
+    public static final ResourceLocation ARCADE_STAR_PLATINUM_SHORT_TS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_STAR_PLATINUM_SHORT_TS);
+    public static SoundEvent ARCADE_STAR_PLATINUM_SHORT_TS_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_STAR_PLATINUM_SHORT_TS_ID);
+    public static final String  ARCADE_STAR_FINGER = "arcade_star_finger";
+    public static final ResourceLocation ARCADE_STAR_FINGER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_STAR_FINGER);
+    public static SoundEvent ARCADE_STAR_FINGER_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_STAR_FINGER_ID);
 
     public static final String UNLOCK_SKIN = "unlock_skin";
     public static final ResourceLocation UNLOCK_SKIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+UNLOCK_SKIN);

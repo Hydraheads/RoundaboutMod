@@ -239,6 +239,20 @@ public class ForgeSounds {
             register(ModSounds.ARCADE_LONG_TS, ModSounds.ARCADE_LONG_TS_ID);
     public static final RegistryObject<SoundEvent> ARCADE_SHORT_TS_EVENT =
             register(ModSounds.ARCADE_SHORT_TS, ModSounds.ARCADE_SHORT_TS_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_ORA_EVENT =
+            register(ModSounds.ARCADE_ORA, ModSounds.ARCADE_ORA_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_ORA_2_EVENT =
+            register(ModSounds.ARCADE_ORA_2, ModSounds.ARCADE_ORA_2_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_ORA_3_EVENT =
+            register(ModSounds.ARCADE_ORA_3, ModSounds.ARCADE_ORA_3_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_STAR_PLATINUM_BARRAGE_EVENT =
+            register(ModSounds.ARCADE_STAR_PLATINUM_BARRAGE, ModSounds.ARCADE_STAR_PLATINUM_BARRAGE_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_STAR_PLATINUM_TIME_STOP_EVENT =
+            register(ModSounds.ARCADE_STAR_PLATINUM_TIME_STOP, ModSounds.ARCADE_STAR_PLATINUM_TIME_STOP_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_STAR_PLATINUM_SHORT_TS_EVENT =
+            register(ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS, ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS_ID);
+    public static final RegistryObject<SoundEvent> ARCADE_STAR_FINGER_EVENT =
+            register(ModSounds.ARCADE_STAR_FINGER, ModSounds.ARCADE_STAR_FINGER_ID);
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =

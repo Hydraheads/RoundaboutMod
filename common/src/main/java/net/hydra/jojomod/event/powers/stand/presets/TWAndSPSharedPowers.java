@@ -1963,7 +1963,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public void runExtraSoundCode(byte soundChoice) {
-        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_11) {
+        if (soundChoice >= TIME_STOP_NOISE && soundChoice <= TIME_STOP_NOISE_12) {
             if (this.getSelf().level().isClientSide) {
                 Minecraft mc = Minecraft.getInstance();
                 mc.getSoundManager().stop();
@@ -1990,7 +1990,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public static final byte TIME_STOP_VOICE = TIME_STOP_CHARGE+1;
     public static final byte TIME_STOP_VOICE_2 = TIME_STOP_CHARGE+2;
     public static final byte TIME_STOP_VOICE_3 = TIME_STOP_CHARGE+3;
-    public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+12;
-    public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+13;
+    public static final byte TIME_STOP_ENDING_NOISE_2 = TIME_STOP_NOISE+13;
+    public static final byte TIME_STOP_ENDING_NOISE = TIME_STOP_NOISE+14;
     public static final byte IMPALE_NOISE = 105;
 }

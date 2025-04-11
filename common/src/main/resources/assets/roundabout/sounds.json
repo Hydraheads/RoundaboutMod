@@ -443,8 +443,8 @@
       "roundabout:star_finger_silent"
     ]
   },
-  "star_platinum_ora": {
-    "subtitle": "sounds.roundabout.star_platinum_ora",
+  "star_platinum_ora_1": {
+    "subtitle": "sounds.roundabout.star_platinum_ora_1",
     "sounds": [
       "roundabout:star_platinum_ora"
     ]
@@ -857,10 +857,52 @@
       "roundabout:arcade_timestop_2"
     ]
   },
+  "arcade_ora_1": {
+    "subtitle": "sounds.roundabout.arcade_ora_1",
+    "sounds": [
+      "roundabout:arcade_ora_1"
+    ]
+  },
+  "arcade_ora_2": {
+    "subtitle": "sounds.roundabout.arcade_ora_2",
+    "sounds": [
+      "roundabout:arcade_ora_2"
+    ]
+  },
+  "arcade_ora_3": {
+    "subtitle": "sounds.roundabout.arcade_ora_3",
+    "sounds": [
+      "roundabout:arcade_ora_3"
+    ]
+  },
   "arcade_short_ts": {
     "subtitle": "sounds.roundabout.arcade_short_ts",
     "sounds": [
       "roundabout:arcade_short_ts"
+    ]
+  },
+  "arcade_star_platinum_short_ts": {
+    "subtitle": "sounds.roundabout.arcade_star_platinum_short_ts",
+    "sounds": [
+      "roundabout:arcade_star_platinum_short_ts"
+    ]
+  },
+  "arcade_star_platinum_time_stop": {
+    "subtitle": "sounds.roundabout.arcade_star_platinum_time_stop",
+    "sounds": [
+      "roundabout:arcade_star_platinum_time_stop"
+    ]
+  },
+  "arcade_star_finger": {
+    "subtitle": "sounds.roundabout.arcade_star_finger",
+    "sounds": [
+      "roundabout:arcade_star_finger"
+    ]
+  },
+  "arcade_star_platinum_barrage": {
+    "subtitle": "sounds.roundabout.arcade_star_platinum_barrage",
+    "sounds": [
+      "roundabout:arcade_star_platinum_barrage"
     ]
   },
   "arcade_time_resume": {

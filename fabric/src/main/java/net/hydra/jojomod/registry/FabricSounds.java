@@ -165,6 +165,14 @@ public class FabricSounds {
         addSound(ModSounds.ARCADE_TIME_RESUME_ID, ModSounds.ARCADE_TIME_RESUME_EVENT);
         addSound(ModSounds.ARCADE_URI_ID, ModSounds.ARCADE_URI_EVENT);
 
+        addSound(ModSounds.ARCADE_ORA_ID, ModSounds.ARCADE_ORA_EVENT);
+        addSound(ModSounds.ARCADE_ORA_2_ID, ModSounds.ARCADE_ORA_2_EVENT);
+        addSound(ModSounds.ARCADE_ORA_3_ID, ModSounds.ARCADE_ORA_3_EVENT);
+        addSound(ModSounds.ARCADE_STAR_PLATINUM_TIME_STOP_ID, ModSounds.ARCADE_STAR_PLATINUM_TIME_STOP_EVENT);
+        addSound(ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS_ID, ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS_EVENT);
+        addSound(ModSounds.ARCADE_STAR_PLATINUM_BARRAGE_ID, ModSounds.ARCADE_STAR_PLATINUM_BARRAGE_EVENT);
+        addSound(ModSounds.ARCADE_STAR_FINGER_ID, ModSounds.ARCADE_STAR_FINGER_EVENT);
+
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);
 
