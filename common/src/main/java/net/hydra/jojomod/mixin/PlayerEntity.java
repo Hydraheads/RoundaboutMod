@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
@@ -1009,5 +1010,22 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Shadow
     public HumanoidArm getMainArm() {
         return null;
+    }
+
+    @Inject(method = "canHarmPlayer", at=@At("HEAD"), cancellable = true)
+    private void roundabout$canHarmPlayer(Player player, CallbackInfoReturnable<Boolean> cir)
+    {
+        Roundabout.LOGGER.info("canHarmPlayer || isClientSide: {} || isD4CPowers: {}", player.level().isClientSide, ((StandUser)player).roundabout$getStandPowers().getClass().equals(PowersD4C.class));
+        if (player.level().isClientSide)
+            return;
+
+        if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C powers)
+        {
+            if (powers.meltDodgeTicks != -1)
+            {
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
+        }
     }
 }
