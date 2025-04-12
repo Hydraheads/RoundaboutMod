@@ -443,8 +443,8 @@
       "roundabout:star_finger_silent"
     ]
   },
-  "star_platinum_ora_1": {
-    "subtitle": "sounds.roundabout.star_platinum_ora_1",
+  "star_platinum_ora": {
+    "subtitle": "sounds.roundabout.star_platinum_ora",
     "sounds": [
       "roundabout:star_platinum_ora"
     ]
