@@ -162,7 +162,7 @@ public class DashPreset extends StandPowers {
     public boolean inputDash = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
-        this.buttonInput3(keyIsDown, options, PowerIndex.POWER_3_SNEAK);
+        this.buttonInput3(keyIsDown, options, PowerIndex.SKILL_3_SNEAK);
     }
 
     public void buttonInput3(boolean keyIsDown, Options options, byte powerIndex)
