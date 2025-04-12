@@ -170,10 +170,10 @@
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand_rush": "%1$s was beaten down by %2$s",
-  "death.attack.stand_fire": "%1$s was beaten by %2$s",
+  "death.attack.stand_fire": "%1$s was roasted",
   "death.attack.stand.item": "%1$s was beaten by %2$s throwing %3$s",
   "death.attack.power_throw.item": "%1$s was beaten by %2$s throwing %3$s",
-  "death.attack.stand_fire.player": "%1$s roasted by %2$s",
+  "death.attack.stand_fire.player": "%1$s was roasted by %2$s",
   "death.attack.crossfire": "%1$s was given hell by %2$s",
   "death.attack.star_finger": "%1$s was turned into sashimi whilst fighting %2$s",
   "death.attack.penetrating_stand": "%1$s was retired by %2$s",
