@@ -24,6 +24,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
@@ -352,9 +353,17 @@ public class PowersD4C extends PunchingStand {
 
             if (isBetweenTwoThings())
             {
-                this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
+                if (!isHoldingSneak())
+                {
+                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
+                }
+                else {
+                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionKidnap);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
+                }
 
                 //ModPacketHandler.PACKET_ACCESS.registerNewWorld();
             }
@@ -377,6 +386,36 @@ public class PowersD4C extends PunchingStand {
             return true;
         }
         return false;
+    }
+
+    private boolean teleportToD4CWorldKidnap()
+    {
+        if (this.getSelf().getServer() == null)
+            return false;
+
+        BlockPos thisPosition = this.getSelf().blockPosition();
+        int radius = ClientNetworking.getAppropriateConfig().chargeSettings.d4cDimensionKidnapRadius;
+
+        List<Player> players = this.getSelf().getServer().overworld().getNearbyPlayers(TargetingConditions.DEFAULT, this.getSelf(),
+                new AABB(thisPosition.subtract(new Vec3i(-radius, -radius, -radius)), thisPosition.subtract(new Vec3i(radius, radius, radius))));
+
+        DynamicWorld world = DynamicWorld.generateD4CWorld(this.getSelf().getServer());
+        if (world.getLevel() != null)
+        {
+            queuedWorldTransports.put(this.getSelf().getId(), world);
+        }
+        else
+            return false;
+
+        for (Player player : players)
+        {
+            if (!player.equals(this.getSelf()))
+            {
+                queuedWorldTransports.put(player.getId(), world);
+            }
+        }
+
+        return true;
     }
 
     private boolean meltDodge()
@@ -458,6 +497,9 @@ public class PowersD4C extends PunchingStand {
             }
             case PowerIndex.POWER_4 -> {
                 return this.teleportToD4CWorld();
+            }
+            case PowerIndex.POWER_4_SNEAK -> {
+                return this.teleportToD4CWorldKidnap();
             }
         }
 
