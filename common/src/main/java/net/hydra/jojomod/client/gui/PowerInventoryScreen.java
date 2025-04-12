@@ -19,7 +19,9 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookTabButton;
@@ -74,6 +76,9 @@ public class PowerInventoryScreen
 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
+        OptionInstance<GraphicsStatus> $$2 = Minecraft.getInstance().options.graphicsMode();
+        GraphicsStatus $$3 = (GraphicsStatus)$$2.get();
+        $$2.set(GraphicsStatus.FANCY);
         Player pl = Minecraft.getInstance().player;
         int i = this.leftPos;
         int j = this.topPos;
@@ -148,6 +153,8 @@ public class PowerInventoryScreen
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
             }
         }
+
+        $$2.set($$3);
     }
 
     public String[] splitIntoLine(String input, int maxCharInLine){
@@ -415,13 +422,12 @@ public class PowerInventoryScreen
         }
 
         $$7.setRenderShadow(false);
-        RenderSystem.runAsFancy(() -> $$7.render($$6, 0.0, 0.0, 0.0, 0.0F, 1.0F, $$0.pose(), $$0.bufferSource(), 15728880));
+        $$7.render($$6, 0.0, 0.0, 0.0, 0.0F, 1.0F, $$0.pose(), $$0.bufferSource(), 15728880);
         $$0.flush();
         $$7.setRenderShadow(true);
         $$0.pose().popPose();
         Lighting.setupFor3DItems();
     }
-
     @Override
     protected boolean isHovering(int $$0, int $$1, int $$2, int $$3, double $$4, double $$5) {
         return (!this.widthTooNarrow) && super.isHovering($$0, $$1, $$2, $$3, $$4, $$5);
