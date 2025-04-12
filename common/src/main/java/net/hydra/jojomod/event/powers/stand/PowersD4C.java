@@ -90,7 +90,11 @@ public class PowersD4C extends PunchingStand {
         {
             held1 = true;
 
+            if (this.onCooldown(PowerIndex.SKILL_1))
+                return;
+
             betweenVision = !betweenVision;
+            this.setCooldown(PowerIndex.SKILL_1, 20);
         } else if (!keyIsDown) {
             held1 = false;
         }
