@@ -27,6 +27,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.*;
@@ -352,7 +353,8 @@ public abstract class InputEvents implements IInputEvents {
 
     @Inject(method = "runTick", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/renderer/FogRenderer;setupNoFog()V"), cancellable = true)
     public void roundabout$run(CallbackInfo ci) {
-        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
                 if (canTS) {
@@ -368,7 +370,8 @@ public abstract class InputEvents implements IInputEvents {
     }
     @Inject(method = "runTick", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$run2(CallbackInfo ci) {
-        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
 
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
@@ -385,7 +388,8 @@ public abstract class InputEvents implements IInputEvents {
     }
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundabout$tickTick(CallbackInfo ci) {
-        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
                 if (canTS) {
@@ -754,7 +758,8 @@ public abstract class InputEvents implements IInputEvents {
 
     @Inject(method = "getFrameTime", at = @At("HEAD"), cancellable = true)
     public void roundabout$getFrameTime(CallbackInfoReturnable<Float> cir){
-        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
                 if (canTS) {
@@ -766,7 +771,8 @@ public abstract class InputEvents implements IInputEvents {
 
     @Inject(method = "getDeltaFrameTime", at = @At("HEAD"), cancellable = true)
     public void roundabout$getDeltaFrameTime(CallbackInfoReturnable<Float> cir){
-        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
                 if (canTS) {

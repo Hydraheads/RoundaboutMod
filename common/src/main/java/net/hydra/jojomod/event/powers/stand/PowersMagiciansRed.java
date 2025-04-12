@@ -2083,7 +2083,6 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
 
                 if (finalHit) {
-                    animateStand((byte) 43);
                     this.attackTimeDuring = -10;
                 }
             } else {

@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Camera;
@@ -195,7 +196,8 @@ public class ClientUtil {
         return wasFrozen != 0;
     }
     public static boolean getScreenFreeze(){
-        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
                 boolean canTS = ((TimeStop) player.level()).CanTimeStopEntity(player);
@@ -403,7 +405,8 @@ public class ClientUtil {
     }
 
     public static void tickTSFreezeScreen() {
-        if (ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen){
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null && mc.level != null) {
