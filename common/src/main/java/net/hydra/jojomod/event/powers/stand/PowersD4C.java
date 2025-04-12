@@ -1,21 +1,20 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.client.Options;
@@ -27,15 +26,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class PowersD4C extends PunchingStand {
@@ -82,9 +80,47 @@ public class PowersD4C extends PunchingStand {
     }
 
     private boolean held1 = false;
+    public boolean betweenVision = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
+        if (betweenVision)
+            highlightBlocksInFrustum(1500, 100);
 
+        if (keyIsDown && !held1)
+        {
+            held1 = true;
+
+            betweenVision = !betweenVision;
+        } else if (!keyIsDown) {
+            held1 = false;
+        }
+    }
+
+    private void highlightBlocksInFrustum(int angle, int offset)
+    {
+        for (int pitch = -angle; pitch < angle; pitch += offset)
+        {
+            for (int yaw = -angle; yaw < angle; yaw += offset)
+            {
+                BlockPos state = ClientUtil.raycastForBlockGivenAngle(Math.toRadians(pitch), Math.toRadians(yaw), 100);
+                if (state == null)
+                    continue;
+
+                if (!isBetweenTwoThings(state.above()))
+                    continue;
+
+                this.getSelf().level().addParticle(
+                        ModParticles.ENDER_BLOOD,
+                        true,
+                        state.getX()+0.5f,
+                        state.getY(),
+                        state.getZ()+0.5f,
+                        0.0f,
+                        1.0f,
+                        0.0f
+                );
+            }
+        }
     }
 
     private boolean held2 = false;
@@ -141,7 +177,7 @@ public class PowersD4C extends PunchingStand {
 
             if (!isHoldingSneak() && !(this.onCooldown(PowerIndex.SKILL_2)))
             {
-                if (isBetweenTwoThings(this.getSelf()))
+                if (isBetweenTwoThings())
                 {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
@@ -279,7 +315,7 @@ public class PowersD4C extends PunchingStand {
         if (keyIsDown) {
             if (!inputDash) {
                 if (isHoldingSneak()) {
-                    if (!this.onCooldown(PowerIndex.SKILL_3) && isBetweenTwoThings(this.getSelf())) {
+                    if (!this.onCooldown(PowerIndex.SKILL_3) && isBetweenTwoThings()) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
 
@@ -302,7 +338,7 @@ public class PowersD4C extends PunchingStand {
         {
             held4 = true;
 
-            if (isBetweenTwoThings(this.getSelf()))
+            if (isBetweenTwoThings())
             {
                 this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
@@ -352,7 +388,7 @@ public class PowersD4C extends PunchingStand {
         switch (activeP)
         {
             case PowerIndex.SKILL_4, PowerIndex.SKILL_4_SNEAK, PowerIndex.SKILL_2, PowerIndex.SKILL_3 -> {
-                return !(isBetweenTwoThings(this.getSelf()));
+                return !(isBetweenTwoThings());
             }
         }
 
@@ -369,14 +405,19 @@ public class PowersD4C extends PunchingStand {
 
     /** Is the entity inbetween two tings? */
     @SuppressWarnings("deprecation") // isSolid()
-    boolean isBetweenTwoThings(LivingEntity entity)
+    boolean isBetweenTwoThings()
     {
-        // TODO: replace this with a more advanced predicate
-        BlockPos pos = entity.blockPosition();
-        BlockState bottom = entity.level().getBlockState(pos.subtract(new Vec3i(0, 1, 0)));
-        BlockState top = entity.level().getBlockState(pos.subtract(new Vec3i(0, -2, 0)));
+        return (isBetweenTwoThings(this.getSelf().blockPosition()));
+    };
 
-        return (!bottom.isAir() && !top.isAir()) && (bottom.isSolid() && bottom.isSolid());
+    // TODO: replace this with a more advanced predicate
+    @SuppressWarnings("deprecation") // isSolid()
+    boolean isBetweenTwoThings(BlockPos pos)
+    {
+        BlockState bottom = this.getSelf().level().getBlockState(pos.subtract(new Vec3i(0, 1, 0)));
+        BlockState top = this.getSelf().level().getBlockState(pos.subtract(new Vec3i(0, -2, 0)));
+
+        return (!bottom.isAir() && !top.isAir()) && (bottom.isSolid() && top.isSolid());
     };
 
 
