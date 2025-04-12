@@ -24,7 +24,7 @@ public class MatchItem extends Item implements Vanishable {
 
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 2.0F;
-    public static final float SHOOT_POWER = 0.8F;
+    public static final float SHOOT_POWER = 0.9F;
 
     public MatchItem(Properties $$0) {
         super($$0);
