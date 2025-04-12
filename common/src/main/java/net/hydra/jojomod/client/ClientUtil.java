@@ -36,8 +36,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 
@@ -488,5 +491,45 @@ public class ClientUtil {
         if (player != null) {
             handleSimpleBytePacketS2C(player,context);
         }
+    }
+
+    /** From the center of the camera, raycast out at given angle and return the BlockPos at that end position.
+     * If nothing is found within the limit, it will return null. */
+    public static @Nullable BlockPos raycastForBlockGivenAngle(double pitchOffsetDeg, double yawOffsetDeg, int limit)
+    {
+        Player player = Minecraft.getInstance().player;
+        if (player == null)
+            return null;
+
+        float baseYaw = player.getYRot();
+        float basePitch = player.getXRot();
+
+        float finalYaw = baseYaw + (float) yawOffsetDeg;
+        float finalPitch = basePitch + (float) pitchOffsetDeg;
+
+        double yawRad = Math.toRadians(finalYaw);
+        double pitchRad = Math.toRadians(finalPitch);
+
+        double xz = Math.cos(pitchRad);
+        double x = -Math.sin(yawRad) * xz;
+        double y = -Math.sin(pitchRad);
+        double z = Math.cos(yawRad) * xz;
+
+        Vec3 start = player.getEyePosition(0);
+        Vec3 direction = new Vec3(x, y, z);
+        Vec3 end = start.add(direction.scale(limit));
+
+        BlockHitResult hitResult = player.level().clip(new ClipContext(
+                start, end,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                player
+        ));
+
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            return hitResult.getBlockPos();
+        }
+
+        return null;
     }
 }

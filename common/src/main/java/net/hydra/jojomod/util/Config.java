@@ -128,6 +128,8 @@ import java.util.Set;
         public Boolean barragesAreAlwaysInterruptable;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer d4cDimensionKidnapRadius;
     }
     public static class DamageMultipliers {
         @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
@@ -242,8 +244,10 @@ import java.util.Set;
         public Integer magicianRedProjectileBurn;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer magicianRedFlameCrash;
-        @IntOption(group = "inherit", value = 6000, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 4000, min = 0, max = 72000)
         public Integer d4cDimensionHopToNewDimension;
+        @IntOption(group = "inherit", value = 6000, min = 0, max = 72000)
+        public Integer d4cDimensionKidnap;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer d4cDimensionHopToOldDimension;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
