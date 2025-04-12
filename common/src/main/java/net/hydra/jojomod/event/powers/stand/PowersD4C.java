@@ -96,8 +96,16 @@ public class PowersD4C extends PunchingStand {
         }
     }
 
+    private int betweenVisionTicks = 0;
     private void highlightBlocksInFrustum(int angle, int offset)
     {
+        betweenVisionTicks++;
+
+        if (betweenVisionTicks < 10)
+            return;
+
+        betweenVisionTicks = 0;
+
         for (int pitch = -angle; pitch < angle; pitch += offset)
         {
             for (int yaw = -angle; yaw < angle; yaw += offset)
@@ -110,13 +118,13 @@ public class PowersD4C extends PunchingStand {
                     continue;
 
                 this.getSelf().level().addParticle(
-                        ModParticles.ENDER_BLOOD,
+                        ModParticles.MENACING,
                         true,
                         state.getX()+0.5f,
-                        state.getY(),
+                        state.getY()+1.0f,
                         state.getZ()+0.5f,
                         0.0f,
-                        1.0f,
+                        0.04f,
                         0.0f
                 );
             }
