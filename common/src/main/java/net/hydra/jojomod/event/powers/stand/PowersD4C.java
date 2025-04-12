@@ -128,7 +128,7 @@ public class PowersD4C extends PunchingStand {
                         state.getY()+1.0f,
                         state.getZ()+0.5f,
                         0.0f,
-                        0.04f,
+                        (Math.random()*0.04f)-0.02f,
                         0.0f
                 );
             }
