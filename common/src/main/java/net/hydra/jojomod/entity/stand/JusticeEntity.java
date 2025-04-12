@@ -40,6 +40,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Team;
 
 public class JusticeEntity extends StandEntity {
     public JusticeEntity(EntityType<? extends Mob> entityType, Level world) {

@@ -60,6 +60,8 @@ import java.util.Set;
     public Integer justiceMaxCorpses;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer justiceStandUserMobMinionCount;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean justiceCorpsesUseOwnerTeam;
     @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
     public Integer maxMagiciansRedFlames;
     @IntOption(group = "inherit", value = 100, min = -1, max = 72000)

@@ -30,6 +30,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.scores.Team;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -76,6 +77,18 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
     public void setJusticeTeamColor(byte fr){
         this.entityData.set(TEAM_COLOR, fr);
+    }
+
+    @Override
+    public Team getTeam() {
+        if (ClientNetworking.getAppropriateConfig().justiceCorpsesUseOwnerTeam) {
+            if (getRealController() != null) {
+                return this.level().getScoreboard().getPlayersTeam(getRealController().getScoreboardName());
+            }
+            return this.level().getScoreboard().getPlayersTeam(this.getScoreboardName());
+        } else {
+            return super.getTeam();
+        }
     }
 
     public boolean getActivated() {
@@ -130,6 +143,17 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public void setPhasesFull(boolean bool){
         ticksThroughPhases = 10;
         this.entityData.set(PHASES_FULL, bool);
+    }
+    public Entity getRealController() {
+        if (this.controller != null){
+            return controller;
+        } else{
+            int ct = this.getEntityData().get(CONTROLLER);
+            if (ct > 0){
+                return this.level().getEntity(ct);
+            }
+        }
+        return null;
     }
     public int getController() {
         return this.getEntityData().get(CONTROLLER);
