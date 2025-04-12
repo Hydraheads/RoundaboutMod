@@ -2620,10 +2620,11 @@ public class StandPowers {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     public boolean tryPlaceBlock(BlockPos pos){
         if (!this.self.level().isClientSide()) {
             BlockState state = this.getSelf().level().getBlockState(pos);
-                if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() &&
+                if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !state.liquid() &&
                         this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
                         !((this.getSelf() instanceof Player &&
                                 (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)

@@ -69,11 +69,11 @@ public class ZScreenShaking implements IGameRenderer {
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$tick(CallbackInfo ci) {
-        if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
             boolean changed = false;
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
                 if (roundabout$tsShaderStatus == 0) {
-                    ClientConfig clientConfig = ConfigManager.getClientConfig();
                     if (!(clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
                         changed = true;
                         roundabout$tsShaderStatus = 1;
@@ -104,8 +104,8 @@ public class ZScreenShaking implements IGameRenderer {
     @Inject(method = "checkEntityPostEffect(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$checkEntityPostEffect(Entity $$0, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
-
-        if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
                 this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
             } else {
