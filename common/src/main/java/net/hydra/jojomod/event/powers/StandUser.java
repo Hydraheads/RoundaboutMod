@@ -19,6 +19,9 @@ public interface StandUser {
     boolean roundabout$hasStandOut();
     void roundabout$onStandOutLookAround(StandEntity passenger);
 
+    LivingEntity roundabout$getEmulator();
+    void roundabout$setEmulator(LivingEntity le);
+
     void roundabout$updateStandOutPosition(StandEntity passenger);
 
     int roundabout$increaseAirSupply(int $$0);

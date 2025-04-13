@@ -165,6 +165,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     @Unique
     private LivingEntity roundabout$thrower;
+
+    /*Emulator is specifically for ZPlayerRenderer justice disguise spoofing and other mob spoofing, for rendering purposes of reading data from the user*/
+    @Nullable
+    @Unique
+    private LivingEntity roundabout$emulator;
+    @Nullable
+    @Override
+    @Unique
+    public LivingEntity roundabout$getEmulator(){
+        return roundabout$emulator;
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setEmulator(LivingEntity le){
+        roundabout$emulator = le;
+    }
     @Nullable
     @Override
     @Unique

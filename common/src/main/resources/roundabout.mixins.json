@@ -18,6 +18,7 @@
     "ZAbstractFurnaceBlockEntity",
     "ZAbstractFurnaceMenu",
     "ZAbstractSchoolingFish",
+    "ZAbstractZombieRenderer",
     "ZAnimal",
     "ZAnvilMenu",
     "ZBeehiveBlock",
@@ -129,6 +130,7 @@
     "ZPlayerRender",
     "ZScreenEffectRenderer",
     "ZScreenShaking",
+    "ZSkeletonRenderer",
     "ZTimeStopTextureFreeze",
     "ZWindowMixin",
     "ZWorldRenderer"

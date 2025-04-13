@@ -73,6 +73,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$TEAM_COLOR = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
 
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(Player.class,
@@ -127,19 +130,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private float roundabout$idleRotation = 0;
     @Unique
     private float roundabout$idleYOffset = 0.1F;
-    @Unique
-    private byte roundabout$teamColor = 0;
 
     @Unique
     @Override
     public void roundabout$setTeamColor(byte color){
-        roundabout$teamColor = color;
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$TEAM_COLOR, color);
     }
     @Unique
     @Override
     public byte roundabout$getTeamColor(){
-        return roundabout$teamColor;
+        return this.entityData.get(ROUNDABOUT$TEAM_COLOR);
     }
+    @Unique
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
 
     protected PlayerEntity(EntityType<? extends LivingEntity> $$0, Level $$1) {
@@ -724,7 +726,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("idleRotation",roundabout$idleRotation);
         compoundtag.putFloat("idleYOffset",roundabout$idleYOffset);
         compoundtag.putFloat("sizePercent",roundabout$sizePercent);
-        compoundtag.putByte("teamColor",roundabout$teamColor);
+        compoundtag.putByte("teamColor",roundabout$getTeamColor());
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -763,7 +765,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$sizePercent = compoundtag2.getFloat("sizePercent");
         }
         if (compoundtag2.contains("teamColor")) {
-            roundabout$teamColor = compoundtag2.getByte("teamColor");
+            roundabout$setTeamColor(compoundtag2.getByte("teamColor"));
         }
 
         //roundabout$maskInventory.addItem()
@@ -991,6 +993,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);
         }
     }
 

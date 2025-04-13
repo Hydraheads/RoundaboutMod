@@ -10,15 +10,15 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FallenSkeletonRenderer extends HumanoidMobRenderer<FallenSkeleton, FallenSkeletonModel<FallenSkeleton>> {
     private static final ResourceLocation SKELETON_LOCATION = new ResourceLocation("textures/entity/skeleton/skeleton.png");
-    private static final ResourceLocation FALLEN_SKELETON_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton.png");
-    private static final ResourceLocation FALLEN_SKELETON_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_holes.png");
-    private static final ResourceLocation FALLEN_SKELETON_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_blue.png");
-    private static final ResourceLocation FALLEN_SKELETON_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_green.png");
-    private static final ResourceLocation FALLEN_SKELETON_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_red.png");
 
     public FallenSkeletonRenderer(EntityRendererProvider.Context $$0) {
