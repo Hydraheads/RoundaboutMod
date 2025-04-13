@@ -1,9 +1,6 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -47,13 +44,7 @@ public class StreetSignBlock extends HorizontalDirectionalBlock implements Cance
 
     @Override
     protected void spawnDestroyParticles(Level $$0, Player $$1, BlockPos $$2, BlockState $$3) {
-        if ($$0 instanceof ServerLevel){
-            StreetSignPart $$4 = $$3.getValue(PART);
-            if ($$4 == StreetSignPart.TOP) {
-                return;
-            }
-        }
-        super.spawnDestroyParticles($$0,$$1,$$2,$$3);
+
     }
     public StreetSignBlock(BlockBehaviour.Properties $$1) {
         super($$1);
@@ -75,12 +66,10 @@ public class StreetSignBlock extends HorizontalDirectionalBlock implements Cance
             StreetSignPart $$4 = $$2.getValue(PART);
             if ($$4 == StreetSignPart.BOTTOM) {
                 $$0.setBlock($$1, Blocks.AIR.defaultBlockState(), 35);
-                $$0.levelEvent($$3, 2001, $$1, Block.getId($$2));
                 BlockPos $$5 = $$1.above();
                 BlockState $$6 = $$0.getBlockState($$5);
                 if ($$6.is(this) && $$6.getValue(PART) == StreetSignPart.TOP) {
                     $$0.setBlock($$5, Blocks.AIR.defaultBlockState(), 35);
-                    $$0.levelEvent($$3, 2001, $$5, Block.getId($$6));
                 }
 
             }else if ($$4 == StreetSignPart.TOP) {
@@ -88,7 +77,6 @@ public class StreetSignBlock extends HorizontalDirectionalBlock implements Cance
                 BlockState $$6 = $$0.getBlockState($$5);
                 if ($$6.is(this) && $$6.getValue(PART) == StreetSignPart.BOTTOM) {
                     $$0.setBlock($$5, Blocks.AIR.defaultBlockState(), 35);
-                    $$0.levelEvent($$3, 2001, $$5, Block.getId($$6));
                 }
 
             }

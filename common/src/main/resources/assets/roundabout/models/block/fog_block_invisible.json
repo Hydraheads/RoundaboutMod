@@ -1,2 +1,5 @@
 {
+  "textures": {
+    "particle": "roundabout:block/fog_block_ghost"
+  }
 }
