@@ -93,6 +93,7 @@ public class ForgeEvents {
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
         ModBlocks.GODDESS_STATUE_BLOCK = ForgeBlocks.GODDESS_STATUE_BLOCK.get();
+        ModBlocks.STREET_SIGN_DIO = ForgeBlocks.STREET_SIGN_DIO.get();
         ModBlocks.FOG_DIRT = ForgeBlocks.FOG_DIRT.get();
         ModBlocks.FOG_DIRT_COATING = ForgeBlocks.FOG_DIRT_COATING.get();
         ModBlocks.FOG_CLAY = ForgeBlocks.FOG_CLAY.get();
@@ -189,6 +190,7 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
+        ModItems.STREET_SIGN_DIO_BLOCK_ITEM = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();

@@ -50,6 +50,9 @@ public class ZItemRenderer implements IItemRenderer {
         if (stack.is(ModItems.HARPOON) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.HARPOON_IN_HAND);
+        } if (stack.is(ModItems.STREET_SIGN_DIO_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.STREET_SIGN_DIO_HELD);
         }
 
         return value;

@@ -17,6 +17,7 @@ public class ModBlocks {
     /**This is where blocks are listed and called upon.
      * Forge and fabric files must define these variables so they are not empty.**/
     public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
+    public static final EnumProperty<StreetSignPart> STREET_SIGN_PART = EnumProperty.create("part", StreetSignPart.class);
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final IntegerProperty BLOOD_LEVEL = IntegerProperty.create("level", 0, 3);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
@@ -38,6 +39,7 @@ public class ModBlocks {
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
+    public static Block STREET_SIGN_DIO;
     public static Block STEREO;
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
@@ -208,6 +210,19 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)
                     .strength(1.5F, 1.0F)
                     .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
+    );
+    public static StreetSignBlock STREET_SIGN_DIO_PROPERTIES = new StreetSignBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .noOcclusion()
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(0.5F, 0.5F)
+                    .sound(SoundType.METAL)
+                    .lightLevel((L) -> {
+                        return 1;
+                    })
                     .requiresCorrectToolForDrops()
     );
     public static FogBlock getFogBlock(){

@@ -48,6 +48,8 @@ public class FabricBlocks {
     );
     public static final Block GODDESS_STATUE_BLOCK = registerBlockUnstackable("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
     , 1);
+    public static final Block STREET_SIGN_DIO = registerBlockUnstackable("street_sign_dio",ModBlocks.STREET_SIGN_DIO_PROPERTIES
+            , 1);
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlock("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
     public static final Block ORANGE_FIRE = registerBlock("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
@@ -144,6 +146,7 @@ public class FabricBlocks {
         ModBlocks.BARBED_WIRE_BUNDLE = BARBED_WIRE_BUNDLE;
         ModBlocks.WIRE_TRAP = WIRE_TRAP;
         ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
+        ModBlocks.STREET_SIGN_DIO = STREET_SIGN_DIO;
         ModBlocks.STEREO = STEREO;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;

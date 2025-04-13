@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
@@ -82,6 +83,7 @@ public class FabricItems {
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
+    public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties()));
     public static Item LOCACACA_PIT = registerItem("locacaca_pit", (Item) new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA_BRANCH = registerItem("locacaca_branch", (Item) new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
@@ -202,6 +204,7 @@ public class FabricItems {
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
+                        entries.accept(STREET_SIGN_DIO_BLOCK_ITEM);
                         entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
@@ -345,6 +348,7 @@ public class FabricItems {
         ModItems.METEORITE = METEORITE;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
+        ModItems.STREET_SIGN_DIO_BLOCK_ITEM = STREET_SIGN_DIO_BLOCK_ITEM;
         ModItems.LOCACACA = LOCACACA;
         ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;
         ModItems.NEW_LOCACACA = NEW_LOCACACA;

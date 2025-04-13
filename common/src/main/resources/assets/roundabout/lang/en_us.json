@@ -35,6 +35,7 @@
   "item.roundabout.music_disc_hallelujah.desc": "Edison - Hallelujah's Chorus",
   "item.roundabout.music_disc_torture_dance": "Music Disc",
   "item.roundabout.music_disc_torture_dance.desc": "Yugo Kanno - Torture Dance Song",
+  "item.roundabout.street_sign_dio_item": "Street Sign Left",
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -130,6 +131,7 @@
   "block.roundabout.fog_block_coating.title": "Coating",
   "block.roundabout.stand_fire": "Stand Fire",
   "block.roundabout.colored_fire_orange": "Orange Colored Fire",
+  "block.roundabout.street_sign_dio": "Street Sign Left",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",

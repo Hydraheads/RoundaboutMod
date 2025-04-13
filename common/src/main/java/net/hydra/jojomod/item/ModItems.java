@@ -22,6 +22,7 @@ public class ModItems {
     public static Item STAND_DISC_D4C;
     public static Item MAX_STAND_DISC_D4C;
     public static Item STAND_DISC;
+    public static Item STREET_SIGN_DIO_BLOCK_ITEM;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;
     public static Item LOCACACA_BRANCH;
