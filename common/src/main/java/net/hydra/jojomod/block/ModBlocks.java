@@ -18,6 +18,7 @@ public class ModBlocks {
      * Forge and fabric files must define these variables so they are not empty.**/
     public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
     public static final EnumProperty<StreetSignPart> STREET_SIGN_PART = EnumProperty.create("part", StreetSignPart.class);
+    public static final IntegerProperty DAMAGED = IntegerProperty.create("damaged", 0, 2);
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final IntegerProperty BLOOD_LEVEL = IntegerProperty.create("level", 0, 3);
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");

@@ -1,35 +1,55 @@
 {
   "variants": {
-    "facing=east,part=bottom": {
-      "model": "roundabout:block/street_sign_dio",
-      "y": 90
-    },
-    "facing=east,part=top": {
-      "model": "roundabout:block/fog_block_invisible",
-      "y": 90
-    },
-    "facing=north,part=bottom": {
-      "model": "roundabout:block/street_sign_dio",
-      "y": 0
-    },
-    "facing=north,part=top": {
+    "part=top": {
       "model": "roundabout:block/fog_block_invisible",
       "y": 0
     },
-    "facing=south,part=bottom": {
+    "facing=east,part=bottom,damaged=0": {
+      "model": "roundabout:block/street_sign_dio",
+      "y": 90
+    },
+    "facing=north,part=bottom,damaged=0": {
+      "model": "roundabout:block/street_sign_dio",
+      "y": 0
+    },
+    "facing=south,part=bottom,damaged=0": {
       "model": "roundabout:block/street_sign_dio",
       "y": 180
     },
-    "facing=south,part=top": {
-      "model": "roundabout:block/fog_block_invisible",
-      "y": 180
-    },
-    "facing=west,part=bottom": {
+    "facing=west,part=bottom,damaged=0": {
       "model": "roundabout:block/street_sign_dio",
       "y": 270
     },
-    "facing=west,part=top": {
-      "model": "roundabout:block/fog_block_invisible",
+    "facing=east,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_dio_damaged",
+      "y": 90
+    },
+    "facing=north,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_dio_damaged",
+      "y": 0
+    },
+    "facing=south,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_dio_damaged",
+      "y": 180
+    },
+    "facing=west,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_dio_damaged",
+      "y": 270
+    },
+    "facing=east,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_dio_damaged_2",
+      "y": 90
+    },
+    "facing=north,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_dio_damaged_2",
+      "y": 0
+    },
+    "facing=south,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_dio_damaged_2",
+      "y": 180
+    },
+    "facing=west,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_dio_damaged_2",
       "y": 270
     }
   }

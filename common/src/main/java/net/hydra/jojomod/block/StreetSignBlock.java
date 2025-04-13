@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
 
 public class StreetSignBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<StreetSignPart> PART = ModBlocks.STREET_SIGN_PART;
+    public static final IntegerProperty DAMAGED= ModBlocks.DAMAGED;
     protected static final VoxelShape BASE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
     protected static final VoxelShape TOP = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
 
@@ -46,7 +48,7 @@ public class StreetSignBlock extends HorizontalDirectionalBlock {
     }
     public StreetSignBlock(BlockBehaviour.Properties $$1) {
         super($$1);
-        this.registerDefaultState(this.stateDefinition.any().setValue(PART, StreetSignPart.BOTTOM));
+        this.registerDefaultState(this.stateDefinition.any().setValue(PART, StreetSignPart.BOTTOM).setValue(DAMAGED,0));
     }
 
     @Override
@@ -105,9 +107,11 @@ public class StreetSignBlock extends HorizontalDirectionalBlock {
     public BlockState getStateForPlacement(BlockPlaceContext $$0) {
         BlockPos $$1 = $$0.getClickedPos();
         Level $$2 = $$0.getLevel();
+        //$$0.getItemInHand();
         if ($$1.getY() < $$2.getMaxBuildHeight() - 2 && $$2.getBlockState($$1.above()).canBeReplaced($$0)
                 && $$2.getBlockState($$1.above().above()).canBeReplaced($$0)) {
             return this.defaultBlockState()
+                    .setValue(DAMAGED, 0)
                     .setValue(FACING, $$0.getHorizontalDirection());
         } else {
             return null;
@@ -127,7 +131,7 @@ public class StreetSignBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
-        $$0.add(FACING, PART);
+        $$0.add(FACING, PART, DAMAGED);
     }
 
 
