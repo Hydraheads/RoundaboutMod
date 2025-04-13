@@ -4,8 +4,11 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,8 +47,12 @@ public class SignBlockItem extends BlockItem {
             int ctd = ct.getInt("damaged");
             ctd++;
             if (ctd > 2) {
+                $$1.level().playSound(null, $$1.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS,
+                        1F, 1);
                 $$0.shrink(1);
             } else {
+                $$1.level().playSound(null, $$1.blockPosition(), ModSounds.SIGN_HIT_EVENT, SoundSource.PLAYERS,
+                        1F, 1);
                 ct.putInt("damaged", ctd);
             }
         }

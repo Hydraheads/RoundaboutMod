@@ -328,7 +328,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_ingot",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_dio_item",
-            () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DIO.get(), new Item.Properties())));
+            () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DIO.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
             () -> new ItemNameBlockItem(ForgeBlocks.LOCACACA_BLOCK.get(), new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA = addToTab(ITEMS.register("locacaca",

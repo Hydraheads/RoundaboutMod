@@ -17,6 +17,12 @@
       "roundabout:firestorm"
     ]
   },
+  "sign_hit": {
+    "subtitle": "sounds.roundabout.sign_hit",
+    "sounds": [
+      "roundabout:sign_hit"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [
