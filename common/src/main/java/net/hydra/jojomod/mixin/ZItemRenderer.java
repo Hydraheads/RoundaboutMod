@@ -12,6 +12,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -132,6 +133,15 @@ public class ZItemRenderer implements IItemRenderer {
         }if ($$0.is(Items.BOOK)){
             if (MainUtil.isDreadBook($$0)){
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.DREAD_BOOK);
+            }
+        } if ($$0.is(ModItems.STREET_SIGN_DIO_BLOCK_ITEM)){
+            CompoundTag ct = $$0.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_DIO_D);
+            }
+            if (ctd == 2) {
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_DIO_D2);
             }
         }
 

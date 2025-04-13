@@ -41,6 +41,8 @@ public abstract class ZModelBakery {
         this.loadTopLevel(ModItemModels.STAND_BEETLE_CROSSBOW);
         this.loadTopLevel(ModItemModels.DREAD_BOOK);
         this.loadTopLevel(ModItemModels.FOG_BLOCK_ICON);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_DIO_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_DIO_D2);
         this.loadTopLevel(ModItemModels.STREET_SIGN_DIO_HELD);
         this.topLevelModels.get(ModItemModels.HARPOON_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BOW).resolveParents(this::getModel);
@@ -51,6 +53,8 @@ public abstract class ZModelBakery {
         this.topLevelModels.get(ModItemModels.STAND_BEETLE_CROSSBOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.DREAD_BOOK).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.FOG_BLOCK_ICON).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_D2).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_HELD).resolveParents(this::getModel);
     }
 
