@@ -588,17 +588,8 @@ public class StandPowers {
                     offset = x+7;
                 }
 
-                String numStr;
-                if (num >= 60) {
-                    int minutes = num / 60;
-                    int seconds = num % 60;
-                    numStr = String.format("%d:%02d", minutes, seconds);
-                } else {
-                    numStr = String.valueOf(num);
-                }
-
                 if (!cd.isFrozen())
-                    context.drawString(Minecraft.getInstance().font, numStr,offset,y,0xffffff,true);
+                    context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
 
                 RenderSystem.disableBlend();
             }
