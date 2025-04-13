@@ -1,0 +1,57 @@
+{
+  "credit": "Made with Blockbench",
+  "textures": {
+    "0": "roundabout:block/yield_sign",
+    "particle": "roundabout:block/yield_sign"
+  },
+  "elements": [
+    {
+      "from": [3.35, 21.7, 8.5],
+      "to": [12.35, 30.7, 8.5],
+      "rotation": {"angle": 0, "axis": "y", "origin": [7.925, 17.7, 7.9]},
+      "faces": {
+        "north": {"uv": [11.5, 4.5, 16, 9], "texture": "#0"},
+        "east": {"uv": [0, 0, 0, 4.5], "texture": "#0"},
+        "south": {"uv": [11.5, 0, 16, 4.5], "texture": "#0"},
+        "west": {"uv": [0, 0, 0, 4.5], "texture": "#0"},
+        "up": {"uv": [4.5, 0, 0, 0], "rotation": 180, "texture": "#0"},
+        "down": {"uv": [4.5, 0, 0, 0], "rotation": 180, "texture": "#0"}
+      }
+    },
+    {
+      "from": [5.85, 18, 8.5],
+      "to": [9.85, 19, 8.5],
+      "rotation": {"angle": 0, "axis": "y", "origin": [7.925, 17.7, 7.9]},
+      "faces": {
+        "north": {"uv": [12, 15, 16, 16], "texture": "#0"},
+        "east": {"uv": [0, 0, 0, 1], "texture": "#0"},
+        "south": {"uv": [12, 14, 16, 15], "texture": "#0"},
+        "west": {"uv": [0, 0, 0, 1], "texture": "#0"},
+        "up": {"uv": [0, 0, 4, 0], "rotation": 180, "texture": "#0"},
+        "down": {"uv": [0, 0, 4, 0], "rotation": 180, "texture": "#0"}
+      }
+    },
+    {
+      "from": [8.5, 0.075, 8.45],
+      "to": [7.2, 28.775, 7.15],
+      "rotation": {"angle": 0, "axis": "y", "origin": [7.925, 17.7, 7.9]},
+      "faces": {
+        "north": {"uv": [2, 0, 4, 16], "texture": "#0"},
+        "east": {"uv": [4, 0, 6, 16], "texture": "#0"},
+        "south": {"uv": [6, 0, 8, 16], "texture": "#0"},
+        "west": {"uv": [0, 0, 2, 16], "texture": "#0"},
+        "up": {"uv": [12, 12, 14, 14], "rotation": 180, "texture": "#0"},
+        "down": {"uv": [14, 12, 16, 14], "rotation": 180, "texture": "#0"}
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "sign",
+      "origin": [8, 8, 8],
+      "color": 0,
+      "children": [0, 1, 2]
+    }
+  ],
+  "render_type": "translucent"
+}

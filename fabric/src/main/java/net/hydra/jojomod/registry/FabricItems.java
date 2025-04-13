@@ -84,6 +84,10 @@ public class FabricItems {
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
+    public static Item STREET_SIGN_RIGHT_BLOCK_ITEM = registerItem("street_sign_right_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_RIGHT, new Item.Properties().stacksTo(1)));
+    public static Item STREET_SIGN_STOP_BLOCK_ITEM = registerItem("street_sign_stop_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_STOP, new Item.Properties().stacksTo(1)));
+    public static Item STREET_SIGN_YIELD_BLOCK_ITEM = registerItem("street_sign_yield_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_YIELD, new Item.Properties().stacksTo(1)));
+    public static Item STREET_SIGN_DANGER_BLOCK_ITEM = registerItem("street_sign_danger_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DANGER, new Item.Properties().stacksTo(1)));
     public static Item LOCACACA_PIT = registerItem("locacaca_pit", (Item) new ItemNameBlockItem(ModBlocks.LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA_BRANCH = registerItem("locacaca_branch", (Item) new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
@@ -348,7 +352,16 @@ public class FabricItems {
         ModItems.METEORITE = METEORITE;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
+        ((StreetSignBlock)FabricBlocks.STREET_SIGN_DIO).referenceItem = STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance();
+        ((StreetSignBlock)FabricBlocks.STREET_SIGN_RIGHT).referenceItem = STREET_SIGN_RIGHT_BLOCK_ITEM.getDefaultInstance();
+        ((StreetSignBlock)FabricBlocks.STREET_SIGN_STOP).referenceItem = STREET_SIGN_STOP_BLOCK_ITEM.getDefaultInstance();
+        ((StreetSignBlock)FabricBlocks.STREET_SIGN_YIELD).referenceItem = STREET_SIGN_YIELD_BLOCK_ITEM.getDefaultInstance();
+        ((StreetSignBlock)FabricBlocks.STREET_SIGN_DANGER).referenceItem = STREET_SIGN_DANGER_BLOCK_ITEM.getDefaultInstance();
         ModItems.STREET_SIGN_DIO_BLOCK_ITEM = STREET_SIGN_DIO_BLOCK_ITEM;
+        ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM = STREET_SIGN_RIGHT_BLOCK_ITEM;
+        ModItems.STREET_SIGN_STOP_BLOCK_ITEM = STREET_SIGN_STOP_BLOCK_ITEM;
+        ModItems.STREET_SIGN_YIELD_BLOCK_ITEM = STREET_SIGN_YIELD_BLOCK_ITEM;
+        ModItems.STREET_SIGN_DANGER_BLOCK_ITEM = STREET_SIGN_DANGER_BLOCK_ITEM;
         ModItems.LOCACACA = LOCACACA;
         ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;
         ModItems.NEW_LOCACACA = NEW_LOCACACA;

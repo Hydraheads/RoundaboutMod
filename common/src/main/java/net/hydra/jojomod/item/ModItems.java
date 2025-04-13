@@ -23,6 +23,10 @@ public class ModItems {
     public static Item MAX_STAND_DISC_D4C;
     public static Item STAND_DISC;
     public static Item STREET_SIGN_DIO_BLOCK_ITEM;
+    public static Item STREET_SIGN_RIGHT_BLOCK_ITEM;
+    public static Item STREET_SIGN_STOP_BLOCK_ITEM;
+    public static Item STREET_SIGN_YIELD_BLOCK_ITEM;
+    public static Item STREET_SIGN_DANGER_BLOCK_ITEM;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;
     public static Item LOCACACA_BRANCH;

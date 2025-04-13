@@ -329,6 +329,14 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_dio_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DIO.get(), new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> STREET_SIGN_RIGHT_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_right_item",
+            () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_RIGHT.get(), new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> STREET_SIGN_STOP_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_stop_item",
+            () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_STOP.get(), new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> STREET_SIGN_YIELD_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_yield_item",
+            () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_YIELD.get(), new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> STREET_SIGN_DANGER_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_danger_item",
+            () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DANGER.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
             () -> new ItemNameBlockItem(ForgeBlocks.LOCACACA_BLOCK.get(), new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA = addToTab(ITEMS.register("locacaca",

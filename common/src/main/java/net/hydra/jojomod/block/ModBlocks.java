@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -41,6 +42,10 @@ public class ModBlocks {
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
     public static Block STREET_SIGN_DIO;
+    public static Block STREET_SIGN_RIGHT;
+    public static Block STREET_SIGN_STOP;
+    public static Block STREET_SIGN_YIELD;
+    public static Block STREET_SIGN_DANGER;
     public static Block STEREO;
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
@@ -213,18 +218,20 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()
     );
-    public static StreetSignBlock STREET_SIGN_DIO_PROPERTIES = new StreetSignBlock(
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.STONE)
-                    .noOcclusion()
-                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
-                    .pushReaction(PushReaction.DESTROY)
-                    .strength(0.01F, 0.01F)
-                    .sound(SoundType.METAL)
-                    .lightLevel((L) -> {
-                        return 1;
-                    })
-    );
+    public static StreetSignBlock getStreetSignBlockProperties(){
+        return new StreetSignBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.STONE)
+                        .noOcclusion()
+                        .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                        .pushReaction(PushReaction.DESTROY)
+                        .strength(0.01F, 0.01F)
+                        .sound(SoundType.METAL)
+                        .lightLevel((L) -> {
+                            return 1;
+                        })
+        );
+    }
     public static FogBlock getFogBlock(){
         return new FogBlock(
                 BlockBehaviour.Properties.of()

@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "roundabout:item/street_sign_danger_item_wrecked"
+  }
+}

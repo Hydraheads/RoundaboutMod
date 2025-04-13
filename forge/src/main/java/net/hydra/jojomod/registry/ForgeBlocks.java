@@ -44,7 +44,15 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> GODDESS_STATUE_BLOCK = BLOCKS.register("goddess_statue",
             () -> ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> STREET_SIGN_DIO = BLOCKS.register("street_sign_dio",
-            () -> ModBlocks.STREET_SIGN_DIO_PROPERTIES);
+            ModBlocks::getStreetSignBlockProperties);
+    public static final RegistryObject<Block> STREET_SIGN_RIGHT = BLOCKS.register("street_sign_right",
+            ModBlocks::getStreetSignBlockProperties);
+    public static final RegistryObject<Block> STREET_SIGN_STOP = BLOCKS.register("street_sign_stop",
+            ModBlocks::getStreetSignBlockProperties);
+    public static final RegistryObject<Block> STREET_SIGN_YIELD = BLOCKS.register("street_sign_yield",
+            ModBlocks::getStreetSignBlockProperties);
+    public static final RegistryObject<Block> STREET_SIGN_DANGER = BLOCKS.register("street_sign_danger",
+            ModBlocks::getStreetSignBlockProperties);
     public static final RegistryObject<Block> FOG_DIRT = BLOCKS.register("fog_dirt",
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_DIRT_COATING = BLOCKS.register("fog_dirt_coating",

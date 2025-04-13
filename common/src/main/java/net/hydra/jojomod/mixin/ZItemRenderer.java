@@ -64,6 +64,58 @@ public class ZItemRenderer implements IItemRenderer {
             }
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.STREET_SIGN_DIO_HELD);
+        } if (stack.is(ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
+
+            CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_RIGHT_HELD_D);
+            } if (ctd == 2){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_RIGHT_HELD_D2);
+            }
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.STREET_SIGN_RIGHT_HELD);
+        } if (stack.is(ModItems.STREET_SIGN_STOP_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
+
+            CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_STOP_HELD_D);
+            } if (ctd == 2){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_STOP_HELD_D2);
+            }
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.STREET_SIGN_STOP_HELD);
+        } if (stack.is(ModItems.STREET_SIGN_YIELD_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
+
+            CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_YIELD_HELD_D);
+            } if (ctd == 2){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_YIELD_HELD_D2);
+            }
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.STREET_SIGN_YIELD_HELD);
+        } if (stack.is(ModItems.STREET_SIGN_DANGER_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
+
+            CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_DANGER_HELD_D);
+            } if (ctd == 2){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_DANGER_HELD_D2);
+            }
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.STREET_SIGN_DANGER_HELD);
         }
 
         return value;
@@ -152,6 +204,42 @@ public class ZItemRenderer implements IItemRenderer {
             }
             if (ctd == 2) {
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_DIO_D2);
+            }
+        } if ($$0.is(ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM)){
+            CompoundTag ct = $$0.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_RIGHT_D);
+            }
+            if (ctd == 2) {
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_RIGHT_D2);
+            }
+        } if ($$0.is(ModItems.STREET_SIGN_STOP_BLOCK_ITEM)){
+            CompoundTag ct = $$0.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_STOP_D);
+            }
+            if (ctd == 2) {
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_STOP_D2);
+            }
+        } if ($$0.is(ModItems.STREET_SIGN_YIELD_BLOCK_ITEM)){
+            CompoundTag ct = $$0.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_YIELD_D);
+            }
+            if (ctd == 2) {
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_YIELD_D2);
+            }
+        } if ($$0.is(ModItems.STREET_SIGN_DANGER_BLOCK_ITEM)){
+            CompoundTag ct = $$0.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_DANGER_D);
+            }
+            if (ctd == 2) {
+                return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_DANGER_D2);
             }
         }
 

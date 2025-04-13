@@ -48,7 +48,15 @@ public class FabricBlocks {
     );
     public static final Block GODDESS_STATUE_BLOCK = registerBlockUnstackable("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
     , 1);
-    public static final Block STREET_SIGN_DIO = registerBlockUnstackable("street_sign_dio",ModBlocks.STREET_SIGN_DIO_PROPERTIES
+    public static final Block STREET_SIGN_DIO = registerBlockUnstackable("street_sign_dio",ModBlocks.getStreetSignBlockProperties()
+            , 1);
+    public static final Block STREET_SIGN_RIGHT = registerBlockUnstackable("street_sign_right",ModBlocks.getStreetSignBlockProperties()
+            , 1);
+    public static final Block STREET_SIGN_STOP = registerBlockUnstackable("street_sign_stop",ModBlocks.getStreetSignBlockProperties()
+            , 1);
+    public static final Block STREET_SIGN_YIELD = registerBlockUnstackable("street_sign_yield",ModBlocks.getStreetSignBlockProperties()
+            , 1);
+    public static final Block STREET_SIGN_DANGER = registerBlockUnstackable("street_sign_danger",ModBlocks.getStreetSignBlockProperties()
             , 1);
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlock("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
@@ -147,6 +155,10 @@ public class FabricBlocks {
         ModBlocks.WIRE_TRAP = WIRE_TRAP;
         ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
         ModBlocks.STREET_SIGN_DIO = STREET_SIGN_DIO;
+        ModBlocks.STREET_SIGN_RIGHT = STREET_SIGN_RIGHT;
+        ModBlocks.STREET_SIGN_STOP = STREET_SIGN_STOP;
+        ModBlocks.STREET_SIGN_YIELD = STREET_SIGN_YIELD;
+        ModBlocks.STREET_SIGN_DANGER = STREET_SIGN_DANGER;
         ModBlocks.STEREO = STEREO;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;

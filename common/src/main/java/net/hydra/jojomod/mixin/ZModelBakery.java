@@ -46,6 +46,26 @@ public abstract class ZModelBakery {
         this.loadTopLevel(ModItemModels.STREET_SIGN_DIO_HELD);
         this.loadTopLevel(ModItemModels.STREET_SIGN_DIO_HELD_D);
         this.loadTopLevel(ModItemModels.STREET_SIGN_DIO_HELD_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_RIGHT_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_RIGHT_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_RIGHT_HELD);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_RIGHT_HELD_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_RIGHT_HELD_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_STOP_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_STOP_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_STOP_HELD);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_STOP_HELD_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_STOP_HELD_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_YIELD_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_YIELD_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_YIELD_HELD);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_YIELD_HELD_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_YIELD_HELD_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_D2);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD_D);
+        this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD_D2);
         this.topLevelModels.get(ModItemModels.HARPOON_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BEETLE_BOW).resolveParents(this::getModel);
@@ -60,6 +80,26 @@ public abstract class ZModelBakery {
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_HELD).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_HELD_D).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_HELD_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_RIGHT_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_RIGHT_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_RIGHT_HELD).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_RIGHT_HELD_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_RIGHT_HELD_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_STOP_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_STOP_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_STOP_HELD).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_STOP_HELD_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_STOP_HELD_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_YIELD_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_YIELD_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_YIELD_HELD).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_YIELD_HELD_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_YIELD_HELD_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD_D).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD_D2).resolveParents(this::getModel);
     }
 
     /**

@@ -9,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -131,12 +132,13 @@ public class StreetSignBlock extends HorizontalDirectionalBlock implements Cance
         $$0.add(FACING, PART, DAMAGED);
     }
 
-    @Override
-    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
-        if (state.getBlock() instanceof StreetSignBlock){
+    public ItemStack referenceItem = ItemStack.EMPTY;
+    public List<ItemStack> dropGen(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be){
+
+        if (state.getBlock() instanceof StreetSignBlock SB){
             if (state.getValue(PART) == StreetSignPart.BOTTOM){
                 List<ItemStack> drops = new ArrayList<>();
-                ItemStack stack = ModItems.STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance().copy();
+                ItemStack stack = referenceItem.copy();
                 stack.getOrCreateTagElement("BlockStateTag").putInt("damaged",state.getValue(DAMAGED));
                 drops.add(stack);
                 return drops;
@@ -144,19 +146,14 @@ public class StreetSignBlock extends HorizontalDirectionalBlock implements Cance
         }
         return new ArrayList<>();
     }
+    @Override
+    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
+        return dropGen(state,sl,bpos,be);
+    }
 
     @Override
     public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be, @Nullable Entity p_49879_, ItemStack p_49880_) {
-        if (state.getBlock() instanceof StreetSignBlock){
-            if (state.getValue(PART) == StreetSignPart.BOTTOM){
-                List<ItemStack> drops = new ArrayList<>();
-                ItemStack stack = ModItems.STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance().copy();
-                stack.getOrCreateTagElement("BlockStateTag").putInt("damaged",state.getValue(DAMAGED));
-                drops.add(stack);
-                return drops;
-            }
-        }
-        return new ArrayList<>();
+        return dropGen(state,sl,bpos,be);
     }
     @Override
     public void setPlacedBy(Level $$0, BlockPos $$1, BlockState $$2, @Nullable LivingEntity $$3, ItemStack $$4) {

@@ -1,0 +1,56 @@
+{
+  "variants": {
+    "part=top": {
+      "model": "roundabout:block/fog_block_invisible",
+      "y": 0
+    },
+    "facing=east,part=bottom,damaged=0": {
+      "model": "roundabout:block/street_sign_right",
+      "y": 90
+    },
+    "facing=north,part=bottom,damaged=0": {
+      "model": "roundabout:block/street_sign_right",
+      "y": 0
+    },
+    "facing=south,part=bottom,damaged=0": {
+      "model": "roundabout:block/street_sign_right",
+      "y": 180
+    },
+    "facing=west,part=bottom,damaged=0": {
+      "model": "roundabout:block/street_sign_right",
+      "y": 270
+    },
+    "facing=east,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_right_damaged",
+      "y": 90
+    },
+    "facing=north,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_right_damaged",
+      "y": 0
+    },
+    "facing=south,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_right_damaged",
+      "y": 180
+    },
+    "facing=west,part=bottom,damaged=1": {
+      "model": "roundabout:block/street_sign_right_damaged",
+      "y": 270
+    },
+    "facing=east,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_right_damaged_2",
+      "y": 90
+    },
+    "facing=north,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_right_damaged_2",
+      "y": 0
+    },
+    "facing=south,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_right_damaged_2",
+      "y": 180
+    },
+    "facing=west,part=bottom,damaged=2": {
+      "model": "roundabout:block/street_sign_right_damaged_2",
+      "y": 270
+    }
+  }
+}
