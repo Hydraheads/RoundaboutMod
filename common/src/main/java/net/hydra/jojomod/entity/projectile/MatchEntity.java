@@ -51,6 +51,15 @@ public class MatchEntity extends ThrowableItemProjectile {
         superThrowTicks = 50;
     }
 
+    public boolean dud = false;
+    public void makeDud(){
+        dud = true;
+        this.setDeltaMovement(0,this.getDeltaMovement().y,0);
+    }
+    public boolean isDud(){
+        return dud;
+    }
+
     public MatchEntity(Level world, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.THROWN_MATCH, p_36862_, p_36863_, p_36864_, world);
     }
@@ -111,38 +120,40 @@ public class MatchEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        Entity $$1 = $$0.getEntity();
-        float $$2 = (float) (2.0f * (ClientNetworking.getAppropriateConfig().damageMultipliers.matchDamage *0.01));
+        if (!isDud()) {
+            Entity $$1 = $$0.getEntity();
+            float $$2 = (float) (2.0f * (ClientNetworking.getAppropriateConfig().damageMultipliers.matchDamage * 0.01));
 
-        Entity $$4 = this.getOwner();
+            Entity $$4 = this.getOwner();
 
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MATCH, $$4);
+            DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MATCH, $$4);
 
-        SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
-        Vec3 DM = $$1.getDeltaMovement();
-        if ($$1 instanceof Creeper) {
-            ((Creeper) $$1).ignite();
-        } else if ($$1 instanceof FallenCreeper) {
-            ((FallenCreeper)$$1).ignite();
-        } if ($$1.getType() == EntityType.TNT_MINECART) {
-            DamageSource DS = $$1.damageSources().explosion($$1, $$0.getEntity());
-            ((IMinecartTNT)$$1).roundabout$explode(DS, this.getDeltaMovement().lengthSqr());
-            this.discard();
-        } else if ($$1.hurt($$5, $$2)) {
-            if ($$1.getType() == EntityType.ENDERMAN) {
-                return;
+            SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
+            Vec3 DM = $$1.getDeltaMovement();
+            if ($$1 instanceof Creeper) {
+                ((Creeper) $$1).ignite();
+            } else if ($$1 instanceof FallenCreeper) {
+                ((FallenCreeper) $$1).ignite();
             }
+            if ($$1.getType() == EntityType.TNT_MINECART) {
+                DamageSource DS = $$1.damageSources().explosion($$1, $$0.getEntity());
+                ((IMinecartTNT) $$1).roundabout$explode(DS, this.getDeltaMovement().lengthSqr());
+                this.discard();
+            } else if ($$1.hurt($$5, $$2)) {
+                if ($$1.getType() == EntityType.ENDERMAN) {
+                    return;
+                }
 
-            if ($$4 instanceof LivingEntity LE) {
-                LE.setLastHurtMob($$1);
+                if ($$4 instanceof LivingEntity LE) {
+                    LE.setLastHurtMob($$1);
+                }
+                if ($$1 instanceof LivingEntity $$7) {
+                    $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4, 0.4, 0.4));
+                }
+                this.playSound($$6, 0.8F, 1.6F);
+                this.makeDud();
             }
-            if ($$1 instanceof LivingEntity $$7) {
-                $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
-            }
-            this.playSound($$6, 0.8F, 1.6F);
-            this.discard();
         }
-
     }
 
 
