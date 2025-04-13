@@ -298,6 +298,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 damage = 20.5F;
             } else if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof WebBlock) {
                 damage = 1F;
+            } else if ((((BlockItem) this.getItem().getItem()).getBlock()) instanceof StreetSignBlock) {
+                damage = 18F;
             } else if (DT <= 0.4) {
                 damage = 1;
             } else if (DT <= 1){

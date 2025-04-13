@@ -52,6 +52,16 @@ public class ZItemRenderer implements IItemRenderer {
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.HARPOON_IN_HAND);
         } if (stack.is(ModItems.STREET_SIGN_DIO_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
+
+            CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
+            int ctd = ct.getInt("damaged");
+            if (ctd == 1){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_DIO_HELD_D);
+            } if (ctd == 2){
+                return this.itemModelShaper.getModelManager().
+                        getModel(ModItemModels.STREET_SIGN_DIO_HELD_D2);
+            }
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.STREET_SIGN_DIO_HELD);
         }

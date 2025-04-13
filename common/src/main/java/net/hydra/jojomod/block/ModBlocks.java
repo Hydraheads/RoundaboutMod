@@ -219,12 +219,11 @@ public class ModBlocks {
                     .noOcclusion()
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .pushReaction(PushReaction.DESTROY)
-                    .strength(0.5F, 0.5F)
+                    .strength(0.01F, 0.01F)
                     .sound(SoundType.METAL)
                     .lightLevel((L) -> {
                         return 1;
                     })
-                    .requiresCorrectToolForDrops()
     );
     public static FogBlock getFogBlock(){
         return new FogBlock(

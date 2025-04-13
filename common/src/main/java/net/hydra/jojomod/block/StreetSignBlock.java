@@ -1,7 +1,10 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +20,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -24,12 +28,17 @@ import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class StreetSignBlock extends HorizontalDirectionalBlock {
+public class StreetSignBlock extends HorizontalDirectionalBlock implements CancelDataDrivenDropLimits {
     public static final EnumProperty<StreetSignPart> PART = ModBlocks.STREET_SIGN_PART;
     public static final IntegerProperty DAMAGED= ModBlocks.DAMAGED;
     protected static final VoxelShape BASE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
@@ -134,7 +143,33 @@ public class StreetSignBlock extends HorizontalDirectionalBlock {
         $$0.add(FACING, PART, DAMAGED);
     }
 
+    @Override
+    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
+        if (state.getBlock() instanceof StreetSignBlock){
+            if (state.getValue(PART) == StreetSignPart.BOTTOM){
+                List<ItemStack> drops = new ArrayList<>();
+                ItemStack stack = ModItems.STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance().copy();
+                stack.getOrCreateTagElement("BlockStateTag").putInt("damaged",state.getValue(DAMAGED));
+                drops.add(stack);
+                return drops;
+            }
+        }
+        return new ArrayList<>();
+    }
 
+    @Override
+    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be, @Nullable Entity p_49879_, ItemStack p_49880_) {
+        if (state.getBlock() instanceof StreetSignBlock){
+            if (state.getValue(PART) == StreetSignPart.BOTTOM){
+                List<ItemStack> drops = new ArrayList<>();
+                ItemStack stack = ModItems.STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance().copy();
+                stack.getOrCreateTagElement("BlockStateTag").putInt("damaged",state.getValue(DAMAGED));
+                drops.add(stack);
+                return drops;
+            }
+        }
+        return new ArrayList<>();
+    }
     @Override
     public void setPlacedBy(Level $$0, BlockPos $$1, BlockState $$2, @Nullable LivingEntity $$3, ItemStack $$4) {
         super.setPlacedBy($$0, $$1, $$2, $$3, $$4);
