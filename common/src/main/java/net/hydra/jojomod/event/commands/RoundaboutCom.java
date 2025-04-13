@@ -92,6 +92,7 @@ public class RoundaboutCom {
                         commandSourceStack.hasPermission(2))
                 .executes(context->{
                     DynamicWorld w = DynamicWorld.generateD4CWorld(context.getSource().getServer());
+                    w.broadcastPacketsToPlayers(context.getSource().getServer());
                     Component worldText = ComponentUtils.wrapInSquareBrackets(
                             Component.literal(w.getName())
                     ).withStyle(

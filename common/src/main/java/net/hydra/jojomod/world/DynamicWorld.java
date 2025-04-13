@@ -26,9 +26,9 @@ public class DynamicWorld {
     /**
      * @param server The server to register the world to.
      * @param name The name of the dimension (roundabout:name)
-     * @param player The player the dynamic world is for. Will send a packet to them letting them know the dimension is ready.
+     * @param broadcastPacket Should broadcast to everyone that the world is made automatically?
      */
-    public DynamicWorld(MinecraftServer server, String name, @Nullable ServerPlayer player)
+    public DynamicWorld(MinecraftServer server, String name, boolean broadcastPacket)
     {
         this.name = name;
 
@@ -71,9 +71,16 @@ public class DynamicWorld {
         level.tick(()->true);
 
         levels.put(name, level);
+
+        if (broadcastPacket)
+            broadcastPacketsToPlayers(server);
+    }
+
+    public void broadcastPacketsToPlayers(MinecraftServer server)
+    {
         for (ServerPlayer sp : server.getPlayerList().getPlayers())
         {
-            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name, level, player);
+            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name, level, null);
         }
     }
 
@@ -130,12 +137,6 @@ public class DynamicWorld {
 
     public static DynamicWorld generateD4CWorld(MinecraftServer server)
     {
-        return new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999), null);
-    }
-
-    public static DynamicWorld generateD4CWorld(MinecraftServer server, ServerPlayer player)
-    {
-        DynamicWorld world = new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999), player);
-        return world;
+        return new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999), false);
     }
 }

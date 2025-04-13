@@ -415,6 +415,8 @@ public class PowersD4C extends PunchingStand {
             }
         }
 
+        world.broadcastPacketsToPlayers(this.getSelf().getServer());
+
         return true;
     }
 
