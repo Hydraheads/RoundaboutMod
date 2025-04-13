@@ -35,6 +35,10 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.CREAM_FIRE,
                 ModBlocks.BLOOD_SPLATTER,
                 ModBlocks.STREET_SIGN_DIO,
+                ModBlocks.STREET_SIGN_RIGHT,
+                ModBlocks.STREET_SIGN_STOP,
+                ModBlocks.STREET_SIGN_YIELD,
+                ModBlocks.STREET_SIGN_DANGER,
                 ModBlocks.BLUE_BLOOD_SPLATTER,
                 ModBlocks.ENDER_BLOOD_SPLATTER);
         FabricPacketManager.registerS2CPackets();

@@ -39,7 +39,7 @@ import java.util.List;
 public class StreetSignBlock extends HorizontalDirectionalBlock implements CancelDataDrivenDropLimits {
     public static final EnumProperty<StreetSignPart> PART = ModBlocks.STREET_SIGN_PART;
     public static final IntegerProperty DAMAGED= ModBlocks.DAMAGED;
-    protected static final VoxelShape BASE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
+    protected static final VoxelShape BASE = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
     protected static final VoxelShape TOP = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
 
 
