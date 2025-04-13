@@ -976,20 +976,22 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$POSE_EMOTE, (byte)0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_SLOT, ItemStack.EMPTY);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$MASK_VOICE_SLOT, ItemStack.EMPTY);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_LEVEL, (byte)0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte)0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte)0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT, (byte)0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte)0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
+        if (!((LivingEntity)(Object)this).getEntityData().hasItem(ROUNDABOUT$POS)) {
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSE_EMOTE, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MASK_SLOT, ItemStack.EMPTY);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MASK_VOICE_SLOT, ItemStack.EMPTY);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_LEVEL, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
+        }
     }
 
     @Shadow

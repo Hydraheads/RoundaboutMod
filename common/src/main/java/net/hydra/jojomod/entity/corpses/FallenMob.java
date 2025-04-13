@@ -79,6 +79,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.entityData.set(TEAM_COLOR, fr);
     }
 
+    /**Corpses will attempt to use their owner's scoreboard by default.
+     *this can accomplish not killing your allies and their corpses*/
     @Override
     public Team getTeam() {
         if (ClientNetworking.getAppropriateConfig().justiceCorpsesUseOwnerTeam) {

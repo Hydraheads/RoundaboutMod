@@ -1687,15 +1687,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void roundabout$initDataTrackerRoundabout(CallbackInfo ci) {
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_ID, -1);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT_TS_DAMAGE, (byte) 0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ON_STAND_FIRE, (byte) 0);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
-        ((LivingEntity)(Object)this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
+        if (!((LivingEntity)(Object)this).getEntityData().hasItem(ROUNDABOUT$STAND_ID)) {
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ID, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT_TS_DAMAGE, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ON_STAND_FIRE, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
+        }
     }
 
     @Inject(method = "handleEntityEvent", at = @At(value = "HEAD"), cancellable = true)
