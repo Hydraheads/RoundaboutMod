@@ -247,6 +247,7 @@ public class ModBlocks {
                         .pushReaction(PushReaction.DESTROY)
                         .strength(0.01F, 0.01F)
                         .sound(SoundType.METAL)
+                        .noCollission()
                         .lightLevel((L) -> {
                             return 1;
                         })

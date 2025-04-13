@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:blue_dye"
+    },
+    "C": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " # ",
+    "C##",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:wall_street_sign_dio"
+  },
+  "show_notification": true
+}

@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StreetWallSignBlock extends HorizontalDirectionalBlock implements CancelDataDrivenDropLimits, SimpleWaterloggedBlock {
+public class StreetWallSignBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape BASE = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
     protected static final VoxelShape TOP = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
@@ -40,10 +40,6 @@ public class StreetWallSignBlock extends HorizontalDirectionalBlock implements C
     protected static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0);
     protected static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0);
 
-    @Override
-    protected void spawnDestroyParticles(Level $$0, Player $$1, BlockPos $$2, BlockState $$3) {
-
-    }
     public StreetWallSignBlock(BlockBehaviour.Properties $$1) {
         super($$1);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
@@ -142,17 +138,6 @@ public class StreetWallSignBlock extends HorizontalDirectionalBlock implements C
         }
         return new ArrayList<>();
     }
-    @Override
-    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
-        return dropGen(state,sl,bpos,be);
-    }
-
-    @Override
-    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be, @Nullable Entity p_49879_, ItemStack p_49880_) {
-        return dropGen(state,sl,bpos,be);
-    }
-
-
     @SuppressWarnings("deprecation")
     @Override
     public boolean isPathfindable(BlockState $$0, BlockGetter $$1, BlockPos $$2, PathComputationType $$3) {
