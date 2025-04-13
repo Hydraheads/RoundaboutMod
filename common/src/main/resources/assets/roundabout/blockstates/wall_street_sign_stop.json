@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "roundabout:block/wall_street_sign_stop",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "roundabout:block/wall_street_sign_stop",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "roundabout:block/wall_street_sign_stop",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "roundabout:block/wall_street_sign_stop",
+      "y": 90
+    }
+  }
+}

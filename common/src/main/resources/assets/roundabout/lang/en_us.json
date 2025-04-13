@@ -140,6 +140,11 @@
   "block.roundabout.street_sign_stop": "Street Sign: Stop",
   "block.roundabout.street_sign_yield": "Street Sign: Yield",
   "block.roundabout.street_sign_danger": "Street Sign: Danger",
+  "block.roundabout.wall_street_sign_dio": "Street Sign Plate: Left",
+  "block.roundabout.wall_street_sign_right": "Street Sign Plate: Right",
+  "block.roundabout.wall_street_sign_stop": "Street Sign Plate: Stop",
+  "block.roundabout.wall_street_sign_yield": "Street Sign Plate: Yield",
+  "block.roundabout.wall_street_sign_danger": "Street Sign Plate: Danger",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",

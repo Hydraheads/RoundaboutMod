@@ -99,6 +99,11 @@ public class ForgeEvents {
         ModBlocks.STREET_SIGN_STOP = ForgeBlocks.STREET_SIGN_STOP.get();
         ModBlocks.STREET_SIGN_YIELD = ForgeBlocks.STREET_SIGN_YIELD.get();
         ModBlocks.STREET_SIGN_DANGER = ForgeBlocks.STREET_SIGN_DANGER.get();
+        ModBlocks.WALL_STREET_SIGN_DIO = ForgeBlocks.WALL_STREET_SIGN_DIO.get();
+        ModBlocks.WALL_STREET_SIGN_RIGHT = ForgeBlocks.WALL_STREET_SIGN_RIGHT.get();
+        ModBlocks.WALL_STREET_SIGN_STOP = ForgeBlocks.WALL_STREET_SIGN_STOP.get();
+        ModBlocks.WALL_STREET_SIGN_YIELD = ForgeBlocks.WALL_STREET_SIGN_YIELD.get();
+        ModBlocks.WALL_STREET_SIGN_DANGER = ForgeBlocks.WALL_STREET_SIGN_DANGER.get();
         ModBlocks.FOG_DIRT = ForgeBlocks.FOG_DIRT.get();
         ModBlocks.FOG_DIRT_COATING = ForgeBlocks.FOG_DIRT_COATING.get();
         ModBlocks.FOG_CLAY = ForgeBlocks.FOG_CLAY.get();

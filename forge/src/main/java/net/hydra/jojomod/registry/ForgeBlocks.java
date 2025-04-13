@@ -53,6 +53,17 @@ public class ForgeBlocks {
             ModBlocks::getStreetSignBlockProperties);
     public static final RegistryObject<Block> STREET_SIGN_DANGER = BLOCKS.register("street_sign_danger",
             ModBlocks::getStreetSignBlockProperties);
+
+    public static final RegistryObject<Block> WALL_STREET_SIGN_DIO = BLOCKS.register("wall_street_sign_dio",
+            ModBlocks::getWallStreetSignBlockProperties);
+    public static final RegistryObject<Block> WALL_STREET_SIGN_RIGHT = BLOCKS.register("wall_street_sign_right",
+            ModBlocks::getWallStreetSignBlockProperties);
+    public static final RegistryObject<Block> WALL_STREET_SIGN_STOP = BLOCKS.register("wall_street_sign_stop",
+            ModBlocks::getWallStreetSignBlockProperties);
+    public static final RegistryObject<Block> WALL_STREET_SIGN_YIELD = BLOCKS.register("wall_street_sign_yield",
+            ModBlocks::getWallStreetSignBlockProperties);
+    public static final RegistryObject<Block> WALL_STREET_SIGN_DANGER = BLOCKS.register("wall_street_sign_danger",
+            ModBlocks::getWallStreetSignBlockProperties);
     public static final RegistryObject<Block> FOG_DIRT = BLOCKS.register("fog_dirt",
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_DIRT_COATING = BLOCKS.register("fog_dirt_coating",

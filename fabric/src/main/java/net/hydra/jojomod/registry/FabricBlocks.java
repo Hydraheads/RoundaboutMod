@@ -48,16 +48,22 @@ public class FabricBlocks {
     );
     public static final Block GODDESS_STATUE_BLOCK = registerBlockUnstackable("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
     , 1);
-    public static final Block STREET_SIGN_DIO = registerBlockUnstackable("street_sign_dio",ModBlocks.getStreetSignBlockProperties()
+    public static final Block STREET_SIGN_DIO = registerBlockUnstackableItemless("street_sign_dio",ModBlocks.getStreetSignBlockProperties()
             , 1);
-    public static final Block STREET_SIGN_RIGHT = registerBlockUnstackable("street_sign_right",ModBlocks.getStreetSignBlockProperties()
+    public static final Block STREET_SIGN_RIGHT = registerBlockUnstackableItemless("street_sign_right",ModBlocks.getStreetSignBlockProperties()
             , 1);
-    public static final Block STREET_SIGN_STOP = registerBlockUnstackable("street_sign_stop",ModBlocks.getStreetSignBlockProperties()
+    public static final Block STREET_SIGN_STOP = registerBlockUnstackableItemless("street_sign_stop",ModBlocks.getStreetSignBlockProperties()
             , 1);
-    public static final Block STREET_SIGN_YIELD = registerBlockUnstackable("street_sign_yield",ModBlocks.getStreetSignBlockProperties()
+    public static final Block STREET_SIGN_YIELD = registerBlockUnstackableItemless("street_sign_yield",ModBlocks.getStreetSignBlockProperties()
             , 1);
-    public static final Block STREET_SIGN_DANGER = registerBlockUnstackable("street_sign_danger",ModBlocks.getStreetSignBlockProperties()
+    public static final Block STREET_SIGN_DANGER = registerBlockUnstackableItemless("street_sign_danger",ModBlocks.getStreetSignBlockProperties()
             , 1);
+    public static final Block WALL_STREET_SIGN_DIO = registerBlock("wall_street_sign_dio",ModBlocks.getWallStreetSignBlockProperties());
+    public static final Block WALL_STREET_SIGN_RIGHT = registerBlock("wall_street_sign_right",ModBlocks.getWallStreetSignBlockProperties());
+    public static final Block WALL_STREET_SIGN_STOP = registerBlock("wall_street_sign_stop",ModBlocks.getWallStreetSignBlockProperties());
+    public static final Block WALL_STREET_SIGN_YIELD = registerBlock("wall_street_sign_yield",ModBlocks.getWallStreetSignBlockProperties());
+    public static final Block WALL_STREET_SIGN_DANGER = registerBlock("wall_street_sign_danger",ModBlocks.getWallStreetSignBlockProperties());
+
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlock("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
     public static final Block ORANGE_FIRE = registerBlock("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
@@ -134,6 +140,9 @@ public class FabricBlocks {
                 new BlockItem(block, new Item.Properties().stacksTo(stacksize)));
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
+    private static Block registerBlockUnstackableItemless(String name, Block block, int stacksize) {
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
 
     private static Item registerBlockItem(String name, Block block){
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
@@ -159,6 +168,11 @@ public class FabricBlocks {
         ModBlocks.STREET_SIGN_STOP = STREET_SIGN_STOP;
         ModBlocks.STREET_SIGN_YIELD = STREET_SIGN_YIELD;
         ModBlocks.STREET_SIGN_DANGER = STREET_SIGN_DANGER;
+        ModBlocks.WALL_STREET_SIGN_DIO = WALL_STREET_SIGN_DIO;
+        ModBlocks.WALL_STREET_SIGN_RIGHT = WALL_STREET_SIGN_RIGHT;
+        ModBlocks.WALL_STREET_SIGN_STOP = WALL_STREET_SIGN_STOP;
+        ModBlocks.WALL_STREET_SIGN_YIELD = WALL_STREET_SIGN_YIELD;
+        ModBlocks.WALL_STREET_SIGN_DANGER = WALL_STREET_SIGN_DANGER;
         ModBlocks.STEREO = STEREO;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;

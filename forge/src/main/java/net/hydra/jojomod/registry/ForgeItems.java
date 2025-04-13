@@ -15,6 +15,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -327,6 +328,26 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_ingot",
             () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_dio",
+    () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DIO.get(),
+                    new Item.Properties()
+                            )));
+    public static final RegistryObject<Item> WALL_STREET_SIGN_RIGHT_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_right",
+            () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_RIGHT.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<Item> WALL_STREET_SIGN_STOP_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_stop",
+            () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_STOP.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<Item> WALL_STREET_SIGN_YIELD_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_yield",
+            () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_YIELD.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<Item> WALL_STREET_SIGN_DANGER_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_danger",
+            () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DANGER.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<Item> STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_dio_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DIO.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> STREET_SIGN_RIGHT_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_right_item",

@@ -39,8 +39,8 @@ import java.util.List;
 public class StreetSignBlock extends HorizontalDirectionalBlock implements CancelDataDrivenDropLimits {
     public static final EnumProperty<StreetSignPart> PART = ModBlocks.STREET_SIGN_PART;
     public static final IntegerProperty DAMAGED= ModBlocks.DAMAGED;
-    protected static final VoxelShape BASE = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
-    protected static final VoxelShape TOP = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
+    protected static final VoxelShape BASE = Block.box(6.0, 0, 6.0, 10.0, 14.0, 10.0);
+    protected static final VoxelShape TOP = Block.box(6.0, 0, 6.0, 10.0, 14.0, 10.0);
 
 
     @Override
@@ -54,12 +54,9 @@ public class StreetSignBlock extends HorizontalDirectionalBlock implements Cance
 
     @Override
     public void fallOn(Level $$0, BlockState $$1, BlockPos $$2, Entity $$3, float $$4) {
-        super.fallOn($$0, $$1, $$2, $$3, $$4 * 2F);
+        super.fallOn($$0, $$1, $$2, $$3, $$4 * 1.5F);
     }
 
-    private static Direction getNeighbourDirection(BedPart $$0, Direction $$1) {
-        return $$0 == BedPart.FOOT ? $$1 : $$1.getOpposite();
-    }
 
     @Override
     public void playerWillDestroy(Level $$0, BlockPos $$1, BlockState $$2, Player $$3) {

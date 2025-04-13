@@ -46,7 +46,13 @@ public class ModBlocks {
     public static Block STREET_SIGN_STOP;
     public static Block STREET_SIGN_YIELD;
     public static Block STREET_SIGN_DANGER;
+    public static Block WALL_STREET_SIGN_DIO;
+    public static Block WALL_STREET_SIGN_RIGHT;
+    public static Block WALL_STREET_SIGN_STOP;
+    public static Block WALL_STREET_SIGN_YIELD;
+    public static Block WALL_STREET_SIGN_DANGER;
     public static Block STEREO;
+
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
     public static Block BLUE_FIRE;
@@ -220,6 +226,20 @@ public class ModBlocks {
     );
     public static StreetSignBlock getStreetSignBlockProperties(){
         return new StreetSignBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.STONE)
+                        .noOcclusion()
+                        .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                        .pushReaction(PushReaction.DESTROY)
+                        .strength(0.01F, 0.01F)
+                        .sound(SoundType.METAL)
+                        .lightLevel((L) -> {
+                            return 1;
+                        })
+        );
+    }
+    public static StreetWallSignBlock getWallStreetSignBlockProperties(){
+        return new StreetWallSignBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.STONE)
                         .noOcclusion()

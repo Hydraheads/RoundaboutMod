@@ -208,6 +208,11 @@ public class FabricItems {
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_DIO);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_RIGHT);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_STOP);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_YIELD);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_DANGER);
                         entries.accept(STREET_SIGN_DIO_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_RIGHT_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_STOP_BLOCK_ITEM);
