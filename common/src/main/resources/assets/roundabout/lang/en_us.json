@@ -553,6 +553,8 @@
 
   "gamerule.roundaboutStandGriefing": "Stand Griefing",
   "gamerule.roundaboutStandGriefing.description": "Controls whether or not stands can mess with blocks",
+  "gamerule.roundaboutMonsterStandFireSpreads": "Monsters Spread Stand Fire",
+  "gamerule.roundaboutMonsterStandFireSpreads.description": "Controls whether or not monsters with Magician's Red spread fire.",
   "gamerule.roundaboutStandLeveling": "Stand Leveling",
   "gamerule.roundaboutStandLeveling.description": "Whether or not stands start off maxed",
   "gamerule.roundaboutKeepStandsOnDeath": "Keep Stands on Death",
