@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.event.powers.visagedata.DIOVisage;
+import net.hydra.jojomod.event.powers.visagedata.EnyaVisage;
 import net.hydra.jojomod.event.powers.visagedata.JotaroVisage;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
@@ -417,6 +418,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties(), new JotaroVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",
             () -> new MaskItem(new Item.Properties(), new DIOVisage(null))));
+    public static final RegistryObject<Item> ENYA_MASK = addToTab(ITEMS.register("enya_mask",
+            () -> new MaskItem(new Item.Properties(), new EnyaVisage(null))));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

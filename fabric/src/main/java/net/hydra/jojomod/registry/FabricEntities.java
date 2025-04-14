@@ -41,6 +41,13 @@ public class FabricEntities {
                         EntityType.Builder.of(OVAEnyaNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_ova_enya")
                 );
+        public static final EntityType<EnyaNPC> ENYA =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_enya"),
+                        EntityType.Builder.of(EnyaNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_enya")
+                );
         public static final EntityType<JotaroNPC> JOTARO =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -297,6 +304,7 @@ public class FabricEntities {
                 ModEntities.FALLEN_CREEPER = FALLEN_CREEPER;
 
                 ModEntities.OVA_ENYA = OVA_ENYA;
+                ModEntities.ENYA = ENYA;
                 ModEntities.JOTARO = JOTARO;
                 ModEntities.DIO = DIO;
                 ModEntities.STEVE_NPC = STEVE_NPC;
@@ -308,6 +316,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(DIO, JotaroNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());

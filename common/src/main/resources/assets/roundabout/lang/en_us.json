@@ -64,6 +64,8 @@
   "item.roundabout.jotaro_mask.desc": "Jotaro Kujo (Part 3)",
   "item.roundabout.dio_mask": "DIO Visage",
   "item.roundabout.dio_mask.desc": "DIO (Part 3)",
+  "item.roundabout.enya_mask": "Enya Mask",
+  "item.roundabout.enya_mask.desc": "Enya Geil (Part 3)",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
@@ -111,6 +113,7 @@
   "entity.roundabout.fallen_skeleton": "Skeleton Corpse",
   "entity.roundabout.fallen_spider": "Spider Corpse",
   "entity.roundabout.jojo_npc_ova_enya": "Enya",
+  "entity.roundabout.jojo_npc_enya": "Enya",
   "entity.roundabout.jojo_npc_jotaro": "Jotaro",
   "entity.roundabout.jojo_npc_dio": "DIO",
   "entity.roundabout.jojo_npc_steve": "Steve",

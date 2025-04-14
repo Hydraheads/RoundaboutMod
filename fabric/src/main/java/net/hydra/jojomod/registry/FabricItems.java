@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.event.powers.visagedata.DIOVisage;
+import net.hydra.jojomod.event.powers.visagedata.EnyaVisage;
 import net.hydra.jojomod.event.powers.visagedata.JotaroVisage;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
@@ -95,6 +96,7 @@ public class FabricItems {
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new VisageData(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_CLAY = registerItem("fog_clay", (Item) new FogBlockItem(ModBlocks.FOG_CLAY, new Item.Properties(), Blocks.CLAY));
@@ -233,6 +235,7 @@ public class FabricItems {
                         entries.accept(BLANK_MASK);
                         entries.accept(JOTARO_MASK);
                         entries.accept(DIO_MASK);
+                        entries.accept(ENYA_MASK);
 
                     }).build());
 
@@ -379,6 +382,7 @@ public class FabricItems {
         ModItems.BLANK_MASK = BLANK_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
         ModItems.DIO_MASK = DIO_MASK;
+        ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;

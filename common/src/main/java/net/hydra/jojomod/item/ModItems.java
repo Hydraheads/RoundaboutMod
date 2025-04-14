@@ -64,6 +64,7 @@ public class ModItems {
     public static Item BLANK_MASK;
     public static Item JOTARO_MASK;
     public static Item DIO_MASK;
+    public static Item ENYA_MASK;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 

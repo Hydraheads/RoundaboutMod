@@ -35,6 +35,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_ova_enya").toString())
             );
+    public static final RegistryObject<EntityType<EnyaNPC>> ENYA =
+            ENTITY_TYPES.register("jojo_npc_enya", () ->
+                    EntityType.Builder.of(EnyaNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_enya").toString())
+            );
     public static final RegistryObject<EntityType<JotaroNPC>> JOTARO =
             ENTITY_TYPES.register("jojo_npc_jotaro", () ->
                     EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).

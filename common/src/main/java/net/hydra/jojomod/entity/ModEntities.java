@@ -44,6 +44,7 @@ public class ModEntities {
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
     public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;
     public static EntityType<OVAEnyaNPC> OVA_ENYA;
+    public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
     public static EntityType<DIONPC> DIO;
