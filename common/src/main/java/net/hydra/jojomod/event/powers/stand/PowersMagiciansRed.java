@@ -119,6 +119,10 @@ public class PowersMagiciansRed extends PunchingStand {
         return cooldown;
     }
 
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().guardPoints.magiciansRedDefend;
+    }
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
             if (leaded != null) {

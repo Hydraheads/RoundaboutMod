@@ -48,6 +48,12 @@ public class PowersD4C extends PunchingStand {
         return new PowersD4C(entity);
     }
 
+
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().guardPoints.d4cDefend;
+    }
+
     @Override
     public StandEntity getNewStandEntity() {
         return ModEntities.D4C.create(this.getSelf().level());

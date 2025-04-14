@@ -93,6 +93,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().guardPoints.starPlatinumDefend;
+    }
+    @Override
     public void playSummonEffects(boolean forced){
         if (!forced) {
             if (((StandUser) this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ATOMIC_SKIN) {

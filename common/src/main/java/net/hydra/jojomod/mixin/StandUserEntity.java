@@ -252,9 +252,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
      * Guard variables for stand blocking
      **/
     @Unique
-    public final float roundabout$maxGuardPoints = 15F;
-    @Unique
-    private float roundabout$GuardPoints = this.roundabout$getMaxGuardPoints();
+    private float roundabout$GuardPoints = 10;
     @Unique
     private boolean roundabout$GuardBroken = false;
     @Unique
@@ -1233,7 +1231,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return (float) (this.roundabout$maxGuardPoints*(ClientNetworking.getAppropriateConfig().damageMultipliers.standGuardMultiplier*0.01));
+        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().damageMultipliers.standGuardMultiplier*0.01));
     }
     @Unique
     public float roundabout$getGuardCooldown(){
@@ -1315,6 +1313,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             if (this.roundabout$isGuarding() && !roundabout$shieldNotDisabled()){
                 this.roundabout$setAttackTimeDuring(0);
+            }
+        } else {
+            if (this.roundabout$GuardBroken){
+                this.roundabout$regenGuard(1);
             }
         }
         if (this.roundabout$GuardCooldown > 0){this.roundabout$GuardCooldown--;}

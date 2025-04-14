@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractFurnaceMenu;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -64,22 +65,24 @@ public abstract class ZAbstractFurnaceScreen<T extends AbstractFurnaceMenu> exte
             StandPowers powers = user.roundabout$getStandPowers();
 
             if (powers.canLightFurnace()){
-                int leftGearPos = i +80;
-                int topGearPos = j+55;
-                if (roundabout$isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
-                    ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SMELT);
-                    SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
-                    soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.FIRECHARGE_USE, 1.0F));
-
-                    /**
-                    if (this.menu instanceof FurnaceMenu fm) {
-                        Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
-                        if (ct instanceof FurnaceBlockEntity fbe){
-                            Roundabout.LOGGER.info("Sigma Sigma Boy");
-                        }
+                int it = ClientNetworking.getAppropriateConfig().magiciansRedFurnaceTicks;
+                if (it > 0) {
+                    int leftGearPos = i + 80;
+                    int topGearPos = j + 55;
+                    if (roundabout$isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SMELT);
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.FIRECHARGE_USE, 1.0F));
+                        /**
+                         if (this.menu instanceof FurnaceMenu fm) {
+                         Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
+                         if (ct instanceof FurnaceBlockEntity fbe){
+                         Roundabout.LOGGER.info("Sigma Sigma Boy");
+                         }
+                         }
+                         */
+                        cir.setReturnValue(true);
                     }
-                     */
-                    cir.setReturnValue(true);
                 }
             }
         }

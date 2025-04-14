@@ -66,6 +66,8 @@ import java.util.Set;
     public Integer maxMagiciansRedFlames;
     @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
     public Integer maxMagiciansRedFlameDistance;
+    @IntOption(group = "inherit", value = 1100, min = -1, max = 72000)
+    public Integer magiciansRedFurnaceTicks;
     @IntOption(group = "inherit", value = 15, min = 0, max = 365)
     public Integer basePunchAngle;
     public Set<String> standArrowPoolv1 = new HashSet<>(
@@ -88,6 +90,8 @@ import java.util.Set;
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
     public DamageMultipliers damageMultipliers;
+    @NestedOption(group = "modded")
+    public GuardPoints guardPoints;
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
@@ -174,6 +178,16 @@ import java.util.Set;
         public Integer matchDamage;
         @BooleanOption(group = "inherit", value = true)
         public Boolean standUserMobsTakePlayerDamageMultipliers;
+    }
+    public static class GuardPoints {
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer theWorldDefend;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer starPlatinumDefend;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer magiciansRedDefend;
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+        public Integer d4cDefend;
     }
     public static class Cooldowns {
         @IntOption(group = "inherit", value = 27, min = 0, max = 72000)

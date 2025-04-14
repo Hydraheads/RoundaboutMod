@@ -105,6 +105,10 @@ public class StandPowers {
     public StandPowers generateStandPowers(LivingEntity entity){
         return null;
     }
+    public StandPowers generateStandPowersPre(LivingEntity entity){
+        ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
+        return generateStandPowers(entity);
+    }
 
     public LivingEntity getSelf(){
         return this.self;
@@ -155,6 +159,9 @@ public class StandPowers {
     }
     public byte getPermaCastContext(){
         return -1;
+    }
+    public int getMaxGuardPoints(){
+        return 10;
     }
     public boolean canSeeThroughFog(){
         return false;

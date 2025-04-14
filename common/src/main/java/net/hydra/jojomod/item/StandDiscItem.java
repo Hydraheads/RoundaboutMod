@@ -34,7 +34,7 @@ public class StandDiscItem extends Item {
     }
 
     public void generateStandPowers(LivingEntity entity){
-        ((StandUser)entity).roundabout$setStandPowers(standPowers.generateStandPowers(entity));
+        ((StandUser)entity).roundabout$setStandPowers(standPowers.generateStandPowersPre(entity));
     }
 
     public void generateStandPowerRejection(LivingEntity entity){

@@ -85,6 +85,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().guardPoints.theWorldDefend;
+    }
+    @Override
     public Byte getLastHitSound(){
 
         double rand = Math.random();
