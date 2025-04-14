@@ -1285,7 +1285,10 @@ public class MainUtil {
                     Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
                     if (ct instanceof AbstractFurnaceBlockEntity fbe){
 
-                        ((IAbstractFurnaceBlockEntity)fbe).roundabout$setFurnaceHeatingTime(1000);
+                        int it = ClientNetworking.getAppropriateConfig().magiciansRedFurnaceTicks;
+                        if (it > 0) {
+                            ((IAbstractFurnaceBlockEntity) fbe).roundabout$setFurnaceHeatingTime(it);
+                        }
                     }
                  }
             }
