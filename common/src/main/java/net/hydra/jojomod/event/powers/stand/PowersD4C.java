@@ -24,6 +24,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -397,8 +398,8 @@ public class PowersD4C extends PunchingStand {
         BlockPos thisPosition = this.getSelf().blockPosition();
         int radius = ClientNetworking.getAppropriateConfig().chargeSettings.d4cDimensionKidnapRadius;
 
-        List<Player> players = this.getSelf().getServer().overworld().getNearbyPlayers(TargetingConditions.DEFAULT, this.getSelf(),
-                new AABB(thisPosition.subtract(new Vec3i(-radius, -radius, -radius)), thisPosition.subtract(new Vec3i(radius, radius, radius))));
+        List<LivingEntity> entities = this.getSelf().getServer().overworld().getNearbyEntities(LivingEntity.class, TargetingConditions.DEFAULT, this.getSelf(),
+                new AABB(thisPosition).inflate(radius));
 
         DynamicWorld world = DynamicWorld.generateD4CWorld(this.getSelf().getServer());
         if (world.getLevel() != null)
@@ -408,11 +409,20 @@ public class PowersD4C extends PunchingStand {
         else
             return false;
 
-        for (Player player : players)
+        for (LivingEntity entity : entities)
         {
-            if (!player.equals(this.getSelf()))
+            if (!entity.equals(this.getSelf()))
             {
-                queuedWorldTransports.put(player.getId(), world);
+                if (entity instanceof StandEntity)
+                    continue;
+
+                if (entity instanceof Player)
+                    queuedWorldTransports.put(entity.getId(), world);
+                else
+                    entity.teleportTo(world.getLevel(), entity.getX(), entity.getY(), entity.getZ(), Set.of(
+                            RelativeMovement.X,
+                            RelativeMovement.Y,
+                            RelativeMovement.Z), entity.getYRot(), entity.getXRot());
             }
         }
 
