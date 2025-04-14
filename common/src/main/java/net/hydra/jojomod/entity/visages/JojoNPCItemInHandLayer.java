@@ -67,7 +67,7 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
                 $$4.mulPose(Axis.XP.rotationDegrees(-90.0F));
                 $$4.mulPose(Axis.YP.rotationDegrees(180.0F));
                 boolean $$7 = $$3 == HumanoidArm.LEFT;
-                $$4.translate((float)($$7 ? -1 : 1) / 16.0F, 0.125F, -0.625F);
+                $$4.translate((float)($$7 ? -1 : 1) / 16.0F, 0.125F, -0.5F);
                 //Roundabout.LOGGER.info("1: "+$$0.getName()+" 2: "+($$0.getItemInHand(InteractionHand.MAIN_HAND) ==
                         //$$0.getUseItem())+" 3: "+($$1==$$0.getUseItem()));
                 if (play != null){

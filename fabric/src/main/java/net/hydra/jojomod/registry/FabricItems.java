@@ -231,6 +231,8 @@ public class FabricItems {
                         entries.accept(ModBlocks.STEREO);
                         entries.accept(WORTHY_ARROW);
                         entries.accept(BLANK_MASK);
+                        entries.accept(JOTARO_MASK);
+                        entries.accept(DIO_MASK);
 
                     }).build());
 

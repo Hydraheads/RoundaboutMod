@@ -351,11 +351,11 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     private void roundabout$renderOtherHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3,
                                             ModelPart $$4, @Nullable ModelPart $$5, Model ML, ResourceLocation texture){
 
-        if ($$4 != null) {
+        if ($$4 != null && texture != null) {
             $$4.xRot = 0.0F;
             $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
         }
-        if ($$5 != null) {
+        if ($$5 != null && texture != null) {
             $$5.xRot = 0.0F;
             $$5.render($$0, $$1.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
         }

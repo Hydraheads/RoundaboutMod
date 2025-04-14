@@ -14,7 +14,7 @@ public class DIOVisage extends VisageData {
     }
     @Override
     public JojoNPC getModelNPC(Player pl){
-        return ModEntities.JOTARO.create(pl.level());
+        return ModEntities.DIO.create(pl.level());
     }
     @Override
     public Vec3 sizeModifier(){

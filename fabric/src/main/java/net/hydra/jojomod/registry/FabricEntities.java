@@ -14,10 +14,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
-import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
+import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -40,30 +37,37 @@ public class FabricEntities {
         public static final EntityType<OVAEnyaNPC> OVA_ENYA =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
-                        new ResourceLocation(Roundabout.MOD_ID, "jnpc_ova_enya"),
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_ova_enya"),
                         EntityType.Builder.of(OVAEnyaNPC::new, MobCategory.MISC).
-                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_ova_enya")
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_ova_enya")
                 );
         public static final EntityType<JotaroNPC> JOTARO =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
-                        new ResourceLocation(Roundabout.MOD_ID, "jnpc_jotaro"),
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro"),
                         EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).
-                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_jotaro")
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_jotaro")
+                );
+        public static final EntityType<DIONPC> DIO =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_dio"),
+                        EntityType.Builder.of(DIONPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_dio")
                 );
         public static final EntityType<PlayerSteveNPC> STEVE_NPC =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
-                        new ResourceLocation(Roundabout.MOD_ID, "jnpc_steve"),
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_steve"),
                         EntityType.Builder.of(PlayerSteveNPC::new, MobCategory.MISC).
-                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_steve")
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_steve")
                 );
         public static final EntityType<PlayerAlexNPC> ALEX_NPC =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
-                        new ResourceLocation(Roundabout.MOD_ID, "jnpc_alex"),
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_alex"),
                         EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.MISC).
-                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jnpc_alex")
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_alex")
                 );
         public static final EntityType<FogCloneEntity> FOG_CLONE =
                 Registry.register(
@@ -294,6 +298,7 @@ public class FabricEntities {
 
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.JOTARO = JOTARO;
+                ModEntities.DIO = DIO;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.FOG_CLONE = FOG_CLONE;
@@ -304,6 +309,7 @@ public class FabricEntities {
 
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(DIO, JotaroNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(FOG_CLONE, PlayerAlexNPC.createAttributes());

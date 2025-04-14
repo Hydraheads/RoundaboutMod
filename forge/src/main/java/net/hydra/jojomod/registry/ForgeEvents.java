@@ -12,10 +12,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
-import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
+import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -52,6 +49,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
+        event.put(ForgeEntities.DIO.get(), DIONPC.createAttributes().build());
         event.put(ForgeEntities.STEVE_NPC.get(), PlayerSteveNPC.createAttributes().build());
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.FOG_CLONE.get(), PlayerAlexNPC.createAttributes().build());
@@ -286,6 +284,7 @@ public class ForgeEvents {
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.JOTARO = ForgeEntities.JOTARO.get();
+        ModEntities.DIO = ForgeEntities.DIO.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();

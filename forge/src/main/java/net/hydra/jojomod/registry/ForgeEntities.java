@@ -10,10 +10,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
-import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
+import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -33,28 +30,34 @@ public class ForgeEntities {
                             build(new ResourceLocation(Roundabout.MOD_ID, "terrier").toString())
             );
     public static final RegistryObject<EntityType<OVAEnyaNPC>> OVA_ENYA =
-            ENTITY_TYPES.register("jnpc_ova_enya", () ->
+            ENTITY_TYPES.register("jojo_npc_ova_enya", () ->
                     EntityType.Builder.of(OVAEnyaNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_ova_enya").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_ova_enya").toString())
             );
     public static final RegistryObject<EntityType<JotaroNPC>> JOTARO =
-            ENTITY_TYPES.register("jnpc_jotaro", () ->
+            ENTITY_TYPES.register("jojo_npc_jotaro", () ->
                     EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_jotaro").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro").toString())
+            );
+    public static final RegistryObject<EntityType<DIONPC>> DIO =
+            ENTITY_TYPES.register("jojo_npc_dio", () ->
+                    EntityType.Builder.of(DIONPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_dio").toString())
             );
     public static final RegistryObject<EntityType<PlayerSteveNPC>> STEVE_NPC =
-            ENTITY_TYPES.register("jnpc_steve", () ->
+            ENTITY_TYPES.register("jojo_npc_steve", () ->
                     EntityType.Builder.of(PlayerSteveNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_steve").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_steve").toString())
             );
     public static final RegistryObject<EntityType<PlayerAlexNPC>> ALEX_NPC =
-            ENTITY_TYPES.register("jnpc_alex", () ->
+            ENTITY_TYPES.register("jojo_npc_alex", () ->
                     EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "jnpc_alex").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_alex").toString())
             );
     public static final RegistryObject<EntityType<FogCloneEntity>> FOG_CLONE =
             ENTITY_TYPES.register("fog_clone", () ->

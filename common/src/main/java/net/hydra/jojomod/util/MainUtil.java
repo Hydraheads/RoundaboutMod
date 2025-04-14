@@ -1295,6 +1295,19 @@ public class MainUtil {
         }
     }
 
+
+    public static boolean isVampireBurnTick(LivingEntity ent) {
+        if (ent.level().isDay() && !ent.level().isClientSide) {
+            float $$0 = ent.getLightLevelDependentMagicValue();
+            BlockPos $$1 = BlockPos.containing(ent.getX(), ent.getEyeY(), ent.getZ());
+            if ($$0 > 0.5F && ent.level().random.nextFloat() * 30.0F < ($$0 - 0.4F) * 2.0F && ent.level().canSeeSky($$1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {

@@ -8,10 +8,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
-import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
-import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
+import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 
@@ -49,6 +46,7 @@ public class ModEntities {
     public static EntityType<OVAEnyaNPC> OVA_ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
+    public static EntityType<DIONPC> DIO;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<FogCloneEntity> FOG_CLONE;
