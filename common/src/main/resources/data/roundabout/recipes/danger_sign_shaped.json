@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "roundabout:wall_street_sign_danger"
+    },
+    "C": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " # ",
+    " C ",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:street_sign_danger_item"
+  },
+  "show_notification": true
+}
