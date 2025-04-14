@@ -728,6 +728,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (roundabout$sealedTicks > -1){
             roundabout$sealedTicks--;
+            if (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative()){
+                roundabout$sealedTicks = -1;
+            }
             if (roundabout$sealedTicks <= -1){
                 this.roundabout$setDrowning(false);
             }
