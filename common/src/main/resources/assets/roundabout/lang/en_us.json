@@ -689,6 +689,7 @@
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
+  "power_inventory.roundabout.settings.attack_offset": "Attack Position",
   "power_inventory.roundabout.settings.distance": "Following Distance",
   "power_inventory.roundabout.settings.opacity": "Opacity (Idle)",
   "power_inventory.roundabout.settings.attack_opacity": "Opacity (Fight)",

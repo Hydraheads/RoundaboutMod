@@ -238,6 +238,7 @@ public class PowerInventoryScreen
             if (isOptionsOut){
                 IPlayerEntity ipe = ((IPlayerEntity) pl);
                 int anchorPlace = ipe.roundabout$getAnchorPlace();
+                int anchorPlaceAttack = ipe.roundabout$getAnchorPlaceAttack();
                 float distanceOut = ipe.roundabout$getDistanceOut();
                 float idleOpacity =  ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                 float combatOpacity = ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking;
@@ -323,6 +324,16 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 173, 5, 11);
+                    }
+
+
+                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.attack_offset").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
+                    context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 111, 11, 173, 118, 11);
+                    int renderSpot4 = (int) Math.floor(((double) 114 / 359) * (anchorPlaceAttack));
+                    if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 185, 5, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 173, 5, 11);
                     }
                 }
 
@@ -502,6 +513,13 @@ public class PowerInventoryScreen
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
                         return true;
                     }
+                    if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
+                        int initialX = ((int) $$0) - jump;
+                        initialX = (int) ((float) 359 / 118) * initialX;
+                        ipe.roundabout$setAnchorPlaceAttack(initialX);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                        return true;
+                    }
                 }
                 if (isSurelyHovering(i-136, j+146, 65, 11, $$0, $$1)) {
                     if (pageNumber == 1) {
@@ -514,9 +532,11 @@ public class PowerInventoryScreen
                         ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;
                         ConfigManager.saveClientConfig();
                     } else if (pageNumber == 2){
+                        ipe.roundabout$setAnchorPlaceAttack(55);
                         ipe.roundabout$setSizePercent(1F);
                         ipe.roundabout$setIdleRotation(0F);
                         ipe.roundabout$setIdleYOffset(0.1F);
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, PacketDataIndex.FLOAT_SIZE_PERCENT);
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0F, PacketDataIndex.FLOAT_IDLE_ROTATION);
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0.1F, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);

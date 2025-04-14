@@ -85,7 +85,8 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                     ipe.roundabout$getDistanceOut(),
                     ipe.roundabout$getSizePercent(),
                     ipe.roundabout$getIdleRotation(),
-                    ipe.roundabout$getIdleYOffset());
+                    ipe.roundabout$getIdleYOffset(),
+                    ipe.roundabout$getAnchorPlaceAttack());
             roundabout$initializeDataOnClient = true;
         }
         if (!this.level().isClientSide) {
@@ -133,6 +134,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ((IPlayerEntity) this).roundabout$setMaskVoiceSlot(((IPlayerEntity) $$0).roundabout$getMaskVoiceSlot());
 
             int anchorPlace = ((IPlayerEntity) $$0).roundabout$getAnchorPlace();
+            int anchorPlaceAttack = ((IPlayerEntity) $$0).roundabout$getAnchorPlaceAttack();
             float distanceOut = ((IPlayerEntity) $$0).roundabout$getDistanceOut();
             float size = ((IPlayerEntity) $$0).roundabout$getSizePercent();
             float rotat = ((IPlayerEntity) $$0).roundabout$getIdleRotation();
@@ -148,7 +150,8 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
                     ipe.roundabout$getSizePercent(),
                     ipe.roundabout$getIdleRotation(),
-                    ipe.roundabout$getIdleYOffset());
+                    ipe.roundabout$getIdleYOffset(),
+                    anchorPlaceAttack);
         }
     }
 

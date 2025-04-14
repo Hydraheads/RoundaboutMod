@@ -1345,6 +1345,9 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_ANCHOR_PLACE){
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setAnchorPlace(data);
+        } else if (context == PacketDataIndex.INT_ANCHOR_PLACE_ATTACK){
+            IPlayerEntity ple = (IPlayerEntity) player;
+            ple.roundabout$setAnchorPlaceAttack(data);
         } else if (context == PacketDataIndex.INT_UPDATE_MOVE){
             ((StandUser)player).roundabout$getStandPowers().updateIntMove(data);
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){

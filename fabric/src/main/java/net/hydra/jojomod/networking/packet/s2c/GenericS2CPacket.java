@@ -57,8 +57,9 @@ public class GenericS2CPacket {
             float idleOpacity = buf.readFloat();
             float combatOpacity = buf.readFloat();
             float enemyOpacity = buf.readFloat();
+            int anchorPlaceAttack = buf.readInt();
             ClientUtil.handlePowerInventoryOptionsPacketS2C(client.player,anchorPlace,distanceOut,idleOpacity,combatOpacity,
-                    enemyOpacity);
+                    enemyOpacity,anchorPlaceAttack);
         }
     }
 }

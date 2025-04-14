@@ -442,7 +442,7 @@ public class ClientUtil {
     }
 
     public static void handleLPPowerInventoryOptionsPacketS2C(int anchorPlace, float distanceOut, float idleOpacity,
-                                                            float combatOpacity, float enemyOpacity){
+                                                            float combatOpacity, float enemyOpacity, int anchorPlaceAttack){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             IPlayerEntity ple = ((IPlayerEntity) player);
@@ -451,17 +451,19 @@ public class ClientUtil {
             ple.roundabout$setSizePercent(idleOpacity);
             ple.roundabout$setIdleRotation(combatOpacity);
             ple.roundabout$setIdleYOffset(enemyOpacity);
+            ple.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
         }
 
     }
     public static void handlePowerInventoryOptionsPacketS2C(LocalPlayer player, int anchorPlace, float distanceOut, float idleOpacity,
-                                                            float combatOpacity, float enemyOpacity){
+                                                            float combatOpacity, float enemyOpacity, int anchorPlaceAttack){
         IPlayerEntity ple = ((IPlayerEntity) player);
         ple.roundabout$setAnchorPlace(anchorPlace);
         ple.roundabout$setDistanceOut(distanceOut);
         ple.roundabout$setSizePercent(idleOpacity);
         ple.roundabout$setIdleRotation(combatOpacity);
         ple.roundabout$setIdleYOffset(enemyOpacity);
+        ple.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
 
     }
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/

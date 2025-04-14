@@ -123,6 +123,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private int roundabout$anchorPlace = 55;
     @Unique
+    private int roundabout$anchorPlaceAttack = 55;
+    @Unique
     private float roundabout$distanceOut = 1.07F;
     @Unique
     private float roundabout$sizePercent = 1F;
@@ -187,6 +189,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Unique
     @Override
+    public void roundabout$setAnchorPlaceAttack(int anchorPlace){
+        anchorPlace = Mth.clamp(anchorPlace,0,360);
+        this.roundabout$anchorPlaceAttack = anchorPlace;
+        StandEntity ent = ((StandUser)this).roundabout$getStand();
+        if (ent != null){
+            ent.setAnchorPlaceAttack(anchorPlace);
+        }
+    }
+    @Unique
+    @Override
     public void roundabout$setSizePercent(float anchorPlace){
         anchorPlace = Mth.clamp(anchorPlace,0,3);
         this.roundabout$sizePercent = anchorPlace;
@@ -219,6 +231,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public int roundabout$getAnchorPlace(){
         return this.roundabout$anchorPlace;
+    }
+    @Unique
+    @Override
+    public int roundabout$getAnchorPlaceAttack(){
+        return this.roundabout$anchorPlaceAttack;
     }
     @Unique
     @Override

@@ -1582,6 +1582,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         stand.playerSetProperties(PE);
                         stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
                         stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                        stand.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
                         stand.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
                         stand.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
                         stand.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
@@ -1592,7 +1593,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                     ipe.roundabout$getDistanceOut(),
                                     ipe.roundabout$getSizePercent(),
                                     ipe.roundabout$getIdleRotation(),
-                                    ipe.roundabout$getIdleYOffset());
+                                    ipe.roundabout$getIdleYOffset(),
+                                    ipe.roundabout$getAnchorPlaceAttack());
                         }
                     }
 
@@ -1679,7 +1681,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             rot = (roundabout$User.getYHeadRot()) % 360;
                             stand.setXRot(roundabout$getStandPowers().getLookAtPlacePitch(stand, dd.getBlockPos().getCenter()));
                         } else {
-                            rot = (float) ((roundabout$User.getYHeadRot() - (stand.getPunchYaw(stand.getAnchorPlace(),
+                            rot = (float) ((roundabout$User.getYHeadRot() - (stand.getPunchYaw(stand.getAnchorPlaceAttack(),
                                     0.36))) % 360);
                         }
                         stand.setYRot(rot);

@@ -58,6 +58,8 @@ public abstract class StandEntity extends Mob{
             EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Integer> ANCHOR_PLACE = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> ANCHOR_PLACE_ATTACK = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.INT);
 
     /**The data of stand leaning from player inputs, might go to the user itself at some point.*/
     protected static final EntityDataAccessor<Byte> MOVE_FORWARD = SynchedEntityData.defineId(StandEntity.class,
@@ -353,6 +355,10 @@ public abstract class StandEntity extends Mob{
         return this.entityData.get(ANCHOR_PLACE);
     }
 
+    public final int getAnchorPlaceAttack() {
+        return this.entityData.get(ANCHOR_PLACE_ATTACK);
+    }
+
     public boolean fireImmune() {
         return true;
     }
@@ -431,6 +437,9 @@ public abstract class StandEntity extends Mob{
      */
     public final void setAnchorPlace(Integer degrees) {
         this.entityData.set(ANCHOR_PLACE, degrees);
+    }
+    public final void setAnchorPlaceAttack(Integer degrees) {
+        this.entityData.set(ANCHOR_PLACE_ATTACK, degrees);
     }
 
     public void playerSetProperties(Player PE) {
@@ -522,6 +531,7 @@ public abstract class StandEntity extends Mob{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANCHOR_PLACE, 55);
+        this.entityData.define(ANCHOR_PLACE_ATTACK, 55);
         this.entityData.define(DISTANCE_OUT, 1.07F);
         this.entityData.define(SIZE_PERCENT, 1F);
         this.entityData.define(IDLE_ROTATION, 0F);
@@ -870,7 +880,7 @@ public abstract class StandEntity extends Mob{
         } else {
             float distanceFront;
             float standrotDir2 = 0;
-            float standrotDir = (float) getPunchYaw(this.getAnchorPlace(),
+            float standrotDir = (float) getPunchYaw(this.getAnchorPlaceAttack(),
                     1);
             if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
             float addY = 0.3F;

@@ -54,6 +54,8 @@ public interface IPlayerEntity {
     byte roundabout$getTeamColor();
     void roundabout$setUnlockedBonusSkin(boolean unlock);
     int roundabout$getAnchorPlace();
+    int roundabout$getAnchorPlaceAttack();
+    void roundabout$setAnchorPlaceAttack(int anchorPlace);
     void roundabout$setAnchorPlace(int anchorPlace);
     float roundabout$getDistanceOut();
     void roundabout$setDistanceOut(float distanceOut);

@@ -39,7 +39,7 @@ public interface IPacketAccess {
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);
     void sendSimpleByte(ServerPlayer sp, byte context);
     void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,
-                                   float combatOpacity, float enemyOpacity);
+                                   float combatOpacity, float enemyOpacity, int anchorPlaceAttack);
     void sendConfig(ServerPlayer sp);
 
     void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player);

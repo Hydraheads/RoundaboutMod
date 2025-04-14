@@ -103,9 +103,9 @@ public class ForgePackets implements IPacketAccess {
     }
     @Override
     public void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,
-                                          float combatOpacity, float enemyOpacity) {
+                                          float combatOpacity, float enemyOpacity, int anchorPlaceAttack) {
         ForgePacketHandler.sendToClient(new ForgeS2CPowerInventorySettingsPacket(anchorPlace,
-                distanceOut, idleOpacity, combatOpacity, enemyOpacity), sp);
+                distanceOut, idleOpacity, combatOpacity, enemyOpacity,anchorPlaceAttack), sp);
     }
 
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

@@ -212,7 +212,7 @@ public class FabricPackets implements IPacketAccess {
     }
     @Override
     public void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,
-                                          float combatOpacity, float enemyOpacity) {
+                                          float combatOpacity, float enemyOpacity, int anchorPlaceAttack) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
 
         buffer.writeInt(anchorPlace);
@@ -220,6 +220,7 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeFloat(idleOpacity);
         buffer.writeFloat(combatOpacity);
         buffer.writeFloat(enemyOpacity);
+        buffer.writeInt(anchorPlaceAttack);
         ServerPlayNetworking.send(sp, ModMessages.SEND_S2C_POWER_INVENTORY_OPTIONS, buffer);
     }
 
