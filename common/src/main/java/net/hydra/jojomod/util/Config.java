@@ -66,6 +66,8 @@ import java.util.Set;
     public Integer maxMagiciansRedFlames;
     @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
     public Integer maxMagiciansRedFlameDistance;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer d4cDimensionKidnapRadius;
     @IntOption(group = "inherit", value = 1100, min = -1, max = 72000)
     public Integer magiciansRedFurnaceTicks;
     @IntOption(group = "inherit", value = 15, min = 0, max = 365)

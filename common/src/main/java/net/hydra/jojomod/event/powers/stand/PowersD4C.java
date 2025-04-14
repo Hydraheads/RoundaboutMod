@@ -402,7 +402,7 @@ public class PowersD4C extends PunchingStand {
             return false;
 
         BlockPos thisPosition = this.getSelf().blockPosition();
-        int radius = ClientNetworking.getAppropriateConfig().chargeSettings.d4cDimensionKidnapRadius;
+        int radius = ClientNetworking.getAppropriateConfig().d4cDimensionKidnapRadius;
 
         List<LivingEntity> entities = this.getSelf().getServer().overworld().getNearbyEntities(LivingEntity.class, TargetingConditions.DEFAULT, this.getSelf(),
                 new AABB(thisPosition).inflate(radius));
