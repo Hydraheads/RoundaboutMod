@@ -51,6 +51,18 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
         }
     }
+
+    /**This is where red bind and other string-like moves will be rendered*/
+    @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;render(Lnet/minecraft/world/entity/Entity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",shift = At.Shift.BEFORE))
+    protected <E extends Entity>  void roundabout$preRender(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
+
+        if ($$0 instanceof LivingEntity LE) {
+            Entity entity = ((StandUser)$$0).roundabout$getBoundTo();
+            if (entity != null) {
+                ClientUtil.roundabout$renderBound(LE, $$5, $$6, $$7, entity, 0);
+            }
+        }
+    }
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE",
     target="Lnet/minecraft/client/renderer/entity/EntityRenderer;render(Lnet/minecraft/world/entity/Entity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
     shift = At.Shift.AFTER), cancellable = true)
