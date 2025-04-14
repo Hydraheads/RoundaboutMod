@@ -10,11 +10,14 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
@@ -54,18 +57,20 @@ public class RoundaboutCommands {
             if (entity instanceof LivingEntity LE) {
                     StandUser user = ((StandUser) LE);
                     ItemStack disc = ItemStack.EMPTY;
-                    if (Objects.equals(standType, "star_platinum") || Objects.equals(standType, "starplatinum") || Objects.equals(standType, "starPlatinum")){
-                        disc = ModItems.STAND_DISC_STAR_PLATINUM.getDefaultInstance();
-                        name = Component.translatable("item.roundabout.star_platinum_disc.desc").getString();
-                    } else if (Objects.equals(standType, "the_world") || Objects.equals(standType, "theworld") || Objects.equals(standType, "theWorld")){
-                        disc = ModItems.STAND_DISC_THE_WORLD.getDefaultInstance();
-                        name = Component.translatable("item.roundabout.the_world_disc.desc").getString();
-                    } else if (Objects.equals(standType, "justice")){
-                        disc = ModItems.STAND_DISC_JUSTICE.getDefaultInstance();
-                        name = Component.translatable("item.roundabout.justice_disc.desc").getString();
+
+                    for (Item i : BuiltInRegistries.ITEM)
+                    {
+                        // in the future: this code should be changed to support addons
+                        if (BuiltInRegistries.ITEM.getKey(i).equals(Roundabout.location(standType.toLowerCase()+"_disc")))
+                        {
+                            disc = i.getDefaultInstance();
+                            name = "item.roundabout."+standType.toLowerCase()+"_disc.desc";
+                            break;
+                        }
                     }
+
                     user.roundabout$setStandDisc(disc);
-                if (disc != null && disc.getItem() instanceof StandDiscItem SD) {
+                if (disc != ItemStack.EMPTY && disc.getItem() instanceof StandDiscItem SD) {
                     SD.generateStandPowers(LE);
 
                     if (entity instanceof Player PE) {
@@ -87,10 +92,14 @@ public class RoundaboutCommands {
                         ((StandUser) entity).roundabout$summonStand(entity.level(), true,false);
                     }
                 }
+                else {
+                    source.sendFailure(Component.translatable("commands.roundabout.argument.standtype.invalid", standType.toLowerCase()));
+                    return targets.size();
+                }
             }
         }
 
-        final String nm = name;
+        final String nm = Component.translatable(name).getString();
         if (targets.size() == 1) {
             source.sendSuccess(() -> Component.translatable("commands.roundabout.argument.standtype.valid_2", ((Entity)targets.iterator().next()).getDisplayName(),nm), true);
         } else {
