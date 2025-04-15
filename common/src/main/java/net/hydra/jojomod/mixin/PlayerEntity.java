@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
@@ -61,6 +62,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Shadow public abstract boolean isSwimming();
 
     @Shadow public abstract float getDestroySpeed(BlockState $$0);
+
 
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(Player.class,

@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -16,7 +17,9 @@ import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -57,6 +60,58 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
     private long roundabout$clashDisplayExtraTimestamp = -100;
     @Unique
     private float roundabout$lastClashPower = -1;
+
+
+    @Unique
+    Mob roundabout$shapeShift = null;
+    @Unique
+    Mob roundabout$swappedModel = null;
+    @Unique
+    VisageData roundabout$visageData = null;
+    @Unique
+    ItemStack roundabout$lastVisage = null;
+
+    @Unique
+    @Override
+    public void roundabout$setShapeShiftTemp(Mob shift){
+        roundabout$shapeShift = shift;
+    }
+
+    @Unique
+    @Override
+    public Mob roundabout$getShapeShiftTemp(){
+        return roundabout$shapeShift;
+    }
+    @Unique
+    @Override
+    public void roundabout$setSwappedModel(Mob swap){
+        roundabout$swappedModel = swap;
+    }
+    @Unique
+    @Override
+    public Mob roundabout$getSwappedModel(){
+        return roundabout$swappedModel;
+    }
+    @Unique
+    @Override
+    public void roundabout$setVisageData(VisageData data){
+        roundabout$visageData = data;
+    }
+    @Unique
+    @Override
+    public VisageData roundabout$getVisageData(){
+        return roundabout$visageData;
+    }
+    @Unique
+    @Override
+    public void roundabout$setLastVisage(ItemStack stack){
+        roundabout$lastVisage = stack;
+    }
+    @Unique
+    @Override
+    public ItemStack roundabout$getLastVisage(){
+        return roundabout$lastVisage;
+    }
 
     public PlayerEntityClient(ClientLevel $$0, GameProfile $$1) {
         super($$0, $$1);

@@ -1,7 +1,9 @@
 package net.hydra.jojomod.access;
 
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
@@ -65,6 +67,7 @@ public interface IPlayerEntity {
     void roundabout$setIdleRotation(float combatOpacity);
     float roundabout$getIdleYOffset();
     void roundabout$setIdleYOffset(float enemyOpacity);
+    void roundabout$setLastVisage(ItemStack stack);
     AnimationState getWry();
     AnimationState getGiorno();
     AnimationState getKoichi();
