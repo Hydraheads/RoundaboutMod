@@ -972,7 +972,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setDestructionTrailTicks(int destructTicks){
-        if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionMode) {
+        if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionBarrageLaunching) {
             this.roundabout$destructionModeTrailTicks = destructTicks;
         }
     }

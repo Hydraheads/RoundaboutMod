@@ -53,7 +53,9 @@ import java.util.Set;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
     public Integer multiplyAboveForVillagerBreeding;
     @BooleanOption(group = "inherit", value = false)
-    public Boolean SuperBlockDestructionMode;
+    public Boolean SuperBlockDestructionBarragePunches;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean SuperBlockDestructionBarrageLaunching;
     @BooleanOption(group = "inherit", value = false)
     public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
     @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -140,8 +142,6 @@ import java.util.Set;
         public Boolean playersInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean barragesAreAlwaysInterruptable;
-        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-        public Integer d4cDimensionKidnapRadius;
     }
     public static class DamageMultipliers {
         @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
