@@ -6,10 +6,7 @@ import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
 import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
-import net.hydra.jojomod.event.powers.visagedata.DIOVisage;
-import net.hydra.jojomod.event.powers.visagedata.EnyaVisage;
-import net.hydra.jojomod.event.powers.visagedata.JotaroVisage;
-import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.item.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
@@ -21,6 +18,7 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.checkerframework.checker.units.qual.A;
 
 import static net.hydra.jojomod.registry.ForgeCreativeTab.*;
 
@@ -420,6 +418,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties(), new DIOVisage(null))));
     public static final RegistryObject<Item> ENYA_MASK = addToTab(ITEMS.register("enya_mask",
             () -> new MaskItem(new Item.Properties(), new EnyaVisage(null))));
+    public static final RegistryObject<Item> AVDOL_MASK = addToTab(ITEMS.register("avdol_mask",
+            () -> new MaskItem(new Item.Properties(), new AvdolVisage(null))));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

@@ -55,6 +55,13 @@ public class FabricEntities {
                         EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_jotaro")
                 );
+        public static final EntityType<AvdolNPC> AVDOL =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_avdol"),
+                        EntityType.Builder.of(AvdolNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_avdol")
+                );
         public static final EntityType<DIONPC> DIO =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -306,6 +313,7 @@ public class FabricEntities {
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.ENYA = ENYA;
                 ModEntities.JOTARO = JOTARO;
+                ModEntities.AVDOL = AVDOL;
                 ModEntities.DIO = DIO;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
@@ -318,7 +326,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
-                FabricDefaultAttributeRegistry.register(DIO, JotaroNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(AVDOL, AvdolNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(DIO, DIONPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(FOG_CLONE, PlayerAlexNPC.createAttributes());
