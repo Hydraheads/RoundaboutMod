@@ -390,9 +390,10 @@ public class PowersD4C extends PunchingStand {
         if (world.getLevel() != null)
         {
             queuedWorldTransports.put(this.getSelf().getId(), world);
+            world.broadcastPacketsToPlayers(this.getSelf().getServer());
             return true;
         }
-        world.broadcastPacketsToPlayers(this.getSelf().getServer());
+
         return false;
     }
 
