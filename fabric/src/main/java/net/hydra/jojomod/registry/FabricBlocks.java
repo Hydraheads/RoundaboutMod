@@ -65,13 +65,13 @@ public class FabricBlocks {
     public static final Block WALL_STREET_SIGN_DANGER = registerBlock("wall_street_sign_danger",ModBlocks.getWallStreetSignBlockProperties());
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
-    public static final Block STAND_FIRE = registerBlock("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
-    public static final Block ORANGE_FIRE = registerBlock("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
-    public static final Block BLUE_FIRE = registerBlock("colored_fire_blue",ModBlocks.BLUE_FIRE_PROPERTIES);
-    public static final Block PURPLE_FIRE = registerBlock("colored_fire_purple",ModBlocks.PURPLE_FIRE_PROPERTIES);
-    public static final Block GREEN_FIRE = registerBlock("colored_fire_green",ModBlocks.GREEN_FIRE_PROPERTIES);
-    public static final Block DREAD_FIRE = registerBlock("colored_fire_dread",ModBlocks.DREAD_FIRE_PROPERTIES);
-    public static final Block CREAM_FIRE = registerBlock("colored_fire_cream",ModBlocks.CREAM_FIRE_PROPERTIES);
+    public static final Block STAND_FIRE = registerBlockItemless("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
+    public static final Block ORANGE_FIRE = registerBlockItemless("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
+    public static final Block BLUE_FIRE = registerBlockItemless("colored_fire_blue",ModBlocks.BLUE_FIRE_PROPERTIES);
+    public static final Block PURPLE_FIRE = registerBlockItemless("colored_fire_purple",ModBlocks.PURPLE_FIRE_PROPERTIES);
+    public static final Block GREEN_FIRE = registerBlockItemless("colored_fire_green",ModBlocks.GREEN_FIRE_PROPERTIES);
+    public static final Block DREAD_FIRE = registerBlockItemless("colored_fire_dread",ModBlocks.DREAD_FIRE_PROPERTIES);
+    public static final Block CREAM_FIRE = registerBlockItemless("colored_fire_cream",ModBlocks.CREAM_FIRE_PROPERTIES);
 
     public static final Block FOG_DIRT = registerBlockItemless("fog_dirt",ModBlocks.getFogBlock());
     public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating",ModBlocks.getFogCoatingBlock());
