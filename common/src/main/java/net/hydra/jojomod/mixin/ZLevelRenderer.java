@@ -71,9 +71,9 @@ public abstract class ZLevelRenderer {
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 1,shift = At.Shift.BEFORE),
             cancellable = true)
-    private void roundabout$shouldOutline(PoseStack $$0, float $$1, long $$2, boolean $$3,
-                                          Camera $$4, GameRenderer $$5, LightTexture $$6,
-                                          Matrix4f $$7, CallbackInfo ci) {
+    private void roundabout$shouldOutline(PoseStack poseStack, float $$1, long $$2, boolean $$3,
+                                          Camera camera, GameRenderer gameRenderer, LightTexture $$6,
+                                          Matrix4f matrix4f, CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             StandUser sus = ((StandUser) player);
@@ -89,12 +89,12 @@ public abstract class ZLevelRenderer {
                             BlockPos $$48 = ((BlockHitResult) $$47).getBlockPos();
                             BlockState $$49 = this.level.getBlockState($$48);
                             if (!$$49.isAir() && this.level.getWorldBorder().isWithinBounds($$48)) {
-                                Vec3 $$9 = $$4.getPosition();
+                                Vec3 $$9 = camera.getPosition();
                                 double $$10 = $$9.x();
                                 double $$11 = $$9.y();
                                 double $$12 = $$9.z();
                                 VertexConsumer $$50 = $$20.getBuffer(RenderType.lines());
-                                this.renderHitOutline($$0, $$50, $$4.getEntity(), $$10, $$11, $$12, $$48, $$49);
+                                this.renderHitOutline(poseStack, $$50, camera.getEntity(), $$10, $$11, $$12, $$48, $$49);
                             }
                         }
                     }

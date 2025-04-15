@@ -30,6 +30,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 
 import javax.annotation.Nullable;
@@ -518,6 +519,14 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 }
             }
         super.tick();
+    }
+
+    @Override
+    protected Vec3 getLeashOffset() {
+        if (!this.getActivated()){
+            return new Vec3(0.0, 0, (double)(this.getBbWidth() * 0.4F));
+        }
+        return new Vec3(0.0, (double)this.getEyeHeight(), (double)(this.getBbWidth() * 0.4F));
     }
 
     public String getData(){

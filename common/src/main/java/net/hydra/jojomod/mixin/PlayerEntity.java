@@ -812,13 +812,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         ) {
             int MiningTier = ((StandUser) this).roundabout$getStandPowers().getMiningLevel();
             if (MiningTier >= 4){
-                cir.setReturnValue(Items.DIAMOND_PICKAXE.isCorrectToolForDrops($$0));
+                cir.setReturnValue(Items.DIAMOND_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
             } else if (MiningTier == 3){
-                cir.setReturnValue(Items.IRON_PICKAXE.isCorrectToolForDrops($$0));
+                cir.setReturnValue(Items.IRON_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
             } else if (MiningTier == 2){
-                cir.setReturnValue(Items.STONE_PICKAXE.isCorrectToolForDrops($$0));
+                cir.setReturnValue(Items.STONE_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
             } else if (MiningTier == 1){
-                cir.setReturnValue(Items.WOODEN_PICKAXE.isCorrectToolForDrops($$0));
+                cir.setReturnValue(Items.WOODEN_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
             } else {
                 cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
             }

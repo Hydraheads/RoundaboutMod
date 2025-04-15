@@ -547,35 +547,42 @@ public class ClientUtil {
     }
 
     @Unique
-    public static void roundabout$renderBound(LivingEntity victim, float p_115463_, PoseStack p_115464_, MultiBufferSource mb, Entity binder, float focus) {
-        p_115464_.pushPose();
-        Vec3 vec3 = binder.getRopeHoldPosition(p_115463_);
+    public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
+        poseStack.pushPose();
+        Vec3 vec3 = binder.getRopeHoldPosition(delta);
         if (binder instanceof LivingEntity lv){
             StandUser su = ((StandUser)lv);
             StandEntity stand = su.roundabout$getStand();
             if (stand != null){
-                vec3 = stand.getRopeHoldPosition(p_115463_);
+                vec3 = stand.getRopeHoldPosition(delta);
             }
         }
-        double d0 = (double)(Mth.lerp(p_115463_, victim.yBodyRotO, victim.yBodyRot) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
-        Vec3 vec31 = victim.getLeashOffset(p_115463_);
+        double d0 = (double)(Mth.lerp(delta, victim.yBodyRotO, victim.yBodyRot) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
+        Vec3 vec31 = victim.getLeashOffset(delta);
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
-        double d3 = Mth.lerp((double)p_115463_, victim.xo, victim.getX()) + d1;
-        double d4 = Mth.lerp((double)p_115463_, victim.yo, victim.getY()) + vec31.y; //+3
-        double d5 = Mth.lerp((double)p_115463_, victim.zo, victim.getZ()) + d2;
-        p_115464_.translate(d1, vec31.y, d2);
+        double d3 = Mth.lerp((double)delta, victim.xo, victim.getX()) + d1;
+        double d4 = Mth.lerp((double)delta, victim.yo, victim.getY()) + vec31.y; //+3
+        double d5 = Mth.lerp((double)delta, victim.zo, victim.getZ()) + d2;
+        poseStack.translate(d1, vec31.y, d2);
         float f = (float)(vec3.x - d3);
         float f1 = (float)(vec3.y - d4);
         float f2 = (float)(vec3.z - d5);
         float f3 = 0.025F;
         VertexConsumer vertexconsumer = mb.getBuffer(RenderType.leash());
-        Matrix4f matrix4f = p_115464_.last().pose();
+        Matrix4f matrix4f = poseStack.last().pose();
         float f4 = Mth.invSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
         float f5 = f2 * f4;
         float f6 = f * f4;
-        BlockPos blockpos = BlockPos.containing(victim.getEyePosition(p_115463_));
-        BlockPos blockpos1 = BlockPos.containing(binder.getEyePosition(p_115463_));
+        Vec3 eyeVectorV = victim.getEyePosition(delta);
+        Vec3 eyeVectorB = binder.getEyePosition(delta);
+        if (victim instanceof FallenMob fm && !fm.getActivated()){
+            eyeVectorV = victim.getPosition(delta);
+        } else if (binder instanceof FallenMob fm && !fm.getActivated()){
+            eyeVectorB = victim.getPosition(delta);
+        }
+        BlockPos blockpos = BlockPos.containing(eyeVectorV);
+        BlockPos blockpos1 = BlockPos.containing(eyeVectorB);
         int i = roundabout$getBlockLightLevel(victim, blockpos);
         int j = roundabout$getBlockLightLevel(binder, blockpos1);
         int k = victim.level().getBrightness(LightLayer.SKY, blockpos);
@@ -589,7 +596,7 @@ public class ClientUtil {
             roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true,focus);
         }
 
-        p_115464_.popPose();
+        poseStack.popPose();
     }
     public static int roundabout$getBlockLightLevel(Entity $$0, BlockPos $$1) {
         return $$0.isOnFire() ? 15 : $$0.level().getBrightness(LightLayer.BLOCK, $$1);
