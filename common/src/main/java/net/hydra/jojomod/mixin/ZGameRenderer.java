@@ -23,19 +23,18 @@ public class ZGameRenderer {
     @Shadow @Final private Map<String, ShaderInstance> shaders;
     @Shadow @Final private Minecraft minecraft;
     @Unique @Nullable
-    private RCoreShader roundabout$timestopShader;
+    private RCoreShader roundabout$meltDodgeShader;
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
     private void roundabout$reloadShaders(ResourceProvider provider, CallbackInfo ci)
     {
         try
         {
-            roundabout$timestopShader = new RCoreShader(provider, "roundabouttimestop");
+            roundabout$meltDodgeShader = new RCoreShader(provider, "meltdodge");
 
-            if (roundabout$timestopShader.getProgram() != null)
+            if (roundabout$meltDodgeShader.getProgram() != null)
             {
-                roundabout$timestopShader.getProgram().setSampler("DiffuseSampler", this.minecraft.getMainRenderTarget().getColorTextureId());
-                //this.shaders.put("roundaboutTimestop", roundabout$timestopShader.getProgram());
+                roundabout$meltDodgeShader.getProgram().setSampler("DiffuseSampler", this.minecraft.getMainRenderTarget().getColorTextureId());
             }
             else {
                 throw new IOException("Shader was null!");
@@ -43,20 +42,10 @@ public class ZGameRenderer {
         }
         catch (IOException e)
         {
-            Roundabout.LOGGER.warn("roundabout$timestopShader failed to load!\n{}", e.toString());
+            Roundabout.LOGGER.warn("roundabout$meltDodgeShader failed to load!\n{}", e.toString());
             return;
         }
-        RCoreShader.roundabout$timestopProgram = roundabout$timestopShader.getProgram();
+        RCoreShader.roundabout$meltDodgeProgram = roundabout$meltDodgeShader.getProgram();
         Roundabout.LOGGER.info("Reloaded shaders!");
     }
-
-//    @Inject(method = "shutdownShaders", at=@At("HEAD"))
-//    private void roundabout$shutdownShaders(CallbackInfo ci)
-//    {
-//        if (roundabout$timestopShader != null)
-//        {
-//            roundabout$timestopShader.getProgram().close();
-//            roundabout$timestopShader = null;
-//        }
-//    }
 }

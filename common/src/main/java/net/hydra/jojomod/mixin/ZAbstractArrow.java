@@ -5,8 +5,10 @@ import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.TimeMovingProjectile;
 import net.hydra.jojomod.entity.projectile.HarpoonEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -155,7 +157,17 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
         Entity $$1 = $$0.getEntity();
         if ($$1 instanceof LivingEntity LE){
-            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this)){
+            StandPowers entityPowers = ((StandUser)LE).roundabout$getStandPowers();
+            if (!this.level().isClientSide && entityPowers instanceof PowersD4C d4cPowers)
+            {
+                if (d4cPowers.meltDodgeTicks >= 0)
+                {
+                    d4cPowers.meltDodge((AbstractArrow)(Object)this);
+                    ci.cancel();
+                }
+            }
+
+            if (entityPowers.dealWithProjectile(this)){
                 ci.cancel();
                 this.discard();
             }

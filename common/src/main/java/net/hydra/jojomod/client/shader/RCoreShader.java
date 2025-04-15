@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 public class RCoreShader {
-    @Nullable public static ShaderInstance roundabout$timestopProgram;
+    @Nullable public static ShaderInstance roundabout$meltDodgeProgram;
     private final ShaderInstance program;
 
     public RCoreShader(ResourceProvider provider, String name) throws IOException {

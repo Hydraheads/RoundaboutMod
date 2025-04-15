@@ -27,6 +27,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -470,6 +471,11 @@ public class PowersD4C extends PunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
+    }
+
+    public void meltDodge(AbstractArrow arrow)
+    {
+
     }
 
     /** Is the entity inbetween two tings? */
