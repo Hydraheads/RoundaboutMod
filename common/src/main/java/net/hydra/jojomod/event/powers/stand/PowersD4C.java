@@ -21,6 +21,8 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -386,11 +388,19 @@ public class PowersD4C extends PunchingStand {
         if (this.getSelf().getServer() == null)
             return false;
 
-        DynamicWorld world = DynamicWorld.generateD4CWorld(this.getSelf().getServer());
+        ServerLevel overworld = this.getSelf().getServer().overworld();
+        ServerPlayer player = (ServerPlayer)this.getSelf();
+        if (player.level() != player.getServer().overworld())
+        {
+            player.teleportTo(overworld.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+            return true;
+        }
+
+        DynamicWorld world = DynamicWorld.generateD4CWorld(player.getServer());
         if (world.getLevel() != null)
         {
-            queuedWorldTransports.put(this.getSelf().getId(), world);
-            world.broadcastPacketsToPlayers(this.getSelf().getServer());
+            queuedWorldTransports.put(player.getId(), world);
+            world.broadcastPacketsToPlayers(player.getServer());
             return true;
         }
 
