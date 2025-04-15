@@ -324,7 +324,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)){
             if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && this.getSelf() instanceof Player) {
-                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.fullChargeTimeStopTicksTheWorld +
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.additionalTimeStopTicksForFullyChargedTheWorld +
                 ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
                 return 80;

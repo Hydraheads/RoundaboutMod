@@ -1065,7 +1065,7 @@ public class StandPowers {
             } else if (isStandDamage && ClientNetworking.getAppropriateConfig().chargeSettings.standsInterruptSomeStandAttacks){
                 interrupt = true;
             } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
-                    ClientNetworking.getAppropriateConfig().chargeSettings.timeStopIsAlwaysInterruptable){
+                    ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopIsAlwaysInterruptable){
                 interrupt = true;
             } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().chargeSettings.playersInterruptSomeStandAttacks){
                 interrupt = true;
@@ -2507,12 +2507,14 @@ public class StandPowers {
         }
     }
 
+    /**For enhancement stands*/
     public float getBonusPassiveMiningSpeed(){
         return 1F;
     }
     public float getBonusAttackSpeed() {
         return 1F;
     }
+    /**For stands with bodies*/
     public float getPickMiningSpeed() {
         return 5F;
     }

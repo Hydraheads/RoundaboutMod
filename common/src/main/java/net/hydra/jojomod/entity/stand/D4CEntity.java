@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
@@ -76,7 +75,7 @@ public class D4CEntity extends StandEntity {
             if (PD4C.meltDodgeTicks != -1)
                 PD4C.meltDodgeTicks += 1;
 
-            if (PD4C.meltDodgeTicks >= ClientNetworking.getAppropriateConfig().cooldownsInTicks.meltDodgeTicks)
+            if (PD4C.meltDodgeTicks >= ClientNetworking.getAppropriateConfig().durationsInTicks.D4CMeltDodgeTicks)
                 PD4C.meltDodgeTicks = -1;
         }
     }

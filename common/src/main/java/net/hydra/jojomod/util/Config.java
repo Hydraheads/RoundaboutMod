@@ -95,6 +95,8 @@ import java.util.Set;
     @NestedOption(group = "modded")
     public GuardPoints guardPoints;
     @NestedOption(group = "modded")
+    public Durations durationsInTicks;
+    @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
@@ -134,8 +136,6 @@ import java.util.Set;
         public Boolean playersInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean barragesAreAlwaysInterruptable;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean timeStopIsAlwaysInterruptable;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer d4cDimensionKidnapRadius;
     }
@@ -190,6 +190,10 @@ import java.util.Set;
         public Integer magiciansRedDefend;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer d4cDefend;
+    }
+    public static class Durations {
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer D4CMeltDodgeTicks;
     }
     public static class Cooldowns {
         @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
@@ -268,26 +272,16 @@ import java.util.Set;
         public Integer d4cDimensionKidnap;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer d4cDimensionHopToOldDimension;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer D4CMeltDodgeCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDisc;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer switchStandDiscWhileOnCooldowns;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer timeStopMinimum;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
-        public Integer timeStopInterrupt;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer timeStopActionBonusTicks;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer timeStopTimeUsedMultiplier;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
         @BooleanOption(group = "inherit", value = true)
         public Boolean canRechargeWhileDrowning;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer meltDodgeTicks;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer meltDodgeCooldown;
     }
     public static class TimeStopSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -295,7 +289,21 @@ import java.util.Set;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer maxTimeStopTicksTheWorld;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer fullChargeTimeStopTicksTheWorld;
+        public Integer additionalTimeStopTicksForFullyChargedTheWorld;
+        @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
+        public Integer impulseTimeStopLength;
+        @IntOption(group = "inherit", value = 2, min = 1, max = 72000)
+        public Integer rateOfChargingTimeStop;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer timeStopMinimumCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer timeStopAdditionalCooldownPerSecondsUsedMultiplier;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer timeStopBonusActionsCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer timeStopInterruptedCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean timeStopIsAlwaysInterruptable;
         @BooleanOption(group = "inherit", value = false)
         public Boolean preventsBreathing;
         @BooleanOption(group = "inherit", value = true)
@@ -304,10 +312,6 @@ import java.util.Set;
         public Boolean mobsTeleportInsteadOfStoppingTime;
         @BooleanOption(group = "inherit", value = true)
         public Boolean wardenMovesInStoppedTime;
-        @IntOption(group = "inherit", value = 2, min = 1, max = 72000)
-        public Integer rateOfChargingTimeStop;
-        @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
-        public Integer impulseTimeStopLength;
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer playerDamageCapHealthPercent;
         @BooleanOption(group = "inherit", value = true)

@@ -663,14 +663,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!this.getSelf().level().isClientSide()) {
             if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.timeStopMinimum+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().cooldownsInTicks.timeStopTimeUsedMultiplier*0.01)));
+                float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopAdditionalCooldownPerSecondsUsedMultiplier*0.01)));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
                         this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                         this.getActivePower() == PowerIndex.POWER_1) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;
                 }
                 if (this.hasActedInTS){
-                    tsTimeRemaining+=ClientNetworking.getAppropriateConfig().cooldownsInTicks.timeStopActionBonusTicks;
+                    tsTimeRemaining+=ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopBonusActionsCooldown;
                     this.hasActedInTS = false;
                 }
 
@@ -1266,7 +1266,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
-            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.timeStopInterrupt;
+            int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldown;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
             }

@@ -28,7 +28,6 @@ import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -339,7 +338,7 @@ public class PowersD4C extends PunchingStand {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
 
-                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.meltDodgeCooldown);
+                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.D4CMeltDodgeCooldown);
                     }
                     inputDash = true;
                 } else {
