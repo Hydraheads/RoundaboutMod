@@ -2147,14 +2147,16 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
         if (keyIsDown) {
-            if (this.getAttackTime() >= this.getAttackTimeMax() ||
-                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
-                if (isHoldingSneak()){
-                    this.tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.RANGED_BARRAGE_CHARGE_2);
-                } else {
-                    this.tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.RANGED_BARRAGE_CHARGE);
+            if (!isLockedByWater()) {
+                if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                        (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
+                    if (isHoldingSneak()) {
+                        this.tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.RANGED_BARRAGE_CHARGE_2);
+                    } else {
+                        this.tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.RANGED_BARRAGE_CHARGE);
+                    }
                 }
             }
         }
