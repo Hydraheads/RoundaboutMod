@@ -782,6 +782,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$getStandPowers().tickPower();
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();
+        if (this.roundabout$leapTicks > -1) {
+            if (this.onGround() && roundabout$leapTicks < (roundabout$maxLeapTicks - 5)) {
+                roundabout$leapTicks = -1;
+            }
+            roundabout$cancelConsumableItem((LivingEntity) (Object) this);
+            roundabout$leapTicks--;
+            if (!this.level().isClientSide) {
+                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(1f, 0.65f, 0), 1f), this.getX(), this.getY(), this.getZ(),
+                        1, 0, 0, 0, 0.1);
+            }
+        }
         if (this.roundabout$destructionModeTrailTicks > -1){
             if (this.horizontalCollision || this.verticalCollision) {
                 /*The stupid setting which puts launched mobs in boom boom mode*/
