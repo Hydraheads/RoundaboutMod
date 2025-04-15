@@ -53,6 +53,8 @@ import java.util.Set;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
     public Integer multiplyAboveForVillagerBreeding;
     @BooleanOption(group = "inherit", value = false)
+    public Boolean SuperBlockDestructionMode;
+    @BooleanOption(group = "inherit", value = false)
     public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
     @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
     public Integer justiceFogAndPilotRange;
@@ -168,8 +170,6 @@ import java.util.Set;
         public Integer magicianAttackOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer magicianAttackOnPlayers;
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
-        public Integer standGuardMultiplier;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer gasolineExplosion;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -192,6 +192,8 @@ import java.util.Set;
         public Integer magiciansRedDefend;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer d4cDefend;
+        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        public Integer standGuardMultiplier;
     }
     public static class MiningSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

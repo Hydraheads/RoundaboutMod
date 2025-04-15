@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.SoftExplosion;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
@@ -30,7 +31,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -57,8 +57,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -131,6 +130,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private float speed;
     @Unique
     private int roundabout$leapTicks = -1;
+    @Unique
+    private int roundabout$destructionModeTrailTicks = -1;
     @Unique
     private int roundabout$detectTicks = -1;
     @Unique
@@ -693,6 +694,72 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Override
+    @Unique
+    public void roundabout$explode(double $$0) {
+        this.roundabout$explode((DamageSource)null, $$0);
+    }
+
+    @Unique
+    protected void roundabout$explode(@javax.annotation.Nullable DamageSource $$0, double $$1) {
+        if (!this.level().isClientSide) {
+            double $$2 = Math.sqrt($$1);
+            if ($$2 > 5.0) {
+                $$2 = 5.0;
+            }
+
+            roundabout$explode(this, $$0, (ExplosionDamageCalculator)null, this.getX(), this.getY(), this.getZ(), (float)(4.0 + this.random.nextDouble() * 1.5 * $$2), false, Level.ExplosionInteraction.TNT);
+
+        }
+
+    }
+    @Unique
+    public void roundabout$explodePublic(double $$1, double x, double y, double z) {
+        if (!this.level().isClientSide) {
+            double $$2 = Math.sqrt($$1);
+            if ($$2 > 5.0) {
+                $$2 = 5.0;
+            }
+
+            roundabout$explode(this, null, null, x, y, z, (float)(1.5 * $$2), false, Level.ExplosionInteraction.TNT);
+
+        }
+
+    }
+
+    public Explosion roundabout$explode(@javax.annotation.Nullable Entity $$0, @javax.annotation.Nullable DamageSource $$1, @javax.annotation.Nullable ExplosionDamageCalculator $$2, double $$3, double $$4, double $$5, float $$6, boolean $$7, Level.ExplosionInteraction $$8) {
+        return this.roundabout$explode($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8, true);
+    }
+
+    private Explosion.BlockInteraction roundabout$getDestroyType(GameRules.Key<GameRules.BooleanValue> $$0) {
+        return this.level().getGameRules().getBoolean($$0) ? Explosion.BlockInteraction.DESTROY_WITH_DECAY : Explosion.BlockInteraction.DESTROY;
+    }
+    public Explosion roundabout$explode(@javax.annotation.Nullable Entity $$0, @javax.annotation.Nullable DamageSource $$1, @javax.annotation.Nullable ExplosionDamageCalculator $$2, double $$3, double $$4, double $$5, float $$6, boolean $$7, Level.ExplosionInteraction $$8, boolean $$9) {
+        Explosion.BlockInteraction var10000;
+        switch ($$8) {
+            case NONE:
+                var10000 = Explosion.BlockInteraction.KEEP;
+                break;
+            case BLOCK:
+                var10000 = this.roundabout$getDestroyType(GameRules.RULE_BLOCK_EXPLOSION_DROP_DECAY);
+                break;
+            case MOB:
+                var10000 = this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? this.roundabout$getDestroyType(GameRules.RULE_MOB_EXPLOSION_DROP_DECAY) : Explosion.BlockInteraction.KEEP;
+                break;
+            case TNT:
+                var10000 = this.roundabout$getDestroyType(GameRules.RULE_TNT_EXPLOSION_DROP_DECAY);
+                break;
+            default:
+                throw new IncompatibleClassChangeError();
+        }
+
+        Explosion.BlockInteraction $$10 = var10000;
+        SoftExplosion $$11 = new SoftExplosion(this.level(), $$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$10);
+        $$11.explode();
+        $$11.finalizeExplosion($$9);
+        return $$11;
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
 
@@ -715,15 +782,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$getStandPowers().tickPower();
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();
-        if (this.roundabout$leapTicks > -1){
-            if (this.onGround() && roundabout$leapTicks < (roundabout$maxLeapTicks - 5)){
-                roundabout$leapTicks = -1;
-            }
-            roundabout$cancelConsumableItem((LivingEntity)(Object)this);
-            roundabout$leapTicks--;
-            if (!this.level().isClientSide){
-                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(1f,0.65f,0), 1f), this.getX(), this.getY(), this.getZ(),
-                        1, 0, 0, 0, 0.1);
+        if (this.roundabout$destructionModeTrailTicks > -1){
+            if (this.horizontalCollision || this.verticalCollision) {
+                /*The stupid setting which puts launched mobs in boom boom mode*/
+                if (this.horizontalCollision) {
+                    double $$0 = this.getDeltaMovement().horizontalDistanceSqr();
+                    if ($$0 >= 0.009999999776482582) {
+                        this.roundabout$explode($$0);
+                    }
+                } else  {
+                    double $$0 = this.getDeltaMovement().horizontalDistanceSqr();
+                    if ($$0 >= 0.009999999776482582) {
+                        this.roundabout$explode($$0);
+                    }
+                }
+                roundabout$destructionModeTrailTicks = -1;
+            } else if (this.isInWater() || this.isInLava()){
+                roundabout$destructionModeTrailTicks = -1;
+            } else {
+                roundabout$cancelConsumableItem((LivingEntity) (Object) this);
+                roundabout$destructionModeTrailTicks--;
+                if (!this.level().isClientSide) {
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE, this.getX(), this.getY(), this.getZ(),
+                            1, 0, 0, 0, 0.1);
+                }
             }
         }
         if (roundabout$sealedTicks > -1){
@@ -882,14 +964,29 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$maxBucketGasTicks;
     }
 
+    @Override
+    @Unique
+    public int roundabout$getDestructionTrailTicks(){
+        return this.roundabout$destructionModeTrailTicks;
+    }
+    @Override
+    @Unique
+    public void roundabout$setDestructionTrailTicks(int destructTicks){
+        if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionMode) {
+            this.roundabout$destructionModeTrailTicks = destructTicks;
+        }
+    }
+    @Override
     @Unique
     public int roundabout$getLeapTicks(){
         return this.roundabout$leapTicks;
     }
+    @Override
     @Unique
     public int roundabout$getMaxLeapTicks(){
         return this.roundabout$maxLeapTicks;
     }
+    @Override
     @Unique
     public void roundabout$setLeapTicks(int leapTicks){
         this.roundabout$leapTicks = leapTicks;
@@ -1234,7 +1331,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().damageMultipliers.standGuardMultiplier*0.01));
+        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().guardPoints.standGuardMultiplier*0.01));
     }
     @Unique
     public float roundabout$getGuardCooldown(){

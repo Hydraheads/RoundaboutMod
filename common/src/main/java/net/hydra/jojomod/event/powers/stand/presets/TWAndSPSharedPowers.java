@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -764,6 +763,19 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void tickPower(){
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+
+            if (isBarrageAttacking() && !this.self.level().isClientSide()){
+                if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionMode){
+
+                    Vec3 vec3d = this.self.getEyePosition(0);
+                    Vec3 vec3d2 = this.self.getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
+                    BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+                    BlockPos blockDest = blockHit.getBlockPos();
+                    ((StandUser)this.self).roundabout$explodePublic(0.4F,blockDest.getX(),blockDest.getY(),blockDest.getZ());
+                }
+            }
+
             if (this.forwardBarrage && !(this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2)){
                 this.forwardBarrage = false;
             }
@@ -1139,12 +1151,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         }
 
                         if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                            if (entity instanceof LivingEntity) {
+                            if (entity instanceof LivingEntity LE) {
                                 if (lastHit) {
                                     if (entity instanceof Player PE){
                                         ((IPlayerEntity) PE).roundabout$setCameraHits(-1);
                                     }
                                     if (!sideHit) {
+                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
                                         playBarrageEndNoise(0, entity);
                                     }
                                 } else {

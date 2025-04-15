@@ -1598,6 +1598,7 @@ public class StandPowers {
                                     setDazed((LivingEntity) entity, (byte) 0);
 
                                     if (!sideHit) {
+                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
                                         addEXP(8,LE);
                                         playBarrageEndNoise(0, entity);
                                     }

@@ -171,7 +171,10 @@ public interface StandUser {
 
     int roundabout$getMaxLeapTicks();
 
-
+    int roundabout$getDestructionTrailTicks();
+    void roundabout$setDestructionTrailTicks(int destructTicks);
+    void roundabout$explode(double $$0);
+    void roundabout$explodePublic(double $$1, double x, double y, double z);
     int roundabout$getLeapTicks();
     void roundabout$setLeapTicks(int leapTicks);
 
