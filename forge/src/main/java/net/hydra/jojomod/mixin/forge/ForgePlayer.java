@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -154,9 +155,11 @@ public abstract class ForgePlayer extends LivingEntity {
                     mspeed /= 5.0F;
                 }
 
-                if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock) {
+                if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().miningSettings.crouchingStopsMiningOres) {
                     mspeed = 0.0F;
                 }
+
+                mspeed *= powers.getMiningMultiplier();
                 cir.setReturnValue(mspeed);
             }
         }

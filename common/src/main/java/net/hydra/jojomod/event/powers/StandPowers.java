@@ -2527,6 +2527,12 @@ public class StandPowers {
     public float getShovelMiningSpeed() {
         return 5F;
     }
+    public float getMiningMultiplier() {
+        return 1F;
+    }
+    public int getMiningLevel() {
+        return 0;
+    }
     public boolean setPowerClash() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CLASH);

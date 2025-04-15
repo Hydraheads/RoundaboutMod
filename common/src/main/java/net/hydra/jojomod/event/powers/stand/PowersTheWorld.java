@@ -320,6 +320,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         this.setChargedTSTicks(this.getChargedTSTicks()*(1+
                 (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld -100)/100));
     }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierTheWorld;
+    }
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                miningSettings.speedMultiplierTheWorld*0.01));
+    }
+
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)){

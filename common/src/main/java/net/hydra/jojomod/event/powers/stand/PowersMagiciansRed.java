@@ -2161,6 +2161,17 @@ public class PowersMagiciansRed extends PunchingStand {
             }
         }
     }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                        miningSettings.speedMultiplierMagiciansRed*0.01));
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierMagiciansRed;
+    }
     @Override
     public boolean clickRelease(){
         if (!canGuard()){

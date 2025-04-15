@@ -810,7 +810,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected void roundabout$hasCorrectTool(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
         if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
         ) {
-            cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
+            int MiningTier = ((StandUser) this).roundabout$getStandPowers().getMiningLevel();
+            if (MiningTier >= 4){
+                cir.setReturnValue(Items.DIAMOND_PICKAXE.isCorrectToolForDrops($$0));
+            } else if (MiningTier == 3){
+                cir.setReturnValue(Items.IRON_PICKAXE.isCorrectToolForDrops($$0));
+            } else if (MiningTier == 2){
+                cir.setReturnValue(Items.STONE_PICKAXE.isCorrectToolForDrops($$0));
+            } else if (MiningTier == 1){
+                cir.setReturnValue(Items.WOODEN_PICKAXE.isCorrectToolForDrops($$0));
+            } else {
+                cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
+            }
         }
     }
 
@@ -841,13 +852,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 mspeed /= 5.0F;
             }
 
-            if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock) {
+            if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().miningSettings.crouchingStopsMiningOres) {
                 mspeed = 0.0F;
             }
 
             if ($$0.is(Blocks.COBWEB)){
                 mspeed *= 5.0F;
             }
+            mspeed *= powers.getMiningMultiplier();
+
             cir.setReturnValue(mspeed);
         }
     }

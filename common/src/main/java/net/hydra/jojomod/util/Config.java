@@ -95,6 +95,8 @@ import java.util.Set;
     @NestedOption(group = "modded")
     public GuardPoints guardPoints;
     @NestedOption(group = "modded")
+    public MiningSettings miningSettings;
+    @NestedOption(group = "modded")
     public Durations durationsInTicks;
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
@@ -190,6 +192,22 @@ import java.util.Set;
         public Integer magiciansRedDefend;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer d4cDefend;
+    }
+    public static class MiningSettings {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer speedMultiplierStarPlatinum;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer speedMultiplierTheWorld;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer speedMultiplierMagiciansRed;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierStarPlatinum;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierTheWorld;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierMagiciansRed;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean crouchingStopsMiningOres;
     }
     public static class Durations {
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)

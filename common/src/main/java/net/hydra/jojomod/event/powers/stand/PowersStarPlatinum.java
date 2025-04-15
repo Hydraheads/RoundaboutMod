@@ -110,6 +110,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                miningSettings.speedMultiplierStarPlatinum*0.01));
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierStarPlatinum;
+    }
+    @Override
     public void levelUp(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
