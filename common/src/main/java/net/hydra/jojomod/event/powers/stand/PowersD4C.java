@@ -21,8 +21,10 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,6 +32,8 @@ import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -381,17 +385,39 @@ public class PowersD4C extends PunchingStand {
             held4 = false;
     }
 
+    private void yoinkCurrency() {
+        if (this.getSelf() instanceof Player pe) {
+            int count = 0;
+            var inventory = pe.getInventory();
+
+            for (int i = 0; i < inventory.items.size(); i++) {
+                ItemStack stack = inventory.items.get(i);
+                if (stack.is(Items.EMERALD) || stack.is(Items.EMERALD_BLOCK)) {
+                    count += stack.getCount();
+                    pe.drop(stack.copy(), false);
+                    inventory.setItem(i, ItemStack.EMPTY);
+                }
+            }
+
+            if (count >= 1) {
+                pe.displayClientMessage(Component.translatable("item.roundabout.d4c.lost_emeralds", count), true);
+            }
+        }
+    }
+
     /** Store player entity ids here while we wait for them to recieve the packet and load the dimension. */
     public static HashMap<Integer, DynamicWorld> queuedWorldTransports = new HashMap<>();
     private boolean teleportToD4CWorld()
     {
-        if (this.getSelf().getServer() == null)
+        if (this.getSelf().getServer() == null){
             return false;
+        }
 
         ServerLevel overworld = this.getSelf().getServer().overworld();
         ServerPlayer player = (ServerPlayer)this.getSelf();
         if (player.level() != player.getServer().overworld())
         {
+            yoinkCurrency();
             player.teleportTo(overworld.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
             return true;
         }
@@ -399,6 +425,7 @@ public class PowersD4C extends PunchingStand {
         DynamicWorld world = DynamicWorld.generateD4CWorld(player.getServer());
         if (world.getLevel() != null)
         {
+            yoinkCurrency();
             queuedWorldTransports.put(player.getId(), world);
             world.broadcastPacketsToPlayers(player.getServer());
             return true;
@@ -421,6 +448,7 @@ public class PowersD4C extends PunchingStand {
         DynamicWorld world = DynamicWorld.generateD4CWorld(this.getSelf().getServer());
         if (world.getLevel() != null)
         {
+            yoinkCurrency();
             queuedWorldTransports.put(this.getSelf().getId(), world);
         }
         else
