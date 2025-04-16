@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
+import net.hydra.jojomod.access.IMultiplayerGameMode;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -52,6 +53,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.BedBlock;
@@ -946,7 +948,11 @@ public abstract class InputEvents implements IInputEvents {
                                     BlockHitResult $$2 = (BlockHitResult) this.hitResult;
                                     BlockPos $$3 = $$2.getBlockPos();
                                     if (!this.level.getBlockState($$3).isAir()) {
+                                        if (!player.isCreative()) {
                                             this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                        } else {
+                                            ((IMultiplayerGameMode)this.gameMode).roundaabout$setDestroyDelay(5);
+                                        }
                                         if (powers.canUseMiningStand()) {
                                             standComp.roundabout$tryPower(PowerIndex.MINING, true);
                                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);

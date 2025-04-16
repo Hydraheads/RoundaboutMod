@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IInputEvents;
+import net.hydra.jojomod.access.IMultiplayerGameMode;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -31,13 +32,14 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
-public abstract class ZMultiPlayerGameMode {
+public abstract class ZMultiPlayerGameMode implements IMultiplayerGameMode {
 
     @Shadow
     private boolean isDestroying;
@@ -58,6 +60,15 @@ public abstract class ZMultiPlayerGameMode {
     @Shadow protected abstract void ensureHasSentCarriedItem();
 
     @Shadow protected abstract void startPrediction(ClientLevel $$0, PredictiveAction $$1);
+
+    @Shadow private int destroyDelay;
+
+    @Unique
+    @Override
+    public void roundaabout$setDestroyDelay(int destroy){
+        this.destroyDelay = destroy;
+    }
+
 
     /**While your offhand is frozen in stone, you cannot use it*/
     @Inject(method = "useItem", at = @At("HEAD"), cancellable = true)

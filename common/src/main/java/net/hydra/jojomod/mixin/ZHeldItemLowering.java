@@ -44,15 +44,15 @@ public class ZHeldItemLowering {
     public void roundabout$HeldItems(CallbackInfo ci) {
         if (this.minecraft.player != null) {
             LocalPlayer clientPlayerEntity2 = this.minecraft.player;
-            if (!this.minecraft.player.isHandsBusy()) {
-                if (((StandUser) this.minecraft.player).roundabout$getActive() && ((StandUser) this.minecraft.player).roundabout$getStandPowers().isMiningStand()) {
+            if (!clientPlayerEntity2.isHandsBusy()) {
+                if (((StandUser) clientPlayerEntity2).roundabout$getActive() && ((StandUser) clientPlayerEntity2).roundabout$getStandPowers().isMiningStand()) {
                     ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
                     ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();
                     //if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)) {
                     if ((itemStack3.getItem() instanceof Vanishable) && !(itemStack3.getItem() instanceof CrossbowItem)
                             && !(itemStack3.getItem() instanceof GasolineCanItem)
                             && !clientPlayerEntity2.getUseItem().equals(itemStack3) &&
-                            !(((StandUser)this.minecraft.player).roundabout$getStandPowers().getActivePower() != PowerIndex.MINING &&
+                            !(((StandUser)clientPlayerEntity2).roundabout$getStandPowers().getActivePower() != PowerIndex.MINING &&
                     this.minecraft.gameMode != null && this.minecraft.gameMode.isDestroying())) {
                         if (this.mainHandHeight > 0.6) {
                             this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4f, 0.6f, 1.0f);
