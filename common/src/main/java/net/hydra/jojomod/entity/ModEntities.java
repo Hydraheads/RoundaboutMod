@@ -25,6 +25,7 @@ public class ModEntities {
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED;
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED_OVA;
     public static EntityType<D4CEntity> D4C;
+    public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;

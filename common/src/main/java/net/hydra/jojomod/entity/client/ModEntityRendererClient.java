@@ -15,6 +15,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation MAGICIANS_RED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red"), "main");
     public static final ModelLayerLocation MAGICIANS_RED_OVA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red_ova"), "main");
     public static final ModelLayerLocation D4C_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "d4c"), "main");
+    public static final ModelLayerLocation CINDERELLA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "cinderella"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");

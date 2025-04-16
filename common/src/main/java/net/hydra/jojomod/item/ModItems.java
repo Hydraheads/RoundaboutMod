@@ -21,6 +21,7 @@ public class ModItems {
     public static Item STAND_DISC_MAGICIANS_RED;
     public static Item STAND_DISC_D4C;
     public static Item MAX_STAND_DISC_D4C;
+    public static Item STAND_DISC_CINDERELLA;
     public static Item STAND_DISC;
     public static Item STREET_SIGN_DIO_BLOCK_ITEM;
     public static Item STREET_SIGN_RIGHT_BLOCK_ITEM;

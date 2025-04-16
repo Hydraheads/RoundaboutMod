@@ -36,6 +36,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED.get(), MagiciansRedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED_OVA.get(), MagiciansRedOVARenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DARK_MIRAGE.get(), DarkMirageRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
@@ -82,6 +83,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.MAGICIANS_RED_OVA_LAYER, MagiciansRedOVAModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_PIRATE_LAYER, JusticePirateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);

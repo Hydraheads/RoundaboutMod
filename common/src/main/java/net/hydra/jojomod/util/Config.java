@@ -24,7 +24,7 @@ import java.util.Set;
     public Integer levelsToRerollStand;
     @BooleanOption(group = "inherit", value = false)
     public Boolean canAwakenOtherPlayersWithArrows;
-    @BooleanOption(group = "inherit", value = true)
+    @BooleanOption(group = "inherit", value = false)
     public Boolean canThrowVisagesOntoOtherPlayers;
     @BooleanOption(group = "inherit", value = true)
     public Boolean enableStandLeveling;

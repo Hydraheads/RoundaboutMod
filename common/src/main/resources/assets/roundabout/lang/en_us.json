@@ -45,6 +45,7 @@
   "item.roundabout.the_world_disc": "Stand Disc",
   "item.roundabout.justice_disc": "Stand Disc",
   "item.roundabout.d4c_disc": "Stand Disc",
+  "item.roundabout.cinderella_disc": "Stand Disc",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
   "item.roundabout.max_the_world_disc": "Stand Disc+",
@@ -56,6 +57,7 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
+  "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.blank_mask": "Glass Visage",
@@ -675,6 +677,8 @@
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "Wonder Festival",
+
+  "skins.roundabout.cinderella.base": "Part 4",
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",

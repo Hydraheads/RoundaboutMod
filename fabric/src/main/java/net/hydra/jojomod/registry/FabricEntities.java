@@ -186,6 +186,13 @@ public class FabricEntities {
                         EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":d4c")
                 );
+        public static final EntityType<CinderellaEntity> CINDERELLA =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("cinderella"),
+                        EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":cinderella")
+                );
         public static final EntityType<JusticePirateEntity> JUSTICE_PIRATE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -295,6 +302,7 @@ public class FabricEntities {
                 ModEntities.MAGICIANS_RED = MAGICIANS_RED;
                 ModEntities.MAGICIANS_RED_OVA = MAGICIANS_RED_OVA;
                 ModEntities.D4C = D4C;
+                ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -356,6 +364,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(CINDERELLA, StandEntity.createStandAttributes());
 
 
                 FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());

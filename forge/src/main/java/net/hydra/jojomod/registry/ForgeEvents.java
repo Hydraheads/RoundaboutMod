@@ -44,6 +44,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.JUSTICE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.JUSTICE_PIRATE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.D4C.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.CINDERELLA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED_OVA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
@@ -200,6 +201,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
+        ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
@@ -266,6 +268,7 @@ public class ForgeEvents {
         ModEntities.MAGICIANS_RED = ForgeEntities.MAGICIANS_RED.get();
         ModEntities.MAGICIANS_RED_OVA = ForgeEntities.MAGICIANS_RED_OVA.get();
         ModEntities.D4C = ForgeEntities.D4C.get();
+        ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();

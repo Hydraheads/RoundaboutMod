@@ -1,11 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
-import net.hydra.jojomod.event.powers.stand.PowersJustice;
-import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
-import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
-import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.item.*;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -384,6 +380,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = addToDiscTab(ITEMS.register("max_d4c_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
+    public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties())));
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
