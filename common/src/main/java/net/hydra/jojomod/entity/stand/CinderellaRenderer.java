@@ -34,7 +34,7 @@ public class CinderellaRenderer extends StandRenderer<CinderellaEntity> {
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
         } else {
-            matrixStack.scale(0.7f * factor, 0.7f * factor, 0.7f * factor);
+            matrixStack.scale(0.8f * factor, 0.8f * factor, 0.8f * factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }

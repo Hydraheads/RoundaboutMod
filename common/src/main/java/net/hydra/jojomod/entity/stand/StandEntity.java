@@ -170,6 +170,8 @@ public abstract class StandEntity extends Mob{
     public final AnimationState brokenBlockAnimationState = new AnimationState();
     public final AnimationState standLeapAnimationState = new AnimationState();
     public final AnimationState standLeapEndAnimationState = new AnimationState();
+    public final AnimationState armlessAnimation = new AnimationState();
+    public final AnimationState armlessAnimationIdle = new AnimationState();
 
     /**Override this to define animations. Above are animation states defined.*/
     public void setupAnimationStates() {
@@ -193,6 +195,16 @@ public abstract class StandEntity extends Mob{
                 this.idleAnimationState4.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState4.stop();
+            }
+            if (this.getAnimation() == 0 && this.getIdleAnimation() == 4) {
+                this.armlessAnimationIdle.startIfStopped(this.tickCount);
+            } else {
+                this.armlessAnimationIdle.stop();
+            }
+            if (this.getIdleAnimation() == 4){
+                this.armlessAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.armlessAnimation.stop();
             }
             if (this.getAnimation() == 1) {
                 this.punchState1.startIfStopped(this.tickCount);

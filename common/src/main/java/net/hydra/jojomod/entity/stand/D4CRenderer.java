@@ -21,12 +21,10 @@ public class D4CRenderer extends StandRenderer<D4CEntity> {
     @Override public ResourceLocation getTextureLocation(D4CEntity entity) {
         switch (entity.getSkin())
         {
-            case (D4CEntity.MANGA_SKIN):
-                return MANGA_SKIN;
             case (D4CEntity.WONDER_FESTIVAL):
                 return WONDER_FESTIVAL;
             default:
-                return null;
+                return MANGA_SKIN;
         }
     }
 

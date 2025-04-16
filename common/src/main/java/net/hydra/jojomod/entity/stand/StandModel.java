@@ -61,6 +61,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationState2, StandAnimations.IDLE_2, animationProgress, 1f);
         this.animate(entity.idleAnimationState3, StandAnimations.FLOATY_IDLE, animationProgress, 1f);
         this.animate(entity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, animationProgress, 1f);
+        this.animate(entity.armlessAnimation, StandAnimations.ArmIdle, animationProgress, 1f);
+        this.animate(entity.armlessAnimationIdle, StandAnimations.ArmIdle2, animationProgress, 1f);
         this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
         this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f); /*1.1666 for 6 ticks, 1.4 for 5*/
         this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);

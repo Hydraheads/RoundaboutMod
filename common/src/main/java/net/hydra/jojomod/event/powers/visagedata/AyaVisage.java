@@ -18,6 +18,6 @@ public class AyaVisage extends VisageData {
     }
     @Override
     public Vec3 sizeModifier(){
-        return new Vec3(1.0F,1.0F,1.0F);
+        return new Vec3(0.95F,0.95F,0.95F);
     }
 }
