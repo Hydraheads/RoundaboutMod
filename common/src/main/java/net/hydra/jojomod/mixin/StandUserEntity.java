@@ -2141,7 +2141,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
             Entity bound = roundabout$getBoundTo();
-            if (bound != null && !$$0.isIndirect() && !$$0.is(ModDamageTypes.STAND_FIRE)){
+            if (bound != null && ($$0.getEntity() != null || $$0.is(DamageTypes.MAGIC) || $$0.is(DamageTypes.EXPLOSION)) && !$$0.is(ModDamageTypes.STAND_FIRE)){
                 roundabout$dropString();
             }
         }
