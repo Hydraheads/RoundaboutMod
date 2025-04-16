@@ -146,6 +146,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ipe.roundabout$setIdleRotation(rotat);
             ipe.roundabout$setIdleYOffset(yOffset);
             ipe.roundabout$setTeamColor(teamColor);
+            ipe.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
             ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
                     ipe.roundabout$getSizePercent(),
