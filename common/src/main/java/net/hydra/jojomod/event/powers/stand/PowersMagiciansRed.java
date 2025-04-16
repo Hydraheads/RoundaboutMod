@@ -961,7 +961,7 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
         if (!isBusy()) {
-            if (!isChargingCrossfire() && !hasHurricane()) {
+            if (!isChargingCrossfire() && !hasHurricaneSingle()) {
                 if (isHoldingSneak()) {
                     if (!isLockedByWater()) {
                         if (keyIsDown) {
@@ -981,7 +981,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (keyIsDown) {
                         if (!hold4) {
                             hold4 = true;
-                            if (canExecuteMoveWithLevel(7)) {
+                            if (canExecuteMoveWithLevel(7) && !hasHurricaneSpecial()) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
                             }
