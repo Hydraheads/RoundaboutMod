@@ -73,6 +73,8 @@
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
+  "item.roundabout.d4c.lost_emeralds": "You lost %s emeralds.",
+
   "item.roundabout.stand_arrow.roll": "???",
   "item.roundabout.stand_arrow.usedUp": "Out of power, craft with meteorite.",
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
