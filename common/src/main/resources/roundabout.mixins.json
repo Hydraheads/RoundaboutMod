@@ -90,6 +90,7 @@
     "GeckolibCompatAttempt",
     "HudRendering",
     "InputEvents",
+    "PlayerEntityAbstractClient",
     "PlayerEntityClient",
     "StandUserClient",
     "WorldTickClient",

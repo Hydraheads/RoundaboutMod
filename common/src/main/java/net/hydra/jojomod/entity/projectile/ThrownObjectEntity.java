@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
@@ -8,10 +9,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.ScissorItem;
-import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -425,6 +423,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         } else if (this.getItem().getItem() instanceof DyeItem && $$1 instanceof LivingEntity) {
             if (!this.useDye(this.getItem(), ((LivingEntity) $$1))){
+                this.dropItem($$1.getOnPos());
+            }
+        } else if (this.getItem().getItem() instanceof MaskItem && $$1 instanceof Player pe) {
+            if (ClientNetworking.getAppropriateConfig().canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(0).isEmpty()){
+                ((IPlayerEntity)pe).roundabout$getMaskInventory().setItem(0,this.getItem().copy());
+
+            } else {
                 this.dropItem($$1.getOnPos());
             }
         } else if (this.getItem().getItem() instanceof SaddleItem && $$1 instanceof LivingEntity) {

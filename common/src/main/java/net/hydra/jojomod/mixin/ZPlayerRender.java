@@ -165,53 +165,53 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Unique
     public void roundabout$setShapeShift(Player pe, Mob me){
-        if (pe instanceof LocalPlayer lpe){
-            ((StandUserClientPlayer)lpe).roundabout$setShapeShiftTemp(me);
+        if (pe instanceof AbstractClientPlayer lpe){
+            ((IPlayerEntityAbstractClient)lpe).roundabout$setShapeShiftTemp(me);
         }
     }
     @Unique
     public Mob roundabout$getShapeShift(Player pe){
-        if (pe instanceof LocalPlayer lpe){
-            return ((StandUserClientPlayer)lpe).roundabout$getShapeShiftTemp();
+        if (pe instanceof AbstractClientPlayer lpe){
+            return ((IPlayerEntityAbstractClient)lpe).roundabout$getShapeShiftTemp();
         }
         return null;
     }
     @Unique
     public void roundabout$setVisageData(Player pe, VisageData me){
-        if (pe instanceof LocalPlayer lpe){
-            ((StandUserClientPlayer)lpe).roundabout$setVisageData(me);
+        if (pe instanceof AbstractClientPlayer lpe){
+            ((IPlayerEntityAbstractClient)lpe).roundabout$setVisageData(me);
         }
     }
     @Unique
     public VisageData roundabout$getVisageData(Player pe){
-        if (pe instanceof LocalPlayer lpe){
-            return ((StandUserClientPlayer)lpe).roundabout$getVisageData();
+        if (pe instanceof AbstractClientPlayer lpe){
+            return ((IPlayerEntityAbstractClient)lpe).roundabout$getVisageData();
         }
         return null;
     }
     @Unique
     public void roundabout$setLastVisage(Player pe, ItemStack me){
-        if (pe instanceof LocalPlayer lpe){
-            ((StandUserClientPlayer)lpe).roundabout$setLastVisage(me);
+        if (pe instanceof AbstractClientPlayer lpe){
+            ((IPlayerEntityAbstractClient)lpe).roundabout$setLastVisage(me);
         }
     }
     @Unique
     public ItemStack roundabout$getLastVisage(Player pe){
-        if (pe instanceof LocalPlayer lpe){
-            return ((StandUserClientPlayer)lpe).roundabout$getLastVisage();
+        if (pe instanceof AbstractClientPlayer lpe){
+            return ((IPlayerEntityAbstractClient)lpe).roundabout$getLastVisage();
         }
         return null;
     }
     @Unique
     public void roundabout$setSwappedModel(Player pe, Mob me){
-        if (pe instanceof LocalPlayer lpe){
-            ((StandUserClientPlayer)lpe).roundabout$setSwappedModel(me);
+        if (pe instanceof AbstractClientPlayer lpe){
+            ((IPlayerEntityAbstractClient)lpe).roundabout$setSwappedModel(me);
         }
     }
     @Unique
     public Mob roundabout$getSwappedModel(Player pe){
-        if (pe instanceof LocalPlayer lpe){
-            return ((StandUserClientPlayer)lpe).roundabout$getSwappedModel();
+        if (pe instanceof AbstractClientPlayer lpe){
+            return ((IPlayerEntityAbstractClient)lpe).roundabout$getSwappedModel();
         }
         return null;
     }
@@ -533,6 +533,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Unique
     boolean roundabout$wasJustCreated;
+    @Unique
     public void roundabout$initializeVisageModel(ItemStack visage, Player $$0){
 
         if (visage != roundabout$getLastVisage($$0)){
