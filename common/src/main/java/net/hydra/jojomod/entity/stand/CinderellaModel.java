@@ -22,7 +22,7 @@ public class CinderellaModel<T extends CinderellaEntity> extends StandModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 0.65F, 0.0F));
+        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 2.65F, 0.0F));
 
         PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 14.0F, 0.0F));
 
@@ -43,13 +43,7 @@ public class CinderellaModel<T extends CinderellaEntity> extends StandModel<T> {
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(56, 27).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 0).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.1F))
-                .texOffs(54, 23).addBox(-2.0F, -1.0F, -2.25F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
-
-        PartDefinition cube_r1 = upper_chest.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 44).addBox(-1.0F, -3.0F, -1.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.5F, -2.0F, -2.5F, 0.0F, 0.2094F, 0.0F));
-
-        PartDefinition cube_r2 = upper_chest.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(24, 43).addBox(-2.0F, -3.0F, -1.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.5F, -2.0F, -2.5F, 0.0F, -0.192F, 0.0F));
+        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -6.0F, 0.0F));
 
@@ -82,6 +76,14 @@ public class CinderellaModel<T extends CinderellaEntity> extends StandModel<T> {
                 .texOffs(10, 74).mirror().addBox(-1.5F, 6.225F, -1.47F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.1F)).mirror(false)
                 .texOffs(38, 42).addBox(-1.5F, -0.025F, -1.47F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(44, 57).mirror().addBox(-1.5F, -0.025F, -1.47F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offset(-1.5F, 4.275F, 0.1F));
+
+        PartDefinition no_arms = upper_chest.addOrReplaceChild("no_arms", CubeListBuilder.create().texOffs(56, 27).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 0).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.1F))
+                .texOffs(54, 23).addBox(-2.0F, -1.0F, -2.25F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition cube_r1 = no_arms.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 44).addBox(-1.0F, -3.0F, -1.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.5F, -2.0F, -2.5F, 0.0F, 0.2094F, 0.0F));
+
+        PartDefinition cube_r2 = no_arms.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(24, 43).addBox(-2.0F, -3.0F, -1.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.5F, -2.0F, -2.5F, 0.0F, -0.192F, 0.0F));
 
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create().texOffs(56, 39).addBox(-3.0F, 5.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.5F))
                 .texOffs(26, 80).addBox(-0.5F, -0.5F, 0.75F, 1.0F, 6.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));

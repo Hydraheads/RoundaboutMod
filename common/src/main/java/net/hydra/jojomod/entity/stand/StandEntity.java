@@ -196,14 +196,16 @@ public abstract class StandEntity extends Mob{
             } else {
                 this.idleAnimationState4.stop();
             }
-            if (this.getAnimation() == 0 && this.getIdleAnimation() == 4) {
-                this.armlessAnimationIdle.startIfStopped(this.tickCount);
+            if (this.getIdleAnimation() == 4) {
+                if (this.getAnimation() == 0){
+                    this.armlessAnimationIdle.startIfStopped(this.tickCount);
+                    this.armlessAnimation.stop();
+                } else {
+                    this.armlessAnimation.startIfStopped(this.tickCount);
+                    this.armlessAnimationIdle.stop();
+                }
             } else {
                 this.armlessAnimationIdle.stop();
-            }
-            if (this.getIdleAnimation() == 4){
-                this.armlessAnimation.startIfStopped(this.tickCount);
-            } else {
                 this.armlessAnimation.stop();
             }
             if (this.getAnimation() == 1) {

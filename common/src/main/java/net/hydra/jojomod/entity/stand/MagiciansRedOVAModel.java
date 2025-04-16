@@ -60,12 +60,7 @@ public class MagiciansRedOVAModel<T extends MagiciansRedEntity> extends StandMod
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(28, 12).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(66, 26).addBox(-1.0F, -5.0F, 1.5F, 2.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
-
-        PartDefinition upper_feather_r1 = upper_chest.addOrReplaceChild("upper_feather_r1", CubeListBuilder.create().texOffs(66, 35).addBox(-1.0F, -2.5F, -1.0F, 2.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.5F, 3.0F, -2.8362F, 0.0F, 0.0F));
-
-        PartDefinition vest = upper_chest.addOrReplaceChild("vest", CubeListBuilder.create(), PartPose.offset(0.0F, 18.0F, 0.0F));
+        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 
@@ -136,6 +131,13 @@ public class MagiciansRedOVAModel<T extends MagiciansRedEntity> extends StandMod
         PartDefinition shoulder_left_r1 = upper_left_arm.addOrReplaceChild("shoulder_left_r1", CubeListBuilder.create().texOffs(66, 0).addBox(-2.0F, -4.0F, -3.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 1.5F, 1.0F, -0.3543F, 0.2602F, 0.6077F));
 
         PartDefinition shoulder_left_r2 = upper_left_arm.addOrReplaceChild("shoulder_left_r2", CubeListBuilder.create().texOffs(66, 0).addBox(-2.0F, -4.0F, -3.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 1.5F, 1.0F, -0.4363F, 0.0F, 0.0F));
+
+        PartDefinition no_arms = upper_chest.addOrReplaceChild("no_arms", CubeListBuilder.create().texOffs(66, 26).addBox(-1.0F, -5.0F, 1.5F, 2.0F, 5.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(28, 12).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition upper_feather_r1 = no_arms.addOrReplaceChild("upper_feather_r1", CubeListBuilder.create().texOffs(66, 35).addBox(-1.0F, -2.5F, -1.0F, 2.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.5F, 3.0F, -2.8362F, 0.0F, 0.0F));
+
+        PartDefinition vest = no_arms.addOrReplaceChild("vest", CubeListBuilder.create(), PartPose.offset(0.0F, 18.0F, 0.0F));
 
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
@@ -210,6 +212,8 @@ public class MagiciansRedOVAModel<T extends MagiciansRedEntity> extends StandMod
         this.animate(pEntity.idleAnimationState3, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.blockAnimationState, StandAnimations.BLOCK, pAgeInTicks, 1f);
+        this.animate(pEntity.armlessAnimation, StandAnimations.ArmIdle, pAgeInTicks, 1f);
+        this.animate(pEntity.armlessAnimationIdle, StandAnimations.ArmIdle2, pAgeInTicks, 1f);
     }
 
     @Override

@@ -3422,6 +3422,9 @@ public class StandAnimations {
                 .addAnimation("no_arms", new AnimationChannel(AnimationChannel.Targets.SCALE,
                         new Keyframe(2.5417F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
                 ))
+                .addAnimation("upper_chest_only", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                        new Keyframe(2.5417F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                ))
                 .build();
 
         public static final AnimationDefinition ArmIdle2 = AnimationDefinition.Builder.withLength(3.0F).looping()
@@ -3471,6 +3474,9 @@ public class StandAnimations {
                         new Keyframe(2.5417F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
                 ))
                 .addAnimation("no_arms", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                        new Keyframe(2.5417F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                ))
+                .addAnimation("upper_chest_only", new AnimationChannel(AnimationChannel.Targets.SCALE,
                         new Keyframe(2.5417F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
                 ))
                 .build();

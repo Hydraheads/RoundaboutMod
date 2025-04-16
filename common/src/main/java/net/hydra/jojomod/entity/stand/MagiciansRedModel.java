@@ -51,9 +51,7 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(28, 12).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
-
-        PartDefinition vest = upper_chest.addOrReplaceChild("vest", CubeListBuilder.create(), PartPose.offset(0.0F, 18.0F, 0.0F));
+        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 
@@ -132,6 +130,10 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         PartDefinition frame10 = Flames2.addOrReplaceChild("frame10", CubeListBuilder.create().texOffs(108, 44).addBox(-2.6F, -2.1F, -2.7F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(48, 0).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition no_arms = upper_chest.addOrReplaceChild("no_arms", CubeListBuilder.create().texOffs(28, 12).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition vest = no_arms.addOrReplaceChild("vest", CubeListBuilder.create(), PartPose.offset(0.0F, 18.0F, 0.0F));
 
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
@@ -218,6 +220,8 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         this.animate(pEntity.idleAnimationState3, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.blockAnimationState, StandAnimations.BLOCK, pAgeInTicks, 1f);
+        this.animate(pEntity.armlessAnimation, StandAnimations.ArmIdle, pAgeInTicks, 1f);
+        this.animate(pEntity.armlessAnimationIdle, StandAnimations.ArmIdle2, pAgeInTicks, 1f);
     }
 
     @Override
