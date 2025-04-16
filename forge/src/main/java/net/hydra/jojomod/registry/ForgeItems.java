@@ -396,6 +396,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties(), new EnyaVisage(null))));
     public static final RegistryObject<Item> AVDOL_MASK = addToTab(ITEMS.register("avdol_mask",
             () -> new MaskItem(new Item.Properties(), new AvdolVisage(null))));
+    public static final RegistryObject<Item> AYA_MASK = addToTab(ITEMS.register("aya_mask",
+            () -> new MaskItem(new Item.Properties(), new AyaVisage(null))));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

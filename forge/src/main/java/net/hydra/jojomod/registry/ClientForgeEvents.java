@@ -55,6 +55,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), JotaroRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AVDOL.get(), AvdolRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DIO.get(), DIORenderer::new);
+        event.registerEntityRenderer(ForgeEntities.AYA.get(), AyaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
@@ -94,6 +95,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.DIO_LAYER, DIOModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ENYA_LAYER, EnyaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.AVDOL_LAYER, AvdolModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.AYA_LAYER, AyaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerNPCModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);

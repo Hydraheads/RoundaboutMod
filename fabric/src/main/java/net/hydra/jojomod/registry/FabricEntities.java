@@ -69,6 +69,13 @@ public class FabricEntities {
                         EntityType.Builder.of(DIONPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_dio")
                 );
+        public static final EntityType<AyaNPC> AYA =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_aya"),
+                        EntityType.Builder.of(AyaNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_aya")
+                );
         public static final EntityType<PlayerSteveNPC> STEVE_NPC =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -315,6 +322,7 @@ public class FabricEntities {
                 ModEntities.JOTARO = JOTARO;
                 ModEntities.AVDOL = AVDOL;
                 ModEntities.DIO = DIO;
+                ModEntities.AYA = AYA;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.FOG_CLONE = FOG_CLONE;
@@ -328,6 +336,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AVDOL, AvdolNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(DIO, DIONPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(AYA, AyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(FOG_CLONE, PlayerAlexNPC.createAttributes());

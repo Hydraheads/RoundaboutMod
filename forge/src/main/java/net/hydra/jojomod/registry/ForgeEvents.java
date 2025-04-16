@@ -52,6 +52,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
         event.put(ForgeEntities.AVDOL.get(), AvdolNPC.createAttributes().build());
         event.put(ForgeEntities.DIO.get(), DIONPC.createAttributes().build());
+        event.put(ForgeEntities.AYA.get(), AyaNPC.createAttributes().build());
         event.put(ForgeEntities.STEVE_NPC.get(), PlayerSteveNPC.createAttributes().build());
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.FOG_CLONE.get(), PlayerAlexNPC.createAttributes().build());
@@ -221,6 +222,7 @@ public class ForgeEvents {
         ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
+        ModItems.AYA_MASK = ForgeItems.AYA_MASK.get();
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
@@ -291,6 +293,7 @@ public class ForgeEvents {
         ModEntities.JOTARO = ForgeEntities.JOTARO.get();
         ModEntities.DIO = ForgeEntities.DIO.get();
         ModEntities.AVDOL = ForgeEntities.AVDOL.get();
+        ModEntities.AYA = ForgeEntities.AYA.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();

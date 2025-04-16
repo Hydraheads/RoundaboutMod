@@ -95,6 +95,7 @@ public class FabricItems {
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
+    public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
     public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_CLAY = registerItem("fog_clay", (Item) new FogBlockItem(ModBlocks.FOG_CLAY, new Item.Properties(), Blocks.CLAY));
@@ -235,6 +236,7 @@ public class FabricItems {
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
                         entries.accept(AVDOL_MASK);
+                        entries.accept(AYA_MASK);
 
                     }).build());
 
@@ -383,6 +385,7 @@ public class FabricItems {
         ModItems.DIO_MASK = DIO_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
+        ModItems.AYA_MASK = AYA_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
