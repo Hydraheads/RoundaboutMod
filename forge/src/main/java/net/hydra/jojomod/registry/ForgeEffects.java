@@ -30,6 +30,14 @@ public class ForgeEffects{
             POTION_EFFECTS.register("stand_virus", () ->
                     new Effect(MobEffectCategory.HARMFUL, 9979490)
             );
+    public static final RegistryObject<MobEffect> CAPTURING_LOVE =
+            POTION_EFFECTS.register("capturing_love", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 16772988)
+            );
+    public static final RegistryObject<MobEffect> FACELESS =
+            POTION_EFFECTS.register("faceless", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 10329495)
+            );
 
     public static class Effect extends MobEffect{
         public Effect(MobEffectCategory typeIn, int liquidColorIn) {

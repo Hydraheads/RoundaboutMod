@@ -220,6 +220,7 @@ public class ForgeEvents {
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
+        ModItems.LUCKY_LIPSTICK = ForgeItems.LUCKY_LIPSTICK.get();
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
@@ -260,6 +261,8 @@ public class ForgeEvents {
         ModEffects.BLEED = ForgeEffects.BLEED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
+        ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
+        ModEffects.FACELESS = ForgeEffects.FACELESS.get();
 
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();

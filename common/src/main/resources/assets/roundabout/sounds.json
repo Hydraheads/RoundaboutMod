@@ -137,6 +137,18 @@
       "roundabout:cinderella_attack"
     ]
   },
+  "cinderella_sparkle": {
+    "subtitle": "sounds.roundabout.cinderella_sparkle",
+    "sounds": [
+      "roundabout:cinderella_sparkle"
+    ]
+  },
+  "cinderella_fail": {
+    "subtitle": "sounds.roundabout.cinderella_fail",
+    "sounds": [
+      "roundabout:cinderella_fail"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [

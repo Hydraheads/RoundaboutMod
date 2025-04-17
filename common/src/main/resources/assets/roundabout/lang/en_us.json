@@ -40,6 +40,7 @@
   "item.roundabout.street_sign_stop_item": "Street Sign: Stop",
   "item.roundabout.street_sign_yield_item": "Street Sign: Yield",
   "item.roundabout.street_sign_danger_item": "Street Sign: Danger",
+  "item.roundabout.lucky_lipstick": "Lucky Lipstick",
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -406,6 +407,8 @@
 
   "sounds.roundabout.cinderella_summon":  "Stand Summoned",
   "sounds.roundabout.cinderella_attack":  "Mechanical Attack",
+  "sounds.roundabout.cinderella_sparkle":  "Magic sparkle",
+  "sounds.roundabout.cinderella_fail":  "Uh oh",
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",

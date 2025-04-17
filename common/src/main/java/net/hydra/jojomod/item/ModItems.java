@@ -62,6 +62,7 @@ public class ModItems {
     public static Item NETHERITE_GLAIVE;
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
+    public static Item LUCKY_LIPSTICK;
     public static Item BLANK_MASK;
     public static Item JOTARO_MASK;
     public static Item DIO_MASK;

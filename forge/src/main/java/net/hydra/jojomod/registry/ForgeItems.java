@@ -384,6 +384,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties())));
+    public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",
+            () -> new LuckyLipstickItem(new Item.Properties())));
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
             () -> new MaskItem(new Item.Properties(), new VisageData(null))));
     public static final RegistryObject<Item> JOTARO_MASK = addToTab(ITEMS.register("jotaro_mask",

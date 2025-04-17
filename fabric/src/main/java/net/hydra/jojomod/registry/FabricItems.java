@@ -88,6 +88,7 @@ public class FabricItems {
     public static Item LOCACACA_BRANCH = registerItem("locacaca_branch", (Item) new ItemNameBlockItem(ModBlocks.NEW_LOCACACA_BLOCK, new Item.Properties()));
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
+    public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new VisageData(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
@@ -229,6 +230,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
                         entries.accept(ModBlocks.STEREO);
                         entries.accept(WORTHY_ARROW);
+                        entries.accept(LUCKY_LIPSTICK);
                         entries.accept(BLANK_MASK);
                         entries.accept(JOTARO_MASK);
                         entries.accept(DIO_MASK);
@@ -380,6 +382,7 @@ public class FabricItems {
         ModItems.LOCACACA = LOCACACA;
         ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;
         ModItems.NEW_LOCACACA = NEW_LOCACACA;
+        ModItems.LUCKY_LIPSTICK = LUCKY_LIPSTICK;
         ModItems.BLANK_MASK = BLANK_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
         ModItems.DIO_MASK = DIO_MASK;
