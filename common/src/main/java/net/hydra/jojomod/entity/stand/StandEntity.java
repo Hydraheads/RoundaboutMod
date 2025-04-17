@@ -176,28 +176,30 @@ public abstract class StandEntity extends Mob{
     /**Override this to define animations. Above are animation states defined.*/
     public void setupAnimationStates() {
         if (this.getUser() != null) {
-            if (this.getAnimation() == 0 && this.getIdleAnimation() == 1) {
+            byte idle = getIdleAnimation();
+            byte animation = getAnimation();
+            if (animation == 0 && idle == 1) {
                 this.idleAnimationState2.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState2.stop();
             }
-            if (this.getAnimation() == 0 && this.getIdleAnimation() == 0) {
+            if (animation == 0 && idle == 0) {
                 this.idleAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState.stop();
             }
-            if (this.getAnimation() == 0 && this.getIdleAnimation() == 2) {
+            if (animation == 0 && idle == 2) {
                 this.idleAnimationState3.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState3.stop();
             }
-            if (this.getAnimation() == 0 && this.getIdleAnimation() == 3) {
+            if (animation == 0 && idle == 3) {
                 this.idleAnimationState4.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState4.stop();
             }
-            if (this.getIdleAnimation() == 4) {
-                if (this.getAnimation() == 0){
+            if (idle == 4) {
+                if (animation == 0){
                     this.armlessAnimationIdle.startIfStopped(this.tickCount);
                     this.armlessAnimation.stop();
                 } else {
@@ -208,69 +210,69 @@ public abstract class StandEntity extends Mob{
                 this.armlessAnimationIdle.stop();
                 this.armlessAnimation.stop();
             }
-            if (this.getAnimation() == 1) {
+            if (animation == 1) {
                 this.punchState1.startIfStopped(this.tickCount);
             } else {
                 this.punchState1.stop();
             }
-            if (this.getAnimation() == 2) {
+            if (animation == 2) {
                 this.punchState2.startIfStopped(this.tickCount);
             } else {
                 this.punchState2.stop();
             }
-            if (this.getAnimation() == 3) {
+            if (animation == 3) {
                 this.punchState3.startIfStopped(this.tickCount);
             } else {
                 this.punchState3.stop();
             }
 
-            if (this.getAnimation() == 10) {
+            if (animation == 10) {
                 this.blockAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.blockAnimationState.stop();
             }
-            if (this.getAnimation() == 11) {
+            if (animation == 11) {
               this.barrageChargeAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.barrageChargeAnimationState.stop();
             }
-            if (this.getAnimation() == 12) {
+            if (animation == 12) {
                 this.barrageAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.barrageAnimationState.stop();
             }
 
-            if (this.getAnimation() == 13) {
+            if (animation == 13) {
                 this.barrageEndAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.barrageEndAnimationState.stop();
             }
 
-            if (this.getAnimation() == 14) {
+            if (animation == 14) {
                 this.barrageHurtAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.barrageHurtAnimationState.stop();
             }
 
-            if (this.getAnimation() == 15) {
+            if (animation == 15) {
                 this.brokenBlockAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.brokenBlockAnimationState.stop();
             }
 
-            if (this.getAnimation() == 16) {
+            if (animation == 16) {
                 this.miningBarrageAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.miningBarrageAnimationState.stop();
             }
 
-            if (this.getAnimation() == 17) {
+            if (animation == 17) {
                 this.standLeapAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.standLeapAnimationState.stop();
             }
 
-            if (this.getAnimation() == 18) {
+            if (animation == 18) {
                 this.standLeapEndAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.standLeapEndAnimationState.stop();
