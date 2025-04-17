@@ -57,6 +57,10 @@ public class PowersCinderella extends DashPreset {
     }
 
     @Override
+    public boolean isSecondaryStand(){
+        return true;
+    }
+    @Override
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte) 0);
@@ -135,7 +139,7 @@ public class PowersCinderella extends DashPreset {
             this.setActivePower(PowerIndex.POWER_2);
             playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand((byte)81);
-            this.poseStand(OffsetIndex.GUARD);
+            this.poseStand(OffsetIndex.ATTACK);
 
             return true;
         }
@@ -199,9 +203,9 @@ public class PowersCinderella extends DashPreset {
                         if (bleedlevel < 0){
                             MainUtil.makeBleed(entity, 0, 200, this.getSelf());
                         } else if (bleedlevel == 1){
-                            MainUtil.makeBleed(entity, 1, 200, this.getSelf());
+                            MainUtil.makeBleed(entity, 1, 250, this.getSelf());
                         } else if (bleedlevel == 2){
-                            MainUtil.makeBleed(entity, 2, 200, this.getSelf());
+                            MainUtil.makeBleed(entity, 2, 300, this.getSelf());
                             MainUtil.makeMobBleed(entity);
                         }
                     }
@@ -233,7 +237,7 @@ public class PowersCinderella extends DashPreset {
                                 float flashAlpha, float otherFlashAlpha) {;
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (this.getActivePower() == PowerIndex.POWER_1) {
+        if (this.getActivePower() == PowerIndex.POWER_2) {
             Entity TE = this.getTargetEntity(playerEntity, 5F);
             if (TE != null) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);

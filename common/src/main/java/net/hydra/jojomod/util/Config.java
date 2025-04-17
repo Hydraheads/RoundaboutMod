@@ -300,7 +300,7 @@ import java.util.Set;
         public Integer d4cDimensionHopToOldDimension;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer D4CMeltDodgeCooldown;
-        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer cinderellaDefaceAttack;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDisc;

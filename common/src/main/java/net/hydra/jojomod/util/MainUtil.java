@@ -160,9 +160,11 @@ public class MainUtil {
     public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack){
         if (ent instanceof Player PE && !(stack.getItem() instanceof MaxStandDiscItem)) {
             IPlayerEntity IPE = ((IPlayerEntity) PE);
-            stack.getOrCreateTagElement("Memory").putByte("Level", (byte) Math.max(IPE.roundabout$getStandLevel()-1,0));
-            stack.getOrCreateTagElement("Memory").putInt("Experience",IPE.roundabout$getStandExp());
-            stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
+            if (stack.getItem() instanceof StandDiscItem SD && !SD.standPowers.isSecondaryStand()) {
+                stack.getOrCreateTagElement("Memory").putByte("Level", (byte) Math.max(IPE.roundabout$getStandLevel() - 1, 0));
+                stack.getOrCreateTagElement("Memory").putInt("Experience", IPE.roundabout$getStandExp());
+                stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
+            }
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
         stack.getOrCreateTagElement("Memory").putByte("Pose",((StandUser)ent).roundabout$getIdlePos());

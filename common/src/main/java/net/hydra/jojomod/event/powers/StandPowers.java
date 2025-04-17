@@ -1696,6 +1696,10 @@ public class StandPowers {
             }
         }
     }
+
+    public boolean isSecondaryStand(){
+        return false;
+    }
     public void playBarrageNoise2(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {

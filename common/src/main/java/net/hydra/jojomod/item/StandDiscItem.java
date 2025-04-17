@@ -71,7 +71,7 @@ public class StandDiscItem extends Item {
         CompoundTag $$4 = $$0.getTagElement("Memory");
         // && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)
         if ($$4 != null && $$1 != null) {
-            if ($$4.contains("Level")) {
+            if (!standPowers.isSecondaryStand() && $$4.contains("Level")) {
                 if (ClientNetworking.getAppropriateConfig().enableStandLeveling) {
                     byte lvl = (byte) ($$4.getByte("Level") + 1);
                     if (lvl < standPowers.getMaxLevel()) {
@@ -85,10 +85,12 @@ public class StandDiscItem extends Item {
                 $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
             }
         } else {
-            $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level",1).withStyle(ChatFormatting.GRAY));
+            if (!standPowers.isSecondaryStand()) {
+                $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level", 1).withStyle(ChatFormatting.GRAY));
+            }
         }
 
-        if(this.standPowers != null && this.standPowers.isWip()){
+        if(this.standPowers.isWip()){
             $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
         }
     }
