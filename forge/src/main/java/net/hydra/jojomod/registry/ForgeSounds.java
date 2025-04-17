@@ -255,6 +255,10 @@ public class ForgeSounds {
             register(ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS, ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS_ID);
     public static final RegistryObject<SoundEvent> ARCADE_STAR_FINGER_EVENT =
             register(ModSounds.ARCADE_STAR_FINGER, ModSounds.ARCADE_STAR_FINGER_ID);
+    public static final RegistryObject<SoundEvent> CINDERELLA_SUMMON_EVENT =
+            register(ModSounds.CINDERELLA_SUMMON, ModSounds.CINDERELLA_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> CINDERELLA_ATTACK_EVENT =
+            register(ModSounds.CINDERELLA_ATTACK, ModSounds.CINDERELLA_ATTACK_ID);
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =

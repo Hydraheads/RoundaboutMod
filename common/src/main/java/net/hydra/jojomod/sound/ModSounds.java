@@ -513,6 +513,13 @@ public class ModSounds {
     public static final ResourceLocation ARCADE_STAR_FINGER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_STAR_FINGER);
     public static SoundEvent ARCADE_STAR_FINGER_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_STAR_FINGER_ID);
 
+    public static final String CINDERELLA_SUMMON = "cinderella_summon";
+    public static final ResourceLocation CINDERELLA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CINDERELLA_SUMMON);
+    public static SoundEvent CINDERELLA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(CINDERELLA_SUMMON_ID);
+    public static final String CINDERELLA_ATTACK = "cinderella_attack";
+    public static final ResourceLocation CINDERELLA_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CINDERELLA_ATTACK);
+    public static SoundEvent CINDERELLA_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(CINDERELLA_ATTACK_ID);
+
     public static final String UNLOCK_SKIN = "unlock_skin";
     public static final ResourceLocation UNLOCK_SKIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+UNLOCK_SKIN);
     public static SoundEvent UNLOCK_SKIN_EVENT = SoundEvent.createVariableRangeEvent(UNLOCK_SKIN_ID);

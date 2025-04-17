@@ -226,7 +226,7 @@ public class TheWorldModel<T extends TheWorldEntity> extends StandModel<T> {
 		this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
 		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
 		this.animate(pEntity.hideLegEntirely, StandAnimations.HIDE_LEGS_ENTIRELY, pAgeInTicks, 1.25f);
-		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
+		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1.05f);
 		this.animate(pEntity.finalKickWindup, TheWorldAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
 		this.animate(pEntity.finalKick, TheWorldAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
 		this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.6f);

@@ -316,7 +316,7 @@ public class StarPlatinumBaseballModel<T extends StarPlatinumEntity> extends Sta
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
-        this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1f);
+        this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1.05f);
         this.animate(pEntity.starFinger, StarPlatinumAnimations.STAR_FINGER, pAgeInTicks, 0.55f);
         this.animate(pEntity.starFinger2, StarPlatinumAnimations.STAR_FINGER, pAgeInTicks, 7f);
         this.animate(pEntity.finalPunchWindup, StarPlatinumAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1f);

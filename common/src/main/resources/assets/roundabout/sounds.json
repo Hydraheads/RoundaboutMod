@@ -125,6 +125,18 @@
       "roundabout:dread_summon"
     ]
   },
+  "cinderella_summon": {
+    "subtitle": "sounds.roundabout.cinderella_summon",
+    "sounds": [
+      "roundabout:cinderella_summon"
+    ]
+  },
+  "cinderella_attack": {
+    "subtitle": "sounds.roundabout.cinderella_attack",
+    "sounds": [
+      "roundabout:cinderella_attack"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [

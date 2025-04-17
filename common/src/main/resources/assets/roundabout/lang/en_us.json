@@ -403,6 +403,9 @@
   "sounds.roundabout.explosive_bat":  "Home Run",
   "sounds.roundabout.fog_clone":  "Illusionary formation",
 
+  "sounds.roundabout.cinderella_summon":  "Stand Summoned",
+  "sounds.roundabout.cinderella_attack":  "Mechanical Attack",
+
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
   "sounds.roundabout.arcade_muda":  "[Arcade Muda]",
