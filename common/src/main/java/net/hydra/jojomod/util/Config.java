@@ -173,6 +173,10 @@ import java.util.Set;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer magicianAttackOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer cinderellaAttackOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer cinderellaAttackOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer gasolineExplosion;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer knifeDamageOnMobs;
@@ -296,6 +300,8 @@ import java.util.Set;
         public Integer d4cDimensionHopToOldDimension;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer D4CMeltDodgeCooldown;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer cinderellaDefaceAttack;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDisc;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

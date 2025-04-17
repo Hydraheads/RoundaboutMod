@@ -205,6 +205,10 @@ public class StandIcons {
     public static final ResourceLocation JUSTICE_PILOT_EXIT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/fog_pilot_exit.png");
 
+    public static final ResourceLocation CINDERELLA_SCALP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/cinderella/deface.png");
+    public static final ResourceLocation CINDERELLA_MASK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/cinderella/masks.png");
 
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");

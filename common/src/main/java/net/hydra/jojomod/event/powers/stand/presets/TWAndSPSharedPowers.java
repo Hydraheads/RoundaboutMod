@@ -561,7 +561,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 40);
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.impaleAttack);
         }
         this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.impaleAttack);
         SoundEvent SE;
@@ -856,7 +856,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
 
-    /**Assault Ability*/
+    /**Impale Ability*/
     public boolean hold1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
