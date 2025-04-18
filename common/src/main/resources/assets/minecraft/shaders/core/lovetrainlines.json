@@ -4,8 +4,8 @@
     "srcrgb": "srcalpha",
     "dstrgb": "1-srcalpha"
   },
-  "vertex": "roundabouttimestop",
-  "fragment": "roundabouttimestop",
+  "vertex": "rdefault",
+  "fragment": "lovetrainlines",
   "attributes": [
     "Position",
     "Color",

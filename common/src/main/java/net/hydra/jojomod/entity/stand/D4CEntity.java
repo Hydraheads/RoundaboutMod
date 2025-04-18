@@ -14,15 +14,19 @@ public class D4CEntity extends StandEntity {
 
     public static final byte
         MANGA_SKIN = 0,
-        WONDER_FESTIVAL = 1;
+        WONDER_FESTIVAL = 1,
+        PROMO = 2,
+        PROMO_L = 3;
 
     @Override public Component getSkinName(byte skinId) {
-        if (skinId == MANGA_SKIN)
-            return Component.translatable("skins.roundabout.d4c.base");
-        else if (skinId == WONDER_FESTIVAL) {
-            return Component.translatable("skins.roundabout.d4c.wonder_festival");
+        switch (skinId)
+        {
+            case MANGA_SKIN -> {return Component.translatable("skins.roundabout.d4c.base");}
+            case WONDER_FESTIVAL -> {return Component.translatable("skins.roundabout.d4c.wonder_festival");}
+            case PROMO -> {return Component.translatable("skins.roundabout.d4c.promo");}
+            case PROMO_L -> {return Component.translatable("skins.roundabout.d4c.promo_l");}
+            default -> {return null;}
         }
-        return null;
     }
 
     public final AnimationState hideFists = new AnimationState();

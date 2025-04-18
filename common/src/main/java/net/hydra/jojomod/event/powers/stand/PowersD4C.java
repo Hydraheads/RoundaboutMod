@@ -544,7 +544,9 @@ public class PowersD4C extends PunchingStand {
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 D4CEntity.MANGA_SKIN,
-                D4CEntity.WONDER_FESTIVAL
+                D4CEntity.WONDER_FESTIVAL,
+                D4CEntity.PROMO,
+                D4CEntity.PROMO_L
         );
     }
 

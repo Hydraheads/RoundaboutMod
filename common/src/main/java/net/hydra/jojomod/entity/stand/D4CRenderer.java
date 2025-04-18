@@ -13,19 +13,21 @@ public class D4CRenderer extends StandRenderer<D4CEntity> {
 
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c.png");
     private static final ResourceLocation WONDER_FESTIVAL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c_wf.png");
+    private static final ResourceLocation PROMO = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c_promo.png");
+    private static final ResourceLocation PROMO_L = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c_promo_l.png");
 
     public D4CRenderer(EntityRendererProvider.Context context) {
         super(context, new D4CModel<>(context.bakeLayer(ModEntityRendererClient.D4C_LAYER)), 0f);
     }
 
     @Override public ResourceLocation getTextureLocation(D4CEntity entity) {
-        switch (entity.getSkin())
-        {
-            case (D4CEntity.WONDER_FESTIVAL):
-                return WONDER_FESTIVAL;
-            default:
-                return MANGA_SKIN;
-        }
+        return switch (entity.getSkin()) {
+            case (D4CEntity.MANGA_SKIN) -> MANGA_SKIN;
+            case (D4CEntity.WONDER_FESTIVAL) -> WONDER_FESTIVAL;
+            case (D4CEntity.PROMO) -> PROMO;
+            case (D4CEntity.PROMO_L) -> PROMO_L;
+            default -> MANGA_SKIN;
+        };
     }
 
     @Override

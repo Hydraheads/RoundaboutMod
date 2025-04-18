@@ -17,35 +17,41 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 @Mixin(GameRenderer.class)
 public class ZGameRenderer {
     @Shadow @Final private Map<String, ShaderInstance> shaders;
     @Shadow @Final private Minecraft minecraft;
-    @Unique @Nullable
-    private RCoreShader roundabout$meltDodgeShader;
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
     private void roundabout$reloadShaders(ResourceProvider provider, CallbackInfo ci)
     {
+        RCoreShader.roundabout$meltDodgeProgram = Objects.requireNonNull(roundabout$registerShader(provider, "meltdodge")).getProgram();
+        RCoreShader.roundabout$loveTrainProgram = Objects.requireNonNull(roundabout$registerShader(provider, "lovetrainlines")).getProgram();
+        Roundabout.LOGGER.info("Reloaded shaders!");
+    }
+
+    @Unique private RCoreShader roundabout$registerShader(ResourceProvider provider, String name)
+    {
         try
         {
-            roundabout$meltDodgeShader = new RCoreShader(provider, "meltdodge");
+            RCoreShader shader = new RCoreShader(provider, name);
 
-            if (roundabout$meltDodgeShader.getProgram() != null)
+            if (shader.getProgram() != null)
             {
-                roundabout$meltDodgeShader.getProgram().setSampler("DiffuseSampler", this.minecraft.getMainRenderTarget().getColorTextureId());
+                shader.getProgram().setSampler("DiffuseSampler", this.minecraft.getMainRenderTarget().getColorTextureId());
             }
             else {
                 throw new IOException("Shader was null!");
             }
+
+            return shader;
         }
         catch (IOException e)
         {
-            Roundabout.LOGGER.warn("roundabout$meltDodgeShader failed to load!\n{}", e.toString());
-            return;
+            Roundabout.LOGGER.warn("roundabout${} failed to load!", name);
+            return null;
         }
-        RCoreShader.roundabout$meltDodgeProgram = roundabout$meltDodgeShader.getProgram();
-        Roundabout.LOGGER.info("Reloaded shaders!");
     }
 }
