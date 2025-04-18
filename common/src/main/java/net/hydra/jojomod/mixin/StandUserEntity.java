@@ -86,6 +86,12 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract boolean removeEffect(MobEffect $$0);
+
+    @Shadow public abstract boolean addEffect(MobEffectInstance $$0);
+
+    @Shadow public abstract boolean addEffect(MobEffectInstance $$0, @Nullable Entity $$1);
+
     @Shadow protected abstract void tickDeath();
 
     @Shadow protected boolean dead;
@@ -361,7 +367,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "HEAD",
             shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
-    public void roundabout$tickEffects(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
+    public void roundabout$hasLineOfSight(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
         if (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange($$0)){
 
             if ($$0.level() != this.level()) {
@@ -417,6 +423,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
             }
+
             if (this.roundabout$getOnlyBleeding() != onlyBleeding) {
                 this.roundabout$setOnlyBleeding(onlyBleeding);
             }
@@ -493,6 +500,42 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (this.roundabout$getOnlyBleeding()) {
             ci.cancel();
+        }
+    }
+
+
+    @Inject(method = "tickEffects", at = @At(value = "HEAD"))
+    public void roundabout$tickEffectsPre(CallbackInfo ci) {
+        if (!this.level().isClientSide) {
+            roundabout$safeToRemoveLove = false;
+        }
+    }
+    @Inject(method = "tickEffects", at = @At(value = "TAIL"))
+    public void roundabout$tickEffectsPost(CallbackInfo ci) {
+        if (!this.level().isClientSide) {
+            roundabout$safeToRemoveLove = true;
+        }
+    }
+
+    @Unique
+    public boolean roundabout$safeToRemoveLove = true;
+    @Unique
+    public boolean roundabout$prepUglyFace = false;
+
+    @Unique
+    @Override
+    public void roundabout$setSafeToRemoveLove(boolean safe){
+        roundabout$safeToRemoveLove = safe;
+    }
+
+    @Inject(method = "removeAllEffects", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$removeAllEffects(CallbackInfoReturnable<Boolean> cir) {
+        roundabout$safeToRemoveLove = true;
+    }
+    @Inject(method = "onEffectRemoved", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$onEffectRemoved(MobEffectInstance $$0, CallbackInfo ci) {
+        if ($$0.getEffect().equals(ModEffects.CAPTURING_LOVE) && !roundabout$safeToRemoveLove) {
+            roundabout$prepUglyFace = true;
         }
     }
 
@@ -582,6 +625,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$endTick(CallbackInfo ci) {
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
+        }
+
+        if (roundabout$prepUglyFace) {
+            roundabout$prepUglyFace = false;
+            roundabout$setGlow((byte) 2);
+            this.removeEffect(ModEffects.CAPTURING_LOVE);
+            this.addEffect(new MobEffectInstance(ModEffects.FACELESS, 3600, 0, false, true));
         }
     }
     @Unique

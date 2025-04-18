@@ -78,6 +78,7 @@ public interface StandUser {
     float roundabout$getRayDistance(Entity entity, float range);
     float roundabout$getDistanceOut(LivingEntity entity, float range, boolean offset);
     float roundabout$getStandReach();
+    void roundabout$setSafeToRemoveLove(boolean safe);
 
     StandPowers roundabout$getStandPowers();
 

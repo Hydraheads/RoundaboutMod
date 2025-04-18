@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerLevel;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.VillagerGoalPackages;
+import net.minecraft.world.entity.ai.gossip.GossipContainer;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.village.ReputationEventType;
@@ -27,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
 import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -74,8 +77,24 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             if (ShapeShifts.isVillager(shift)) {
-                cir.setReturnValue(50);
+                cir.setReturnValue(40);
+                return;
             }
+        }
+        if ($$0.hasEffect(ModEffects.FACELESS)) {
+            cir.setReturnValue(
+                    Math.round (((float)this.gossips.getReputation($$0.getUUID(), ($$0x) -> {
+                        return true;
+                    })) / 2)
+            );
+            return;
+        } else if ($$0.hasEffect(ModEffects.CAPTURING_LOVE)) {
+            cir.setReturnValue(
+                    (this.gossips.getReputation($$0.getUUID(), ($$0x) -> {
+                        return true;
+                    })) + 25
+            );
+            return;
         }
     }
     @Inject(method = "onReputationEventFrom", at = @At(value = "HEAD"),cancellable = true)
@@ -118,6 +137,8 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     }
 
     @Shadow public abstract void refreshBrain(ServerLevel $$0);
+
+    @Shadow @Final private GossipContainer gossips;
 
     @Unique
     private void roundabout$refreshBrainOG(ServerLevel $$0) {

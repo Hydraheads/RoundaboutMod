@@ -1,9 +1,11 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.datafixers.util.Either;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -31,6 +33,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Unit;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -502,6 +505,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
         if (!this.isInvulnerableTo($$0)) {
@@ -948,6 +952,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     protected void roundabout$Tick2(CallbackInfo ci) {
+        if (this.isSleeping()){
+            if (this.hasEffect(ModEffects.CAPTURING_LOVE)){
+                StandUser user = ((StandUser)this);
+                user.roundabout$setSafeToRemoveLove(true);
+                this.removeEffect(ModEffects.CAPTURING_LOVE);
+            }
+        }
+
         if (((StandUser)this).roundabout$getAttackTimeDuring() > -1 || this.isUsingItem()) {
             ((StandUser) this).roundabout$setIdleTime(-1);
         } else if (!new Vec3(this.getX(), this.getY(), this.getZ()).equals(new Vec3(this.xOld, this.yOld, this.zOld))) {

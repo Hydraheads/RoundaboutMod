@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -14,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -69,6 +71,10 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Override
     public void roundabout$setInvincibleTicks(int ticks){
         roundabout$invincibleTicks = ticks;
+    }
+    @Inject(method = "onEffectRemoved", at = @At(value = "HEAD"))
+    public void roundabout$oneffectRemoved(MobEffectInstance $$0, CallbackInfo ci) {
+
     }
     @Inject(method = "isChangingDimension()Z", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$changeDimensions(CallbackInfoReturnable<Boolean> cir) {

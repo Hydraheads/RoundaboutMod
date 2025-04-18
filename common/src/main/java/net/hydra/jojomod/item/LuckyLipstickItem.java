@@ -28,15 +28,19 @@ public class LuckyLipstickItem extends Item implements Vanishable {
         $$1.getCooldowns().addCooldown(this, 50);
 
         if (!$$0.isClientSide) {
-            ((StandUser) $$1).roundabout$setGlow((byte) 2);
-            ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.CAPTURING_LOVE, 3600, 0, false, true), null);
+            if (!$$1.hasEffect(ModEffects.FACELESS)) {
+                ((StandUser) $$1).roundabout$setGlow((byte) 2);
+                ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.CAPTURING_LOVE, 3600, 0, false, true), null);
+            }
         }
         $$1.awardStat(Stats.ITEM_USED.get(this));
         if (!$$1.getAbilities().instabuild) {
             if (!$$0.isClientSide) {
-                $$3.hurtAndBreak(1, $$1, ($$1x) -> {
-                    $$1x.broadcastBreakEvent($$2);
-                });
+                if (!$$1.hasEffect(ModEffects.FACELESS)) {
+                    $$3.hurtAndBreak(1, $$1, ($$1x) -> {
+                        $$1x.broadcastBreakEvent($$2);
+                    });
+                }
             }
         }
 
