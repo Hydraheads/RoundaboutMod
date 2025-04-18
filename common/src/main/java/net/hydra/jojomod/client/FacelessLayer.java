@@ -48,7 +48,7 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
             ResourceLocation RL
     ) {
         if (RL != null) {
-            VertexConsumer $$10 = multiBufferSource.getBuffer(RenderType.armorCutoutNoCull(RL));
+            VertexConsumer $$10 = multiBufferSource.getBuffer(RenderType.entityTranslucent(RL));
 
             ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale += 0.04F);
             ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale += 0.04F);

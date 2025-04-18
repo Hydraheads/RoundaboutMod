@@ -377,6 +377,14 @@ public class MainUtil {
         }
         return false;
     }
+
+    public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
+        if (entity instanceof LivingEntity LE){
+            ((StandUser)entity).roundabout$setGlow((byte) 1);
+            ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.FACELESS, ticks, power), user);
+        }
+    }
+
     public static void makeMobBleed(Entity target) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
