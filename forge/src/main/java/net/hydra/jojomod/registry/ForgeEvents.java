@@ -254,6 +254,7 @@ public class ForgeEvents {
         ModParticles.CREAM_FLAME = ForgeParticles.CREAM_FLAME.get();
         ModParticles.FOG_CHAIN = ForgeParticles.FOG_CHAIN.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
+        ModParticles.CINDERELLA_GLOW = ForgeParticles.CINDERELLA_GLOW.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

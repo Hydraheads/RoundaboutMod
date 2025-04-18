@@ -60,6 +60,8 @@ public interface StandUser {
     int roundabout$getAttackTimeDuring();
     void roundabout$setBleedLevel(int bleedLevel);
     int roundabout$getBleedLevel();
+    byte roundabout$getGlow();
+    void roundabout$setGlow(byte glowingSkin);
     boolean roundabout$getOnlyBleeding();
     void roundabout$setOnlyBleeding(boolean only);
     byte roundabout$getActivePowerPhase();

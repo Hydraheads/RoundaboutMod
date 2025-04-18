@@ -21,4 +21,5 @@ public class ModParticles {
     public static SimpleParticleType GREEN_FLAME;
     public static SimpleParticleType DREAD_FLAME;
     public static SimpleParticleType CREAM_FLAME;
+    public static SimpleParticleType CINDERELLA_GLOW;
 }

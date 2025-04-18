@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
@@ -74,6 +75,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         this.addLayer(new KnifeLayer<>($$0, this));
         //this.addLayer(new LocacacaBeamLayer<>($$0, this));
         this.addLayer(new StoneLayer<>($$0, this));
+        this.addLayer(new FacelessLayer<>($$0, this));
     }
 
     private static AbstractClientPlayer ACP;

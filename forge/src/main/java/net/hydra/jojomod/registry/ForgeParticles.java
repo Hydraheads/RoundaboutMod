@@ -69,4 +69,8 @@ public class ForgeParticles {
             "warden_clock",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> CINDERELLA_GLOW = PARTICLES.register(
+            "cinderella_glow",
+            () -> new SimpleParticleType(true)
+    );
 }

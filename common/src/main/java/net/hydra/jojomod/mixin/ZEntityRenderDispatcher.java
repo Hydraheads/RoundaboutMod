@@ -42,13 +42,32 @@ public abstract class ZEntityRenderDispatcher {
     @Final
     private static RenderType SHADOW_RENDER_TYPE;
 
+
+    @Unique
+    public boolean roundabout$recurse = false;
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    protected <E extends Entity>  void roundabout$render(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
+    protected <E extends Entity>  void roundabout$render(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
         if ($$0 instanceof LivingEntity){
             ((StandUser)$$0).roundabout$tryBlip();
         }
         if ($$0 instanceof Projectile && ClientUtil.getScreenFreeze()){
             ci.cancel();
+            return;
+        }
+        if ($$0 instanceof LivingEntity LE && !roundabout$recurse){
+            byte bt =  ((StandUser)LE).roundabout$getGlow();
+            if (bt > 0){
+                int light2 = light;
+                if (bt ==1){
+                    light2 = (int)(((float)light2)/2);
+                } else if (bt == 2){
+                    light2 = 15728880;
+                }
+                roundabout$recurse = true;
+                render($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,light2);
+                roundabout$recurse = false;
+                ci.cancel();
+            }
         }
     }
 
@@ -73,6 +92,8 @@ public abstract class ZEntityRenderDispatcher {
             }
         }
     }
+
+
     private void roundabout$renderFlame(PoseStack $$0, MultiBufferSource $$1, LivingEntity $$2) {
         byte bt = ((StandUser) $$2).roundabout$getOnStandFire();
         if (bt > 0) {
@@ -167,6 +188,8 @@ public abstract class ZEntityRenderDispatcher {
 
 
     @Shadow public Camera camera;
+
+    @Shadow public abstract <E extends Entity> void render(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8);
 
     private static void fireVertex(VertexConsumer vertexConsumer, PoseStack.Pose matrices, float x, float y, float z, float u, float v) {
         vertexConsumer.vertex(matrices.pose(), x, y, z)
