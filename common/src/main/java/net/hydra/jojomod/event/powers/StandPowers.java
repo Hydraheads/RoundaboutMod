@@ -1058,11 +1058,7 @@ public class StandPowers {
         boolean interrupt = false;
         if (interrupter instanceof LivingEntity){
             if (this.isBarraging() && ClientNetworking.getAppropriateConfig().chargeSettings.barragesAreAlwaysInterruptable) {
-                if ((this.self) instanceof Player){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.GUARD, true);
-                } else {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                }
                 return true;
             } else if (isStandDamage && ClientNetworking.getAppropriateConfig().chargeSettings.standsInterruptSomeStandAttacks){
                 interrupt = true;
