@@ -654,6 +654,9 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     @Unique
     public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user, int light) {
 
+
+        $$6.deathTime = user.deathTime;
+        $$6.setHealth(user.getHealth());
         $$6.xOld = user.xOld;
         $$6.yOld = user.yOld;
         $$6.zOld = user.zOld;
