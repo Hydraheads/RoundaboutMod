@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.ICreeper;
+import net.hydra.jojomod.entity.goals.AvoidEntityWhenFacelessGoal;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -9,8 +10,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -55,6 +59,11 @@ public class ZCreeper extends Monster implements ICreeper {
             return col2;
         }
         return col;
+    }
+    @Inject(method = "registerGoals()V", at = @At(value = "HEAD"))
+    protected void roundabout$registerGoals(CallbackInfo ci) {
+        this.goalSelector.addGoal(3, new AvoidEntityWhenFacelessGoal<>(this, Player.class, 6.0F, 1.0, 1.2));
+
     }
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
     protected void roundabout$DefineSyncedData(CallbackInfo ci) {
