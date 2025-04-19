@@ -14,7 +14,7 @@ public class EnyaRenderer<T extends EnyaNPC> extends PlayerLikeRenderer<EnyaNPC>
     private static final ResourceLocation ENYA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/enya.png");
 
     public EnyaRenderer(EntityRendererProvider.Context context) {
-        super(context, new EnyaModel<>(context.bakeLayer(ModEntityRendererClient.ENYA_LAYER)),0f);
+        super(context, new EnyaModel<>(context.bakeLayer(ModEntityRendererClient.ENYA_LAYER)),0.4F);
     }
     @Override
     public void render(EnyaNPC mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

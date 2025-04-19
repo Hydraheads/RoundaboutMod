@@ -13,7 +13,7 @@ public class DIORenderer<T extends JojoNPC> extends PlayerLikeRenderer<DIONPC> {
 
     private static final ResourceLocation DIO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/dio.png");
     public DIORenderer(EntityRendererProvider.Context context) {
-        super(context, new DIOModel<>(context.bakeLayer(ModEntityRendererClient.DIO_LAYER)),0f);
+        super(context, new DIOModel<>(context.bakeLayer(ModEntityRendererClient.DIO_LAYER)),0.5F);
     }
     @Override
     public void render(DIONPC mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

@@ -13,7 +13,7 @@ public class JotaroRenderer<T extends JojoNPC> extends PlayerLikeRenderer<Jotaro
 
     private static final ResourceLocation JOTARO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/jotaro.png");
     public JotaroRenderer(EntityRendererProvider.Context context) {
-        super(context, new JotaroModel<>(context.bakeLayer(ModEntityRendererClient.JOTARO_LAYER)),0f);
+        super(context, new JotaroModel<>(context.bakeLayer(ModEntityRendererClient.JOTARO_LAYER)),0.5F);
     }
     @Override
     public void render(JotaroNPC mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

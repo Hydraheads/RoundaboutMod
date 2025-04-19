@@ -14,7 +14,7 @@ public class AyaRenderer<T extends AyaNPC> extends PlayerLikeRenderer<AyaNPC> {
     private static final ResourceLocation AYA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/aya.png");
 
     public AyaRenderer(EntityRendererProvider.Context context) {
-        super(context, new AyaModel<>(context.bakeLayer(ModEntityRendererClient.AYA_LAYER)),0f);
+        super(context, new AyaModel<>(context.bakeLayer(ModEntityRendererClient.AYA_LAYER)),0.45F);
     }
     @Override
     public void render(AyaNPC mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

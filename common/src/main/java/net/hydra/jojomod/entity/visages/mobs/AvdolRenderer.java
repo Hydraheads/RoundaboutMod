@@ -13,7 +13,7 @@ public class AvdolRenderer<T extends JojoNPC> extends PlayerLikeRenderer<AvdolNP
 
     private static final ResourceLocation AVDOL_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/avdol.png");
     public AvdolRenderer(EntityRendererProvider.Context context) {
-        super(context, new AvdolModel<>(context.bakeLayer(ModEntityRendererClient.AVDOL_LAYER)),0f);
+        super(context, new AvdolModel<>(context.bakeLayer(ModEntityRendererClient.AVDOL_LAYER)),0.5F);
     }
     @Override
     public void render(AvdolNPC mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

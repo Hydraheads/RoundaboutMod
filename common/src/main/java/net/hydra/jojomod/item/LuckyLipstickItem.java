@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 
 public class LuckyLipstickItem extends Item implements Vanishable {
     public LuckyLipstickItem(Item.Properties $$0) {
-        super($$0.defaultDurability(5));
+        super($$0.defaultDurability(6));
     }
 
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
