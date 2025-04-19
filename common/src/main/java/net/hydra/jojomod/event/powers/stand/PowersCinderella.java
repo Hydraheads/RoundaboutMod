@@ -204,13 +204,15 @@ public class PowersCinderella extends DashPreset {
                             MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
                             MainUtil.makeBleed(entity, 0, 200, this.getSelf());
                         } else if (bleedlevel == 1){
-                            MainUtil.makeFaceless(entity, 250, 0, this.getSelf());
+                            MainUtil.makeFaceless(entity, 250, 1, this.getSelf());
                             MainUtil.makeBleed(entity, 1, 250, this.getSelf());
                         } else if (bleedlevel == 2){
-                            MainUtil.makeFaceless(entity, 300, 0, this.getSelf());
+                            MainUtil.makeFaceless(entity, 300, 2, this.getSelf());
                             MainUtil.makeBleed(entity, 2, 300, this.getSelf());
                             MainUtil.makeMobBleed(entity);
                         }
+                    } else {
+                        MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
                     }
                 }
                 this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
