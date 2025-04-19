@@ -777,7 +777,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$anchorPlace = compoundtag2.getInt("anchorPlace");
         }
         if (compoundtag2.contains("anchorPlaceAttack")) {
-            roundabout$anchorPlace = compoundtag2.getInt("anchorPlaceAttack");
+            roundabout$anchorPlaceAttack = compoundtag2.getInt("anchorPlaceAttack");
         }
         if (compoundtag2.contains("distanceOut")) {
             roundabout$distanceOut = compoundtag2.getFloat("distanceOut");
