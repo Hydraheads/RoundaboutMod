@@ -86,6 +86,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract Map<MobEffect, MobEffectInstance> getActiveEffectsMap();
+
     @Shadow public abstract boolean removeEffect(MobEffect $$0);
 
     @Shadow public abstract boolean addEffect(MobEffectInstance $$0);
@@ -2266,6 +2268,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 cir.setReturnValue($$1);
             }
+        }
+        if (this.hasEffect(ModEffects.FACELESS)) {
+            float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
+            cir.setReturnValue($$1*amt);
         }
     }
     @Inject(method = "die", at = @At("HEAD"))

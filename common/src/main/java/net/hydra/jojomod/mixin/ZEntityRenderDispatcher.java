@@ -59,7 +59,7 @@ public abstract class ZEntityRenderDispatcher {
             if (bt > 0){
                 int light2 = light;
                 if (bt ==1){
-                    light2 = (int)(((float)light2)*0.7);
+                    light2 = (int)(((float)light2)/2);
                 } else if (bt == 2){
                     light2 = 15728880;
                 }
