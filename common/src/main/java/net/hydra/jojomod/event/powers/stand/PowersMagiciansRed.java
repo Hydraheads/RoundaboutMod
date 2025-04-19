@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.visages.mobs.AvdolNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
@@ -2848,7 +2849,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     }
                     if (dist <= 25 && !hasHurricane() && activePower == PowerIndex.NONE) {
 
-                        if ((this.self instanceof Raider || this.self instanceof Villager ||
+                        if ((this.self instanceof Raider || this.self instanceof Villager || this.self instanceof AvdolNPC ||
                         this.self instanceof Blaze || this.self instanceof Piglin || this.self instanceof EnderMan||
                                 this.self instanceof Hoglin || this.self instanceof ZombifiedPiglin || this.self instanceof PiglinBrute)
                                 && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)
@@ -2877,7 +2878,7 @@ public class PowersMagiciansRed extends PunchingStand {
                                 } else if ((this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) &&
                                         (this.activePower == PowerIndex.NONE || this.activePower == PowerIndex.ATTACK)) {
                                     if (RNG < 0.5 && (this.self instanceof IronGolem ||
-                                            this.self instanceof Ravager || this.self instanceof Piglin ||
+                                            this.self instanceof Ravager || this.self instanceof Piglin || this.self instanceof AvdolNPC ||
                                             this.self instanceof ZombifiedPiglin ||this.self instanceof Hoglin ||
                                             this.self instanceof PiglinBrute)){
                                         wentForCharge = false;

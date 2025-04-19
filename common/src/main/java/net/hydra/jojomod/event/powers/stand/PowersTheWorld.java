@@ -10,6 +10,8 @@ import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.entity.visages.mobs.DIONPC;
+import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -949,7 +951,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
                                 }
                             } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
-                                if (RNG < 0.85 && (this.getSelf() instanceof Hoglin || this.getSelf() instanceof Ravager)) {
+                                if ((RNG < 0.85 && (this.getSelf() instanceof Hoglin || this.getSelf() instanceof Ravager))
+                                || (this.self instanceof JotaroNPC && RNG < 0.47)) {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                                     wentForCharge = false;
                                 } else {
@@ -963,11 +966,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 }
                             }
                         } else if ((this.getSelf().getHealth() > 20 || this.getSelf() instanceof Piglin
+                                || this.getSelf() instanceof DIONPC
                                 || this.getSelf() instanceof AbstractVillager) && dist <= 8 && dist >= 5) {
                             if (!onCooldown(PowerIndex.SKILL_1)) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                             }
                         } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
+                                || this.getSelf() instanceof DIONPC
                                 || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                                 || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                                 this.getSelf().onGround() && dist <= 19 && dist >= 5) {

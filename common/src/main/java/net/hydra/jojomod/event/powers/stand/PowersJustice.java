@@ -18,6 +18,8 @@ import net.hydra.jojomod.entity.corpses.FallenVillager;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.entity.visages.mobs.EnyaNPC;
+import net.hydra.jojomod.entity.visages.mobs.OVAEnyaNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -289,8 +291,10 @@ public class PowersJustice extends DashPreset {
                 }
             } else {
                 if (this.self instanceof Villager || this.self instanceof IronGolem || this.self instanceof SnowGolem
-                        || this.self instanceof TamableAnimal){
+                        || this.self instanceof TamableAnimal) {
                     corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
+                } else if (this.self instanceof EnyaNPC || this.self instanceof OVAEnyaNPC){
+                    corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
                 } else {
                     corpse = ModEntities.FALLEN_CREEPER.create(this.getSelf().level());
                 }
