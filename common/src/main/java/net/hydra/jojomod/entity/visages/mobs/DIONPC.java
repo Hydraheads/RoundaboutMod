@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.visages.mobs;
 
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.StandUsingNPC;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
@@ -26,5 +28,10 @@ public class DIONPC extends StandUsingNPC {
             this.kill();
         }
         super.tick();
+    }
+
+    @Override
+    public StandDiscItem getDisc(){
+        return ((StandDiscItem) ModItems.STAND_DISC_THE_WORLD);
     }
 }

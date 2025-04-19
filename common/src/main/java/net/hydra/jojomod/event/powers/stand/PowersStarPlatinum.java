@@ -1524,7 +1524,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public SoundEvent getImpaleSound(){
 
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (bt == TheWorldEntity.ARCADE_SKIN){
+        if (bt == StarPlatinumEntity.ARCADE){
             return ModSounds.ARCADE_IMPALE_EVENT;
         }
         return super.getImpaleSound();
