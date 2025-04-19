@@ -28,6 +28,8 @@ public abstract class ZProjectile extends Entity implements IProjectileAccess{
     @Unique
     private boolean roundabout$IsTimeStopCreated = false;
     @Unique
+    private boolean roundabout$IsDeflected = false;
+    @Unique
     private float roundaboutSpeedMultiplier = 0.75F;
 
     public ZProjectile(EntityType<?> $$0, Level $$1) {
@@ -46,6 +48,17 @@ public abstract class ZProjectile extends Entity implements IProjectileAccess{
     }
     public void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
         this.roundabout$IsTimeStopCreated = roundaboutIsTimeStopCreated;
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$getIsDeflected(){
+        return roundabout$IsDeflected;
+    }
+    @Unique
+    @Override
+    public void roundabout$setIsDeflected(boolean defl){
+        roundabout$IsDeflected = defl;
     }
 
     @Override

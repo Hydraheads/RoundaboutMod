@@ -14,4 +14,6 @@ public interface IProjectileAccess {
     boolean roundabout$CanHitEntity(Entity $$0x);
 
     void roundabout$CheckInsideBlocks();
+    boolean roundabout$getIsDeflected();
+    void roundabout$setIsDeflected(boolean defl);
 }

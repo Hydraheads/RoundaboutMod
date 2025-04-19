@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -46,6 +47,7 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
@@ -1331,6 +1333,31 @@ public class StandPowers {
                     }
                 }
             }
+
+        }
+
+            float halfReach = (float) (getReach()*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
+            Roundabout.LOGGER.info("1");
+            List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), getReach());
+            if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().barrageDeflectsArrrows) {
+                for (int i = 0; i < arrows.size(); i++) {
+                    Roundabout.LOGGER.info("2");
+                    deflectArrowsAndBullets(arrows.get(i));
+                }
+            }
+    }
+
+    public void deflectArrowsAndBullets(Entity ent){
+        if (ent instanceof Projectile PE){
+            IProjectileAccess ipa = (IProjectileAccess) PE;
+            if (!ipa.roundabout$getIsDeflected()){
+                ipa.roundabout$setIsDeflected(true);
+                ent.setDeltaMovement(ent.getDeltaMovement().scale(-0.4));
+                ent.setYRot(ent.getYRot() + 180.0F);
+                ent.yRotO += 180.0F;
+            }
         }
     }
 
@@ -2102,6 +2129,25 @@ public class StandPowers {
                     }
                 }
             }
+        return hitEntities;
+    }
+
+
+    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return arrowGrabHitbox(User,entities,maxDistance,90);
+    }
+    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if (!(value instanceof Arrow)){
+                hitEntities.remove(value);
+            } else if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                hitEntities.remove(value);
+            } else if (value.distanceTo(User) > maxDistance){
+                hitEntities.remove(value);
+            }
+        }
         return hitEntities;
     }
     public boolean StandAttackHitbox(List<Entity> entities, float pow, float knockbackStrength){
