@@ -247,7 +247,8 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         return this.deltaMovementOnPreviousTick.lerp(this.getDeltaMovement(), (double)$$0);
     }
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.5D).add(Attributes.MAX_HEALTH, 30).
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.MAX_HEALTH, 30)
+                .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
     protected void customServerAiStep() {
@@ -307,20 +308,20 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     private void registerBrainGoals(Brain<JojoNPC> p_35425_) {
         if (this.isBaby()) {
             p_35425_.setSchedule(Schedule.VILLAGER_BABY);
-            p_35425_.addActivity(Activity.PLAY, JojoNPCGoalPackages.getPlayPackage(0.5F));
+            p_35425_.addActivity(Activity.PLAY, JojoNPCGoalPackages.getPlayPackage(1F));
         } else {
             p_35425_.setSchedule(Schedule.VILLAGER_DEFAULT);
-            p_35425_.addActivityWithConditions(Activity.WORK, JojoNPCGoalPackages.getMeetPackage(0.5F), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)));
+            p_35425_.addActivityWithConditions(Activity.WORK, JojoNPCGoalPackages.getMeetPackage(1F), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)));
         }
 
-        p_35425_.addActivity(Activity.CORE, JojoNPCGoalPackages.getCorePackage(0.5F));
-        p_35425_.addActivityWithConditions(Activity.MEET, JojoNPCGoalPackages.getMeetPackage(0.5F), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)));
-        p_35425_.addActivity(Activity.REST, JojoNPCGoalPackages.getRestPackage(0.5F));
-        p_35425_.addActivity(Activity.IDLE, JojoNPCGoalPackages.getIdlePackage(0.5F));
-        p_35425_.addActivity(Activity.PANIC, JojoNPCGoalPackages.getPanicPackage(0.5F));
-        p_35425_.addActivity(Activity.PRE_RAID, JojoNPCGoalPackages.getPreRaidPackage(0.5F));
-        p_35425_.addActivity(Activity.RAID, JojoNPCGoalPackages.getRaidPackage(0.5F));
-        p_35425_.addActivity(Activity.HIDE, JojoNPCGoalPackages.getHidePackage(0.5F));
+        p_35425_.addActivity(Activity.CORE, JojoNPCGoalPackages.getCorePackage(1F));
+        p_35425_.addActivityWithConditions(Activity.MEET, JojoNPCGoalPackages.getMeetPackage(1F), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)));
+        p_35425_.addActivity(Activity.REST, JojoNPCGoalPackages.getRestPackage(1F));
+        p_35425_.addActivity(Activity.IDLE, JojoNPCGoalPackages.getIdlePackage(1F));
+        p_35425_.addActivity(Activity.PANIC, JojoNPCGoalPackages.getPanicPackage(1F));
+        p_35425_.addActivity(Activity.PRE_RAID, JojoNPCGoalPackages.getPreRaidPackage(1F));
+        p_35425_.addActivity(Activity.RAID, JojoNPCGoalPackages.getRaidPackage(1F));
+        p_35425_.addActivity(Activity.HIDE, JojoNPCGoalPackages.getHidePackage(1F));
         p_35425_.setCoreActivities(ImmutableSet.of(Activity.CORE));
         p_35425_.setDefaultActivity(Activity.IDLE);
         p_35425_.setActiveActivityIfPossible(Activity.IDLE);

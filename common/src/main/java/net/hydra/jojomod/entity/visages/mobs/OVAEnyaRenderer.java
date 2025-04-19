@@ -18,7 +18,7 @@ public class OVAEnyaRenderer<T extends JojoNPC> extends PlayerLikeRenderer<OVAEn
 
     private static final ResourceLocation OVA_ENYA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/enya_ova.png");
     public OVAEnyaRenderer(EntityRendererProvider.Context context) {
-        super(context, new OVAEnyaModel<>(context.bakeLayer(ModEntityRendererClient.OVA_ENYA_LAYER)),0f);
+        super(context, new OVAEnyaModel<>(context.bakeLayer(ModEntityRendererClient.OVA_ENYA_LAYER)),0.47f);
     }
     @Override
     public void render(OVAEnyaNPC mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

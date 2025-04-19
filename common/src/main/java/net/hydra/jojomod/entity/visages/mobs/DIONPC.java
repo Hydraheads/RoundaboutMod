@@ -17,11 +17,6 @@ public class DIONPC extends StandUsingNPC {
         super(p_35384_, p_35385_);
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.5D).add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.ATTACK_DAMAGE, 5).
-                add(Attributes.FOLLOW_RANGE, 48.0D);
-    }
     @Override
     public void tick(){
         if (MainUtil.isVampireBurnTick(this) && host == null){
