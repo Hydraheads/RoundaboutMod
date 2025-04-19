@@ -32,22 +32,18 @@ public class StandArgument implements ArgumentType<StandType> {
 
     @Override
     public Collection<String> getExamples() {
-        Roundabout.LOGGER.info("5");
         return Collections.emptyList();
     }
     @Override
         public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> p_259767_, SuggestionsBuilder p_259515_) {
-            Roundabout.LOGGER.info("2");
             return p_259767_.getSource() instanceof SharedSuggestionProvider ? SharedSuggestionProvider.suggest(Arrays.stream(VALUES).map(StandType::getName), p_259515_) : Suggestions.empty();
         }
 
         public static StandArgument gameMode() {
-            Roundabout.LOGGER.info("3");
             return new StandArgument();
         }
 
         public static StandType getStandType(CommandContext<CommandSourceStack> p_259927_, String name) {
-            Roundabout.LOGGER.info("4");
             return p_259927_.getArgument(name, StandType.class);
         }
 }

@@ -1210,7 +1210,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setGlow(byte glow) {
         if (!(this.level().isClientSide)) {
-            Roundabout.LOGGER.info(""+glow);
             this.getEntityData().set(ROUNDABOUT$GLOW, glow);
         }
     }
