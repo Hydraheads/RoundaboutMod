@@ -430,8 +430,10 @@ public class BlockGrabPreset extends PunchingStand{
                         }
                         Vec3 qVec2 = Vec3.ZERO;
                         if (candoit){
-                            qVec2 = new Vec3(vec3d3.x,vec3d3.y,vec3d3.z);
-                            ent.dismountTo(vec3d3.x,vec3d3.y,vec3d3.z);
+                            if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(this.self.position()) < 100) {
+                                qVec2 = new Vec3(vec3d3.x, vec3d3.y, vec3d3.z);
+                                ent.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
+                            }
                         } else {
                             qVec2 = new Vec3(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
                             ent.dismountTo(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());

@@ -2373,8 +2373,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                     Vec3 qVec2 = Vec3.ZERO;
                     if (candoit){
-                        qVec2 = new Vec3(vec3d3.x,vec3d3.y,vec3d3.z);
-                        this.dismountTo(vec3d3.x,vec3d3.y,vec3d3.z);
+                        if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(SE.getUser().position()) < 100) {
+                            qVec2 = new Vec3(vec3d3.x,vec3d3.y,vec3d3.z);
+                            this.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
+                        }
                     } else {
                         qVec2 = new Vec3(this.getX(),this.getY(),this.getZ());
                         this.dismountTo(SE.getUser().getX(), SE.getUser().getY(), SE.getUser().getZ());

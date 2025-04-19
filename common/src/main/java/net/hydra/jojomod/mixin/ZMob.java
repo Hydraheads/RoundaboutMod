@@ -614,7 +614,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
                                 }
                             }
                             if (candoit) {
-                                this.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
+                                if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(SE.getUser().position()) < 100) {
+                                    this.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
+                                }
                             } else {
                                 this.dismountTo(SE.getUser().getX(), SE.getUser().getY(), SE.getUser().getZ());
                             }
