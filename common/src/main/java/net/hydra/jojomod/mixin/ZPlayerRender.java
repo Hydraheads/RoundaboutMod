@@ -575,6 +575,8 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         ila2.roundabout$setSharedFlag(4, ila.roundabout$getSharedFlag(4));
         ila2.roundabout$setSharedFlag(5, ila.roundabout$getSharedFlag(5));
         ila2.roundabout$setSharedFlag(6, ila.roundabout$getSharedFlag(6));
+        entityeah.deathTime = $$0.deathTime;
+        entityeah.setHealth($$0.getHealth());
 
         ItemStack stack = $$0.getItemBySlot(EquipmentSlot.CHEST);
         ve.setItemSlot(EquipmentSlot.CHEST, stack);
