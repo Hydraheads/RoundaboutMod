@@ -149,6 +149,12 @@
       "roundabout:cinderella_fail"
     ]
   },
+  "cinderella_visage_creation": {
+    "subtitle": "sounds.roundabout.cinderella_visage_creation",
+    "sounds": [
+      "roundabout:cinderella_visage_creation"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [

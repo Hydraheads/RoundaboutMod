@@ -527,6 +527,10 @@ public class ModSounds {
     public static final ResourceLocation CINDERELLA_FAIL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CINDERELLA_FAIL);
     public static SoundEvent CINDERELLA_FAIL_EVENT = SoundEvent.createVariableRangeEvent(CINDERELLA_FAIL_ID);
 
+    public static final String CINDERELLA_VISAGE_CREATION = "cinderella_visage_creation";
+    public static final ResourceLocation CINDERELLA_VISAGE_CREATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CINDERELLA_VISAGE_CREATION);
+    public static SoundEvent CINDERELLA_VISAGE_CREATION_EVENT = SoundEvent.createVariableRangeEvent(CINDERELLA_VISAGE_CREATION_ID);
+
     public static final String UNLOCK_SKIN = "unlock_skin";
     public static final ResourceLocation UNLOCK_SKIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+UNLOCK_SKIN);
     public static SoundEvent UNLOCK_SKIN_EVENT = SoundEvent.createVariableRangeEvent(UNLOCK_SKIN_ID);
