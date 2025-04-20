@@ -2364,6 +2364,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && !this.level().isClientSide()){
             if (SE.dismountOnHit() && ($$0.getDirectEntity() != null || $$0.is(DamageTypes.IN_WALL))) {
+                Vec3 sanityCheckCoordinates = this.getPosition(0);
                 SE.ejectPassengers();
                 if (SE.getUser() != null) {
                     //((StandUser)SE.getUser())
@@ -2397,6 +2398,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         ((IEntityAndData)this).roundabout$setQVec2Params(qVec2);
                     }
 
+                    if (this.getPosition(0).distanceTo(Vec3.ZERO) < 5){
+                        this.teleportTo(sanityCheckCoordinates.x,sanityCheckCoordinates.y,sanityCheckCoordinates.z);
+                    }
                 }
                 if ($$0.is(DamageTypes.IN_WALL)) {
                     ci.setReturnValue(false);
