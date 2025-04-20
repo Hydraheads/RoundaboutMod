@@ -73,6 +73,8 @@
   "item.roundabout.avdol_mask.desc": "Muhammad Avdol",
   "item.roundabout.aya_mask": "Aya Visage",
   "item.roundabout.aya_mask.desc": "Aya Tsuji",
+  "item.roundabout.valentine_mask": "Valentine Visage",
+  "item.roundabout.valentine_mask.desc": "Funny Valentine",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
@@ -129,6 +131,7 @@
   "entity.roundabout.jojo_npc_avdol": "Avdol",
   "entity.roundabout.jojo_npc_jotaro": "Jotaro",
   "entity.roundabout.jojo_npc_dio": "DIO",
+  "entity.roundabout.jojo_npc_valentine": "Valentine",
   "entity.roundabout.jojo_npc_aya": "Aya",
   "entity.roundabout.jojo_npc_steve": "Steve",
   "entity.roundabout.jojo_npc_alex": "Alex",

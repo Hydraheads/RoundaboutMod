@@ -68,6 +68,7 @@ public class ModItems {
     public static Item DIO_MASK;
     public static Item ENYA_MASK;
     public static Item AVDOL_MASK;
+    public static Item VALENTINE_MASK;
     public static Item AYA_MASK;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;

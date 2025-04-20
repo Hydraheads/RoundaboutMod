@@ -62,6 +62,13 @@ public class FabricEntities {
                         EntityType.Builder.of(AvdolNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_avdol")
                 );
+        public static final EntityType<ValentineNPC> VALENTINE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_valentine"),
+                        EntityType.Builder.of(ValentineNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_valentine")
+                );
         public static final EntityType<DIONPC> DIO =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -329,6 +336,7 @@ public class FabricEntities {
                 ModEntities.ENYA = ENYA;
                 ModEntities.JOTARO = JOTARO;
                 ModEntities.AVDOL = AVDOL;
+                ModEntities.VALENTINE = VALENTINE;
                 ModEntities.DIO = DIO;
                 ModEntities.AYA = AYA;
                 ModEntities.STEVE_NPC = STEVE_NPC;
@@ -343,6 +351,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AVDOL, AvdolNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(VALENTINE, ValentineNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(DIO, DIONPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AYA, AyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());

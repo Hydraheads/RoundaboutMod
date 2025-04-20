@@ -63,6 +63,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.ENYA, EnyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOTARO, JotaroRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AVDOL, AvdolRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.VALENTINE, ValentineRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIO, DIORenderer::new);
         EntityRendererRegistry.register(FabricEntities.AYA, AyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
@@ -99,6 +100,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ENYA_LAYER, EnyaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.AYA_LAYER, AyaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.AVDOL_LAYER, AvdolModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.VALENTINE_LAYER, ValentineModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEVE_LAYER, PlayerNPCModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);

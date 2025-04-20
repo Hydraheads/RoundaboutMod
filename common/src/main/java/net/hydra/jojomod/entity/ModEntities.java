@@ -49,6 +49,7 @@ public class ModEntities {
 
     public static EntityType<JotaroNPC> JOTARO;
     public static EntityType<AvdolNPC> AVDOL;
+    public static EntityType<ValentineNPC> VALENTINE;
 
     public static EntityType<DIONPC> DIO;
     public static EntityType<AyaNPC> AYA;
