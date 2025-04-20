@@ -110,6 +110,8 @@ import java.util.Set;
     public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
+    @NestedOption(group="modded")
+    public Experiments experiments;
 
         private Config() {
         }
@@ -349,5 +351,9 @@ import java.util.Set;
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
         public Integer blockRangeNegativeOneIsInfinite;
 
+    }
+    public static class Experiments {
+        @BooleanOption(group="inherit", value=false)
+        public Boolean d4cCopyWorldChunks;
     }
 }
