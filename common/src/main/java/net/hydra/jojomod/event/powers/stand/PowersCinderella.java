@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
@@ -87,6 +88,8 @@ public class PowersCinderella extends DashPreset {
             return ModSounds.CINDERELLA_SUMMON_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.CINDERELLA_ATTACK_EVENT;
+        } else if (soundChoice == VISAGE_NOISE) {
+            return ModSounds.CINDERELLA_VISAGE_CREATION_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -94,8 +97,26 @@ public class PowersCinderella extends DashPreset {
     public boolean tryPower(int move, boolean forced) {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2 && this.attackTimeDuring > -1) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
+        }if (!this.getSelf().level().isClientSide && !(this.getActivePower() != PowerIndex.POWER_1 && move == PowerIndex.POWER_1)) {
+            this.stopSoundsIfNearby(VISAGE_NOISE, 100,true);
         }
         return super.tryPower(move,forced);
+    }
+    public boolean hold2 = false;
+
+    public boolean hasUIOpen = false;
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (!hold2) {
+                hold2 = true;
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                ClientUtil.setCinderellaUI();
+                hasUIOpen = true;
+            }
+        } else {
+            hold2 = false;
+        }
     }
     public boolean hold1 = false;
     @Override
@@ -117,6 +138,18 @@ public class PowersCinderella extends DashPreset {
             hold1 = false;
         }
     }
+
+    public void tickPower() {
+        if (this.self.level().isClientSide()) {
+            if (hasUIOpen && !ClientUtil.hasCinderellaUI()){
+                hasUIOpen = false;
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+            }
+        }
+        super.tickPower();
+    }
+
     @Override
     public void updateUniqueMoves() {
         if (this.getActivePower() == PowerIndex.POWER_2){
@@ -128,16 +161,31 @@ public class PowersCinderella extends DashPreset {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_2) {
             return this.deface();
+        }if (move == PowerIndex.POWER_1) {
+            return this.visages();
         }
         return super.setPowerOther(move,lastMove);
     }
+    public boolean visages(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1);
+            playStandUserOnlySoundsIfNearby(VISAGE_NOISE, 27, false,false);
+            this.poseStand(OffsetIndex.GUARD);
+
+            return true;
+        }
+        return false;
+    }
+    public static final byte VISAGE_NOISE = 104;
     public static final byte IMPALE_NOISE = 105;
     public boolean deface(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
-            playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            playStandUserOnlySoundsIfNearby(IMPALE_NOISE, 27, false,false);
             this.animateStand((byte)81);
             this.poseStand(OffsetIndex.ATTACK);
 

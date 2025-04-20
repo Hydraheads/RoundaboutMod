@@ -295,6 +295,14 @@ public class ClientUtil {
         }
     }
 
+    public static boolean hasCinderellaUI() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.screen instanceof VisageStoreScreen;
+    }
+    public static void setCinderellaUI() {
+        Minecraft mc = Minecraft.getInstance();
+        mc.setScreen(new VisageStoreScreen());
+    }
     public static void setJusticeTacticsScreen() {
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(new JusticeTacticsScreen());
