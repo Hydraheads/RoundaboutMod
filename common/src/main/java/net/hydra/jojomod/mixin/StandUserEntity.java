@@ -2362,7 +2362,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE){
+        if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && !this.level().isClientSide()){
             if (SE.dismountOnHit() && ($$0.getDirectEntity() != null || $$0.is(DamageTypes.IN_WALL))) {
                 SE.ejectPassengers();
                 if (SE.getUser() != null) {
@@ -2379,13 +2379,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                     Vec3 qVec2 = Vec3.ZERO;
                     if (candoit){
-                        if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(SE.getUser().position()) < 100) {
+                        if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(SE.getUser().position()) < 100 &&
+                        vec3d3.distanceTo(Vec3.ZERO) > 5) {
                             qVec2 = new Vec3(vec3d3.x,vec3d3.y,vec3d3.z);
                             this.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
                         }
                     } else {
                         qVec2 = new Vec3(this.getX(),this.getY(),this.getZ());
-                        this.dismountTo(SE.getUser().getX(), SE.getUser().getY(), SE.getUser().getZ());
+                        Vec3 dVec = new Vec3(SE.getUser().getX(), SE.getUser().getY(), SE.getUser().getZ());
+                        if (!dVec.equals(Vec3.ZERO) && dVec.distanceTo(SE.getUser().position()) < 100 &&
+                                dVec.distanceTo(Vec3.ZERO) > 5) {
+                            this.dismountTo(dVec.x(), dVec.y(), dVec.z());
+                        }
                     }
 
                     if (((Entity)(Object)this) instanceof Player){

@@ -413,25 +413,27 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     @Override
     public void roundabout$tickQVec(){
-        Vec3 vec = new Vec3(roundabout$qknockback2params.x,roundabout$qknockback2params.y,roundabout$qknockback2params.z);
-        if (!vec.equals(Vec3.ZERO)){
-            if (vec.distanceTo(this.getPosition(0)) < 50) {
-                if (((Entity) (Object) this) instanceof LivingEntity le) {
-                    le.teleportTo(vec.x, vec.y, vec.z);
-                } else {
-                    this.moveTo(vec.x, vec.y, vec.z);
+        if (!this.level.isClientSide()) {
+            Vec3 vec = new Vec3(roundabout$qknockback2params.x, roundabout$qknockback2params.y, roundabout$qknockback2params.z);
+            if (!vec.equals(Vec3.ZERO) && vec.distanceTo(Vec3.ZERO) > 5) {
+                if (vec.distanceTo(this.getPosition(0)) < 50) {
+                    if (((Entity) (Object) this) instanceof LivingEntity le) {
+                        le.teleportTo(vec.x, vec.y, vec.z);
+                    } else {
+                        this.moveTo(vec.x, vec.y, vec.z);
+                    }
+                    roundabout$qknockback2params = Vec3.ZERO;
                 }
-                roundabout$qknockback2params = Vec3.ZERO;
             }
-        }
-        Vec3 vecx = new Vec3(roundabout$qknockback.x,roundabout$qknockback.y,roundabout$qknockback.z);
-        if (!vecx.equals(Vec3.ZERO)){
-            MainUtil.takeUnresistableKnockbackWithYBias(((Entity)(Object)this), roundabout$qknockbackparams.x,
-                    vecx.x,
-                    vecx.y,
-                    vecx.z,
-                    (float)roundabout$qknockbackparams.y);
-            roundabout$setQVec(Vec3.ZERO);
+            Vec3 vecx = new Vec3(roundabout$qknockback.x, roundabout$qknockback.y, roundabout$qknockback.z);
+            if (!vecx.equals(Vec3.ZERO)) {
+                MainUtil.takeUnresistableKnockbackWithYBias(((Entity) (Object) this), roundabout$qknockbackparams.x,
+                        vecx.x,
+                        vecx.y,
+                        vecx.z,
+                        (float) roundabout$qknockbackparams.y);
+                roundabout$setQVec(Vec3.ZERO);
+            }
         }
     }
     @Unique
