@@ -61,6 +61,8 @@ public class MagiciansRedEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.magicians_red.jojonium");
         } else if (skinId == JOJONIUM_ABLAZE){
             return Component.translatable(  "skins.roundabout.magicians_red.jojonium_ablaze");
+        } else if (skinId == DEBUT_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.debut");
         }
         return Component.translatable(  "skins.roundabout.magicians_red.base");
     }
@@ -108,7 +110,8 @@ public class MagiciansRedEntity extends StandEntity {
             return false;
         }
         return switch (skn) {
-            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAZE, MAGMA_SKIN, MANGA_SKIN, JOJONIUM_ABLAZE -> true;
+            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAZE, MAGMA_SKIN,
+                    MANGA_SKIN, JOJONIUM_ABLAZE, DEBUT_SKIN -> true;
             default -> false;
         };
     }
@@ -138,7 +141,8 @@ public class MagiciansRedEntity extends StandEntity {
             SIDEKICK = 18,
             BETA = 19,
             JOJONIUM = 20,
-            JOJONIUM_ABLAZE = 21;
+            JOJONIUM_ABLAZE = 21,
+            DEBUT_SKIN = 22;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();

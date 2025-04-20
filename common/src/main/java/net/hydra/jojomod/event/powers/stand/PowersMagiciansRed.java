@@ -699,6 +699,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 $$1.add(MagiciansRedEntity.JOJONIUM);
                 $$1.add(MagiciansRedEntity.JOJONIUM_ABLAZE);
                 $$1.add(MagiciansRedEntity.MAGMA_SKIN);
+                $$1.add(MagiciansRedEntity.DEBUT_SKIN);
                 $$1.add(MagiciansRedEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
