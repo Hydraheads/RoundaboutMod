@@ -11,10 +11,13 @@ import net.hydra.jojomod.entity.visages.PlayerLikeModel;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.platform.services.IPlatformHelper;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
@@ -26,9 +29,11 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeableArmorItem;
@@ -38,6 +43,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Objects;
 
 public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
     private static final Map<String, ResourceLocation> ARMOR_LOCATION_CACHE = Maps.newHashMap();
@@ -122,27 +128,38 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
         }
     }
 
-    private void renderArmorPiece(PoseStack $$0, MultiBufferSource $$1, T $$2, EquipmentSlot $$3, int $$4, A $$5) {
-        ItemStack $$6 = store($$2.getItemBySlot($$3));
-        if ($$6.getItem() instanceof ArmorItem $$7) {
-            if ($$7.getEquipmentSlot() == $$3) {
-                this.getParentModel().copyPropertiesTo2($$5);
-                this.setPartVisibility($$5, $$3);
-                boolean $$9 = this.usesInnerModel($$3);
-                if ($$7 instanceof DyeableArmorItem $$10) {
-                    int $$11 = $$10.getColor($$6);
+    private void renderArmorPiece(PoseStack $$0, MultiBufferSource $$1, T entity, EquipmentSlot slot, int $$4, A model) {
+        ItemStack itemStack = store(entity.getItemBySlot(slot));
+        if (itemStack.getItem() instanceof ArmorItem armorItem) {
+            if (armorItem.getEquipmentSlot() == slot) {
+                this.getParentModel().copyPropertiesTo2(model);
+                this.setPartVisibility(model, slot);
+                net.minecraft.client.model.Model model2 = ModPacketHandler.PLATFORM_ACCESS.getArmorModelHook(entity, itemStack, slot, model);
+                Model usethis = model;
+                if (model2 != null){
+                    usethis = model2;
+                }
+                boolean flag = this.usesInnerModel(slot);
+                if (armorItem instanceof DyeableArmorItem $$10) {
+                    int $$11 = $$10.getColor(itemStack);
                     float $$12 = (float)($$11 >> 16 & 0xFF) / 255.0F;
                     float $$13 = (float)($$11 >> 8 & 0xFF) / 255.0F;
                     float $$14 = (float)($$11 & 0xFF) / 255.0F;
-                    this.renderModel($$0, $$1, $$4, $$7, $$5, $$9, $$12, $$13, $$14, null);
-                    this.renderModel($$0, $$1, $$4, $$7, $$5, $$9, 1.0F, 1.0F, 1.0F, "overlay");
+                    this.renderModel($$0, $$1, $$4, armorItem, usethis, flag, $$12, $$13, $$14, null,
+                            entity, itemStack, slot
+                            );
+                    this.renderModel($$0, $$1, $$4, armorItem, usethis, flag, 1.0F, 1.0F, 1.0F, "overlay",
+                            entity, itemStack, slot
+                            );
                 } else {
-                    this.renderModel($$0, $$1, $$4, $$7, $$5, $$9, 1.0F, 1.0F, 1.0F, null);
+                    this.renderModel($$0, $$1, $$4, armorItem, usethis, flag, 1.0F, 1.0F, 1.0F, null,
+                            entity, itemStack, slot
+                            );
                 }
 
-                ArmorTrim.getTrim($$2.level().registryAccess(), $$6).ifPresent($$6x -> this.renderTrim($$7.getMaterial(), $$0, $$1, $$4, $$6x, $$5, $$9));
-                if ($$6.hasFoil()) {
-                    this.renderGlint($$0, $$1, $$4, $$5);
+                ArmorTrim.getTrim(entity.level().registryAccess(), itemStack).ifPresent($$6x -> this.renderTrim(armorItem.getMaterial(), $$0, $$1, $$4, $$6x, model, flag));
+                if (itemStack.hasFoil()) {
+                    this.renderGlint($$0, $$1, $$4, model);
                 }
             }
         }
@@ -199,10 +216,20 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
     }
 
     private void renderModel(
-            PoseStack $$0, MultiBufferSource $$1, int $$2, ArmorItem $$3, A $$4, boolean $$5, float $$6, float $$7, float $$8, @Nullable String $$9
+            PoseStack $$0, MultiBufferSource $$1, int $$2, ArmorItem $$3, Model $$4, boolean $$5, float $$6, float $$7, float $$8, @Nullable String $$9,
+            Entity ent, ItemStack stack, EquipmentSlot slot
     ) {
-        VertexConsumer $$10 = $$1.getBuffer(RenderType.armorCutoutNoCull(this.getArmorLocation($$3, $$5, $$9)));
-        $$4.renderToBuffer($$0, $$10, $$2, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
+        if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
+            renderModel($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8,getArmorResource(ent,stack,slot,$$9));
+        } else {
+            VertexConsumer $$10 = $$1.getBuffer(RenderType.armorCutoutNoCull(this.getArmorLocation($$3, $$5, $$9)));
+            $$4.renderToBuffer($$0, $$10, $$2, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
+        }
+    }
+
+    private void renderModel(PoseStack p_289664_, MultiBufferSource p_289689_, int p_289681_, ArmorItem p_289650_, net.minecraft.client.model.Model p_289658_, boolean p_289668_, float p_289678_, float p_289674_, float p_289693_, ResourceLocation armorResource) {
+        VertexConsumer vertexconsumer = p_289689_.getBuffer(RenderType.armorCutoutNoCull(armorResource));
+        p_289658_.renderToBuffer(p_289664_, vertexconsumer, p_289681_, OverlayTexture.NO_OVERLAY, p_289678_, p_289674_, p_289693_, 1.0F);
     }
 
     private void renderTrim(ArmorMaterial $$0, PoseStack $$1, MultiBufferSource $$2, int $$3, ArmorTrim $$4, A $$5, boolean $$6) {
@@ -226,5 +253,26 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
     private ResourceLocation getArmorLocation(ArmorItem $$0, boolean $$1, @Nullable String $$2) {
         String $$3 = "textures/models/armor/" + $$0.getMaterial().getName() + "_layer_" + ($$1 ? 2 : 1) + ($$2 == null ? "" : "_" + $$2) + ".png";
         return ARMOR_LOCATION_CACHE.computeIfAbsent($$3, ResourceLocation::new);
+    }
+    public ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity, ItemStack stack, EquipmentSlot slot, @Nullable String type) {
+            ArmorItem item = (ArmorItem) stack.getItem();
+            String texture = item.getMaterial().getName();
+            String domain = "minecraft";
+            int idx = texture.indexOf(':');
+            if (idx != -1) {
+                domain = texture.substring(0, idx);
+                texture = texture.substring(idx + 1);
+            }
+            String s1 = String.format(java.util.Locale.ROOT, "%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (usesInnerModel(slot) ? 2 : 1), type == null ? "" : String.format(java.util.Locale.ROOT, "_%s", type));
+
+            s1 = ModPacketHandler.PLATFORM_ACCESS.getArmorTexture(entity,stack,s1,slot,type);
+            ResourceLocation resourcelocation = ARMOR_LOCATION_CACHE.get(s1);
+
+            if (resourcelocation == null) {
+                resourcelocation = new ResourceLocation(s1);
+                ARMOR_LOCATION_CACHE.put(s1, resourcelocation);
+            }
+
+            return resourcelocation;
     }
 }
