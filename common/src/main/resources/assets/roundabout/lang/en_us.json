@@ -41,6 +41,7 @@
   "item.roundabout.street_sign_yield_item": "Street Sign: Yield",
   "item.roundabout.street_sign_danger_item": "Street Sign: Danger",
   "item.roundabout.lucky_lipstick": "Lucky Lipstick",
+  "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -741,6 +742,9 @@
   "roundabout.corpse.tactics.kill_all": "Destroy Corpses",
   "roundabout.corpse.tactics.cackle": "Cackle",
   "roundabout.cinderella.gui": "Beauty",
+  "roundabout.cinderella.gui.cannot_afford": "You cannot afford this item.",
+  "roundabout.cinderella.gui.cost_levels": "Costs %1$s Levels",
+  "roundabout.cinderella.gui.cost_emeralds": "Costs %1$s Emeralds",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",

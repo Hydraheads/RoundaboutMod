@@ -17,11 +17,11 @@ public class VisageStoreEntry {
     /**
      * An int representing the level cost.
      */
-    public double costL;
+    public int costL;
     /**
      * An int representing the emerald cost.
      */
-    public double costE;
+    public int costE;
 
 
     public VisageStoreEntry(ItemStack stack, int page, int costL, int costE){

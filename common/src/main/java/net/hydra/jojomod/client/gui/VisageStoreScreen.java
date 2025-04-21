@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -26,6 +27,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -37,6 +39,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class VisageStoreScreen extends Screen {
     //Check out GamemodeSwitcherScreen
@@ -196,6 +199,18 @@ public class VisageStoreScreen extends Screen {
                 guiGraphics.renderItem(value.stack, k, l, k+l * this.imageWidth);
                 if (isSurelyHovering(k,l,16,16,mouseX,mouseY)){
                     guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k-2, l-2, 144, 27, 20, 20, 256, 256);
+
+                    List<Component> compList = Lists.newArrayList();
+                    compList.add(value.stack.getHoverName());
+                    compList.add(Component.translatable(  value.stack.getDescriptionId()+".desc", value.costE).withStyle(ChatFormatting.ITALIC));
+
+                    if (costsEmeralds){
+                        compList.add(Component.translatable(  "roundabout.cinderella.gui.cost_emeralds", value.costE).withStyle(ChatFormatting.GREEN));
+                    } else {
+                        compList.add(Component.translatable(  "roundabout.cinderella.gui.cost_levels", value.costL).withStyle(ChatFormatting.GREEN));
+                    }
+
+                    guiGraphics.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
                 }
             }
         }
