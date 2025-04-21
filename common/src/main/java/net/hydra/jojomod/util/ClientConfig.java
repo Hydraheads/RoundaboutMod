@@ -19,7 +19,7 @@ public class ClientConfig {
     @BooleanOption(group = "inherit", value = true)
     public Boolean renderJusticeHandsWhilePiloting;
     @BooleanOption(group = "inherit", value = true)
-    public Boolean renderArmorOnFogClones;
+    public Boolean renderArmorOnPlayerCloneAbilities;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)

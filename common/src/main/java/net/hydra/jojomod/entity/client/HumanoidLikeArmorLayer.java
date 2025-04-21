@@ -12,16 +12,12 @@ import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.platform.services.IPlatformHelper;
 import net.hydra.jojomod.util.ConfigManager;
-import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -31,9 +27,6 @@ import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeableArmorItem;
@@ -120,7 +113,7 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
         } else {
             roundabout$ModifyEntity = false;
         }
-        if (ConfigManager.getClientConfig().renderArmorOnFogClones) {
+        if (ConfigManager.getClientConfig().renderArmorOnPlayerCloneAbilities) {
             this.renderArmorPiece($$0, $$1, $$3, EquipmentSlot.CHEST, $$2, this.getArmorModel(EquipmentSlot.CHEST));
             this.renderArmorPiece($$0, $$1, $$3, EquipmentSlot.LEGS, $$2, this.getArmorModel(EquipmentSlot.LEGS));
             this.renderArmorPiece($$0, $$1, $$3, EquipmentSlot.FEET, $$2, this.getArmorModel(EquipmentSlot.FEET));

@@ -19,7 +19,7 @@ public class PlayerAlexRenderer<T extends JojoNPC> extends PlayerLikeRenderer<Jo
     private static final ResourceLocation ALEX_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/alex.png");
     public PlayerAlexRenderer(EntityRendererProvider.Context context) {
         super(context, new PlayerAlexModel<>(context.bakeLayer(ModEntityRendererClient.ALEX_LAYER)),0f);
-        if (ConfigManager.getClientConfig().renderArmorOnFogClones) {
+        if (ConfigManager.getClientConfig().renderArmorOnPlayerCloneAbilities) {
             this.addLayer(new HumanoidLikeArmorLayer<>(this, new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR)), context.getModelManager()));
         }
     }
