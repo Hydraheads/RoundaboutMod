@@ -6,9 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.KeyInputRegistry;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
-import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
@@ -20,22 +17,16 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,24 +61,17 @@ public class VisageStoreScreen extends Screen {
         this.currentlyHovered = null;
     }
 
-    private ShapeShifts getDefaultSelected() {
-        Player pl = Minecraft.getInstance().player;
-        if (pl != null){
-            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).roundabout$getShapeShift());
-        }
-        return ShapeShifts.PLAYER;
-    }
-
-
 
     public int page = 0;
     public boolean costsEmeralds = false;
+
+    Player pl;
 
     @Override
     protected void init() {
         super.init();
         zHeld = true;
-        Player pl = Minecraft.getInstance().player;
+        pl = Minecraft.getInstance().player;
         this.page = 0;
 
         //this.currentlyHovered = CorpseBagScreen.corpseIcon.NONE;
@@ -116,6 +100,9 @@ public class VisageStoreScreen extends Screen {
                 page = 0;
             }
         }
+
+        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
     public List<VisageStoreEntry> getPage(){
         List<VisageStoreEntry> list = ModItems.getVisageStore();
@@ -150,9 +137,56 @@ public class VisageStoreScreen extends Screen {
         //ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
         //        stack, PacketDataIndex.USE_CORPSE_BAG, vc);
 
+        List<VisageStoreEntry> list = getPage();
+        for (VisageStoreEntry value : list) {
+            if (value.page == page) {
+                int index = list.indexOf(value);
+                int kk = index % 5;
+                kk *= 22;
+                k = this.width / 2 - 54 + kk;
+                int bb = 0;
+                bb = Mth.floor((double) index / 5) * 22;
+                l = this.height / 2 - 73 + bb;
+                if (isSurelyHovering(k, l, 16, 16, mouseX, mouseY)) {
+                    if (!canAfford(value)) {
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    } else {
+                        if (costsEmeralds){
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(ModItems.getVisageStore().indexOf(value),PacketDataIndex.INT_INDEX_OF_VISAGE_EMERALDS);
+                        } else {
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(ModItems.getVisageStore().indexOf(value),PacketDataIndex.INT_INDEX_OF_VISAGE_LEVEL);
+                        }
+                        this.minecraft.setScreen(null);
+                    }
+                }
+            }
+        }
+
         //this.minecraft.setScreen(null);
         return true;
     }
+
+    public boolean canAfford(VisageStoreEntry vs){
+        if (pl != null) {
+            if (costsEmeralds) {
+                int i = 0;
+                for(int $$5 = 0; $$5 < pl.getInventory().getContainerSize(); ++$$5) {
+                    ItemStack $$6 = pl.getInventory().getItem($$5);
+                    if ($$6.getItem().equals(Items.EMERALD)){
+                        i+=$$6.getCount();
+                    }
+                }
+                return i >= vs.costE;
+            }
+
+            if (pl.experienceLevel >= vs.costL){
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected int imageWidth = 176;
 
     @Override
@@ -168,7 +202,7 @@ public class VisageStoreScreen extends Screen {
         super.render(guiGraphics, mouseX, mouseY, delta);
         guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
 
-        guiGraphics.drawCenteredString(this.font, ""+page, this.width / 2, this.height / 2 + 30, -1);
+        guiGraphics.drawCenteredString(this.font, ""+(page+1), this.width / 2, this.height / 2 + 30, -1);
 
         k = this.width / 2 - 79;
         l = this.height / 2 - 31 - 31;
@@ -198,7 +232,11 @@ public class VisageStoreScreen extends Screen {
                 l = this.height / 2 - 73 + bb;
                 guiGraphics.renderItem(value.stack, k, l, k+l * this.imageWidth);
                 if (isSurelyHovering(k,l,16,16,mouseX,mouseY)){
-                    guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k-2, l-2, 144, 27, 20, 20, 256, 256);
+                    if (!canAfford(value)){
+                        guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k-2, l-2, 165, 27, 20, 20, 256, 256);
+                    } else {
+                        guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k-2, l-2, 144, 27, 20, 20, 256, 256);
+                    }
 
                     List<Component> compList = Lists.newArrayList();
                     compList.add(value.stack.getHoverName());
@@ -208,6 +246,9 @@ public class VisageStoreScreen extends Screen {
                         compList.add(Component.translatable(  "roundabout.cinderella.gui.cost_emeralds", value.costE).withStyle(ChatFormatting.GREEN));
                     } else {
                         compList.add(Component.translatable(  "roundabout.cinderella.gui.cost_levels", value.costL).withStyle(ChatFormatting.GREEN));
+                    }
+                    if (!canAfford(value)){
+                        compList.add(Component.translatable(  "roundabout.cinderella.gui.cannot_afford").withStyle(ChatFormatting.RED));
                     }
 
                     guiGraphics.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);

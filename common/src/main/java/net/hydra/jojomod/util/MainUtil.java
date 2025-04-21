@@ -49,6 +49,7 @@ import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -1389,7 +1390,60 @@ public class MainUtil {
             } else {
                 ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
             }
+        } else if (context == PacketDataIndex.INT_INDEX_OF_VISAGE_LEVEL){
+            if (ModItems.getVisageStore().size() >= data){
+                VisageStoreEntry entry = ModItems.getVisageStore().get(data);
+                if (player.experienceLevel >= entry.costL){
+                    addItem(player,entry.stack.copy());
+                    player.giveExperienceLevels(-entry.costL);
+
+                    SoundEvent $$6 = ModSounds.CINDERELLA_SPARKLE_EVENT;
+                    player.level().playSound(null, BlockPos.containing(player.position()), $$6, SoundSource.BLOCKS, 1F, 1F);
+                }
+            }
+        } else if (context == PacketDataIndex.INT_INDEX_OF_VISAGE_EMERALDS){
+            if (ModItems.getVisageStore().size() >= data){
+                VisageStoreEntry entry = ModItems.getVisageStore().get(data);
+                    int i = 0;
+                    for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                        ItemStack $$6 = player.getInventory().getItem($$5);
+                        if ($$6.getItem().equals(Items.EMERALD)){
+                            i+=$$6.getCount();
+                        }
+                    }
+                    if (i >= entry.costE){
+                        addItem(player,entry.stack.copy());
+                        int j = 0;
+                        for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                            ItemStack $$6 = player.getInventory().getItem($$5);
+                            if ($$6.getItem().equals(Items.EMERALD)){
+                                int ct = $$6.getCount();
+                                if ((j + ct) > entry.costE){
+                                    $$6.shrink(entry.costE);
+                                    j+= entry.costE;
+                                } else {
+                                    $$6.shrink(ct);
+                                    j+= ct;
+                                }
+                            }
+                            if (j >= entry.costE){
+                                break;
+                            }
+                        }
+
+                        SoundEvent $$6 = ModSounds.CINDERELLA_SPARKLE_EVENT;
+                        player.level().playSound(null, BlockPos.containing(player.position()), $$6, SoundSource.BLOCKS, 1F, 1F);
+                    }
+            }
         }
+    }
+    public static void addItem(Player player, ItemStack stack){
+        ItemEntity $$4 = new ItemEntity(player.level(), player.getX(),
+                player.getY() + player.getEyeHeight(), player.getZ(),
+                stack);
+        $$4.setPickUpDelay(0);
+        $$4.setThrower(player.getUUID());
+        player.level().addFreshEntity($$4);
     }
 
     public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,

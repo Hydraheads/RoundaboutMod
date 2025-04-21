@@ -36,6 +36,8 @@ public class PacketDataIndex {
     public static final byte INT_UPDATE_MOVE = 7;
     public static final byte INT_UPDATE_PILOT = 8;
     public static final byte INT_ANCHOR_PLACE_ATTACK = 9;
+    public static final byte INT_INDEX_OF_VISAGE_LEVEL = 10;
+    public static final byte INT_INDEX_OF_VISAGE_EMERALDS = 11;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
