@@ -24,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -31,6 +32,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VisageStoreScreen extends Screen {
@@ -70,6 +72,8 @@ public class VisageStoreScreen extends Screen {
         return ShapeShifts.PLAYER;
     }
 
+
+
     public int zombies = 0;
     public int skeletons = 0;
     public int spiders = 0;
@@ -97,6 +101,7 @@ public class VisageStoreScreen extends Screen {
         this.minecraft.setScreen(null);
         return true;
     }
+    protected int imageWidth = 176;
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
@@ -128,6 +133,10 @@ public class VisageStoreScreen extends Screen {
         } else {
             guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 22.0f, 40.0f, 19, 24, 256, 256);
         }
+
+        k = this.width / 2;
+        l = this.height / 2 - 31 - 31;
+        guiGraphics.renderItem(ModItems.JOTARO_MASK.getDefaultInstance(), k, l, k+l * this.imageWidth);
 
         if (!this.setFirstMousePos) {
             this.firstMouseX = mouseX;

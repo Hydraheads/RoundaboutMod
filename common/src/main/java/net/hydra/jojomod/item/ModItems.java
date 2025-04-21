@@ -1,10 +1,13 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModItems {
 
@@ -75,5 +78,23 @@ public class ModItems {
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL_FOR_MOBS = Lists.newArrayList();
+    public static ArrayList<VisageStoreEntry> VISAGE_STORE_ENTRIES = Lists.newArrayList();
+
+    public static void initializeVisageStore(){
+        addToVisageStore(LUCKY_LIPSTICK,0, 4, 5);
+        addToVisageStore(BLANK_MASK,0, 5, 7);
+        addToVisageStore(JOTARO_MASK,1, 10, 15);
+        addToVisageStore(AVDOL_MASK,1, 10, 15);
+        addToVisageStore(DIO_MASK,1, 10, 15);
+        addToVisageStore(ENYA_MASK,1, 10, 15);
+        addToVisageStore(AYA_MASK,1, 10, 15);
+        addToVisageStore(VALENTINE_MASK,1, 10, 15);
+    }
+    public static void addToVisageStore(Item item, int page, int costL, int costE){
+        VISAGE_STORE_ENTRIES.add(new VisageStoreEntry(item.getDefaultInstance(), page, costL, costE));
+    }
+    public static void addToVisageStore(ItemStack item, int page, int costL, int costE){
+        VISAGE_STORE_ENTRIES.add(new VisageStoreEntry(item, page, costL, costE));
+    }
 
 }

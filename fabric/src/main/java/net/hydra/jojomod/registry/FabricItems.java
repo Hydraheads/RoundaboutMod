@@ -371,6 +371,8 @@ public class FabricItems {
         ModItems.METEORITE = METEORITE;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
+
+
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DIO).referenceItem = STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_RIGHT).referenceItem = STREET_SIGN_RIGHT_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_STOP).referenceItem = STREET_SIGN_STOP_BLOCK_ITEM.getDefaultInstance();
@@ -397,6 +399,7 @@ public class FabricItems {
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
 
+        ModItems.initializeVisageStore();
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);
 
         registerPotions();
