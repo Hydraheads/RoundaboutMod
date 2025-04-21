@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientPlatform;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
@@ -127,7 +128,7 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
             if (armorItem.getEquipmentSlot() == slot) {
                 this.getParentModel().copyPropertiesTo2(model);
                 this.setPartVisibility(model, slot);
-                net.minecraft.client.model.Model model2 = ModPacketHandler.PLATFORM_ACCESS.getArmorModelHook(entity, itemStack, slot, model);
+                net.minecraft.client.model.Model model2 = ClientPlatform.PLATFORM_ACCESS_CLIENT.getArmorModelHook(entity, itemStack, slot, model);
                 Model usethis = model;
                 if (model2 != null){
                     usethis = model2;
@@ -258,7 +259,7 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
             }
             String s1 = String.format(java.util.Locale.ROOT, "%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (usesInnerModel(slot) ? 2 : 1), type == null ? "" : String.format(java.util.Locale.ROOT, "_%s", type));
 
-            s1 = ModPacketHandler.PLATFORM_ACCESS.getArmorTexture(entity,stack,s1,slot,type);
+            s1 = ClientPlatform.PLATFORM_ACCESS_CLIENT.getArmorTexture(entity,stack,s1,slot,type);
             ResourceLocation resourcelocation = ARMOR_LOCATION_CACHE.get(s1);
 
             if (resourcelocation == null) {

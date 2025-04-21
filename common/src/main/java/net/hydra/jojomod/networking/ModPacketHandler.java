@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.platform.services.IPlatformHelper;
+import net.hydra.jojomod.platform.services.IPlatformHelperClient;
 import net.minecraft.client.multiplayer.chat.report.AbuseReportSender;
 
 public class ModPacketHandler {

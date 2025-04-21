@@ -30,8 +30,6 @@ public interface IPlatformHelper {
      */
     boolean isDevelopmentEnvironment();
 
-    String getArmorTexture(Entity entity, ItemStack armor, String _default, EquipmentSlot slot, String type);
-
     /**
      * Gets the name of the environment type as a string.
      *
@@ -40,8 +38,5 @@ public interface IPlatformHelper {
     default String getEnvironmentName() {
         return isDevelopmentEnvironment() ? "development" : "production";
     }
-
-   <T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> net.minecraft.client.model.Model getArmorModelHook
-            (T entity, ItemStack itemStack, EquipmentSlot slot, A model);
 
 }
