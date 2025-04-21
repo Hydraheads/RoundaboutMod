@@ -23,6 +23,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.hoglin.HoglinBase;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -59,7 +62,19 @@ public abstract class ZEntityRenderDispatcher {
             if (bt > 0){
                 int light2 = light;
                 if (bt ==1){
-                    light2 = (int)(((float)light2)/2);
+                    if ($$0 instanceof Zombie || $$0 instanceof HoglinBase || $$0 instanceof Player) {
+                        light2 = Math.min(light2, 11010048);
+                    } else {
+                        light2 = (int)(((float)light2)/2);
+                    }
+                    /**
+                     * Unfortunately, the light value decrease never seems to never work with ANY amount of variance, just /2
+                     *
+                    Roundabout.LOGGER.info("1:"+light2);
+                    Roundabout.LOGGER.info("2:"+((float)light2));
+                    Roundabout.LOGGER.info("3:"+(((float)light2)*0.7F));
+                    Roundabout.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
+                     **/
                 } else if (bt == 2){
                     light2 = 15728880;
                 }

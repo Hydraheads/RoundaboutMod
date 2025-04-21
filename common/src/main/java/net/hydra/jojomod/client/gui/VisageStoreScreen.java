@@ -36,7 +36,7 @@ import java.util.List;
 public class VisageStoreScreen extends Screen {
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/corpse_chooser.png");
+            "textures/gui/cinderella_gui.png");
     private static final int SPRITE_SHEET_WIDTH = 256;
     private static final int SPRITE_SHEET_HEIGHT = 256;
     private static final int SLOT_AREA = 26;
@@ -105,14 +105,12 @@ public class VisageStoreScreen extends Screen {
         }
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
-        int k = this.width / 2 - 62;
-        int l = this.height / 2 - 31 - 39;
-        guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 125, 63, 256, 256);
+        int k = this.width / 2 - 60;
+        int l = this.height / 2 - 31 - 80;
+        guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 113, 26, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
-        if (this.currentlyHovered != null) {
-            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, this.height / 2 - 31 - 32, -1);
-        }
+        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2, this.height / 2 - 31 - 32, -1);
         if (!this.setFirstMousePos) {
             this.firstMouseX = i;
             this.firstMouseY = j;
