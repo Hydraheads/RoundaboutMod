@@ -15,7 +15,9 @@ import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -206,7 +208,7 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         $$7.setRenderShadow(false);
         boolean hb = $$7.shouldRenderHitBoxes();
         $$7.setRenderHitBoxes(false);
-        RenderSystem.runAsFancy(() -> $$7.render($$6, 0.0, 0.0, 0.0, f1, f2, $$3,$$4, light));
+        $$7.render($$6, 0.0, 0.0, 0.0, f1, f2, $$3,$$4, light);
         $$7.setRenderShadow(true);
         $$7.setRenderHitBoxes(hb);
         $$3.popPose();
@@ -226,7 +228,6 @@ public class FogCloneRenderer<T extends FogCloneEntity, M extends EntityModel<T>
         }
         if (AC == null){
             if (roundabout$visageData != null){
-                Roundabout.LOGGER.info("create3");
                  AC = roundabout$visageData.getModelNPC($$0);
             }
         }

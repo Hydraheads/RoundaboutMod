@@ -24,7 +24,9 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -714,7 +716,16 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         $$7.setRenderShadow(false);
         boolean hb = $$7.shouldRenderHitBoxes();
         $$7.setRenderHitBoxes(false);
-        RenderSystem.runAsFancy(() -> $$7.render($$6, 0.0, 0.0, 0.0, f1, f2, $$3,$$4, light));
+
+        /**
+        OptionInstance<GraphicsStatus> gm = Minecraft.getInstance().options.graphicsMode();
+        GraphicsStatus gs = (GraphicsStatus)gm.get();
+        gm.set(GraphicsStatus.FANCY);
+         **/
+        $$7.render($$6, 0.0, 0.0, 0.0, f1, f2, $$3,$$4, light);
+        /**
+        gm.set(gs);
+         **/
         $$7.setRenderShadow(true);
         $$7.setRenderHitBoxes(hb);
         $$3.popPose();

@@ -26,7 +26,7 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 import java.util.function.Function;
 
-public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> implements HeadedModel, ArmedModel {
+public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> implements HeadedModel, ArmedModel {
     /**Override this for every stand model.*/
     private float alpha;
     private static final String EAR = "ear";
@@ -532,11 +532,6 @@ public class PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> imp
 
         return $$1 + $$0 * $$3;
     }
-    @Override
-    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        playerlike.render(matrices, vertexConsumer, light, overlay, red, green, blue, this.alpha);
-    }
-
     public void setAlpha(float alpha){
         this.alpha = alpha;
     }
