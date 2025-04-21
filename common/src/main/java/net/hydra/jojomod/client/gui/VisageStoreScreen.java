@@ -105,12 +105,12 @@ public class VisageStoreScreen extends Screen {
         }
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
-        int k = this.width / 2 - 60;
+        int k = this.width / 2 - 55;
         int l = this.height / 2 - 31 - 80;
         guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 113, 26, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2, this.height / 2 - 31 - 32, -1);
+        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2, this.height / 2 - 31 - 75, -1);
         if (!this.setFirstMousePos) {
             this.firstMouseX = i;
             this.firstMouseY = j;

@@ -22,6 +22,7 @@ public class CinderellaEntity extends StandEntity {
         return Component.translatable("skins.roundabout.cinderella.base");
     }
     public final AnimationState deface = new AnimationState();
+    public final AnimationState visages = new AnimationState();
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -30,6 +31,11 @@ public class CinderellaEntity extends StandEntity {
                 this.deface.startIfStopped(this.tickCount);
             } else {
                 this.deface.stop();
+            }
+            if (this.getAnimation() == 82) {
+                this.visages.startIfStopped(this.tickCount);
+            } else {
+                this.visages.stop();
             }
         }
     }
