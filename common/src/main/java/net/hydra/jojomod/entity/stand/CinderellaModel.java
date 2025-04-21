@@ -106,7 +106,7 @@ public class CinderellaModel<T extends CinderellaEntity> extends StandModel<T> {
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.deface, StandAnimations.IMPALE, pAgeInTicks, 1.5f);
-        this.animate(pEntity.visages, StandAnimations.TIMESTOP, pAgeInTicks, 1.5f);
+        this.animate(pEntity.visages, StandAnimations.TIMESTOP, pAgeInTicks, 5f);
     }
 
     @Override
