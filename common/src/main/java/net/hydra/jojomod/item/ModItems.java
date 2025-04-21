@@ -80,6 +80,13 @@ public class ModItems {
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL_FOR_MOBS = Lists.newArrayList();
     public static ArrayList<VisageStoreEntry> VISAGE_STORE_ENTRIES = Lists.newArrayList();
 
+
+    public static ArrayList<VisageStoreEntry> getVisageStore(){
+        if (VISAGE_STORE_ENTRIES == null){
+            VISAGE_STORE_ENTRIES = Lists.newArrayList();
+        }
+        return VISAGE_STORE_ENTRIES;
+    }
     public static void initializeVisageStore(){
         addToVisageStore(LUCKY_LIPSTICK,0, 4, 5);
         addToVisageStore(BLANK_MASK,0, 5, 7);

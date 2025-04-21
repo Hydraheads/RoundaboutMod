@@ -7,9 +7,11 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.GameNarrator;
@@ -23,6 +25,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -74,18 +77,15 @@ public class VisageStoreScreen extends Screen {
 
 
 
-    public int zombies = 0;
-    public int skeletons = 0;
-    public int spiders = 0;
-    public int villagers = 0;
-    public int creepers = 0;
+    public int page = 0;
+    public boolean costsEmeralds = false;
 
     @Override
     protected void init() {
         super.init();
         zHeld = true;
         Player pl = Minecraft.getInstance().player;
-
+        this.page = 0;
 
         //this.currentlyHovered = CorpseBagScreen.corpseIcon.NONE;
         //for (int i = 0; i < CorpseBagScreen.corpseIcon.VALUES.length; ++i) {
@@ -94,11 +94,60 @@ public class VisageStoreScreen extends Screen {
         //}
     }
 
+    public int getLastPageNumber() {
+        List<VisageStoreEntry> list = ModItems.getVisageStore();
+        return list.get(list.size()-1).page;
+    }
 
+
+    public void turnPage(boolean left){
+        List<VisageStoreEntry> list = ModItems.getVisageStore();
+        if (left){
+            this.page--;
+            if (page < 0){
+                page = getLastPageNumber();
+            }
+        } else {
+            this.page++;
+            if (page > getLastPageNumber()){
+                page = 0;
+            }
+        }
+    }
+    public List<VisageStoreEntry> getPage(){
+        List<VisageStoreEntry> list = ModItems.getVisageStore();
+        List<VisageStoreEntry> list2 = new ArrayList<>();
+        for (VisageStoreEntry value : list) {
+            if (value.page == page){
+                list2.add(value);
+            }
+        }
+        return list2;
+    }
     @Override
-    public boolean mouseReleased(double $$0, double $$1, int $$2) {
-        this.switchToHoveredGameMode();
-        this.minecraft.setScreen(null);
+    public boolean mouseReleased(double mouseX, double mouseY, int $$2) {
+
+        //if (minecraft.gameMode == null || minecraft.player == null) {
+        //   return;
+        //}
+
+        int k;
+        int l;
+        k = this.width / 2 - 79;
+        l = this.height / 2 - 31 - 31;
+        if (isSurelyHovering(k, l, 19, 24, mouseX, mouseY)) {
+            turnPage(true);
+        }
+
+        k = this.width / 2 + 55;
+        l = this.height / 2 - 31 - 31;
+        if (isSurelyHovering(k, l, 19, 24, mouseX, mouseY)) {
+            turnPage(false);
+        }
+        //ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
+        //        stack, PacketDataIndex.USE_CORPSE_BAG, vc);
+
+        //this.minecraft.setScreen(null);
         return true;
     }
     protected int imageWidth = 176;
@@ -106,9 +155,7 @@ public class VisageStoreScreen extends Screen {
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         renderBackground(guiGraphics);
-        if (this.checkToClose()) {
-            return;
-        }
+
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 58;
@@ -117,6 +164,8 @@ public class VisageStoreScreen extends Screen {
         guiGraphics.pose().popPose();
         super.render(guiGraphics, mouseX, mouseY, delta);
         guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
+
+        guiGraphics.drawCenteredString(this.font, ""+page, this.width / 2, this.height / 2 + 30, -1);
 
         k = this.width / 2 - 79;
         l = this.height / 2 - 31 - 31;
@@ -134,9 +183,22 @@ public class VisageStoreScreen extends Screen {
             guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 22.0f, 40.0f, 19, 24, 256, 256);
         }
 
-        k = this.width / 2;
-        l = this.height / 2 - 31 - 31;
-        guiGraphics.renderItem(ModItems.JOTARO_MASK.getDefaultInstance(), k, l, k+l * this.imageWidth);
+        List<VisageStoreEntry> list = getPage();
+        for (VisageStoreEntry value : list) {
+            if (value.page == page){
+                int index = list.indexOf(value);
+                int kk = index % 5;
+                kk *= 22;
+                k = this.width / 2 - 54 + kk;
+                int bb =0;
+                bb = Mth.floor((double) index / 5) * 22;
+                l = this.height / 2 - 73 + bb;
+                guiGraphics.renderItem(value.stack, k, l, k+l * this.imageWidth);
+                if (isSurelyHovering(k,l,16,16,mouseX,mouseY)){
+                    guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k-2, l-2, 144, 27, 20, 20, 256, 256);
+                }
+            }
+        }
 
         if (!this.setFirstMousePos) {
             this.firstMouseX = mouseX;
@@ -146,28 +208,7 @@ public class VisageStoreScreen extends Screen {
         boolean bl = this.firstMouseX == mouseX && this.firstMouseY == mouseY;
     }
 
-    private void switchToHoveredGameMode() {
-        switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
-    }
 
-    private void switchToHoveredGameMode(Minecraft minecraft, CorpseBagScreen.corpseIcon pIcon) {
-        if (minecraft.gameMode == null || minecraft.player == null) {
-            return;
-        }
-
-
-            Vec3 vec3d = minecraft.player.getEyePosition(0);
-            Vec3 vec3d2 = minecraft.player.getViewVector(0);
-            Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
-            BlockHitResult blockHit = minecraft.player.level().clip(new ClipContext(vec3d, vec3d3,
-                    ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, minecraft.player));
-            Vector3f vc = minecraft.player.position().toVector3f();
-            if (blockHit.getType() == HitResult.Type.BLOCK){
-                vc = blockHit.getBlockPos().getCenter().toVector3f().add(0,1,0);
-            }
-            //ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
-            //        stack, PacketDataIndex.USE_CORPSE_BAG, vc);
-    }
     public boolean sameKeyOne(KeyMapping key1, Options options){
         return (key1.isDown() || (key1.same(options.keyLoadHotbarActivator) && options.keyLoadHotbarActivator.isDown())
                 || (key1.same(options.keySaveHotbarActivator) && options.keySaveHotbarActivator.isDown())
@@ -178,17 +219,6 @@ public class VisageStoreScreen extends Screen {
                 || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
                 || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
         );
-    }
-    private boolean checkToClose() {
-        if (minecraft != null) {
-            if (sameKeyOneX(KeyInputRegistry.abilityTwoKey, this.minecraft.options)) {
-                this.switchToHoveredGameMode();
-                this.minecraft.setScreen(null);
-                return true;
-            }
-        }
-        Options options = Minecraft.getInstance().options;
-        return false;
     }
     @Override
     public boolean keyPressed(int i, int j, int k) {
