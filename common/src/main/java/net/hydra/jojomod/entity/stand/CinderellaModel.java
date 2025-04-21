@@ -28,7 +28,7 @@ public class CinderellaModel<T extends CinderellaEntity> extends StandModel<T> {
 
         PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -18.0F, 0.0F));
 
-        PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+        PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.01F))
                 .texOffs(60, 0).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.1F))
                 .texOffs(0, 16).mirror().addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(0, 120).addBox(-4.0F, -10.0F, 3.85F, 8.0F, 6.0F, 2.0F, new CubeDeformation(0.0F))
@@ -106,7 +106,7 @@ public class CinderellaModel<T extends CinderellaEntity> extends StandModel<T> {
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.deface, StandAnimations.IMPALE, pAgeInTicks, 1.5f);
-        this.animate(pEntity.visages, StandAnimations.TIMESTOP, pAgeInTicks, 5f);
+        this.animate(pEntity.visages, StandAnimations.TIMESTOP, pAgeInTicks, 4f);
     }
 
     @Override

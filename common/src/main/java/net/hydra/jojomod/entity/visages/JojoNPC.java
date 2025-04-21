@@ -247,7 +247,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         return this.deltaMovementOnPreviousTick.lerp(this.getDeltaMovement(), (double)$$0);
     }
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.MAX_HEALTH, 30)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.26).add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }

@@ -99,30 +99,42 @@ public class VisageStoreScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        renderBackground(guiGraphics);
         if (this.checkToClose()) {
             return;
         }
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
-        int k = this.width / 2 - 55;
+        int k = this.width / 2 - 58;
         int l = this.height / 2 - 31 - 80;
         guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 113, 26, 256, 256);
         guiGraphics.pose().popPose();
-        super.render(guiGraphics, i, j, f);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2, this.height / 2 - 31 - 75, -1);
+        super.render(guiGraphics, mouseX, mouseY, delta);
+        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
+
+        k = this.width / 2 - 79;
+        l = this.height / 2 - 31 - 31;
+        if (isSurelyHovering(k, l, 19, 24, mouseX, mouseY)) {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 65.0f, 19, 24, 256, 256);
+        } else {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 40.0f, 19, 24, 256, 256);
+        }
+
+        k = this.width / 2 + 55;
+        l = this.height / 2 - 31 - 31;
+        if (isSurelyHovering(k, l, 19, 24, mouseX, mouseY)) {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 22.0f, 65.0f, 19, 24, 256, 256);
+        } else {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 22.0f, 40.0f, 19, 24, 256, 256);
+        }
+
         if (!this.setFirstMousePos) {
-            this.firstMouseX = i;
-            this.firstMouseY = j;
+            this.firstMouseX = mouseX;
+            this.firstMouseY = mouseY;
             this.setFirstMousePos = true;
         }
-        boolean bl = this.firstMouseX == i && this.firstMouseY == j;
-        for (CorpseBagScreen.PoseSlot MobSlot : this.slots) {
-            MobSlot.render(guiGraphics, i, j, f);
-            MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
-            if (bl || !MobSlot.isHoveredOrFocused()) continue;
-            this.currentlyHovered = MobSlot.icon;
-        }
+        boolean bl = this.firstMouseX == mouseX && this.firstMouseY == mouseY;
     }
 
     private void switchToHoveredGameMode() {
@@ -178,7 +190,9 @@ public class VisageStoreScreen extends Screen {
     public boolean isPauseScreen() {
         return false;
     }
-
+    protected boolean isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
+        return p_97772_ >= (double)(p_97768_) && p_97772_ < (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ < (double)(p_97769_ + p_97771_);
+    }
 
 }
 
