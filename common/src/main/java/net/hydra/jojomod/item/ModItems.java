@@ -71,6 +71,7 @@ public class ModItems {
     public static Item DIO_MASK;
     public static Item ENYA_MASK;
     public static Item AVDOL_MASK;
+    public static Item DIEGO_MASK;
     public static Item VALENTINE_MASK;
     public static Item AYA_MASK;
 
@@ -95,6 +96,7 @@ public class ModItems {
         addToVisageStore(DIO_MASK,1, 10, 15);
         addToVisageStore(ENYA_MASK,1, 10, 15);
         addToVisageStore(AYA_MASK,1, 10, 15);
+        addToVisageStore(DIEGO_MASK,1, 10, 15);
         addToVisageStore(VALENTINE_MASK,1, 10, 15);
     }
     public static void addToVisageStore(Item item, int page, int costL, int costE){

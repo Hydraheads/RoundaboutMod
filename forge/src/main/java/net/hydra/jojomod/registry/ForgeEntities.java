@@ -59,6 +59,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_dio").toString())
             );
+    public static final RegistryObject<EntityType<ParallelDiegoNPC>> PARALLEL_DIEGO =
+            ENTITY_TYPES.register("jojo_npc_parallel_diego", () ->
+                    EntityType.Builder.of(ParallelDiegoNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_parallel_diego").toString())
+            );
     public static final RegistryObject<EntityType<AyaNPC>> AYA =
             ENTITY_TYPES.register("jojo_npc_aya", () ->
                     EntityType.Builder.of(AyaNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).

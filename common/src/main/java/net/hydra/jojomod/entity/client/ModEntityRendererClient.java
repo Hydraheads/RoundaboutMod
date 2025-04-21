@@ -29,6 +29,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation OVA_ENYA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_ova_enya"), "main");
     public static final ModelLayerLocation JOTARO_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro"), "main");
     public static final ModelLayerLocation DIO_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_dio"), "main");
+    public static final ModelLayerLocation DIEGO_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_diego"), "main");
     public static final ModelLayerLocation ENYA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_enya"), "main");
     public static final ModelLayerLocation AYA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_aya"), "main");
     public static final ModelLayerLocation AVDOL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_avdol"), "main");

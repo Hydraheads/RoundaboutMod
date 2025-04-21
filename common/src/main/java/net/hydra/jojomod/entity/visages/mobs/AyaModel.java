@@ -19,12 +19,6 @@ public class AyaModel<T extends AyaNPC> extends PlayerLikeModel<T> {
 
     @Override
     public void defaultModifiers(T entity) {
-        this.head.yScale *= 0.95F;
-        this.head.xScale *= 0.95F;
-        this.head.zScale *= 0.95F;
-        this.hat.yScale *= 0.95F;
-        this.hat.xScale *= 0.95F;
-        this.hat.zScale *= 0.95F;
         super.defaultModifiers(entity);
     }
     public static LayerDefinition getTexturedModelData() {

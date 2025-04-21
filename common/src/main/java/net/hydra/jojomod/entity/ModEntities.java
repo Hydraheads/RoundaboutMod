@@ -52,6 +52,8 @@ public class ModEntities {
     public static EntityType<ValentineNPC> VALENTINE;
 
     public static EntityType<DIONPC> DIO;
+
+    public static EntityType<ParallelDiegoNPC> PARALLEL_DIEGO;
     public static EntityType<AyaNPC> AYA;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;

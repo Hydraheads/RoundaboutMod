@@ -56,6 +56,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), JotaroRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AVDOL.get(), AvdolRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DIO.get(), DIORenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PARALLEL_DIEGO.get(), DiegoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AYA.get(), AyaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.VALENTINE.get(), ValentineRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
@@ -96,6 +97,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.OVA_ENYA_LAYER, OVAEnyaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JOTARO_LAYER, JotaroModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DIO_LAYER, DIOModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.DIEGO_LAYER, DiegoModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ENYA_LAYER, EnyaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.AVDOL_LAYER, AvdolModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.VALENTINE_LAYER, ValentineModel::getTexturedModelData);

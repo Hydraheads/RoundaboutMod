@@ -26,6 +26,8 @@ public class StandUsingNPC extends JojoNPC{
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("isInitialized",isInitialized);
     }
+    public void applySkin(){
+    }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         super.readAdditionalSaveData($$0);
@@ -34,7 +36,8 @@ public class StandUsingNPC extends JojoNPC{
             ItemStack stack = ((StandUser)this).roundabout$getStandDisc();
             if (stack == null || stack.isEmpty()){
                 if (getDisc() != null){
-                    ((StandUser)this).roundabout$setStandDisc(getDisc().getDefaultInstance());
+                    ((StandUser)this).roundabout$setStandDisc(getDisc().getDefaultInstance().copy());
+                    applySkin();
                 }
             }
             isInitialized = true;
