@@ -288,6 +288,13 @@ public class PowersCinderella extends DashPreset {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
             }
+        } else {
+            if (this.getActivePower() == PowerIndex.POWER_1){
+
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                        this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
+                        1, 2.5, 2,2.5, 0.015);
+            }
         }
         super.tickPower();
     }

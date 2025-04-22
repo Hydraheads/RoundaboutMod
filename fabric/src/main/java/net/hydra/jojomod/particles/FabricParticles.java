@@ -26,6 +26,7 @@ public class FabricParticles {
     public static final SimpleParticleType FOG_CHAIN = FabricParticleTypes.simple();
     public static final SimpleParticleType WARDEN_CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType CINDERELLA_GLOW = FabricParticleTypes.simple();
+    public static final SimpleParticleType PINK_SMOKE = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blood"), BLOOD);
@@ -44,6 +45,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "dread_flame"), DREAD_FLAME);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "cream_flame"), CREAM_FLAME);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "cinderella_glow"), CINDERELLA_GLOW);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pink_smoke"), PINK_SMOKE);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -62,5 +64,6 @@ public class FabricParticles {
         ModParticles.DREAD_FLAME = DREAD_FLAME;
         ModParticles.CREAM_FLAME = CREAM_FLAME;
         ModParticles.CINDERELLA_GLOW = CINDERELLA_GLOW;
+        ModParticles.PINK_SMOKE = PINK_SMOKE;
     }
 }

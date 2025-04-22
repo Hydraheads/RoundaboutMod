@@ -73,4 +73,8 @@ public class ForgeParticles {
             "cinderella_glow",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> PINK_SMOKE = PARTICLES.register(
+            "pink_smoke",
+            () -> new SimpleParticleType(true)
+    );
 }
