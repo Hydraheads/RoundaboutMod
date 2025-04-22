@@ -88,6 +88,11 @@ import java.util.Set;
                     "roundabout:magicians_red_disc"
             )
     );
+    public Set<String> standArrowSecondaryPoolv1 = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:cinderella_disc"
+            )
+    );
     public Set<String> naturalStandUserMobPoolv1 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",

@@ -40,11 +40,14 @@
   "item.roundabout.street_sign_stop_item": "Panneau de Signalisation : Stop",
   "item.roundabout.street_sign_yield_item": "Panneau de Signalisation : Cédez le passage",
   "item.roundabout.street_sign_danger_item": "Panneau de Signalisation : Danger",
+  "item.roundabout.lucky_lipstick": "Baume à lèvres chanceux",
+  "item.roundabout.lucky_lipstick.desc": "Pour des meilleurs échanges, appliquez jusqu'à que vous dormiez",
 
   "item.roundabout.star_platinum_disc": "Disque Stand",
   "item.roundabout.the_world_disc": "Disque Stand",
   "item.roundabout.justice_disc": "Disque Stand",
   "item.roundabout.d4c_disc": "Disque Stand",
+  "item.roundabout.cinderella_disc": "Disque Stand",
   "item.roundabout.max_star_platinum_disc": "Disque Stand+",
   "item.roundabout.magicians_red_disc": "Disque Stand",
   "item.roundabout.max_the_world_disc": "Disque Stand+",
@@ -56,6 +59,7 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
+  "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.none_disc.desc": "Aucun",
 
   "item.roundabout.blank_mask": "Visage de verre",
@@ -70,6 +74,10 @@
   "item.roundabout.avdol_mask.desc": "Muhammad Avdol",
   "item.roundabout.aya_mask": "Visage d'Aya",
   "item.roundabout.aya_mask.desc": "Aya Tsuji",
+  "item.roundabout.diego_mask": "Diego Visage",
+  "item.roundabout.diego_mask.desc": "Diego Brando",
+  "item.roundabout.valentine_mask": "Valentine Visage",
+  "item.roundabout.valentine_mask.desc": "Funny Valentine",
 
   "item.roundabout.stand_arrow.fail": "Besoin de plus d'expérience!",
 
@@ -92,12 +100,14 @@
   "effect.roundabout.bleed": "Saignement",
   "effect.roundabout.hex": "Mauvais Sort",
   "effect.roundabout.stand_virus": "Virus des Stand",
+  "effect.roundabout.capturing_love": "Beauté captivante",
+  "effect.roundabout.faceless": "Sans visage",
 
   "text.roundabout.meteorite": "Météorite",
 
-  "item.roundabout.terrier_spawn_egg": "Oeuf d'apparition de terrier",
+  "item.roundabout.terrier_spawn_egg": "Oeuf d'apparition de terrier (de Boston)",
 
-  "entity.roundabout.terrier": "Terrier",
+  "entity.roundabout.terrier": "Terrier (de Boston)",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
   "entity.roundabout.star_platinum_baseball": "Star Platinum",
@@ -106,6 +116,7 @@
   "entity.roundabout.justice": "Justice",
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Dark Mirage",
+  "entity.roundabout.cinderella": "Cinderella",
   "entity.roundabout.harpoon": "Harpon",
   "entity.roundabout.match": "Allumette",
   "entity.roundabout.knife": "Couteau",
@@ -118,15 +129,16 @@
   "entity.roundabout.fallen_zombie": "Cadavre de Zombie",
   "entity.roundabout.fallen_skeleton": "Cadavre de Squelette",
   "entity.roundabout.fallen_spider": "Cadavre d'Araignée",
-  "entity.roundabout.jnpc_ova_enya": "Enya",
   "entity.roundabout.jojo_npc_enya": "Enya",
   "entity.roundabout.jojo_npc_avdol": "Avdol",
-  "entity.roundabout.jnpc_jotaro": "Jotaro",
   "entity.roundabout.jojo_npc_dio": "DIO",
+  "entity.roundabout.jojo_npc_parallel_diego": "Diego alternatif",
+  "entity.roundabout.jojo_npc_valentine": "Valentine",
   "entity.roundabout.jojo_npc_aya": "Aya",
-  "entity.roundabout.jnpc_steve": "Steve",
-  "entity.roundabout.jnpc_alex": "Alex",
   "entity.roundabout.fog_clone": "Clone brumeux",
+  "entity.roundabout.ground_hurricane": "Hurricane souterraine",
+  "entity.roundabout.concealed_flame_object": "Hurricane dissimulé",
+  "entity.roundabout.visage_display": "Visage Flottant",
 
   "block.roundabout.meteor_block": "Bloc de météorite",
   "block.roundabout.ancient_meteor": "Météorite antique",
@@ -401,6 +413,12 @@
   "sounds.roundabout.explosive_bat":  "Home Run",
   "sounds.roundabout.fog_clone":  "Formation d'Illusion",
 
+  "sounds.roundabout.cinderella_summon":  "Invocation de Cinderella",
+  "sounds.roundabout.cinderella_attack":  "Attaque mécanique",
+  "sounds.roundabout.cinderella_sparkle":  "Étincelles magiques",
+  "sounds.roundabout.cinderella_fail":  "Uh oh",
+  "sounds.roundabout.cinderella_visage_creation":  "Tourbillon mécanique",
+
   "sounds.roundabout.arcade_impale":  "[Arcade Empalement]",
   "sounds.roundabout.arcade_long_ts":  "[Arrêt du Temps]",
   "sounds.roundabout.arcade_muda":  "[Arcade Muda]",
@@ -566,6 +584,15 @@
   "ability.roundabout.fire_slam": "Maximum Flame Crash",
   "ability.roundabout.fire_slam.desc": "Vous lancez Magician's Red en avant, le transformant en une boule de flamme. Il rentre en collision avec une immense force et beaucoup de flamme, mais en faisant cela votre stand est scellé pendant un moment. À utiliser seulement en dernier recourt.",
 
+  "ability.roundabout.visage_creation": "Création de visages",
+  "ability.roundabout.visage_creation.desc": "Vous permez d'utiliser des niveau d'expérience pour créé n'importe quel visage que vous désirez, ou pour créé du baume à lèvres chanceux. Les PNJ avec ce stand demanderont des émeraudes en échanges.",
+  "ability.roundabout.face_removal": "Arrachage de visage",
+  "ability.roundabout.face_removal.desc": "Lance une attaque qui inflige saignement et sans visage, un effect qui amollie vos ennemis pour les attaques et rend certaines créatures embarrassé de leur image. Des coups supplémentaire de cette attaque augmente le niveau des effets.",
+  "ability.roundabout.visages": "Visages",
+  "ability.roundabout.visages.desc": "Les Visages de personnages que vous pouvez créé. S'équipe dans l'inventaire des pouvoirs (ce menu). L'emplacement du masque change l'apparence, et l'emplacement de la voix peut ajoutez des doublages dépendant du visage.",
+  "ability.roundabout.lucky_lipstick": "Baume à lèvres chanceux",
+  "ability.roundabout.lucky_lipstick.desc": "Appliquez toute les 3 minutes, avant que l'effet se termine, et vous serait scintillant de beauté, attirant l'amour. Les villageois auront de meilleurs offre pour vous. Appliquez jusqu'à que vous dormiez ou buvait du lait, ou quelque chose de mal pourrait arrivé...",
+
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
@@ -604,6 +631,7 @@
 
   "idle.roundabout.floaty": "Flottant",
   "idle.roundabout.star_platinum": "L'Etoile",
+  "idle.roundabout.arms_only": "Bras",
 
   "idle.roundabout.passive_justice": "Au repos",
   "idle.roundabout.battle_justice": "Menaçant",
@@ -635,6 +663,7 @@
   "skins.roundabout.the_world.arcade": "Arcade",
   "skins.roundabout.the_world.agogo": "A-Go!Go!",
   "skins.roundabout.the_world.beta": "Beta",
+  "skins.roundabout.the_world.arcade_2": "Arcade II",
 
   "skins.roundabout.justice.base": "Partie 3",
   "skins.roundabout.justice.skeleton": "Squelette",
@@ -672,9 +701,15 @@
   "skins.roundabout.magicians_red.beta": "Beta",
   "skins.roundabout.magicians_red.jojonium": "JoJonium",
   "skins.roundabout.magicians_red.jojonium_ablaze": "JoJonium F",
+  "skins.roundabout.magicians_red.debut": "Manga Début",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "Wonder Festival",
+  "skins.roundabout.d4c.promo": "Promo",
+  "skins.roundabout.d4c.promo_l": "Promo (L)",
+
+  "skins.roundabout.cinderella.base": "Partie 4",
+  "skins.roundabout.cinderella.manga": "Manga",
 
   "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Skin Over Heaven Débloqué !",
   "unlock_skin.roundabout.star_platinum.atomic": "Skin Star Platinum: Skin Atomic Débloqué !",
@@ -717,6 +752,10 @@
   "roundabout.corpse.tactics.change_team": "Couleur de l'équipe",
   "roundabout.corpse.tactics.kill_all": "Détruire les Cadavres",
   "roundabout.corpse.tactics.cackle": "Ricaner",
+  "roundabout.cinderella.gui": "Beauté",
+  "roundabout.cinderella.gui.cannot_afford": "Vous n'avez pas les moyens d'achetez cette objet.",
+  "roundabout.cinderella.gui.cost_levels": "Coûte %1$s Niveaux",
+  "roundabout.cinderella.gui.cost_emeralds": "Coûte %1$s émeraudes",
 
   "power_inventory.roundabout.settings.general": "Option de Stand",
   "power_inventory.roundabout.settings.offset": "Position relative",

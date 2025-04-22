@@ -93,6 +93,28 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL_FOR_MOBS.add((StandDiscItem) i);
             }
         }
+
+        if (getConfig().standArrowSecondaryPoolv1 != null)
+        {
+            ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
+
+            for (String disc : getConfig().standArrowSecondaryPoolv1)
+            {
+                String[] split = disc.split(":");
+
+                if (split.length != 2)
+                    continue;
+
+                ResourceLocation identifier = new ResourceLocation(split[0], split[1]);
+
+                Item i = BuiltInRegistries.ITEM.get(identifier);
+
+                if (i.getClass() != StandDiscItem.class)
+                    continue;
+
+                ModItems.STAND_ARROW_SECONDARY_STAND_POOL.add((StandDiscItem) i);
+            }
+        }
     }
 
     private static void loadClientConfig() {
