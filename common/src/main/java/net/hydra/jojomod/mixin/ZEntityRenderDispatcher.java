@@ -62,7 +62,7 @@ public abstract class ZEntityRenderDispatcher {
             if (bt > 0){
                 int light2 = light;
                 if (bt ==1){
-                    if ($$0 instanceof Zombie || $$0 instanceof HoglinBase || $$0 instanceof Player) {
+                    if ($$0 instanceof Zombie || $$0 instanceof Player) {
                         light2 = Math.min(light2, 11010048);
                     } else {
                         light2 = (int)(((float)light2)/2);

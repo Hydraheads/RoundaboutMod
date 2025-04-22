@@ -3,7 +3,6 @@ package net.hydra.jojomod.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,8 +15,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.monster.hoglin.Hoglin;
-import net.minecraft.world.entity.monster.hoglin.HoglinBase;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
@@ -39,7 +36,7 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {
-        if (var4 instanceof Zombie || var4 instanceof HoglinBase|| var4 instanceof Player) {
+        if (var4 instanceof Zombie || var4 instanceof Player) {
             byte glow = ((StandUser) var4).roundabout$getGlow();
             if (glow == 1) {
                 ResourceLocation rl = StandIcons.NO_FACE_LAYER;
