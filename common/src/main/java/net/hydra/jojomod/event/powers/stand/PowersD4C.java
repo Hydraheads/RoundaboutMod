@@ -529,14 +529,21 @@ public class PowersD4C extends PunchingStand {
         return (isBetweenTwoThings(this.getSelf().blockPosition()));
     };
 
+    private boolean isBlockSolid(BlockPos pos)
+    {
+        return (this.getSelf().level().getBlockState(pos).isSolid() && !this.getSelf().level().getBlockState(pos).isAir());
+    }
+
     // TODO: replace this with a more advanced predicate
     @SuppressWarnings("deprecation") // isSolid()
     boolean isBetweenTwoThings(BlockPos pos)
     {
-        BlockState bottom = this.getSelf().level().getBlockState(pos.subtract(new Vec3i(0, 1, 0)));
-        BlockState top = this.getSelf().level().getBlockState(pos.subtract(new Vec3i(0, -2, 0)));
-
-        return (!bottom.isAir() && !top.isAir()) && (bottom.isSolid() && top.isSolid());
+        return (
+                isBlockSolid(pos.subtract(new Vec3i(0, 1, 0))) &&
+                        isBlockSolid(pos.subtract(new Vec3i(0, -2, 0))) &&
+                        !isBlockSolid(pos) &&
+                        !isBlockSolid(pos.subtract(new Vec3i(0, -1, 0)))
+                );
     };
 
 
