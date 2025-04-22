@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -90,15 +91,21 @@ public class ModItems {
         return VISAGE_STORE_ENTRIES;
     }
     public static void initializeVisageStore(){
-        addToVisageStore(LUCKY_LIPSTICK,0, 4, 5);
-        addToVisageStore(BLANK_MASK,0, 5, 7);
-        addToVisageStore(JOTARO_MASK,1, 10, 15);
-        addToVisageStore(AVDOL_MASK,1, 10, 15);
-        addToVisageStore(DIO_MASK,1, 10, 15);
-        addToVisageStore(ENYA_MASK,1, 10, 15);
-        addToVisageStore(AYA_MASK,1, 10, 15);
-        addToVisageStore(DIEGO_MASK,1, 10, 15);
-        addToVisageStore(VALENTINE_MASK,1, 10, 15);
+        addToVisageStore(LUCKY_LIPSTICK,0,
+                ClientNetworking.getAppropriateConfig().cinderellaLevelCostLipstick,
+                ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostLipstick);
+        addToVisageStore(BLANK_MASK,0,
+                ClientNetworking.getAppropriateConfig().cinderellaLevelCostGlassVisage,
+                ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostGlassVisage);
+        int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaLevelCostCharacterVisage;
+        int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostCharacterVisage;
+        addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(AVDOL_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIEGO_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(VALENTINE_MASK,1, characterCostExp, characterCostEmerald);
     }
     public static void addToVisageStore(Item item, int page, int costL, int costE){
         VISAGE_STORE_ENTRIES.add(new VisageStoreEntry(item.getDefaultInstance(), page, costL, costE));

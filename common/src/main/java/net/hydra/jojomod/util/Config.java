@@ -74,10 +74,22 @@ import java.util.Set;
     public Integer maxMagiciansRedFlames;
     @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
     public Integer maxMagiciansRedFlameDistance;
-    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-    public Integer d4cDimensionKidnapRadius;
     @IntOption(group = "inherit", value = 1100, min = -1, max = 72000)
     public Integer magiciansRedFurnaceTicks;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer d4cDimensionKidnapRadius;
+    @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+    public Integer cinderellaLevelCostLipstick;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer cinderellaEmeraldCostLipstick;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer cinderellaLevelCostGlassVisage;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer cinderellaEmeraldCostGlassVisage;
+    @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+    public Integer cinderellaLevelCostCharacterVisage;
+    @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+    public Integer cinderellaEmeraldCostCharacterVisage;
     @IntOption(group = "inherit", value = 15, min = 0, max = 365)
     public Integer basePunchAngle;
     public Set<String> standArrowPoolv1 = new HashSet<>(
