@@ -124,6 +124,8 @@ public class PowersD4C extends PunchingStand {
 
         betweenVisionTicks = 0;
 
+        Set<BlockPos> highlighted = new HashSet<>();
+
         for (int pitch = -angle; pitch < angle; pitch += offset)
         {
             for (int yaw = -angle; yaw < angle; yaw += offset)
@@ -132,11 +134,14 @@ public class PowersD4C extends PunchingStand {
                 if (state == null)
                     continue;
 
+                if (!highlighted.add(state))
+                    continue;
+
                 if (!isBetweenTwoThings(state.above()))
                     continue;
 
                 this.getSelf().level().addParticle(
-                        ModParticles.MENACING,
+                        ModParticles.D4C_LINES,
                         true,
                         state.getX()+0.5f,
                         state.getY()+1.0f,

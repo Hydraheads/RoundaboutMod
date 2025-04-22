@@ -131,5 +131,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CINDERELLA_GLOW.get(), CinderellaGlowParticle.CinderellaGlowProvider::new);
         event.registerSpriteSet(ForgeParticles.PINK_SMOKE.get(), CinderellaSmokeParticle.CosyProvider::new);
+        event.registerSpriteSet(ForgeParticles.D4C_LINES.get(), D4CLinesParticle.Provider::new);
     }
 }

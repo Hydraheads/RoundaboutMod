@@ -25,6 +25,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FOG_CHAIN, VacuumParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.WARDEN_CLOCK, WardenClockParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.CINDERELLA_GLOW, CinderellaGlowParticle.CinderellaGlowProvider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.D4C_LINES, D4CLinesParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PINK_SMOKE, CinderellaSmokeParticle.CosyProvider::new);
     }
 }

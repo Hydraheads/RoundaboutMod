@@ -77,4 +77,8 @@ public class ForgeParticles {
             "pink_smoke",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> D4C_LINES = PARTICLES.register(
+            "d4c_lines",
+            () -> new SimpleParticleType(true)
+    );
 }
