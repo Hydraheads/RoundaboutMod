@@ -93,12 +93,13 @@ import java.util.Set;
                     "roundabout:cinderella_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv1 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
                     "roundabout:justice_disc",
-                    "roundabout:magicians_red_disc"
+                    "roundabout:magicians_red_disc",
+                    "roundabout:cinderella_disc"
             )
     );
     @NestedOption(group = "modded")

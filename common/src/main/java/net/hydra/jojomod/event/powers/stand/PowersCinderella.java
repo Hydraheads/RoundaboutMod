@@ -34,6 +34,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -54,10 +55,6 @@ public class PowersCinderella extends DashPreset {
     }
     @Override
     public boolean canSummonStand(){
-        return true;
-    }
-    @Override
-    public boolean isWip(){
         return true;
     }
     @Override
@@ -394,6 +391,27 @@ public class PowersCinderella extends DashPreset {
             }
         }
     }
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive()){
+            if ((this.getActivePower() != PowerIndex.NONE
+                    || attackTarget.distanceTo(this.getSelf()) <= 5)){
+                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                this.getSelf().setYRot(yrot);
+                this.getSelf().setYHeadRot(yrot);
+            }
+
+            Entity targetEntity = getTargetEntity(this.self, 5);
+            if (targetEntity != null && targetEntity.is(attackTarget)) {
+                if (this.getActivePower() == PowerIndex.NONE && (!this.onCooldown(PowerIndex.SKILL_2) ||
+                        this.self instanceof IronGolem)) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                }
+            }
+        }
+    }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.visage_creation",
@@ -462,10 +480,10 @@ public class PowersCinderella extends DashPreset {
                         if (bleedlevel < 0){
                             MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
                             MainUtil.makeBleed(entity, 0, 200, this.getSelf());
-                        } else if (bleedlevel == 1){
+                        } else if (bleedlevel == 0){
                             MainUtil.makeFaceless(entity, 250, 1, this.getSelf());
                             MainUtil.makeBleed(entity, 1, 250, this.getSelf());
-                        } else if (bleedlevel == 2){
+                        } else if (bleedlevel == 1){
                             MainUtil.makeFaceless(entity, 300, 2, this.getSelf());
                             MainUtil.makeBleed(entity, 2, 300, this.getSelf());
                             MainUtil.makeMobBleed(entity);
