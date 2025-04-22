@@ -27,8 +27,13 @@ public class ZGameRenderer {
     @Inject(method = "reloadShaders", at=@At("HEAD"))
     private void roundabout$reloadShaders(ResourceProvider provider, CallbackInfo ci)
     {
-        //RCoreShader.roundabout$meltDodgeProgram = Objects.requireNonNull(roundabout$registerShader(provider, "meltdodge")).getProgram();
-        //RCoreShader.roundabout$loveTrainProgram = Objects.requireNonNull(roundabout$registerShader(provider, "lovetrainlines")).getProgram();
+        try {
+            RCoreShader.roundabout$meltDodgeProgram = Objects.requireNonNull(roundabout$registerShader(provider, "meltdodge")).getProgram();
+            RCoreShader.roundabout$loveTrainProgram = Objects.requireNonNull(roundabout$registerShader(provider, "lovetrainlines")).getProgram();
+        } catch(Exception e) {
+            //put shader debug stuff here
+            Roundabout.LOGGER.info("Oops, something went wrong loading shaders");
+        }
         Roundabout.LOGGER.info("Reloaded shaders!");
     }
 
