@@ -252,6 +252,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "concealed_flame_object").toString())
             );
+    public static final RegistryObject<EntityType<CinderellaVisageDisplayEntity>> CINDERELLA_VISAGE_DISPLAY =
+            ENTITY_TYPES.register("visage_display", () ->
+                    EntityType.Builder.<CinderellaVisageDisplayEntity>of(CinderellaVisageDisplayEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "visage_display").toString())
+            );
     public static final RegistryObject<EntityType<GroundHurricaneEntity>> GROUND_HURRICANE =
             ENTITY_TYPES.register("ground_hurricane", () ->
                     EntityType.Builder.<GroundHurricaneEntity>of(GroundHurricaneEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).

@@ -294,6 +294,7 @@ public class ForgeEvents {
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();
+        ModEntities.CINDERELLA_VISAGE_DISPLAY = ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get();
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
         ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();
         ModEntities.FALLEN_SPIDER = ForgeEntities.FALLEN_SPIDER.get();

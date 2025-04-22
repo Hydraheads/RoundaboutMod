@@ -298,6 +298,13 @@ public class FabricEntities {
                         EntityType.Builder.<ConcealedFlameObjectEntity>of(ConcealedFlameObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":concealed_flame_object")
                 );
+        public static final EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "visage_display"),
+                        EntityType.Builder.<CinderellaVisageDisplayEntity>of(CinderellaVisageDisplayEntity::new, MobCategory.MISC).
+                                sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":visage_display")
+                );
         public static final EntityType<GroundHurricaneEntity> GROUND_HURRICANE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -332,6 +339,7 @@ public class FabricEntities {
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
+                ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
                 ModEntities.FALLEN_SKELETON = FALLEN_SKELETON;

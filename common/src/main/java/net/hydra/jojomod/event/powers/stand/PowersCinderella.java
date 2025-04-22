@@ -1,13 +1,14 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
+import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -15,8 +16,9 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
+import net.hydra.jojomod.item.LuckyLipstickItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -26,17 +28,20 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class PowersCinderella extends DashPreset {
 
+    public List<CinderellaVisageDisplayEntity> floatingVisages = new ArrayList<>();
     public PowersCinderella(LivingEntity self) {
         super(self);
     }
@@ -71,6 +76,128 @@ public class PowersCinderella extends DashPreset {
         $$1.add((byte) 4);
         return $$1;
     }
+
+    @Override
+    public void tickPowerEnd() {
+        if (floatingVisages != null && !floatingVisages.isEmpty()) {
+            removeFloatingVisages();
+            if (!this.self.level().isClientSide()) {
+                floatingVisagesRotation();
+            } else {
+                lastSpinInt += maxSpinint;
+            }
+        }
+    }
+    public double spinint = 0;
+    public double lastSpinInt = 0;
+    public double maxSpinint = 4;
+
+    public void floatingVisageInit(){
+        if (floatingVisages == null) {
+            floatingVisages = new ArrayList<>();
+        }
+    }
+    public void floatingVisagesRotation() {
+        floatingVisageInit();
+        List<CinderellaVisageDisplayEntity> hurricaneSpecial2 = new ArrayList<>(floatingVisages) {
+        };
+        if (!hurricaneSpecial2.isEmpty()) {
+            int totalnumber = hurricaneSpecial2.size();
+            for (CinderellaVisageDisplayEntity value : hurricaneSpecial2) {
+                transformFloatingVisages(value, totalnumber, this.self.getX(), this.self.getY(), this.self.getZ(),value.getSize());
+            }
+        }
+    }
+
+    public void addFloatingVisage(CinderellaVisageDisplayEntity che){
+        floatingVisageInit();
+        floatingVisages.add(che);
+    }
+    public void transformFloatingVisages(CinderellaVisageDisplayEntity value, int totalnumber, double entityX, double entityY, double entityZ, double rsize){
+        if (value != null) {
+            int size = value.getSize();
+            double distanceUp = 0.3;
+            if (size < value.getMaxSize()) {
+                size += value.getAccrualRate();
+                value.setSize(size);
+            }
+            distanceUp += ((double) rsize / 20);
+            double offset = 0;
+            int number = value.getCrossNumber();
+            if (this.self.level().isClientSide()) {
+                if (number == 1) {
+                    offset = 0;
+                } else if (number == 2) {
+                    offset = 90;
+                } else if (number == 3) {
+                    offset = 180;
+                } else if (number == 4) {
+                    offset = 270;
+                } else if (number == 5) {
+                    offset = 45;
+                } else if (number == 6) {
+                    offset = 135;
+                } else if (number == 7) {
+                    offset = 225;
+                } else if (number == 8) {
+                    offset = 315;
+                }
+                    offset += Mth.floor(spinint/2);
+
+                if (offset > 360) {
+                    offset -= 360;
+                } else if (offset < 0) {
+                    offset += 360;
+                }
+            } else {
+                offset = this.self.getYRot() % 360;
+            }
+            double offset2 = offset;
+            offset = (offset - 180) * Math.PI;
+            double distanceOut = 3F;
+            if (number >4) {
+                distanceUp *= 0.5F;
+            }
+            double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
+            double y1 = entityY + distanceUp;
+            double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));
+            if (!this.self.level().isClientSide()) {
+                value.setOldPosAndRot();
+                //Roundabout.LOGGER.info("bye");
+            }
+            value.actuallyTick();
+            value.storeVec = new Vec3(x1, y1, z1);
+            if (this.self.level().isClientSide()) {
+                value.setYRot((float) offset2);
+                value.yRotO = (float) offset2;
+                value.xOld = x1;
+                value.yOld = y1;
+                value.zOld = z1;
+                value.absMoveTo(x1, y1, z1);
+            } else {
+                value.setYRot((float) offset2);
+                value.yRotO = (float) offset2;
+                value.xOld = x1;
+                value.yOld = y1;
+                value.zOld = z1;
+                value.setPos(x1, y1, z1);
+            }
+        }
+    }
+
+    public void removeFloatingVisages(){
+        floatingVisageInit();
+        List<CinderellaVisageDisplayEntity> hurricaneSpecial2 = new ArrayList<>(floatingVisages) {
+        };
+        if (!hurricaneSpecial2.isEmpty()) {
+            for (CinderellaVisageDisplayEntity value : hurricaneSpecial2) {
+                if (value.isRemoved() || !value.isAlive() || value.getCrossNumber() <= 0) {
+                    value.initialized = false;
+                    floatingVisages.remove(value);
+                }
+            }
+        }
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1, StandIcons.CINDERELLA_MASK, PowerIndex.NO_CD);
@@ -93,12 +220,27 @@ public class PowersCinderella extends DashPreset {
         }
         return super.getSoundFromByte(soundChoice);
     }
+    public void clearAllFloatingVisages() {
+        floatingVisageInit();
+
+        List<CinderellaVisageDisplayEntity> hurricaneSpecial2 = new ArrayList<>(floatingVisages) {
+        };
+        if (!hurricaneSpecial2.isEmpty()) {
+            int totalnumber = hurricaneSpecial2.size();
+            for (CinderellaVisageDisplayEntity value : hurricaneSpecial2) {
+                value.discard();
+            }
+        }
+    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2 && this.attackTimeDuring > -1) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
         }if (!this.getSelf().level().isClientSide && !(this.getActivePower() != PowerIndex.POWER_1 && move == PowerIndex.POWER_1)) {
             this.stopSoundsIfNearby(VISAGE_NOISE, 100,true);
+        }
+        if (!this.getSelf().level().isClientSide()){
+            clearAllFloatingVisages();
         }
         return super.tryPower(move,forced);
     }
@@ -166,6 +308,31 @@ public class PowersCinderella extends DashPreset {
         }
         return super.setPowerOther(move,lastMove);
     }
+    public void generateFloatingMask(int crossNumber, int maxSize){
+        ItemStack stack = ModItems.getVisageStore().get(
+                Mth.floor(Math.random()* (ModItems.getVisageStore().size()-1))
+        ).stack;
+        if (stack.getItem() instanceof LuckyLipstickItem){
+            stack = ModItems.BLANK_MASK.getDefaultInstance().copy();
+        }
+        CinderellaVisageDisplayEntity cross = new CinderellaVisageDisplayEntity(
+                this.self,this.self.level(),stack
+                );
+        if (cross != null){
+            cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+            cross.setUser(this.self);
+
+            if (floatingVisages == null) {floatingVisages = new ArrayList<>();}
+            cross.setCrossNumber(crossNumber);
+            cross.setMaxSize(maxSize);
+            floatingVisages.add(cross);
+
+            this.getSelf().level().addFreshEntity(cross);
+        }
+    }
+    public static int getChargingCrossfireSpecialSize(){
+        return 26;
+    }
     public boolean visages(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
@@ -175,6 +342,14 @@ public class PowersCinderella extends DashPreset {
             playStandUserOnlySoundsIfNearby(VISAGE_NOISE, 27, false,false);
             this.poseStand(OffsetIndex.GUARD);
 
+            generateFloatingMask(1, getChargingCrossfireSpecialSize());
+            generateFloatingMask(2, getChargingCrossfireSpecialSize());
+            generateFloatingMask(3, getChargingCrossfireSpecialSize());
+            generateFloatingMask(4, getChargingCrossfireSpecialSize());
+            generateFloatingMask(5, getChargingCrossfireSpecialSize());
+            generateFloatingMask(6, getChargingCrossfireSpecialSize());
+            generateFloatingMask(7, getChargingCrossfireSpecialSize());
+            generateFloatingMask(8, getChargingCrossfireSpecialSize());
             return true;
         }
         return false;
