@@ -11,7 +11,8 @@ public class CinderellaEntity extends StandEntity {
         super(entityType, world);
     }
     public static final byte
-            PART_4_SKIN = 1;
+            PART_4_SKIN = 1,
+            MANGA_SKIN = 2;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -19,6 +20,9 @@ public class CinderellaEntity extends StandEntity {
     }
 
     public static Component getSkinNameT(byte skinId){
+        if (skinId == MANGA_SKIN) {
+            return Component.translatable("skins.roundabout.cinderella.manga");
+        }
         return Component.translatable("skins.roundabout.cinderella.base");
     }
     public final AnimationState deface = new AnimationState();

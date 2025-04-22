@@ -3,8 +3,6 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FogBlock;
@@ -12,17 +10,12 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.ChatFormatting;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.ReportedException;
 import net.minecraft.client.HotbarManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.CreativeInventoryListener;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.player.inventory.Hotbar;
 import net.minecraft.client.searchtree.SearchRegistry;
@@ -32,7 +25,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -135,12 +127,15 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
     @Override
     protected void slotClicked(@Nullable Slot $$0, int $$1, int $$2, ClickType $$3) {
+        if ($$3 == ClickType.SWAP) {
+            return;
+        }
         if (this.isCreativeSlot($$0)) {
             this.searchBox.moveCursorToEnd();
             this.searchBox.setHighlightPos(0);
         }
 
-        boolean $$4 = $$3 == ClickType.QUICK_MOVE;
+        boolean flag = $$3 == ClickType.QUICK_MOVE;
         $$3 = $$1 == -999 && $$3 == ClickType.PICKUP ? ClickType.THROW : $$3;
         if ($$0 == null && selectedTab.getType() != CreativeModeTab.Type.INVENTORY && $$3 != ClickType.QUICK_CRAFT) {
             if (!this.menu.getCarried().isEmpty() && this.hasClickedOutside) {
@@ -224,7 +219,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
                 if (!$$8.isEmpty() && !$$9.isEmpty() && ItemStack.isSameItemSameTags($$8, $$9)) {
                     if ($$2 == 0) {
-                        if ($$4) {
+                        if (flag) {
                             $$8.setCount($$8.getMaxStackSize());
                         } else if ($$8.getCount() < $$8.getMaxStackSize()) {
                             $$8.grow(1);
@@ -233,7 +228,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                         $$8.shrink(1);
                     }
                 } else if (!$$9.isEmpty() && $$8.isEmpty()) {
-                    int $$12 = $$4 ? $$9.getMaxStackSize() : $$9.getCount();
+                    int $$12 = flag ? $$9.getMaxStackSize() : $$9.getCount();
                     this.menu.setCarried($$9.copyWithCount($$12));
                 } else if ($$2 == 0) {
                     this.minecraft.player.drop($$8, true);

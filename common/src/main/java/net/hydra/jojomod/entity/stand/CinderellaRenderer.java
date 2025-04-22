@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class CinderellaRenderer extends StandRenderer<CinderellaEntity> {
 
     private static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella_manga.png");
 
     public CinderellaRenderer(EntityRendererProvider.Context context) {
         super(context, new CinderellaModel<>(context.bakeLayer(ModEntityRendererClient.CINDERELLA_LAYER)), 0f);
@@ -21,8 +22,8 @@ public class CinderellaRenderer extends StandRenderer<CinderellaEntity> {
     public ResourceLocation getTextureLocation(CinderellaEntity entity) {
         switch (entity.getSkin())
         {
-            case (CinderellaEntity.PART_4_SKIN):
-                return PART_4_SKIN;
+            case (CinderellaEntity.MANGA_SKIN):
+                return MANGA_SKIN;
             default:
                 return PART_4_SKIN;
         }

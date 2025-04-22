@@ -8,7 +8,9 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -391,7 +393,18 @@ public class PowersCinderella extends DashPreset {
             }
         }
     }
+    @Override
+    public List<Byte> getSkinList() {
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(CinderellaEntity.PART_4_SKIN);
+        $$1.add(CinderellaEntity.MANGA_SKIN);
+        return $$1;
+    }
 
+    @Override
+    public boolean hasMoreThanOneSkin(){
+        return true;
+    }
     public void standImpale(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){
