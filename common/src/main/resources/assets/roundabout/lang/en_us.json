@@ -588,6 +588,15 @@
   "ability.roundabout.fire_slam": "Maximum Flame Crash",
   "ability.roundabout.fire_slam.desc": "Launches Magician's Red forward, turning it into a ball of fire. It collides with extreme force and lots of flames, but in doing so your stand is sealed for a while. Only use as a last resort.",
 
+  "ability.roundabout.visage_creation": "Face Creation",
+  "ability.roundabout.visage_creation.desc": "Allows you to use experience levels to create any visage you like, or to create lucky lipstick. NPCs with this stand may charge emeralds instead.",
+  "ability.roundabout.face_removal": "Face Removal Attack",
+  "ability.roundabout.face_removal.desc": "Launches an attack that inflicts bleed and faceless, an effect that softens enemies up for attacks and makes some mobs self-conscious. Subsequent hits of this attack increase the effect level.",
+  "ability.roundabout.visages": "Visages",
+  "ability.roundabout.visages.desc": "Faces of iconic characters that you can create. Equip in the power inventory (this menu). The mask slot changes appearance, and the voice slot may add voice lines depending on the visage.",
+  "ability.roundabout.lucky_lipstick": "Lucky Lipstick",
+  "ability.roundabout.lucky_lipstick.desc": "Apply every 3 minutes, before the effect runs out, and you will be glowing with beauty, capturing love. Villagers will trade better with you. Apply until you sleep or drink milk, or something bad may happen...",
+
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
