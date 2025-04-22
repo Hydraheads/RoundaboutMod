@@ -741,6 +741,14 @@
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.none": "Strike Pose!",
 
+  "roundabout.stand_switch.main": "Main Stand",
+  "roundabout.stand_switch.main.desc": "A stand with combat potential that can level up. Costs %s levels to obtain.",
+  "roundabout.stand_switch.secondary": "Secondary Stand",
+  "roundabout.stand_switch.secondary.desc": "A stand with fewer abilities that cannot level up. Costs no levels to obtain.",
+  "roundabout.stand_switch.custom": "Custom Stand",
+  "roundabout.stand_switch.custom.desc": "A stand that you can design to your liking, think of it as your own stand. Costs %s levels to obtain.",
+  "roundabout.stand_switch.none": "Choose Type",
+
   "roundabout.corpse.none": "Choose Body",
   "roundabout.corpse.tactics.none": "Tactic Select",
   "roundabout.corpse.tactics.still": "Stay Put",

@@ -237,6 +237,10 @@ public class ClientUtil {
     }
 
     public static boolean poseHeld = false;
+
+    public static void openStandSwitchUI(ItemStack arrow){
+        Minecraft.getInstance().setScreen(new StandArrowRerollScreen(arrow));
+    }
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){

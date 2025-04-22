@@ -20,6 +20,8 @@ public class PacketDataIndex {
     public static final byte ADD_FOG_ITEM = 1;
     public static final byte DROP_FOG_ITEM = 2;
     public static final byte USE_CORPSE_BAG = 3;
+    public static final byte ITEM_SWITCH_MAIN = 4;
+    public static final byte ITEM_SWITCH_SECONDARY = 5;
 
     public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
     public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;

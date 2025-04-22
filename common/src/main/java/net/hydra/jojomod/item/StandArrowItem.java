@@ -2,6 +2,7 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -35,6 +36,24 @@ public class StandArrowItem extends RoundaboutArrowItem {
         super($$0);
     }
 
+    public static void rerollStand(Player player, boolean offh, ItemStack stack,byte context){
+        ItemStack item;
+        if (offh){
+            item =player.getOffhandItem();
+        } else {
+            item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+        }
+
+        if (!player.isCreative()) {
+            player.giveExperienceLevels(-1);
+        }
+        if (context == PacketDataIndex.ITEM_SWITCH_MAIN){
+            rollStand(player.level(), player, item,true);
+        } else if (context == PacketDataIndex.ITEM_SWITCH_SECONDARY){
+            rollStand(player.level(), player, item,false);
+        }
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
@@ -45,11 +64,17 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 if ($$1.isCrouching()) {
                     int reroll = ClientNetworking.getAppropriateConfig().levelsToRerollStand;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
-                        if (!$$1.isCreative()) {
-                            $$1.giveExperienceLevels(-1);
+                        if (ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv1.isEmpty()) {
+                             if (!$$1.isCreative()) {
+                             $$1.giveExperienceLevels(-1);
+                             }
+                             rollStand($$0, $$1, $$3,true);
+                             return InteractionResultHolder.consume($$3);
+                        } else {
+                            if ($$0.isClientSide()){
+                                ClientUtil.openStandSwitchUI($$3);
+                            }
                         }
-                        rollStand($$0, $$1, $$3);
-                        return InteractionResultHolder.consume($$3);
                     } else {
                         $$1.displayClientMessage(Component.translatable("container.enchant.level.requirement", reroll).withStyle(ChatFormatting.RED), true);
                         return InteractionResultHolder.fail($$3);
@@ -63,7 +88,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 }
             } else {
                 if (!$$0.isClientSide) {
-                    rollStand($$0, $$1, $$3);
+                    rollStand($$0, $$1, $$3, true);
                     return InteractionResultHolder.consume($$3);
                 }
                 return InteractionResultHolder.fail($$3);
@@ -72,11 +97,11 @@ public class StandArrowItem extends RoundaboutArrowItem {
         return InteractionResultHolder.fail($$3);
     }
 
-    public void rollStand(Level level, Player player, ItemStack itemStack) {
+    public static void rollStand(Level level, Player player, ItemStack itemStack, boolean primary) {
         if (!level.isClientSide()) {
             level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.5F, 1.3F);
-            ItemStack stack = rerollStand(itemStack);
-            player.awardStat(Stats.ITEM_USED.get(this));
+            ItemStack stack = rerollStand(itemStack,primary);
+            player.awardStat(Stats.ITEM_USED.get(itemStack.getItem()));
             ((ServerLevel) level).sendParticles(ParticleTypes.HAPPY_VILLAGER, player.getX(),
                 player.getY() + player.getEyeHeight(), player.getZ(),
                 15, 1, 1, 1, 1);
@@ -93,7 +118,6 @@ public class StandArrowItem extends RoundaboutArrowItem {
         }
     }
 
-
     @Override
     public boolean isEnchantable(ItemStack p_41456_) {
         return false;
@@ -105,7 +129,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             ItemStack itemstack = ItemStack.EMPTY;
             if (tag2 == null){
-                itemstack = rerollStand($$0);
+                itemstack = rerollStand($$0,true);
             }
             if (tag2 != null) {
                 itemstack = ItemStack.of(tag2);
@@ -129,7 +153,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             ItemStack itemstack = ItemStack.EMPTY;
             if (tag2 == null){
-                itemstack = rerollStand($$0);
+                itemstack = rerollStand($$0,true);
             }
             if (tag2 != null) {
                 itemstack = ItemStack.of(tag2);
@@ -163,12 +187,12 @@ public class StandArrowItem extends RoundaboutArrowItem {
                             PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
                         } else {
                             int get = ClientNetworking.getAppropriateConfig().levelsToGetStand;
-                            if (PE.experienceLevel >= get || PE.isCreative()) {
-                                CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
-                                CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
-                                if (tag2 != null) {
-                                    ItemStack itemstack = ItemStack.of(tag2);
-                                    if (itemstack.getItem() instanceof StandDiscItem de) {
+                            CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
+                            CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+                            if (tag2 != null) {
+                                ItemStack itemstack = ItemStack.of(tag2);
+                                if (itemstack.getItem() instanceof StandDiscItem de) {
+                                    if (de.standPowers.isSecondaryStand() || PE.experienceLevel >= get || PE.isCreative()) {
                                         if (grantStand(itemstack, $$2)) {
                                             $$1.playSound(null, $$2.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
                                             PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
@@ -182,10 +206,11 @@ public class StandArrowItem extends RoundaboutArrowItem {
                                             $$0.hurt(1,PE.level().getRandom(),(ServerPlayer) PE);
                                             //$$0.removeTagKey("StandDisc");
                                         }
+
+                                    } else {
+                                        PE.displayClientMessage(Component.translatable("container.enchant.level.requirement", get).withStyle(ChatFormatting.RED), true);
                                     }
                                 }
-                            } else {
-                                PE.displayClientMessage(Component.translatable("container.enchant.level.requirement", get).withStyle(ChatFormatting.RED), true);
                             }
                         }
                     }
@@ -196,13 +221,17 @@ public class StandArrowItem extends RoundaboutArrowItem {
         }
     }
 
-    public static @Nullable ItemStack rerollStand(ItemStack $$0){
+    public static @Nullable ItemStack rerollStand(ItemStack $$0,boolean primary){
         if (ModItems.STAND_ARROW_POOL.isEmpty())
             return null;
 
         CompoundTag tag = $$0.getOrCreateTagElement("StandDisc");
         int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL.size()));
         Item item = ModItems.STAND_ARROW_POOL.get(index);
+        if (!primary){
+            index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_SECONDARY_STAND_POOL.size()));
+            item = ModItems.STAND_ARROW_SECONDARY_STAND_POOL.get(index);
+        }
         if (tag.get("DiscItem") != null) {
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
@@ -210,10 +239,17 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 if (!stack2.isEmpty()) {
                     if (stack2.is(item)){
                         index += 1;
-                        if (index >= ModItems.STAND_ARROW_POOL.size()){
-                            index=0;
+                        if (primary) {
+                            if (index >= ModItems.STAND_ARROW_POOL.size()) {
+                                index = 0;
+                            }
+                            item = ModItems.STAND_ARROW_POOL.get(index);
+                        } else {
+                            if (index >= ModItems.STAND_ARROW_SECONDARY_STAND_POOL.size()) {
+                                index = 0;
+                            }
+                            item = ModItems.STAND_ARROW_SECONDARY_STAND_POOL.get(index);
                         }
-                        item = ModItems.STAND_ARROW_POOL.get(index);
                     }
                 }
             }

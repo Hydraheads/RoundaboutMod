@@ -6,11 +6,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -22,10 +24,15 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.StringTokenizer;
 
-public class PoseSwitcherScreen extends Screen {
+public class StandArrowRerollScreen extends Screen {
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/pose_switcher.png");
@@ -35,20 +42,27 @@ public class PoseSwitcherScreen extends Screen {
     private static final int SLOT_PADDING = 5;
     private static final int SLOT_AREA_PADDED = 31;
     private static final int HELP_TIPS_OFFSET_Y = 5;
-    private static final int ALL_SLOTS_WIDTH = posIcon.VALUES.length * 31 - 5;
-    private posIcon currentlyHovered;
+    private static final int ALL_SLOTS_WIDTH = standRerollIcon.VALUES.length * 31 - 5;
+    private standRerollIcon currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
     public boolean zHeld;
 
+    public ItemStack arrow = ItemStack.EMPTY;
+
     private final List<PoseSlot> slots = Lists.newArrayList();
 
-    public PoseSwitcherScreen() {
+    public StandArrowRerollScreen() {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
     }
 
+    public StandArrowRerollScreen(ItemStack arrow) {
+        super(GameNarrator.NO_TITLE);
+        this.currentlyHovered = null;
+        this.arrow = arrow;
+    }
     private ShapeShifts getDefaultSelected() {
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
@@ -64,9 +78,9 @@ public class PoseSwitcherScreen extends Screen {
         Player pl = Minecraft.getInstance().player;
 
 
-        this.currentlyHovered = posIcon.NONE;
-            for (int i = 0; i < posIcon.VALUES.length; ++i) {
-                posIcon pIcon = posIcon.VALUES[i];
+        this.currentlyHovered = standRerollIcon.NONE;
+            for (int i = 0; i < standRerollIcon.VALUES.length; ++i) {
+                standRerollIcon pIcon = standRerollIcon.VALUES[i];
                 this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
             }
     }
@@ -87,12 +101,20 @@ public class PoseSwitcherScreen extends Screen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 62;
-        int l = this.height / 2 - 31 - 39;
-        guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 0.0f, 125, 22, 256, 256);
+        int l = this.height / 2 - 39;
+        guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 31.0f, 125, 22, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
-            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, this.height / 2 - 31 - 32, -1);
+            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, this.height / 2 - 32, -1);
+            if (this.currentlyHovered.id != 0) {
+                List<Component> compList = Lists.newArrayList();
+                String[] strung2 = splitIntoLine(this.currentlyHovered.desc.getString(), 30);
+                for (String s : strung2) {
+                    compList.add(Component.literal(s));
+                }
+                guiGraphics.renderTooltip(this.font, compList, Optional.empty(), i, j);
+            }
         }
         if (!this.setFirstMousePos) {
             this.firstMouseX = i;
@@ -106,20 +128,51 @@ public class PoseSwitcherScreen extends Screen {
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             this.currentlyHovered = MobSlot.icon;
         }
+
+
+    }
+
+    public String[] splitIntoLine(String input, int maxCharInLine){
+
+        StringTokenizer tok = new StringTokenizer(input, " ");
+        StringBuilder output = new StringBuilder(input.length());
+        int lineLen = 0;
+        while (tok.hasMoreTokens()) {
+            String word = tok.nextToken();
+
+            while(word.length() > maxCharInLine){
+                output.append(word.substring(0, maxCharInLine-lineLen) + "\n");
+                word = word.substring(maxCharInLine-lineLen);
+                lineLen = 0;
+            }
+
+            if (lineLen + word.length() > maxCharInLine) {
+                output.append("\n");
+                lineLen = 0;
+            }
+            output.append(word + " ");
+
+            lineLen += word.length() + 1;
+        }
+        // output.split();
+        // return output.toString();
+        return output.toString().split("\n");
     }
 
     private void switchToHoveredGameMode() {
-        PoseSwitcherScreen.switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
+        switchToHoveredGameMode(this.minecraft, this.currentlyHovered);
     }
 
-    private static void switchToHoveredGameMode(Minecraft minecraft, posIcon pIcon) {
+    private void switchToHoveredGameMode(Minecraft minecraft, standRerollIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
         }
 
-        byte ppos = ((IPlayerEntity)minecraft.player).roundabout$GetPoseEmote();
-        if (pIcon.id != ppos) {
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id, PacketDataIndex.BYTE_STRIKE_POSE);
+        if (pIcon.id == 1){
+            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_SWITCH_MAIN, this.arrow, (byte)0, new Vector3f());
+        } else if (pIcon.id == 2){
+            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_SWITCH_SECONDARY, this.arrow, (byte)0, new Vector3f());
+
         }
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }
@@ -155,61 +208,41 @@ public class PoseSwitcherScreen extends Screen {
         return false;
     }
 
-    public enum posIcon {
-        GIORNO(Component.translatable("roundabout.pose.giorno"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/giorno.png"),Poses.GIORNO.id,0,93),
-        JOSEPH(Component.translatable("roundabout.pose.joseph"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/joseph.png"),Poses.JOSEPH.id,-31,62),
-        KOICHI(Component.translatable("roundabout.pose.koichi"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/koichi.png"),Poses.KOICHI.id,31,31),
+    public enum standRerollIcon {
+        MAIN_STAND(Component.translatable("roundabout.stand_switch.main"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/stand_type_icons/main_stand.png"),(byte)1,-31,31, Component.translatable("roundabout.stand_switch.main.desc", ClientNetworking.getAppropriateConfig().levelsToRerollStand)),
+        SECONDARY_STAND(Component.translatable("roundabout.stand_switch.secondary"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/stand_type_icons/secondary_stand.png"),(byte)2,31,31, Component.translatable("roundabout.stand_switch.secondary.desc")),
 
-        WRY(Component.translatable("roundabout.pose.wry"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/wry.png"),Poses.WRY.id,-31,0),
-        OH_NO(Component.translatable("roundabout.pose.oh_no"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/oh_no.png"),Poses.OH_NO.id,-31,31),
-        TORTURE_DANCE(Component.translatable("roundabout.pose.torture_dance"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/torture_dance.png"),Poses.TORTURE_DANCE.id,0,0),
-        WAMUU(Component.translatable("roundabout.pose.wamuu"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/wamuu.png"),Poses.WAMUU.id,0,62),
-        JOTARO(Component.translatable("roundabout.pose.jotaro"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/jotaro.png"),Poses.JOTARO.id,31,62),
-        JONATHAN(Component.translatable("roundabout.pose.jonathan"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/jonathan.png"),Poses.JONATHAN.id,31,0),
+        NONE(Component.translatable("roundabout.stand_switch.none"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/stand_type_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
 
-        NONE(Component.translatable("roundabout.pose.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/jonathan.png"),Poses.NONE.id,0,31);
-
-        static PoseSwitcherScreen.posIcon getByte(Poses pose) {
+        static standRerollIcon getByte(Poses pose) {
             return switch (pose) {
                 default -> throw new IncompatibleClassChangeError();
                 case NONE -> NONE;
-                case JOSEPH -> JOSEPH;
-                case KOICHI -> KOICHI;
-                case WRY -> WRY;
-                case OH_NO -> OH_NO;
-                case GIORNO -> GIORNO;
-                case TORTURE_DANCE -> TORTURE_DANCE;
-                case WAMUU -> WAMUU;
-                case JOTARO -> JOTARO;
-                case JONATHAN -> JONATHAN;
+                case JOSEPH -> MAIN_STAND;
+                case KOICHI -> SECONDARY_STAND;
             };
         }
-        protected static final posIcon[] VALUES;
+        protected static final standRerollIcon[] VALUES;
         private static final int ICON_AREA = 16;
         protected static final int ICON_TOP_LEFT = 5;
         final Component name;
+        final Component desc;
         final ResourceLocation rl;
         final byte id;
 
         final int xoff;
         final int yoff;
 
-        private posIcon(Component component, ResourceLocation rl, byte id, int xoff, int yoff) {
+        private standRerollIcon(Component component, ResourceLocation rl, byte id, int xoff, int yoff, Component desc) {
             this.name = component;
             this.rl = rl;
             this.id = id;
             this.xoff = xoff;
             this.yoff = yoff;
+            this.desc = desc;
         }
 
         void drawIcon(GuiGraphics guiGraphics, int i, int j) {
@@ -221,24 +254,23 @@ public class PoseSwitcherScreen extends Screen {
         }
 
         static {
-            VALUES = new PoseSwitcherScreen.posIcon[]{GIORNO,JOSEPH,KOICHI,WRY,OH_NO,TORTURE_DANCE,WAMUU,JOTARO,JONATHAN,
-            NONE};
+            VALUES = new standRerollIcon[]{MAIN_STAND, SECONDARY_STAND, NONE};
         }
     }
 
     public class PoseSlot
             extends AbstractWidget {
-        final posIcon icon;
+        final standRerollIcon icon;
         private boolean isSelected;
 
-        public PoseSlot(posIcon pIcon, int i, int j) {
+        public PoseSlot(standRerollIcon pIcon, int i, int j) {
             super(i, j, 26, 26, pIcon.getName());
             this.icon = pIcon;
         }
 
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-            if (!this.icon.equals(posIcon.NONE)) {
+            if (!this.icon.equals(standRerollIcon.NONE)) {
                 this.drawSlot(guiGraphics);
                 this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
                 if (this.isSelected) {
@@ -262,11 +294,15 @@ public class PoseSwitcherScreen extends Screen {
         }
 
         private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 144.0f, 0.0f, 26, 26, 256, 256);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 144.0f, 31.0f, 26, 26, 256, 256);
         }
 
         private void drawSelection(GuiGraphics guiGraphics) {
             guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
         }
+    }
+
+    protected boolean isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
+        return p_97772_ >= (double)(p_97768_) && p_97772_ < (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ < (double)(p_97769_ + p_97771_);
     }
 }
