@@ -32,6 +32,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -511,6 +512,17 @@ public class PowersCinderella extends DashPreset {
 
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
+    }
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 15) {
+                MainUtil.makeFaceless(this.self,800,0,this.self);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_FAIL_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
+            }
         }
     }
     @Override
