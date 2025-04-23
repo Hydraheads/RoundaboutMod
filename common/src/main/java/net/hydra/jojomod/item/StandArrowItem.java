@@ -45,7 +45,11 @@ public class StandArrowItem extends RoundaboutArrowItem {
         }
 
         if (!player.isCreative()) {
-            player.giveExperienceLevels(-1);
+            CompoundTag tag = stack.isEmpty() ? null : stack.getTagElement("StandDisc");
+            CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+            if (tag2 != null) {
+                player.giveExperienceLevels(-1);
+            }
         }
         if (context == PacketDataIndex.ITEM_SWITCH_MAIN){
             rollStand(player.level(), player, item,true);
@@ -87,11 +91,18 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     return InteractionResultHolder.consume($$3);
                 }
             } else {
-                if (!$$0.isClientSide) {
-                    rollStand($$0, $$1, $$3, true);
-                    return InteractionResultHolder.consume($$3);
+                if (!$$1.isCrouching() || ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv1.isEmpty()) {
+                    if (!$$0.isClientSide) {
+                        rollStand($$0, $$1, $$3, true);
+                        return InteractionResultHolder.consume($$3);
+                    } else {
+                        return InteractionResultHolder.fail($$3);
+                    }
+                } else {
+                    if ($$0.isClientSide) {
+                        ClientUtil.openStandSwitchUI($$3);
+                    }
                 }
-                return InteractionResultHolder.fail($$3);
             }
         }
         return InteractionResultHolder.fail($$3);
