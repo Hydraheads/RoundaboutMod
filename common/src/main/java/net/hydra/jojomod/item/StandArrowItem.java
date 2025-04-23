@@ -192,6 +192,9 @@ public class StandArrowItem extends RoundaboutArrowItem {
                             if (tag2 != null) {
                                 ItemStack itemstack = ItemStack.of(tag2);
                                 if (itemstack.getItem() instanceof StandDiscItem de) {
+                                    if (de.standPowers.isSecondaryStand()){
+                                        get = 0;
+                                    }
                                     if (de.standPowers.isSecondaryStand() || PE.experienceLevel >= get || PE.isCreative()) {
                                         if (grantStand(itemstack, $$2)) {
                                             $$1.playSound(null, $$2.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
@@ -199,7 +202,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                                             ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, $$2.getX(),
                                                     $$2.getY() + $$2.getEyeHeight(), $$2.getZ(),
                                                     20, 0, 0, 0, 0.4);
-                                            if (!PE.isCreative()) {
+                                            if (!PE.isCreative() && get > 0) {
                                                 PE.giveExperienceLevels(-get);
                                             }
                                             $$0.removeTagKey("StandDisc");
