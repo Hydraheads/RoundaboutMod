@@ -40,11 +40,14 @@
   "item.roundabout.street_sign_stop_item": "Дорожный Знак: Стоп",
   "item.roundabout.street_sign_yield_item": "Дорожный Знак: Уступи дорогу",
   "item.roundabout.street_sign_danger_item": "Дорожный Знак: Опасность",
+  "item.roundabout.lucky_lipstick": "Помада 'Lucky'",
+  "item.roundabout.lucky_lipstick.desc": "Нанеси до сна для успешных сделок.",
 
   "item.roundabout.star_platinum_disc": "Диск со Стендом",
   "item.roundabout.the_world_disc": "Диск со Стендом",
   "item.roundabout.justice_disc": "Диск со Стендом",
   "item.roundabout.d4c_disc": "Диск со Стендом",
+  "item.roundabout.cinderella_disc": "Диск со Стендом",
   "item.roundabout.max_star_platinum_disc": "Диск со Стендом+",
   "item.roundabout.magicians_red_disc": "Диск со Стендом",
   "item.roundabout.max_the_world_disc": "Диск со Стендом+",
@@ -56,6 +59,7 @@
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
+  "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.blank_mask": "Пустой Облик",
@@ -70,6 +74,10 @@
   "item.roundabout.avdol_mask.desc": "Мухаммед Абдул",
   "item.roundabout.aya_mask": "Облик Аи",
   "item.roundabout.aya_mask.desc": "Ая Цуджи",
+  "item.roundabout.diego_mask": "Облик Диего",
+  "item.roundabout.diego_mask.desc": "Диего Брандо",
+  "item.roundabout.valentine_mask": "Облик Валентайна",
+  "item.roundabout.valentine_mask.desc": "Фанни Валентайн",
 
   "item.roundabout.stand_arrow.fail": "Нужно больше опыта!",
 
@@ -86,16 +94,18 @@
   "item.roundabout.stand_arrow.noStandsInPool": "В стреле нет Стенда!",
   "item.roundabout.stand_arrow.magnet": "Вибрирует вблизи с достойными мобами.",
 
-  "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
-  "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
+  "item.roundabout.worthy_arrow.info": "Только для Креатива, гарантированный эффект.",
+  "item.roundabout.worthy_arrow.info_2": "Если выстрелить в Креативе, может удалить стенд/достойность.",
 
   "effect.roundabout.bleed": "Кровотечение",
   "effect.roundabout.hex": "Наговор",
   "effect.roundabout.stand_virus": "Вирус Стенда",
+  "effect.roundabout.capturing_love": "Пленяющая Любовь",
+  "effect.roundabout.faceless": "Безликость",
 
   "text.roundabout.meteorite": "Метеорит",
 
-  "item.roundabout.terrier_spawn_egg": "Яйцо спавна Терьера",
+  "item.roundabout.terrier_spawn_egg": "Boston Terrier Spawn Egg",
 
   "entity.roundabout.terrier": "Terrier",
   "entity.roundabout.the_world": "The World",
@@ -106,6 +116,7 @@
   "entity.roundabout.justice": "Justice",
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Тёмный Мираж",
+  "entity.roundabout.cinderella": "Cinderella",
   "entity.roundabout.harpoon": "Гарпун",
   "entity.roundabout.match": "Спичка",
   "entity.roundabout.knife": "Нож",
@@ -123,10 +134,15 @@
   "entity.roundabout.jojo_npc_avdol": "Абдул",
   "entity.roundabout.jojo_npc_jotaro": "Джотаро",
   "entity.roundabout.jojo_npc_dio": "Дио",
+  "entity.roundabout.jojo_npc_parallel_diego": "Альтернативный Диего",
+  "entity.roundabout.jojo_npc_valentine": "Валентайн",
   "entity.roundabout.jojo_npc_aya": "Ая",
   "entity.roundabout.jojo_npc_steve": "Стив",
   "entity.roundabout.jojo_npc_alex": "Алекс",
   "entity.roundabout.fog_clone": "Туманный Клон",
+  "entity.roundabout.ground_hurricane": "Вариация урагана",
+  "entity.roundabout.concealed_flame_object": "Невидимый вихрь",
+  "entity.roundabout.visage_display": "Парящее лицо",
 
   "block.roundabout.meteor_block": "Блок Метеорита",
   "block.roundabout.ancient_meteor": "Древний метеор",
@@ -401,6 +417,12 @@
   "sounds.roundabout.explosive_bat":  "Хоумран",
   "sounds.roundabout.fog_clone":  "Иллюзорное формирование",
 
+  "sounds.roundabout.cinderella_summon":  "Стенд Призван",
+  "sounds.roundabout.cinderella_attack":  "Механическая Атака",
+  "sounds.roundabout.cinderella_sparkle":  "Магическая Искра",
+  "sounds.roundabout.cinderella_fail":  "Ой-ой",
+  "sounds.roundabout.cinderella_visage_creation":  "Механический Вихрь",
+
   "sounds.roundabout.arcade_impale":  "[Аркадный Удар]",
   "sounds.roundabout.arcade_long_ts":  "[Остановка Времени]",
   "sounds.roundabout.arcade_muda":  "[Аркадное Муда]",
@@ -566,6 +588,15 @@
   "ability.roundabout.fire_slam": "Пиковый Пламенный Удар",
   "ability.roundabout.fire_slam.desc": "Запускает Magician's Red вперёд, превращая его в пламенную сферу. Он летит с большой силой и огромным количеством пламени, в это время стенд не доступен. Используется только в крайнем случае.",
 
+  "ability.roundabout.visage_creation": "Создание Облика",
+  "ability.roundabout.visage_creation.desc": "Позволяет использовать любой облик или создать Помаду 'Lucky', но тратит  опыт. Мобы с этим стендом будут требовать изумруды.",
+  "ability.roundabout.face_removal": "Обезличивание",
+  "ability.roundabout.face_removal.desc": "Запускает атаку, которая наносит кровотечение и накладывает эффект 'Безликость', делающий врагов более уязвимыми к атакам и заставляющий некоторых мобов чувствовать себя неловко. Последующие удары этой атаки усиливают уровень эффекта.",
+  "ability.roundabout.visages": "Облики",
+  "ability.roundabout.visages.desc": "Облики культовых персонажей которые ты можешь воссоздать. Экипируй в меню Стенда (Это меню). Слот Маски меняет облик, и Слот Голоса добавляет фразы зависящие от облика.",
+  "ability.roundabout.lucky_lipstick": "Помада 'Lucky'",
+  "ability.roundabout.lucky_lipstick.desc": "Применяй каждые 3 минуты, перед тем как эффект пропадёт и ты будешь сиять красивой, пленящей любовью. Жители будут предлагать скидки. Применяй до сна или выпей молока, иначе что-то плохое может случится...",
+
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Недоступно",
@@ -604,6 +635,7 @@
 
   "idle.roundabout.floaty": "Левитация",
   "idle.roundabout.star_platinum": "Звезда",
+  "idle.roundabout.arms_only": "Руки",
 
   "idle.roundabout.passive_justice": "Нейтральная Поза",
   "idle.roundabout.battle_justice": "Угрожающая поза",
@@ -635,6 +667,7 @@
   "skins.roundabout.the_world.arcade": "Аркадный",
   "skins.roundabout.the_world.agogo": "A-Go!Go!",
   "skins.roundabout.the_world.beta": "Бета",
+  "skins.roundabout.the_world.arcade_2": "Аркадный II",
 
   "skins.roundabout.justice.base": "Часть 3",
   "skins.roundabout.justice.skeleton": "Скелетный",
@@ -672,9 +705,15 @@
   "skins.roundabout.magicians_red.beta": "Бета",
   "skins.roundabout.magicians_red.jojonium": "JoJonium",
   "skins.roundabout.magicians_red.jojonium_ablaze": "JoJonium F",
+  "skins.roundabout.magicians_red.debut": "Манга 'Debut'",
 
   "skins.roundabout.d4c.base": "Манга",
   "skins.roundabout.d4c.wonder_festival": "Фестивальный",
+  "skins.roundabout.d4c.promo": "Promo",
+  "skins.roundabout.d4c.promo_l": "Promo (L)",
+
+  "skins.roundabout.cinderella.base": "Часть 4",
+  "skins.roundabout.cinderella.manga": "Манга",
 
   "unlock_skin.roundabout.the_world.over_heaven": "Разблокирован скин The World: Over Heaven!",
   "unlock_skin.roundabout.star_platinum.atomic": "Разблокирован скин Star Platinum: Atomic!",
@@ -702,6 +741,14 @@
   "roundabout.pose.jonathan": "Герой",
   "roundabout.pose.none": "ДжоДжо Позинг",
 
+  "roundabout.stand_switch.main": "Основной Стенд",
+  "roundabout.stand_switch.main.desc": "Стенд с боевым потенциалом с возможностью прокачки. Стоит %s уровней чтобы получить.",
+  "roundabout.stand_switch.secondary": "Вторичный Стенд",
+  "roundabout.stand_switch.secondary.desc": "Стенд с меньшими способностями без возможности прокачки. Не имеет ценника для получения.",
+  "roundabout.stand_switch.custom": "Кастомный Стенд",
+  "roundabout.stand_switch.custom.desc": "Стенд который можно менять по вкусу, считай что это собственный стед. Стоит %s уровней чтобы получить.",
+  "roundabout.stand_switch.none": "Выбор типа",
+
   "roundabout.corpse.none": "Выбор трупа",
   "roundabout.corpse.tactics.none": "Выбор тактики",
   "roundabout.corpse.tactics.still": "Стоять на месте",
@@ -717,6 +764,11 @@
   "roundabout.corpse.tactics.change_team": "Цвет команды",
   "roundabout.corpse.tactics.kill_all": "Уничтожение трупов",
   "roundabout.corpse.tactics.cackle": "Насмешка",
+  "roundabout.cinderella.gui": "Beauty",
+  "roundabout.cinderella.gui.cannot_afford": "Вы не можете позволить себе это.",
+  "roundabout.cinderella.gui.cost_levels": "Стоит %1$s уровней",
+  "roundabout.cinderella.gui.cost_emeralds": "Стоит %1$s изумрудов",
+  "roundabout.cinderella.gui.exit": "Закрыть",
 
   "power_inventory.roundabout.settings.general": "Настройки Стенда",
   "power_inventory.roundabout.settings.offset": "Позиция",
