@@ -86,6 +86,10 @@ import java.util.Set;
     public Integer cinderellaLevelCostGlassVisage;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer cinderellaEmeraldCostGlassVisage;
+    @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
+    public Integer cinderellaLevelCostModificationVisage;
+    @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
+    public Integer cinderellaEmeraldCostModificationVisage;
     @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
     public Integer cinderellaLevelCostCharacterVisage;
     @IntOption(group = "inherit", value = 10, min = 0, max = 72000)

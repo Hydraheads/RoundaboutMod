@@ -68,6 +68,7 @@ public class ModItems {
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item LUCKY_LIPSTICK;
     public static Item BLANK_MASK;
+    public static Item MODIFICATION_MASK;
     public static Item JOTARO_MASK;
     public static Item DIO_MASK;
     public static Item ENYA_MASK;
@@ -97,6 +98,9 @@ public class ModItems {
         addToVisageStore(BLANK_MASK,0,
                 ClientNetworking.getAppropriateConfig().cinderellaLevelCostGlassVisage,
                 ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostGlassVisage);
+        addToVisageStore(MODIFICATION_MASK,0,
+                ClientNetworking.getAppropriateConfig().cinderellaLevelCostModificationVisage,
+                ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostModificationVisage);
         int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaLevelCostCharacterVisage;
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostCharacterVisage;
         addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
