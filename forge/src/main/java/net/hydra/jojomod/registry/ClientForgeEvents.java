@@ -16,7 +16,6 @@ import net.hydra.jojomod.entity.substand.LifeTrackerModel;
 import net.hydra.jojomod.entity.substand.LifeTrackerRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.particles.*;
-import net.minecraft.client.particle.CampfireSmokeParticle;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -104,7 +103,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.AVDOL_LAYER, AvdolModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.VALENTINE_LAYER, ValentineModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.AYA_LAYER, AyaModel::getTexturedModelData);
-        event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerNPCModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);

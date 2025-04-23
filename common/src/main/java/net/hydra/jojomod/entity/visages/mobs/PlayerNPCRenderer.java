@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 public class PlayerNPCRenderer<T extends JojoNPC> extends PlayerLikeRenderer<JojoNPCPlayer> {
     private static final ResourceLocation STEVE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/steve.png");
     public PlayerNPCRenderer(EntityRendererProvider.Context context) {
-        super(context, new PlayerNPCModel<>(context.bakeLayer(ModEntityRendererClient.STEVE_LAYER)),0f);
+        super(context, new PlayerSteveModel<>(context.bakeLayer(ModEntityRendererClient.STEVE_LAYER)),0f);
         if (ConfigManager.getClientConfig().renderArmorOnPlayerCloneAbilities) {
             this.addLayer(new HumanoidLikeArmorLayer<>(this, new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelManager()));
         }
