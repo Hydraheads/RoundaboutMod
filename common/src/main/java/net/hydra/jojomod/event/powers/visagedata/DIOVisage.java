@@ -20,4 +20,8 @@ public class DIOVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(1.09F,1.09F,1.09F);
     }
+    @Override
+    public float getNametagHeight(){
+        return 0.54f;
+    }
 }

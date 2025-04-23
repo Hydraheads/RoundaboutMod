@@ -20,4 +20,9 @@ public class DiegoVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(0.98F,0.98F,0.98F);
     }
+
+    @Override
+    public float getNametagHeight(){
+        return 0.49f;
+    }
 }

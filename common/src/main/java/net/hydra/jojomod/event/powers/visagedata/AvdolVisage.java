@@ -20,4 +20,9 @@ public class AvdolVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(1.0675F,1.0675F,1.0675F);
     }
+
+    @Override
+    public float getNametagHeight(){
+        return 0.54f;
+    }
 }

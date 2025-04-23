@@ -20,4 +20,9 @@ public class EnyaVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(1.0F,1.0F,1.0F);
     }
+
+    @Override
+    public float getNametagHeight(){
+        return -0.2F;
+    }
 }

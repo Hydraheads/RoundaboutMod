@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -24,6 +25,7 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -153,17 +155,30 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     }
 
     @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$getPlayerRep(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
+    private void roundabout$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
         byte shape = ple.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
-            ci.cancel();
-            return;
+            if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null
+                    && !ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagsWhenJusticeMorphed) {
+                if (!(Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
+                        ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode)) {
+                    ci.cancel();
+                    return;
+                }
+            }
         }
         if (Minecraft.getInstance().player !=null && !((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()
                 && ((IPermaCasting)$$0.level()).roundabout$inPermaCastFogRange($$0)){
-            ci.cancel();
+            if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null
+            && !ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagsInJusticeFog) {
+                if (!(Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
+                        ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode)) {
+                    ci.cancel();
+                    return;
+                }
+            }
         }
     }
 
@@ -411,6 +426,25 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         }
     }
 
+    @Unique
+    public void roundabout$corpseShowName(AbstractClientPlayer $$0, PoseStack $$3, MultiBufferSource $$4, int $$5){
+        if (Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
+                ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null &&
+                ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode) {
+            if (this.shouldShowName($$0)) {
+                this.renderNameTag($$0, $$0.getDisplayName(), $$3, $$4, $$5);
+            }
+        } else {
+            if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
+                if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagsWhenJusticeMorphed) {
+                    if (this.shouldShowName($$0)) {
+                        this.renderNameTag($$0, $$0.getDisplayName(), $$3, $$4, $$5);
+                    }
+                }
+            }
+        }
+    }
+
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
@@ -427,6 +461,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
                     roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
                     ci.cancel();
+                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
                 }
             } else if (shift == ShapeShifts.VILLAGER){
                 if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Villager))){
@@ -445,6 +480,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     }
                     roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
                     ci.cancel();
+                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
                 }
             } else if (shift == ShapeShifts.SKELETON){
                 if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Skeleton))) {
@@ -455,6 +491,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
                     roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
                     ci.cancel();
+                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
                 }
             } else if (shift == ShapeShifts.WITHER_SKELETON){
                 if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof WitherSkeleton))) {
@@ -465,6 +502,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
                     roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
                     ci.cancel();
+                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
                 }
             } else if (shift == ShapeShifts.STRAY){
                 if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Stray))) {
@@ -475,6 +513,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
                     roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
                     ci.cancel();
+                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
                 }
             } else if (shift == ShapeShifts.OVA){
                 if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof OVAEnyaNPC))) {
@@ -488,6 +527,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                         assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
                                 roundabout$getShapeShift($$0));
                         ci.cancel();
+                        roundabout$corpseShowName($$0,$$3,$$4,$$5);
                     }
                 }
             }
@@ -517,6 +557,33 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
                             roundabout$getSwappedModel($$0));
                     ci.cancel();
+
+                    boolean characterType = true;
+                    if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME){
+                        characterType = ME.visageData.isCharacterVisage();
+                    }
+                    if (Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
+                            ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null &&
+                            ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode) {
+                        if (this.shouldShowName($$0)) {
+                            this.renderNameTag($$0, $$0.getDisplayName(), $$3, $$4, $$5);
+                        }
+                    } else {
+                        if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
+                            if ((characterType && ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnCharacterVisages)
+                                    || (!characterType && ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnPlayerVisages)) {
+                                if (this.shouldShowName($$0)) {
+
+                                    Component comp = $$0.getDisplayName();
+                                    if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages){
+                                        comp = ve.getDisplayName();
+                                    }
+
+                                    this.renderNameTag($$0, comp, $$3, $$4, $$5);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

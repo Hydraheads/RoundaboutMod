@@ -123,6 +123,8 @@ import java.util.Set;
     @NestedOption(group = "modded")
     public MiningSettings miningSettings;
     @NestedOption(group = "modded")
+    public NameTagSettings nameTagSettings;
+    @NestedOption(group = "modded")
     public Durations durationsInTicks;
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
@@ -238,6 +240,20 @@ import java.util.Set;
         public Integer getMiningTierMagiciansRed;
         @BooleanOption(group = "inherit", value = true)
         public Boolean crouchingStopsMiningOres;
+    }
+    public static class NameTagSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean renderNameTagOnPlayerVisages;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean renderNameTagOnCharacterVisages;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean renderActualCharactersNameUsingVisages;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean renderNameTagsInJusticeFog;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean renderNameTagsWhenJusticeMorphed;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bypassAllNametagHidesInCreativeMode;
     }
     public static class Durations {
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)

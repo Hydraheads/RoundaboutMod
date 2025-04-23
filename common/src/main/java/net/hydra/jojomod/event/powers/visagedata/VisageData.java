@@ -22,4 +22,10 @@ public class VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(1.0F,1.0F,1.0F);
     }
+    public float getNametagHeight(){
+        return 0.5f;
+    }
+    public boolean isCharacterVisage(){
+        return true;
+    }
 }

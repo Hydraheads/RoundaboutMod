@@ -3,14 +3,17 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -192,6 +195,15 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
 
+    }
+    @Inject(method = "getNameTagOffsetY", at = @At("HEAD"), cancellable = true)
+    public void roundabout$getNameTagOffsetY(CallbackInfoReturnable<Float> cir){
+        if (((Entity)(Object)this) instanceof Player PE){
+            ItemStack stack = ((IPlayerEntity) PE).roundabout$getMaskSlot();
+            if (stack !=null && !stack.isEmpty() && stack.getItem() instanceof MaskItem ME){
+                cir.setReturnValue(this.getBbHeight() + ME.visageData.getNametagHeight());
+            }
+        }
     }
     @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
     public void roundabout$Turn(double $$0, double $$1, CallbackInfo ci){
@@ -380,6 +392,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow @javax.annotation.Nullable private Entity vehicle;
 
     @Shadow @Deprecated public abstract BlockPos getOnPosLegacy();
+
+    @Shadow public abstract float getBbHeight();
 
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {

@@ -387,7 +387,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",
             () -> new LuckyLipstickItem(new Item.Properties())));
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
-            () -> new MaskItem(new Item.Properties(), new VisageData(null))));
+            () -> new MaskItem(new Item.Properties(), new NonCharacterVisage(null))));
     public static final RegistryObject<Item> JOTARO_MASK = addToTab(ITEMS.register("jotaro_mask",
             () -> new MaskItem(new Item.Properties(), new JotaroVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",
