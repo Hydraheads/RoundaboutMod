@@ -768,6 +768,7 @@
   "roundabout.cinderella.gui.cannot_afford": "You cannot afford this item.",
   "roundabout.cinderella.gui.cost_levels": "Costs %1$s Levels",
   "roundabout.cinderella.gui.cost_emeralds": "Costs %1$s Emeralds",
+  "roundabout.cinderella.gui.exit": "Exit",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",

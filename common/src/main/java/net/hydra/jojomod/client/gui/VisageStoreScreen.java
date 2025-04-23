@@ -129,6 +129,11 @@ public class VisageStoreScreen extends Screen {
             turnPage(true);
         }
 
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 10, mouseX, mouseY)) {
+            this.minecraft.setScreen(null);
+            return true;
+        }
+
         k = this.width / 2 + 55;
         l = this.height / 2 - 31 - 31;
         if (isSurelyHovering(k, l, 19, 24, mouseX, mouseY)) {
@@ -204,6 +209,16 @@ public class VisageStoreScreen extends Screen {
 
         guiGraphics.drawCenteredString(this.font, ""+(page+1), this.width / 2, this.height / 2 + 30, -1);
 
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 10, mouseX, mouseY)) {
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit").
+                            withStyle(ChatFormatting.GREEN),
+                    this.width / 2, this.height / 2 + 50, -1);
+        } else {
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit"),
+                    this.width / 2, this.height / 2 + 50, -1);
+        }
+
+
         k = this.width / 2 - 79;
         l = this.height / 2 - 31 - 31;
         if (isSurelyHovering(k, l, 19, 24, mouseX, mouseY)) {
@@ -219,6 +234,8 @@ public class VisageStoreScreen extends Screen {
         } else {
             guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 22.0f, 40.0f, 19, 24, 256, 256);
         }
+
+
 
         List<VisageStoreEntry> list = getPage();
         for (VisageStoreEntry value : list) {
