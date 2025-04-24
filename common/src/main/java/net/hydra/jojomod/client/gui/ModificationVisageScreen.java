@@ -244,10 +244,10 @@ public class ModificationVisageScreen extends Screen {
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
             guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.save").
                             withStyle(ChatFormatting.GREEN),
-                    this.width / 2, this.height / 2 + 50, -1);
+                    this.width / 2, this.height / 2 + 40, -1);
         } else {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit"),
-                    this.width / 2, this.height / 2 + 50, -1);
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.save"),
+                    this.width / 2, this.height / 2 + 40, -1);
         }
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 8, mouseX, mouseY)) {
             guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit").
@@ -258,13 +258,13 @@ public class ModificationVisageScreen extends Screen {
                     this.width / 2, this.height / 2 + 50, -1);
         }
 
-        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 70, 8, mouseX, mouseY)) {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.save").
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.reset").
                             withStyle(ChatFormatting.GREEN),
-                    this.width / 2, this.height / 2 + 50, -1);
+                    this.width / 2, this.height / 2 + 40, -1);
         } else {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit"),
-                    this.width / 2, this.height / 2 + 50, -1);
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.reset"),
+                    this.width / 2, this.height / 2 + 40, -1);
         }
 
 
