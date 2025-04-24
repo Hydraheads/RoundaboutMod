@@ -184,7 +184,7 @@ public class PowerInventoryScreen
         return output.toString().split("\n");
     }
     protected boolean isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
-        return p_97772_ >= (double)(p_97768_) && p_97772_ < (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ < (double)(p_97769_ + p_97771_);
+        return p_97772_ >= (double)(p_97768_) && p_97772_ <= (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ <= (double)(p_97769_ + p_97771_);
     }
 
     public static void renderStandEntityInInventoryFollowsMouse(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, StandEntity $$6, Player user) {
@@ -251,6 +251,7 @@ public class PowerInventoryScreen
                 context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.general").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE), i- 135, j+24, 4210752, false);
 
                 if (pageNumber == 1) {
+
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.offset").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 46, 11, 173, 118, 11);
                     int renderSpot1 = (int) Math.floor(((double) 114 / 359) * (anchorPlace));
@@ -462,8 +463,8 @@ public class PowerInventoryScreen
                 int jump = i - 136;
                 if (pageNumber == 1) {
                     if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
-                        int initialX = ((int) $$0) - jump;
-                        initialX = (int) ((float) 359 / 118) * initialX;
+                        int initialX = (int) ($$0 - jump);
+                        initialX = (int) (((float) 359 / 118) * initialX);
                         if (initialX != ipe.roundabout$getAnchorPlace()) {
                             ipe.roundabout$setAnchorPlace(initialX);
                             ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
@@ -511,7 +512,7 @@ public class PowerInventoryScreen
                     }
                 } else if (pageNumber == 2) {
                     if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
-                        float initialX = ((int) $$0) - jump;
+                        float initialX = (int) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
                         if (initialX != ipe.roundabout$getSizePercent()) {
                             ipe.roundabout$setSizePercent(initialX);
@@ -539,7 +540,7 @@ public class PowerInventoryScreen
                     }
                     if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
                         int initialX = ((int) $$0) - jump;
-                        initialX = (int) ((float) 359 / 118) * initialX;
+                        initialX = (int) (((float) 359 / 118) * initialX);
                         if (initialX != ipe.roundabout$getAnchorPlaceAttack()) {
                             ipe.roundabout$setAnchorPlaceAttack(initialX);
                             ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
