@@ -260,7 +260,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
             if (player.getInventory().contains(stack) || offh){
-                if (stack.is(ModItems.STAND_ARROW)){
+                if (stack.getItem() instanceof StandArrowItem){
                     StandArrowItem.rerollStand(player,offh,stack,context);
                 }
             }
