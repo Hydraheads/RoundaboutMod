@@ -105,6 +105,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.AYA_LAYER, AyaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.MODIFIED_LAYER, PlayerModifiedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
 

@@ -89,6 +89,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_alex").toString())
             );
+    public static final RegistryObject<EntityType<PlayerModifiedNPC>> MODIFIED_NPC =
+            ENTITY_TYPES.register("jojo_npc_modified", () ->
+                    EntityType.Builder.of(PlayerModifiedNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_modified").toString())
+            );
     public static final RegistryObject<EntityType<FogCloneEntity>> FOG_CLONE =
             ENTITY_TYPES.register("fog_clone", () ->
                     EntityType.Builder.of(FogCloneEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).

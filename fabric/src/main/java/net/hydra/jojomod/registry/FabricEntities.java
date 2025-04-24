@@ -104,6 +104,13 @@ public class FabricEntities {
                         EntityType.Builder.of(PlayerAlexNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_alex")
                 );
+        public static final EntityType<PlayerModifiedNPC> MODIFIED_NPC =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_modified"),
+                        EntityType.Builder.of(PlayerModifiedNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_modified")
+                );
         public static final EntityType<FogCloneEntity> FOG_CLONE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -357,6 +364,7 @@ public class FabricEntities {
                 ModEntities.AYA = AYA;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
+                ModEntities.MODIFIED_NPC = MODIFIED_NPC;
                 ModEntities.FOG_CLONE = FOG_CLONE;
                 ModEntities.D4C_CLONE = D4C_CLONE;
 
@@ -373,6 +381,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(AYA, AyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(MODIFIED_NPC, PlayerModifiedNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(FOG_CLONE, PlayerAlexNPC.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(FALLEN_ZOMBIE, FallenZombie.createAttributes());
