@@ -181,8 +181,8 @@ public class ModificationVisageScreen extends Screen {
         guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
 
 
-        k = this.width / 2 - 80;
-        l = this.height / 2 - 1;
+        k = this.width / 2 - 75;
+        l = this.height / 2 +17;
         renderEntityInInventoryFollowsMouse(guiGraphics, k, l, 30,
                 (float) k - mouseX, (float) l - mouseY, pl);
 

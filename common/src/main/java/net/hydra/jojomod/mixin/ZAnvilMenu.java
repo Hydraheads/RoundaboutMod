@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.logging.LogUtils;
+import net.hydra.jojomod.item.LuckyLipstickItem;
 import net.hydra.jojomod.item.RoundaboutArrowItem;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
@@ -52,6 +53,10 @@ public abstract class ZAnvilMenu extends ItemCombinerMenu {
                     this.resultSlots.setItem(0, ItemStack.EMPTY);
                     this.cost.set(0);
                     ci.cancel();
+            } else if (!itemstack2.isEmpty() && itemstack.getItem() instanceof LuckyLipstickItem && itemstack2.getItem() instanceof EnchantedBookItem) {
+                this.resultSlots.setItem(0, ItemStack.EMPTY);
+                this.cost.set(0);
+                ci.cancel();
             }
         }
     }

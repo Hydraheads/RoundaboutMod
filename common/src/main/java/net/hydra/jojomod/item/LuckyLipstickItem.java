@@ -22,6 +22,10 @@ public class LuckyLipstickItem extends Item implements Vanishable {
         super($$0.defaultDurability(6));
     }
 
+    @Override
+    public boolean isEnchantable(ItemStack p_41456_) {
+        return false;
+    }
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$0.playSound((Player)null, $$1.getX(), $$1.getY(), $$1.getZ(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.NEUTRAL, 1F, 1F);
