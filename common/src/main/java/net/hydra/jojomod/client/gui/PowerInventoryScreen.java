@@ -445,112 +445,154 @@ public class PowerInventoryScreen
     }
 
     @Override
-    public boolean mouseClicked(double $$0, double $$1, int $$2) {
+    public boolean mouseDragged(double $$0, double $$1, int $$2, double $$3, double $$4) {
+        if (updateClicked($$0,$$1,$$2)){
+            return true;
+        }
+        return super.mouseDragged($$0,$$1,$$2,$$3,$$4);
+    }
+
+    public boolean updateClicked(double $$0, double $$1, int $$2){
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
-
-
-            if (isOptionsOut){
+            if (isOptionsOut) {
                 int i = this.leftPos;
                 int j = this.topPos;
                 IPlayerEntity ipe = ((IPlayerEntity) pl);
-                int jump = i-136;
+                int jump = i - 136;
                 if (pageNumber == 1) {
                     if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
                         int initialX = ((int) $$0) - jump;
                         initialX = (int) ((float) 359 / 118) * initialX;
-                        ipe.roundabout$setAnchorPlace(initialX);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                        if (initialX != ipe.roundabout$getAnchorPlace()) {
+                            ipe.roundabout$setAnchorPlace(initialX);
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                        }
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        ipe.roundabout$setDistanceOut(initialX);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                        if (initialX != ipe.roundabout$getDistanceOut()) {
+                            ipe.roundabout$setDistanceOut(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                        }
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 89, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 100 / 118) * initialX;
-                        ConfigManager.getClientConfig().opacitySettings.opacityOfStand = Mth.clamp(initialX, 0, 100);
-                        ConfigManager.saveClientConfig();
+                        initialX = Mth.clamp(initialX, 0, 100);
+                        if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityOfStand) {
+                            ConfigManager.getClientConfig().opacitySettings.opacityOfStand = initialX;
+                            ConfigManager.saveClientConfig();
+                        }
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 100 / 118) * initialX;
-                        ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = Mth.clamp(initialX, 0, 100);
-                        ConfigManager.saveClientConfig();
+                        initialX = Mth.clamp(initialX, 0, 100);
+                        if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking) {
+                            ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = initialX;
+                            ConfigManager.saveClientConfig();
+                        }
                         return true;
                     }
                     if (isSurelyHovering(i - 136, j + 133, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 100 / 118) * initialX;
-                        ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = Mth.clamp(initialX, 0, 100);
-                        ConfigManager.saveClientConfig();
+                        initialX = Mth.clamp(initialX, 0, 100);
+                        if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityOfOthers) {
+                            ConfigManager.getClientConfig().opacitySettings.opacityOfOthers =initialX;
+                            ConfigManager.saveClientConfig();
+                        }
                         return true;
                     }
-                } else if (pageNumber == 2){
+                } else if (pageNumber == 2) {
                     if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
                         float initialX = ((int) $$0) - jump;
                         initialX = ((float) 2 / 118) * initialX;
-                        ipe.roundabout$setSizePercent(initialX);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_SIZE_PERCENT);
+                        if (initialX != ipe.roundabout$getSizePercent()) {
+                            ipe.roundabout$setSizePercent(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_SIZE_PERCENT);
+                        }
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 360 / 118) * initialX;
-                        ipe.roundabout$setIdleRotation(initialX);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_ROTATION);
+                        if (initialX != ipe.roundabout$getIdleRotation()) {
+                            ipe.roundabout$setIdleRotation(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_ROTATION);
+                        }
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 89, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        ipe.roundabout$setIdleYOffset(initialX);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
+                        if (initialX != ipe.roundabout$getIdleYOffset()) {
+                            ipe.roundabout$setIdleYOffset(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
+                        }
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
                         int initialX = ((int) $$0) - jump;
                         initialX = (int) ((float) 359 / 118) * initialX;
-                        ipe.roundabout$setAnchorPlaceAttack(initialX);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                        if (initialX != ipe.roundabout$getAnchorPlaceAttack()) {
+                            ipe.roundabout$setAnchorPlaceAttack(initialX);
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                        }
                         return true;
                     }
                 }
-                if (isSurelyHovering(i-136, j+146, 65, 11, $$0, $$1)) {
-                    if (pageNumber == 1) {
-                        ipe.roundabout$setAnchorPlace(55);
-                        ipe.roundabout$setDistanceOut(1.07F);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1.07F, PacketDataIndex.FLOAT_DISTANCE_OUT);
-                        ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
-                        ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = 100F;
-                        ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;
-                        ConfigManager.saveClientConfig();
-                    } else if (pageNumber == 2){
-                        ipe.roundabout$setAnchorPlaceAttack(55);
-                        ipe.roundabout$setSizePercent(1F);
-                        ipe.roundabout$setIdleRotation(0F);
-                        ipe.roundabout$setIdleYOffset(0.1F);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, PacketDataIndex.FLOAT_SIZE_PERCENT);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0F, PacketDataIndex.FLOAT_IDLE_ROTATION);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0.1F, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
-                    }
-                    return true;
+
+            }
+        }
+        return false;
+    }
+    @Override
+    public boolean mouseClicked(double $$0, double $$1, int $$2) {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+
+
+            if (updateClicked($$0,$$1,$$2)){
+                return true;
+            }
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            int i = this.leftPos;
+            int j = this.topPos;
+            if (isSurelyHovering(i - 136, j + 146, 65, 11, $$0, $$1)) {
+                if (pageNumber == 1) {
+                    ipe.roundabout$setAnchorPlace(55);
+                    ipe.roundabout$setDistanceOut(1.07F);
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1.07F, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                    ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
+                    ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = 100F;
+                    ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;
+                    ConfigManager.saveClientConfig();
+                } else if (pageNumber == 2) {
+                    ipe.roundabout$setAnchorPlaceAttack(55);
+                    ipe.roundabout$setSizePercent(1F);
+                    ipe.roundabout$setIdleRotation(0F);
+                    ipe.roundabout$setIdleYOffset(0.1F);
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, PacketDataIndex.FLOAT_SIZE_PERCENT);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0F, PacketDataIndex.FLOAT_IDLE_ROTATION);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0.1F, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
                 }
-                if (isSurelyHovering(i-66, j+146, 65, 11, $$0, $$1)) {
-                    if (pageNumber == 1){
-                        pageNumber = 2;
-                    } else {
-                        pageNumber = 1;
-                    }
-                    return true;
+                return true;
+            }
+            if (isSurelyHovering(i - 66, j + 146, 65, 11, $$0, $$1)) {
+                if (pageNumber == 1) {
+                    pageNumber = 2;
+                } else {
+                    pageNumber = 1;
                 }
+                return true;
             }
 
             int leftGearPos = leftPos+6;
