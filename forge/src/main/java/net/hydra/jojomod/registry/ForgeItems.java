@@ -389,7 +389,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
             () -> new MaskItem(new Item.Properties(), new NonCharacterVisage(null))));
     public static final RegistryObject<Item> MODIFICATION_MASK = addToTab(ITEMS.register("modification_mask",
-            () -> new MaskItem(new Item.Properties(), new ModificationVisage(null))));
+            () -> new ModificationMaskItem(new Item.Properties(), new ModificationVisage(null))));
     public static final RegistryObject<Item> JOTARO_MASK = addToTab(ITEMS.register("jotaro_mask",
             () -> new MaskItem(new Item.Properties(), new JotaroVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",

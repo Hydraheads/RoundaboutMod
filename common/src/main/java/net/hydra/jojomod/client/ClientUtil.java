@@ -241,6 +241,9 @@ public class ClientUtil {
     public static void openStandSwitchUI(ItemStack arrow){
         Minecraft.getInstance().setScreen(new StandArrowRerollScreen(arrow));
     }
+    public static void openModificationVisageUI(ItemStack visage){
+        Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage));
+    }
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){

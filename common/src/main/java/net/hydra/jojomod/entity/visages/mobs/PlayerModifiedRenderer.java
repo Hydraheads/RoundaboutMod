@@ -25,15 +25,15 @@ public class PlayerModifiedRenderer<T extends JojoNPC> extends PlayerLikeRendere
     }
     @Override
     public void render(JojoNPCPlayer mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        if (mobEntity.faker instanceof AbstractClientPlayer AP) {
+        if (mobEntity.host instanceof AbstractClientPlayer AP) {
             matrixStack.scale(0.9375f, 0.9375f, 0.9375f);
             super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         }
     }
     @Override
     public ResourceLocation getTextureLocation(JojoNPC entity) {
-        if (entity instanceof JojoNPCPlayer jnp && jnp.faker instanceof AbstractClientPlayer AP){
-            return ((AbstractClientPlayer) jnp.faker).getSkinTextureLocation();
+        if (entity instanceof JojoNPCPlayer jnp && jnp.host instanceof AbstractClientPlayer AP){
+            return ((AbstractClientPlayer) jnp.host).getSkinTextureLocation();
         }
         else {
             return STEVE_SKIN;

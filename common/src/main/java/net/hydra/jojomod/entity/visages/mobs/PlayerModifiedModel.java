@@ -72,13 +72,13 @@ public class PlayerModifiedModel<T extends JojoNPCPlayer> extends PlayerLikeMode
 
         PartDefinition chest = body.addOrReplaceChild("chest", CubeListBuilder.create(), PartPose.offset(-5.0F, -0.4F, 0.0F));
 
-        PartDefinition chest_r1 = chest.addOrReplaceChild("chest_r1", CubeListBuilder.create().texOffs(24, 20).addBox(-4.0F, 0.0F, 0.005F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(9.0F, 4.65F, -3.775F, 1.5502F, 0.4577F, 1.5222F));
+        PartDefinition chest_r1 = chest.addOrReplaceChild("chest_r1", CubeListBuilder.create().texOffs(24, 20).addBox(-4.0F, 0.0F, 0.005F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.001F)), PartPose.offsetAndRotation(9.0F, 4.65F, -3.775F, 1.5502F, 0.4577F, 1.5222F));
 
-        PartDefinition chest_r2 = chest.addOrReplaceChild("chest_r2", CubeListBuilder.create().texOffs(16, 20).addBox(-4.0F, 0.0F, 0.005F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 4.65F, -3.775F, 1.5735F, 0.4581F, 1.5757F));
+        PartDefinition chest_r2 = chest.addOrReplaceChild("chest_r2", CubeListBuilder.create().texOffs(16, 20).addBox(-4.0F, 0.0F, 0.005F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.001F)), PartPose.offsetAndRotation(1.0F, 4.65F, -3.775F, 1.5735F, 0.4581F, 1.5757F));
 
-        PartDefinition chest_r3 = chest.addOrReplaceChild("chest_r3", CubeListBuilder.create().texOffs(20, 24).addBox(-4.0F, 0.0F, 0.005F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.0F, 4.65F, -3.775F, 1.117F, 0.0F, 0.0F));
+        PartDefinition chest_r3 = chest.addOrReplaceChild("chest_r3", CubeListBuilder.create().texOffs(20, 24).addBox(-4.0F, 0.0F, 0.005F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.001F)), PartPose.offsetAndRotation(5.0F, 4.65F, -3.775F, 1.117F, 0.0F, 0.0F));
 
-        PartDefinition chest_r4 = chest.addOrReplaceChild("chest_r4", CubeListBuilder.create().texOffs(20, 20).addBox(-4.0F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.0F, 1.05F, -2.0F, -0.4581F, 0.0F, 0.0F));
+        PartDefinition chest_r4 = chest.addOrReplaceChild("chest_r4", CubeListBuilder.create().texOffs(20, 20).addBox(-4.0F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.001F)), PartPose.offsetAndRotation(5.0F, 1.05F, -2.0F, -0.4581F, 0.0F, 0.0F));
 
         PartDefinition chest_two = body.addOrReplaceChild("chest_two", CubeListBuilder.create().texOffs(19, 20).addBox(-4.0F, 1.0F, -2.725F, 8.0F, 4.0F, 1.0F, new CubeDeformation(-0.1F)), PartPose.offset(0.0F, -0.175F, 0.425F));
 
