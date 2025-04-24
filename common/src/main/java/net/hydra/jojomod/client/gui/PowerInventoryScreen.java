@@ -255,7 +255,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.offset").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 46, 11, 173, 118, 11);
                     int renderSpot1 = (int) Math.floor(((double) 114 / 359) * (anchorPlace));
-                    if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY) || sliderHeld == 1) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 173, 5, 11);
@@ -265,7 +265,7 @@ public class PowerInventoryScreen
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
 
                     int renderSpot2 = (int) Math.floor(((double) 114 / 2) * (distanceOut));
-                    if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY) || sliderHeld == 2) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 173, 5, 11);
@@ -274,7 +274,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 89, 11, 173, 118, 11);
                     int renderSpot3 = (int) Math.floor(((double) 114 / 100) * (idleOpacity));
-                    if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY) || sliderHeld == 3) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 173, 5, 11);
@@ -283,7 +283,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.attack_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 111, 11, 173, 118, 11);
                     int renderSpot4 = (int) Math.floor(((double) 114 / 100) * (combatOpacity));
-                    if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY) || sliderHeld == 4) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 173, 5, 11);
@@ -292,7 +292,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.enemy_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 124, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 134, 11, 173, 118, 11);
                     int renderSpot5 = (int) Math.floor(((double) 114 / 100) * (enemyOpacity));
-                    if (isSurelyHovering(i - 136, j + 133, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 133, 118, 11, mouseX, mouseY) || sliderHeld == 5) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot5, j + 133, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot5, j + 133, 5, 173, 5, 11);
@@ -302,7 +302,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.size").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 46, 11, 173, 118, 11);
                     int renderSpot1 = (int) Math.floor(((double) 114 / 2) * (standSize));
-                    if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY) || sliderHeld == 6) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 173, 5, 11);
@@ -312,7 +312,7 @@ public class PowerInventoryScreen
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
 
                     int renderSpot2 = (int) Math.floor(((double) 114 / 360) * (idleRot));
-                    if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 67, 118, 11, mouseX, mouseY) || sliderHeld == 7) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 173, 5, 11);
@@ -321,7 +321,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.yOffset").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 89, 11, 173, 118, 11);
                     int renderSpot3 = (int) Math.floor(((double) 114 / 2) * (idleY));
-                    if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY) || sliderHeld == 8) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 173, 5, 11);
@@ -331,7 +331,7 @@ public class PowerInventoryScreen
                     context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.attack_offset").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 111, 11, 173, 118, 11);
                     int renderSpot4 = (int) Math.floor(((double) 114 / 359) * (anchorPlaceAttack));
-                    if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY)) {
+                    if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY) || sliderHeld == 9) {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 185, 5, 11);
                     } else {
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 173, 5, 11);
@@ -447,12 +447,116 @@ public class PowerInventoryScreen
 
     @Override
     public boolean mouseDragged(double $$0, double $$1, int $$2, double $$3, double $$4) {
-        if (updateClicked($$0,$$1,$$2)){
+        if (updateClickDragged($$0,$$1,$$2)){
             return true;
         }
         return super.mouseDragged($$0,$$1,$$2,$$3,$$4);
     }
 
+
+    public int sliderHeld = 0;
+    public boolean updateClickDragged(double $$0, double $$1, int $$2){
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            if (isOptionsOut) {
+                int i = this.leftPos;
+                int j = this.topPos;
+                IPlayerEntity ipe = ((IPlayerEntity) pl);
+                int jump = i - 136;
+                $$0 = Math.min($$0,jump+118);
+                $$0 = Math.max($$0,jump);
+                if (pageNumber == 1) {
+                    if (sliderHeld == 1) {
+                        int initialX = (int) ($$0 - jump);
+                        initialX = (int) (((float) 359 / 118) * initialX);
+                        if (initialX != ipe.roundabout$getAnchorPlace()) {
+                            ipe.roundabout$setAnchorPlace(initialX);
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                        }
+                        return true;
+                    }
+                    if (sliderHeld == 2) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 2 / 118) * initialX;
+                        if (initialX != ipe.roundabout$getDistanceOut()) {
+                            ipe.roundabout$setDistanceOut(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                        }
+                        return true;
+                    }
+                    if (sliderHeld == 3) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 100 / 118) * initialX;
+                        initialX = Mth.clamp(initialX, 0, 100);
+                        if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityOfStand) {
+                            ConfigManager.getClientConfig().opacitySettings.opacityOfStand = initialX;
+                            ConfigManager.saveClientConfig();
+                        }
+                        return true;
+                    }
+                    if (sliderHeld == 4) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 100 / 118) * initialX;
+                        initialX = Mth.clamp(initialX, 0, 100);
+                        if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking) {
+                            ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = initialX;
+                            ConfigManager.saveClientConfig();
+                        }
+                        return true;
+                    }
+                    if (sliderHeld == 5) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 100 / 118) * initialX;
+                        initialX = Mth.clamp(initialX, 0, 100);
+                        if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityOfOthers) {
+                            ConfigManager.getClientConfig().opacitySettings.opacityOfOthers =initialX;
+                            ConfigManager.saveClientConfig();
+                        }
+                        return true;
+                    }
+                } else if (pageNumber == 2) {
+                    if (sliderHeld == 6) {
+                        float initialX = (int) ($$0 - jump);
+                        initialX = ((float) 2 / 118) * initialX;
+                        if (initialX != ipe.roundabout$getSizePercent()) {
+                            ipe.roundabout$setSizePercent(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_SIZE_PERCENT);
+                        }
+                        return true;
+                    }
+                    if (sliderHeld == 7) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 360 / 118) * initialX;
+                        if (initialX != ipe.roundabout$getIdleRotation()) {
+                            ipe.roundabout$setIdleRotation(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_ROTATION);
+                        }
+                        return true;
+                    }
+                    if (sliderHeld == 8) {
+                        float initialX = (float) ($$0 - jump);
+                        initialX = ((float) 2 / 118) * initialX;
+                        if (initialX != ipe.roundabout$getIdleYOffset()) {
+                            ipe.roundabout$setIdleYOffset(initialX);
+                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
+                        }
+                        return true;
+                    }
+                    if (sliderHeld == 9) {
+                        int initialX = ((int) $$0) - jump;
+                        initialX = (int) (((float) 359 / 118) * initialX);
+                        if (initialX != ipe.roundabout$getAnchorPlaceAttack()) {
+                            ipe.roundabout$setAnchorPlaceAttack(initialX);
+                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                        }
+                        return true;
+                    }
+                }
+
+            }
+        }
+        return false;
+    }
     public boolean updateClicked(double $$0, double $$1, int $$2){
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
@@ -469,6 +573,7 @@ public class PowerInventoryScreen
                             ipe.roundabout$setAnchorPlace(initialX);
                             ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
                         }
+                        sliderHeld = 1;
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
@@ -478,6 +583,7 @@ public class PowerInventoryScreen
                             ipe.roundabout$setDistanceOut(initialX);
                             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
                         }
+                        sliderHeld = 2;
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 89, 118, 11, $$0, $$1)) {
@@ -488,6 +594,7 @@ public class PowerInventoryScreen
                             ConfigManager.getClientConfig().opacitySettings.opacityOfStand = initialX;
                             ConfigManager.saveClientConfig();
                         }
+                        sliderHeld = 3;
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
@@ -498,6 +605,7 @@ public class PowerInventoryScreen
                             ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = initialX;
                             ConfigManager.saveClientConfig();
                         }
+                        sliderHeld = 4;
                         return true;
                     }
                     if (isSurelyHovering(i - 136, j + 133, 118, 11, $$0, $$1)) {
@@ -508,6 +616,7 @@ public class PowerInventoryScreen
                             ConfigManager.getClientConfig().opacitySettings.opacityOfOthers =initialX;
                             ConfigManager.saveClientConfig();
                         }
+                        sliderHeld = 5;
                         return true;
                     }
                 } else if (pageNumber == 2) {
@@ -518,6 +627,7 @@ public class PowerInventoryScreen
                             ipe.roundabout$setSizePercent(initialX);
                             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_SIZE_PERCENT);
                         }
+                        sliderHeld = 6;
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
@@ -527,6 +637,7 @@ public class PowerInventoryScreen
                             ipe.roundabout$setIdleRotation(initialX);
                             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_ROTATION);
                         }
+                        sliderHeld = 7;
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 89, 118, 11, $$0, $$1)) {
@@ -536,6 +647,7 @@ public class PowerInventoryScreen
                             ipe.roundabout$setIdleYOffset(initialX);
                             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);
                         }
+                        sliderHeld = 8;
                         return true;
                     }
                     if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
@@ -545,6 +657,7 @@ public class PowerInventoryScreen
                             ipe.roundabout$setAnchorPlaceAttack(initialX);
                             ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
                         }
+                        sliderHeld = 9;
                         return true;
                     }
                 }
@@ -673,6 +786,7 @@ public class PowerInventoryScreen
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
+        sliderHeld = 0;
         if (this.buttonClicked) {
             this.buttonClicked = false;
             return true;
