@@ -2272,7 +2272,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (this.hasEffect(ModEffects.FACELESS)) {
             float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
-            cir.setReturnValue($$1*amt);
+            cir.setReturnValue($$1+($$1*amt));
         }
     }
     @Inject(method = "die", at = @At("HEAD"))

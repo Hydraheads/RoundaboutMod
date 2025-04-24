@@ -14,6 +14,6 @@ public class ModificationVisage extends NonCharacterVisage {
     }
     @Override
     public JojoNPC getModelNPC(Player pl){
-        return ModEntities.DIO.create(pl.level());
+        return ModEntities.MODIFIED_NPC.create(pl.level());
     }
 }
