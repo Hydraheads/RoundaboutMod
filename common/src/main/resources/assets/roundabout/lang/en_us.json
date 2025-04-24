@@ -772,7 +772,12 @@
   "roundabout.cinderella.gui.cost_levels": "Costs %1$s Levels",
   "roundabout.cinderella.gui.cost_emeralds": "Costs %1$s Emeralds",
   "roundabout.cinderella.gui.exit": "Exit",
+  "roundabout.cinderella.gui.save": "Save",
+  "roundabout.cinderella.gui.Reset": "Reset",
   "roundabout.cinderella.mod_visage_gui": "Modify",
+  "roundabout.cinderella.mod_visage_gui.height": "Height",
+  "roundabout.cinderella.mod_visage_gui.weight": "Weight",
+  "roundabout.cinderella.mod_visage_gui.head_size": "Head Size",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",

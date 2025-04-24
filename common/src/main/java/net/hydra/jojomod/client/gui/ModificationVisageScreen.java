@@ -42,6 +42,9 @@ public class ModificationVisageScreen extends Screen {
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/cinderella_gui.png");
+
+    public static final ResourceLocation POWER_INVENTORY_GEAR_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/stand_user_settings.png");
     private static final int SPRITE_SHEET_WIDTH = 256;
     private static final int SPRITE_SHEET_HEIGHT = 256;
     private static final int SLOT_AREA = 26;
@@ -122,6 +125,8 @@ public class ModificationVisageScreen extends Screen {
         }
         return list2;
     }
+
+    public int sliderHeld = 0;
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int $$2) {
 
@@ -129,10 +134,12 @@ public class ModificationVisageScreen extends Screen {
         //   return;
         //}
 
+
+        sliderHeld = 0;
         int k;
         int l;
 
-        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 10, mouseX, mouseY)) {
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 8, mouseX, mouseY)) {
             this.minecraft.setScreen(null);
             return true;
         }
@@ -167,6 +174,15 @@ public class ModificationVisageScreen extends Screen {
 
     protected int imageWidth = 176;
 
+    public int visageHeight = 237;
+    public int maxVisageHeight = 270;
+
+    public int visageWidth = 135;
+    public int maxVisageWidth = 270;
+
+    public int visageHeadSize = 135;
+    public int maxVisageHeadSize = 270;
+
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         renderBackground(guiGraphics);
@@ -174,11 +190,44 @@ public class ModificationVisageScreen extends Screen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 58;
-        int l = this.height / 2 - 31 - 80;
+        int l = this.height / 2 - 111;
         guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 113, 26, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, mouseX, mouseY, delta);
         guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
+
+
+
+        int i = this.width / 2 - 30;
+        int j = this.height / 2 - 70;
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.height").withStyle(ChatFormatting.GRAY), i +1, j - 9, 4210752, false);
+        guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j, 11, 173, 118, 11);
+        int renderSpot1 = (int) Math.floor(((double) 114 / maxVisageHeight) * (visageHeight));
+        if (isSurelyHovering(i, j, 118, 11, mouseX, mouseY) || sliderHeld == 1) {
+            guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot1, j, 5, 185, 5, 11);
+        } else {
+            guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot1, j, 5, 173, 5, 11);
+        }
+
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.weight").withStyle(ChatFormatting.GRAY), i+1, j + 13, 4210752, false);
+        guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 22, 11, 173, 118, 11);
+
+        int renderSpot2 =(int) Math.floor(((double) 114 / maxVisageWidth) * (visageWidth));
+        if (isSurelyHovering(i, j + 22, 118, 11, mouseX, mouseY) || sliderHeld == 2) {
+            guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot2, j + 22, 5, 185, 5, 11);
+        } else {
+            guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i+ renderSpot2, j + 22, 5, 173, 5, 11);
+        }
+
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.head_size").withStyle(ChatFormatting.GRAY), i +1, j + 35, 4210752, false);
+        guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 44, 11, 173, 118, 11);
+        int renderSpot3 = (int) Math.floor(((double) 114 / maxVisageHeadSize) * (visageHeadSize));
+        if (isSurelyHovering(i , j + 44, 118, 11, mouseX, mouseY) || sliderHeld == 3) {
+            guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot3, j + 44, 5, 185, 5, 11);
+        } else {
+            guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot3, j + 44, 5, 173, 5, 11);
+        }
+
 
 
         k = this.width / 2 - 75;
@@ -188,12 +237,19 @@ public class ModificationVisageScreen extends Screen {
 
 
         k = this.width / 2 - 110;
-        l = this.height / 2 - 1 - 74;
+        l = this.height / 2 - 75;
         guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 109.0f, 71, 107, 256, 256);
 
-        guiGraphics.drawCenteredString(this.font, ""+(page+1), this.width / 2, this.height / 2 + 30, -1);
 
-        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 10, mouseX, mouseY)) {
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.save").
+                            withStyle(ChatFormatting.GREEN),
+                    this.width / 2, this.height / 2 + 50, -1);
+        } else {
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit"),
+                    this.width / 2, this.height / 2 + 50, -1);
+        }
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 8, mouseX, mouseY)) {
             guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit").
                             withStyle(ChatFormatting.GREEN),
                     this.width / 2, this.height / 2 + 50, -1);
@@ -202,6 +258,14 @@ public class ModificationVisageScreen extends Screen {
                     this.width / 2, this.height / 2 + 50, -1);
         }
 
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 70, 8, mouseX, mouseY)) {
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.save").
+                            withStyle(ChatFormatting.GREEN),
+                    this.width / 2, this.height / 2 + 50, -1);
+        } else {
+            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit"),
+                    this.width / 2, this.height / 2 + 50, -1);
+        }
 
 
 
