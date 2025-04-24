@@ -778,6 +778,10 @@
   "roundabout.cinderella.mod_visage_gui.height": "Height",
   "roundabout.cinderella.mod_visage_gui.weight": "Weight",
   "roundabout.cinderella.mod_visage_gui.head_size": "Head Size",
+  "roundabout.cinderella.mod_visage_gui.chest_type": "Chest Type",
+  "roundabout.cinderella.mod_visage_gui.chest_type.one": "A",
+  "roundabout.cinderella.mod_visage_gui.chest_type.two": "B",
+  "roundabout.cinderella.mod_visage_gui.chest_type.three": "C",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
