@@ -70,7 +70,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
         return entity.level().getBrightness(LightLayer.BLOCK, pos);
     }
 
-    private void setModelProperties(T $$0) {
+    public void setModelProperties(T $$0) {
         PlayerLikeModel<T> $$1 = this.getModel();
         if ($$0.isSpectator()) {
             $$1.setAllVisible(false);

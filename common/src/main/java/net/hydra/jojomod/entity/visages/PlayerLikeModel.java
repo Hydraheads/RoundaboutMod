@@ -2,7 +2,9 @@ package net.hydra.jojomod.entity.visages;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.client.model.*;
@@ -428,6 +430,8 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
         this.rightSleeve.copyFrom(this.rightArm);
         this.jacket.copyFrom(this.body);
         this.hat.copyFrom(this.head);
+
+
     }
 
     private float quadraticArmUpdate(float $$0) {

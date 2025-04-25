@@ -1,26 +1,73 @@
 package net.hydra.jojomod.entity.visages.mobs;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import org.joml.Vector3f;
 
 public class PlayerModifiedModel<T extends JojoNPCPlayer> extends PlayerLikeModel<T> {
+    public ModelPart leftArmTrigger;
+    public ModelPart leftArmTrigger2;
+    public ModelPart rightArmTrigger;
+    public ModelPart rightArmTrigger2;
+    public ModelPart leftSleeveTrigger;
+    public ModelPart leftSleeveTrigger2;
+    public ModelPart rightSleeveTrigger;
+    public ModelPart rightSleeveTrigger2;
+    public ModelPart chestTrigger1;
+    public ModelPart chestTrigger2;
+    public ModelPart chestTrigger3;
     public PlayerModifiedModel(ModelPart root) {
         initParts(root);
     }
 
     @Override
+    public void initParts(ModelPart root){
+        super.initParts(root);
+        this.rightArmTrigger = this.rightArm.getChild("right_arm_one");
+        this.rightArmTrigger2 = this.rightArm.getChild("right_arm_two");
+        this.leftArmTrigger = this.leftArm.getChild("left_arm_one");
+        this.leftArmTrigger2 = this.leftArm.getChild("left_arm_two");
+
+        this.rightSleeveTrigger = this.rightSleeve.getChild("right_sleeve_one");
+        this.rightSleeveTrigger2 = this.rightSleeve.getChild("right_sleeve_two");
+        this.leftSleeveTrigger = this.leftSleeve.getChild("left_sleeve_one");
+        this.leftSleeveTrigger2 = this.leftSleeve.getChild("left_sleeve_two");
+
+        this.chestTrigger1 = this.body.getChild("chest");
+        this.chestTrigger2 = this.body.getChild("chest_two");
+        this.chestTrigger3 = this.jacket.getChild("chest_three");
+    }
+
+    @Override
     public boolean getSlim(){
+        if (host != null){
+            EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderer<? super AbstractClientPlayer> ER = $$7.getRenderer(host);
+            if (ER instanceof PlayerRenderer PR) {
+                return ((IPlayerModel)PR.getModel()).roundabout$getSlim();
+            }
+        }
         return true;
     }
 
     @Override
     public void defaultModifiers(T entity) {
         super.defaultModifiers(entity);
+
     }
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition meshdefinition = new MeshDefinition();
@@ -106,11 +153,63 @@ public class PlayerModifiedModel<T extends JojoNPCPlayer> extends PlayerLikeMode
     }
     StandPowers Power = new PowersStarPlatinum(null);
 
+    AbstractClientPlayer host = null;
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+
+        if (pEntity.host instanceof AbstractClientPlayer AP){
+            host = AP;
+        }
         this.root().getAllParts().forEach(ModelPart::resetPose);
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+
+        if (pEntity instanceof PlayerModifiedNPC pmn) {
+            float yeah = (float) (0.73F + (pmn.faceSize*0.002));
+            this.head.yScale *= yeah;
+            this.head.xScale *= yeah;
+            this.head.zScale *= yeah;
+            this.hat.yScale *= yeah;
+            this.hat.xScale *= yeah;
+            this.hat.zScale *= yeah;
+
+            if (getSlim()){
+                rightArmTrigger.visible = false;
+                leftArmTrigger.visible = false;
+                rightArmTrigger2.visible = true;
+                leftArmTrigger2.visible = true;
+
+                rightSleeveTrigger.visible = false;
+                leftSleeveTrigger.visible = false;
+                rightSleeveTrigger2.visible = true;
+                leftSleeveTrigger2.visible = true;
+            } else {
+                rightArmTrigger.visible = true;
+                leftArmTrigger.visible = true;
+                rightArmTrigger2.visible = false;
+                leftArmTrigger2.visible = false;
+
+                rightSleeveTrigger.visible = true;
+                leftSleeveTrigger.visible = true;
+                rightSleeveTrigger2.visible = false;
+                leftSleeveTrigger2.visible = false;
+            }
+
+            if (pmn.chestType == 0){
+                chestTrigger1.visible = false;
+                chestTrigger2.visible = false;
+                chestTrigger3.visible = false;
+            } else if (pmn.chestType == 1){
+                chestTrigger1.visible = false;
+                chestTrigger2.visible = true;
+                chestTrigger3.visible = true;
+            } else if (pmn.chestType == 2){
+                chestTrigger1.visible = true;
+                chestTrigger2.visible = false;
+                chestTrigger3.visible = false;
+            }
+        }
         defaultModifiers(pEntity);
+
     }
 
     @Override

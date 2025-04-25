@@ -437,6 +437,7 @@ public class ModificationVisageScreen extends Screen {
             $$6.height = visageHeight;
             $$6.width = visageWidth;
             $$6.faceSize = visageHeadSize;
+            $$6.chestType = chestType;
 
             float $$7 = (float) Math.atan((double) ($$4 / 40.0F));
             float $$8 = (float) Math.atan((double) ($$5 / 40.0F));
