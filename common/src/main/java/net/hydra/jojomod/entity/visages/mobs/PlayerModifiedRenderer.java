@@ -25,8 +25,8 @@ public class PlayerModifiedRenderer<T extends JojoNPC> extends PlayerLikeRendere
     }
     @Override
     public void render(JojoNPCPlayer mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        if (mobEntity.host instanceof AbstractClientPlayer AP) {
-            matrixStack.scale(0.9375f, 0.9375f, 0.9375f);
+        if (mobEntity.host instanceof AbstractClientPlayer AP && mobEntity instanceof PlayerModifiedNPC pmn) {
+            matrixStack.scale(0.798F + (((float) pmn.width)*0.001F), 0.7F+(((float) pmn.height)*0.001F), 0.798F+(((float) pmn.width)*0.001F));
             super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         }
     }

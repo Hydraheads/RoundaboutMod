@@ -428,12 +428,15 @@ public class ModificationVisageScreen extends Screen {
     }
 
 
-    public static void renderEntityInInventoryFollowsMouse(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, Player user) {
+    public void renderEntityInInventoryFollowsMouse(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, Player user) {
 
         Entity E = ModEntities.MODIFIED_NPC.create(user.level());
         if (E instanceof PlayerModifiedNPC $$6) {
             $$6.host = user;
             $$6.faker = user;
+            $$6.height = visageHeight;
+            $$6.width = visageWidth;
+            $$6.faceSize = visageHeadSize;
 
             float $$7 = (float) Math.atan((double) ($$4 / 40.0F));
             float $$8 = (float) Math.atan((double) ($$5 / 40.0F));
