@@ -387,23 +387,23 @@ public class ForgeItems {
     public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",
             () -> new LuckyLipstickItem(new Item.Properties())));
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
-            () -> new MaskItem(new Item.Properties(), new NonCharacterVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));
     public static final RegistryObject<Item> MODIFICATION_MASK = addToTab(ITEMS.register("modification_mask",
-            () -> new ModificationMaskItem(new Item.Properties(), new ModificationVisage(null))));
+            () -> new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null))));
     public static final RegistryObject<Item> JOTARO_MASK = addToTab(ITEMS.register("jotaro_mask",
-            () -> new MaskItem(new Item.Properties(), new JotaroVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",
-            () -> new MaskItem(new Item.Properties(), new DIOVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null))));
     public static final RegistryObject<Item> ENYA_MASK = addToTab(ITEMS.register("enya_mask",
-            () -> new MaskItem(new Item.Properties(), new EnyaVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null))));
     public static final RegistryObject<Item> AVDOL_MASK = addToTab(ITEMS.register("avdol_mask",
-            () -> new MaskItem(new Item.Properties(), new AvdolVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null))));
     public static final RegistryObject<Item> DIEGO_MASK = addToTab(ITEMS.register("diego_mask",
-            () -> new MaskItem(new Item.Properties(), new DiegoVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null))));
     public static final RegistryObject<Item> VALENTINE_MASK = addToTab(ITEMS.register("valentine_mask",
-            () -> new MaskItem(new Item.Properties(), new ValentineVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null))));
     public static final RegistryObject<Item> AYA_MASK = addToTab(ITEMS.register("aya_mask",
-            () -> new MaskItem(new Item.Properties(), new AyaVisage(null))));
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

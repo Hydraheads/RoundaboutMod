@@ -74,6 +74,8 @@ public class ModificationVisageScreen extends Screen {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
         visage = stack;
+
+        Roundabout.LOGGER.info(""+stack.getItem());
         if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem){
             if (stack.getOrCreateTagElement("modifications").contains("height")) {
                 visageHeight = stack.getOrCreateTagElement("modifications").getInt("height");
@@ -159,6 +161,7 @@ public class ModificationVisageScreen extends Screen {
 
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
 
+            Roundabout.LOGGER.info(""+this.visage.getItem());
             ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_MOD_VISAGE, this.visage, (byte)chestType,
                     new Vector3f(visageHeight,visageWidth,visageHeadSize));
             //SAVE

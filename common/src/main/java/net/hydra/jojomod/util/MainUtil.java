@@ -19,10 +19,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
-import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -174,15 +171,18 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
+        Roundabout.LOGGER.info(""+1);
         if (context == PacketDataIndex.ITEM_MOD_VISAGE) {
+            Roundabout.LOGGER.info(""+stack.getItem()+" uhhh"+(stack.getItem() instanceof ModificationMaskItem));
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
-            if (player.getInventory().contains(stack) || offh || stack.is(ModItems.MODIFICATION_MASK)) {
+            if (player.getInventory().contains(stack) || offh || stack.getItem() instanceof ModificationMaskItem) {
                 ItemStack item;
                 if (offh) {
                     item = player.getOffhandItem();
                 } else {
                     item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
                 }
+                Roundabout.LOGGER.info(""+4);
                 item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
                 item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
                 item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
