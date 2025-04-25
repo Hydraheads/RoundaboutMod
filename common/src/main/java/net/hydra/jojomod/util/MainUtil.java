@@ -171,18 +171,16 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
-        Roundabout.LOGGER.info(""+1);
         if (context == PacketDataIndex.ITEM_MOD_VISAGE) {
-            Roundabout.LOGGER.info(""+stack.getItem()+" uhhh"+(stack.getItem() instanceof ModificationMaskItem));
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
-            if (player.getInventory().contains(stack) || offh || stack.getItem() instanceof ModificationMaskItem) {
+            if (stack.getItem() instanceof ModificationMaskItem || player.getInventory().contains(stack) || offh) {
                 ItemStack item;
                 if (offh) {
                     item = player.getOffhandItem();
                 } else {
-                    item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+                    int yes = player.getInventory().findSlotMatchingItem(stack);
+                    item = player.getInventory().getItem(yes);
                 }
-                Roundabout.LOGGER.info(""+4);
                 item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
                 item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
                 item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
