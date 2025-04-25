@@ -2,12 +2,14 @@ package net.hydra.jojomod.entity.visages.mobs;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.client.HumanoidLikeArmorLayer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
 import net.hydra.jojomod.entity.visages.PlayerLikeRenderer;
+import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -15,6 +17,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
 public class PlayerModifiedRenderer<T extends JojoNPC> extends PlayerLikeRenderer<JojoNPCPlayer> {
@@ -30,6 +33,14 @@ public class PlayerModifiedRenderer<T extends JojoNPC> extends PlayerLikeRendere
     @Override
     public void render(JojoNPCPlayer mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if (mobEntity.host instanceof AbstractClientPlayer AP && mobEntity instanceof PlayerModifiedNPC pmn) {
+            ItemStack stack = ((IPlayerEntity)AP).roundabout$getMaskSlot();
+            if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem && !pmn.isDisplay){
+                pmn.height = stack.getOrCreateTagElement("modifications").getInt("height");
+                pmn.width = stack.getOrCreateTagElement("modifications").getInt("width");
+                pmn.faceSize = stack.getOrCreateTagElement("modifications").getInt("head");
+                pmn.chestType = stack.getOrCreateTagElement("modifications").getInt("chest");
+            }
+
             matrixStack.scale(0.798F + (((float) pmn.width)*0.001F), 0.7F+(((float) pmn.height)*0.001F), 0.798F+(((float) pmn.width)*0.001F));
             super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         }

@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.ChatFormatting;
@@ -34,6 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -72,6 +74,20 @@ public class ModificationVisageScreen extends Screen {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
         visage = stack;
+        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem){
+            if (stack.getOrCreateTagElement("modifications").contains("height")) {
+                visageHeight = stack.getOrCreateTagElement("modifications").getInt("height");
+            }
+            if (stack.getOrCreateTagElement("modifications").contains("width")) {
+                visageWidth = stack.getOrCreateTagElement("modifications").getInt("width");
+            }
+            if (stack.getOrCreateTagElement("modifications").contains("head")) {
+                visageHeadSize = stack.getOrCreateTagElement("modifications").getInt("head");
+            }
+            if (stack.getOrCreateTagElement("modifications").contains("chest")) {
+                chestType = stack.getOrCreateTagElement("modifications").getInt("chest");
+            }
+        }
     }
 
 
@@ -142,6 +158,10 @@ public class ModificationVisageScreen extends Screen {
         int l;
 
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
+
+            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_MOD_VISAGE, this.visage, (byte)chestType,
+                    new Vector3f(visageHeight,visageWidth,visageHeadSize));
+            //SAVE
             this.minecraft.setScreen(null);
             return true;
         }
@@ -438,6 +458,7 @@ public class ModificationVisageScreen extends Screen {
             $$6.width = visageWidth;
             $$6.faceSize = visageHeadSize;
             $$6.chestType = chestType;
+            $$6.isDisplay = true;
 
             float $$7 = (float) Math.atan((double) ($$4 / 40.0F));
             float $$8 = (float) Math.atan((double) ($$5 / 40.0F));

@@ -22,6 +22,7 @@ public class PacketDataIndex {
     public static final byte USE_CORPSE_BAG = 3;
     public static final byte ITEM_SWITCH_MAIN = 4;
     public static final byte ITEM_SWITCH_SECONDARY = 5;
+    public static final byte ITEM_MOD_VISAGE = 6;
 
     public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
     public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;

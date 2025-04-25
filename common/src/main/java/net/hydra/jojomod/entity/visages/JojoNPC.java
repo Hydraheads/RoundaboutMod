@@ -97,6 +97,8 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
 
     public Player host = null;
 
+    public boolean isDisplay = false;
+
     public Poses standPos = null;
     public final AnimationState WRYYY = new AnimationState();
     public final AnimationState GIORNO = new AnimationState();

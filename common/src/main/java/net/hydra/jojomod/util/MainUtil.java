@@ -174,8 +174,21 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
-        Roundabout.LOGGER.info("4");
-        if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
+        if (context == PacketDataIndex.ITEM_MOD_VISAGE) {
+            boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
+            if (player.getInventory().contains(stack) || offh || stack.is(ModItems.MODIFICATION_MASK)) {
+                ItemStack item;
+                if (offh) {
+                    item = player.getOffhandItem();
+                } else {
+                    item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem(stack)));
+                }
+                item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
+                item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
+                item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
+                item.getOrCreateTagElement("modifications").putInt("chest", context2);
+            }
+        } else if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
             if (player.getInventory().contains(stack) || offh || stack.is(ModItems.CREATIVE_BODY_BAG)) {
                 ItemStack item;

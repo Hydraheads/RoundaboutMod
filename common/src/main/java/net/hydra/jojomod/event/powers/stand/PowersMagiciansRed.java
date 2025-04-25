@@ -2856,7 +2856,7 @@ public class PowersMagiciansRed extends PunchingStand {
                                 && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)
                         ){
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                        } else if (dist > 7 && !this.onCooldown(PowerIndex.SKILL_2)) {
+                        } else if (dist > 7 && !this.onCooldown(PowerIndex.SKILL_2) && !isLockedByWater()) {
                             double RNG = Math.random();
                             if (RNG < 0.3){
                                 wentForCharge = true;
@@ -2873,7 +2873,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         if (targetEntity != null && targetEntity.is(attackTarget)) {
                             if (this.attackTimeDuring <= -1) {
                                 double RNG = Math.random();
-                                if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
+                                if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge && !isLockedByWater()){
                                     wentForCharge = true;
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
                                 } else if ((this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) &&
