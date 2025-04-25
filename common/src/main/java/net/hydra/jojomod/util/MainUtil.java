@@ -390,6 +390,12 @@ public class MainUtil {
 
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
         if (entity instanceof LivingEntity LE){
+            if (((LivingEntity)entity).hasEffect(ModEffects.FACELESS)){
+                MobEffectInstance mf = ((LivingEntity)entity).getEffect(ModEffects.FACELESS);
+                if (mf != null && mf.getAmplifier() <= power && mf.getDuration() > ticks){
+                    return;
+                }
+            }
             ((StandUser)entity).roundabout$setGlow((byte) 1);
             ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.FACELESS, ticks, power), user);
         }

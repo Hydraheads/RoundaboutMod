@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.GuiGraphics;
@@ -183,6 +185,87 @@ public class ModificationVisageScreen extends Screen {
     public int visageHeadSize = 135;
     public int maxVisageHeadSize = 270;
 
+    public boolean updateClickDragged(double $$0, double $$1, int $$2){
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            int i = this.width / 2 - 30;
+            int j = this.height / 2 - 70;
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            int jump = i - 136;
+            $$0 = Math.min($$0,jump+118);
+            $$0 = Math.max($$0,jump);
+            if (sliderHeld == 1) {
+                int initialX = (int) ($$0 - jump);
+                initialX = (int) (((float) 359 / 118) * initialX);
+                if (initialX != ipe.roundabout$getAnchorPlace()) {
+                    ipe.roundabout$setAnchorPlace(initialX);
+                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                }
+                return true;
+            }
+            if (sliderHeld == 2) {
+                float initialX = (float) ($$0 - jump);
+                initialX = ((float) 2 / 118) * initialX;
+                if (initialX != ipe.roundabout$getDistanceOut()) {
+                    ipe.roundabout$setDistanceOut(initialX);
+                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
+                }
+                return true;
+            }
+            if (sliderHeld == 3) {
+                float initialX = (float) ($$0 - jump);
+                initialX = ((float) 100 / 118) * initialX;
+                initialX = Mth.clamp(initialX, 0, 100);
+                if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityOfStand) {
+                    ConfigManager.getClientConfig().opacitySettings.opacityOfStand = initialX;
+                    ConfigManager.saveClientConfig();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateClicked(double $$0, double $$1, int $$2){
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            int i = this.width / 2 - 30;
+            int j = this.height / 2 - 70;
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            if (isSurelyHovering(i, j, 118, 11, $$0, $$1)) {
+                int initialX = (int) ($$0 - i);
+                initialX = (int) (((float) maxVisageHeight / 118) * initialX);
+                visageHeight = initialX;
+                sliderHeld = 1;
+                return true;
+            }
+            if (isSurelyHovering(i, j + 22, 118, 11, $$0, $$1)) {
+                int initialX = (int) ($$0 - i);
+                initialX = (int) (((float) maxVisageWidth / 118) * initialX);
+                visageWidth = initialX;
+                sliderHeld = 2;
+                return true;
+            }
+            if (isSurelyHovering(i, j + 44, 118, 11, $$0, $$1)) {
+                int initialX = (int) ($$0 - i);
+                initialX = (int) (((float) maxVisageHeadSize / 118) * initialX);
+                visageHeadSize = initialX;
+                sliderHeld = 3;
+                return true;
+            }
+        }
+        return false;
+    }
+    @Override
+    public boolean mouseClicked(double $$0, double $$1, int $$2) {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            if (updateClicked($$0, $$1, $$2)) {
+                return true;
+            }
+        }
+        return super.mouseClicked($$0, $$1, $$2);
+    }
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         renderBackground(guiGraphics);

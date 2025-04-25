@@ -484,7 +484,7 @@ public class PowersCinderella extends DashPreset {
                         } else if (bleedlevel == 0){
                             MainUtil.makeFaceless(entity, 250, 1, this.getSelf());
                             MainUtil.makeBleed(entity, 1, 250, this.getSelf());
-                        } else if (bleedlevel == 1){
+                        } else {
                             MainUtil.makeFaceless(entity, 300, 2, this.getSelf());
                             MainUtil.makeBleed(entity, 2, 300, this.getSelf());
                             MainUtil.makeMobBleed(entity);
