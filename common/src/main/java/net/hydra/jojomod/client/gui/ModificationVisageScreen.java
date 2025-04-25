@@ -141,8 +141,19 @@ public class ModificationVisageScreen extends Screen {
         int k;
         int l;
 
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
+            this.minecraft.setScreen(null);
+            return true;
+        }
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 55, 60, 8, mouseX, mouseY)) {
             this.minecraft.setScreen(null);
+            return true;
+        }
+        if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 70, 60, 8, mouseX, mouseY)) {
+            visageWidth = baseVisageWidth;
+            visageHeight = baseVisageHeight;
+            visageHeadSize = baseVisageHeadSize;
+            chestType = 0;
             return true;
         }
 
@@ -177,13 +188,25 @@ public class ModificationVisageScreen extends Screen {
     protected int imageWidth = 176;
 
     public int visageHeight = 237;
+    public int baseVisageHeight = 237;
     public int maxVisageHeight = 270;
 
     public int visageWidth = 135;
+    public int baseVisageWidth = 135;
     public int maxVisageWidth = 270;
 
     public int visageHeadSize = 135;
+    public int baseVisageHeadSize = 135;
     public int maxVisageHeadSize = 270;
+    public int chestType = 0;
+
+    @Override
+    public boolean mouseDragged(double $$0, double $$1, int $$2, double $$3, double $$4) {
+        if (updateClickDragged($$0,$$1,$$2)){
+            return true;
+        }
+        return super.mouseDragged($$0,$$1,$$2,$$3,$$4);
+    }
 
     public boolean updateClickDragged(double $$0, double $$1, int $$2){
         Player pl = Minecraft.getInstance().player;
@@ -191,35 +214,25 @@ public class ModificationVisageScreen extends Screen {
             int i = this.width / 2 - 30;
             int j = this.height / 2 - 70;
             IPlayerEntity ipe = ((IPlayerEntity) pl);
-            int jump = i - 136;
-            $$0 = Math.min($$0,jump+118);
-            $$0 = Math.max($$0,jump);
+            $$0 = Math.min($$0,i+118);
+            $$0 = Math.max($$0,i);
             if (sliderHeld == 1) {
-                int initialX = (int) ($$0 - jump);
-                initialX = (int) (((float) 359 / 118) * initialX);
-                if (initialX != ipe.roundabout$getAnchorPlace()) {
-                    ipe.roundabout$setAnchorPlace(initialX);
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
-                }
+                int initialX = (int) ($$0 - i);
+                initialX = (int) (((float) maxVisageHeight / 118) * initialX);
+                visageHeight = initialX;
                 return true;
             }
             if (sliderHeld == 2) {
-                float initialX = (float) ($$0 - jump);
-                initialX = ((float) 2 / 118) * initialX;
-                if (initialX != ipe.roundabout$getDistanceOut()) {
-                    ipe.roundabout$setDistanceOut(initialX);
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(initialX, PacketDataIndex.FLOAT_DISTANCE_OUT);
-                }
+                int initialX = (int) ($$0 - i);
+                initialX = (int) (((float) maxVisageWidth / 118) * initialX);
+                visageWidth = initialX;
                 return true;
             }
             if (sliderHeld == 3) {
-                float initialX = (float) ($$0 - jump);
-                initialX = ((float) 100 / 118) * initialX;
-                initialX = Mth.clamp(initialX, 0, 100);
-                if (initialX != ConfigManager.getClientConfig().opacitySettings.opacityOfStand) {
-                    ConfigManager.getClientConfig().opacitySettings.opacityOfStand = initialX;
-                    ConfigManager.saveClientConfig();
-                }
+                int initialX = (int) ($$0 - i);
+                initialX = (int) (((float) maxVisageHeadSize / 118) * initialX);
+                visageHeadSize = initialX;
+                sliderHeld = 3;
                 return true;
             }
         }
@@ -257,14 +270,30 @@ public class ModificationVisageScreen extends Screen {
         return false;
     }
     @Override
-    public boolean mouseClicked(double $$0, double $$1, int $$2) {
+    public boolean mouseClicked(double mouseX, double mouseY, int $$2) {
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
-            if (updateClicked($$0, $$1, $$2)) {
+            if (updateClicked(mouseX, mouseY, $$2)) {
                 return true;
             }
         }
-        return super.mouseClicked($$0, $$1, $$2);
+
+        int i = this.width / 2 - 30;
+        int j = this.height / 2 - 70;
+        if (isSurelyHovering( i, j+66, 17, 17, mouseX, mouseY)) {
+            chestType = 0;
+            return true;
+        }
+        if (isSurelyHovering( i+25,   j+66, 17, 17, mouseX, mouseY)) {
+            chestType = 1;
+            return true;
+        }
+        if (isSurelyHovering( i+50,   j+66, 17, 17, mouseX, mouseY)) {
+            chestType = 2;
+            return true;
+        }
+
+        return super.mouseClicked(mouseX, mouseY, $$2);
     }
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
@@ -312,27 +341,37 @@ public class ModificationVisageScreen extends Screen {
         }
 
         guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.chest_type").withStyle(ChatFormatting.GRAY), i +1, j + 57, 4210752, false);
-        if (isSurelyHovering( i,   j+66, 17, 17, mouseX, mouseY)) {
-            //144
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i, j+66, 178, 74, 17, 17, 256, 256);
+
+        if (chestType == 0){
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i, j + 66, 144, 74, 17, 17, 256, 256);
         } else {
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i,  j+66, 161, 74, 17, 17, 256, 256);
+            if (isSurelyHovering(i, j + 66, 17, 17, mouseX, mouseY)) {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i, j + 66, 178, 74, 17, 17, 256, 256);
+            } else {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i, j + 66, 161, 74, 17, 17, 256, 256);
+            }
         }
         guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.chest_type.one").withStyle(ChatFormatting.BOLD), i+5, j + 71, 4210752, false);
 
-        if (isSurelyHovering( i+25,   j+66, 17, 17, mouseX, mouseY)) {
-            //144
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i+25, j+66, 178, 74, 17, 17, 256, 256);
+        if (chestType == 1) {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 25, j + 66, 144, 74, 17, 17, 256, 256);
         } else {
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i+25,  j+66, 161, 74, 17, 17, 256, 256);
+            if (isSurelyHovering(i + 25, j + 66, 17, 17, mouseX, mouseY)) {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 25, j + 66, 178, 74, 17, 17, 256, 256);
+            } else {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 25, j + 66, 161, 74, 17, 17, 256, 256);
+            }
         }
         guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.chest_type.two").withStyle(ChatFormatting.BOLD), i+30, j + 71, 4210752, false);
 
-        if (isSurelyHovering( i+50,   j+66, 17, 17, mouseX, mouseY)) {
-            //144
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i+50, j+66, 178, 74, 17, 17, 256, 256);
+        if (chestType == 2) {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 50, j + 66, 144, 74, 17, 17, 256, 256);
         } else {
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i+50,  j+66, 161, 74, 17, 17, 256, 256);
+            if (isSurelyHovering(i + 50, j + 66, 17, 17, mouseX, mouseY)) {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 50, j + 66, 178, 74, 17, 17, 256, 256);
+            } else {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 50, j + 66, 161, 74, 17, 17, 256, 256);
+            }
         }
         guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.chest_type.three").withStyle(ChatFormatting.BOLD), i+55, j + 71, 4210752, false);
 
