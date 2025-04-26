@@ -326,8 +326,8 @@ public class MainUtil {
                         IPE.roundabout$setStandLevel(lvl);
 
                         if ($$4.contains("Experience")) {
-                            int exp = (byte) ($$4.getInt("Experience"));
-                            exp = (byte) Mth.clamp(exp, 0, SD.standPowers.getExpForLevelUp(lvl));
+                            int exp = ($$4.getInt("Experience"));
+                            exp = Mth.clamp(exp, 0, SD.standPowers.getExpForLevelUp(lvl));
                             IPE.roundabout$setStandExp(exp);
                         } else {
                             IPE.roundabout$setStandExp(0);

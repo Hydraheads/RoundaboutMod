@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.datafixers.util.Either;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
@@ -488,6 +490,24 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*modifier) * 20.0D));
         }
     }
+
+    @Inject(method = "die", at = @At(value = "HEAD"))
+    public void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+        if (roundabout$getVoiceData() != null){
+            roundabout$getVoiceData().playIfDying($$0);
+        }
+    }
+    @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "TAIL"))
+    public void roundabout$actuallyHurt2(DamageSource $$0, float $$1, CallbackInfo ci) {
+        if (!this.isInvulnerableTo($$0)) {
+            if (!this.isDeadOrDying()) {
+                if (roundabout$getVoiceData() != null){
+                    roundabout$getVoiceData().playIfHurt($$0);
+                }
+            }
+        }
+    }
+
     /**Block Breaking Speed Decreases when your hand is stone*/
     @Unique
     private boolean roundabout$destroySpeedRecursion = false;
@@ -510,7 +530,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cir.setReturnValue(dSpeed);
         }
     }
-
 
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
@@ -971,6 +990,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty()) {
             if (((TimeStop) ((Player) (Object) this).level()).CanTimeStopEntity(((Player) (Object) this))) {
                 ci.cancel();
+                return;
             } else if ((((TimeStop) ((Player) (Object) this).level()).isTimeStoppingEntity(((Player) (Object) this)))) {
                 ((StandUser) this).roundabout$setIdleTime(-1);
                 roundabout$airTime = 0;
@@ -980,6 +1000,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 } else {
                     roundabout$airTime += 1;
                 }
+            }
+        }
+
+        if (!this.isDeadOrDying()) {
+            if (roundabout$getVoiceData() != null){
+                roundabout$getVoiceData().playOnTick();
             }
         }
 
@@ -1005,10 +1031,17 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         ((StandUser) this).roundabout$getStandPowers().tickPowerEnd();
     }
 
+    @Unique
+    public VoiceData roundabout$voiceData;
     @Override
     @Unique
-    public final int roundabout$getKnifeCount() {
-        return this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
+    public VoiceData roundabout$getVoiceData() {
+        return roundabout$voiceData;
+    }
+    @Override
+    @Unique
+    public void roundabout$setVoiceData(VoiceData vd) {
+        roundabout$voiceData = vd;
     }
     @Override
     @Unique
@@ -1055,7 +1088,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Override
     @Unique
+    public final int roundabout$getKnifeCount() {
+        return this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
+    }
+    @Override
+    @Unique
     public void roundabout$setMaskVoiceSlot(ItemStack stack) {
+        if (!this.level().isClientSide()) {
+            if (stack != null && !stack.isEmpty() && stack.getItem() instanceof MaskItem mi) {
+                roundabout$setVoiceData(mi.visageData.voiceData());
+            } else {
+                roundabout$setVoiceData(null);
+            }
+        }
         ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$MASK_VOICE_SLOT, stack);
     }
 

@@ -467,6 +467,8 @@
 
   "sounds.roundabout.levelup": "Development Level Up!",
 
+  "sounds.roundabout.dio_hoho":  "Hoho!",
+
   "instruction.roundabout.press_attack": "Click Attack",
   "instruction.roundabout.hold_attack": "Hold Attack",
   "instruction.roundabout.hold_attack_crouch": "Hold Attack While Crouching",

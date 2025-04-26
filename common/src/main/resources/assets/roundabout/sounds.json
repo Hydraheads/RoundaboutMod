@@ -23,6 +23,12 @@
       "roundabout:sign_hit"
     ]
   },
+  "dio_hoho": {
+    "subtitle": "sounds.roundabout.dio_hoho",
+    "sounds": [
+      "roundabout:dio_hoho"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [

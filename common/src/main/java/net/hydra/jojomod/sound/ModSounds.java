@@ -594,11 +594,18 @@ public class ModSounds {
     public static final ResourceLocation ITEM_CATCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ITEM_CATCH);
     public static SoundEvent ITEM_CATCH_EVENT = SoundEvent.createVariableRangeEvent(ITEM_CATCH_ID);
 
-
-
     public static final String BALL_BEARING_SHOT = "ball_bearing_shot";
     public static final ResourceLocation BALL_BEARING_SHOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BALL_BEARING_SHOT);
     public static SoundEvent BALL_BEARING_SHOT_EVENT = SoundEvent.createVariableRangeEvent(BALL_BEARING_SHOT_ID);
+
+
+
+
+    public static final String DIO_HOHO = "dio_hoho";
+    public static final ResourceLocation DIO_HOHO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HOHO);
+    public static SoundEvent DIO_HOHO_EVENT = SoundEvent.createVariableRangeEvent(DIO_HOHO_ID);
+
+
 
     public static final String TORTURE_DANCE = "torture_dance";
     public static final ResourceLocation TORTURE_DANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TORTURE_DANCE);

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Mob;
@@ -34,6 +35,8 @@ public interface IPlayerEntity {
     void roundabout$addKnife();
     void roundabout$setKnife(byte knives);
     int roundabout$getKnifeCount();
+    VoiceData roundabout$getVoiceData();
+    void roundabout$setVoiceData(VoiceData vd);
     ItemStack roundabout$getMaskSlot();
     ItemStack roundabout$getMaskVoiceSlot();
     void roundabout$setMaskSlot(ItemStack stack);
