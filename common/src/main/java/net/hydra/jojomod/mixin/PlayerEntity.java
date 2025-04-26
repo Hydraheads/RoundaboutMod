@@ -1137,6 +1137,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     }
 
+    @Inject(method = "killedEntity", at=@At("HEAD"))
+    private void roundabout$killedEntity(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir)
+    {
+        if (roundabout$getVoiceData() != null){
+            roundabout$getVoiceData().playIfKilled($$1);
+        }
+    }
     @Shadow
     public HumanoidArm getMainArm() {
         return null;

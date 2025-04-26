@@ -29,6 +29,12 @@
       "roundabout:dio_hoho"
     ]
   },
+  "dio_kurei": {
+    "subtitle": "sounds.roundabout.dio_kurei",
+    "sounds": [
+      "roundabout:dio_kurei"
+    ]
+  },
   "dio_death": {
     "subtitle": "sounds.roundabout.dio_death",
     "sounds": [

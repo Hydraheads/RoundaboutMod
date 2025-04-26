@@ -9,5 +9,6 @@ public class DIOVoice extends VoiceData{
         super(self);
         addVoiceLine(new VoiceLine(26, ModSounds.DIO_HOHO_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
         addVoiceLine(new VoiceLine(76, ModSounds.DIO_DEATH_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
+        addVoiceLine(new VoiceLine(16, ModSounds.DIO_KUREI_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
     }
 }

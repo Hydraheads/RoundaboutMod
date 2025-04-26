@@ -207,6 +207,7 @@ public class FabricSounds {
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_DEATH_ID, ModSounds.DIO_DEATH_EVENT);
+        addSound(ModSounds.DIO_KUREI_ID, ModSounds.DIO_KUREI_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
