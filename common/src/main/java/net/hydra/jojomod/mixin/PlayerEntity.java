@@ -491,12 +491,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
-    @Inject(method = "die", at = @At(value = "HEAD"))
-    public void roundabout$die(DamageSource $$0, CallbackInfo ci) {
-        if (roundabout$getVoiceData() != null){
-            roundabout$getVoiceData().playIfDying($$0);
-        }
-    }
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "TAIL"))
     public void roundabout$actuallyHurt2(DamageSource $$0, float $$1, CallbackInfo ci) {
         if (!this.isInvulnerableTo($$0)) {

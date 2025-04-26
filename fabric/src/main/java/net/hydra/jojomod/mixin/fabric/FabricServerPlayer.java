@@ -1,11 +1,13 @@
 package net.hydra.jojomod.mixin.fabric;
 
 import com.mojang.authlib.GameProfile;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayer.class)
@@ -23,6 +26,12 @@ public abstract class FabricServerPlayer extends Player {
         super(level, blockPos, f, gameProfile);
     }
 
+    @Inject(method = "die", at = @At(value = "HEAD"))
+    public void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+        if ((((IPlayerEntity)this).roundabout$getVoiceData()) != null){
+            ((IPlayerEntity)this).roundabout$getVoiceData().playIfDying($$0);
+        }
+    }
     @Inject(method = "changeDimension", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$changeDim(ServerLevel $$0, CallbackInfoReturnable<Boolean> ci) {
         if (((Entity)(Object)this) instanceof LivingEntity LE){

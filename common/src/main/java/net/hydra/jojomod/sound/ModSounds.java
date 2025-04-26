@@ -605,6 +605,10 @@ public class ModSounds {
     public static final ResourceLocation DIO_HOHO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HOHO);
     public static SoundEvent DIO_HOHO_EVENT = SoundEvent.createVariableRangeEvent(DIO_HOHO_ID);
 
+    public static final String DIO_DEATH = "dio_death";
+    public static final ResourceLocation DIO_DEATH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_DEATH);
+    public static SoundEvent DIO_DEATH_EVENT = SoundEvent.createVariableRangeEvent(DIO_DEATH_ID);
+
 
 
     public static final String TORTURE_DANCE = "torture_dance";

@@ -16,7 +16,7 @@ public class VoiceData {
     public final Player self;
 
     public int talkingTicks = -1;
-    public int timeSinceLastIdle = -1;
+    public int idleCooldown = -1;
     public List<VoiceLine> tickLines = new ArrayList<>();
     public List<VoiceLine> hurtLines = new ArrayList<>();
     public List<VoiceLine> deathLines = new ArrayList<>();
@@ -44,18 +44,26 @@ public class VoiceData {
 
     public void playSound(SoundEvent se, int ticksLasting){
         talkingTicks = ticksLasting;
+        idleCooldown = ticksLasting+600;
         this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
+    }
+    public void playSound2(SoundEvent se, int ticksLasting){
+        talkingTicks = ticksLasting;
+        this.self.level().playSound(null, this.self.getX(),this.self.getY(),this.self.getZ(), se, this.self.getSoundSource(), 2F, 1F);
     }
 
     public void playOnTick(){
         if (inTheMiddleOfTalking()){
             talkingTicks--;
         }
+        if (idleCooldown > -1){
+            idleCooldown --;
+        }
 
         if (!inTheMiddleOfTalking()){
             safeInit();
             overrideTick();
-            if (!tickLines.isEmpty()) {
+            if (!tickLines.isEmpty() && idleCooldown <= -1) {
                 VoiceLine vl = getRandomElement(tickLines);
                 if (vl != null){
                     playSound(vl.soundEvent,vl.lengthInTicks);
@@ -75,14 +83,28 @@ public class VoiceData {
     }
     public void playIfHurt(DamageSource $$0){
         if (!inTheMiddleOfTalking()){
+            safeInit();
             overrideHurt();
+            if (!hurtLines.isEmpty()) {
+                VoiceLine vl = getRandomElement(hurtLines);
+                if (vl != null){
+                    playSound(vl.soundEvent,vl.lengthInTicks);
+                }
+            }
         }
     }
     public void overrideHurt(){
     }
     public void playIfDying(DamageSource $$0){
         if (!inTheMiddleOfTalking()){
+            safeInit();
             overrideDying();
+            if (!deathLines.isEmpty()) {
+                VoiceLine vl = getRandomElement(deathLines);
+                if (vl != null){
+                    playSound2(vl.soundEvent,vl.lengthInTicks);
+                }
+            }
         }
     }
     public void overrideDying(){

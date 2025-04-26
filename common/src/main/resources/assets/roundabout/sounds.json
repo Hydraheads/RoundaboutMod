@@ -29,6 +29,12 @@
       "roundabout:dio_hoho"
     ]
   },
+  "dio_death": {
+    "subtitle": "sounds.roundabout.dio_death",
+    "sounds": [
+      "roundabout:dio_death"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [

@@ -351,6 +351,8 @@ public class ForgeSounds {
             register(ModSounds.BALL_BEARING_SHOT, ModSounds.BALL_BEARING_SHOT_ID);
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
+    public static final RegistryObject<SoundEvent> DIO_DEATH =
+            register(ModSounds.DIO_DEATH, ModSounds.DIO_DEATH_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =
