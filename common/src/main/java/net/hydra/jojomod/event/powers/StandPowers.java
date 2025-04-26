@@ -9,6 +9,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -1334,12 +1336,10 @@ public class StandPowers {
 
             float halfReach = (float) (getReach()*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
-            Roundabout.LOGGER.info("1");
             List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), getReach());
             if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().barrageDeflectsArrrows) {
                 for (int i = 0; i < arrows.size(); i++) {
-                    Roundabout.LOGGER.info("2");
                     deflectArrowsAndBullets(arrows.get(i));
                 }
             }
@@ -2136,7 +2136,7 @@ public class StandPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if (!(value instanceof Arrow)){
+            if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
                 hitEntities.remove(value);
             } else if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
                 hitEntities.remove(value);
