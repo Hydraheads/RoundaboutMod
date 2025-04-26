@@ -525,21 +525,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 }
             }
 
-            Roundabout.LOGGER.info("sanity check");
             if ($$0.getEntity() instanceof LivingEntity livent){
-                Roundabout.LOGGER.info("wha");
                 ShapeShifts shift = ShapeShifts.getShiftFromByte(this.roundabout$getShapeShift());
                 if (shift != ShapeShifts.PLAYER) {
-                    Roundabout.LOGGER.info("f");
                     if (ShapeShifts.isVillager(shift)) {
                         AABB aab = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
                         List<? extends LivingEntity> le = this.level().getNearbyEntities(IronGolem.class, roundabout$attackTargeting, ((LivingEntity)(Object)this), aab);
                         Iterator var4 = le.iterator();
-                        Roundabout.LOGGER.info("l");
                         while(var4.hasNext()) {
                             LivingEntity nle = (LivingEntity)var4.next();
                             IronGolem golem = (IronGolem) nle;
-                            Roundabout.LOGGER.info("RIP BOZO");
                             golem.setTarget(livent);
                             golem.setLastHurtMob(livent);
                             golem.setLastHurtByMob(livent);
