@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
+import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -73,7 +74,11 @@ public class StoneLayerLike<T extends JojoNPC, M extends PlayerLikeModel<T>> ext
                 } else if (curse == LocacacaCurseIndex.CHEST) {
                     rl = StandIcons.STONE_CHEST_JOJO;
                 } else if (curse == LocacacaCurseIndex.HEAD) {
-                    rl = StandIcons.STONE_HEAD_JOJO;
+                    if (var4 instanceof JosukePartEightNPC){
+                        rl = StandIcons.STONE_HEAD_JOSUKE;
+                    } else {
+                        rl = StandIcons.STONE_HEAD_JOJO;
+                    }
                 } else if (curse == LocacacaCurseIndex.HEART) {
                     rl = StandIcons.STONE_HEART_JOJO;
                 }

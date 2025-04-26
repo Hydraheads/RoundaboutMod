@@ -13,6 +13,8 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -260,7 +262,14 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 if (this.minecraft.options.getCameraType().isFirstPerson()) {
                     if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
-                        this.renderTextureOverlay(context, StandIcons.STONE_HEAD_OVERLAY, 1F);
+                        if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
+                                !((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().isEmpty() &&
+                                ((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+                        ME.visageData instanceof JosukePartEightVisage){
+                            this.renderTextureOverlay(context, StandIcons.STONE_HEAD_OVERLAY_JOSUKE, 1F);
+                        } else {
+                            this.renderTextureOverlay(context, StandIcons.STONE_HEAD_OVERLAY, 1F);
+                        }
                     }
                 }
             }

@@ -28,8 +28,12 @@ public class StandIcons {
             "textures/entity/other_layers/faceless.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/stone_face.png");
+    public static final ResourceLocation STONE_HEAD_OVERLAY_JOSUKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/stone_face_josuke.png");
     public static final ResourceLocation STONE_HEAD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/locacaca_layers/head.png");
+    public static final ResourceLocation STONE_HEAD_JOSUKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/locacaca_layers/head_josuke.png");
     public static final ResourceLocation STONE_CHEST = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/locacaca_layers/chest.png");
     public static final ResourceLocation STONE_HEART = new ResourceLocation(Roundabout.MOD_ID,
