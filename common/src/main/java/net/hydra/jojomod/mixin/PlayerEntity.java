@@ -1096,7 +1096,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setMaskVoiceSlot(ItemStack stack) {
         if (!this.level().isClientSide()) {
             if (stack != null && !stack.isEmpty() && stack.getItem() instanceof MaskItem mi) {
-                roundabout$setVoiceData(mi.visageData.voiceData());
+                ItemStack stack2 = roundabout$getMaskVoiceSlot();
+                if (!(stack2.equals(stack))) {
+                    roundabout$setVoiceData(mi.visageData.voiceData(((Player) (Object) this)));
+                }
             } else {
                 roundabout$setVoiceData(null);
             }

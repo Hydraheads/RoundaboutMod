@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.VoiceLine;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.sounds.SoundEvent;
@@ -24,7 +25,7 @@ public class VoiceData {
     }
 
     public boolean inTheMiddleOfTalking(){
-        return talkingTicks <= -1;
+        return this.talkingTicks > -1;
     }
 
     public void safeInit(){
@@ -42,9 +43,8 @@ public class VoiceData {
     }
 
     public void playSound(SoundEvent se, int ticksLasting){
-        this.talkingTicks = ticksLasting;
-        this.self.level().playSound(null, this.self.getX(), this.self.getY(),
-                this.self.getZ(), se, this.self.getSoundSource(), 1F, 1F);
+        talkingTicks = ticksLasting;
+        this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
     }
 
     public void playOnTick(){

@@ -32,8 +32,8 @@ public class VisageData {
         return true;
     }
 
-    public VoiceData voiceData(){
-        return new VoiceData(self);
+    public VoiceData voiceData(Player realSelf){
+        return new VoiceData(realSelf);
     }
 
 }

@@ -27,7 +27,7 @@ public class DIOVisage extends VisageData {
         return 0.54f;
     }
     @Override
-    public VoiceData voiceData(){
-        return new DIOVoice(self);
+    public VoiceData voiceData(Player slef){
+        return new DIOVoice(slef);
     }
 }
