@@ -72,6 +72,36 @@ public abstract class HudRendering implements IHudAccess {
     /** The stand move HUD renders with the hotbar so that it may exist in all gamemodes.*/
     @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
     private void roundabout$renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
+
+
+        if (this.minecraft.player != null) {
+            boolean renderGasOverlay = ConfigManager.getClientConfig().renderGasSplatterOverlay;
+            if (renderGasOverlay) {
+                int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
+                if (overlay > 0) {
+                    int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
+                    float overlay2 = 0;
+                    if (overlay <= 40) {
+                        overlay2 = 0.5F - ((float) (40 - overlay) / 40) * 0.5F;
+                    } else {
+                        overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
+                    }
+                    this.renderTextureOverlay($$1, StandIcons.GASOLINE_OVERLAY, overlay2);
+                }
+            }
+            if (this.minecraft.options.getCameraType().isFirstPerson()) {
+                if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
+                    if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
+                            !((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().isEmpty() &&
+                            ((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+                            ME.visageData instanceof JosukePartEightVisage){
+                        this.renderTextureOverlay($$1, StandIcons.STONE_HEAD_OVERLAY_JOSUKE, 1F);
+                    } else {
+                        this.renderTextureOverlay($$1, StandIcons.STONE_HEAD_OVERLAY, 1F);
+                    }
+                }
+            }
+        }
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
     }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
@@ -243,37 +273,6 @@ public abstract class HudRendering implements IHudAccess {
     @Unique
     private boolean roundabout$RenderBars(GuiGraphics context, int x){
         if (minecraft.player != null && minecraft.level != null) {
-
-
-            if (this.minecraft.player != null) {
-                boolean renderGasOverlay = ConfigManager.getClientConfig().renderGasSplatterOverlay;
-                if (renderGasOverlay) {
-                    int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
-                    if (overlay > 0) {
-                        int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
-                        float overlay2 = 0;
-                        if (overlay <= 40) {
-                            overlay2 = 0.5F - ((float) (40 - overlay) / 40) * 0.5F;
-                        } else {
-                            overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
-                        }
-                        this.renderTextureOverlay(context, StandIcons.GASOLINE_OVERLAY, overlay2);
-                    }
-                }
-                if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                    if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
-                        if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
-                                !((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().isEmpty() &&
-                                ((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
-                        ME.visageData instanceof JosukePartEightVisage){
-                            this.renderTextureOverlay(context, StandIcons.STONE_HEAD_OVERLAY_JOSUKE, 1F);
-                        } else {
-                            this.renderTextureOverlay(context, StandIcons.STONE_HEAD_OVERLAY, 1F);
-                        }
-                    }
-                }
-            }
-
 
 
 
