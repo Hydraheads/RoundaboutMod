@@ -48,7 +48,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag = stack.isEmpty() ? null : stack.getTagElement("StandDisc");
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
-                player.giveExperienceLevels(ClientNetworking.getAppropriateConfig().levelsToRerollStand);
+                player.giveExperienceLevels(-ClientNetworking.getAppropriateConfig().levelsToRerollStand);
             }
         }
         if (context == PacketDataIndex.ITEM_SWITCH_MAIN){
@@ -70,7 +70,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
                         if (ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv1.isEmpty()) {
                              if (!$$1.isCreative()) {
-                             $$1.giveExperienceLevels(reroll);
+                             $$1.giveExperienceLevels(-reroll);
                              }
                              rollStand($$0, $$1, $$3,true);
                              return InteractionResultHolder.consume($$3);
