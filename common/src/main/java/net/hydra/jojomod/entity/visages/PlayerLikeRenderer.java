@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.entity.client.HumanoidLikeArmorLayer;
 import net.hydra.jojomod.entity.client.HumanoidLikeArmorModel;
+import net.hydra.jojomod.entity.client.StoneLayer;
+import net.hydra.jojomod.entity.client.StoneLayerLike;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -13,6 +15,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.*;
 import net.minecraft.core.BlockPos;
@@ -39,6 +42,7 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
         this.addLayer(new PlayerLikeParrotOnShoulderLayer<>(this, context.getModelSet()));
         this.addLayer(new PlayerLikeSpinAttackLayer<>(this, context.getModelSet()));
         this.addLayer(new PlayerLikeBeeStingLayer<>(this));
+        this.addLayer(new StoneLayerLike<>(context, this));
     }
 
 

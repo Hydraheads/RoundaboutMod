@@ -49,12 +49,12 @@ public class ModEntities {
     public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
-    public static EntityType<AvdolNPC> AVDOL;
-    public static EntityType<ValentineNPC> VALENTINE;
 
     public static EntityType<DIONPC> DIO;
-
+    public static EntityType<AvdolNPC> AVDOL;
+    public static EntityType<ValentineNPC> VALENTINE;
     public static EntityType<ParallelDiegoNPC> PARALLEL_DIEGO;
+    public static EntityType<JosukePartEightNPC> JOSUKE_PART_EIGHT;
     public static EntityType<AyaNPC> AYA;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;

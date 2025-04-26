@@ -83,6 +83,13 @@ public class FabricEntities {
                         EntityType.Builder.of(ParallelDiegoNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_parallel_diego")
                 );
+        public static final EntityType<JosukePartEightNPC> JOSUKE_PART_EIGHT =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_josuke_part_eight"),
+                        EntityType.Builder.of(JosukePartEightNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_josuke_part_eight")
+                );
         public static final EntityType<AyaNPC> AYA =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -361,6 +368,7 @@ public class FabricEntities {
                 ModEntities.VALENTINE = VALENTINE;
                 ModEntities.DIO = DIO;
                 ModEntities.PARALLEL_DIEGO = PARALLEL_DIEGO;
+                ModEntities.JOSUKE_PART_EIGHT = JOSUKE_PART_EIGHT;
                 ModEntities.AYA = AYA;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
@@ -378,6 +386,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(VALENTINE, ValentineNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(DIO, DIONPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(PARALLEL_DIEGO, ParallelDiegoNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(JOSUKE_PART_EIGHT, JosukePartEightNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AYA, AyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());

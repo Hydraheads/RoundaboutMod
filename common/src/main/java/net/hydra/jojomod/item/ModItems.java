@@ -75,6 +75,7 @@ public class ModItems {
     public static Item AVDOL_MASK;
     public static Item DIEGO_MASK;
     public static Item VALENTINE_MASK;
+    public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item AYA_MASK;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
@@ -110,6 +111,7 @@ public class ModItems {
         addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIEGO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(VALENTINE_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOSUKE_PART_EIGHT_MASK,1, characterCostExp, characterCostEmerald);
     }
     public static void addToVisageStore(Item item, int page, int costL, int costE){
         VISAGE_STORE_ENTRIES.add(new VisageStoreEntry(item.getDefaultInstance(), page, costL, costE));

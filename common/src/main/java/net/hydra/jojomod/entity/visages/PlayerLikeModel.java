@@ -154,7 +154,9 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
                 this.rightArm.yRot = this.head.yRot - (float) (Math.PI / 6);
         }
     }
-
+    public Iterable<ModelPart> bodyParts() {
+        return ImmutableList.of(this.body, this.rightArm, this.leftArm, this.rightLeg, this.leftLeg, this.hat);
+    }
     protected void setupAttackAnimation(T $$0, float $$1) {
         if (!(this.attackTime <= 0.0F)) {
             HumanoidArm $$2 = this.getAttackArm($$0);

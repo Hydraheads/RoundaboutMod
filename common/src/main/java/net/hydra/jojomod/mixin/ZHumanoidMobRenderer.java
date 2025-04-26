@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.client.FacelessLayer;
-import net.hydra.jojomod.entity.client.StoneLayer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;

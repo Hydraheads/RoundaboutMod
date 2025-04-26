@@ -111,6 +111,10 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     public final AnimationState JOTARO = new AnimationState();
     public final AnimationState JONATHAN = new AnimationState();
 
+    public boolean isSimple(){
+        return false;
+    }
+
     public void setupAnimationStates() {
         if (standPos == Poses.JONATHAN) {
             this.JONATHAN.startIfStopped(this.tickCount);

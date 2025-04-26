@@ -7,6 +7,8 @@ import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.entity.visages.PlayerLikeRenderer;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.HumanoidModel;
@@ -17,6 +19,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.layers.StuckInBodyLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -43,6 +46,8 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
         this.livingEntityRenderer = livingEntityRenderer;
         this.transformedModel = livingEntityRenderer.getModel();
     }
+
+
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {

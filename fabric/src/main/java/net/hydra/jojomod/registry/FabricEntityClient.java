@@ -67,6 +67,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.VALENTINE, ValentineRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIO, DIORenderer::new);
         EntityRendererRegistry.register(FabricEntities.PARALLEL_DIEGO, DiegoRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.JOSUKE_PART_EIGHT, JosukePartEightRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AYA, AyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
@@ -99,6 +100,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.OVA_ENYA_LAYER, OVAEnyaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.JOTARO_LAYER, JotaroModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.JOSUKE_PART_EIGHT_LAYER, JosukePartEightModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIO_LAYER, DIOModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIEGO_LAYER, DiegoModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ENYA_LAYER, EnyaModel::getTexturedModelData);

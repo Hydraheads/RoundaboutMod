@@ -96,6 +96,7 @@ public class FabricItems {
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
+    public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
     public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
@@ -242,6 +243,7 @@ public class FabricItems {
                         entries.accept(AVDOL_MASK);
                         entries.accept(DIEGO_MASK);
                         entries.accept(VALENTINE_MASK);
+                        entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(AYA_MASK);
 
                     }).build());
@@ -398,6 +400,7 @@ public class FabricItems {
         ModItems.AVDOL_MASK = AVDOL_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
+        ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.AYA_MASK = AYA_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
