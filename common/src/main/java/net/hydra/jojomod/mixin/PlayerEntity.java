@@ -35,9 +35,12 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -46,6 +49,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -57,6 +61,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 @Mixin(Player.class)
@@ -510,6 +516,39 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
         if (!this.isInvulnerableTo($$0)) {
 
+
+            if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
+                    && !$$0.is(DamageTypes.THORNS)){
+                if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
+                    ci.cancel();
+                    return;
+                }
+            }
+
+            Roundabout.LOGGER.info("sanity check");
+            if ($$0.getEntity() instanceof LivingEntity livent){
+                Roundabout.LOGGER.info("wha");
+                ShapeShifts shift = ShapeShifts.getShiftFromByte(this.roundabout$getShapeShift());
+                if (shift != ShapeShifts.PLAYER) {
+                    Roundabout.LOGGER.info("f");
+                    if (ShapeShifts.isVillager(shift)) {
+                        AABB aab = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+                        List<? extends LivingEntity> le = this.level().getNearbyEntities(IronGolem.class, roundabout$attackTargeting, ((LivingEntity)(Object)this), aab);
+                        Iterator var4 = le.iterator();
+                        Roundabout.LOGGER.info("l");
+                        while(var4.hasNext()) {
+                            LivingEntity nle = (LivingEntity)var4.next();
+                            IronGolem golem = (IronGolem) nle;
+                            Roundabout.LOGGER.info("RIP BOZO");
+                            golem.setTarget(livent);
+                            golem.setLastHurtMob(livent);
+                            golem.setLastHurtByMob(livent);
+                        }
+                    }
+                }
+            }
+
+
             Entity bound = ((StandUser)this).roundabout$getBoundTo();
             if (bound != null && !$$0.isIndirect() && !$$0.is(ModDamageTypes.STAND_FIRE)){
                 ((StandUser)this).roundabout$dropString();
@@ -517,6 +556,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+    private final TargetingConditions roundabout$attackTargeting = TargetingConditions.forCombat().range(64.0);
     @Unique
     public Poses roundabout$standPos = null;
     @Unique
