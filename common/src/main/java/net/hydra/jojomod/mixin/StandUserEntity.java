@@ -2596,7 +2596,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                     damageMultipliers.standFireOnPlayers * 0.01))*0.8F;
                         } else {
                             fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
-                                    damageMultipliers.standFireOnMobs * 0.01));
+                                    damageMultipliers.standFireOnMobs * 0.01))*0.8F;
                         }
                         this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
                     }
