@@ -107,7 +107,9 @@ public class ZScreenShaking implements IGameRenderer {
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
-                this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                if (!(clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
+                    this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                }
             } else {
                 this.postEffect = null;
             }
