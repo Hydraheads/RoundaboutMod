@@ -286,6 +286,13 @@ public abstract class EntityAndData implements IEntityAndData {
             this.remainingFireTicks = 0;
         }
     }
+    @Inject(method = "isControlledByLocalInstance", at = @At("HEAD"), cancellable = true)
+    protected void roundabout$IsControlledByLocalInstance(CallbackInfoReturnable<Boolean> cir){
+        Entity entity = ((Entity)(Object) this);
+        if (entity instanceof LivingEntity LE && ((TimeStop)entity.level()).CanTimeStopEntity(entity)){
+            cir.setReturnValue(this.isEffectiveAi());
+        }
+    }
 
     @Shadow
     public boolean isShiftKeyDown() {
@@ -394,6 +401,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow @Deprecated public abstract BlockPos getOnPosLegacy();
 
     @Shadow public abstract float getBbHeight();
+
+    @Shadow public abstract boolean isEffectiveAi();
 
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
