@@ -4,6 +4,7 @@ package net.hydra.jojomod.client;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.Config;
 import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.Networking;
 
 public class ClientNetworking {
     private static boolean isConnectedToDedicated = false;
@@ -11,7 +12,7 @@ public class ClientNetworking {
     private static boolean refreshScreen = false;
 
     public static Config getAppropriateConfig(){
-        if (isConnectedToDedicated){
+        if (isConnectedToDedicated || Networking.isDedicated()){
             return Config.getServerInstance();
         }
         return Config.getLocalInstance();
