@@ -468,12 +468,17 @@
   "sounds.roundabout.levelup": "Development Level Up!",
 
   "sounds.roundabout.dio_hoho":  "Hoho!",
+  "sounds.roundabout.dio_hoho_2":  "Ho!",
   "sounds.roundabout.dio_death":  "I am DIO!",
+  "sounds.roundabout.dio_death_2":  "DIO killed",
   "sounds.roundabout.dio_kurei":  "DIO shouting",
   "sounds.roundabout.dio_hurt_1":  "DIO hurt",
   "sounds.roundabout.dio_hurt_2":  "DIO hurt",
   "sounds.roundabout.dio_hurt_3":  "DIO hurt",
   "sounds.roundabout.dio_hurt_4":  "DIO hurt",
+  "sounds.roundabout.dio_laugh":  "DIO laugh",
+  "sounds.roundabout.dio_suberashi":  "Wonderful",
+  "sounds.roundabout.dio_approaching_me":  "Approaching me?",
 
   "instruction.roundabout.press_attack": "Click Attack",
   "instruction.roundabout.hold_attack": "Hold Attack",

@@ -29,6 +29,12 @@
       "roundabout:dio_hoho"
     ]
   },
+  "dio_hoho_2": {
+    "subtitle": "sounds.roundabout.dio_hoho_2",
+    "sounds": [
+      "roundabout:dio_hoho_2"
+    ]
+  },
   "dio_kurei": {
     "subtitle": "sounds.roundabout.dio_kurei",
     "sounds": [
@@ -63,6 +69,30 @@
     "subtitle": "sounds.roundabout.dio_death",
     "sounds": [
       "roundabout:dio_death"
+    ]
+  },
+  "dio_death_2": {
+    "subtitle": "sounds.roundabout.dio_death_2",
+    "sounds": [
+      "roundabout:dio_death_2"
+    ]
+  },
+  "dio_approaching_me": {
+    "subtitle": "sounds.roundabout.dio_approaching_me",
+    "sounds": [
+      "roundabout:dio_approaching_me"
+    ]
+  },
+  "dio_laugh": {
+    "subtitle": "sounds.roundabout.dio_laugh",
+    "sounds": [
+      "roundabout:dio_laugh"
+    ]
+  },
+  "dio_suberashi": {
+    "subtitle": "sounds.roundabout.dio_suberashi",
+    "sounds": [
+      "roundabout:dio_suberashi"
     ]
   },
   "fire_whoosh": {

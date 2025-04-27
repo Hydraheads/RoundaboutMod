@@ -8,7 +8,11 @@ public class DIOVoice extends VoiceData{
     public DIOVoice(Player self) {
         super(self);
         addVoiceLine(new VoiceLine(26, ModSounds.DIO_HOHO_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
+        addVoiceLine(new VoiceLine(18, ModSounds.DIO_HOHO_2_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
+        addVoiceLine(new VoiceLine(40, ModSounds.DIO_LAUGH_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
+        addVoiceLine(new VoiceLine(28, ModSounds.DIO_SUBERASHI_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
         addVoiceLine(new VoiceLine(76, ModSounds.DIO_DEATH_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
+        addVoiceLine(new VoiceLine(40, ModSounds.DIO_DEATH_2_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
         addVoiceLine(new VoiceLine(16, ModSounds.DIO_KUREI_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
         addVoiceLine(new VoiceLine(8, ModSounds.DIO_HURT_1_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
         addVoiceLine(new VoiceLine(7, ModSounds.DIO_HURT_2_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));

@@ -608,6 +608,26 @@ public class ModSounds {
     public static final String DIO_DEATH = "dio_death";
     public static final ResourceLocation DIO_DEATH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_DEATH);
     public static SoundEvent DIO_DEATH_EVENT = SoundEvent.createVariableRangeEvent(DIO_DEATH_ID);
+    public static final String DIO_HOHO_2 = "dio_hoho_2";
+    public static final ResourceLocation DIO_HOHO_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HOHO_2);
+    public static SoundEvent DIO_HOHO_2_EVENT = SoundEvent.createVariableRangeEvent(DIO_HOHO_2_ID);
+
+    public static final String DIO_DEATH_2 = "dio_death_2";
+    public static final ResourceLocation DIO_DEATH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_DEATH_2);
+    public static SoundEvent DIO_DEATH_2_EVENT = SoundEvent.createVariableRangeEvent(DIO_DEATH_2_ID);
+
+    public static final String DIO_SUBERASHI = "dio_suberashi";
+    public static final ResourceLocation DIO_SUBERASHI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_SUBERASHI);
+    public static SoundEvent DIO_SUBERASHI_EVENT = SoundEvent.createVariableRangeEvent(DIO_SUBERASHI_ID);
+
+    public static final String DIO_LAUGH = "dio_laugh";
+    public static final ResourceLocation DIO_LAUGH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_LAUGH);
+    public static SoundEvent DIO_LAUGH_EVENT = SoundEvent.createVariableRangeEvent(DIO_LAUGH_ID);
+
+    public static final String DIO_APPROACHING_ME = "dio_approaching_me";
+    public static final ResourceLocation DIO_APPROACHING_ME_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_APPROACHING_ME);
+    public static SoundEvent DIO_APPROACHING_ME_EVENT = SoundEvent.createVariableRangeEvent(DIO_APPROACHING_ME_ID);
+
 
     public static final String DIO_KUREI = "dio_kurei";
     public static final ResourceLocation DIO_KUREI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_KUREI);

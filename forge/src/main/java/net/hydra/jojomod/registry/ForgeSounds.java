@@ -353,6 +353,10 @@ public class ForgeSounds {
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
     public static final RegistryObject<SoundEvent> DIO_DEATH =
             register(ModSounds.DIO_DEATH, ModSounds.DIO_DEATH_ID);
+    public static final RegistryObject<SoundEvent> DIO_HOHO_2 =
+            register(ModSounds.DIO_HOHO_2, ModSounds.DIO_HOHO_2_ID);
+    public static final RegistryObject<SoundEvent> DIO_DEATH_2 =
+            register(ModSounds.DIO_DEATH_2, ModSounds.DIO_DEATH_2_ID);
     public static final RegistryObject<SoundEvent> DIO_KUREI =
             register(ModSounds.DIO_KUREI, ModSounds.DIO_KUREI_ID);
     public static final RegistryObject<SoundEvent> DIO_HURT_1 =
@@ -363,6 +367,12 @@ public class ForgeSounds {
             register(ModSounds.DIO_HURT_3, ModSounds.DIO_HURT_3_ID);
     public static final RegistryObject<SoundEvent> DIO_HURT_4 =
             register(ModSounds.DIO_HURT_4, ModSounds.DIO_HURT_4_ID);
+    public static final RegistryObject<SoundEvent> DIO_LAUGH =
+            register(ModSounds.DIO_LAUGH, ModSounds.DIO_LAUGH_ID);
+    public static final RegistryObject<SoundEvent> DIO_SUBERASHI =
+            register(ModSounds.DIO_SUBERASHI, ModSounds.DIO_SUBERASHI_ID);
+    public static final RegistryObject<SoundEvent> DIO_APPROACHING_ME =
+            register(ModSounds.DIO_APPROACHING_ME, ModSounds.DIO_APPROACHING_ME_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =
