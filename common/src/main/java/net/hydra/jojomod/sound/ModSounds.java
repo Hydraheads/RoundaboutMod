@@ -650,6 +650,33 @@ public class ModSounds {
     public static SoundEvent DIO_HURT_4_EVENT = SoundEvent.createVariableRangeEvent(DIO_HURT_4_ID);
 
 
+    public static final String DIO_WRY = "dio_wry";
+    public static final ResourceLocation DIO_WRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_WRY);
+    public static SoundEvent DIO_WRY_EVENT = SoundEvent.createVariableRangeEvent(DIO_WRY_ID);
+
+    public static final String DIO_SHINE = "dio_shine";
+    public static final ResourceLocation DIO_SHINE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_SHINE);
+    public static SoundEvent DIO_SHINE_EVENT = SoundEvent.createVariableRangeEvent(DIO_SHINE_ID);
+    public static final String DIO_CHECKMATE = "dio_checkmate";
+    public static final ResourceLocation DIO_CHECKMATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_CHECKMATE);
+    public static SoundEvent DIO_CHECKMATE_EVENT = SoundEvent.createVariableRangeEvent(DIO_CHECKMATE_ID);
+    public static final String DIO_NANI = "dio_nani";
+    public static final ResourceLocation DIO_NANI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_NANI);
+    public static SoundEvent DIO_NANI_EVENT = SoundEvent.createVariableRangeEvent(DIO_NANI_ID);
+    public static final String DIO_KONO_DIO = "dio_kono_dio";
+    public static final ResourceLocation DIO_KONO_DIO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_KONO_DIO);
+    public static SoundEvent DIO_KONO_DIO_EVENT = SoundEvent.createVariableRangeEvent(DIO_KONO_DIO_ID);
+    public static final String DIO_NO_WAY = "dio_no_way";
+    public static final ResourceLocation DIO_NO_WAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_NO_WAY);
+    public static SoundEvent DIO_NO_WAY_EVENT = SoundEvent.createVariableRangeEvent(DIO_NO_WAY_ID);
+    public static final String DIO_ATTACK = "dio_attack";
+    public static final ResourceLocation DIO_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_ATTACK);
+    public static SoundEvent DIO_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(DIO_ATTACK_ID);
+    public static final String DIO_ATTACK_2 = "dio_attack_2";
+    public static final ResourceLocation DIO_ATTACK_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_ATTACK_2);
+    public static SoundEvent DIO_ATTACK_2_EVENT = SoundEvent.createVariableRangeEvent(DIO_ATTACK_2_ID);
+
+
 
     public static final String TORTURE_DANCE = "torture_dance";
     public static final ResourceLocation TORTURE_DANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TORTURE_DANCE);

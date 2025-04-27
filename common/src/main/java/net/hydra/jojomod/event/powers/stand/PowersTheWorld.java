@@ -102,6 +102,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     true);
         }
     }
+
+    @Override
+    public void playImpaleConnectSoundExtra(){
+        if (!this.self.level().isClientSide()) {
+            if (this.self instanceof Player pe && ((IPlayerEntity) pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+                DV.playSoundIfPossible(ModSounds.DIO_SHINE_EVENT,22,1,2);
+            }
+        }
+    }
     @Override
     public void playBarrageCrySound(){
         if (!this.self.level().isClientSide()) {

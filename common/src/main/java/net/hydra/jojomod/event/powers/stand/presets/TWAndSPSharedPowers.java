@@ -568,6 +568,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         SoundEvent SE;
         float pitch = 1F;
             if (entity != null) {
+                playImpaleConnectSoundExtra();
                 SE = getImpaleSound();
                 pitch = 1.2F;
             } else {
@@ -577,6 +578,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
+    }
+    public void playImpaleConnectSoundExtra(){
+
     }
 
     public SoundEvent getImpaleSound(){

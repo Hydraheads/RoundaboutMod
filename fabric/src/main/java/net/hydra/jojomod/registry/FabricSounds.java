@@ -217,6 +217,14 @@ public class FabricSounds {
         addSound(ModSounds.DIO_SUBERASHI_ID, ModSounds.DIO_SUBERASHI_EVENT);
         addSound(ModSounds.DIO_LAUGH_ID, ModSounds.DIO_LAUGH_EVENT);
         addSound(ModSounds.DIO_APPROACHING_ME_ID, ModSounds.DIO_APPROACHING_ME_EVENT);
+        addSound(ModSounds.DIO_WRY_ID, ModSounds.DIO_WRY_EVENT);
+        addSound(ModSounds.DIO_SHINE_ID, ModSounds.DIO_SHINE_EVENT);
+        addSound(ModSounds.DIO_CHECKMATE_ID, ModSounds.DIO_CHECKMATE_EVENT);
+        addSound(ModSounds.DIO_NANI_ID, ModSounds.DIO_NANI_EVENT);
+        addSound(ModSounds.DIO_KONO_DIO_ID, ModSounds.DIO_KONO_DIO_EVENT);
+        addSound(ModSounds.DIO_NO_WAY_ID, ModSounds.DIO_NO_WAY_EVENT);
+        addSound(ModSounds.DIO_ATTACK_ID, ModSounds.DIO_ATTACK_EVENT);
+        addSound(ModSounds.DIO_ATTACK_2_ID, ModSounds.DIO_ATTACK_2_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);

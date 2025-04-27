@@ -1144,6 +1144,17 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$getVoiceData().playIfKilled($$1);
         }
     }
+    @Inject(method = "attack", at=@At("HEAD"))
+    private void roundabout$attack(Entity $$0, CallbackInfo ci)
+    {
+        if (roundabout$getVoiceData() != null){
+            if ($$0.isAttackable()) {
+                if (!$$0.skipAttackInteraction(this)) {
+                    roundabout$getVoiceData().playIfAttacking($$0);
+                }
+            }
+        }
+    }
     @Shadow
     public HumanoidArm getMainArm() {
         return null;

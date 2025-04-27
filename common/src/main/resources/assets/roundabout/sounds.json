@@ -95,6 +95,54 @@
       "roundabout:dio_suberashi"
     ]
   },
+  "dio_wry": {
+    "subtitle": "sounds.roundabout.dio_wry",
+    "sounds": [
+      "roundabout:dio_wry"
+    ]
+  },
+  "dio_shine": {
+    "subtitle": "sounds.roundabout.dio_shine",
+    "sounds": [
+      "roundabout:dio_shine"
+    ]
+  },
+  "dio_checkmate": {
+    "subtitle": "sounds.roundabout.dio_checkmate",
+    "sounds": [
+      "roundabout:dio_checkmate"
+    ]
+  },
+  "dio_nani": {
+    "subtitle": "sounds.roundabout.dio_nani",
+    "sounds": [
+      "roundabout:dio_nani"
+    ]
+  },
+  "dio_kono_dio": {
+    "subtitle": "sounds.roundabout.dio_kono_dio",
+    "sounds": [
+      "roundabout:dio_kono_dio"
+    ]
+  },
+  "dio_no_way": {
+    "subtitle": "sounds.roundabout.dio_no_way",
+    "sounds": [
+      "roundabout:dio_no_way"
+    ]
+  },
+  "dio_attack": {
+    "subtitle": "sounds.roundabout.dio_attack",
+    "sounds": [
+      "roundabout:dio_attack"
+    ]
+  },
+  "dio_attack_2": {
+    "subtitle": "sounds.roundabout.dio_attack_2",
+    "sounds": [
+      "roundabout:dio_attack_2"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [

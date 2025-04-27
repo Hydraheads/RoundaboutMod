@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.VoiceLine;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -21,10 +22,12 @@ public class VoiceData {
     public int idleCooldown = -1;
     public int killCooldown = -1;
     public int hurtCooldown = -1;
+    public int attackCooldown = -1;
     public List<VoiceLine> tickLines = new ArrayList<>();
     public List<VoiceLine> hurtLines = new ArrayList<>();
     public List<VoiceLine> deathLines = new ArrayList<>();
     public List<VoiceLine> killLines = new ArrayList<>();
+    public List<VoiceLine> attackLines = new ArrayList<>();
     public VoiceData(Player self) {
         this.self = self;
     }
@@ -38,6 +41,7 @@ public class VoiceData {
         if (hurtLines == null) {hurtLines = new ArrayList<>();}
         if (deathLines == null) {deathLines = new ArrayList<>();}
         if (killLines == null) {killLines = new ArrayList<>();}
+        if (attackLines == null) {attackLines = new ArrayList<>();}
     }
     public void addVoiceLine(VoiceLine vl){
         safeInit();
@@ -46,6 +50,7 @@ public class VoiceData {
             case HURT -> hurtLines.add(vl);
             case DEATH -> deathLines.add(vl);
             case KILL -> killLines.add(vl);
+            case ATTACK -> attackLines.add(vl);
         }
     }
     public void forceTalkingTicks(int ticksLasting){
@@ -60,7 +65,7 @@ public class VoiceData {
     }
     public void playSound(SoundEvent se, int ticksLasting){
         talkingTicks = ticksLasting;
-        idleCooldown = ticksLasting+600;
+        idleCooldown = ticksLasting+6000;
         this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
     }
     public void playSound2(SoundEvent se, int ticksLasting){
@@ -70,6 +75,11 @@ public class VoiceData {
     public void playSoundKill(SoundEvent se, int ticksLasting){
         talkingTicks = ticksLasting;
         killCooldown = ticksLasting+600;
+        this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
+    }
+    public void playSoundAttack(SoundEvent se, int ticksLasting){
+        talkingTicks = ticksLasting;
+        attackCooldown = ticksLasting+600;
         this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
     }
     public void playSoundHurt(SoundEvent se, int ticksLasting){
@@ -90,6 +100,9 @@ public class VoiceData {
         }
         if (hurtCooldown > -1){
             hurtCooldown --;
+        }
+        if (attackCooldown > -1){
+            attackCooldown --;
         }
 
         if (!inTheMiddleOfTalking()){
@@ -154,5 +167,19 @@ public class VoiceData {
         }
     }
     public void overrideKilling(LivingEntity victim){
+    }
+    public void playIfAttacking(Entity victim){
+        if (!inTheMiddleOfTalking()){
+            safeInit();
+            overrideAttacking(victim);
+            if (!attackLines.isEmpty() && attackCooldown <= -1) {
+                VoiceLine vl = getRandomElement(attackLines);
+                if (vl != null){
+                    playSoundAttack(vl.soundEvent,vl.lengthInTicks);
+                }
+            }
+        }
+    }
+    public void overrideAttacking(Entity victim){
     }
 }

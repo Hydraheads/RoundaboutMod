@@ -373,6 +373,22 @@ public class ForgeSounds {
             register(ModSounds.DIO_SUBERASHI, ModSounds.DIO_SUBERASHI_ID);
     public static final RegistryObject<SoundEvent> DIO_APPROACHING_ME =
             register(ModSounds.DIO_APPROACHING_ME, ModSounds.DIO_APPROACHING_ME_ID);
+    public static final RegistryObject<SoundEvent> DIO_WRY =
+            register(ModSounds.DIO_WRY, ModSounds.DIO_WRY_ID);
+    public static final RegistryObject<SoundEvent> DIO_SHINE =
+            register(ModSounds.DIO_SHINE, ModSounds.DIO_SHINE_ID);
+    public static final RegistryObject<SoundEvent> DIO_CHECKMATE =
+            register(ModSounds.DIO_CHECKMATE, ModSounds.DIO_CHECKMATE_ID);
+    public static final RegistryObject<SoundEvent> DIO_NANI =
+            register(ModSounds.DIO_NANI, ModSounds.DIO_NANI_ID);
+    public static final RegistryObject<SoundEvent> DIO_KONO_DIO =
+            register(ModSounds.DIO_KONO_DIO, ModSounds.DIO_KONO_DIO_ID);
+    public static final RegistryObject<SoundEvent> DIO_NO_WAY =
+            register(ModSounds.DIO_NO_WAY, ModSounds.DIO_NO_WAY_ID);
+    public static final RegistryObject<SoundEvent> DIO_ATTACK =
+            register(ModSounds.DIO_ATTACK, ModSounds.DIO_ATTACK_ID);
+    public static final RegistryObject<SoundEvent> DIO_ATTACK_2 =
+            register(ModSounds.DIO_ATTACK_2, ModSounds.DIO_ATTACK_2_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =
