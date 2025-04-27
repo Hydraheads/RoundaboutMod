@@ -355,6 +355,14 @@ public class ForgeSounds {
             register(ModSounds.DIO_DEATH, ModSounds.DIO_DEATH_ID);
     public static final RegistryObject<SoundEvent> DIO_KUREI =
             register(ModSounds.DIO_KUREI, ModSounds.DIO_KUREI_ID);
+    public static final RegistryObject<SoundEvent> DIO_HURT_1 =
+            register(ModSounds.DIO_HURT_1, ModSounds.DIO_HURT_1_ID);
+    public static final RegistryObject<SoundEvent> DIO_HURT_2 =
+            register(ModSounds.DIO_HURT_2, ModSounds.DIO_HURT_2_ID);
+    public static final RegistryObject<SoundEvent> DIO_HURT_3 =
+            register(ModSounds.DIO_HURT_3, ModSounds.DIO_HURT_3_ID);
+    public static final RegistryObject<SoundEvent> DIO_HURT_4 =
+            register(ModSounds.DIO_HURT_4, ModSounds.DIO_HURT_4_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =

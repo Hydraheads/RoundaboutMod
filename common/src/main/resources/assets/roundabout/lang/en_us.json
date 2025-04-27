@@ -470,6 +470,10 @@
   "sounds.roundabout.dio_hoho":  "Hoho!",
   "sounds.roundabout.dio_death":  "I am DIO!",
   "sounds.roundabout.dio_kurei":  "DIO shouting",
+  "sounds.roundabout.dio_hurt_1":  "DIO hurt",
+  "sounds.roundabout.dio_hurt_2":  "DIO hurt",
+  "sounds.roundabout.dio_hurt_3":  "DIO hurt",
+  "sounds.roundabout.dio_hurt_4":  "DIO hurt",
 
   "instruction.roundabout.press_attack": "Click Attack",
   "instruction.roundabout.hold_attack": "Hold Attack",

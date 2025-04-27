@@ -35,6 +35,30 @@
       "roundabout:dio_kurei"
     ]
   },
+  "dio_hurt_1": {
+    "subtitle": "sounds.roundabout.dio_hurt_1",
+    "sounds": [
+      "roundabout:dio_hurt_1"
+    ]
+  },
+  "dio_hurt_2": {
+    "subtitle": "sounds.roundabout.dio_hurt_2",
+    "sounds": [
+      "roundabout:dio_hurt_2"
+    ]
+  },
+  "dio_hurt_3": {
+    "subtitle": "sounds.roundabout.dio_hurt_3",
+    "sounds": [
+      "roundabout:dio_hurt_3"
+    ]
+  },
+  "dio_hurt_4": {
+    "subtitle": "sounds.roundabout.dio_hurt_4",
+    "sounds": [
+      "roundabout:dio_hurt_4"
+    ]
+  },
   "dio_death": {
     "subtitle": "sounds.roundabout.dio_death",
     "sounds": [

@@ -613,6 +613,22 @@ public class ModSounds {
     public static final ResourceLocation DIO_KUREI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_KUREI);
     public static SoundEvent DIO_KUREI_EVENT = SoundEvent.createVariableRangeEvent(DIO_KUREI_ID);
 
+    public static final String DIO_HURT_1 = "dio_hurt_1";
+    public static final ResourceLocation DIO_HURT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HURT_1);
+    public static SoundEvent DIO_HURT_1_EVENT = SoundEvent.createVariableRangeEvent(DIO_HURT_1_ID);
+
+    public static final String DIO_HURT_2 = "dio_hurt_2";
+    public static final ResourceLocation DIO_HURT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HURT_2);
+    public static SoundEvent DIO_HURT_2_EVENT = SoundEvent.createVariableRangeEvent(DIO_HURT_2_ID);
+
+    public static final String DIO_HURT_3 = "dio_hurt_3";
+    public static final ResourceLocation DIO_HURT_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HURT_3);
+    public static SoundEvent DIO_HURT_3_EVENT = SoundEvent.createVariableRangeEvent(DIO_HURT_3_ID);
+
+    public static final String DIO_HURT_4 = "dio_hurt_4";
+    public static final ResourceLocation DIO_HURT_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HURT_4);
+    public static SoundEvent DIO_HURT_4_EVENT = SoundEvent.createVariableRangeEvent(DIO_HURT_4_ID);
+
 
 
     public static final String TORTURE_DANCE = "torture_dance";

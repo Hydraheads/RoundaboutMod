@@ -19,6 +19,7 @@ public class VoiceData {
     public int talkingTicks = -1;
     public int idleCooldown = -1;
     public int killCooldown = -1;
+    public int hurtCooldown = -1;
     public List<VoiceLine> tickLines = new ArrayList<>();
     public List<VoiceLine> hurtLines = new ArrayList<>();
     public List<VoiceLine> deathLines = new ArrayList<>();
@@ -61,6 +62,11 @@ public class VoiceData {
         killCooldown = ticksLasting+600;
         this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
     }
+    public void playSoundHurt(SoundEvent se, int ticksLasting){
+        talkingTicks = ticksLasting;
+        hurtCooldown = ticksLasting+100;
+        this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
+    }
 
     public void playOnTick(){
         if (inTheMiddleOfTalking()){
@@ -69,8 +75,11 @@ public class VoiceData {
         if (idleCooldown > -1){
             idleCooldown --;
         }
-        if (idleCooldown > -1){
+        if (killCooldown > -1){
             killCooldown --;
+        }
+        if (hurtCooldown > -1){
+            hurtCooldown --;
         }
 
         if (!inTheMiddleOfTalking()){
@@ -98,10 +107,10 @@ public class VoiceData {
         if (!inTheMiddleOfTalking()){
             safeInit();
             overrideHurt($$0);
-            if (!hurtLines.isEmpty()) {
+            if (!hurtLines.isEmpty() && hurtCooldown <= -1) {
                 VoiceLine vl = getRandomElement(hurtLines);
                 if (vl != null){
-                    playSound(vl.soundEvent,vl.lengthInTicks);
+                    playSoundHurt(vl.soundEvent,vl.lengthInTicks);
                 }
             }
         }
