@@ -143,6 +143,48 @@
       "roundabout:dio_attack_2"
     ]
   },
+  "dio_the_world": {
+    "subtitle": "sounds.roundabout.dio_the_world",
+    "sounds": [
+      "roundabout:dio_the_world"
+    ]
+  },
+  "dio_the_world_2": {
+    "subtitle": "sounds.roundabout.dio_the_world_2",
+    "sounds": [
+      "roundabout:dio_the_world_2"
+    ]
+  },
+  "dio_the_world_3": {
+    "subtitle": "sounds.roundabout.dio_the_world_3",
+    "sounds": [
+      "roundabout:dio_the_world_3"
+    ]
+  },
+  "dio_the_world_4": {
+    "subtitle": "sounds.roundabout.dio_the_world_4",
+    "sounds": [
+      "roundabout:dio_the_world_4"
+    ]
+  },
+  "dio_interesting": {
+    "subtitle": "sounds.roundabout.dio_interesting",
+    "sounds": [
+      "roundabout:dio_interesting"
+    ]
+  },
+  "dio_taunt": {
+    "subtitle": "sounds.roundabout.dio_taunt",
+    "sounds": [
+      "roundabout:dio_taunt"
+    ]
+  },
+  "dio_jotaro": {
+    "subtitle": "sounds.roundabout.dio_jotaro",
+    "sounds": [
+      "roundabout:dio_jotaro"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [

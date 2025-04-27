@@ -23,11 +23,13 @@ public class VoiceData {
     public int killCooldown = -1;
     public int hurtCooldown = -1;
     public int attackCooldown = -1;
+    public int summonCooldown = -1;
     public List<VoiceLine> tickLines = new ArrayList<>();
     public List<VoiceLine> hurtLines = new ArrayList<>();
     public List<VoiceLine> deathLines = new ArrayList<>();
     public List<VoiceLine> killLines = new ArrayList<>();
     public List<VoiceLine> attackLines = new ArrayList<>();
+    public List<VoiceLine> summonLines = new ArrayList<>();
     public VoiceData(Player self) {
         this.self = self;
     }
@@ -42,6 +44,7 @@ public class VoiceData {
         if (deathLines == null) {deathLines = new ArrayList<>();}
         if (killLines == null) {killLines = new ArrayList<>();}
         if (attackLines == null) {attackLines = new ArrayList<>();}
+        if (summonLines == null) {summonLines = new ArrayList<>();}
     }
     public void addVoiceLine(VoiceLine vl){
         safeInit();
@@ -51,12 +54,14 @@ public class VoiceData {
             case DEATH -> deathLines.add(vl);
             case KILL -> killLines.add(vl);
             case ATTACK -> attackLines.add(vl);
+            case SUMMON -> summonLines.add(vl);
         }
     }
     public void forceTalkingTicks(int ticksLasting){
         talkingTicks = ticksLasting;
 
     }
+
     public void playSoundIfPossible(SoundEvent se, int ticksLasting, float pitch, float volume){
         if (!inTheMiddleOfTalking()) {
             talkingTicks = ticksLasting;
@@ -75,6 +80,11 @@ public class VoiceData {
     public void playSoundKill(SoundEvent se, int ticksLasting){
         talkingTicks = ticksLasting;
         killCooldown = ticksLasting+600;
+        this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
+    }
+    public void playSoundSummon(SoundEvent se, int ticksLasting){
+        talkingTicks = ticksLasting;
+        summonCooldown = ticksLasting+200;
         this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
     }
     public void playSoundAttack(SoundEvent se, int ticksLasting){
@@ -103,6 +113,9 @@ public class VoiceData {
         }
         if (attackCooldown > -1){
             attackCooldown --;
+        }
+        if (summonCooldown > -1){
+            summonCooldown --;
         }
 
         if (!inTheMiddleOfTalking()){
@@ -181,5 +194,20 @@ public class VoiceData {
         }
     }
     public void overrideAttacking(Entity victim){
+    }
+
+    public void playSummon(){
+        if (!inTheMiddleOfTalking()){
+            safeInit();
+            playSummonOverride();
+            if (!summonLines.isEmpty() && summonCooldown <= -1) {
+                VoiceLine vl = getRandomElement(summonLines);
+                if (vl != null){
+                    playSoundSummon(vl.soundEvent,vl.lengthInTicks);
+                }
+            }
+        }
+    }
+    public void playSummonOverride(){
     }
 }

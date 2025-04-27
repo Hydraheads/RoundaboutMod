@@ -213,12 +213,11 @@ public class DashPreset extends StandPowers {
                                     backwards = -3;
                                 }
 
-
-                                int cdTime = 120;
+                                int cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.dash;
                                 if (this.getSelf() instanceof Player) {
                                     ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                                     if (options.keyJump.isDown()) {
-                                        cdTime = 160;
+                                        cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.jumpingDash;
                                     }
                                 }
                                 this.setCooldown(powerIndex, cdTime);

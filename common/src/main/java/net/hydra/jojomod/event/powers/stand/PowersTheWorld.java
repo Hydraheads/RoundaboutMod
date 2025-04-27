@@ -74,6 +74,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public void playSummonSound() {
+        if (this.self.isCrouching()){
+            return;
+        }
+
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV){
+            DV.playSummon();
+        }
+        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+    }
+    @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }

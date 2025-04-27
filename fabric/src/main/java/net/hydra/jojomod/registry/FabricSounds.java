@@ -225,6 +225,12 @@ public class FabricSounds {
         addSound(ModSounds.DIO_NO_WAY_ID, ModSounds.DIO_NO_WAY_EVENT);
         addSound(ModSounds.DIO_ATTACK_ID, ModSounds.DIO_ATTACK_EVENT);
         addSound(ModSounds.DIO_ATTACK_2_ID, ModSounds.DIO_ATTACK_2_EVENT);
+        addSound(ModSounds.DIO_THE_WORLD_ID, ModSounds.DIO_THE_WORLD_EVENT);
+        addSound(ModSounds.DIO_THE_WORLD_2_ID, ModSounds.DIO_THE_WORLD_2_EVENT);
+        addSound(ModSounds.DIO_THE_WORLD_3_ID, ModSounds.DIO_THE_WORLD_3_EVENT);
+        addSound(ModSounds.DIO_THE_WORLD_4_ID, ModSounds.DIO_THE_WORLD_4_EVENT);
+        addSound(ModSounds.DIO_TAUNT_ID, ModSounds.DIO_TAUNT_EVENT);
+        addSound(ModSounds.DIO_INTERESTING_ID, ModSounds.DIO_JOTARO_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);

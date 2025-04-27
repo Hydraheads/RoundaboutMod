@@ -389,6 +389,20 @@ public class ForgeSounds {
             register(ModSounds.DIO_ATTACK, ModSounds.DIO_ATTACK_ID);
     public static final RegistryObject<SoundEvent> DIO_ATTACK_2 =
             register(ModSounds.DIO_ATTACK_2, ModSounds.DIO_ATTACK_2_ID);
+    public static final RegistryObject<SoundEvent> DIO_THE_WORLD =
+            register(ModSounds.DIO_THE_WORLD, ModSounds.DIO_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> DIO_THE_WORLD_2 =
+            register(ModSounds.DIO_THE_WORLD_2, ModSounds.DIO_THE_WORLD_2_ID);
+    public static final RegistryObject<SoundEvent> DIO_THE_WORLD_3 =
+            register(ModSounds.DIO_THE_WORLD_3, ModSounds.DIO_THE_WORLD_3_ID);
+    public static final RegistryObject<SoundEvent> DIO_THE_WORLD_4 =
+            register(ModSounds.DIO_THE_WORLD_4, ModSounds.DIO_THE_WORLD_4_ID);
+    public static final RegistryObject<SoundEvent> DIO_TAUNT =
+            register(ModSounds.DIO_TAUNT, ModSounds.DIO_TAUNT_ID);
+    public static final RegistryObject<SoundEvent> DIO_INTERESTING =
+            register(ModSounds.DIO_INTERESTING, ModSounds.DIO_INTERESTING_ID);
+    public static final RegistryObject<SoundEvent> DIO_JOTARO =
+            register(ModSounds.DIO_JOTARO, ModSounds.DIO_JOTARO_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =

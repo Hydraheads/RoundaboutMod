@@ -28,6 +28,7 @@ public class VoiceLine {
         HURT,
         DEATH,
         KILL,
+        SUMMON,
         INTERACTION
     }
 

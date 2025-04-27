@@ -676,6 +676,27 @@ public class ModSounds {
     public static final ResourceLocation DIO_ATTACK_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_ATTACK_2);
     public static SoundEvent DIO_ATTACK_2_EVENT = SoundEvent.createVariableRangeEvent(DIO_ATTACK_2_ID);
 
+    public static final String DIO_TAUNT = "dio_taunt";
+    public static final ResourceLocation DIO_TAUNT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_TAUNT);
+    public static SoundEvent DIO_TAUNT_EVENT = SoundEvent.createVariableRangeEvent(DIO_TAUNT_ID);
+    public static final String DIO_THE_WORLD = "dio_the_world";
+    public static final ResourceLocation DIO_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_THE_WORLD);
+    public static SoundEvent DIO_THE_WORLD_EVENT = SoundEvent.createVariableRangeEvent(DIO_THE_WORLD_ID);
+    public static final String DIO_THE_WORLD_2 = "dio_the_world_2";
+    public static final ResourceLocation DIO_THE_WORLD_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_THE_WORLD_2);
+    public static SoundEvent DIO_THE_WORLD_2_EVENT = SoundEvent.createVariableRangeEvent(DIO_THE_WORLD_2_ID);
+    public static final String DIO_THE_WORLD_3 = "dio_the_world_3";
+    public static final ResourceLocation DIO_THE_WORLD_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_THE_WORLD_3);
+    public static SoundEvent DIO_THE_WORLD_3_EVENT = SoundEvent.createVariableRangeEvent(DIO_THE_WORLD_3_ID);
+    public static final String DIO_THE_WORLD_4 = "dio_the_world_4";
+    public static final ResourceLocation DIO_THE_WORLD_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_THE_WORLD_4);
+    public static SoundEvent DIO_THE_WORLD_4_EVENT = SoundEvent.createVariableRangeEvent(DIO_THE_WORLD_4_ID);
+    public static final String DIO_JOTARO = "dio_jotaro";
+    public static final ResourceLocation DIO_JOTARO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_JOTARO);
+    public static SoundEvent DIO_JOTARO_EVENT = SoundEvent.createVariableRangeEvent(DIO_JOTARO_ID);
+    public static final String DIO_INTERESTING = "dio_interesting";
+    public static final ResourceLocation DIO_INTERESTING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_INTERESTING);
+    public static SoundEvent DIO_INTERESTING_EVENT = SoundEvent.createVariableRangeEvent(DIO_INTERESTING_ID);
 
 
     public static final String TORTURE_DANCE = "torture_dance";
