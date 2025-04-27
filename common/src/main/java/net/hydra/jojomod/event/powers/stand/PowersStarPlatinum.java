@@ -1335,6 +1335,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public int getMobTSTime(){
+        return ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
+    }
+    @Override
     public int getMaxTSTime (){
         return ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
     }

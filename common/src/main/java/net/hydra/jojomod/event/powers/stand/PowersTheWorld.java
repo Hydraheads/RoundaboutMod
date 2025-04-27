@@ -422,6 +422,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return 0;
     }
     @Override
+    public int getMobTSTime(){
+        return ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld-1;
+    }
+    @Override
     public int getMaxTSTime(){
         if (canExecuteMoveWithLevel(6)){
             return (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld);
@@ -916,7 +920,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (check) {
             if (ClientNetworking.getAppropriateConfig().timeStopSettings.mobsTeleportInsteadOfStoppingTime) {
                 dist = attackTarget.distanceTo(this.getSelf());
-                TPTYPE tptype = TPTYPE.GROUND;
+                    TPTYPE tptype = TPTYPE.GROUND;
                 if (this.getSelf() instanceof WaterAnimal || this.getSelf() instanceof Guardian) {
                     tptype = TPTYPE.WATER;
                 } else if (this.getSelf() instanceof FlyingMob) {

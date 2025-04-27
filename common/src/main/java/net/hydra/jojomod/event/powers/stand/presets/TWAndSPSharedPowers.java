@@ -62,6 +62,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public int getMaxTSTime (){
         return 100;
     }
+    public int getMobTSTime(){
+        return 100;
+    }
+
 
     /*Change this value actively to manipulate how long a ts charge can be in ticks*/
     public int maxChargeTSTime = 100;
@@ -1646,8 +1650,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (!((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                     boolean animate = false;
                     hasActedInTS = false;
-                    this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
-                    setChargeTicksMult();
+                    if (this.self instanceof Player PE) {
+                        this.maxChargedTSTicks = this.getChargedTSTicks() + this.setCurrentMaxTSTime(this.getChargedTSTicks());
+                        setChargeTicksMult();
+                    } else {
+                        setChargedTSTicks(getMobTSTime());
+                        this.maxChargedTSTicks = getMobTSTime();
+                        this.maxChargeTSTime = getMobTSTime();
+                    }
                     if (!(((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
                         if (this.getChargedTSTicks() > 20 || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
                             /*Charged Sound*/
