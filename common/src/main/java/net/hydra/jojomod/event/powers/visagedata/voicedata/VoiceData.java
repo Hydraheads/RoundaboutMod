@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.VoiceLine;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.sounds.SoundEvent;
@@ -47,7 +48,16 @@ public class VoiceData {
             case KILL -> killLines.add(vl);
         }
     }
+    public void forceTalkingTicks(int ticksLasting){
+        talkingTicks = ticksLasting;
 
+    }
+    public void playSoundIfPossible(SoundEvent se, int ticksLasting, float pitch, float volume){
+        if (!inTheMiddleOfTalking()) {
+            talkingTicks = ticksLasting;
+            this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), volume, pitch);
+        }
+    }
     public void playSound(SoundEvent se, int ticksLasting){
         talkingTicks = ticksLasting;
         idleCooldown = ticksLasting+600;

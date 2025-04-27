@@ -713,12 +713,15 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         poseStand(OffsetIndex.GUARD);
         animateStand((byte) 30);
         if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) && this.getMaxChargeTSTime() >= 100) {
-            playSoundsIfNearby(getTSVoice(), 100, false, true);
+            playTSVoiceSound();
         }
         playSoundsIfNearby(TIME_STOP_CHARGE, 100, true);
         return true;
     }
 
+    public void playTSVoiceSound(){
+        playStandUserOnlySoundsIfNearby(getTSVoice(), 100, false, true);
+    }
 
 
     @Override

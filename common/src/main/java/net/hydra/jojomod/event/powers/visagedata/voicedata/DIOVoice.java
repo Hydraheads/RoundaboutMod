@@ -1,6 +1,8 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.VoiceLine;
+import net.hydra.jojomod.event.powers.stand.PowersTheWorld;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.world.entity.player.Player;
 

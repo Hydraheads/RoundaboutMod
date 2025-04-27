@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -90,6 +91,36 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public int getMaxGuardPoints(){
         return ClientNetworking.getAppropriateConfig().guardPoints.theWorldDefend;
+    }
+    @Override
+    public void playTheLastHitSound(){
+        Byte LastHitSound = this.getLastHitSound();
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV){
+            DV.playSoundIfPossible( getSoundFromByte(LastHitSound),20,1,2);
+        } else {
+            this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
+                    true);
+        }
+    }
+    @Override
+    public void playBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+
+                if (!DV.inTheMiddleOfTalking()) {
+                    DV.forceTalkingTicks(70);
+                    byte barrageCrySound = this.chooseBarrageSound();
+                    if (barrageCrySound != SoundIndex.NO_SOUND) {
+                        playSoundsIfNearby(barrageCrySound, 27, false, true);
+                    }
+                }
+            } else {
+                byte barrageCrySound = this.chooseBarrageSound();
+                if (barrageCrySound != SoundIndex.NO_SOUND) {
+                    playStandUserOnlySoundsIfNearby(barrageCrySound, 27, false, true);
+                }
+            }
+        }
     }
     @Override
     public Byte getLastHitSound(){
@@ -1152,19 +1183,60 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playKickBarrageCrySound(){
         if (!this.self.level().isClientSide()) {
-            byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-            if (bt == TheWorldEntity.ARCADE_SKIN || bt == TheWorldEntity.ARCADE_SKIN_2){
-                playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_7, 32, false,true);
-                return;
-            }
-            if (bt == TheWorldEntity.OVA_SKIN){
-                return;
-            }
-            if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN){
-                playStandUserOnlySoundsIfNearby(KICK_BARRAGE_NOISE_3, 32, false,true);
+
+            if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+
+                if (!DV.inTheMiddleOfTalking()) {
+                    DV.forceTalkingTicks(70);
+                    byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+                    if (bt == TheWorldEntity.ARCADE_SKIN || bt == TheWorldEntity.ARCADE_SKIN_2) {
+                        playSoundsIfNearby(BARRAGE_NOISE_7, 32, false, true);
+                        return;
+                    }
+                    if (bt == TheWorldEntity.OVA_SKIN) {
+                        return;
+                    }
+                    if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN) {
+                        playSoundsIfNearby(KICK_BARRAGE_NOISE_3, 32, false, true);
+                    } else {
+                        double rand = Math.random();
+                        byte barrageCrySound;
+                        if (rand > 0.5) {
+                            barrageCrySound = KICK_BARRAGE_NOISE;
+                        } else {
+                            barrageCrySound = KICK_BARRAGE_NOISE_2;
+                        }
+                        playSoundsIfNearby(barrageCrySound, 32, false, true);
+                    }
+                }
             } else {
-                super.playKickBarrageCrySound();
+                byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+                if (bt == TheWorldEntity.ARCADE_SKIN || bt == TheWorldEntity.ARCADE_SKIN_2) {
+                    playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_7, 32, false, true);
+                    return;
+                }
+                if (bt == TheWorldEntity.OVA_SKIN) {
+                    return;
+                }
+                if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN) {
+                    playStandUserOnlySoundsIfNearby(KICK_BARRAGE_NOISE_3, 32, false, true);
+                } else {
+                    super.playKickBarrageCrySound();
+                }
             }
+        }
+    }
+
+    @Override
+    public void playTSVoiceSound(){
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+            if (!DV.inTheMiddleOfTalking()) {
+                DV.forceTalkingTicks(40);
+                playSoundsIfNearby(getTSVoice(), 100, false, true);
+            }
+        } else {
+
+            playStandUserOnlySoundsIfNearby(getTSVoice(), 100, false, true);
         }
     }
 

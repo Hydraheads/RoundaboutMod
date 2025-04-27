@@ -140,6 +140,12 @@ public class PunchingStand extends DashPreset {
             }
         }
     }
+
+    public void playTheLastHitSound(){
+        Byte LastHitSound = this.getLastHitSound();
+        this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
+                true);
+    }
     @Override
     public void punchImpact(Entity entity){
         this.setAttackTimeDuring(-10);
@@ -184,9 +190,7 @@ public class PunchingStand extends DashPreset {
         if (this.activePowerPhase >= this.activePowerPhaseMax) {
 
             if (!this.self.level().isClientSide()) {
-                Byte LastHitSound = this.getLastHitSound();
-                    this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
-                            true);
+                playTheLastHitSound();
             }
 
             if (entity != null) {
