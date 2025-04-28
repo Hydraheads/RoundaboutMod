@@ -25,7 +25,7 @@ public class MaskItem extends Item {
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         super.appendHoverText($$0,$$1,$$2,$$3);
-        $$2.add(this.getDisplayName2());
+        $$2.add(this.getDisplayName2().withStyle(ChatFormatting.GRAY));
         if (visageData.hasVoices() || $$0.is(ModItems.BLANK_MASK)){
             $$2.add(
                     Component.translatable("roundabout.cinderella.mod_visage.voice_available").withStyle(ChatFormatting.AQUA)
