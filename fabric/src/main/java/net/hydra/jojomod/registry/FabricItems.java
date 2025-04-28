@@ -225,6 +225,7 @@ public class FabricItems {
                         entries.accept(STREET_SIGN_DANGER_BLOCK_ITEM);
                         entries.accept(LIGHT_BULB);
                         entries.accept(ModBlocks.CEILING_LIGHT);
+                        entries.accept(ModBlocks.MIRROR);
                         entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);

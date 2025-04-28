@@ -52,6 +52,7 @@ public class ModBlocks {
     public static Block WALL_STREET_SIGN_YIELD;
     public static Block WALL_STREET_SIGN_DANGER;
     public static Block CEILING_LIGHT;
+    public static Block MIRROR;
     public static Block STEREO;
 
     public static Block STAND_FIRE;
@@ -264,6 +265,21 @@ public class ModBlocks {
                         .pushReaction(PushReaction.DESTROY)
                         .strength(0.01F, 0.01F)
                         .sound(SoundType.METAL)
+                        .noCollission()
+                        .lightLevel((L) -> {
+                            return 1;
+                        })
+        );
+    }
+    public static MirrorBlock getMirrorBlockProperties(){
+        return new MirrorBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.STONE)
+                        .noOcclusion()
+                        .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                        .pushReaction(PushReaction.DESTROY)
+                        .strength(0.01F, 0.01F)
+                        .sound(SoundType.GLASS)
                         .noCollission()
                         .lightLevel((L) -> {
                             return 1;

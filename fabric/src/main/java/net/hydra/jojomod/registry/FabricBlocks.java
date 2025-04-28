@@ -60,6 +60,7 @@ public class FabricBlocks {
     public static final Block WALL_STREET_SIGN_YIELD = registerBlock("wall_street_sign_yield",ModBlocks.getWallStreetSignBlockProperties());
     public static final Block WALL_STREET_SIGN_DANGER = registerBlock("wall_street_sign_danger",ModBlocks.getWallStreetSignBlockProperties());
     public static final Block CEILING_LIGHT = registerBlock("ceiling_light",ModBlocks.CEILING_LIGHT_BLOCK_PROPERTIES);
+    public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlockItemless("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
@@ -171,6 +172,7 @@ public class FabricBlocks {
         ModBlocks.WALL_STREET_SIGN_YIELD = WALL_STREET_SIGN_YIELD;
         ModBlocks.WALL_STREET_SIGN_DANGER = WALL_STREET_SIGN_DANGER;
         ModBlocks.CEILING_LIGHT = CEILING_LIGHT;
+        ModBlocks.MIRROR = MIRROR;
         ModBlocks.STEREO = STEREO;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;

@@ -335,6 +335,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<Item> MIRROR_ITEM = addToTab(ITEMS.register("mirror",
+            () -> new BlockItem(ForgeBlocks.MIRROR.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
             () -> new ItemNameBlockItem(ForgeBlocks.LOCACACA_BLOCK.get(), new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA = addToTab(ITEMS.register("locacaca",

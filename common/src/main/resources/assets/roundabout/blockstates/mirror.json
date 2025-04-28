@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "roundabout:block/mirror",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "roundabout:block/mirror",
+      "y": 0
+    },
+    "facing=south": {
+      "model": "roundabout:block/mirror",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "roundabout:block/mirror",
+      "y": 270
+    }
+  }
+}
