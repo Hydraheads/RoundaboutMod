@@ -197,6 +197,66 @@
       "roundabout:jotaro_yare_yare_2"
     ]
   },
+  "jotaro_yare_yare_3": {
+    "subtitle": "sounds.roundabout.jotaro_yare_yare_3",
+    "sounds": [
+      "roundabout:jotaro_yare_yare_3"
+    ]
+  },
+  "jotaro_yare_yare_4": {
+    "subtitle": "sounds.roundabout.jotaro_yare_yare_4",
+    "sounds": [
+      "roundabout:jotaro_yare_yare_4"
+    ]
+  },
+  "jotaro_yare_yare_5": {
+    "subtitle": "sounds.roundabout.jotaro_yare_yare_5",
+    "sounds": [
+      "roundabout:jotaro_yare_yare_5"
+    ]
+  },
+  "jotaro_attack_1": {
+    "subtitle": "sounds.roundabout.jotaro_attack_1",
+    "sounds": [
+      "roundabout:jotaro_attack_1"
+    ]
+  },
+  "jotaro_attack_2": {
+    "subtitle": "sounds.roundabout.jotaro_attack_2",
+    "sounds": [
+      "roundabout:jotaro_attack_2"
+    ]
+  },
+  "jotaro_attack_3": {
+    "subtitle": "sounds.roundabout.jotaro_attack_3",
+    "sounds": [
+      "roundabout:jotaro_attack_3"
+    ]
+  },
+  "jotaro_attack_4": {
+    "subtitle": "sounds.roundabout.jotaro_attack_4",
+    "sounds": [
+      "roundabout:jotaro_attack_4"
+    ]
+  },
+  "jotaro_yaro": {
+    "subtitle": "sounds.roundabout.jotaro_yaro",
+    "sounds": [
+      "roundabout:jotaro_yaro"
+    ]
+  },
+  "jotaro_yamero": {
+    "subtitle": "sounds.roundabout.jotaro_yamero",
+    "sounds": [
+      "roundabout:jotaro_yamero"
+    ]
+  },
+  "jotaro_finisher": {
+    "subtitle": "sounds.roundabout.jotaro_finisher",
+    "sounds": [
+      "roundabout:jotaro_finisher"
+    ]
+  },
   "jotaro_hurt_1": {
     "subtitle": "sounds.roundabout.jotaro_hurt_1",
     "sounds": [
@@ -233,6 +293,12 @@
       "roundabout:jotaro_death_1"
     ]
   },
+  "jotaro_death_2": {
+    "subtitle": "sounds.roundabout.jotaro_death_2",
+    "sounds": [
+      "roundabout:jotaro_death_2"
+    ]
+  },
   "jotaro_star_platinum_1": {
     "subtitle": "sounds.roundabout.jotaro_star_platinum_1",
     "sounds": [
@@ -243,6 +309,18 @@
     "subtitle": "sounds.roundabout.jotaro_star_platinum_2",
     "sounds": [
       "roundabout:jotaro_star_platinum_2"
+    ]
+  },
+  "jotaro_star_platinum_3": {
+    "subtitle": "sounds.roundabout.jotaro_star_platinum_3",
+    "sounds": [
+      "roundabout:jotaro_star_platinum_3"
+    ]
+  },
+  "jotaro_star_platinum_4": {
+    "subtitle": "sounds.roundabout.jotaro_star_platinum_4",
+    "sounds": [
+      "roundabout:jotaro_star_platinum_4"
     ]
   },
   "jotaro_pissed_off": {

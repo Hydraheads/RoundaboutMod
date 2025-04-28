@@ -59,6 +59,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         this(ModEntities.CROSSFIRE_HURRICANE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
+
+    @Override
+    public boolean canBeHitByProjectile() {
+        return false;
+    }
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CROSS_NUMBER = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> SIZE = SynchedEntityData.defineId(CrossfireHurricaneEntity.class, EntityDataSerializers.INT);

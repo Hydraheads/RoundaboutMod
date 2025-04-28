@@ -46,6 +46,11 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
     }
+
+    @Override
+    public boolean canBeHitByProjectile() {
+        return false;
+    }
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(StandFireballEntity.class, EntityDataSerializers.INT);
 
     public LivingEntity standUser;

@@ -62,6 +62,18 @@ public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile imple
         return null;
     }
 
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+    @Override
+    public boolean isAttackable() {
+        return false;
+    }
+    @Override
+    public boolean canBeHitByProjectile() {
+        return false;
+    }
     public int getMaxSize() {
         return this.getEntityData().get(MAX_SIZE);
     }
