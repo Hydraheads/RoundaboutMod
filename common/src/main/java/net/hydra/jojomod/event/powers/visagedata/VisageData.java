@@ -31,6 +31,9 @@ public class VisageData {
     public boolean isCharacterVisage(){
         return true;
     }
+    public boolean hasVoices(){
+        return false;
+    }
 
     public VoiceData voiceData(Player realSelf){
         return new VoiceData(realSelf);

@@ -341,6 +341,12 @@
       "roundabout:jotaro_oi_oi"
     ]
   },
+  "jotaro_grunt": {
+    "subtitle": "sounds.roundabout.jotaro_grunt",
+    "sounds": [
+      "roundabout:jotaro_grunt"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [

@@ -83,6 +83,15 @@ public class PowerInventoryScreen
         int i = this.leftPos;
         int j = this.topPos;
         context.blit(POWER_INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
+
+        if (!(pl != null && ((IPlayerEntity)pl).roundabout$getMaskSlot() != null && !((IPlayerEntity)pl).roundabout$getMaskSlot().isEmpty())) {
+            context.blit(POWER_INVENTORY_LOCATION, i+8, j+8, 182, 98, 16, 16);
+        }
+        if (!(pl != null && ((IPlayerEntity)pl).roundabout$getMaskVoiceSlot() != null && !((IPlayerEntity)pl).roundabout$getMaskVoiceSlot().isEmpty())) {
+            context.blit(POWER_INVENTORY_LOCATION, i+8, j+26, 182, 115, 16, 16);
+        }
+
+
         if (pl != null) {
         StandUser standUser = ((StandUser)pl);
 

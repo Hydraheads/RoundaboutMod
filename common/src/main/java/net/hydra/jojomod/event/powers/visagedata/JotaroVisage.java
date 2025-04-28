@@ -29,6 +29,9 @@ public class JotaroVisage extends VisageData {
         return 0.54f;
     }
 
+    public boolean hasVoices(){
+        return true;
+    }
     @Override
     public VoiceData voiceData(Player slef){
         return new JotaroVoice(slef);
