@@ -238,14 +238,26 @@ public class FabricSounds {
         addSound(ModSounds.JOTARO_JUDGEMENT_ID, ModSounds.JOTARO_JUDGEMENT_EVENT);
         addSound(ModSounds.JOTARO_YARE_YARE_ID, ModSounds.JOTARO_YARE_YARE_EVENT);
         addSound(ModSounds.JOTARO_YARE_YARE_2_ID, ModSounds.JOTARO_YARE_YARE_2_EVENT);
+        addSound(ModSounds.JOTARO_YARE_YARE_3_ID, ModSounds.JOTARO_YARE_YARE_3_EVENT);
+        addSound(ModSounds.JOTARO_YARE_YARE_4_ID, ModSounds.JOTARO_YARE_YARE_4_EVENT);
+        addSound(ModSounds.JOTARO_YARE_YARE_5_ID, ModSounds.JOTARO_YARE_YARE_5_EVENT);
         addSound(ModSounds.JOTARO_DEATH_1_ID, ModSounds.JOTARO_DEATH_1_EVENT);
+        addSound(ModSounds.JOTARO_DEATH_2_ID, ModSounds.JOTARO_DEATH_2_EVENT);
         addSound(ModSounds.JOTARO_STAR_PLATINUM_1_ID, ModSounds.JOTARO_STAR_PLATINUM_1_EVENT);
         addSound(ModSounds.JOTARO_STAR_PLATINUM_2_ID, ModSounds.JOTARO_STAR_PLATINUM_2_EVENT);
+        addSound(ModSounds.JOTARO_STAR_PLATINUM_3_ID, ModSounds.JOTARO_STAR_PLATINUM_3_EVENT);
+        addSound(ModSounds.JOTARO_STAR_PLATINUM_4_ID, ModSounds.JOTARO_STAR_PLATINUM_4_EVENT);
         addSound(ModSounds.JOTARO_HURT_1_ID, ModSounds.JOTARO_HURT_1_EVENT);
         addSound(ModSounds.JOTARO_HURT_2_ID, ModSounds.JOTARO_HURT_2_EVENT);
         addSound(ModSounds.JOTARO_HURT_3_ID, ModSounds.JOTARO_HURT_3_EVENT);
         addSound(ModSounds.JOTARO_HURT_4_ID, ModSounds.JOTARO_HURT_4_EVENT);
         addSound(ModSounds.JOTARO_HURT_5_ID, ModSounds.JOTARO_HURT_5_EVENT);
+        addSound(ModSounds.JOTARO_ATTACK_1_ID, ModSounds.JOTARO_ATTACK_1_EVENT);
+        addSound(ModSounds.JOTARO_ATTACK_2_ID, ModSounds.JOTARO_ATTACK_2_EVENT);
+        addSound(ModSounds.JOTARO_ATTACK_3_ID, ModSounds.JOTARO_ATTACK_3_EVENT);
+        addSound(ModSounds.JOTARO_YARO_ID, ModSounds.JOTARO_YARO_EVENT);
+        addSound(ModSounds.JOTARO_YAMERO_ID, ModSounds.JOTARO_YAMERO_EVENT);
+        addSound(ModSounds.JOTARO_FINISHER_ID, ModSounds.JOTARO_FINISHER_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);

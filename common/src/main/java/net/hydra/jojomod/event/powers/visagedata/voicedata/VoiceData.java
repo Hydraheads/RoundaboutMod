@@ -118,7 +118,7 @@ public class VoiceData {
             summonCooldown --;
         }
 
-        if (!inTheMiddleOfTalking()){
+        if (!inTheMiddleOfTalking() && !self.isCrouching()){
             safeInit();
             overrideTick();
             if (!tickLines.isEmpty() && idleCooldown <= -1) {

@@ -415,6 +415,8 @@ public class ForgeSounds {
             register(ModSounds.JOTARO_HURT_5, ModSounds.JOTARO_HURT_5_ID);
     public static final RegistryObject<SoundEvent> JOTARO_DEATH_1 =
             register(ModSounds.JOTARO_DEATH_1, ModSounds.JOTARO_DEATH_1_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_DEATH_2 =
+            register(ModSounds.JOTARO_DEATH_2, ModSounds.JOTARO_DEATH_2_ID);
     public static final RegistryObject<SoundEvent> JOTARO_GRUNT =
             register(ModSounds.JOTARO_GRUNT, ModSounds.JOTARO_GRUNT_ID);
     public static final RegistryObject<SoundEvent> JOTARO_OI_OI =
@@ -423,6 +425,10 @@ public class ForgeSounds {
             register(ModSounds.JOTARO_STAR_PLATINUM_1, ModSounds.JOTARO_STAR_PLATINUM_1_ID);
     public static final RegistryObject<SoundEvent> JOTARO_STAR_PLATINUM_2 =
             register(ModSounds.JOTARO_STAR_PLATINUM_2, ModSounds.JOTARO_STAR_PLATINUM_2_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_STAR_PLATINUM_3 =
+            register(ModSounds.JOTARO_STAR_PLATINUM_3, ModSounds.JOTARO_STAR_PLATINUM_3_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_STAR_PLATINUM_4 =
+            register(ModSounds.JOTARO_STAR_PLATINUM_4, ModSounds.JOTARO_STAR_PLATINUM_4_ID);
     public static final RegistryObject<SoundEvent> JOTARO_PISSED_OFF =
             register(ModSounds.JOTARO_PISSED_OFF, ModSounds.JOTARO_PISSED_OFF_ID);
     public static final RegistryObject<SoundEvent> JOTARO_JUDGEMENT =
@@ -431,6 +437,24 @@ public class ForgeSounds {
             register(ModSounds.JOTARO_YARE_YARE, ModSounds.JOTARO_YARE_YARE_ID);
     public static final RegistryObject<SoundEvent> JOTARO_YARE_YARE_2 =
             register(ModSounds.JOTARO_YARE_YARE_2, ModSounds.JOTARO_YARE_YARE_2_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_YARE_YARE_3 =
+            register(ModSounds.JOTARO_YARE_YARE_3, ModSounds.JOTARO_YARE_YARE_3_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_YARE_YARE_4 =
+            register(ModSounds.JOTARO_YARE_YARE_4, ModSounds.JOTARO_YARE_YARE_4_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_YARE_YARE_5 =
+            register(ModSounds.JOTARO_YARE_YARE_5, ModSounds.JOTARO_YARE_YARE_5_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_FINISHER =
+            register(ModSounds.JOTARO_FINISHER, ModSounds.JOTARO_FINISHER_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_YAMERO =
+            register(ModSounds.JOTARO_YAMERO, ModSounds.JOTARO_YAMERO_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_YARO =
+            register(ModSounds.JOTARO_YARO, ModSounds.JOTARO_YARO_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_ATTACK_1 =
+            register(ModSounds.JOTARO_ATTACK_1, ModSounds.JOTARO_ATTACK_1_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_ATTACK_2 =
+            register(ModSounds.JOTARO_ATTACK_2, ModSounds.JOTARO_ATTACK_2_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_ATTACK_3 =
+            register(ModSounds.JOTARO_ATTACK_3, ModSounds.JOTARO_ATTACK_3_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =

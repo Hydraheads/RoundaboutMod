@@ -705,6 +705,15 @@ public class ModSounds {
     public static final String JOTARO_YARE_YARE_2 = "jotaro_yare_yare_2";
     public static final ResourceLocation JOTARO_YARE_YARE_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YARE_YARE_2);
     public static SoundEvent JOTARO_YARE_YARE_2_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YARE_YARE_2_ID);
+    public static final String JOTARO_YARE_YARE_3 = "jotaro_yare_yare_3";
+    public static final ResourceLocation JOTARO_YARE_YARE_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YARE_YARE_3);
+    public static SoundEvent JOTARO_YARE_YARE_3_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YARE_YARE_3_ID);
+    public static final String JOTARO_YARE_YARE_4 = "jotaro_yare_yare_4";
+    public static final ResourceLocation JOTARO_YARE_YARE_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YARE_YARE_4);
+    public static SoundEvent JOTARO_YARE_YARE_4_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YARE_YARE_4_ID);
+    public static final String JOTARO_YARE_YARE_5 = "jotaro_yare_yare_5";
+    public static final ResourceLocation JOTARO_YARE_YARE_5_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YARE_YARE_5);
+    public static SoundEvent JOTARO_YARE_YARE_5_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YARE_YARE_5_ID);
     public static final String JOTARO_PISSED_OFF = "jotaro_pissed_off";
     public static final ResourceLocation JOTARO_PISSED_OFF_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_PISSED_OFF);
     public static SoundEvent JOTARO_PISSED_OFF_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_PISSED_OFF_ID);
@@ -723,6 +732,12 @@ public class ModSounds {
     public static final String JOTARO_STAR_PLATINUM_2 = "jotaro_star_platinum_2";
     public static final ResourceLocation JOTARO_STAR_PLATINUM_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_STAR_PLATINUM_2);
     public static SoundEvent JOTARO_STAR_PLATINUM_2_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_STAR_PLATINUM_2_ID);
+    public static final String JOTARO_STAR_PLATINUM_3 = "jotaro_star_platinum_3";
+    public static final ResourceLocation JOTARO_STAR_PLATINUM_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_STAR_PLATINUM_3);
+    public static SoundEvent JOTARO_STAR_PLATINUM_3_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_STAR_PLATINUM_3_ID);
+    public static final String JOTARO_STAR_PLATINUM_4 = "jotaro_star_platinum_4";
+    public static final ResourceLocation JOTARO_STAR_PLATINUM_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_STAR_PLATINUM_4);
+    public static SoundEvent JOTARO_STAR_PLATINUM_4_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_STAR_PLATINUM_4_ID);
     public static final String JOTARO_HURT_1 = "jotaro_hurt_1";
     public static final ResourceLocation JOTARO_HURT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_HURT_1);
     public static SoundEvent JOTARO_HURT_1_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_HURT_1_ID);
@@ -741,6 +756,27 @@ public class ModSounds {
     public static final String JOTARO_DEATH_1 = "jotaro_death_1";
     public static final ResourceLocation JOTARO_DEATH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_DEATH_1);
     public static SoundEvent JOTARO_DEATH_1_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_DEATH_1_ID);
+    public static final String JOTARO_DEATH_2 = "jotaro_death_2";
+    public static final ResourceLocation JOTARO_DEATH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_DEATH_2);
+    public static SoundEvent JOTARO_DEATH_2_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_DEATH_2_ID);
+    public static final String JOTARO_FINISHER = "jotaro_finisher";
+    public static final ResourceLocation JOTARO_FINISHER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_FINISHER);
+    public static SoundEvent JOTARO_FINISHER_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_FINISHER_ID);
+    public static final String JOTARO_ATTACK_1 = "jotaro_attack_1";
+    public static final ResourceLocation JOTARO_ATTACK_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_ATTACK_1);
+    public static SoundEvent JOTARO_ATTACK_1_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_ATTACK_1_ID);
+    public static final String JOTARO_ATTACK_2 = "jotaro_attack_2";
+    public static final ResourceLocation JOTARO_ATTACK_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_ATTACK_2);
+    public static SoundEvent JOTARO_ATTACK_2_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_ATTACK_2_ID);
+    public static final String JOTARO_ATTACK_3 = "jotaro_attack_3";
+    public static final ResourceLocation JOTARO_ATTACK_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_ATTACK_3);
+    public static SoundEvent JOTARO_ATTACK_3_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_ATTACK_3_ID);
+    public static final String JOTARO_YARO = "jotaro_yaro";
+    public static final ResourceLocation JOTARO_YARO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YARO);
+    public static SoundEvent JOTARO_YARO_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YARO_ID);
+    public static final String JOTARO_YAMERO = "jotaro_yamero";
+    public static final ResourceLocation JOTARO_YAMERO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YAMERO);
+    public static SoundEvent JOTARO_YAMERO_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YAMERO_ID);
 
 
 
