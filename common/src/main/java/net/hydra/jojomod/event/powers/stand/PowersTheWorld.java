@@ -253,20 +253,36 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
-
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-            if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2){
-                playSoundsIfNearby(BARRAGE_NOISE_7, 27, false);
+            if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+                DV.forceTalkingTicks(70);
+                if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2){
+                    playSoundsIfNearby(BARRAGE_NOISE_7, 27, false);
+                }
+                if (skn == TheWorldEntity.OVA_SKIN){
+                    playSoundsIfNearby(BARRAGE_NOISE_5, 27, false);
+                    return;
+                }
+                if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
+                    playSoundsIfNearby(BARRAGE_NOISE_3, 27, false);
+                    return;
+                }
+                playSoundsIfNearby(BARRAGE_NOISE_2, 27, false);
+            } else {
+
+                if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2){
+                    playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_7, 27, false, true);
+                }
+                if (skn == TheWorldEntity.OVA_SKIN){
+                    playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_5, 27, false,true);
+                    return;
+                }
+                if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
+                    playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_3, 27, false,true);
+                    return;
+                }
+                playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_2, 27, false,true);
             }
-            if (skn == TheWorldEntity.OVA_SKIN){
-                playSoundsIfNearby(BARRAGE_NOISE_5, 27, false);
-                return;
-            }
-            if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE){
-                playSoundsIfNearby(BARRAGE_NOISE_3, 27, false);
-                return;
-            }
-            playSoundsIfNearby(BARRAGE_NOISE_2, 27, false);
         }
     }
     @Override
