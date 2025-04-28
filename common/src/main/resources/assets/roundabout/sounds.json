@@ -185,6 +185,84 @@
       "roundabout:dio_jotaro"
     ]
   },
+  "jotaro_yare_yare": {
+    "subtitle": "sounds.roundabout.jotaro_yare_yare",
+    "sounds": [
+      "roundabout:jotaro_yare_yare"
+    ]
+  },
+  "jotaro_yare_yare_2": {
+    "subtitle": "sounds.roundabout.jotaro_yare_yare_2",
+    "sounds": [
+      "roundabout:jotaro_yare_yare_2"
+    ]
+  },
+  "jotaro_hurt_1": {
+    "subtitle": "sounds.roundabout.jotaro_hurt_1",
+    "sounds": [
+      "roundabout:jotaro_hurt_1"
+    ]
+  },
+  "jotaro_hurt_2": {
+    "subtitle": "sounds.roundabout.jotaro_hurt_2",
+    "sounds": [
+      "roundabout:jotaro_hurt_2"
+    ]
+  },
+  "jotaro_hurt_3": {
+    "subtitle": "sounds.roundabout.jotaro_hurt_3",
+    "sounds": [
+      "roundabout:jotaro_hurt_3"
+    ]
+  },
+  "jotaro_hurt_4": {
+    "subtitle": "sounds.roundabout.jotaro_hurt_4",
+    "sounds": [
+      "roundabout:jotaro_hurt_4"
+    ]
+  },
+  "jotaro_hurt_5": {
+    "subtitle": "sounds.roundabout.jotaro_hurt_5",
+    "sounds": [
+      "roundabout:jotaro_hurt_5"
+    ]
+  },
+  "jotaro_death_1": {
+    "subtitle": "sounds.roundabout.jotaro_death_1",
+    "sounds": [
+      "roundabout:jotaro_death_1"
+    ]
+  },
+  "jotaro_star_platinum_1": {
+    "subtitle": "sounds.roundabout.jotaro_star_platinum_1",
+    "sounds": [
+      "roundabout:jotaro_star_platinum_1"
+    ]
+  },
+  "jotaro_star_platinum_2": {
+    "subtitle": "sounds.roundabout.jotaro_star_platinum_2",
+    "sounds": [
+      "roundabout:jotaro_star_platinum_2"
+    ]
+  },
+  "jotaro_star_pissed_off": {
+    "subtitle": "sounds.roundabout.jotaro_star_pissed_off",
+    "sounds": [
+      "roundabout:jotaro_star_pissed_off"
+    ]
+  },
+  "jotaro_star_judgement": {
+    "subtitle": "sounds.roundabout.jotaro_star_judgement",
+    "sounds": [
+      "roundabout:jotaro_star_judgement"
+    ]
+  },
+  "jotaro_star_oi_oi": {
+    "subtitle": "sounds.roundabout.jotaro_star_oi_oi",
+    "sounds": [
+      "roundabout:jotaro_star_oi_oi"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [

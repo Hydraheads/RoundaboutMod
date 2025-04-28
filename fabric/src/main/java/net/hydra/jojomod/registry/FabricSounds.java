@@ -232,6 +232,21 @@ public class FabricSounds {
         addSound(ModSounds.DIO_TAUNT_ID, ModSounds.DIO_TAUNT_EVENT);
         addSound(ModSounds.DIO_INTERESTING_ID, ModSounds.DIO_JOTARO_EVENT);
 
+        addSound(ModSounds.JOTARO_GRUNT_ID, ModSounds.JOTARO_GRUNT_EVENT);
+        addSound(ModSounds.JOTARO_OI_OI_ID, ModSounds.JOTARO_OI_OI_EVENT);
+        addSound(ModSounds.JOTARO_PISSED_OFF_ID, ModSounds.JOTARO_PISSED_OFF_EVENT);
+        addSound(ModSounds.JOTARO_JUDGEMENT_ID, ModSounds.JOTARO_JUDGEMENT_EVENT);
+        addSound(ModSounds.JOTARO_YARE_YARE_ID, ModSounds.JOTARO_YARE_YARE_EVENT);
+        addSound(ModSounds.JOTARO_YARE_YARE_2_ID, ModSounds.JOTARO_YARE_YARE_2_EVENT);
+        addSound(ModSounds.JOTARO_DEATH_1_ID, ModSounds.JOTARO_DEATH_1_EVENT);
+        addSound(ModSounds.JOTARO_STAR_PLATINUM_1_ID, ModSounds.JOTARO_STAR_PLATINUM_1_EVENT);
+        addSound(ModSounds.JOTARO_STAR_PLATINUM_2_ID, ModSounds.JOTARO_STAR_PLATINUM_2_EVENT);
+        addSound(ModSounds.JOTARO_HURT_1_ID, ModSounds.JOTARO_HURT_1_EVENT);
+        addSound(ModSounds.JOTARO_HURT_2_ID, ModSounds.JOTARO_HURT_2_EVENT);
+        addSound(ModSounds.JOTARO_HURT_3_ID, ModSounds.JOTARO_HURT_3_EVENT);
+        addSound(ModSounds.JOTARO_HURT_4_ID, ModSounds.JOTARO_HURT_4_EVENT);
+        addSound(ModSounds.JOTARO_HURT_5_ID, ModSounds.JOTARO_HURT_5_EVENT);
+
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
     }
