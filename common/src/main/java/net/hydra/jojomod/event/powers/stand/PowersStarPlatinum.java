@@ -1305,6 +1305,18 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         return false;
     }
+    @Override
+    public void playTSVoiceSound(){
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof JotaroVoice JV) {
+            if (!JV.inTheMiddleOfTalking()) {
+                JV.forceTalkingTicks(40);
+                playSoundsIfNearby(getTSVoice(), 100, false, true);
+            }
+        } else {
+
+            playStandUserOnlySoundsIfNearby(getTSVoice(), 100, false, true);
+        }
+    }
     public boolean starFinger(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
@@ -1320,11 +1332,24 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } else if (skn == StarPlatinumEntity.ARCADE){
                 playStandUserOnlySoundsIfNearby(STAR_FINGER_3, 32, false, true);
             } else{
-                if (rand > 0.5) {
-                    playStandUserOnlySoundsIfNearby(STAR_FINGER, 32, false, true);
+
+                if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof JotaroVoice JV) {
+                    if (!JV.inTheMiddleOfTalking()) {
+                        JV.forceTalkingTicks(56);
+                        if (rand > 0.5) {
+                            playSoundsIfNearby(STAR_FINGER, 32, false, true);
+                        } else {
+                            playSoundsIfNearby(STAR_FINGER_2, 32, false, true);
+                        }
+                    }
                 } else {
-                    playStandUserOnlySoundsIfNearby(STAR_FINGER_2, 32, false, true);
+                    if (rand > 0.5) {
+                        playStandUserOnlySoundsIfNearby(STAR_FINGER, 32, false, true);
+                    } else {
+                        playStandUserOnlySoundsIfNearby(STAR_FINGER_2, 32, false, true);
+                    }
                 }
+
             }
             this.animateStand((byte)82);
             this.poseStand(OffsetIndex.GUARD_AND_TRACE);
