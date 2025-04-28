@@ -32,6 +32,7 @@ public class ModItems {
     public static Item STREET_SIGN_STOP_BLOCK_ITEM;
     public static Item STREET_SIGN_YIELD_BLOCK_ITEM;
     public static Item STREET_SIGN_DANGER_BLOCK_ITEM;
+    public static Item LIGHT_BULB;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;
     public static Item LOCACACA_BRANCH;

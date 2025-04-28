@@ -319,10 +319,6 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DANGER.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<Item> CEILING_LIGHT_BLOCK_ITEM = addToTab(ITEMS.register("ceiling_light",
-            () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
-                    new Item.Properties()
-            )));
     public static final RegistryObject<Item> STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_dio_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DIO.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> STREET_SIGN_RIGHT_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_right_item",
@@ -333,6 +329,12 @@ public class ForgeItems {
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_YIELD.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> STREET_SIGN_DANGER_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_danger_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DANGER.get(), new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> LIGHT_BULB = addToTab(ITEMS.register("light_bulb",
+            () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> CEILING_LIGHT_BLOCK_ITEM = addToTab(ITEMS.register("ceiling_light",
+            () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<Item> LOCACACA_PIT = addToTab(ITEMS.register("locacaca_pit",
             () -> new ItemNameBlockItem(ForgeBlocks.LOCACACA_BLOCK.get(), new Item.Properties())));
     public static final RegistryObject<Item> LOCACACA = addToTab(ITEMS.register("locacaca",

@@ -221,7 +221,8 @@ public class ForgeEvents {
         ModItems.STREET_SIGN_DANGER_BLOCK_ITEM = ForgeItems.STREET_SIGN_DANGER_BLOCK_ITEM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
-        ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
+        ModItems.LOCACACA_PIT = ForgeItems.LIGHT_BULB.get();
+        ModItems.LIGHT_BULB = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
