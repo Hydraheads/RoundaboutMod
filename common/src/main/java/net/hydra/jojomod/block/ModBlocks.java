@@ -7,9 +7,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+
+import java.util.function.ToIntFunction;
 
 public class ModBlocks {
     /**This is where blocks are listed and called upon.
@@ -113,16 +116,21 @@ public class ModBlocks {
                     .sound(SoundType.METAL)
     );
 
+    private static ToIntFunction<BlockState> litBlockEmission(int p_50760_) {
+        return (p_50763_) -> {
+            return p_50763_.getValue(BlockStateProperties.LIT) ? p_50760_ : 0;
+        };
+    }
 
     public static CeilingLightBlock CEILING_LIGHT_BLOCK_PROPERTIES = new CeilingLightBlock(
             BlockBehaviour.Properties.of().
                     mapColor(MapColor.SAND).
                     strength(0.1F).
-                    lightLevel((p_152607_) -> {
-                        return 15;
-                    }).
+                    lightLevel(litBlockEmission(15)
+                    ).
                     pushReaction(PushReaction.DESTROY).
-                    sound(SoundType.COPPER));
+                    sound(SoundType.COPPER)
+    );
     public static Block METEOR_BLOCK_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)

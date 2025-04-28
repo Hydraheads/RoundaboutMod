@@ -1,6 +1,9 @@
 {
   "variants": {
-    "": {
+    "lit=false": {
+      "model": "roundabout:block/ceiling_light_off"
+    },
+    "lit=true": {
       "model": "roundabout:block/ceiling_light"
     }
   }
