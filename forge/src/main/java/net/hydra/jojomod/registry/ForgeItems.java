@@ -319,6 +319,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DANGER.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<Item> CEILING_LIGHT_BLOCK_ITEM = addToTab(ITEMS.register("ceiling_light",
+            () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<Item> STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_dio_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DIO.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> STREET_SIGN_RIGHT_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_right_item",

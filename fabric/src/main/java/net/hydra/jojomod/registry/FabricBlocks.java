@@ -1,15 +1,12 @@
 package net.hydra.jojomod.registry;
 
 import com.mojang.datafixers.types.Type;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.item.BlockItem;
@@ -19,7 +16,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class FabricBlocks {
     public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
@@ -63,6 +59,7 @@ public class FabricBlocks {
     public static final Block WALL_STREET_SIGN_STOP = registerBlock("wall_street_sign_stop",ModBlocks.getWallStreetSignBlockProperties());
     public static final Block WALL_STREET_SIGN_YIELD = registerBlock("wall_street_sign_yield",ModBlocks.getWallStreetSignBlockProperties());
     public static final Block WALL_STREET_SIGN_DANGER = registerBlock("wall_street_sign_danger",ModBlocks.getWallStreetSignBlockProperties());
+    public static final Block CEILING_LIGHT = registerBlock("ceiling_light",ModBlocks.CEILING_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlockItemless("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
@@ -173,6 +170,7 @@ public class FabricBlocks {
         ModBlocks.WALL_STREET_SIGN_STOP = WALL_STREET_SIGN_STOP;
         ModBlocks.WALL_STREET_SIGN_YIELD = WALL_STREET_SIGN_YIELD;
         ModBlocks.WALL_STREET_SIGN_DANGER = WALL_STREET_SIGN_DANGER;
+        ModBlocks.CEILING_LIGHT = CEILING_LIGHT;
         ModBlocks.STEREO = STEREO;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;

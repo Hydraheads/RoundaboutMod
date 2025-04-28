@@ -3,10 +3,7 @@ package net.hydra.jojomod.block;
 import net.hydra.jojomod.Roundabout;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -51,6 +48,7 @@ public class ModBlocks {
     public static Block WALL_STREET_SIGN_STOP;
     public static Block WALL_STREET_SIGN_YIELD;
     public static Block WALL_STREET_SIGN_DANGER;
+    public static Block CEILING_LIGHT;
     public static Block STEREO;
 
     public static Block STAND_FIRE;
@@ -114,6 +112,17 @@ public class ModBlocks {
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL)
     );
+
+
+    public static CeilingLightBlock CEILING_LIGHT_BLOCK_PROPERTIES = new CeilingLightBlock(
+            BlockBehaviour.Properties.of().
+                    mapColor(MapColor.SAND).
+                    strength(0.1F).
+                    lightLevel((p_152607_) -> {
+                        return 15;
+                    }).
+                    pushReaction(PushReaction.DESTROY).
+                    sound(SoundType.COPPER));
     public static Block METEOR_BLOCK_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
@@ -277,7 +286,6 @@ public class ModBlocks {
                         .replaceable()
         );
     }
-
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).

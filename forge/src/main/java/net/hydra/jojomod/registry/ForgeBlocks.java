@@ -64,6 +64,8 @@ public class ForgeBlocks {
             ModBlocks::getWallStreetSignBlockProperties);
     public static final RegistryObject<Block> WALL_STREET_SIGN_DANGER = BLOCKS.register("wall_street_sign_danger",
             ModBlocks::getWallStreetSignBlockProperties);
+    public static final RegistryObject<Block> CEILING_LIGHT = BLOCKS.register("ceiling_light",
+            () -> ModBlocks.CEILING_LIGHT_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> FOG_DIRT = BLOCKS.register("fog_dirt",
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_DIRT_COATING = BLOCKS.register("fog_dirt_coating",
