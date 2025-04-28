@@ -230,7 +230,9 @@ public class FabricSounds {
         addSound(ModSounds.DIO_THE_WORLD_3_ID, ModSounds.DIO_THE_WORLD_3_EVENT);
         addSound(ModSounds.DIO_THE_WORLD_4_ID, ModSounds.DIO_THE_WORLD_4_EVENT);
         addSound(ModSounds.DIO_TAUNT_ID, ModSounds.DIO_TAUNT_EVENT);
-        addSound(ModSounds.DIO_INTERESTING_ID, ModSounds.DIO_JOTARO_EVENT);
+        addSound(ModSounds.DIO_INTERESTING_ID, ModSounds.DIO_INTERESTING_EVENT);
+        addSound(ModSounds.DIO_JOTARO_ID, ModSounds.DIO_JOTARO_EVENT);
+        addSound(ModSounds.DIO_JOTARO_2_ID, ModSounds.DIO_JOTARO_2_EVENT);
 
         addSound(ModSounds.JOTARO_GRUNT_ID, ModSounds.JOTARO_GRUNT_EVENT);
         addSound(ModSounds.JOTARO_OI_OI_ID, ModSounds.JOTARO_OI_OI_EVENT);
@@ -258,6 +260,8 @@ public class FabricSounds {
         addSound(ModSounds.JOTARO_YARO_ID, ModSounds.JOTARO_YARO_EVENT);
         addSound(ModSounds.JOTARO_YAMERO_ID, ModSounds.JOTARO_YAMERO_EVENT);
         addSound(ModSounds.JOTARO_FINISHER_ID, ModSounds.JOTARO_FINISHER_EVENT);
+        addSound(ModSounds.JOTARO_DIO_ID, ModSounds.JOTARO_DIO_EVENT);
+        addSound(ModSounds.JOTARO_GETING_CLOSER_ID, ModSounds.JOTARO_GETING_CLOSER_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);

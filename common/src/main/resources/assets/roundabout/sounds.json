@@ -185,6 +185,12 @@
       "roundabout:dio_jotaro"
     ]
   },
+  "dio_jotaro_2": {
+    "subtitle": "sounds.roundabout.dio_jotaro_2",
+    "sounds": [
+      "roundabout:dio_jotaro_2"
+    ]
+  },
   "jotaro_yare_yare": {
     "subtitle": "sounds.roundabout.jotaro_yare_yare",
     "sounds": [
@@ -345,6 +351,18 @@
     "subtitle": "sounds.roundabout.jotaro_grunt",
     "sounds": [
       "roundabout:jotaro_grunt"
+    ]
+  },
+  "jotaro_dio": {
+    "subtitle": "sounds.roundabout.jotaro_dio",
+    "sounds": [
+      "roundabout:jotaro_dio"
+    ]
+  },
+  "jotaro_getting_closer": {
+    "subtitle": "sounds.roundabout.jotaro_getting_closer",
+    "sounds": [
+      "roundabout:jotaro_getting_closer"
     ]
   },
   "fire_whoosh": {

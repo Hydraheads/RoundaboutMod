@@ -426,9 +426,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 this.dropItem($$1.getOnPos());
             }
         } else if (this.getItem().getItem() instanceof MaskItem && $$1 instanceof Player pe) {
-            if (ClientNetworking.getAppropriateConfig().canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(0).isEmpty()){
-                ((IPlayerEntity)pe).roundabout$getMaskInventory().setItem(0,this.getItem().copy());
-
+            if (ClientNetworking.getAppropriateConfig().canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(0).isEmpty()) {
+                ((IPlayerEntity) pe).roundabout$getMaskInventory().setItem(0, this.getItem().copy());
+            } else if (ClientNetworking.getAppropriateConfig().canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(1).isEmpty()){
+                ((IPlayerEntity)pe).roundabout$getMaskInventory().setItem(1,this.getItem().copy());
             } else {
                 this.dropItem($$1.getOnPos());
             }

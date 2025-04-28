@@ -403,6 +403,8 @@ public class ForgeSounds {
             register(ModSounds.DIO_INTERESTING, ModSounds.DIO_INTERESTING_ID);
     public static final RegistryObject<SoundEvent> DIO_JOTARO =
             register(ModSounds.DIO_JOTARO, ModSounds.DIO_JOTARO_ID);
+    public static final RegistryObject<SoundEvent> DIO_JOTARO_2 =
+            register(ModSounds.DIO_JOTARO_2, ModSounds.DIO_JOTARO_2_ID);
     public static final RegistryObject<SoundEvent> JOTARO_HURT_1 =
             register(ModSounds.JOTARO_HURT_1, ModSounds.JOTARO_HURT_1_ID);
     public static final RegistryObject<SoundEvent> JOTARO_HURT_2 =
@@ -455,6 +457,10 @@ public class ForgeSounds {
             register(ModSounds.JOTARO_ATTACK_2, ModSounds.JOTARO_ATTACK_2_ID);
     public static final RegistryObject<SoundEvent> JOTARO_ATTACK_3 =
             register(ModSounds.JOTARO_ATTACK_3, ModSounds.JOTARO_ATTACK_3_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_DIO =
+            register(ModSounds.JOTARO_DIO, ModSounds.JOTARO_DIO_ID);
+    public static final RegistryObject<SoundEvent> JOTARO_GETTING_CLOSER =
+            register(ModSounds.JOTARO_GETING_CLOSER, ModSounds.JOTARO_GETING_CLOSER_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =

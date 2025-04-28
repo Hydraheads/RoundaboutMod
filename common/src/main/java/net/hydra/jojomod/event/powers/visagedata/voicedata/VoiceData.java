@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class VoiceData {
     public int hurtCooldown = -1;
     public int attackCooldown = -1;
     public int summonCooldown = -1;
+
+    public int challengeCooldown = -1;
+    public int challengeNumber = -1;
     public List<VoiceLine> tickLines = new ArrayList<>();
     public List<VoiceLine> hurtLines = new ArrayList<>();
     public List<VoiceLine> deathLines = new ArrayList<>();
@@ -97,10 +101,26 @@ public class VoiceData {
         hurtCooldown = ticksLasting+100;
         this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
     }
+    public void playSoundChallenge(SoundEvent se, int ticksLasting){
+        talkingTicks = ticksLasting;
+        challengeCooldown = ticksLasting+2400;
+        this.self.level().playSound(null, this.self, se, this.self.getSoundSource(), 2F, 1F);
+    }
 
+    public void challengeId(int tickCount, int challengeID){
+        challengeNumber = challengeID;
+        talkingTicks = tickCount;
+    }
+    public void respondToChallenge(){
+
+    }
     public void playOnTick(){
         if (inTheMiddleOfTalking()){
             talkingTicks--;
+            if (talkingTicks <= -1 && challengeNumber != -1){
+                respondToChallenge();
+                challengeNumber = -1;
+            }
         }
         if (idleCooldown > -1){
             idleCooldown --;
@@ -117,9 +137,16 @@ public class VoiceData {
         if (summonCooldown > -1){
             summonCooldown --;
         }
+        if (challengeCooldown > -1){
+            challengeCooldown --;
+        }
 
         if (!inTheMiddleOfTalking() && !self.isCrouching()){
             safeInit();
+            if (challengeCooldown <= -1){
+                challenge();
+            }
+
             overrideTick();
             if (!tickLines.isEmpty() && idleCooldown <= -1) {
                 VoiceLine vl = getRandomElement(tickLines);
@@ -210,4 +237,9 @@ public class VoiceData {
     }
     public void playSummonOverride(){
     }
+
+    public void challenge(){
+
+    }
+    public static final TargetingConditions roundabout$attackTargeting = TargetingConditions.forNonCombat().range(64.0);
 }

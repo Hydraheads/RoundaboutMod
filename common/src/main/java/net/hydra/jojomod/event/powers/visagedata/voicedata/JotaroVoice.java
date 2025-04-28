@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.VoiceLine;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.world.entity.player.Player;
@@ -32,5 +33,14 @@ public class JotaroVoice extends VoiceData{
         addVoiceLine(new VoiceLine(22, ModSounds.JOTARO_STAR_PLATINUM_2_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
         addVoiceLine(new VoiceLine(22, ModSounds.JOTARO_STAR_PLATINUM_3_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
         addVoiceLine(new VoiceLine(21, ModSounds.JOTARO_STAR_PLATINUM_4_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
+    }
+
+    @Override
+    public void respondToChallenge(){
+        if (challengeNumber == 1){
+            playSoundChallenge(ModSounds.JOTARO_DIO_EVENT,10);
+        } if (challengeNumber == 2){
+            playSoundChallenge(ModSounds.JOTARO_GETING_CLOSER_EVENT,68);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 
 public class VoiceLine {
 
@@ -29,9 +30,9 @@ public class VoiceLine {
         DEATH,
         KILL,
         SUMMON,
-        INTERACTION
+        INTERACTION,
+        COMMUNICATION
     }
-
 
     public VoiceLine(int lengthInTicks, SoundEvent soundEvent, SOUND_CATEGORIES soundCategory) {
         this.lengthInTicks = lengthInTicks;

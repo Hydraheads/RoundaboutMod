@@ -694,6 +694,9 @@ public class ModSounds {
     public static final String DIO_JOTARO = "dio_jotaro";
     public static final ResourceLocation DIO_JOTARO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_JOTARO);
     public static SoundEvent DIO_JOTARO_EVENT = SoundEvent.createVariableRangeEvent(DIO_JOTARO_ID);
+    public static final String DIO_JOTARO_2 = "dio_jotaro_2";
+    public static final ResourceLocation DIO_JOTARO_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_JOTARO_2);
+    public static SoundEvent DIO_JOTARO_2_EVENT = SoundEvent.createVariableRangeEvent(DIO_JOTARO_2_ID);
     public static final String DIO_INTERESTING = "dio_interesting";
     public static final ResourceLocation DIO_INTERESTING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_INTERESTING);
     public static SoundEvent DIO_INTERESTING_EVENT = SoundEvent.createVariableRangeEvent(DIO_INTERESTING_ID);
@@ -777,6 +780,12 @@ public class ModSounds {
     public static final String JOTARO_YAMERO = "jotaro_yamero";
     public static final ResourceLocation JOTARO_YAMERO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YAMERO);
     public static SoundEvent JOTARO_YAMERO_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YAMERO_ID);
+    public static final String JOTARO_DIO = "jotaro_dio";
+    public static final ResourceLocation JOTARO_DIO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_DIO);
+    public static SoundEvent JOTARO_DIO_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_DIO_ID);
+    public static final String JOTARO_GETING_CLOSER = "jotaro_getting_closer";
+    public static final ResourceLocation JOTARO_GETING_CLOSER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_GETING_CLOSER);
+    public static SoundEvent JOTARO_GETING_CLOSER_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_GETING_CLOSER_ID);
 
 
 

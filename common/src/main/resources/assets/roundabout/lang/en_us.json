@@ -494,6 +494,7 @@
   "sounds.roundabout.dio_taunt":  "DIO taunting",
   "sounds.roundabout.dio_interesting":  "Amusing!",
   "sounds.roundabout.dio_jotaro":  "Jotaro!",
+  "sounds.roundabout.dio_jotaro_2":  "Jotaro-",
 
   "sounds.roundabout.jotaro_hurt_1":  "Jotaro hurt",
   "sounds.roundabout.jotaro_hurt_2":  "Jotaro hurt",
@@ -520,7 +521,9 @@
   "sounds.roundabout.jotaro_yare_yare_4":  "Good grief",
   "sounds.roundabout.jotaro_yare_yare_5":  "Good grief",
   "sounds.roundabout.jotaro_pissed_off":  "One Mistake...",
-  "sounds.roundabout.jotaro_judgment":  "Judgement",
+  "sounds.roundabout.jotaro_judgement":  "Judgement",
+  "sounds.roundabout.jotaro_dio":  "DIO!",
+  "sounds.roundabout.jotaro_getting_closer":  "How else can I...",
 
   "instruction.roundabout.press_attack": "Click Attack",
   "instruction.roundabout.hold_attack": "Hold Attack",

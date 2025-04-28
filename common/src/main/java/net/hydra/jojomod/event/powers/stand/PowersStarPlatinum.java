@@ -1443,6 +1443,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
+    @Override
+    public void playBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof JotaroVoice JV) {
+                if (Math.random() > 0.7) {
+                    JV.playSoundIfPossible(ModSounds.JOTARO_JUDGEMENT_EVENT, 46, 1, 2);
+                }
+            }
+        }
+        super.playBarrageCrySound();
+    }
 
     @Override
     public void animateFinalAttack(){
