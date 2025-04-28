@@ -25,6 +25,8 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -1342,6 +1344,20 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int getMaxTSTime (){
         return ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
     }
+
+
+    @Override
+    public void playSummonSound() {
+        if (this.self.isCrouching()){
+            return;
+        }
+
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof JotaroVoice JV){
+            JV.playSummon();
+        }
+        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+    }
+
     @Override
 
     public void setChargeTicksMult(){

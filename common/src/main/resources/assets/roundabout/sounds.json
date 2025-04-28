@@ -245,22 +245,22 @@
       "roundabout:jotaro_star_platinum_2"
     ]
   },
-  "jotaro_star_pissed_off": {
-    "subtitle": "sounds.roundabout.jotaro_star_pissed_off",
+  "jotaro_pissed_off": {
+    "subtitle": "sounds.roundabout.jotaro_pissed_off",
     "sounds": [
-      "roundabout:jotaro_star_pissed_off"
+      "roundabout:jotaro_pissed_off"
     ]
   },
-  "jotaro_star_judgement": {
-    "subtitle": "sounds.roundabout.jotaro_star_judgement",
+  "jotaro_judgement": {
+    "subtitle": "sounds.roundabout.jotaro_judgement",
     "sounds": [
-      "roundabout:jotaro_star_judgement"
+      "roundabout:jotaro_judgement"
     ]
   },
-  "jotaro_star_oi_oi": {
-    "subtitle": "sounds.roundabout.jotaro_star_oi_oi",
+  "jotaro_oi_oi": {
+    "subtitle": "sounds.roundabout.jotaro_oi_oi",
     "sounds": [
-      "roundabout:jotaro_star_oi_oi"
+      "roundabout:jotaro_oi_oi"
     ]
   },
   "fire_whoosh": {
