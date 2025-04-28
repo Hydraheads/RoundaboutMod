@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "item": "roundabout:light_bulb"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "###",
+    "NBN",
+    "   "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:ceiling_light"
+  },
+  "show_notification": true
+}
