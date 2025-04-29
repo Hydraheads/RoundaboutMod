@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -25,15 +26,17 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MirrorBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+public class MirrorBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape BASE = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
     protected static final VoxelShape TOP = Block.box(2.0, 0, 2.0, 14.0, 14.0, 14.0);
 
-    protected static final VoxelShape EAST_AABB = Block.box(0.0, 0.0, 0.0, 3.0, 16.0, 16.0);
-    protected static final VoxelShape WEST_AABB = Block.box(13.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-    protected static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0);
-    protected static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape EAST_AABB = Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0);
+    protected static final VoxelShape WEST_AABB = Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0);
+    protected static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
 
     public MirrorBlock(BlockBehaviour.Properties $$1) {
         super($$1);
@@ -119,6 +122,10 @@ public class MirrorBlock extends HorizontalDirectionalBlock implements SimpleWat
     }
 
     @Override
+    public BlockEntity newBlockEntity(BlockPos $$0, BlockState $$1) {
+        return new MirrorBlockEntity($$0, $$1);
+    }
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
         $$0.add(FACING, WATERLOGGED);
     }
@@ -129,6 +136,11 @@ public class MirrorBlock extends HorizontalDirectionalBlock implements SimpleWat
         return true;
     }
 
+
+    @Override
+    public RenderShape getRenderShape(BlockState $$0) {
+        return RenderShape.MODEL;
+    }
 }
 
 

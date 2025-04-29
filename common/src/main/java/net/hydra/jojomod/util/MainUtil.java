@@ -1189,7 +1189,7 @@ public class MainUtil {
             level.setBlockAndUpdate(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), state);
         }
     }
-    private static final TargetingConditions OFFER_TARGER_CONTEXT = TargetingConditions.forNonCombat().range(64.0D);
+    public static final TargetingConditions OFFER_TARGER_CONTEXT = TargetingConditions.forNonCombat().range(64.0D);
 
     public static void handShake(ServerPlayer player){
         Networking.sendConfigToPlayer(player);

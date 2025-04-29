@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.MirrorBlockEntityRenderer;
 import net.hydra.jojomod.block.StandFireRenderer;
 import net.hydra.jojomod.entity.D4CCloneRenderer;
 import net.hydra.jojomod.entity.FogCloneRenderer;
@@ -73,6 +74,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
 
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);
         //TSCoreShader.bootstrapShaders();
         //TSPostShader.bootstrapShaders();
     }

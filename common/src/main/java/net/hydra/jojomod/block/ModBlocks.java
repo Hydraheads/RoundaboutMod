@@ -108,6 +108,7 @@ public class ModBlocks {
 
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
+    public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)

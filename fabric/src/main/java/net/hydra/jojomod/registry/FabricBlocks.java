@@ -119,6 +119,8 @@ public class FabricBlocks {
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
     public static final BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY =
             registerBE("stand_fire",BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE));
+    public static final BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY =
+            registerBE("mirror",BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR));
 
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
@@ -183,6 +185,7 @@ public class FabricBlocks {
         ModBlocks.CREAM_FIRE = CREAM_FIRE;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
+        ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_CLAY = FOG_CLAY;

@@ -166,6 +166,7 @@ public class ForgeEvents {
         ModBlocks.CREAM_FIRE = ForgeBlocks.CREAM_FIRE.get();
 
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();
+        ModBlocks.MIRROR_BLOCK_ENTITY = ForgeBlocks.MIRROR_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
