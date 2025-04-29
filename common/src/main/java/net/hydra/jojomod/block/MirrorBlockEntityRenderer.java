@@ -10,8 +10,10 @@ import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IRenderSystem;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -31,6 +33,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -71,7 +77,12 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                         int totalnumber = lvent.size();
                         for (LivingEntity value : lvent) {
                             if (value instanceof StandEntity || value.isInvisible() || value.getBbHeight() >= 2 || value.getBbWidth() >= 2 ||
-                                    !(value instanceof Mob || value instanceof Player)) {
+                                    !(value instanceof AbstractVillager || value instanceof Player || value instanceof JojoNPC
+                                            || value instanceof Pig || value instanceof Cow || value instanceof Sheep
+                                            || value instanceof Wolf || value instanceof Parrot
+                                            || value instanceof Skeleton || value instanceof Creeper || value instanceof Vindicator
+                                            || value instanceof Illusioner || value instanceof Evoker || value instanceof Witch
+                                            || value instanceof Chicken || value instanceof Zombie || value instanceof FallenMob)) {
                                 rement.remove(value);
                             }
                         }
