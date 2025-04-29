@@ -1,7 +1,9 @@
 package net.hydra.jojomod.block;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.Lighting;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.util.MainUtil;
@@ -17,6 +19,8 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -48,7 +52,8 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                 List<LivingEntity> rement = new ArrayList<>(lvent);
                 int totalnumber = lvent.size();
                 for (LivingEntity value : lvent) {
-                    if (value instanceof StandEntity || value.isInvisible() ||value.getBbHeight() >= 2) {
+                    if (value instanceof StandEntity || value.isInvisible() ||value.getBbHeight() >= 2||value.getBbWidth() >= 2 ||
+                            !(value instanceof Mob || value instanceof Player)) {
                         rement.remove(value);
                     }
                 }
@@ -63,7 +68,12 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                 EntityRenderer<? super T> ERA = $$7.getRenderer(lv);
                 if (ERA instanceof LivingEntityRenderer) {
                     EntityRenderer<LivingEntity> ER = (EntityRenderer<LivingEntity>) $$7.getRenderer(lv);
+                    if (lv instanceof Player PE){
+                        ((IPlayerEntity)PE).roundabout$setShowName(false);
+                    }
                     if (fire.getBlockState().hasProperty(MirrorBlock.FACING)) {
+                        $$7.setRenderShadow(false);
+                        Lighting.setupForEntityInInventory();
                         Direction direction = fire.getBlockState().getValue(MirrorBlock.FACING);
                         if (direction.equals(Direction.NORTH)){
                             matrices.translate(0.5,0.1,0.93);
@@ -83,11 +93,18 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                             float rotO = lv.yBodyRotO;
                             float headrot = lv.yHeadRot;
                             float headrotO = lv.yHeadRotO;
+                            float yrotGeneral = lv.getYRot();
+                            float yrotGeneralO = lv.yRotO;
+                            lv.setYRot(((yrotGeneral + 180) % 360));
+                            lv.yRotO = ((yrotGeneralO + 180) % 360);
+                            lv.yBodyRotO = ((rotO + 180) % 360);
                             lv.setYBodyRot((rot + 180) % 360);
                             lv.yBodyRotO = ((rotO + 180) % 360);
                             lv.yHeadRot = ((headrot + 180) % 360);
                             lv.yHeadRotO = ((headrotO + 180) % 360);
                             ER.render(lv, 0, partialTick, matrices, buffer, 15728880);
+                            lv.setYRot(yrotGeneral);
+                            lv.yRotO = yrotGeneralO;
                             lv.setYBodyRot(rot);
                             lv.yBodyRotO = rotO;
                             lv.yHeadRot = headrot;
@@ -95,8 +112,12 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                         } else {
                             ER.render(lv, 0, partialTick, matrices, buffer, 15728880);
                         }
-                    } else {
-                        Roundabout.LOGGER.info("I have questions");
+
+                        if (lv instanceof Player PE){
+                            ((IPlayerEntity)PE).roundabout$setShowName(true);
+                        }
+                        $$7.setRenderShadow(true);
+                        Lighting.setupFor3DItems();
                     }
                 }
             }

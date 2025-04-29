@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -22,6 +23,9 @@ import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -311,6 +315,22 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public boolean roundabout$heldDownSwitchExp = false;
     @Unique
     public boolean roundabout$displayExp = false;
+
+    @Unique
+    public boolean roundabout$displayNamePossible = true;
+
+    @Override
+    @Unique
+    public void roundabout$setShowName(boolean boo){
+        roundabout$displayNamePossible = boo;
+    }
+    @Inject(method = "shouldShowName",
+            at = @At(value = "HEAD"), cancellable = true)
+    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$shouldShowName(CallbackInfoReturnable<Boolean> cir) {
+        if (!roundabout$displayNamePossible){
+            cir.setReturnValue(false);
+        }
+    }
     @Override
     @Unique
     public void roundabout$showExp(boolean keyIsDown){
