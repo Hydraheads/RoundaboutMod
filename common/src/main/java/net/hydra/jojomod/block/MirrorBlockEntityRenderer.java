@@ -82,7 +82,8 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                             || value instanceof Wolf || value instanceof Parrot
                                             || value instanceof Skeleton || value instanceof Creeper || value instanceof Vindicator
                                             || value instanceof Illusioner || value instanceof Evoker || value instanceof Witch
-                                            || value instanceof Chicken || value instanceof Zombie || value instanceof FallenMob)) {
+                                            || value instanceof Chicken || value instanceof Zombie || value instanceof FallenMob)
+                            || value.isAutoSpinAttack()) {
                                 rement.remove(value);
                             } else {
                                 if (fire.getBlockState().hasProperty(MirrorBlock.FACING)) {
@@ -171,7 +172,9 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                 Vector3f first = new Vector3f(lighting[0]);
                                 Vector3f second = new Vector3f(lighting[1]);
 
-                                matrices.last().normal().rotate(Axis.YP.rotationDegrees(180F)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
+                                if (Minecraft.getInstance().getCameraEntity() != null) {
+                                    matrices.last().normal().rotate(Axis.YP.rotationDegrees(Minecraft.getInstance().getCameraEntity().getXRot()+90)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
+                                }
                                 Lighting.setupLevel(matrices.last().pose());
 
                                 ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, LightTexture.pack(15, 15)); // replace with: LightTexture.pack(15, 15)) for fullbright;
