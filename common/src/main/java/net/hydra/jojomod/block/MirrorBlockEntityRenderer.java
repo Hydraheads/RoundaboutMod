@@ -105,7 +105,7 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                         matrices.last().normal().rotate(Axis.YP.rotationDegrees(180F)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
 
                         Lighting.setupLevel(matrices.last().pose());
-                        ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, renderType -> buffer.getBuffer(RenderType.entityCutoutNoCull(ER.getTextureLocation(lv))), packedLight); // replace with: LightTexture.pack(15, 15)) for fullbright;
+                        ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, packedLight); // replace with: LightTexture.pack(15, 15)) for fullbright;
                         Lighting.setupNetherLevel(matrices.last().pose());
 
                         Minecraft.getInstance().options.hideGui = hgui;
