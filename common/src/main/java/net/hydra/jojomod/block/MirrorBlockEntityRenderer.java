@@ -139,18 +139,22 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                 boolean hgui = Minecraft.getInstance().options.hideGui;
                                 Minecraft.getInstance().options.hideGui = true;
                                 Direction direction = fire.getBlockState().getValue(MirrorBlock.FACING);
+                                float flip = 1;
+                                if (ClientConfig.getLocalInstance().mirrorFlipsRendering){
+                                    flip*=-1;
+                                }
                                 if (direction.equals(Direction.NORTH)) {
                                     matrices.translate(0.5, 0.1, 0.93);
-                                    matrices.scale(-0.35f, 0.35f, 0.012f);
+                                    matrices.scale(flip*0.35f, 0.35f, 0.012f);
                                 } else if (direction.equals(Direction.EAST)) {
                                     matrices.translate(0.07, 0.1, 0.5);
-                                    matrices.scale(-0.012f, 0.35f, 0.35f);
+                                    matrices.scale(flip*0.012f, 0.35f, 0.35f);
                                 } else if (direction.equals(Direction.SOUTH)) {
                                     matrices.translate(0.5, 0.1, 0.07);
-                                    matrices.scale(-0.35f, 0.35f, 0.012f);
+                                    matrices.scale(flip*0.35f, 0.35f, 0.012f);
                                 } else if (direction.equals(Direction.WEST)) {
                                     matrices.translate(0.93, 0.1, 0.5);
-                                    matrices.scale(-0.012f, 0.35f, 0.35f);
+                                    matrices.scale(flip*0.012f, 0.35f, 0.35f);
                                 }
                                 boolean $$18 = !lv.isInvisible();
                                 Player pp = Minecraft.getInstance().player;

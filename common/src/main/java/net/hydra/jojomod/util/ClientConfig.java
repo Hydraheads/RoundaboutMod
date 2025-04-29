@@ -23,6 +23,8 @@ public class ClientConfig {
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer maxMirrorRendersAtOnceSetToZeroToDisable;
     @BooleanOption(group = "inherit", value = false)
+    public Boolean mirrorFlipsRendering;
+    @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
     public Boolean showCreativeTextOnWorthinessArrow;
