@@ -84,6 +84,43 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                             || value instanceof Illusioner || value instanceof Evoker || value instanceof Witch
                                             || value instanceof Chicken || value instanceof Zombie || value instanceof FallenMob)) {
                                 rement.remove(value);
+                            } else {
+                                if (fire.getBlockState().hasProperty(MirrorBlock.FACING)) {
+                                    Direction direction = fire.getBlockState().getValue(MirrorBlock.FACING);
+                                    if (direction.equals(Direction.NORTH)) {
+                                        if (value.getZ() > fire.getBlockPos().getZ()+1){
+                                            rement.remove(value);
+                                        } else if (value.getX() > fire.getBlockPos().getX()+8){
+                                            rement.remove(value);
+                                        } else if (value.getX() < fire.getBlockPos().getX()-8){
+                                            rement.remove(value);
+                                        }
+                                    } else if (direction.equals(Direction.EAST)) {
+                                        if (value.getX() < fire.getBlockPos().getX()-1){
+                                            rement.remove(value);
+                                        } else if (value.getZ() > fire.getBlockPos().getZ()+8){
+                                            rement.remove(value);
+                                        } else if (value.getZ() < fire.getBlockPos().getZ()-8){
+                                            rement.remove(value);
+                                        }
+                                    } else if (direction.equals(Direction.WEST)) {
+                                        if (value.getX() > fire.getBlockPos().getX()+1){
+                                            rement.remove(value);
+                                        } else if (value.getZ() > fire.getBlockPos().getZ()+8){
+                                            rement.remove(value);
+                                        } else if (value.getZ() < fire.getBlockPos().getZ()-8){
+                                            rement.remove(value);
+                                        }
+                                    } else if (direction.equals(Direction.SOUTH)) {
+                                        if (value.getZ() < fire.getBlockPos().getZ()-1){
+                                            rement.remove(value);
+                                        } else if (value.getX() > fire.getBlockPos().getX()+8){
+                                            rement.remove(value);
+                                        } else if (value.getX() < fire.getBlockPos().getX()-8){
+                                            rement.remove(value);
+                                        }
+                                    }
+                                }
                             }
                         }
                         lvent = rement;
