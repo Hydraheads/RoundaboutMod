@@ -954,6 +954,7 @@ public class BlockGrabPreset extends PunchingStand{
                         && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
                         && !state.is(Blocks.REINFORCED_DEEPSLATE)
                         && !(state.getBlock() instanceof InfestedBlock)
+                        && !(state.getBlock() instanceof SlabBlock)
                         && !(state.getBlock() instanceof FrostedIceBlock)
                         && !(state.getBlock() instanceof BuddingAmethystBlock)
                         && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK) {
