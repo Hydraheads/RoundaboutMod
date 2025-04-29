@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:glass_pane"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    " N ",
+    "NBN",
+    " N "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:mirror"
+  },
+  "show_notification": true
+}
