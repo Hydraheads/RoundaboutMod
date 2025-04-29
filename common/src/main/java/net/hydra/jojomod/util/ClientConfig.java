@@ -20,6 +20,8 @@ public class ClientConfig {
     public Boolean renderJusticeHandsWhilePiloting;
     @BooleanOption(group = "inherit", value = true)
     public Boolean renderArmorOnPlayerCloneAbilities;
+    @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+    public Integer maxMirrorRendersAtOnceSetToZeroToDisable;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)

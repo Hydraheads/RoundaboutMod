@@ -99,6 +99,7 @@ public class ClientUtil {
         }
         return false;
     }
+    public static int mirrorCycles = 0;
     public static boolean checkIfGamePaused() {
         return Minecraft.getInstance().isPaused();
     }

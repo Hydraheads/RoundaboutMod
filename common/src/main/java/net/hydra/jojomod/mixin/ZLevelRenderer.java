@@ -102,6 +102,14 @@ public abstract class ZLevelRenderer {
             }
         }
     }
+    @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
+            at = @At(value = "HEAD"))
+    private void roundabout$renderLevelHead(PoseStack $$0, float $$1, long $$2, boolean $$3,
+                                        Camera $$4, GameRenderer $$5, LightTexture $$6,
+                                        Matrix4f $$7, CallbackInfo ci) {
+        ClientUtil.mirrorCycles = 0;
+    }
+
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "TAIL"))
