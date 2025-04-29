@@ -2,13 +2,16 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -18,6 +21,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -66,14 +70,12 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
             if (lv != null){
                 EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
                 EntityRenderer<? super T> ERA = $$7.getRenderer(lv);
-                if (ERA instanceof LivingEntityRenderer) {
+                if (ERA instanceof LivingEntityRenderer ELA) {
                     EntityRenderer<LivingEntity> ER = (EntityRenderer<LivingEntity>) $$7.getRenderer(lv);
-                    if (lv instanceof Player PE){
-                        ((IPlayerEntity)PE).roundabout$setShowName(false);
-                    }
                     if (fire.getBlockState().hasProperty(MirrorBlock.FACING)) {
-                        $$7.setRenderShadow(false);
-                        Lighting.setupForEntityInInventory();
+                        matrices.pushPose();
+                        boolean hgui = Minecraft.getInstance().options.hideGui;
+                        Minecraft.getInstance().options.hideGui = true;
                         Direction direction = fire.getBlockState().getValue(MirrorBlock.FACING);
                         if (direction.equals(Direction.NORTH)){
                             matrices.translate(0.5,0.1,0.93);
@@ -88,36 +90,18 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                             matrices.translate(0.93,0.1,0.5);
                             matrices.scale(-0.012f, 0.35f, 0.35f);
                         }
+                        boolean $$18 = !lv.isInvisible();
+                        Player pp = Minecraft.getInstance().player;
+                        Minecraft $$17 = Minecraft.getInstance();
+                        boolean $$19 = !$$18 && (pp != null && !lv.isInvisibleTo(pp));
+                        boolean $$20 = false;
+                        RenderType $$21 = ((ILivingEntityRenderer)ELA).roundabout$getRenderType(lv, $$18, $$19, $$20);
                         if (direction.equals(Direction.NORTH)|| (direction.equals(Direction.SOUTH))) {
-                            float rot = lv.yBodyRot;
-                            float rotO = lv.yBodyRotO;
-                            float headrot = lv.yHeadRot;
-                            float headrotO = lv.yHeadRotO;
-                            float yrotGeneral = lv.getYRot();
-                            float yrotGeneralO = lv.yRotO;
-                            lv.setYRot(((yrotGeneral + 180) % 360));
-                            lv.yRotO = ((yrotGeneralO + 180) % 360);
-                            lv.yBodyRotO = ((rotO + 180) % 360);
-                            lv.setYBodyRot((rot + 180) % 360);
-                            lv.yBodyRotO = ((rotO + 180) % 360);
-                            lv.yHeadRot = ((headrot + 180) % 360);
-                            lv.yHeadRotO = ((headrotO + 180) % 360);
-                            ER.render(lv, 0, partialTick, matrices, buffer, 15728880);
-                            lv.setYRot(yrotGeneral);
-                            lv.yRotO = yrotGeneralO;
-                            lv.setYBodyRot(rot);
-                            lv.yBodyRotO = rotO;
-                            lv.yHeadRot = headrot;
-                            lv.yHeadRotO = headrotO;
-                        } else {
-                            ER.render(lv, 0, partialTick, matrices, buffer, 15728880);
+                            matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
                         }
-
-                        if (lv instanceof Player PE){
-                            ((IPlayerEntity)PE).roundabout$setShowName(true);
-                        }
-                        $$7.setRenderShadow(true);
-                        Lighting.setupFor3DItems();
+                        ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, 15728880);
+                        Minecraft.getInstance().options.hideGui = hgui;
+                        matrices.popPose();
                     }
                 }
             }

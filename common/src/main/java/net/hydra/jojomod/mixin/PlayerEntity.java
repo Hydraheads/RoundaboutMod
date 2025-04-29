@@ -326,7 +326,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "shouldShowName",
             at = @At(value = "HEAD"), cancellable = true)
-    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$shouldShowName(CallbackInfoReturnable<Boolean> cir) {
+    public void roundabout$shouldShowName(CallbackInfoReturnable<Boolean> cir) {
         if (!roundabout$displayNamePossible){
             cir.setReturnValue(false);
         }
