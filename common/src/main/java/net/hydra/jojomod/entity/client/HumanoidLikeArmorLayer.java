@@ -214,7 +214,13 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
             Entity ent, ItemStack stack, EquipmentSlot slot
     ) {
         if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
-            renderModel($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8,getArmorResource(ent,stack,slot,$$9));
+            ResourceLocation rl = getArmorResource(ent,stack,slot,$$9);
+            if (rl != null){
+                renderModel($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8,rl);
+            } else {
+                VertexConsumer $$10 = $$1.getBuffer(RenderType.armorCutoutNoCull(this.getArmorLocation($$3, $$5, $$9)));
+                $$4.renderToBuffer($$0, $$10, $$2, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
+            }
         } else {
             VertexConsumer $$10 = $$1.getBuffer(RenderType.armorCutoutNoCull(this.getArmorLocation($$3, $$5, $$9)));
             $$4.renderToBuffer($$0, $$10, $$2, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
@@ -262,7 +268,7 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
             s1 = ClientPlatform.PLATFORM_ACCESS_CLIENT.getArmorTexture(entity,stack,s1,slot,type);
             ResourceLocation resourcelocation = ARMOR_LOCATION_CACHE.get(s1);
 
-            if (resourcelocation == null) {
+            if (resourcelocation == null && s1 != null) {
                 resourcelocation = new ResourceLocation(s1);
                 ARMOR_LOCATION_CACHE.put(s1, resourcelocation);
             }
