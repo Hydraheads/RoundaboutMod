@@ -107,15 +107,13 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                         }
 
                         Matrix3f norm1 = new Matrix3f(matrices.last().normal());
-                        matrices.last().normal().set(norm1);
-
-                        matrices.last().normal().rotate(Axis.YP.rotationDegrees(180F)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
-
                         Vector3f[] lighting = ((IRenderSystem)new RenderSystem()).roundabout$getShaderLightDirections();
                         Vector3f first = new Vector3f(lighting[0]);
                         Vector3f second = new Vector3f(lighting[1]);
 
+                        matrices.last().normal().rotate(Axis.YP.rotationDegrees(180F)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
                         Lighting.setupLevel(matrices.last().pose());
+
                         ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, LightTexture.pack(15,15)); // replace with: LightTexture.pack(15, 15)) for fullbright;
 
                         matrices.last().normal().set(norm1);
