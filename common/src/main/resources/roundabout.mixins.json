@@ -130,6 +130,7 @@
     "ZParticleEngine",
     "ZPlayerModel",
     "ZPlayerRender",
+    "ZRenderSystem",
     "ZScreenEffectRenderer",
     "ZScreenShaking",
     "ZSkeletonRenderer",

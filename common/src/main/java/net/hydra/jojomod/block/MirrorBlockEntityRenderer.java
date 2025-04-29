@@ -2,11 +2,13 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IRenderSystem;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.util.MainUtil;
@@ -31,6 +33,8 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix3f;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,11 +106,20 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                             matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
                         }
 
+                        Matrix3f norm1 = new Matrix3f(matrices.last().normal());
+                        matrices.last().normal().set(norm1);
+
                         matrices.last().normal().rotate(Axis.YP.rotationDegrees(180F)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
 
+                        Vector3f[] lighting = ((IRenderSystem)new RenderSystem()).roundabout$getShaderLightDirections();
+                        Vector3f first = new Vector3f(lighting[0]);
+                        Vector3f second = new Vector3f(lighting[1]);
+
                         Lighting.setupLevel(matrices.last().pose());
-                        ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, packedLight); // replace with: LightTexture.pack(15, 15)) for fullbright;
-                        Lighting.setupNetherLevel(matrices.last().pose());
+                        ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, LightTexture.pack(15,15)); // replace with: LightTexture.pack(15, 15)) for fullbright;
+
+                        matrices.last().normal().set(norm1);
+                        RenderSystem.setShaderLights(first,second);
 
                         Minecraft.getInstance().options.hideGui = hgui;
                         matrices.popPose();
