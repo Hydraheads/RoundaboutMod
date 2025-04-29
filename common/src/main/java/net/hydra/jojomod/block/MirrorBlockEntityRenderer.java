@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -95,11 +97,17 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                         Minecraft $$17 = Minecraft.getInstance();
                         boolean $$19 = !$$18 && (pp != null && !lv.isInvisibleTo(pp));
                         boolean $$20 = false;
-                        RenderType $$21 = ((ILivingEntityRenderer)ELA).roundabout$getRenderType(lv, $$18, $$19, $$20);
+                        RenderType $$21 = RenderType.cutout();//((ILivingEntityRenderer)ELA).roundabout$getRenderType(lv, $$18, $$19, $$20);
                         if (direction.equals(Direction.NORTH)|| (direction.equals(Direction.SOUTH))) {
                             matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
                         }
-                        ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, 15728880);
+
+                        matrices.last().normal().rotate(Axis.YP.rotationDegrees(180F)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
+
+                        Lighting.setupLevel(matrices.last().pose());
+                        ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, renderType -> buffer.getBuffer(RenderType.entityCutoutNoCull(ER.getTextureLocation(lv))), packedLight); // replace with: LightTexture.pack(15, 15)) for fullbright;
+                        Lighting.setupLevel(matrices.last().pose());
+
                         Minecraft.getInstance().options.hideGui = hgui;
                         matrices.popPose();
                     }
