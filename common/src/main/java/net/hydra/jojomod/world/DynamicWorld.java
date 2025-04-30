@@ -105,14 +105,14 @@ public class DynamicWorld {
 
     public static void deregisterWorld(MinecraftServer server, String name)
     {
-        DynamicWorldAccessor accessor = DynamicWorldAccessor.getFrom(server);
-
-        accessor.roundabout$removeWorld(ResourceKey.create(Registries.DIMENSION, Roundabout.location(name)));
-
-        for (ServerPlayer sp : server.getPlayerList().getPlayers())
-        {
-            ModPacketHandler.PACKET_ACCESS.deregisterDynamicWorld(sp, name);
-        }
+//        DynamicWorldAccessor accessor = DynamicWorldAccessor.getFrom(server);
+//
+//        accessor.roundabout$removeWorld(ResourceKey.create(Registries.DIMENSION, Roundabout.location(name)));
+//
+//        for (ServerPlayer sp : server.getPlayerList().getPlayers())
+//        {
+//            ModPacketHandler.PACKET_ACCESS.deregisterDynamicWorld(sp, name);
+//        }
     }
 
     private static String generateRandomStringByWords(int numWords) {
