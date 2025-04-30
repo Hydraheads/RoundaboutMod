@@ -132,6 +132,11 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
+    public void deregisterDynamicWorld(ServerPlayer sp, String name) {
+
+    }
+
+    @Override
     public void StandGuardCancelClientPacket() {
         ForgePacketHandler.sendToServer(new ForgeGuardCancelPacket());
     }
