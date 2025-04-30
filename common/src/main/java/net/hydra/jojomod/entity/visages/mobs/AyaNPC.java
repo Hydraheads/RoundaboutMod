@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.visages.mobs;
 
+import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.StandUsingNPC;
 import net.hydra.jojomod.item.ModItems;
@@ -10,13 +11,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
-public class AyaNPC extends StandUsingNPC {
+public class AyaNPC extends Aesthetician {
     public AyaNPC(EntityType<? extends JojoNPC> p_35384_, Level p_35385_) {
         super(p_35384_, p_35385_);
     }
 
-    @Override
-    public StandDiscItem getDisc(){
-        return ((StandDiscItem) ModItems.STAND_DISC_CINDERELLA);
-    }
 }

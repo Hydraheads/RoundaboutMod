@@ -390,6 +390,13 @@ public abstract class InputEvents implements IInputEvents {
     }
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundabout$tickTick(CallbackInfo ci) {
+        if (ClientUtil.isInCinderellaMobUI > -1){
+            if (!ClientUtil.hasCinderellaShopUI()){
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(ClientUtil.isInCinderellaMobUI, PacketDataIndex.INT_RELLA_CANCEL);
+                ClientUtil.isInCinderellaMobUI = -1;
+            }
+        }
+
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
             if (player != null && level != null) {

@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
@@ -295,6 +296,18 @@ public class PowersCinderella extends DashPreset {
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
                         this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                         1, 2.5, 2,2.5, 0.015);
+
+                if (this.self instanceof Aesthetician aes){
+                    if (aes.interactingWith != null && aes.interactingWith.isEmpty()){
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+            } else {
+                if (this.self instanceof Aesthetician aes){
+                    if (aes.interactingWith != null && !aes.interactingWith.isEmpty()){
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                    }
+                }
             }
         }
         super.tickPower();

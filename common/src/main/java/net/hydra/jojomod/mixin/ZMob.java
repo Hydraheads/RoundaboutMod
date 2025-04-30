@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -451,10 +452,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         roundabout$retractTicks = 100;
                     }
                 } else {
-                    roundabout$retractTicks = Math.max(roundabout$retractTicks-1,-1);
-                    if (roundabout$retractTicks == -1 || this.roundabout$getFightOrFlight()){
-                        if (((StandUser) this).roundabout$getActive()){
-                            ((StandUser)this).roundabout$summonStand(this.level(),false,false);
+                    if (((StandUser)this).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE) {
+                        roundabout$retractTicks = Math.max(roundabout$retractTicks - 1, -1);
+                        if (roundabout$retractTicks == -1 || this.roundabout$getFightOrFlight()) {
+                            if (((StandUser) this).roundabout$getActive()) {
+                                ((StandUser) this).roundabout$summonStand(this.level(), false, false);
+                            }
                         }
                     }
                 }

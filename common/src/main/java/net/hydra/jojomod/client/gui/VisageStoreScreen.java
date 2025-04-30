@@ -56,9 +56,10 @@ public class VisageStoreScreen extends Screen {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
     }
-    public VisageStoreScreen(ItemStack stack) {
+    public VisageStoreScreen(boolean costs) {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
+        this.costsEmeralds = costs;
     }
 
 

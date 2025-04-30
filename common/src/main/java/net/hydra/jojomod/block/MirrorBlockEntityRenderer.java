@@ -143,21 +143,26 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                 Minecraft.getInstance().options.hideGui = true;
                                 Direction direction = fire.getBlockState().getValue(MirrorBlock.FACING);
                                 float flip = 1;
+                                float bam = 0;
                                 if (ClientConfig.getLocalInstance().mirrorFlipsRendering){
                                     flip*=-1;
                                 }
                                 if (direction.equals(Direction.NORTH)) {
                                     matrices.translate(0.5, 0.1, 0.93);
                                     matrices.scale(flip*0.35f, 0.35f, 0.012f);
+                                    bam = 0;
                                 } else if (direction.equals(Direction.EAST)) {
                                     matrices.translate(0.07, 0.1, 0.5);
                                     matrices.scale(flip*0.012f, 0.35f, 0.35f);
+                                    bam = 90;
                                 } else if (direction.equals(Direction.SOUTH)) {
                                     matrices.translate(0.5, 0.1, 0.07);
                                     matrices.scale(flip*0.35f, 0.35f, 0.012f);
+                                    bam = 180;
                                 } else if (direction.equals(Direction.WEST)) {
                                     matrices.translate(0.93, 0.1, 0.5);
                                     matrices.scale(flip*0.012f, 0.35f, 0.35f);
+                                    bam = 270;
                                 }
                                 boolean $$18 = !lv.isInvisible();
                                 Player pp = Minecraft.getInstance().player;
@@ -177,7 +182,9 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                 Vector3f second = new Vector3f(lighting[1]);
 
                                 if (Minecraft.getInstance().getCameraEntity() != null) {
-                                    matrices.last().normal().rotate(Axis.YP.rotationDegrees(Minecraft.getInstance().getCameraEntity().getXRot()+90)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
+                                    matrices.last().normal().set(Axis.YP.rotationDegrees(90)); // fix for scaling the X axis by a negative amount: otherwise it's always light level 0
+                                    //matrices.last().normal().set(Axis.ZP.rotationDegrees((Minecraft.getInstance().getCameraEntity().getYRot()%360)));
+                                    matrices.last().normal().rotate(Axis.ZP.rotationDegrees(0+bam));
                                 }
                                 Lighting.setupLevel(matrices.last().pose());
 

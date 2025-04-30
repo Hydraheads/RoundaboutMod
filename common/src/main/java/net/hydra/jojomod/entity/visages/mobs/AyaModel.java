@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.visages.mobs;
 
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
@@ -7,7 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
-public class AyaModel<T extends AyaNPC> extends PlayerLikeModel<T> {
+public class AyaModel<T extends JojoNPC> extends PlayerLikeModel<T> {
     public AyaModel(ModelPart root) {
         initParts(root);
     }

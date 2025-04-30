@@ -248,7 +248,6 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     }
 
 
-
     public Vec3 getDeltaMovementLerped(float $$0) {
         return this.deltaMovementOnPreviousTick.lerp(this.getDeltaMovement(), (double)$$0);
     }
@@ -257,10 +256,20 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
+
+
+    public boolean isUsingBrain(){
+        return true;
+    }
+    public void useNotBrain(){
+    }
+
     protected void customServerAiStep() {
-        this.level().getProfiler().push("villagerBrain");
-        this.getBrain().tick((ServerLevel)this.level(), this);
-        this.level().getProfiler().pop();
+        if (isUsingBrain()) {
+            this.getBrain().tick((ServerLevel) this.level(), this);
+        } else {
+            useNotBrain();
+        }
         if (this.assignProfessionWhenSpawned) {
             this.assignProfessionWhenSpawned = false;
         }

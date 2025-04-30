@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -1460,6 +1461,16 @@ public class MainUtil {
                         SoundEvent $$6 = ModSounds.CINDERELLA_SPARKLE_EVENT;
                         player.level().playSound(null, BlockPos.containing(player.position()), $$6, SoundSource.BLOCKS, 1F, 1F);
                     }
+            }
+        } else if (context == PacketDataIndex.INT_RELLA_START){
+            Entity target = player.level().getEntity(data);
+            if (target instanceof Aesthetician aes){
+                aes.addPlayerToList(player);
+            }
+        } else if (context == PacketDataIndex.INT_RELLA_CANCEL){
+            Entity target = player.level().getEntity(data);
+            if (target instanceof Aesthetician aes){
+                aes.removePlayerFromList(player);
             }
         }
     }

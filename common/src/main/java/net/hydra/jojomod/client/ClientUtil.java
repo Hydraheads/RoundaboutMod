@@ -303,13 +303,26 @@ public class ClientUtil {
         }
     }
 
+    public static boolean hasCinderellaShopUI() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.screen instanceof VisageStoreScreen vsc && vsc.costsEmeralds;
+    }
     public static boolean hasCinderellaUI() {
         Minecraft mc = Minecraft.getInstance();
-        return mc.screen instanceof VisageStoreScreen;
+        return mc.screen instanceof VisageStoreScreen vsc && !vsc.costsEmeralds;
     }
     public static void setCinderellaUI() {
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(new VisageStoreScreen());
+    }
+
+    public static int isInCinderellaMobUI = -1;
+    public static void setCinderellaUI(boolean costs, int entid) {
+        Minecraft mc = Minecraft.getInstance();
+
+        ModPacketHandler.PACKET_ACCESS.intToServerPacket(entid, PacketDataIndex.INT_RELLA_START);
+        isInCinderellaMobUI = entid;
+        mc.setScreen(new VisageStoreScreen(costs));
     }
     public static void setJusticeTacticsScreen() {
         Minecraft mc = Minecraft.getInstance();
