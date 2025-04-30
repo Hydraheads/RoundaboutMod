@@ -61,6 +61,11 @@ public abstract class ServerAccessorMixin implements DynamicWorldAccessor {
         this.levels.put(key, level);
     }
 
+    @Override
+    public void roundabout$removeWorld(ResourceKey<Level> key) {
+        this.levels.remove(key);
+    }
+
     @Inject(method="createLevels", at=@At("TAIL"))
     private void createLevelsMixin(ChunkProgressListener progressListener, CallbackInfo ci)
     {

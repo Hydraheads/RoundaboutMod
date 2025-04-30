@@ -23,6 +23,8 @@ public class DynamicWorld {
 
     public static HashMap<String, ServerLevel> levels = new HashMap<>();
 
+    public ResourceKey<Level> LEVEL_KEY;
+
     /**
      * @param server The server to register the world to.
      * @param name The name of the dimension (roundabout:name)
@@ -33,7 +35,7 @@ public class DynamicWorld {
         this.name = name;
 
         DynamicWorldAccessor accessor = DynamicWorldAccessor.getFrom(server);
-        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
+        LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
 
         var manager = getLevelStemRegistry(server);
 
@@ -99,6 +101,18 @@ public class DynamicWorld {
         var temp = registryManager.registryOrThrow(Registries.LEVEL_STEM);
 
         return (MappedRegistry<LevelStem>) temp;
+    }
+
+    public static void deregisterWorld(MinecraftServer server, String name)
+    {
+        DynamicWorldAccessor accessor = DynamicWorldAccessor.getFrom(server);
+
+        accessor.roundabout$removeWorld(ResourceKey.create(Registries.DIMENSION, Roundabout.location(name)));
+
+        for (ServerPlayer sp : server.getPlayerList().getPlayers())
+        {
+            ModPacketHandler.PACKET_ACCESS.deregisterDynamicWorld(sp, name);
+        }
     }
 
     private static String generateRandomStringByWords(int numWords) {

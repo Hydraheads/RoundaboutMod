@@ -27,6 +27,7 @@ public interface DynamicWorldAccessor {
     @Nullable ChunkProgressListener roundabout$getProgressListener();
 
     void roundabout$addWorld(ResourceKey<Level> key, ServerLevel level);
+    void roundabout$removeWorld(ResourceKey<Level> key);
 
     static DynamicWorldAccessor getFrom(MinecraftServer server)
     { return ((DynamicWorldAccessor) server); }

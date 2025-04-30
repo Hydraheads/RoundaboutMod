@@ -43,6 +43,7 @@ public interface IPacketAccess {
     void sendConfig(ServerPlayer sp);
 
     void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player);
+    void deregisterDynamicWorld(ServerPlayer sp, String name);
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();

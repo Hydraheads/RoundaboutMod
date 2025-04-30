@@ -91,6 +91,7 @@
     "InputEvents",
     "PlayerEntityAbstractClient",
     "PlayerEntityClient",
+    "PostChainMixin",
     "StandUserClient",
     "WorldTickClient",
     "ZAbstractFurnaceScreen",
