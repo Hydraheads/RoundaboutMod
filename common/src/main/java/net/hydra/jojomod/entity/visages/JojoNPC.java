@@ -311,7 +311,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         this.registerBrainGoals(this.getBrain());
     }
 
-    private void registerBrainGoals(Brain<JojoNPC> p_35425_) {
+    public void registerBrainGoals(Brain<JojoNPC> p_35425_) {
         if (this.isBaby()) {
             p_35425_.setSchedule(Schedule.VILLAGER_BABY);
             p_35425_.addActivity(Activity.PLAY, JojoNPCGoalPackages.getPlayPackage(1F));

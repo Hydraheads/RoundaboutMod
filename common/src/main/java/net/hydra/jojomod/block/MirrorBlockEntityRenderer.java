@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -47,6 +48,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> implements BlockEntityRenderer<MirrorBlockEntity> {
 
@@ -163,7 +165,9 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                 boolean $$19 = !$$18 && (pp != null && !lv.isInvisibleTo(pp));
                                 boolean $$20 = false;
                                 RenderType $$21 = RenderType.cutout();//((ILivingEntityRenderer)ELA).roundabout$getRenderType(lv, $$18, $$19, $$20);
-                                if (direction.equals(Direction.NORTH) || (direction.equals(Direction.SOUTH))) {
+                                if ((direction.equals(Direction.NORTH) || (direction.equals(Direction.SOUTH))) ||
+                                        Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
+                                    //Thank you forge for messing up rotation, very cool
                                     matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
                                 }
 
