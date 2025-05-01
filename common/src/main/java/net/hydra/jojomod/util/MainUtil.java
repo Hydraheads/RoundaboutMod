@@ -1230,6 +1230,8 @@ public class MainUtil {
                         VillagerType VT = VillagerType.byBiome(player.level().getBiome(player.blockPosition()));
                         totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + 1);
                     }
+
+
                     ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
                 }
                 ((IPlayerEntity) player).roundabout$shapeShift();

@@ -112,6 +112,7 @@
   "text.roundabout.meteorite": "Meteorite",
 
   "item.roundabout.terrier_spawn_egg": "Boston Terrier Spawn Egg",
+  "item.roundabout.aesthetician_spawn_egg": "Aesthetician Spawn Egg",
 
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.the_world": "The World",
@@ -144,6 +145,7 @@
   "entity.roundabout.jojo_npc_josuke_part_eight": "Josuke",
   "entity.roundabout.jojo_npc_valentine": "Valentine",
   "entity.roundabout.jojo_npc_aya": "Aya",
+  "entity.roundabout.aesthetician": "Aesthetician",
   "entity.roundabout.jojo_npc_steve": "Steve",
   "entity.roundabout.jojo_npc_alex": "Alex",
   "entity.roundabout.jojo_npc_modified": "Custom",

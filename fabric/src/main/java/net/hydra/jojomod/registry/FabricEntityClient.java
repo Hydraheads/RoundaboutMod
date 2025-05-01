@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.Terrier.TerrierEntityRenderer;
 import net.hydra.jojomod.entity.client.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.corpses.*;
+import net.hydra.jojomod.entity.npcs.AestheticianRenderer;
 import net.hydra.jojomod.entity.pathfinding.NoRenderer;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -70,6 +71,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.PARALLEL_DIEGO, DiegoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOSUKE_PART_EIGHT, JosukePartEightRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AYA, AyaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.AESTHETICIAN, AestheticianRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);

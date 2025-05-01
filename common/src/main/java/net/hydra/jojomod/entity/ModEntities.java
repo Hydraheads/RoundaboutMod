@@ -4,6 +4,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
+import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -56,6 +57,7 @@ public class ModEntities {
     public static EntityType<ParallelDiegoNPC> PARALLEL_DIEGO;
     public static EntityType<JosukePartEightNPC> JOSUKE_PART_EIGHT;
     public static EntityType<AyaNPC> AYA;
+    public static EntityType<Aesthetician> AESTHETICIAN;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;
