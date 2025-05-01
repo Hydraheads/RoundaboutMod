@@ -1,11 +1,17 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.shader.RCoreShader;
+import net.hydra.jojomod.client.shader.RPostShaderRegistry;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,9 +30,21 @@ public class ZGameRenderer {
     @Shadow @Final private Map<String, ShaderInstance> shaders;
     @Shadow @Final private Minecraft minecraft;
 
+//    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(IZ)V", shift = At.Shift.BEFORE))
+//    private void roundabout$beforeClearDepthBuffer(float tickDelta, long $$1, PoseStack $$2, CallbackInfo ci)
+//    {
+//        if (RPostShaderRegistry.D4C_DIMENSION_TRANSITION != null)
+//        {
+//            RPostShaderRegistry.D4C_DIMENSION_TRANSITION.roundabout$resize();
+//            ((PostChain)RPostShaderRegistry.D4C_DIMENSION_TRANSITION).process(tickDelta);
+//        }
+//    }
+
     @Inject(method = "reloadShaders", at=@At("HEAD"))
     private void roundabout$reloadShaders(ResourceProvider provider, CallbackInfo ci)
     {
+        RPostShaderRegistry.bootstrap();
+
         try {
             RCoreShader.roundabout$meltDodgeProgram = Objects.requireNonNull(roundabout$registerShader(provider, "meltdodge")).getProgram();
             RCoreShader.roundabout$loveTrainProgram = Objects.requireNonNull(roundabout$registerShader(provider, "lovetrainlines")).getProgram();

@@ -57,5 +57,6 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.CONFIG_SYNC, ConfigSyncPacket::readConfig);
 
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.DYNAMIC_WORLD_SYNC, DynamicWorldSync::updateWorlds);
+        ClientPlayNetworking.registerGlobalReceiver(ModMessages.DYNAMIC_WORLD_DEREGISTER, DynamicWorldDeregister::updateWorlds);
     }
 }

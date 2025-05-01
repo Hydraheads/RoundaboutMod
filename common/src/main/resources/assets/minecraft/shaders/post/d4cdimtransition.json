@@ -4,7 +4,7 @@
   ],
   "passes": [
     {
-      "name": "fog",
+      "name": "d4cdimtransition",
       "intarget": "minecraft:main",
       "outtarget": "swap",
       "auxtargets": [

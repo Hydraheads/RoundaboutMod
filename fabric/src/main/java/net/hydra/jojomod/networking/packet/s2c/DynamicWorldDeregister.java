@@ -6,12 +6,13 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
-public class DynamicWorldSync {
+public class DynamicWorldDeregister {
     public static void updateWorlds(Minecraft client, ClientPacketListener handler,
                                FriendlyByteBuf buf, PacketSender responseSender)
     {
@@ -20,10 +21,6 @@ public class DynamicWorldSync {
 
         LocalPlayer player = client.player;
 
-        player.connection.levels().add(LEVEL_KEY);
-        ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
-
-//        if (buf.readInt() == player.getId())
-//            ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(name);
+        player.connection.levels().remove(LEVEL_KEY);
     }
 }
