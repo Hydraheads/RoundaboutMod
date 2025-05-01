@@ -395,8 +395,34 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                             $$0.translate($$5 * -0.3F, 0F, 0F);
                             if (right) {
                                 roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
+
+                                byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
+                                if (curse == LocacacaCurseIndex.MAIN_HAND) {
+                                    sm.rightSleeve.xScale += 0.04F;
+                                    sm.rightSleeve.zScale += 0.04F;
+                                    if (skl.isSimple()){
+                                        sm.rightSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+                                    } else {
+                                        sm.rightSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM_JOJO)), $$2, OverlayTexture.NO_OVERLAY);
+                                    }
+                                    sm.rightSleeve.xScale -= 0.04F;
+                                    sm.rightSleeve.zScale -= 0.04F;
+                                }
                             } else {
                                 roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
+
+                                byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
+                                if (curse == LocacacaCurseIndex.OFF_HAND) {
+                                    sm.leftSleeve.xScale += 0.04F;
+                                    sm.leftSleeve.zScale += 0.04F;
+                                    if (skl.isSimple()){
+                                        sm.leftSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+                                    } else {
+                                        sm.leftSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM_JOJO)), $$2, OverlayTexture.NO_OVERLAY);
+                                    }
+                                    sm.leftSleeve.xScale -= 0.04F;
+                                    sm.leftSleeve.zScale -= 0.04F;
+                                }
                             }
                             return true;
                         }
