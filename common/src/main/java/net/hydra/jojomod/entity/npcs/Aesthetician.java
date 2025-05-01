@@ -7,8 +7,10 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersCinderella;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -74,7 +76,25 @@ public class Aesthetician extends StandUsingNPC {
     public void useNotBrain(){
         initInteractCheck();
         if (!interactingWith.isEmpty()){
-
+            List<Player> iteratable = new ArrayList<>(interactingWith);
+            List<Player> iteratable2 = new ArrayList<>(interactingWith);
+            for (Player value : iteratable) {
+                if (value == null || value.isRemoved() || !value.isAlive() || value.distanceTo(this) > 15){
+                    iteratable2.remove(value);
+                    interactingWith =  iteratable2;
+                }
+            }
+            List<Player> iteratable3 = new ArrayList<>(interactingWith);
+            if (!iteratable3.isEmpty()){
+                Player plrot = iteratable3.get(0);
+                if (plrot != null){
+                    this.setXRot(MainUtil.getLookAtEntityPitch(this, plrot));
+                    float yrot = MainUtil.getLookAtEntityYaw(this, plrot);
+                    this.setYRot(yrot);
+                    this.setYHeadRot(yrot);
+                }
+                this.navigation.stop();
+            }
         }
     }
 }

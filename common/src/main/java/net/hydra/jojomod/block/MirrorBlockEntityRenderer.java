@@ -170,11 +170,7 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                 boolean $$19 = !$$18 && (pp != null && !lv.isInvisibleTo(pp));
                                 boolean $$20 = false;
                                 RenderType $$21 = RenderType.cutout();//((ILivingEntityRenderer)ELA).roundabout$getRenderType(lv, $$18, $$19, $$20);
-                                if ((direction.equals(Direction.NORTH) || (direction.equals(Direction.SOUTH))) ||
-                                        Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
-                                    //Thank you forge for messing up rotation, very cool
                                     matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
-                                }
 
                                 Matrix3f norm1 = new Matrix3f(matrices.last().normal());
                                 Vector3f[] lighting = ((IRenderSystem) new RenderSystem()).roundabout$getShaderLightDirections();
