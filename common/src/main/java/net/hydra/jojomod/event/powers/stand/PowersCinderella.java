@@ -513,7 +513,7 @@ public class PowersCinderella extends DashPreset {
         if (this.getSelf() instanceof Player) {
             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cooldownsInTicks.cinderellaDefaceAttack);
         }
-        this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.cinderellaDefaceAttack);
+        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.cinderellaDefaceAttack);
         SoundEvent SE;
         float pitch = 1F;
         if (entity != null) {

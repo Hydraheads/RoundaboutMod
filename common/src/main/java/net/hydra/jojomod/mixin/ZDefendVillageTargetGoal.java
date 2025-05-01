@@ -55,7 +55,7 @@ public class ZDefendVillageTargetGoal {
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
 
-            if (shift == ShapeShifts.ZOMBIE || shift == ShapeShifts.SKELETON) {
+            if (ShapeShifts.isZombie(shift) || ShapeShifts.isSkeleton(shift)) {
                 this.potentialTarget = $$5;
             }
         }

@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
@@ -365,7 +366,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
         float mindist = -1;
 
         for (LivingEntity $$3 : $$1) {
-            if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget() instanceof AbstractVillager)){
+            if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget() instanceof AbstractVillager)) {
+                if (mindist == -1 || this.distanceToSqr($$3) < mindist) {
+                    mindist = (float) this.distanceToSqr($$3);
+                    potentialTarget = $$3;
+                }
+            } else if (($$3 instanceof Mob Mb && Mb.getTarget() != null && Mb.getTarget() instanceof JojoNPC JN && JN.villageDefends())){
                 if (mindist == -1 || this.distanceToSqr($$3) < mindist){
                     mindist = (float) this.distanceToSqr($$3);
                     potentialTarget = $$3;
@@ -469,13 +475,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     }
 
 
-                    if (mb instanceof AbstractVillager){
+                    if (mb instanceof AbstractVillager || (mb instanceof JojoNPC jn && jn.villageDefends())){
                         if (this.getTarget() == null){
                             if (this.tickCount % 4 == 0){
                                 roundabout$targetVillageEnemies();
                             }
                             if (this.getTarget() instanceof AbstractVillager || this.getLastHurtByMob()
-                                    instanceof AbstractVillager){
+                                    instanceof AbstractVillager ||
+                                    (this.getTarget() instanceof JojoNPC J1 && J1.villageDefends()) || (this.getLastHurtByMob()
+                                    instanceof JojoNPC J2 && J2.villageDefends())){
                                 this.setTarget(null);
                                 this.setLastHurtByMob(null);
                             }

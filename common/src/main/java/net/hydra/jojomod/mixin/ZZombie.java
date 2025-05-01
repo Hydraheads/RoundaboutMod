@@ -2,10 +2,13 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,5 +37,10 @@ public abstract class ZZombie extends Monster {
                 }
             }
         }
+    }
+
+    @Inject(method = "addBehaviourGoals", at = @At(value = "TAIL"))
+    protected void roundabout$addBehaviourGoals(CallbackInfo ci) {
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, JojoNPC.class, false));
     }
 }

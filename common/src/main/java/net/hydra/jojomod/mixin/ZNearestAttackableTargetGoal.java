@@ -67,7 +67,7 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
-                if (shift == ShapeShifts.ZOMBIE) {
+                if (ShapeShifts.isZombie(shift)) {
                     target = null;
                     ZE.setLastHurtByPlayer(null);
                     ZE.setLastHurtByMob(null);

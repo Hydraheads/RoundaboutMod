@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SoftExplosion;
@@ -2768,8 +2769,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (!((StandUser) this).roundabout$getStandDisc().isEmpty() &&
-                ((LivingEntity)(Object)this) instanceof AbstractVillager AV &&
-                AV.getTarget() != null && !(((IMob) this).roundabout$getFightOrFlight())){
+
+                (((LivingEntity)(Object)this) instanceof AbstractVillager AV &&
+                AV.getTarget() != null && !(((IMob) this).roundabout$getFightOrFlight()))
+
+        ){
             basis *= 0.5F;
         }
 

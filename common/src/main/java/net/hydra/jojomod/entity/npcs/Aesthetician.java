@@ -1,8 +1,10 @@
 package net.hydra.jojomod.entity.npcs;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.StandUsingNPC;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersCinderella;
 import net.hydra.jojomod.item.ModItems;
@@ -51,6 +53,12 @@ public class Aesthetician extends StandUsingNPC {
         ItemStack $$2 = $$0.getItemInHand($$1);
         if ($$0.level().isClientSide() && ((StandUser)this).roundabout$getStandPowers() instanceof PowersCinderella) {
 
+            IPlayerEntity ple = ((IPlayerEntity) $$0);
+            byte shape = ple.roundabout$getShapeShift();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+            if (ShapeShifts.isZombie(shift) || ShapeShifts.isSkeleton(shift)) {
+                return (InteractionResult.sidedSuccess(this.level().isClientSide));
+            }
             ClientUtil.setCinderellaUI(true,this.getId());
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {

@@ -20,7 +20,7 @@ public class ZVillagerHostilesSensor {
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
-                if (shift == ShapeShifts.ZOMBIE) {
+                if (ShapeShifts.isZombie(shift)) {
                     cir.setReturnValue(true);
                 }
             }
