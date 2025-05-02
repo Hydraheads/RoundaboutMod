@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.ZombieVillager;
 
-public class ZombieAestheticianRenderer<T extends ZombieAesthetician> extends MobRenderer<T, NonJojoNpcModel<T>> {
+public class ZombieAestheticianRenderer<T extends ZombieAesthetician> extends NonJojoNPCRenderer<T> {
     private static final ResourceLocation AES1 = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/npcs/zombie_aesthetician.png");
 
     public ZombieAestheticianRenderer(EntityRendererProvider.Context context) {

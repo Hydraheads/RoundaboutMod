@@ -29,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
 public class NonJojoNPCRenderer<T extends Mob> extends MobRenderer<T, NonJojoNpcModel<T>> {
     public NonJojoNPCRenderer(EntityRendererProvider.Context context, NonJojoNpcModel<T> entityModel, float f) {
         super(context, entityModel, f);
-        this.addLayer(new ItemInHandLayer<>(this,context.getItemInHandRenderer()));
+        this.addLayer(new NonJojoNPCItemInHandLayer<>(this,context.getItemInHandRenderer()));
         this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
         this.addLayer(new ElytraLayer<>(this, context.getModelSet()));
     }
