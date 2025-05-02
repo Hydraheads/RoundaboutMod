@@ -173,6 +173,7 @@ public class ZombieAesthetician extends Zombie {
     private void finishConversion(ServerLevel serverLevel) {
         Roundabout.LOGGER.info("4");
         Aesthetician villager = this.convertTo(ModEntities.AESTHETICIAN, false);
+        villager.setSkinNumber(getSkinNumber());
         EquipmentSlot[] var3 = EquipmentSlot.values();
         int var4 = var3.length;
 

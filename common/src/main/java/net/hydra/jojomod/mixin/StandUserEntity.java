@@ -417,7 +417,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
             boolean onlyBleeding = true;
-            if (this.activeEffects.size() > 1) {
+            if (!this.activeEffects.isEmpty()) {
                 Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
                 while ($$0.hasNext()) {
                     MobEffect $$1 = $$0.next();
