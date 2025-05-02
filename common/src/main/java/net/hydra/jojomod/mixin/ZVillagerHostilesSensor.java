@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor;
@@ -22,14 +23,22 @@ public class ZVillagerHostilesSensor {
             if (shift != ShapeShifts.PLAYER) {
                 if (ShapeShifts.isZombie(shift)) {
                     cir.setReturnValue(true);
+                    return;
                 }
             }
+        } if ($$0 instanceof ZombieAesthetician PE){
+            cir.setReturnValue(true);
+            return;
         }
     }
     @Inject(method = "isClose", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$customServerAiStep(LivingEntity $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
         if ($$1 instanceof Player PE){
             cir.setReturnValue($$1.distanceToSqr($$0) <= (double)(64));
+            return;
+        } if ($$1 instanceof ZombieAesthetician PE){
+            cir.setReturnValue($$1.distanceToSqr($$0) <= (double)(64));
+            return;
         }
     }
 }
