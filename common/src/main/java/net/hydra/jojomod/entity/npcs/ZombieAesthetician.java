@@ -3,6 +3,11 @@ package net.hydra.jojomod.entity.npcs;
 import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.CinderellaEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -24,6 +29,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.village.ReputationEventType;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombieVillager;
@@ -71,12 +78,23 @@ public class ZombieAesthetician extends Zombie {
         }
     }
 
+    public void setBaby(boolean $$0) {
+    }
+
+    public boolean isBaby() {
+        return false;
+    }
+    public boolean isInitialized = false;
+    public void applySkin(){
+        ((StandUser)this).roundabout$setStandSkin(CinderellaEntity.ZOMBIE_SKIN);
+    }
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
 
         if (this.gossips != null) {
             compoundTag.put("Gossips", this.gossips);
         }
+        compoundTag.putBoolean("isInitialized",isInitialized);
 
         compoundTag.putInt("ConversionTime", this.isConverting() ? this.villagerConversionTime : -1);
         if (this.conversionStarter != null) {
@@ -86,10 +104,27 @@ public class ZombieAesthetician extends Zombie {
         compoundTag.putInt("Xp", this.villagerXp);
     }
 
+    public void rollStand(){
+        if (!isInitialized){
+            ItemStack stack = ((StandUser)this).roundabout$getStandDisc();
+            if (stack == null || stack.isEmpty()){
+                if (getDisc() != null){
+                    ((StandUser)this).roundabout$setStandDisc(getDisc().getDefaultInstance().copy());
+                    applySkin();
+                }
+            }
+            isInitialized = true;
+        }
+    }
+
+    public StandDiscItem getDisc(){
+        return ((StandDiscItem) ModItems.STAND_DISC_CINDERELLA);
+    }
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
 
-
+        isInitialized = compoundTag.getBoolean("isInitialized");
+        rollStand();
         if (compoundTag.contains("Gossips", 9)) {
             this.gossips = compoundTag.getList("Gossips", 10);
         }
@@ -151,7 +186,6 @@ public class ZombieAesthetician extends Zombie {
 
     private void startConverting(@Nullable UUID uUID, int i) {
         this.conversionStarter = uUID;
-        Roundabout.LOGGER.info("1");
         this.villagerConversionTime = i;
         this.getEntityData().set(DATA_CONVERTING_ID, true);
         this.removeEffect(MobEffects.WEAKNESS);
@@ -171,9 +205,11 @@ public class ZombieAesthetician extends Zombie {
     }
 
     private void finishConversion(ServerLevel serverLevel) {
-        Roundabout.LOGGER.info("4");
         Aesthetician villager = this.convertTo(ModEntities.AESTHETICIAN, false);
-        villager.setSkinNumber(getSkinNumber());
+        if (villager != null) {
+            ((StandUser) villager).roundabout$setStandDisc(((StandUser) this).roundabout$getStandDisc());
+            villager.setSkinNumber(getSkinNumber());
+        }
         EquipmentSlot[] var3 = EquipmentSlot.values();
         int var4 = var3.length;
 
@@ -237,9 +273,6 @@ public class ZombieAesthetician extends Zombie {
         return i;
     }
 
-    public float getVoicePitch() {
-        return this.isBaby() ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
-    }
 
     public SoundEvent getAmbientSound() {
         return null;
@@ -271,7 +304,7 @@ public class ZombieAesthetician extends Zombie {
     }
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-
+        rollStand();
         RandomSource $$5 = serverLevelAccessor.getRandom();
         if ($$5.nextFloat() < 0.2F) {
             setSkinNumber(2);

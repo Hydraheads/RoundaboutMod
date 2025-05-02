@@ -445,6 +445,7 @@ public class PowersCinderella extends DashPreset {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(CinderellaEntity.PART_4_SKIN);
         $$1.add(CinderellaEntity.MANGA_SKIN);
+        $$1.add(CinderellaEntity.ZOMBIE_SKIN);
         return $$1;
     }
 

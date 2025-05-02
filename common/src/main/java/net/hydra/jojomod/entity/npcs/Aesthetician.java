@@ -73,8 +73,9 @@ public class Aesthetician extends StandUsingNPC {
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, @Nullable SpawnGroupData $$3, @Nullable CompoundTag $$4) {
-        rollStand();
+
         if (!(this instanceof AyaNPC) && !$$2.equals(MobSpawnType.CONVERSION)) {
+            rollStand();
             RandomSource $$5 = $$0.getRandom();
             if ($$5.nextFloat() < 0.2F) {
                 setSkinNumber(2);
