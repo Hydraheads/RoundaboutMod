@@ -5,13 +5,16 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.StandUsingNPC;
 import net.hydra.jojomod.entity.visages.mobs.AyaNPC;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersCinderella;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -112,6 +115,13 @@ public class Aesthetician extends StandUsingNPC {
             }
         } else {
             if (!interactingWith.isEmpty()) {
+
+                List<Player> iteratable2 = new ArrayList<>(interactingWith);
+                for (Player value : iteratable2) {
+                    if (!this.level().isClientSide() && value instanceof ServerPlayer PE && value.isAlive()) {
+                        ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE, PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA);
+                    }
+                }
                 interactingWith = new ArrayList<>();
             }
         }
@@ -125,6 +135,9 @@ public class Aesthetician extends StandUsingNPC {
             List<Player> iteratable2 = new ArrayList<>(interactingWith);
             for (Player value : iteratable) {
                 if (value == null || value.isRemoved() || !value.isAlive() || value.distanceTo(this) > 15){
+                    if (!this.level().isClientSide() && value instanceof ServerPlayer PE && value.isAlive()){
+                        ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE, PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA);
+                    }
                     iteratable2.remove(value);
                     interactingWith =  iteratable2;
                 }

@@ -395,6 +395,9 @@ public abstract class InputEvents implements IInputEvents {
                 ModPacketHandler.PACKET_ACCESS.intToServerPacket(ClientUtil.isInCinderellaMobUI, PacketDataIndex.INT_RELLA_CANCEL);
                 ClientUtil.isInCinderellaMobUI = -1;
             }
+        } if (ClientUtil.setScreenNull){
+            ClientUtil.setScreenNull = false;
+            Minecraft.getInstance().setScreen(null);
         }
 
         ClientConfig clientConfig = ConfigManager.getClientConfig();

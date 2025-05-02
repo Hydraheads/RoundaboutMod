@@ -528,6 +528,10 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
             ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;
+        } else if (context == PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA) {
+            if (Minecraft.getInstance().screen instanceof VisageStoreScreen vs){
+                setScreenNull = true;
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -535,6 +539,8 @@ public class ClientUtil {
             handleSimpleBytePacketS2C(player,context);
         }
     }
+
+    public static boolean setScreenNull = false;
 
     /** From the center of the camera, raycast out at given angle and return the BlockPos at that end position.
      * If nothing is found within the limit, it will return null. */
