@@ -24,7 +24,8 @@ public class TheWorldEntity extends StandEntity {
             ARCADE_SKIN = 11,
             AGOGO_SKIN = 12,
             BETA = 13,
-            ARCADE_SKIN_2 = 14;
+            ARCADE_SKIN_2 = 14,
+            FOUR_DEE_EXPERIENCE = 15;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -59,6 +60,8 @@ public class TheWorldEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.the_world.beta");
         } else if (skinId == ARCADE_SKIN_2){
             return Component.translatable(  "skins.roundabout.the_world.arcade_2");
+        } else if (skinId == FOUR_DEE_EXPERIENCE){
+            return Component.translatable(  "skins.roundabout.the_world.four_dee");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
