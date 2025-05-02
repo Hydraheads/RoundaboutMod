@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.ZombieVillager;
 
 public class ZombieAestheticianRenderer<T extends ZombieAesthetician> extends MobRenderer<T, NonJojoNpcModel<T>> {
     private static final ResourceLocation AES1 = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/npcs/zombie_aesthetician.png");
@@ -20,7 +21,7 @@ public class ZombieAestheticianRenderer<T extends ZombieAesthetician> extends Mo
         return AES1;
     }
 
-    protected boolean isShaking(T p_113773_) {
-        return super.isShaking(p_113773_) || p_113773_.isUnderWaterConverting();
+    protected boolean isShaking(ZombieAesthetician zombieAesthetician) {
+        return super.isShaking((T) zombieAesthetician) || zombieAesthetician.isConverting();
     }
 }

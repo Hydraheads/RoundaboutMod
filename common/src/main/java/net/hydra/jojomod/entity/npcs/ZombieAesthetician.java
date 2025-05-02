@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.npcs;
 
 import com.mojang.logging.LogUtils;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -43,7 +44,8 @@ import java.util.UUID;
 
 public class ZombieAesthetician extends Zombie {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final EntityDataAccessor<Boolean> DATA_CONVERTING_ID;
+    private static final EntityDataAccessor<Boolean> DATA_CONVERTING_ID =
+            SynchedEntityData.defineId(ZombieAesthetician.class, EntityDataSerializers.BOOLEAN);;
     private static final int VILLAGER_CONVERSION_WAIT_MIN = 3600;
     private static final int VILLAGER_CONVERSION_WAIT_MAX = 6000;
     private static final int MAX_SPECIAL_BLOCKS_COUNT = 14;
@@ -149,6 +151,7 @@ public class ZombieAesthetician extends Zombie {
 
     private void startConverting(@Nullable UUID uUID, int i) {
         this.conversionStarter = uUID;
+        Roundabout.LOGGER.info("1");
         this.villagerConversionTime = i;
         this.getEntityData().set(DATA_CONVERTING_ID, true);
         this.removeEffect(MobEffects.WEAKNESS);
@@ -168,6 +171,7 @@ public class ZombieAesthetician extends Zombie {
     }
 
     private void finishConversion(ServerLevel serverLevel) {
+        Roundabout.LOGGER.info("4");
         Aesthetician villager = this.convertTo(ModEntities.AESTHETICIAN, false);
         EquipmentSlot[] var3 = EquipmentSlot.values();
         int var4 = var3.length;
@@ -280,7 +284,4 @@ public class ZombieAesthetician extends Zombie {
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
 
-    static {
-        DATA_CONVERTING_ID = SynchedEntityData.defineId(ZombieAesthetician.class, EntityDataSerializers.BOOLEAN);
-    }
 }
