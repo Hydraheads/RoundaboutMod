@@ -932,6 +932,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 $$1.add(StarPlatinumEntity.MANGA_SKIN);
             } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.OVA_SKIN);
+                $$1.add(StarPlatinumEntity.FOUR_DEE);
             } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.GREEN_SKIN);
                 $$1.add(StarPlatinumEntity.ARCADE);
