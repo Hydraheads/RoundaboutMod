@@ -7,10 +7,8 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.event.index.Poses;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -170,6 +168,8 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
 
     private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$SKIN_NUMBER = SynchedEntityData.defineId(JojoNPC.class,
+            EntityDataSerializers.INT);
 
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.BYTE);
@@ -178,6 +178,12 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     }
     public byte roundabout$GetPos(){
         return this.getEntityData().get(ROUNDABOUT$POS);
+    }
+    public void setSkinNumber(int Pos){
+        this.getEntityData().set(ROUNDABOUT$SKIN_NUMBER, Pos);
+    }
+    public int getSkinNumber(){
+        return this.getEntityData().get(ROUNDABOUT$SKIN_NUMBER);
     }
     public final int roundabout$getKnifeCount() {
         return this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
@@ -192,6 +198,11 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         }
     }
 
+    /**When running at low health the stand is usually put down, but some cases like cinderella need to still use
+     * the stand because players need to interact with the shop*/
+    public boolean canSummonStandThroughFightOrFlightActive(){
+        return false;
+    }
     private int roundabout$clientDodgeTime = 0;
     public int roundabout$getDodgeTime(){
         return this.getEntityData().get(ROUNDABOUT$DODGE_TIME);
@@ -417,6 +428,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         this.entityData.define(DATA_SCORE_ID, 0);
         this.entityData.define(DATA_PLAYER_MODE_CUSTOMISATION, (byte)0);
         this.entityData.define(ROUNDABOUT$DODGE_TIME, -1);
+        this.entityData.define(ROUNDABOUT$SKIN_NUMBER, 1);
         this.entityData.define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte)0);
         this.entityData.define(DATA_PLAYER_MAIN_HAND, (byte)1);
         this.entityData.define(DATA_SHOULDER_LEFT, new CompoundTag());
@@ -430,7 +442,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         p_35481_.putInt("Xp", this.villagerXp);
         p_35481_.putLong("LastGossipDecay", this.lastGossipDecayTime);
         this.writeInventoryToTag(p_35481_);
-
+        p_35481_.putInt("skinNumber", getSkinNumber());
     }
 
     public void readAdditionalSaveData(CompoundTag p_35451_) {
@@ -453,6 +465,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         }
 
 
+        setSkinNumber(p_35451_.getInt("skinNumber"));
     }
 
 

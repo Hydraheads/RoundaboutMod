@@ -460,7 +460,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 } else {
                     if (((StandUser)this).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE) {
                         roundabout$retractTicks = Math.max(roundabout$retractTicks - 1, -1);
-                        if (roundabout$retractTicks == -1 || this.roundabout$getFightOrFlight()) {
+                        if (roundabout$retractTicks == -1 ||
+                                (this.roundabout$getFightOrFlight() && !((Mob)(Object)this instanceof JojoNPC JP &&
+                                        JP.canSummonStandThroughFightOrFlightActive()))
+                        ) {
                             if (((StandUser) this).roundabout$getActive()) {
                                 ((StandUser) this).roundabout$summonStand(this.level(), false, false);
                             }

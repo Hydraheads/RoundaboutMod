@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.StandUsingNPC;
+import net.hydra.jojomod.entity.visages.mobs.AyaNPC;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersCinderella;
@@ -15,12 +16,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -62,15 +60,32 @@ public class Aesthetician extends StandUsingNPC {
         }
     }
 
+    public boolean canSummonStandThroughFightOrFlightActive(){
+        return true;
+    }
     public void removePlayerFromList(Player pl){
         initInteractCheck();
         interactingWith.remove(pl);
     }
+
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, @Nullable SpawnGroupData $$3, @Nullable CompoundTag $$4) {
         rollStand();
+        if (!(this instanceof AyaNPC)) {
+            RandomSource $$5 = $$0.getRandom();
+            if ($$5.nextFloat() < 0.2F) {
+                setSkinNumber(2);
+            } else if ($$5.nextFloat() < 0.4F) {
+                setSkinNumber(3);
+            } else if ($$5.nextFloat() < 0.6F) {
+                setSkinNumber(4);
+            } else if ($$5.nextFloat() < 0.8F) {
+                setSkinNumber(5);
+            }
+        }
         return super.finalizeSpawn($$0,$$1,$$2,$$3,$$4);
     }
+
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
         ItemStack $$2 = $$0.getItemInHand($$1);
         if ($$0.level().isClientSide() && ((StandUser)this).roundabout$getStandPowers() instanceof PowersCinderella) {
