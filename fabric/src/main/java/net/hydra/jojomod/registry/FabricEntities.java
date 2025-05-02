@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -104,6 +105,13 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "aesthetician"),
                         EntityType.Builder.of(Aesthetician::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":aesthetician")
+                );
+        public static final EntityType<ZombieAesthetician> ZOMBIE_AESTHETICIAN =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "zombie_aesthetician"),
+                        EntityType.Builder.of(ZombieAesthetician::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":zombie_aesthetician")
                 );
         public static final EntityType<PlayerSteveNPC> STEVE_NPC =
                 Registry.register(
@@ -379,6 +387,7 @@ public class FabricEntities {
                 ModEntities.JOSUKE_PART_EIGHT = JOSUKE_PART_EIGHT;
                 ModEntities.AYA = AYA;
                 ModEntities.AESTHETICIAN = AESTHETICIAN;
+                ModEntities.ZOMBIE_AESTHETICIAN = ZOMBIE_AESTHETICIAN;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.MODIFIED_NPC = MODIFIED_NPC;
@@ -398,6 +407,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JOSUKE_PART_EIGHT, JosukePartEightNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AYA, AyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AESTHETICIAN, Aesthetician.createAttributes());
+                FabricDefaultAttributeRegistry.register(ZOMBIE_AESTHETICIAN, ZombieAesthetician.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(MODIFIED_NPC, PlayerModifiedNPC.createAttributes());

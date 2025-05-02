@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
@@ -58,6 +59,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.JOSUKE_PART_EIGHT.get(), JosukePartEightNPC.createAttributes().build());
         event.put(ForgeEntities.AYA.get(), AyaNPC.createAttributes().build());
         event.put(ForgeEntities.AESTHETICIAN.get(), Aesthetician.createAttributes().build());
+        event.put(ForgeEntities.ZOMBIE_AESTHETICIAN.get(), ZombieAesthetician.createAttributes().build());
         event.put(ForgeEntities.VALENTINE.get(), ValentineNPC.createAttributes().build());
         event.put(ForgeEntities.STEVE_NPC.get(), PlayerSteveNPC.createAttributes().build());
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
@@ -243,6 +245,7 @@ public class ForgeEvents {
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.AESTHETICIAN_SPAWN_EGG = ForgeItems.AESTHETICIAN_SPAWN_EGG.get();
+        ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ForgeItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
@@ -323,6 +326,7 @@ public class ForgeEvents {
         ModEntities.AVDOL = ForgeEntities.AVDOL.get();
         ModEntities.AYA = ForgeEntities.AYA.get();
         ModEntities.AESTHETICIAN = ForgeEntities.AESTHETICIAN.get();
+        ModEntities.ZOMBIE_AESTHETICIAN = ForgeEntities.ZOMBIE_AESTHETICIAN.get();
         ModEntities.VALENTINE = ForgeEntities.VALENTINE.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();

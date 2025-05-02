@@ -42,6 +42,7 @@ public class ModItems {
     public static Item METEORITE_INGOT;
     public static Item TERRIER_SPAWN_EGG;
     public static Item AESTHETICIAN_SPAWN_EGG;
+    public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
 
     public static Item KNIFE;
     public static Item KNIFE_BUNDLE;

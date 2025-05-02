@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Terrier.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -83,6 +84,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(Aesthetician::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "aesthetician").toString())
+            );
+    public static final RegistryObject<EntityType<ZombieAesthetician>> ZOMBIE_AESTHETICIAN =
+            ENTITY_TYPES.register("zombie_aesthetician", () ->
+                    EntityType.Builder.of(ZombieAesthetician::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "zombie_aesthetician").toString())
             );
     public static final RegistryObject<EntityType<ValentineNPC>> VALENTINE =
             ENTITY_TYPES.register("jojo_npc_valentine", () ->

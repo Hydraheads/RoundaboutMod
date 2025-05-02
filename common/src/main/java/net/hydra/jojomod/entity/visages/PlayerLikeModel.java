@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> implements HeadedModel, ArmedModel {
-    /**Override this for every stand model.*/
+    /**Override this for every visage model.*/
     private float alpha;
     private static final String EAR = "ear";
     private static final String CLOAK = "cloak";

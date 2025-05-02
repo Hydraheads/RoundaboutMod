@@ -156,6 +156,8 @@ public class FabricItems {
 
     public static final Item AESTHETICIAN_SPAWN_EGG = registerItem("aesthetician_spawn_egg", new SpawnEggItem(FabricEntities.AESTHETICIAN,
             0xfffef2, 0xffa8e8, new Item.Properties()));
+    public static final Item ZOMBIE_AESTHETICIAN_SPAWN_EGG = registerItem("zombie_aesthetician_spawn_egg", new SpawnEggItem(FabricEntities.ZOMBIE_AESTHETICIAN,
+            0x66BB6A, 0xffa8e8, new Item.Properties()));
     public static final Potion HEX_POTION =
             Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
                     new Potion(new MobEffectInstance(ModEffects.HEX, 9600, 0)));
@@ -210,6 +212,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.BARBED_WIRE);
                         entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(AESTHETICIAN_SPAWN_EGG);
+                        entries.accept(ZOMBIE_AESTHETICIAN_SPAWN_EGG);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
@@ -413,6 +416,7 @@ public class FabricItems {
         ModItems.AYA_MASK = AYA_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
+        ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;

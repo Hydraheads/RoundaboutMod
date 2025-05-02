@@ -11,6 +11,8 @@ import net.hydra.jojomod.entity.client.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.AestheticianRenderer;
+import net.hydra.jojomod.entity.npcs.ZombieAestheticianModel;
+import net.hydra.jojomod.entity.npcs.ZombieAestheticianRenderer;
 import net.hydra.jojomod.entity.pathfinding.NoRenderer;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -63,6 +65,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.JOSUKE_PART_EIGHT.get(), JosukePartEightRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AYA.get(), AyaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AESTHETICIAN.get(), AestheticianRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ZOMBIE_AESTHETICIAN.get(), ZombieAestheticianRenderer::new);
         event.registerEntityRenderer(ForgeEntities.VALENTINE.get(), ValentineRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
@@ -110,6 +113,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.AVDOL_LAYER, AvdolModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.VALENTINE_LAYER, ValentineModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.AYA_LAYER, AyaModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.ALEX_LAYER, PlayerAlexModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.MODIFIED_LAYER, PlayerModifiedModel::getTexturedModelData);

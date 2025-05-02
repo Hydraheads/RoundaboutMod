@@ -13,6 +13,8 @@ import net.hydra.jojomod.entity.client.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.AestheticianRenderer;
+import net.hydra.jojomod.entity.npcs.ZombieAestheticianModel;
+import net.hydra.jojomod.entity.npcs.ZombieAestheticianRenderer;
 import net.hydra.jojomod.entity.pathfinding.NoRenderer;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -72,6 +74,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.JOSUKE_PART_EIGHT, JosukePartEightRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AYA, AyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AESTHETICIAN, AestheticianRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ZOMBIE_AESTHETICIAN, ZombieAestheticianRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);
@@ -108,6 +111,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIEGO_LAYER, DiegoModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ENYA_LAYER, EnyaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.AYA_LAYER, AyaModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.AVDOL_LAYER, AvdolModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.VALENTINE_LAYER, ValentineModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
