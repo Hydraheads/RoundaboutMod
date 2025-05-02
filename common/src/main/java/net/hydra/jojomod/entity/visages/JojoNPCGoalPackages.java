@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.visages;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import net.hydra.jojomod.Roundabout;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -123,6 +124,7 @@ public class JojoNPCGoalPackages {
 
     public static ImmutableList<Pair<Integer, ? extends BehaviorControl<? super JojoNPC>>> getPanicPackage(float $$1) {
         float $$2 = $$1 * 1.5F;
+        Roundabout.LOGGER.info("2");
         return ImmutableList.of(
                 Pair.of(0, VillagerCalmDown.create()),
                 Pair.of(1, SetWalkTargetAwayFrom.entity(MemoryModuleType.NEAREST_HOSTILE, $$2, 6, false)),

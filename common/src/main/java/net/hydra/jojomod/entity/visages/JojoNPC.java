@@ -7,7 +7,10 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -274,7 +277,35 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     public void useNotBrain(){
     }
 
+    public boolean hidesInGeneral(){
+        return false;
+    }
+    public boolean runsInGeneral(){
+        return false;
+    }
+    public boolean runsIfLow(){
+        return false;
+    }
+
+    public boolean roundabout$initializedStandUser = false;
     protected void customServerAiStep() {
+        if (runsIfLow()){
+            if (!roundabout$initializedStandUser){
+                ((IMob)this).roundabout$toggleFightOrFlight(true);
+                roundabout$initializedStandUser = true;
+            }
+            if (((IMob)this).roundabout$getFightOrFlight() && this.getHealth() > this.getMaxHealth()*0.6){
+                this.refreshBrain(((ServerLevel)this.level()));
+                ((IMob)this).roundabout$toggleFightOrFlight(false);
+            } else if (!((IMob)this).roundabout$getFightOrFlight() && (this.getHealth() < this.getMaxHealth()*0.35)){
+                this.refreshBrain(((ServerLevel)this.level()));
+                ((IMob)this).roundabout$toggleFightOrFlight(true);
+            }
+
+            if (!((IMob)this).roundabout$getFightOrFlight()){
+            }
+        }
+
         if (isUsingBrain()) {
             this.getBrain().tick((ServerLevel) this.level(), this);
         } else {
@@ -336,17 +367,21 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
             p_35425_.addActivity(Activity.PLAY, JojoNPCGoalPackages.getPlayPackage(1F));
         } else {
             p_35425_.setSchedule(Schedule.VILLAGER_DEFAULT);
-            p_35425_.addActivityWithConditions(Activity.WORK, JojoNPCGoalPackages.getMeetPackage(1F), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)));
+            //p_35425_.addActivityWithConditions(Activity.WORK, JojoNPCGoalPackages.getMeetPackage(1F), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)));
         }
 
         p_35425_.addActivity(Activity.CORE, JojoNPCGoalPackages.getCorePackage(1F));
         p_35425_.addActivityWithConditions(Activity.MEET, JojoNPCGoalPackages.getMeetPackage(1F), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)));
         p_35425_.addActivity(Activity.REST, JojoNPCGoalPackages.getRestPackage(1F));
         p_35425_.addActivity(Activity.IDLE, JojoNPCGoalPackages.getIdlePackage(1F));
-        p_35425_.addActivity(Activity.PANIC, JojoNPCGoalPackages.getPanicPackage(1F));
+        if ((runsInGeneral() || (runsIfLow() && (this.getHealth() < this.getMaxHealth()*0.35)))) {
+            p_35425_.addActivity(Activity.PANIC, JojoNPCGoalPackages.getPanicPackage(1F));
+        }
         p_35425_.addActivity(Activity.PRE_RAID, JojoNPCGoalPackages.getPreRaidPackage(1F));
         p_35425_.addActivity(Activity.RAID, JojoNPCGoalPackages.getRaidPackage(1F));
-        p_35425_.addActivity(Activity.HIDE, JojoNPCGoalPackages.getHidePackage(1F));
+        if (hidesInGeneral()) {
+            p_35425_.addActivity(Activity.HIDE, JojoNPCGoalPackages.getHidePackage(1F));
+        }
         p_35425_.setCoreActivities(ImmutableSet.of(Activity.CORE));
         p_35425_.setDefaultActivity(Activity.IDLE);
         p_35425_.setActiveActivityIfPossible(Activity.IDLE);

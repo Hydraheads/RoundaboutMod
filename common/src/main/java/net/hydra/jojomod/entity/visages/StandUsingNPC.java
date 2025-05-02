@@ -28,10 +28,7 @@ public class StandUsingNPC extends JojoNPC{
     }
     public void applySkin(){
     }
-    @Override
-    public void readAdditionalSaveData(CompoundTag $$0){
-        super.readAdditionalSaveData($$0);
-        isInitialized = $$0.getBoolean("isInitialized");
+    public void rollStand(){
         if (!isInitialized){
             ItemStack stack = ((StandUser)this).roundabout$getStandDisc();
             if (stack == null || stack.isEmpty()){
@@ -42,6 +39,12 @@ public class StandUsingNPC extends JojoNPC{
             }
             isInitialized = true;
         }
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0){
+        super.readAdditionalSaveData($$0);
+        isInitialized = $$0.getBoolean("isInitialized");
+        rollStand();
     }
 
 }

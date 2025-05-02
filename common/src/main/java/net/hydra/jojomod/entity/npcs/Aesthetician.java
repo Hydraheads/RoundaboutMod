@@ -10,14 +10,23 @@ import net.hydra.jojomod.event.powers.stand.PowersCinderella;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +38,15 @@ public class Aesthetician extends StandUsingNPC {
     @Override
     public StandDiscItem getDisc(){
         return ((StandDiscItem) ModItems.STAND_DISC_CINDERELLA);
+    }
+
+    @Override
+    public boolean hidesInGeneral(){
+        return true;
+    }
+    @Override
+    public boolean runsIfLow(){
+        return true;
     }
 
     public List<Player> interactingWith = new ArrayList<>();
@@ -48,7 +66,11 @@ public class Aesthetician extends StandUsingNPC {
         initInteractCheck();
         interactingWith.remove(pl);
     }
-
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, @Nullable SpawnGroupData $$3, @Nullable CompoundTag $$4) {
+        rollStand();
+        return super.finalizeSpawn($$0,$$1,$$2,$$3,$$4);
+    }
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
         ItemStack $$2 = $$0.getItemInHand($$1);
         if ($$0.level().isClientSide() && ((StandUser)this).roundabout$getStandPowers() instanceof PowersCinderella) {

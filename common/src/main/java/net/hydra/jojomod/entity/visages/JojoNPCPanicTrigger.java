@@ -14,11 +14,11 @@ public class JojoNPCPanicTrigger extends Behavior<JojoNPC> {
             super(ImmutableMap.of());
         }
 
-        protected boolean canStillUse(ServerLevel $$0, Villager $$1, long $$2) {
+        protected boolean canStillUse(ServerLevel $$0, JojoNPC $$1, long $$2) {
             return isHurt($$1) || hasHostile($$1);
         }
 
-        protected void start(ServerLevel $$0, Villager $$1, long $$2) {
+        protected void start(ServerLevel $$0, JojoNPC $$1, long $$2) {
             if (isHurt($$1) || hasHostile($$1)) {
                 Brain<?> $$3 = $$1.getBrain();
                 if (!$$3.isActive(Activity.PANIC)) {
@@ -33,7 +33,7 @@ public class JojoNPCPanicTrigger extends Behavior<JojoNPC> {
             }
         }
 
-        protected void tick(ServerLevel $$0, Villager $$1, long $$2) {
+        protected void tick(ServerLevel $$0, JojoNPC $$1, long $$2) {
             if ($$2 % 100L == 0L) {
                 $$1.spawnGolemIfNeeded($$0, $$2, 3);
             }
