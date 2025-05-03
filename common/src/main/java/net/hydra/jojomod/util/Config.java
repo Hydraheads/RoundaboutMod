@@ -127,6 +127,8 @@ import java.util.Set;
     @NestedOption(group = "modded")
     public GuardPoints guardPoints;
     @NestedOption(group = "modded")
+    public WorldGenSettings worldgenSettings;
+    @NestedOption(group = "modded")
     public MiningSettings miningSettings;
     @NestedOption(group = "modded")
     public NameTagSettings nameTagSettings;
@@ -230,6 +232,12 @@ import java.util.Set;
         public Integer d4cDefend;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer standGuardMultiplier;
+    }
+    public static class WorldGenSettings {
+        @IntOption(group = "inherit", value = 55, min = 0, max = 72000)
+        public Integer cinderellaSpacing;
+        @IntOption(group = "inherit", value = 54, min = 0, max = 72000)
+        public Integer cinderellaSeparationMakeSmallerThanSpacing;
     }
     public static class MiningSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

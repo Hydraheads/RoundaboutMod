@@ -84,7 +84,8 @@
     "ZZombieVillager",
     "dworlds.ChunkGeneratorD4CMixin",
     "dworlds.RegistryMixin",
-    "dworlds.ServerAccessorMixin"
+    "dworlds.ServerAccessorMixin",
+    "ZRandomSpreadStructurePlacement"
   ],
   "client": [
     "GeckolibCompatAttempt",
