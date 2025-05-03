@@ -85,6 +85,22 @@ public class Aesthetician extends StandUsingNPC {
         interactingWith.remove(pl);
     }
 
+    @Override
+    public void rollTheSkin(){
+        if (!(this instanceof AyaNPC)){
+            RandomSource $$5 = this.level().getRandom();
+            if ($$5.nextFloat() < 0.2F) {
+                setSkinNumber(2);
+            } else if ($$5.nextFloat() < 0.4F) {
+                setSkinNumber(3);
+            } else if ($$5.nextFloat() < 0.6F) {
+                setSkinNumber(4);
+            } else if ($$5.nextFloat() < 0.8F) {
+                setSkinNumber(5);
+            }
+        }
+    }
+
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, @Nullable SpawnGroupData $$3, @Nullable CompoundTag $$4) {
 

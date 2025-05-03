@@ -468,8 +468,14 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
 
 
         setSkinNumber(p_35451_.getInt("skinNumber"));
+        if (getSkinNumber() == -1){
+            rollTheSkin();
+        }
     }
 
+
+    public void rollTheSkin(){
+    }
 
     private boolean hungry() {
         return this.foodLevel < 12;

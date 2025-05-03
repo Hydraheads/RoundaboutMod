@@ -1,8 +1,11 @@
 package net.hydra.jojomod.entity.npcs;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.DIOModel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +19,12 @@ public class ZombieAestheticianRenderer<T extends ZombieAesthetician> extends No
         super(context, new ZombieAestheticianModel<>(context.bakeLayer(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER)),0.5F);
     }
 
+    @Override
+    public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+
+        matrixStack.scale(0.8F, 0.839F, 0.8F);
+        super.render(mobEntity,f,g,matrixStack,vertexConsumerProvider,i);
+    }
     @Override
     public ResourceLocation getTextureLocation(T t) {
         return AES1;
