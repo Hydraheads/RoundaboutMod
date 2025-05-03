@@ -9,6 +9,8 @@
   // Think of it like the length of the branch of the structure
   "size": 2,
 
+  "spawn_overrides": {},
+
   // Maximum distance away from center that pieces can spawn. Cannot be greater than 128
   "max_distance_from_center": 80,
 
@@ -34,21 +36,5 @@
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
 
   // Keep this false. This is only for vanilla legacy villages to make it spawn properly. We don't need no hacks here!
-  "use_expansion_hack": false,
-
-  // What mobs can spawn over time in the structure.
-  // Make sure you add the mob to the right category (monster, creature, etc)
-  "spawn_overrides": {
-    "creature": {
-      "bounding_box": "piece",
-      "spawns": [
-        {
-          "type": "minecraft:parrot",
-          "weight": 1,
-          "minCount": 1,
-          "maxCount": 4
-        }
-      ]
-    }
-  }
+  "use_expansion_hack": false
 }

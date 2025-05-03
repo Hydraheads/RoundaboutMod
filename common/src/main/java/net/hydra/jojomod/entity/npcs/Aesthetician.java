@@ -45,10 +45,6 @@ public class Aesthetician extends StandUsingNPC {
     }
 
     @Override
-    public boolean hidesInGeneral(){
-        return true;
-    }
-    @Override
     public boolean runsIfLow(){
         return true;
     }
@@ -134,6 +130,15 @@ public class Aesthetician extends StandUsingNPC {
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             return super.mobInteract($$0, $$1);
+        }
+    }
+
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide) {
+            if (getSkinNumber() < 0){
+                rollTheSkin();
+            }
         }
     }
 

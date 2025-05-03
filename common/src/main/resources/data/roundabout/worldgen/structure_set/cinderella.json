@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "roundabout:cinderella",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 55,
+    "separation": 54,
+    "salt": 992713456833171
+  }
+}
