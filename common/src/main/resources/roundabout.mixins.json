@@ -81,6 +81,7 @@
     "ZWitch",
     "ZWitherBoss",
     "ZZombie",
+    "ZZombieVillager",
     "dworlds.ChunkGeneratorD4CMixin",
     "dworlds.RegistryMixin",
     "dworlds.ServerAccessorMixin"

@@ -46,6 +46,8 @@ import java.util.Set;
     public Integer fabricTerrierSpawnWeightInTaigaUseDatapackForForge;
     @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
     public Integer fabricTerrierSpawnWeightInDesertUseDatapackForForge;
+    @FloatOption(group = "inherit", value = 10F, min = 0, max = 72000F)
+    public Float percentOfZombieVillagersThatBecomeZombieAestheticians;
     @FloatOption(group = "inherit", value = 0.05F, min = 0, max = 1F)
     public Float worthyMobOdds;
     @FloatOption(group = "inherit", value = 0.005F, min = 0, max = 1F)
