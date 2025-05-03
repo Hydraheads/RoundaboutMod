@@ -1289,6 +1289,30 @@
       "roundabout:arcade_time_resume"
     ]
   },
+  "female_zombie_hurt": {
+    "subtitle": "sounds.roundabout.female_zombie_hurt",
+    "sounds": [
+      "roundabout:female_zombie_hurt"
+    ]
+  },
+  "female_zombie_death": {
+    "subtitle": "sounds.roundabout.female_zombie_death",
+    "sounds": [
+      "roundabout:female_zombie_death"
+    ]
+  },
+  "female_zombie_ambient": {
+    "subtitle": "sounds.roundabout.female_zombie_ambient",
+    "sounds": [
+      "roundabout:female_zombie_ambient"
+    ]
+  },
+  "aesthetician_exhale": {
+    "subtitle": "sounds.roundabout.aesthetician_exhale",
+    "sounds": [
+      "roundabout:aesthetician_exhale"
+    ]
+  },
   "unlock_skin": {
     "subtitle": "sounds.roundabout.unlock_skin",
     "sounds": [

@@ -787,6 +787,18 @@ public class ModSounds {
     public static final ResourceLocation JOTARO_GETING_CLOSER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_GETING_CLOSER);
     public static SoundEvent JOTARO_GETING_CLOSER_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_GETING_CLOSER_ID);
 
+    public static final String FEMALE_ZOMBIE_HURT = "female_zombie_hurt";
+    public static final ResourceLocation FEMALE_ZOMBIE_HURT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FEMALE_ZOMBIE_HURT);
+    public static SoundEvent FEMALE_ZOMBIE_HURT_EVENT = SoundEvent.createVariableRangeEvent(FEMALE_ZOMBIE_HURT_ID);
+    public static final String FEMALE_ZOMBIE_AMBIENT = "female_zombie_ambient";
+    public static final ResourceLocation FEMALE_ZOMBIE_AMBIENT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FEMALE_ZOMBIE_AMBIENT);
+    public static SoundEvent FEMALE_ZOMBIE_AMBIENT_EVENT = SoundEvent.createVariableRangeEvent(FEMALE_ZOMBIE_AMBIENT_ID);
+    public static final String FEMALE_ZOMBIE_DEATH = "female_zombie_death";
+    public static final ResourceLocation FEMALE_ZOMBIE_DEATH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FEMALE_ZOMBIE_DEATH);
+    public static SoundEvent FEMALE_ZOMBIE_DEATH_EVENT = SoundEvent.createVariableRangeEvent(FEMALE_ZOMBIE_DEATH_ID);
+    public static final String AESTHETICIAN_EXHALE = "aesthetician_exhale";
+    public static final ResourceLocation AESTHETICIAN_EXHALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+AESTHETICIAN_EXHALE);
+    public static SoundEvent AESTHETICIAN_EXHALE_EVENT = SoundEvent.createVariableRangeEvent(AESTHETICIAN_EXHALE_ID);
 
 
     public static final String TORTURE_DANCE = "torture_dance";

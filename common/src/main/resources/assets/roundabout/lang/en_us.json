@@ -533,6 +533,11 @@
   "sounds.roundabout.jotaro_dio":  "DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "How else can I...",
 
+  "sounds.roundabout.aesthetician_exhale":  "Exhale",
+  "sounds.roundabout.female_zombie_ambient":  "Zombie Aesthetician groans",
+  "sounds.roundabout.female_zombie_hurt":  "Zombie Aesthetician hurt",
+  "sounds.roundabout.female_zombie_death":  "Zombie Aesthetician death",
+
   "instruction.roundabout.press_attack": "Click Attack",
   "instruction.roundabout.hold_attack": "Hold Attack",
   "instruction.roundabout.hold_attack_crouch": "Hold Attack While Crouching",

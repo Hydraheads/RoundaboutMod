@@ -262,6 +262,10 @@ public class FabricSounds {
         addSound(ModSounds.JOTARO_FINISHER_ID, ModSounds.JOTARO_FINISHER_EVENT);
         addSound(ModSounds.JOTARO_DIO_ID, ModSounds.JOTARO_DIO_EVENT);
         addSound(ModSounds.JOTARO_GETING_CLOSER_ID, ModSounds.JOTARO_GETING_CLOSER_EVENT);
+        addSound(ModSounds.FEMALE_ZOMBIE_AMBIENT_ID, ModSounds.FEMALE_ZOMBIE_AMBIENT_EVENT);
+        addSound(ModSounds.FEMALE_ZOMBIE_HURT_ID, ModSounds.FEMALE_ZOMBIE_HURT_EVENT);
+        addSound(ModSounds.FEMALE_ZOMBIE_DEATH_ID, ModSounds.FEMALE_ZOMBIE_DEATH_EVENT);
+        addSound(ModSounds.AESTHETICIAN_EXHALE_ID, ModSounds.AESTHETICIAN_EXHALE_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);

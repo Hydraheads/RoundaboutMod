@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,7 +31,16 @@ public abstract class ZZombieVillager extends Zombie implements VillagerDataHold
         super($$0, $$1);
     }
 
+    @Unique
+    public boolean roundabout$ceaseSound = false;
+
     /**Replace naturally spawned zombie villagers with Zombie Aestheticians*/
+    @Inject(method = "getAmbientSound", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$playAmbientSound(CallbackInfoReturnable<SoundEvent> cir) {
+        if (roundabout$ceaseSound) {
+            cir.setReturnValue(null);
+        }
+    }
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     protected void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         if ($$2.equals(MobSpawnType.NATURAL) || $$2.equals(MobSpawnType.CHUNK_GENERATION)) {
@@ -40,6 +51,7 @@ public abstract class ZZombieVillager extends Zombie implements VillagerDataHold
                     $$7.setPos(this.getPosition(0));
                     this.level().addFreshEntity($$7);
                     this.discard();
+                    roundabout$ceaseSound = true;
                 }
             }
         }

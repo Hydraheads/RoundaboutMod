@@ -70,7 +70,7 @@ public class StarPlatinumEntity extends StandEntity {
         } else if (skinId == ARCADE){
             return Component.translatable(  "skins.roundabout.star_platinum.arcade");
         } else if (skinId == FOUR_DEE){
-            return Component.translatable(  "skins.roundabout.star_platinum.arcade");
+            return Component.translatable(  "skins.roundabout.star_platinum.four_dee");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

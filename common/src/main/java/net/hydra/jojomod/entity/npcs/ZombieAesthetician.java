@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -275,15 +276,15 @@ public class ZombieAesthetician extends Zombie {
 
 
     public SoundEvent getAmbientSound() {
-        return null;
+        return ModSounds.FEMALE_ZOMBIE_AMBIENT_EVENT;
     }
 
     public SoundEvent getHurtSound(DamageSource damageSource) {
-        return null;
+        return ModSounds.FEMALE_ZOMBIE_HURT_EVENT;
     }
 
     public SoundEvent getDeathSound() {
-        return null;
+        return ModSounds.FEMALE_ZOMBIE_DEATH_EVENT;
     }
 
     public SoundEvent getStepSound() {

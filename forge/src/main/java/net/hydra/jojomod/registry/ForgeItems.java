@@ -360,7 +360,7 @@ public class ForgeItems {
             () -> new ForgeSpawnEggItem(ForgeEntities.AESTHETICIAN,
                     0xfffef2, 0xffa8e8, new Item.Properties())));
     public static final RegistryObject<ForgeSpawnEggItem> ZOMBIE_AESTHETICIAN_SPAWN_EGG = addToTab(ITEMS.register("zombie_aesthetician_spawn_egg",
-            () -> new ForgeSpawnEggItem(ForgeEntities.AESTHETICIAN,
+            () -> new ForgeSpawnEggItem(ForgeEntities.ZOMBIE_AESTHETICIAN,
                     0x66BB6A, 0xffa8e8, new Item.Properties())));
     public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
             () -> new Potion(new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));

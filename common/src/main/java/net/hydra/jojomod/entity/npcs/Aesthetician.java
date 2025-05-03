@@ -12,9 +12,12 @@ import net.hydra.jojomod.event.powers.stand.PowersCinderella;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -60,6 +63,17 @@ public class Aesthetician extends StandUsingNPC {
         initInteractCheck();
         if (!interactingWith.contains(pl)){
             interactingWith.add(pl);
+        }
+    }
+    public int getAmbientSoundInterval() {
+        return 500;
+    }
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        if (this.isSleeping()) {
+            return null;
+        } else {
+            return ModSounds.AESTHETICIAN_EXHALE_EVENT;
         }
     }
 

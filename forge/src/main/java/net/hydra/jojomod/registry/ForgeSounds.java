@@ -461,6 +461,14 @@ public class ForgeSounds {
             register(ModSounds.JOTARO_DIO, ModSounds.JOTARO_DIO_ID);
     public static final RegistryObject<SoundEvent> JOTARO_GETTING_CLOSER =
             register(ModSounds.JOTARO_GETING_CLOSER, ModSounds.JOTARO_GETING_CLOSER_ID);
+    public static final RegistryObject<SoundEvent> FEMALE_ZOMBIE_HURT =
+            register(ModSounds.FEMALE_ZOMBIE_HURT, ModSounds.FEMALE_ZOMBIE_HURT_ID);
+    public static final RegistryObject<SoundEvent> FEMALE_ZOMBIE_DEATH =
+            register(ModSounds.FEMALE_ZOMBIE_DEATH, ModSounds.FEMALE_ZOMBIE_DEATH_ID);
+    public static final RegistryObject<SoundEvent> FEMALE_ZOMBIE_AMBIENT =
+            register(ModSounds.FEMALE_ZOMBIE_AMBIENT, ModSounds.FEMALE_ZOMBIE_AMBIENT_ID);
+    public static final RegistryObject<SoundEvent> AESTHETICIAN_EXHALE =
+            register(ModSounds.AESTHETICIAN_EXHALE, ModSounds.AESTHETICIAN_EXHALE_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =
