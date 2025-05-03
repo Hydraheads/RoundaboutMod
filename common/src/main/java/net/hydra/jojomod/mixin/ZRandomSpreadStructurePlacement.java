@@ -43,7 +43,12 @@ public abstract class ZRandomSpreadStructurePlacement extends StructurePlacement
         }
         //Meteorite spacing interception
         if (this.salt() == 99271346){
-
+            Config conf = ClientNetworking.getAppropriateConfig();
+            if (conf != null && conf.worldgenSettings != null){
+                if (conf.worldgenSettings.meteoriteSpacing > conf.worldgenSettings.meteoriteSeparationMakeSmallerThanSpacing){
+                    cir.setReturnValue(conf.worldgenSettings.meteoriteSpacing);
+                }
+            }
             return;
         }
     }
@@ -62,7 +67,12 @@ public abstract class ZRandomSpreadStructurePlacement extends StructurePlacement
         }
         //Meteorite spacing interception
         if (this.salt() == 99271346){
-
+            Config conf = ClientNetworking.getAppropriateConfig();
+            if (conf != null && conf.worldgenSettings != null){
+                if (conf.worldgenSettings.meteoriteSpacing > conf.worldgenSettings.meteoriteSeparationMakeSmallerThanSpacing){
+                    cir.setReturnValue(conf.worldgenSettings.meteoriteSeparationMakeSmallerThanSpacing);
+                }
+            }
             return;
         }
     }
@@ -82,7 +92,13 @@ public abstract class ZRandomSpreadStructurePlacement extends StructurePlacement
         }
         //Meteorite spacing interception
         if (this.salt() == 99271346){
-
+            Config conf = ClientNetworking.getAppropriateConfig();
+            if (conf != null && conf.worldgenSettings != null){
+                if (conf.worldgenSettings.meteoriteSpacing > conf.worldgenSettings.meteoriteSeparationMakeSmallerThanSpacing){
+                    cir.setReturnValue(roundabout$getPotentialStructureChunk2(loong, i1, i2,
+                            conf.worldgenSettings.meteoriteSpacing, conf.worldgenSettings.meteoriteSeparationMakeSmallerThanSpacing));
+                }
+            }
             return;
         }
     }

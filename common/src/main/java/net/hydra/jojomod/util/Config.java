@@ -238,6 +238,10 @@ import java.util.Set;
         public Integer cinderellaSpacing;
         @IntOption(group = "inherit", value = 54, min = 0, max = 72000)
         public Integer cinderellaSeparationMakeSmallerThanSpacing;
+        @IntOption(group = "inherit", value = 14, min = 0, max = 72000)
+        public Integer meteoriteSpacing;
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+        public Integer meteoriteSeparationMakeSmallerThanSpacing;
     }
     public static class MiningSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
