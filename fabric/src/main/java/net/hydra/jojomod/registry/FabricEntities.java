@@ -237,6 +237,13 @@ public class FabricEntities {
                         EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":soft_and_wet")
                 );
+        public static final EntityType<KillerQueenEntity> KILLER_QUEEN =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("killer_queen"),
+                        EntityType.Builder.of(KillerQueenEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":killer_queen")
+                );
         public static final EntityType<CinderellaEntity> CINDERELLA =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -361,6 +368,7 @@ public class FabricEntities {
                 ModEntities.MAGICIANS_RED_OVA = MAGICIANS_RED_OVA;
                 ModEntities.D4C = D4C;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
+                ModEntities.KILLER_QUEEN = KILLER_QUEEN;
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
@@ -434,6 +442,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED_OVA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(KILLER_QUEEN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());

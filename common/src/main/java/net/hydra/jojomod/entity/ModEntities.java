@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.visages.JojoNPCGoToClosestVillage;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -28,6 +29,7 @@ public class ModEntities {
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED_OVA;
     public static EntityType<D4CEntity> D4C;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
+    public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -74,5 +76,6 @@ public class ModEntities {
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");
+
 
 }

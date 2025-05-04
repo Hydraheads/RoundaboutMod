@@ -39,6 +39,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED.get(), MagiciansRedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED_OVA.get(), MagiciansRedOVARenderer::new);
+        event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET.get(), SoftAndWetRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);

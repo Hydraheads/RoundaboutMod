@@ -194,6 +194,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet").toString())
             );
+    public static final RegistryObject<EntityType<KillerQueenEntity>> KILLER_QUEEN =
+            ENTITY_TYPES.register("killer_queen", () ->
+                    EntityType.Builder.of(KillerQueenEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
+            );
     public static final RegistryObject<EntityType<CinderellaEntity>> CINDERELLA =
             ENTITY_TYPES.register("cinderella", () ->
                     EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
