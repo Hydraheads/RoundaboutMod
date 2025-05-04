@@ -45,6 +45,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+    public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
+    public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
@@ -287,6 +291,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
+                        entries.accept(STAND_DISC_SOFT_AND_WET);
+                        entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_CINDERELLA);
 
                     }).build());
@@ -361,6 +367,9 @@ public class FabricItems {
         ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
         ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
+        ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
+        ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;

@@ -214,6 +214,9 @@ public class ForgeEvents {
         ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
+        ModItems.STAND_DISC_SOFT_AND_WET = ForgeItems.STAND_DISC_SOFT_AND_WET.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_SOFT_AND_WET.get());
+        ModItems.MAX_STAND_DISC_SOFT_AND_WET = ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get();
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
 
