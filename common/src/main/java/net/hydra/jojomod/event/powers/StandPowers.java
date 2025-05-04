@@ -1502,7 +1502,7 @@ public class StandPowers {
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth()){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().barragesOnlyKillOnLastHit){
                 if (entity instanceof Player) {
                     power = 0.00001F;
                 } else {
