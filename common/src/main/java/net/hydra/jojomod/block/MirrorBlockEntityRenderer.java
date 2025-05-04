@@ -97,6 +97,10 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                             rement.remove(value);
                                         } else if (value.getX() < fire.getBlockPos().getX()-8){
                                             rement.remove(value);
+                                        } else if (value.getY() > fire.getBlockPos().getY()+4){
+                                            rement.remove(value);
+                                        } else if (value.getY() < fire.getBlockPos().getY()-4){
+                                            rement.remove(value);
                                         }
                                     } else if (direction.equals(Direction.EAST)) {
                                         if (value.getX() < fire.getBlockPos().getX()-1){
@@ -104,6 +108,10 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                         } else if (value.getZ() > fire.getBlockPos().getZ()+8){
                                             rement.remove(value);
                                         } else if (value.getZ() < fire.getBlockPos().getZ()-8){
+                                            rement.remove(value);
+                                        } else if (value.getY() > fire.getBlockPos().getY()+4){
+                                            rement.remove(value);
+                                        } else if (value.getY() < fire.getBlockPos().getY()-4){
                                             rement.remove(value);
                                         }
                                     } else if (direction.equals(Direction.WEST)) {
@@ -113,6 +121,10 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                             rement.remove(value);
                                         } else if (value.getZ() < fire.getBlockPos().getZ()-8){
                                             rement.remove(value);
+                                        } else if (value.getY() > fire.getBlockPos().getY()+4){
+                                            rement.remove(value);
+                                        } else if (value.getY() < fire.getBlockPos().getY()-4){
+                                            rement.remove(value);
                                         }
                                     } else if (direction.equals(Direction.SOUTH)) {
                                         if (value.getZ() < fire.getBlockPos().getZ()-1){
@@ -120,6 +132,10 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                         } else if (value.getX() > fire.getBlockPos().getX()+8){
                                             rement.remove(value);
                                         } else if (value.getX() < fire.getBlockPos().getX()-8){
+                                            rement.remove(value);
+                                        } else if (value.getY() > fire.getBlockPos().getY()+4){
+                                            rement.remove(value);
+                                        } else if (value.getY() < fire.getBlockPos().getY()-4){
                                             rement.remove(value);
                                         }
                                     }
