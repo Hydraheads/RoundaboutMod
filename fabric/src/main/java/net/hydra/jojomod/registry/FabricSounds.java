@@ -96,6 +96,7 @@ public class FabricSounds {
         addSound(ModSounds.IMPALE_CHARGE_ID, ModSounds.IMPALE_CHARGE_EVENT);
         addSound(ModSounds.IMPALE_HIT_ID, ModSounds.IMPALE_HIT_EVENT);
 
+        addSound(ModSounds.SUMMON_SOFT_AND_WET_ID, ModSounds.SUMMON_SOFT_AND_WET_EVENT);
         addSound(ModSounds.THE_WORLD_ASSAULT_ID, ModSounds.THE_WORLD_ASSAULT_EVENT);
         addSound(ModSounds.THE_WORLD_WRY_ID, ModSounds.THE_WORLD_WRY_EVENT);
         addSound(ModSounds.THE_WORLD_MUDA_ID, ModSounds.THE_WORLD_MUDA_EVENT);

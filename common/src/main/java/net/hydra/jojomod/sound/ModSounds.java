@@ -210,6 +210,10 @@ public class ModSounds {
     public static final ResourceLocation THE_WORLD_WRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+THE_WORLD_WRY);
     public static SoundEvent THE_WORLD_WRY_EVENT = SoundEvent.createVariableRangeEvent(THE_WORLD_WRY_ID);
 
+    public static final String SUMMON_SOFT_AND_WET = "summon_soft_and_wet";
+    public static final ResourceLocation SUMMON_SOFT_AND_WET_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_SOFT_AND_WET);
+    public static SoundEvent SUMMON_SOFT_AND_WET_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_SOFT_AND_WET_ID);
+
     public static final String SUMMON_JUSTICE = "summon_justice";
     public static final ResourceLocation SUMMON_JUSTICE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_JUSTICE);
     public static SoundEvent SUMMON_JUSTICE_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_JUSTICE_ID);

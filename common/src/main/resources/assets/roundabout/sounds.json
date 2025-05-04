@@ -515,6 +515,12 @@
       "roundabout:cackle"
     ]
   },
+  "summon_soft_and_wet": {
+    "subtitle": "sounds.roundabout.summon_soft_and_wet",
+    "sounds": [
+      "roundabout:summon_soft_and_wet"
+    ]
+  },
   "summon_justice": {
     "subtitle": "sounds.roundabout.summon_justice",
     "sounds": [

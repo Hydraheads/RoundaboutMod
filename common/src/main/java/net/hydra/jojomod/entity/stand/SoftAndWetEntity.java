@@ -9,22 +9,16 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
-public class D4CEntity extends StandEntity {
-    public D4CEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
+public class SoftAndWetEntity extends StandEntity {
+    public SoftAndWetEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
 
     public static final byte
-        MANGA_SKIN = 0,
-        WONDER_FESTIVAL = 1,
-        PROMO = 2,
-        PROMO_L = 3;
+            MANGA_SKIN = 0;
 
     @Override public Component getSkinName(byte skinId) {
         switch (skinId)
         {
-            case WONDER_FESTIVAL -> {return Component.translatable("skins.roundabout.d4c.wonder_festival");}
-            case PROMO -> {return Component.translatable("skins.roundabout.d4c.promo");}
-            case PROMO_L -> {return Component.translatable("skins.roundabout.d4c.promo_l");}
-            default -> {return Component.translatable("skins.roundabout.d4c.base");}
+            default -> {return Component.translatable("skins.roundabout.soft_and_wet.base");}
         }
     }
 
@@ -65,21 +59,5 @@ public class D4CEntity extends StandEntity {
         }
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.level().isClientSide)
-            return;
-
-        if (!this.hasUser())
-            return;
-
-        if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersD4C PD4C) {
-            if (PD4C.meltDodgeTicks != -1)
-                PD4C.meltDodgeTicks += 1;
-
-            if (PD4C.meltDodgeTicks >= ClientNetworking.getAppropriateConfig().durationsInTicks.D4CMeltDodgeTicks)
-                PD4C.meltDodgeTicks = -1;
-        }
-    }
 }
+

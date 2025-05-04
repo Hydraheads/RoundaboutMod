@@ -75,6 +75,8 @@ public class ForgeSounds {
             register(ModSounds.THE_WORLD_ASSAULT, ModSounds.THE_WORLD_ASSAULT_ID);
     public static final RegistryObject<SoundEvent> THE_WORLD_WRY_EVENT =
             register(ModSounds.THE_WORLD_WRY, ModSounds.THE_WORLD_WRY_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_SOFT_AND_WET_EVENT =
+            register(ModSounds.SUMMON_SOFT_AND_WET, ModSounds.SUMMON_SOFT_AND_WET_ID);
     public static final RegistryObject<SoundEvent> THE_WORLD_MUDA_EVENT =
             register(ModSounds.THE_WORLD_MUDA, ModSounds.THE_WORLD_MUDA_ID);
     public static final RegistryObject<SoundEvent> SUMMON_JUSTICE =
