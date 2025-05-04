@@ -35,6 +35,8 @@ import java.util.Set;
     @BooleanOption(group = "inherit", value = true)
     public Boolean barrageDeflectsArrrows;
     @BooleanOption(group = "inherit", value = true)
+    public Boolean barragesOnlyKillOnLastHit;
+    @BooleanOption(group = "inherit", value = true)
     public Boolean disableMeleeWhileStandActive;
     @BooleanOption(group = "inherit", value = false)
     public Boolean disableBleedingAndBloodSplatters;

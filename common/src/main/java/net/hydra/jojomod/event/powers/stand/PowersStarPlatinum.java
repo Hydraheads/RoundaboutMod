@@ -219,15 +219,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public float getBarrageHitStrength(Entity entity){
         float str = super.getBarrageHitStrength(entity);
-        if (getReducedDamage(entity)){
-            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
-        } else {
-            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
-        }
-        if (forwardBarrage){
-            str*=0.6F;
+        if (str > 0.005F) {
+            if (getReducedDamage(entity)) {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.starPlatinumAttacksOnPlayers * 0.01)));
+            } else {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.starPlatinumAttacksOnMobs * 0.01)));
+            }
+            if (forwardBarrage) {
+                str *= 0.6F;
+            }
         }
         return str;
     }
