@@ -1246,7 +1246,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return 7;
         }
     }
-    private float getKickBarrageHitStrength(Entity entity){
+    public float getKickBarrageHitStrength(Entity entity){
         float barrageLength = this.getKickBarrageLength();
         float power;
         if (this.getReducedDamage(entity)){
@@ -1256,7 +1256,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth()){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().barragesOnlyKillOnLastHit){
                 if (entity instanceof Player) {
                     power = 0.00001F;
                 } else {

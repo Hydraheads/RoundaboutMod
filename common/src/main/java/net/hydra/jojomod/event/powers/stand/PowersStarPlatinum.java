@@ -250,6 +250,40 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         return str;
     }
+    @Override
+    public float getKickBarrageHitStrength(Entity entity){
+        float str = super.getKickBarrageHitStrength(entity);
+        if (str > 0.005F) {
+            if (getReducedDamage(entity)) {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.starPlatinumAttacksOnPlayers * 0.01)));
+            } else {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.starPlatinumAttacksOnMobs * 0.01)));
+            }
+            if (forwardBarrage) {
+                str *= 0.6F;
+            }
+        }
+        return str;
+    }
+    @Override
+    public float getKickBarrageFinisherStrength(Entity entity){
+        float str = super.getKickBarrageFinisherStrength(entity);
+        if (this.getReducedDamage(entity)){
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+        } else {
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+        }
+        if (forwardBarrage && !(entity instanceof Player)){
+            str*=0.6F;
+        } else if (forwardBarrage){
+            str*=0.8F;
+        }
+        return str;
+    }
 
     @Override
     public void playBarrageClashSound(){

@@ -745,6 +745,31 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return str;
     }
     @Override
+    public float getKickBarrageFinisherStrength(Entity entity){
+        float str = super.getKickBarrageFinisherStrength(entity);
+        if (this.getReducedDamage(entity)){
+            return str*levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+        } else {
+            return str*levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+        }
+    }
+    @Override
+    public float getKickBarrageHitStrength(Entity entity){
+        float str = super.getKickBarrageHitStrength(entity);
+        if (str > 0.005F) {
+            if (getReducedDamage(entity)) {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.theWorldAttacksOnPlayers * 0.01)));
+            } else {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.theWorldAttacksOnMobs * 0.01)));
+            }
+        }
+        return str;
+    }
+    @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
