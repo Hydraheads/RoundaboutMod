@@ -689,6 +689,7 @@
   "leveling.roundabout.levelup.max.moves": "Max Development: New Ability!",
   "leveling.roundabout.levelup.max.both": "Max Development: New Ability & Skin!",
   "leveling.roundabout.disc_wip": "Work in Progress, Not Obtainable",
+  "leveling.roundabout.disc_wip_2": "That means the moves are not complete",
 
   "gamerule.roundaboutStandGriefing": "Stand Griefing",
   "gamerule.roundaboutStandGriefing.description": "Controls whether or not stands can mess with blocks",
