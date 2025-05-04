@@ -60,6 +60,7 @@
     "ZPumpkinBlock",
     "ZRaid",
     "ZRaider",
+    "ZRandomSpreadStructurePlacement",
     "ZRecordItem",
     "ZServerGamePacketListenerImpl",
     "ZServerPlayerGameMode",
@@ -68,6 +69,7 @@
     "ZSlime",
     "ZSmithingTemplateItem",
     "ZSnowGolem",
+    "ZStructureTemplatePool",
     "ZTargetGoal",
     "ZThrowableProjectile",
     "ZThrownPotion",
@@ -84,8 +86,7 @@
     "ZZombieVillager",
     "dworlds.ChunkGeneratorD4CMixin",
     "dworlds.RegistryMixin",
-    "dworlds.ServerAccessorMixin",
-    "ZRandomSpreadStructurePlacement"
+    "dworlds.ServerAccessorMixin"
   ],
   "client": [
     "GeckolibCompatAttempt",

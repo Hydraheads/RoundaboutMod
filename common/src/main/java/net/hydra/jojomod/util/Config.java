@@ -234,14 +234,20 @@ import java.util.Set;
         public Integer standGuardMultiplier;
     }
     public static class WorldGenSettings {
-        @IntOption(group = "inherit", value = 55, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 55, min = 0, max = 4096)
         public Integer cinderellaSpacing;
-        @IntOption(group = "inherit", value = 54, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 54, min = 0, max = 4096)
         public Integer cinderellaSeparationMakeSmallerThanSpacing;
-        @IntOption(group = "inherit", value = 14, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 14, min = 0, max = 4096)
         public Integer meteoriteSpacing;
-        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 12, min = 0, max = 4096)
         public Integer meteoriteSeparationMakeSmallerThanSpacing;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean modifyStructureWeights;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 150)
+        public Integer cinderellaWeight;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 150)
+        public Integer meteoriteWeight;
     }
     public static class MiningSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
