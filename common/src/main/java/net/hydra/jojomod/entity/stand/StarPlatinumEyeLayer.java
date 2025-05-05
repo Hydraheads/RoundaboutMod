@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class StarPlatinumEyeLayer <T extends StarPlatinumEntity, M extends StandModel<T>> extends EyesLayer<T, M> {
-        private static final RenderType SPIDER_EYES = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum_eyes.png"));
+        private static final RenderType SPIDER_EYES = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/eyes.png"));
 
         public StarPlatinumEyeLayer(RenderLayerParent<T, M> $$0) {
             super($$0);

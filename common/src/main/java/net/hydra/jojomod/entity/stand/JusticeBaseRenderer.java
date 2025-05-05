@@ -41,20 +41,20 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
         $$4.xRot = 0.0F;
         $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(getTextureLocation($$3))), $$2, OverlayTexture.NO_OVERLAY);
     }
-    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice.png");
-    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_manga.png");
-    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_ova.png");
-    private static final ResourceLocation BOGGED_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_bogged.png");
-    private static final ResourceLocation SKELETON = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_skeleton.png");
-    private static final ResourceLocation STRAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_stray.png");
-    private static final ResourceLocation WITHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_wither.png");
-    private static final ResourceLocation TAROT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_tarot.png");
-    private static final ResourceLocation FLAMED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_flamed.png");
-    private static final ResourceLocation TWILIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_twilight.png");
-    private static final ResourceLocation PIRATE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_pirate.png");
-    private static final ResourceLocation BLUE_FLAME = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_flamed_blue.png");
-    private static final ResourceLocation DARK_MIRAGE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/dark_mirage.png");
-    private static final ResourceLocation JOJONIUM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice_jojonium.png");
+    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/anime.png");
+    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/manga.png");
+    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/ova.png");
+    private static final ResourceLocation BOGGED_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/bogged.png");
+    private static final ResourceLocation SKELETON = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/skeleton.png");
+    private static final ResourceLocation STRAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/stray.png");
+    private static final ResourceLocation WITHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/wither.png");
+    private static final ResourceLocation TAROT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/tarot.png");
+    private static final ResourceLocation FLAMED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/flamed.png");
+    private static final ResourceLocation TWILIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/twilight.png");
+    private static final ResourceLocation PIRATE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/pirate.png");
+    private static final ResourceLocation BLUE_FLAME = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/flamed_blue.png");
+    private static final ResourceLocation DARK_MIRAGE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/dark_mirage.png");
+    private static final ResourceLocation JOJONIUM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/jojonium.png");
 
 
 

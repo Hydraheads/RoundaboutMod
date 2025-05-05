@@ -11,21 +11,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class TheWorldRenderer extends StandRenderer<TheWorldEntity> {
 
-    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world.png");
-    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_manga.png");
-    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_ova.png");
-    private static final ResourceLocation HERITAGE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_heritage.png");
-    private static final ResourceLocation BLACK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_black.png");
-    private static final ResourceLocation PART_7_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_part_7.png");
-    private static final ResourceLocation PART_7_BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_part_7_blue.png");
-    private static final ResourceLocation OVER_HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_over_heaven.png");
-    private static final ResourceLocation DARK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_dark.png");
-    private static final ResourceLocation AQUA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_aqua.png");
-    private static final ResourceLocation ARCADE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_arcade.png");
-    private static final ResourceLocation AGOGO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_agogo.png");
-    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_beta.png");
-    private static final ResourceLocation ARCADE_SKIN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_arcade_2.png");
-    private static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_4d.png");
+    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/anime.png");
+    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/manga.png");
+    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/ova.png");
+    private static final ResourceLocation HERITAGE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/heritage.png");
+    private static final ResourceLocation BLACK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/black.png");
+    private static final ResourceLocation PART_7_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/part_7.png");
+    private static final ResourceLocation PART_7_BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/part_7_blue.png");
+    private static final ResourceLocation OVER_HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/over_heaven.png");
+    private static final ResourceLocation DARK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/dark.png");
+    private static final ResourceLocation AQUA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/aqua.png");
+    private static final ResourceLocation ARCADE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/arcade.png");
+    private static final ResourceLocation AGOGO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/agogo.png");
+    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/beta.png");
+    private static final ResourceLocation ARCADE_SKIN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/arcade_2.png");
+    private static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/4d.png");
     public TheWorldRenderer(EntityRendererProvider.Context context) {
         super(context, new TheWorldModel<>(context.bakeLayer(ModEntityRendererClient.THE_WORLD_LAYER)),0f);
         this.addLayer(new TheWorldOverHeavenEyeLayer<>(this));

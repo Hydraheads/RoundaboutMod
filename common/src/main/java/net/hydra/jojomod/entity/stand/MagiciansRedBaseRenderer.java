@@ -13,21 +13,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRenderer<MagiciansRedEntity> {
 
-    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red.png");
-    private static final ResourceLocation BLUE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_blue.png");
-    private static final ResourceLocation PURPLE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_purple.png");
-    private static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_green.png");
-    private static final ResourceLocation DREAD_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_dread.png");
-    private static final ResourceLocation DREAD_BEAST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_chagaroth.png");
-    private static final ResourceLocation BLUE_ACE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_blue_ace.png");
-    private static final ResourceLocation MAGMA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_magma.png");
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_manga.png");
-    private static final ResourceLocation LIGHTER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_lighter.png");
-    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_ova.png");
-    private static final ResourceLocation SIDEKICK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_sidekicks.png");
-    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_beta.png");
-    private static final ResourceLocation JOJONIUM_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_jojonium.png");
-    private static final ResourceLocation DEBUT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red_debut.png");
+    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/anime.png");
+    private static final ResourceLocation BLUE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/blue.png");
+    private static final ResourceLocation PURPLE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/purple.png");
+    private static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/green.png");
+    private static final ResourceLocation DREAD_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/dread.png");
+    private static final ResourceLocation DREAD_BEAST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/chagaroth.png");
+    private static final ResourceLocation BLUE_ACE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/blue_ace.png");
+    private static final ResourceLocation MAGMA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/magma.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/manga.png");
+    private static final ResourceLocation LIGHTER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/lighter.png");
+    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/ova.png");
+    private static final ResourceLocation SIDEKICK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/sidekicks.png");
+    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/beta.png");
+    private static final ResourceLocation JOJONIUM_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/jojonium.png");
+    private static final ResourceLocation DEBUT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/debut.png");
     public MagiciansRedBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
         this.addLayer(new MagiciansRedSpinEffectLayer<>(this, context.getModelSet()));

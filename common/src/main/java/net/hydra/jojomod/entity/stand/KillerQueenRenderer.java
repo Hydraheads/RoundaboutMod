@@ -16,7 +16,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
         return main_skin;
     }
 
-    private static final ResourceLocation main_skin = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen.png");
+    private static final ResourceLocation main_skin = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/anime.png");
 
     public KillerQueenRenderer(EntityRendererProvider.Context context) {
         super(context, new KillerQueenModel<>(context.bakeLayer(ModEntityRendererClient.KILLER_QUEEN_LAYER)), 0f);

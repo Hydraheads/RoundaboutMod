@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SoftAndWetRenderer extends StandRenderer<SoftAndWetEntity> {
 
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/manga.png");
     public SoftAndWetRenderer(EntityRendererProvider.Context context) {
         super(context, new SoftAndWetModel<>(context.bakeLayer(ModEntityRendererClient.SOFT_AND_WET_LAYER)), 0f);
     }

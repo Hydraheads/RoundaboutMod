@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class TheWorldOverHeavenEyeLayer <T extends TheWorldEntity, M extends StandModel<T>> extends EyesLayer<T, M> {
-    private static final RenderType SPIDER_EYES = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world_over_heaven_eyes.png"));
+    private static final RenderType SPIDER_EYES = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/over_heaven_eyes.png"));
 
     public TheWorldOverHeavenEyeLayer(RenderLayerParent<T, M> $$0) {
         super($$0);

@@ -11,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class CinderellaRenderer extends StandRenderer<CinderellaEntity> {
 
-    private static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella.png");
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella_manga.png");
-    private static final ResourceLocation ZOMBIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella_zombie.png");
+    private static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/anime.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/manga.png");
+    private static final ResourceLocation ZOMBIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/zombie.png");
 
     public CinderellaRenderer(EntityRendererProvider.Context context) {
         super(context, new CinderellaModel<>(context.bakeLayer(ModEntityRendererClient.CINDERELLA_LAYER)), 0f);
