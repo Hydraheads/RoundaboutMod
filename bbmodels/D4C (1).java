@@ -39,7 +39,7 @@ public class D4C (1)<T extends Entity> extends EntityModel<T> {
 	private final ModelPart RightArmBAM2;
 	private final ModelPart RightArmBAM3;
 	private final ModelPart LeftArmBAM;
-	private final ModelPart LeftArmBAM2;
+	private final ModelPart LeftArmBAM4;
 	private final ModelPart LeftArmBAM3;
 	private final ModelPart kick_barrage;
 	private final ModelPart One;
@@ -83,7 +83,7 @@ public class D4C (1)<T extends Entity> extends EntityModel<T> {
 		this.RightArmBAM2 = this.BAM.getChild("RightArmBAM2");
 		this.RightArmBAM3 = this.BAM.getChild("RightArmBAM3");
 		this.LeftArmBAM = this.BAM.getChild("LeftArmBAM");
-		this.LeftArmBAM2 = this.BAM.getChild("LeftArmBAM2");
+		this.LeftArmBAM4 = this.BAM.getChild("LeftArmBAM4");
 		this.LeftArmBAM3 = this.BAM.getChild("LeftArmBAM3");
 		this.kick_barrage = this.stand2.getChild("kick_barrage");
 		this.One = this.kick_barrage.getChild("One");
@@ -207,12 +207,12 @@ public class D4C (1)<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition LeftArm_r1 = LeftArmBAM.addOrReplaceChild("LeftArm_r1", CubeListBuilder.create().texOffs(0, 112).mirror().addBox(-3.25F, -1.25F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(-0.75F, -1.75F, -1.0F, -1.5708F, 0.0F, -1.5708F));
 
-		PartDefinition LeftArmBAM2 = BAM.addOrReplaceChild("LeftArmBAM2", CubeListBuilder.create(), PartPose.offset(14.5F, -2.75F, 0.0F));
+		PartDefinition LeftArmBAM4 = BAM.addOrReplaceChild("LeftArmBAM4", CubeListBuilder.create(), PartPose.offset(14.5F, -2.75F, 0.0F));
 
-		PartDefinition cube_r5 = LeftArmBAM2.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(0, 121).mirror().addBox(1.5F, -4.25F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
+		PartDefinition cube_r5 = LeftArmBAM4.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(0, 121).mirror().addBox(1.5F, -4.25F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(16, 118).addBox(1.5F, -1.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.25F, 3.0F, 0.0F, -1.5708F, 0.0F, -1.5708F));
 
-		PartDefinition LeftArm_r2 = LeftArmBAM2.addOrReplaceChild("LeftArm_r2", CubeListBuilder.create().texOffs(0, 112).mirror().addBox(1.5F, -1.25F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(-0.25F, 3.0F, -1.0F, -1.5708F, 0.0F, -1.5708F));
+		PartDefinition LeftArm_r2 = LeftArmBAM4.addOrReplaceChild("LeftArm_r2", CubeListBuilder.create().texOffs(0, 112).mirror().addBox(1.5F, -1.25F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(-0.25F, 3.0F, -1.0F, -1.5708F, 0.0F, -1.5708F));
 
 		PartDefinition LeftArmBAM3 = BAM.addOrReplaceChild("LeftArmBAM3", CubeListBuilder.create(), PartPose.offset(13.625F, 0.75F, 0.0F));
 
