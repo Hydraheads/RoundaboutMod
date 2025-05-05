@@ -213,6 +213,9 @@ public class ForgeEvents {
         ModItems.STAND_DISC_MAGICIANS_RED = ForgeItems.STAND_DISC_MAGICIANS_RED.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_MAGICIANS_RED.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_MAGICIANS_RED.get());
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = ForgeItems.MAX_STAND_DISC_MAGICIANS_RED.get();
+        ModItems.STAND_DISC_KILLER_QUEEN = ForgeItems.STAND_DISC_KILLER_QUEEN.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_KILLER_QUEEN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_KILLER_QUEEN.get());
+        ModItems.MAX_STAND_DISC_KILLER_QUEEN = ForgeItems.MAX_STAND_DISC_KILLER_QUEEN.get();
         ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
