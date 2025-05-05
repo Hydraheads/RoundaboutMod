@@ -857,6 +857,9 @@ public class StandPowers {
             setScopeLevel(0);
             this.scopeTime = -1;
         }
+        if (((StandUser)this.self).roundabout$getStandDisc().isEmpty()){
+            ((StandUser)this.self).roundabout$setStandPowers(new StandPowers(this.self));
+        }
     }
 
     public void tickMobAi(){

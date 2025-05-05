@@ -1,9 +1,12 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.util.ConfigManager;
@@ -771,10 +774,17 @@ public abstract class StandEntity extends Mob{
                                     this.incFadeOut((byte) 1);
                                 }
                             }
+
+                            if (!this.level().isClientSide() && (((StandUser)this.getUser()).roundabout$getStandDisc().isEmpty() ||
+                            ((StandUser)this.getUser()).roundabout$getStandDisc().is(ModItems.STAND_DISC))){
+                                this.discard();
+                                return;
+                            }
                         } else {
                             if (thisStand != null && !thisStand.is(this) && thisStand instanceof StandEntity SE &&
                             SE.getFadeOut() >= 1 && this.getFadeOut() > 1){
                                 this.setFadeOut((byte) 1);
+                                TickDown();
                             }
                             TickDown();
                         }
