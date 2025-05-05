@@ -27,6 +27,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_D4C;
     public static Item STAND_DISC_SOFT_AND_WET;
     public static Item MAX_STAND_DISC_SOFT_AND_WET;
+    public static Item STAND_DISC_KILLER_QUEEN;
+    public static Item MAX_STAND_DISC_KILLER_QUEEN;
     public static Item STAND_DISC_CINDERELLA;
     public static Item STAND_DISC;
     public static Item STREET_SIGN_DIO_BLOCK_ITEM;

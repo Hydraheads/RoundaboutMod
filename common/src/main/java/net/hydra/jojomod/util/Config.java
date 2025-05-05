@@ -232,6 +232,8 @@ import java.util.Set;
         public Integer magiciansRedDefend;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer d4cDefend;
+        @IntOption(group= "inherit", value = 15, min = 0, max = 72000)
+        public Integer killerQueenDefend;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer standGuardMultiplier;
     }
