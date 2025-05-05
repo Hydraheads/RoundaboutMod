@@ -175,12 +175,17 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     direction = $$0.getDirection();
                 }
 
-                if (((BlockItem)this.getItem().getItem()).place(new DirectionalPlaceContext(this.level(),
-                        pos,
-                        direction, this.getItem(),
-                        direction)) != InteractionResult.FAIL){
-                    this.tempDirection = direction;
-                    return true;
+                try {
+                    if (((BlockItem)this.getItem().getItem()).place(new DirectionalPlaceContext(this.level(),
+                            pos,
+                            direction, this.getItem(),
+                            direction)) != InteractionResult.FAIL){
+                        this.tempDirection = direction;
+                        return true;
+                    }
+                } catch(Exception e) {
+                    //put shader debug stuff here
+                    Roundabout.LOGGER.info("Mod does not make a safe null check for players, report to devs who made blocks");
                 }
             }
 
