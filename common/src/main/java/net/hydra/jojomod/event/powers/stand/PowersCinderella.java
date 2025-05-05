@@ -298,6 +298,11 @@ public class PowersCinderella extends DashPreset {
                         1, 2.5, 2,2.5, 0.015);
 
                 if (this.self instanceof Aesthetician aes){
+                    if (this.getStandEntity(this.self) == null || this.getStandEntity(this.self).isRemoved()){
+                        if (this.canSummonStand()){
+                            ((StandUser)this.self).roundabout$summonStand(this.self.level(),true,false);
+                        }
+                    }
                     if (aes.interactingWith != null && aes.interactingWith.isEmpty()){
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     }
