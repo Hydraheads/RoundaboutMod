@@ -47,14 +47,20 @@
   "item.roundabout.the_world_disc": "Disque Stand",
   "item.roundabout.justice_disc": "Disque Stand",
   "item.roundabout.d4c_disc": "Disque Stand",
+  "item.roundabout.soft_and_wet_disc": "Disque Stand",
   "item.roundabout.cinderella_disc": "Disque Stand",
   "item.roundabout.max_star_platinum_disc": "Disque Stand+",
   "item.roundabout.magicians_red_disc": "Disque Stand",
+  "item.roundabout.killer_queen_disc": "Disque Stand",
   "item.roundabout.max_the_world_disc": "Disque Stand+",
   "item.roundabout.max_justice_disc": "Disque Stand+",
   "item.roundabout.max_d4c_disc": "Disque Stand+",
+  "item.roundabout.max_soft_and_wet_disc": "Disque Stand+",
   "item.roundabout.max_magicians_red_disc": "Disque Stand+",
-  "item.roundabout.d4c_disc.desc": "Dirty Deeds Done Dirt Cheap",
+  "item.roundabout.max_killer_queen_disc": "Disque Stand+",
+  "item.roundabout.d4c_disc.desc": "D4C",
+  "item.roundabout.soft_and_wet_disc.desc": "Soft And Wet",
+  "item.roundabout.killer_queen_disc.desc": "Killer Queen",
   "item.roundabout.magicians_red_disc.desc": "Magician's Red",
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
@@ -125,6 +131,7 @@
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.cinderella": "Cinderella",
+  "entity.roundabout.soft_and_wet": "Soft And Wet",
   "entity.roundabout.harpoon": "Harpon",
   "entity.roundabout.match": "Allumette",
   "entity.roundabout.knife": "Couteau",
@@ -297,6 +304,7 @@
   "sounds.roundabout.summon_stand":  "Invocation de Stand",
   "sounds.roundabout.summon_star":  "Invocation de Star Platinium",
   "sounds.roundabout.summon_world":  "Invocation de The World",
+  "sounds.roundabout.summon_soft_and_wet":  "Invocation de Soft And Wet",
   "sounds.roundabout.summon_justice":  "Invocation de Justice",
   "sounds.roundabout.summon_justice_2":  "Invocation de Justice (Bad to the Bone)",
   "sounds.roundabout.summon_magician":  "Invocation de Magician's Red",
@@ -529,6 +537,11 @@
   "sounds.roundabout.jotaro_dio":  "DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "De quel autre manière...",
 
+  "sounds.roundabout.aesthetician_exhale":  "Expiration",
+  "sounds.roundabout.female_zombie_ambient":  "Gémissement d'Esthéticienne zombie",
+  "sounds.roundabout.female_zombie_hurt":  "Esthéticienne zombie blessé",
+  "sounds.roundabout.female_zombie_death":  "Mort d'Esthéticienne zombie",
+
   "instruction.roundabout.press_attack": "Pressez Attaquer",
   "instruction.roundabout.hold_attack": "Maintenez Attaquer",
   "instruction.roundabout.hold_attack_crouch": "Maintenez Attaquer en vous Accroupissant",
@@ -680,6 +693,7 @@
   "leveling.roundabout.levelup.max.moves": "Dévelopement Maximal : Nouvelle capacité !",
   "leveling.roundabout.levelup.max.both": "Dévelopement Maximal : Nouvelle capacité & Skin!",
   "leveling.roundabout.disc_wip": "En cours de développement, Pas disponible en Survie",
+  "leveling.roundabout.disc_wip_2": "Ça veut dire que les capacités ne sont pas terminé",
 
   "gamerule.roundaboutStandGriefing": "Actions destructrice des Stands",
   "gamerule.roundaboutStandGriefing.description": "Contrôle si les Stands peuvent intéragir avec les blocs ou non",
@@ -721,6 +735,7 @@
   "skins.roundabout.star_platinum.jojonium": "Jojonium",
   "skins.roundabout.star_platinum.beta": "Beta",
   "skins.roundabout.star_platinum.arcade": "Arcade",
+  "skins.roundabout.star_platinum.four_dee": "4D",
 
   "skins.roundabout.the_world.base": "Partie 3",
   "skins.roundabout.the_world.manga": "Manga",
@@ -776,6 +791,8 @@
   "skins.roundabout.magicians_red.jojonium_ablaze": "JoJonium F",
   "skins.roundabout.magicians_red.debut": "Manga Début",
 
+  "skins.roundabout.soft_and_wet.base": "Manga",
+
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "Wonder Festival",
   "skins.roundabout.d4c.promo": "Promo",
@@ -784,6 +801,8 @@
   "skins.roundabout.cinderella.base": "Partie 4",
   "skins.roundabout.cinderella.manga": "Manga",
   "skins.roundabout.cinderella.zombie": "Infecté",
+
+  "skins.roundabout.killer_queen.base": "Partie 4",
 
   "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Skin Over Heaven Débloqué !",
   "unlock_skin.roundabout.star_platinum.atomic": "Skin Star Platinum: Skin Atomic Débloqué !",
