@@ -32,11 +32,17 @@ public class SoftAndWetModel<T extends SoftAndWetEntity> extends StandModel<T> {
                 .texOffs(74, 59).addBox(-1.5F, 0.9636F, -2.5552F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(38, 26).addBox(-0.5F, 2.9886F, -5.1552F, 1.0F, 6.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(32, 0).addBox(-7.5F, 4.7886F, -1.9802F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.24F))
-                .texOffs(79, 20).addBox(-2.5F, 5.0261F, -5.0802F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(79, 20).addBox(1.5F, 5.0261F, -5.0802F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(81, 28).addBox(-8.45F, 3.7761F, -2.9802F, 2.0F, 3.0F, 3.0F, new CubeDeformation(-0.6F)), PartPose.offset(0.0F, -8.8761F, 1.0302F));
 
         PartDefinition ear_star_1_r1 = extra_details.addOrReplaceChild("ear_star_1_r1", CubeListBuilder.create().texOffs(81, 34).addBox(-1.0F, -1.4739F, -1.5F, 2.0F, 3.0F, 3.0F, new CubeDeformation(-0.6F)), PartPose.offsetAndRotation(7.45F, 5.25F, -1.4802F, 0.0F, 3.1416F, 0.0F));
+
+        PartDefinition eye2_r1 = extra_details.addOrReplaceChild("eye2_r1", CubeListBuilder.create().texOffs(75, 18).addBox(-0.5F, -1.1F, 0.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.675F, 6.1261F, -5.1302F, 0.0F, 0.2051F, 0.0F));
+
+        PartDefinition eye2_r2 = extra_details.addOrReplaceChild("eye2_r2", CubeListBuilder.create().texOffs(75, 18).addBox(-0.5F, -1.1F, 0.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.375F, 6.1261F, -5.1302F, 0.0F, -0.2051F, 0.0F));
+
+        PartDefinition eye2_r3 = extra_details.addOrReplaceChild("eye2_r3", CubeListBuilder.create().texOffs(75, 18).addBox(-0.5F, -1.1F, 0.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.375F, 6.1261F, -5.1302F, 0.0F, 0.2051F, 0.0F));
+
+        PartDefinition eye2_r4 = extra_details.addOrReplaceChild("eye2_r4", CubeListBuilder.create().texOffs(75, 18).addBox(-0.5F, -1.1F, 0.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.675F, 6.1261F, -5.1302F, 0.0F, -0.2051F, 0.0F));
 
         PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
