@@ -21,10 +21,10 @@ public class SoftAndWetRenderer extends StandRenderer<SoftAndWetEntity> {
 
     @Override public ResourceLocation getTextureLocation(SoftAndWetEntity entity) {
         return switch (entity.getSkin()) {
-            case (SoftAndWetEntity.LIGHT_SKIN) -> LIGHT_SKIN;
+            case (SoftAndWetEntity.MANGA_SKIN) -> MANGA_SKIN;
             case (SoftAndWetEntity.BETA_SKIN) -> BETA_SKIN;
             case (SoftAndWetEntity.KING_SKIN) -> KING_SKIN;
-            default -> MANGA_SKIN;
+            default -> LIGHT_SKIN;
         };
     }
 

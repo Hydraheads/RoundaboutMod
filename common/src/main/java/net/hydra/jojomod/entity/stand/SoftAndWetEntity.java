@@ -21,10 +21,10 @@ public class SoftAndWetEntity extends StandEntity {
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
-            case LIGHT_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.light");
+            case MANGA_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.base");
             case BETA_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.beta");
             case KING_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.king");
-            default -> Component.translatable("skins.roundabout.soft_and_wet.base");
+            default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }
 
