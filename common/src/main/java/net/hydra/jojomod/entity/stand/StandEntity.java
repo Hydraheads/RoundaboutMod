@@ -42,6 +42,8 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public abstract class StandEntity extends Mob{
     /**The entity code for a stand. Not to be confused with StandPowers, which contain
      * the actual ability data of stands, this code exists more for the physical
@@ -626,6 +628,24 @@ public abstract class StandEntity extends Mob{
         }
     }
 
+    public UUID validationUUID = null;
+    public void validateUUID(){
+        if (!this.level().isClientSide) {
+            if (this.getUser() != null && this.getUser() instanceof Player PE) {
+                if (validationUUID == null) {
+                    validationUUID = PE.getUUID();
+                } else {
+                    Player ZE = this.level().getPlayerByUUID(validationUUID);
+                    if (ZE != null){
+                        if (!ZE.is(PE) || ZE.getId() != PE.getId()){
+                            this.discard();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * When this is called, sets the User's owned stand to this one. Both the Stand and the User store
      * each other, and this is for setting the User's storage.
@@ -737,6 +757,7 @@ public abstract class StandEntity extends Mob{
     /** This happens every tick. Basic stand movement/fade code, also see vex code for turning on noclip.*/
     @Override
     public void tick() {
+        validateUUID();
         this.noPhysics = true;
         float pitch = this.getXRot();
         float yaw = this.getYRot();
@@ -824,7 +845,7 @@ public abstract class StandEntity extends Mob{
             if (!this.getPassengers().isEmpty()){
                 this.ejectPassengers();
             }
-            this.remove(RemovalReason.DISCARDED);
+            this.discard();
         }
     }
 

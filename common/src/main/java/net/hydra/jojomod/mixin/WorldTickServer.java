@@ -51,6 +51,7 @@ public class WorldTickServer {
 
         this.entityTickList.forEach($$0x -> {
             if ($$0x instanceof StandEntity standEntity) {
+                standEntity.validateUUID();
                 if (standEntity.getFollowing() != null && !standEntity.getFollowing().isRemoved()){
                     LivingEntity LE = standEntity.getFollowing();
                     if (!((StandUser)LE).roundabout$hasFollower(standEntity)){
