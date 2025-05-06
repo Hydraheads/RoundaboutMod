@@ -12,12 +12,18 @@ import org.jetbrains.annotations.Nullable;
 public class SoftAndWetRenderer extends StandRenderer<SoftAndWetEntity> {
 
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/manga.png");
+    private static final ResourceLocation LIGHT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/light.png");
+    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/beta.png");
+    private static final ResourceLocation KING_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/king.png");
     public SoftAndWetRenderer(EntityRendererProvider.Context context) {
         super(context, new SoftAndWetModel<>(context.bakeLayer(ModEntityRendererClient.SOFT_AND_WET_LAYER)), 0f);
     }
 
     @Override public ResourceLocation getTextureLocation(SoftAndWetEntity entity) {
         return switch (entity.getSkin()) {
+            case (SoftAndWetEntity.LIGHT_SKIN) -> LIGHT_SKIN;
+            case (SoftAndWetEntity.BETA_SKIN) -> BETA_SKIN;
+            case (SoftAndWetEntity.KING_SKIN) -> KING_SKIN;
             default -> MANGA_SKIN;
         };
     }

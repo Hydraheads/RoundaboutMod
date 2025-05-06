@@ -13,13 +13,19 @@ public class SoftAndWetEntity extends StandEntity {
     public SoftAndWetEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
 
     public static final byte
-            MANGA_SKIN = 0;
+            MANGA_SKIN = 1,
+            LIGHT_SKIN = 2,
+            KING_SKIN = 3,
+            BETA_SKIN = 4;
 
     @Override public Component getSkinName(byte skinId) {
-        switch (skinId)
+        return switch (skinId)
         {
-            default -> {return Component.translatable("skins.roundabout.soft_and_wet.base");}
-        }
+            case LIGHT_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.light");
+            case BETA_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.beta");
+            case KING_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.king");
+            default -> Component.translatable("skins.roundabout.soft_and_wet.base");
+        };
     }
 
     public final AnimationState hideFists = new AnimationState();

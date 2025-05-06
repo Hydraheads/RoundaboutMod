@@ -1,8 +1,11 @@
 package net.hydra.jojomod.event.powers.stand;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
+import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -13,6 +16,8 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
+
+import java.util.List;
 
 public class PowersSoftAndWet extends PunchingStand {
     public PowersSoftAndWet(LivingEntity self) {
@@ -52,6 +57,15 @@ public class PowersSoftAndWet extends PunchingStand {
         return super.getSoundFromByte(soundChoice);
     }
 
+    @Override
+    public List<Byte> getSkinList() {
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(SoftAndWetEntity.LIGHT_SKIN);
+        $$1.add(SoftAndWetEntity.MANGA_SKIN);
+        $$1.add(SoftAndWetEntity.KING_SKIN);
+        $$1.add(SoftAndWetEntity.BETA_SKIN);
+        return $$1;
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
