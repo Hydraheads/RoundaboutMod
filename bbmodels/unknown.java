@@ -39,7 +39,6 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart LeftArmBAM;
 	private final ModelPart LeftArmBAM4;
 	private final ModelPart LeftArmBAM3;
-	private final ModelPart bb_main;
 
 	public unknown(ModelPart root) {
 		this.stand = root.getChild("stand");
@@ -75,7 +74,6 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.LeftArmBAM = this.BAM.getChild("LeftArmBAM");
 		this.LeftArmBAM4 = this.BAM.getChild("LeftArmBAM4");
 		this.LeftArmBAM3 = this.BAM.getChild("LeftArmBAM3");
-		this.bb_main = root.getChild("bb_main");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -90,11 +88,15 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -7.85F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition extra_details = head2.addOrReplaceChild("extra_details", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, 0.7886F, -5.0302F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.2F))
-		.texOffs(74, 59).addBox(-1.5F, 0.9636F, -2.5552F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
+		PartDefinition extra_details = head2.addOrReplaceChild("extra_details", CubeListBuilder.create().texOffs(74, 59).addBox(-1.5F, 0.9636F, -2.5552F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
 		.texOffs(38, 26).addBox(-0.5F, 2.9886F, -5.1552F, 1.0F, 6.0F, 0.0F, new CubeDeformation(0.0F))
 		.texOffs(32, 0).addBox(-7.5F, 4.7886F, -1.9802F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.24F))
-		.texOffs(81, 28).addBox(-8.45F, 3.7761F, -2.9802F, 2.0F, 3.0F, 3.0F, new CubeDeformation(-0.6F)), PartPose.offset(0.0F, -8.8761F, 1.0302F));
+		.texOffs(81, 28).addBox(-8.45F, 3.7761F, -2.9802F, 2.0F, 3.0F, 3.0F, new CubeDeformation(-0.6F))
+		.texOffs(0, 16).addBox(-4.0F, 0.7886F, -5.0302F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.2F))
+		.texOffs(75, 18).addBox(2.075F, 5.0261F, -5.0302F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F))
+		.texOffs(75, 18).addBox(0.775F, 5.0261F, -5.0302F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F))
+		.texOffs(75, 18).addBox(-3.025F, 5.0261F, -5.0302F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F))
+		.texOffs(75, 18).addBox(-1.725F, 5.0261F, -5.0302F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, -8.8761F, 1.0302F));
 
 		PartDefinition ear_star_1_r1 = extra_details.addOrReplaceChild("ear_star_1_r1", CubeListBuilder.create().texOffs(81, 34).addBox(-1.0F, -1.4739F, -1.5F, 2.0F, 3.0F, 3.0F, new CubeDeformation(-0.6F)), PartPose.offsetAndRotation(7.45F, 5.25F, -1.4802F, 0.0F, 3.1416F, 0.0F));
 
@@ -208,11 +210,6 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		PartDefinition cube_r6 = LeftArmBAM3.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(0, 121).mirror().addBox(-4.25F, -4.25F, -4.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(16, 118).addBox(-4.25F, -1.25F, -4.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.625F, -0.5F, 0.0F, -1.5708F, 0.0F, -1.5708F));
 
-		PartDefinition bb_main = partdefinition.addOrReplaceChild("bb_main", CubeListBuilder.create().texOffs(75, 18).addBox(2.075F, -28.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F))
-		.texOffs(75, 18).addBox(0.775F, -28.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F))
-		.texOffs(75, 18).addBox(-1.725F, -28.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F))
-		.texOffs(75, 18).addBox(-3.025F, -28.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 24.0F, 0.0F));
-
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
@@ -224,6 +221,5 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		bb_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }
