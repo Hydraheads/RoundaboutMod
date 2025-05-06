@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGameRenderer;
 import net.hydra.jojomod.client.shader.RCoreShader;
 import net.hydra.jojomod.client.shader.RPostShaderRegistry;
 import net.minecraft.client.Camera;
@@ -26,19 +27,30 @@ import java.util.Map;
 import java.util.Objects;
 
 @Mixin(GameRenderer.class)
-public class ZGameRenderer {
+public abstract class ZGameRenderer {
     @Shadow @Final private Map<String, ShaderInstance> shaders;
     @Shadow @Final private Minecraft minecraft;
 
-//    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(IZ)V", shift = At.Shift.BEFORE))
-//    private void roundabout$beforeClearDepthBuffer(float tickDelta, long $$1, PoseStack $$2, CallbackInfo ci)
-//    {
+    @Shadow public abstract Minecraft getMinecraft();
+
+    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(IZ)V", shift = At.Shift.BEFORE))
+    private void roundabout$beforeClearDepthBuffer(float tickDelta, long $$1, PoseStack $$2, CallbackInfo ci)
+    {
+        if (RPostShaderRegistry.DESATURATE != null) {
+            if (((IGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
+            {
+                RPostShaderRegistry.DESATURATE.roundabout$resize();
+                ((PostChain)RPostShaderRegistry.DESATURATE).process(tickDelta);
+                this.getMinecraft().getMainRenderTarget().bindWrite(false);
+            }
+        }
+
 //        if (RPostShaderRegistry.D4C_DIMENSION_TRANSITION != null)
 //        {
 //            RPostShaderRegistry.D4C_DIMENSION_TRANSITION.roundabout$resize();
 //            ((PostChain)RPostShaderRegistry.D4C_DIMENSION_TRANSITION).process(tickDelta);
 //        }
-//    }
+    }
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
     private void roundabout$reloadShaders(ResourceProvider provider, CallbackInfo ci)

@@ -54,6 +54,11 @@ public class ZScreenShaking implements IGameRenderer {
         this.loadEffect($$0);
     }
 
+    @Override
+    public boolean roundabout$tsShaderStatus() {
+        return roundabout$tsShaderStatus == 1;
+    }
+
     @Inject(method = "shouldRenderBlockOutline()Z", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$shouldOutline(CallbackInfoReturnable<Boolean> cir) {
         LivingEntity player = Minecraft.getInstance().player;
@@ -77,7 +82,7 @@ public class ZScreenShaking implements IGameRenderer {
                     if (!(clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
                         changed = true;
                         roundabout$tsShaderStatus = 1;
-                        this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                        //this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
                     }
                 }
             } else {
@@ -108,7 +113,7 @@ public class ZScreenShaking implements IGameRenderer {
         if (clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
                 if (!(clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.timeStopFreezesScreen && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
-                    this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                    //this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
                 }
             } else {
                 this.postEffect = null;

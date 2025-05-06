@@ -15,12 +15,14 @@ public class RPostShaderRegistry {
     private static HashMap<String, IPostChainAccessor> shaders = new HashMap<>();
 
     public static IPostChainAccessor D4C_DIMENSION_TRANSITION = null;
+    public static IPostChainAccessor DESATURATE = null;
 
     public static void bootstrap()
     {
         Roundabout.LOGGER.info("Registering post effects");
 
         D4C_DIMENSION_TRANSITION = register("d4cdimtransition");
+        DESATURATE = register("desaturate");
     }
 
     public static @Nullable IPostChainAccessor register(String name)
@@ -35,6 +37,8 @@ public class RPostShaderRegistry {
             IPostChainAccessor shader = IPostChainAccessor.getInstance(new PostChain(tm, rm, client.getMainRenderTarget(), new ResourceLocation("shaders/post/"+name+".json")));
 
             shaders.put(name, shader);
+
+            Roundabout.LOGGER.info("Registered post shader \"{}\" successfully", name);
             return shader;
         }
         catch (IOException e)
