@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
@@ -12,7 +13,9 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
@@ -85,6 +88,35 @@ public class PowersSoftAndWet extends PunchingStand {
         }
 
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+    }
+
+    public boolean hold1 = false;
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide) {
+            if (isHoldingSneak()) {
+                if (keyIsDown) {
+                    if (!hold1) {
+                        hold1 = true;
+                    }
+                } else {
+                    hold1 = false;
+                }
+            } else {
+                if (keyIsDown) {
+                    if (!hold1) {
+                        if (!this.onCooldown(PowerIndex.SKILL_3)){
+                            hold1 = true;
+                           ClientUtil.openPlunderScreen();
+                        }
+                    }
+                } else {
+
+                    hold1 = false;
+                }
+            }
+        }
+        super.buttonInput1(keyIsDown, options);
     }
 }
 

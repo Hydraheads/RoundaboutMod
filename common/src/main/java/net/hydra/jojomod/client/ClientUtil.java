@@ -239,6 +239,9 @@ public class ClientUtil {
 
     public static boolean poseHeld = false;
 
+    public static void openPlunderScreen(){
+        Minecraft.getInstance().setScreen(new PlunderScreen());
+    }
     public static void openStandSwitchUI(ItemStack arrow){
         Minecraft.getInstance().setScreen(new StandArrowRerollScreen(arrow));
     }
