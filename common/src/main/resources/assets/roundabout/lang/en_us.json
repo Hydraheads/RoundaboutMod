@@ -837,6 +837,15 @@
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.none": "Strike Pose!",
 
+  "roundabout.soft_and_wet_plunder.none": "Plunder",
+  "roundabout.soft_and_wet_plunder.sight": "Sight",
+  "roundabout.soft_and_wet_plunder.sound": "Sound",
+  "roundabout.soft_and_wet_plunder.friction": "Friction",
+  "roundabout.soft_and_wet_plunder.items": "Items",
+  "roundabout.soft_and_wet_plunder.mobs": "Mobs",
+  "roundabout.soft_and_wet_plunder.oxygen": "Oxygen",
+  "roundabout.soft_and_wet_plunder.potion_effects": "Effects",
+
   "roundabout.stand_switch.main": "Main Stand",
   "roundabout.stand_switch.main.desc": "A stand with combat potential that can level up in development. Costs %s experience levels to obtain.",
   "roundabout.stand_switch.secondary": "Secondary Stand",
