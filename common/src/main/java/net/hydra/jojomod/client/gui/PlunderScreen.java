@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -106,12 +107,12 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 62;
-        int l = this.height / 2 - 79;
+        int l = this.height / 2 - 90;
         guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 63.0f, 125, 22, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
-            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, this.height / 2 - 32, -1);
+            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, l+7, -1);
             if (this.currentlyHovered.id != 0) {
                 List<Component> compList = Lists.newArrayList();
                 String[] strung2 = splitIntoLine(this.currentlyHovered.desc.getString(), 30);
@@ -221,21 +222,37 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
 
     public enum standRerollIcon {
         ITEM_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.items"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/stand_type_icons/main_stand.png"),(byte)1,-33,31, Component.translatable("roundabout.soft_and_wet_plunder.items.desc")),
+                "textures/gui/plunder_icons/item.png"),PlunderTypes.ITEM.id,-43,31, Component.translatable("roundabout.soft_and_wet_plunder.items.desc")),
         SOUND_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.sound"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/stand_type_icons/main_stand.png"),(byte)2,-31,0, Component.translatable("roundabout.soft_and_wet_plunder.sound.desc")),
-        SECONDARY_STAND(Component.translatable("roundabout.stand_switch.secondary"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/stand_type_icons/secondary_stand.png"),(byte)3,33,31, Component.translatable("roundabout.stand_switch.secondary.desc")),
+                "textures/gui/plunder_icons/sound.png"),PlunderTypes.SOUND.id,-28,1, Component.translatable("roundabout.soft_and_wet_plunder.sound.desc")),
+        FRICTION_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.friction"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/plunder_icons/friction.png"),PlunderTypes.FRICTION.id,42,31, Component.translatable("roundabout.soft_and_wet_plunder.friction.desc")),
+        SIGHT_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.sight"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/plunder_icons/sight.png"),PlunderTypes.SIGHT.id,0,-16, Component.translatable("roundabout.soft_and_wet_plunder.sight.desc")),
+        OXYGEN_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.oxygen"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/plunder_icons/oxygen.png"),PlunderTypes.OXYGEN.id,28,1, Component.translatable("roundabout.soft_and_wet_plunder.oxygen.desc")),
+        MOB_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.mobs"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/plunder_icons/mobs.png"),PlunderTypes.MOBS.id,28,61, Component.translatable("roundabout.soft_and_wet_plunder.mobs.desc")),
+        POTION_EFFECT_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.potion_effects"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/plunder_icons/effects.png"),PlunderTypes.POTION_EFFECTS.id,-28,61, Component.translatable("roundabout.soft_and_wet_plunder.potion_effects.desc")),
+        MOISTURE_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.moisture"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/plunder_icons/moisture.png"),PlunderTypes.MOISTURE.id,0,78, Component.translatable("roundabout.soft_and_wet_plunder.moisture.desc")),
 
-        NONE(Component.translatable("roundabout.stand_switch.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/stand_type_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
+        NONE(Component.translatable("roundabout.soft_and_wet_plunder.none"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
 
-        static standRerollIcon getByte(Poses pose) {
+        static standRerollIcon getByte(PlunderTypes pose) {
             return switch (pose) {
                 default -> throw new IncompatibleClassChangeError();
                 case NONE -> NONE;
-                case JOSEPH -> ITEM_PLUNDER;
-                case KOICHI -> SECONDARY_STAND;
+                case ITEM -> ITEM_PLUNDER;
+                case SOUND -> SOUND_PLUNDER;
+                case FRICTION -> FRICTION_PLUNDER;
+                case OXYGEN -> OXYGEN_PLUNDER;
+                case SIGHT -> SIGHT_PLUNDER;
+                case MOISTURE -> MOISTURE_PLUNDER;
+                case POTION_EFFECTS -> POTION_EFFECT_PLUNDER;
+                case MOBS -> MOB_PLUNDER;
             };
         }
         protected static final standRerollIcon[] VALUES;
@@ -267,7 +284,17 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         }
 
         static {
-            VALUES = new standRerollIcon[]{ITEM_PLUNDER, SECONDARY_STAND, NONE};
+            VALUES = new standRerollIcon[]{
+                    ITEM_PLUNDER,
+                    SOUND_PLUNDER,
+                    FRICTION_PLUNDER,
+                    OXYGEN_PLUNDER,
+                    SIGHT_PLUNDER,
+                    MOB_PLUNDER,
+                    POTION_EFFECT_PLUNDER,
+                    MOISTURE_PLUNDER,
+                    NONE
+            };
         }
     }
 

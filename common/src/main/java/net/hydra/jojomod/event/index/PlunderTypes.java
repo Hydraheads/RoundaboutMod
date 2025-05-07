@@ -1,15 +1,15 @@
 package net.hydra.jojomod.event.index;
 
 public enum PlunderTypes {
-    NONE((byte) -1),
-    ITEM((byte) 0),
-    MOBS((byte) 1),
-    SIGHT((byte) 2),
-    SOUND((byte) 3),
-    FRICTION((byte) 4),
-    OXYGEN((byte) 5),
-    MOISTURE((byte) 6),
-    POTION_EFFECTS((byte) 7);
+    NONE((byte) 0),
+    ITEM((byte) 1),
+    MOBS((byte) 2),
+    SIGHT((byte) 3),
+    SOUND((byte) 4),
+    FRICTION((byte) 5),
+    OXYGEN((byte) 6),
+    MOISTURE((byte) 7),
+    POTION_EFFECTS((byte) 8);
 
     public final byte id;
 
