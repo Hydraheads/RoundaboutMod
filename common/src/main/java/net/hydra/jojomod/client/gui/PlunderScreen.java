@@ -25,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 import java.util.Optional;
@@ -82,8 +83,14 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
                 this.slots.add(new PlunderSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
             }
     }
-
-
+    @Override
+    public boolean keyReleased(int $$0, int $$1, int $$2) {
+        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+            this.switchToHoveredGameMode();
+            this.minecraft.setScreen(null);
+        }
+        return super.keyReleased($$0, $$1, $$2);
+    }
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         this.switchToHoveredGameMode();
@@ -99,7 +106,7 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 62;
-        int l = this.height / 2 - 39;
+        int l = this.height / 2 - 79;
         guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 63.0f, 125, 22, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
@@ -174,6 +181,12 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         }
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }
+
+    public boolean roundabout$sameKeyOne(KeyMapping key1){
+        return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
+                || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
+        );
+    }
     public boolean sameKeyOne(KeyMapping key1, Options options){
         return (key1.isDown() || (key1.same(options.keyLoadHotbarActivator) && options.keyLoadHotbarActivator.isDown())
                 || (key1.same(options.keySaveHotbarActivator) && options.keySaveHotbarActivator.isDown())
@@ -207,10 +220,12 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
     }
 
     public enum standRerollIcon {
-        MAIN_STAND(Component.translatable("roundabout.stand_switch.main"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/stand_type_icons/main_stand.png"),(byte)1,-31,31, Component.translatable("roundabout.stand_switch.main.desc", ClientNetworking.getAppropriateConfig().levelsToGetStand)),
+        ITEM_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.items"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/stand_type_icons/main_stand.png"),(byte)1,-33,31, Component.translatable("roundabout.soft_and_wet_plunder.items.desc")),
+        SOUND_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.sound"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/stand_type_icons/main_stand.png"),(byte)2,-31,0, Component.translatable("roundabout.soft_and_wet_plunder.sound.desc")),
         SECONDARY_STAND(Component.translatable("roundabout.stand_switch.secondary"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/stand_type_icons/secondary_stand.png"),(byte)2,31,31, Component.translatable("roundabout.stand_switch.secondary.desc")),
+                "textures/gui/stand_type_icons/secondary_stand.png"),(byte)3,33,31, Component.translatable("roundabout.stand_switch.secondary.desc")),
 
         NONE(Component.translatable("roundabout.stand_switch.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/stand_type_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
@@ -219,7 +234,7 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
             return switch (pose) {
                 default -> throw new IncompatibleClassChangeError();
                 case NONE -> NONE;
-                case JOSEPH -> MAIN_STAND;
+                case JOSEPH -> ITEM_PLUNDER;
                 case KOICHI -> SECONDARY_STAND;
             };
         }
@@ -252,7 +267,7 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         }
 
         static {
-            VALUES = new standRerollIcon[]{MAIN_STAND, SECONDARY_STAND, NONE};
+            VALUES = new standRerollIcon[]{ITEM_PLUNDER, SECONDARY_STAND, NONE};
         }
     }
 

@@ -35,11 +35,28 @@ public class ZKeyboardHandler {
         }
     }
     @Inject(method = "keyPress(JIIII)V", at = @At(value = "TAIL"), cancellable = true)
-    protected void roundabout$KP2(long $$0, int $$1, int $$2, int $$3, int $$4, CallbackInfo ci) {
-        Screen screen = this.minecraft.screen;
+    protected void roundabout$KP2(long l, int i, int j, int k, int m, CallbackInfo ci) {
         if (roundabout$SaveScreen != null){
             this.minecraft.screen = roundabout$SaveScreen;
             roundabout$SaveScreen = null;
+            Screen screen =  this.minecraft.screen;
+            if (screen != null) {
+                boolean[] bls = new boolean[]{false};
+                Screen.wrapScreenError(() -> {
+                    if (k != 1 && k != 2) {
+                        if (k == 0) {
+                            bls[0] = this.minecraft.screen.keyReleased(i, j, m);
+                        }
+                    } else {
+                        this.minecraft.screen.afterKeyboardAction();
+                        bls[0] = this.minecraft.screen.keyPressed(i, j, m);
+                    }
+
+                }, "keyPressed event handler", screen.getClass().getCanonicalName());
+                if (bls[0]) {
+                    return;
+                }
+            }
         }
     }
 }

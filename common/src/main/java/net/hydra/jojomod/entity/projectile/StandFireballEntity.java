@@ -171,6 +171,9 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
             if (isEffectivelyInWater()){
                 tickWater();
             }
+            if (this.getDeltaMovement().equals(Vec3.ZERO)){
+                this.discard();
+            }
         }
     }
 
