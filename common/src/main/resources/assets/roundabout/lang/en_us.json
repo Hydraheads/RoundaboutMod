@@ -132,6 +132,8 @@
   "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.cinderella": "Cinderella",
   "entity.roundabout.soft_and_wet": "Soft And Wet",
+  "entity.roundabout.soft_and_wet_king": "Soft And Wet",
+  "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
   "entity.roundabout.knife": "Knife",
@@ -799,6 +801,7 @@
   "skins.roundabout.soft_and_wet.light": "Sailor",
   "skins.roundabout.soft_and_wet.base": "Manga",
   "skins.roundabout.soft_and_wet.king": "The King",
+  "skins.roundabout.soft_and_wet.drowned": "Sunken",
   "skins.roundabout.soft_and_wet.beta": "Beta",
 
   "skins.roundabout.d4c.base": "Manga",

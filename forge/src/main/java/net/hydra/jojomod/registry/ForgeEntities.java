@@ -194,6 +194,18 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet").toString())
             );
+    public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET_DROWNED =
+            ENTITY_TYPES.register("soft_and_wet_drowned", () ->
+                    EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_drowned").toString())
+            );
+    public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET_KING =
+            ENTITY_TYPES.register("soft_and_wet_king", () ->
+                    EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_king").toString())
+            );
     public static final RegistryObject<EntityType<KillerQueenEntity>> KILLER_QUEEN =
             ENTITY_TYPES.register("killer_queen", () ->
                     EntityType.Builder.of(KillerQueenEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
