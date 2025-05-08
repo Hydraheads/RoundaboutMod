@@ -87,7 +87,11 @@ public class PowersSoftAndWet extends PunchingStand {
 
         }
 
-        setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_2);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE, PowerIndex.SKILL_2);
+        }
 
         if (isHoldingSneak()){
             setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);

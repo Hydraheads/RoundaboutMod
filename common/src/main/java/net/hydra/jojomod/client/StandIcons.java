@@ -107,6 +107,10 @@ public class StandIcons {
             "textures/gui/icons/the_world/air_tanks.png");
     public static final ResourceLocation PLUNDER_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/plunder_selection.png");
+    public static final ResourceLocation PLUNDER_BUBBLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/plunder_bubble.png");
+    public static final ResourceLocation PLUNDER_BUBBLE_FILL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/plunder_bubble_fill.png");
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fire_clear.png");
     public static final ResourceLocation FURNACE = new ResourceLocation(Roundabout.MOD_ID,
