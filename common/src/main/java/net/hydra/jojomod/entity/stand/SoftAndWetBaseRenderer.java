@@ -20,6 +20,7 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
 
     public SoftAndWetBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
+        this.addLayer(new SoftAndWetDrownedGlowingLayer<>(this));
     }
 
     @Override public ResourceLocation getTextureLocation(SoftAndWetEntity entity) {
@@ -28,6 +29,7 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
             case (SoftAndWetEntity.BETA_SKIN) -> BETA_SKIN;
             case (SoftAndWetEntity.KING_SKIN) -> KING_SKIN;
             case (SoftAndWetEntity.DROWNED_SKIN) -> DROWNED_SKIN;
+            case (SoftAndWetEntity.DROWNED_SKIN_2) -> DROWNED_SKIN;
             default -> LIGHT_SKIN;
         };
     }
