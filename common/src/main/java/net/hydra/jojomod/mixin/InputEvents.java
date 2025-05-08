@@ -409,13 +409,11 @@ public abstract class InputEvents implements IInputEvents {
             //copy cooldowns on dimension switch code
             if (roundabout$playerlev == null){
                 roundabout$playerlev = this.player.level();
-                Roundabout.LOGGER.info("X");
             }
 
             if (this.player.level() != roundabout$playerlev){
                 ((StandUser)this.player).roundabout$getStandPowers().StandCooldowns = roundabout$StandCooldownsBackup;
                 roundabout$playerlev = this.player.level();
-                Roundabout.LOGGER.info("Y");
             } else {
                 roundabout$StandCooldownsBackup = ((StandUser)this.player).roundabout$getStandPowers().StandCooldowns;
             }

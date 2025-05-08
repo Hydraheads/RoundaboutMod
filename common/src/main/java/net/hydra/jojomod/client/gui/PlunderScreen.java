@@ -14,6 +14,8 @@ import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.ClientConfig;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -138,10 +140,13 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             caughtSomething = true;
-            if (this.currentlyHovered == standRerollIcon.NONE && MobSlot.icon != standRerollIcon.NONE){
-                Roundabout.LOGGER.info("1");
-                SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
-                soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BUBBLE_HOVERED_OVER_EVENT, (float) (0.95+(Math.random()*0.1F))));
+
+            if (MobSlot.icon != standRerollIcon.NONE) {
+                setWidgetNumber(MobSlot.icon.id);
+                if (this.currentlyHovered == standRerollIcon.NONE) {
+                    SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                    soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BUBBLE_HOVERED_OVER_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
+                }
             }
             this.currentlyHovered = MobSlot.icon;
         }
@@ -187,13 +192,6 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
     private void switchToHoveredGameMode(Minecraft minecraft, standRerollIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
-        }
-
-        if (pIcon.id == 1){
-            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_SWITCH_MAIN, this.arrow, (byte)0, new Vector3f());
-        } else if (pIcon.id == 2){
-            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_SWITCH_SECONDARY, this.arrow, (byte)0, new Vector3f());
-
         }
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }
@@ -313,13 +311,29 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         }
     }
 
+
+    public void setWidgetNumber(byte swap){
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null){
+            if (clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble != (int) swap) {
+                clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble = (int) swap;
+            }
+        }
+    }
+    public byte getWidgetNumber(){
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null){
+            return clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble.byteValue();
+        }
+        return 0;
+    }
     public class PlunderSlot
             extends AbstractWidget {
         final standRerollIcon icon;
         private boolean isSelected;
 
         public PlunderSlot(standRerollIcon pIcon, int i, int j) {
-            super(i, j, 28, 28, pIcon.getName());
+            super(i, j, 26, 26, pIcon.getName());
             this.icon = pIcon;
         }
 
@@ -327,13 +341,21 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             RenderSystem.enableBlend();
             if (!this.icon.equals(standRerollIcon.NONE)) {
-                if (this.isSelected) {
-                    this.drawSlot2(guiGraphics);
-                    this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+
+                if (this.icon.id == getWidgetNumber()){
+                    if (this.isSelected) {
+                        this.drawSlot4(guiGraphics);
+                    } else {
+                        this.drawSlot3(guiGraphics);
+                    }
                 } else {
-                    this.drawSlot(guiGraphics);
-                    this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+                    if (this.isSelected) {
+                        this.drawSlot2(guiGraphics);
+                    } else {
+                        this.drawSlot(guiGraphics);
+                    }
                 }
+                this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
             }
             RenderSystem.disableBlend();
         }
@@ -348,10 +370,17 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         }
 
         private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 143.0f, 63.0f, 26, 26, 256, 256);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 133.0f, 63.0f, 26, 26, 256, 256);
         }
         private void drawSlot2(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX()-3, this.getY()-3, 170.0f, 60.0f, 32, 32, 256, 256);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX()-3, this.getY()-3, 160.0f, 60.0f, 32, 32, 256, 256);
+        }
+
+        private void drawSlot3(GuiGraphics guiGraphics) {
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 196.0f, 63.0f, 26, 26, 256, 256);
+        }
+        private void drawSlot4(GuiGraphics guiGraphics) {
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX()-3, this.getY()-3, 223.0f, 60.0f, 32, 32, 256, 256);
         }
 
         private void drawSelection(GuiGraphics guiGraphics) {
