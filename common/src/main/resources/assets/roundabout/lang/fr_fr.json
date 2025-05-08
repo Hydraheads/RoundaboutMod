@@ -791,7 +791,10 @@
   "skins.roundabout.magicians_red.jojonium_ablaze": "JoJonium F",
   "skins.roundabout.magicians_red.debut": "Manga Début",
 
+  "skins.roundabout.soft_and_wet.light": "Marin",
   "skins.roundabout.soft_and_wet.base": "Manga",
+  "skins.roundabout.soft_and_wet.king": "Le Roi",
+  "skins.roundabout.soft_and_wet.beta": "Beta",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "Wonder Festival",
@@ -829,6 +832,18 @@
   "roundabout.pose.jotaro": "Stand Proud",
   "roundabout.pose.jonathan": "Le Héro",
   "roundabout.pose.none": "Faire une pose !",
+
+  "roundabout.soft_and_wet_plunder.none": "Flibusterie",
+  "roundabout.soft_and_wet_plunder.sight": "Vision",
+  "roundabout.soft_and_wet_plunder.sound": "Sons",
+  "roundabout.soft_and_wet_plunder.sound.desc": "Transforme la zone en zone silencieuse, absorbant tout les sons et les attaques basé sur le son jusqu'à qu'elle éclate.",
+  "roundabout.soft_and_wet_plunder.friction": "Friction",
+  "roundabout.soft_and_wet_plunder.items": "Objets",
+  "roundabout.soft_and_wet_plunder.items.desc": "Récupère les objets au sol et te les ramène.",
+  "roundabout.soft_and_wet_plunder.mobs": "Créatures",
+  "roundabout.soft_and_wet_plunder.oxygen": "Oxygène",
+  "roundabout.soft_and_wet_plunder.moisture": "Moisture",
+  "roundabout.soft_and_wet_plunder.potion_effects": "Effets",
 
   "roundabout.stand_switch.main": "Stand Principal",
   "roundabout.stand_switch.main.desc": "Un stand avec un potentiel combatif qui peut évolué avec son dévelopement. Coûtes %s niveau d'expérience à acquérir.",

@@ -118,8 +118,8 @@
   "text.roundabout.meteorite": "Метеорит",
 
   "item.roundabout.terrier_spawn_egg": "Яйцо спавна Бостон-Терьера",
-  "item.roundabout.aesthetician_spawn_egg": "Aesthetician Spawn Egg",
-  "item.roundabout.zombie_aesthetician_spawn_egg": "Zombie Aesthetician Spawn Egg",
+  "item.roundabout.aesthetician_spawn_egg": "Яйцо спавна Косметолога",
+  "item.roundabout.zombie_aesthetician_spawn_egg": "Яйцо спавна Зомби Косметолога",
 
   "entity.roundabout.terrier": "Бостон-Терьер",
   "entity.roundabout.the_world": "The World",
@@ -541,7 +541,7 @@
   "sounds.roundabout.jotaro_dio":  "ДИО!",
   "sounds.roundabout.jotaro_getting_closer":  "Если я не подойду...",
 
-  "sounds.roundabout.aesthetician_exhale":  "Выдох",
+  "sounds.roundabout.aesthetician_exhale":  "Дыхание Косметолога",
   "sounds.roundabout.female_zombie_ambient":  "Стоны Зомби Косметолога",
   "sounds.roundabout.female_zombie_hurt":  "Зомби Косметолог",
   "sounds.roundabout.female_zombie_death":  "Смерть Зомби Косметолога",
@@ -795,7 +795,10 @@
   "skins.roundabout.magicians_red.jojonium_ablaze": "JoJonium F",
   "skins.roundabout.magicians_red.debut": "Манга 'Debut'",
 
+  "skins.roundabout.soft_and_wet.light": "Моряк",
   "skins.roundabout.soft_and_wet.base": "Манга",
+  "skins.roundabout.soft_and_wet.king": "Королевский",
+  "skins.roundabout.soft_and_wet.beta": "Бета",
 
   "skins.roundabout.d4c.base": "Манга",
   "skins.roundabout.d4c.wonder_festival": "Фестивальный",
@@ -825,7 +828,7 @@
 
   "roundabout.pose.giorno": "Реквием",
   "roundabout.pose.joseph": "Bloody Stream",
-  "roundabout.pose.koichi": "Bizarre Town",
+  "roundabout.pose.koichi": "Биззарный Городок",
   "roundabout.pose.wry": "Wryyy!",
   "roundabout.pose.oh_no": "О, Нет!",
   "roundabout.pose.torture_dance": "Танец Пытки",
@@ -833,6 +836,24 @@
   "roundabout.pose.jotaro": "Гордая Стойка",
   "roundabout.pose.jonathan": "Герой",
   "roundabout.pose.none": "ДжоДжо Позинг",
+
+  "roundabout.soft_and_wet_plunder.none": "Добыча",
+  "roundabout.soft_and_wet_plunder.sight": "Зрение",
+  "roundabout.soft_and_wet_plunder.sight.desc": "Лишать зрения тех, кто полагается на зрение, пока оно не лопнет.",
+  "roundabout.soft_and_wet_plunder.sound": "Звук",
+  "roundabout.soft_and_wet_plunder.sound.desc": "Создает звукоизолированные зоны, поглощая все звуки и звуковые атаки, пока не лопнет.",
+  "roundabout.soft_and_wet_plunder.friction": "Трение",
+  "roundabout.soft_and_wet_plunder.friction.desc": "Поглощает трение от поверхности, делая ее скользкой.",
+  "roundabout.soft_and_wet_plunder.items": "Предметы",
+  "roundabout.soft_and_wet_plunder.items.desc": "Подбирает предметы и приносит их к тебе.",
+  "roundabout.soft_and_wet_plunder.mobs": "Мобы",
+  "roundabout.soft_and_wet_plunder.mobs.desc": "Захватывает малых мобов и подносит их к тебе.",
+  "roundabout.soft_and_wet_plunder.oxygen": "Кислород",
+  "roundabout.soft_and_wet_plunder.oxygen.desc": "Забирает воздух из лёгких Моба, если они окажутся под водой, сразу начнут тонуть.",
+  "roundabout.soft_and_wet_plunder.moisture": "Влажность",
+  "roundabout.soft_and_wet_plunder.moisture.desc": "Собирает жидкости или бензин, для их перемещения.",
+  "roundabout.soft_and_wet_plunder.potion_effects": "Эффекты",
+  "roundabout.soft_and_wet_plunder.potion_effects.desc": "Перемещает эффекты зелий между мобами или убирает их пока не лопнут пузыри.",
 
   "roundabout.stand_switch.main": "Основной Стенд",
   "roundabout.stand_switch.main.desc": "Стенд с боевым потенциалом с возможностью прокачки. Стоит %s уровней чтобы получить.",
