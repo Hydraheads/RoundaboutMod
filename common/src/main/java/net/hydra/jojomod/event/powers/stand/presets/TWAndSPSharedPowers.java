@@ -37,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -667,10 +668,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public byte getTimeResumeNoise(){
         return TIME_RESUME_NOISE;
     }
-    public boolean resumeTime() {
+    public boolean resumeTime(){
+        return resumeTime(this.self.level());
+    }
+    public boolean resumeTime(Level level) {
         /*Time Resume*/
-        if (!this.getSelf().level().isClientSide()) {
-            if (((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
+        if (!level.isClientSide()) {
+            if (((TimeStop) level).isTimeStoppingEntity(this.getSelf())) {
                 float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopAdditionalCooldownPerSecondsUsedMultiplier*0.01)));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
                         this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
@@ -690,14 +694,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
                 }
 
-                ((TimeStop) this.getSelf().level()).removeTimeStoppingEntity(this.getSelf());
+                ((TimeStop) level).removeTimeStoppingEntity(this.getSelf());
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,true);
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,false);
                 if (this.getSelf() instanceof Player) {
                     ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
                 }
 
-                if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))) {
+                if (!(((TimeStop)level).CanTimeStopEntity(this.getSelf()))) {
                     if (this.getMaxChargeTSTime() > 20) {
                         this.playSoundsIfNearby(getTimeResumeNoise(), 100, true);
                     }

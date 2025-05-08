@@ -137,6 +137,9 @@ public class ModSounds {
     public static final String CACKLE = "cackle";
     public static final ResourceLocation CACKLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CACKLE);
     public static SoundEvent CACKLE_EVENT = SoundEvent.createVariableRangeEvent(CACKLE_ID);
+    public static final String BUBBLE_HOVERED_OVER = "bubble_hover_over";
+    public static final ResourceLocation BUBBLE_HOVERED_OVER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_HOVERED_OVER);
+    public static SoundEvent BUBBLE_HOVERED_OVER_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_HOVERED_OVER_ID);
 
 
     public static final String KNIFE_IMPACT_GROUND = "knife_impact_ground";

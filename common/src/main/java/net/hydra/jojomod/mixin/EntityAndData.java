@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
@@ -253,7 +254,11 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
     }
-
+    @Inject(method = "restoreFrom", at = @At(value = "TAIL"), cancellable = true)
+    private void roundabout$restoreFrom (Entity $$0, CallbackInfo ci){
+        if (((Entity) (Object) this) instanceof LivingEntity LE && $$0 instanceof LivingEntity LE2) {
+        }
+    }
     @Override
     public float roundabout$getPreTSTick() {
         return this.roundabout$PrevTick;

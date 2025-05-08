@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -189,7 +190,13 @@ public class TimeStopWorld implements TimeStop {
             List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId){
-                    removeTimeStoppingEntity($$1.get(i));
+                    if ($$1.get(i).level().dimensionTypeId() != this.dimensionTypeId &&
+                            (((StandUser)$$1.get(i)).roundabout$getStandPowers()) instanceof TWAndSPSharedPowers TP
+                    ){
+                        TP.resumeTime(((Level) (Object) this));
+                    } else {
+                        removeTimeStoppingEntity($$1.get(i));
+                    }
                 } else if (!((Level) (Object) this).isClientSide) {
                     ((StandUser)$$1.get(i)).roundabout$getStandPowers().timeTickStopPower();
                 }

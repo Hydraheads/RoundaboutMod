@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -21,8 +22,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
@@ -127,16 +131,27 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
             this.firstMouseY = j;
             this.setFirstMousePos = true;
         }
+        caughtSomething = false;
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
         for (PlunderSlot MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
+            caughtSomething = true;
+            if (this.currentlyHovered == standRerollIcon.NONE && MobSlot.icon != standRerollIcon.NONE){
+                Roundabout.LOGGER.info("1");
+                SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BUBBLE_HOVERED_OVER_EVENT, (float) (0.95+(Math.random()*0.1F))));
+            }
             this.currentlyHovered = MobSlot.icon;
         }
 
+        if (!caughtSomething){
+            this.currentlyHovered = standRerollIcon.NONE;
+        }
 
     }
+    boolean caughtSomething = false;
 
     public String[] splitIntoLine(String input, int maxCharInLine){
 
@@ -304,7 +319,7 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         private boolean isSelected;
 
         public PlunderSlot(standRerollIcon pIcon, int i, int j) {
-            super(i, j, 26, 26, pIcon.getName());
+            super(i, j, 28, 28, pIcon.getName());
             this.icon = pIcon;
         }
 
@@ -326,11 +341,6 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         @Override
         public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
             this.defaultButtonNarrationText(narrationElementOutput);
-        }
-
-        @Override
-        public boolean isHoveredOrFocused() {
-            return super.isHoveredOrFocused() || this.isSelected;
         }
 
         public void setSelected(boolean bl) {

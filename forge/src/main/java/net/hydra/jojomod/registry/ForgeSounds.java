@@ -41,6 +41,8 @@ public class ForgeSounds {
             register(ModSounds.FOG_MORPH, ModSounds.FOG_MORPH_ID);
     public static final RegistryObject<SoundEvent> CACKLE_EVENT =
             register(ModSounds.CACKLE, ModSounds.CACKLE_ID);
+    public static final RegistryObject<SoundEvent> BUBBLE_HOVERED_OVER_EVENT =
+            register(ModSounds.BUBBLE_HOVERED_OVER, ModSounds.BUBBLE_HOVERED_OVER_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_PETRIFY_EVENT =
             register(ModSounds.LOCACACA_PETRIFY, ModSounds.LOCACACA_PETRIFY_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_FUSION_EVENT =

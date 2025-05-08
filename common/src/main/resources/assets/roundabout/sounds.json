@@ -35,6 +35,12 @@
       "roundabout:dio_hoho_2"
     ]
   },
+  "bubble_hover_over": {
+    "subtitle": "sounds.roundabout.bubble_hover_over",
+    "sounds": [
+      "roundabout:bubble_hover_over"
+    ]
+  },
   "dio_kurei": {
     "subtitle": "sounds.roundabout.dio_kurei",
     "sounds": [
