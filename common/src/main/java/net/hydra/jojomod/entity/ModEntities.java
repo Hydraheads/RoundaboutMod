@@ -52,6 +52,7 @@ public class ModEntities {
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
     public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;
+    public static EntityType<SoftAndWetPlunderBubbleEntity> PLUNDER_BUBBLE;
     public static EntityType<OVAEnyaNPC> OVA_ENYA;
     public static EntityType<EnyaNPC> ENYA;
 

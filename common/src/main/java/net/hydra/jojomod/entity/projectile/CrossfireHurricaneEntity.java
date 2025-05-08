@@ -595,7 +595,6 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         return false;
     }
     @Override
-
     protected boolean shouldBurn() {
         return false;
     }

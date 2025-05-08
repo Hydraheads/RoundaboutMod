@@ -1532,9 +1532,10 @@ public class PowersMagiciansRed extends PunchingStand {
             if (fireball != null) {
                 Vec3 vec3dST = this.self.getEyePosition(0).subtract(0,this.self.getEyeHeight()*0.25,0);
                 Vec3 vec3d2ST = this.self.getViewVector(0);
+
+                fireball.setUser(this.self);
                 Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * 1.1, vec3d2ST.y * 1.1, vec3d2ST.z * 1.1);
                 fireball.absMoveTo(vec3d3ST.x(), vec3d3ST.y(), vec3d3ST.z());
-                fireball.setUser(this.self);
 
                 fireball.setXRot(this.getSelf().getXRot() % 360);
                 fireball.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.35F, 0);
