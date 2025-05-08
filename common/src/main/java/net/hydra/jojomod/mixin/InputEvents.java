@@ -20,10 +20,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.StandUserClientPlayer;
-import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -55,6 +52,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RespawnAnchorBlock;
@@ -75,9 +73,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(value = Minecraft.class, priority = 100)
 public abstract class InputEvents implements IInputEvents {
+
+    @Unique
+    public List<CooldownInstance> roundabout$StandCooldownsBackup = new ArrayList<>();
+
+    @Unique
+    public Level roundabout$playerlev;
 
     protected InputEvents() {
     }
@@ -397,6 +403,22 @@ public abstract class InputEvents implements IInputEvents {
         } if (ClientUtil.setScreenNull){
             ClientUtil.setScreenNull = false;
             Minecraft.getInstance().setScreen(null);
+        }
+
+        if (this.player != null){
+            //copy cooldowns on dimension switch code
+            if (roundabout$playerlev == null){
+                roundabout$playerlev = this.player.level();
+                Roundabout.LOGGER.info("X");
+            }
+
+            if (this.player.level() != roundabout$playerlev){
+                ((StandUser)this.player).roundabout$getStandPowers().StandCooldowns = roundabout$StandCooldownsBackup;
+                roundabout$playerlev = this.player.level();
+                Roundabout.LOGGER.info("Y");
+            } else {
+                roundabout$StandCooldownsBackup = ((StandUser)this.player).roundabout$getStandPowers().StandCooldowns;
+            }
         }
 
         ClientConfig clientConfig = ConfigManager.getClientConfig();
