@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
@@ -21,7 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class SoftAndWetDrownedGlowingLayer <T extends SoftAndWetEntity, M extends StandModel<T>> extends EyesLayer<T, M> {
-    private static final RenderType SPIDER_EYES = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/drowned_glowing.png"));
+    private static final RenderType SPIDER_EYES = RenderType.entityTranslucentCull(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/drowned_glowing.png"));
 
     public SoftAndWetDrownedGlowingLayer(RenderLayerParent<T, M> $$0) {
         super($$0);
@@ -32,6 +33,7 @@ public class SoftAndWetDrownedGlowingLayer <T extends SoftAndWetEntity, M extend
         if (ClientUtil.canSeeStands(Minecraft.getInstance().player) && mobEntity.getSkin() == SoftAndWetEntity.DROWNED_SKIN_2){
             VertexConsumer $$10 = $$1.getBuffer(this.renderType());
             this.getParentModel().renderToBuffer($$0, $$10, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, mobEntity.fadePercent);
+
         }
     }
 
