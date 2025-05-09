@@ -1,21 +1,25 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.index.PlunderTypes;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.ClientConfig;
+import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
@@ -134,6 +138,44 @@ public class PowersSoftAndWet extends PunchingStand {
         super.buttonInput1(keyIsDown, options);
     }
     public boolean hold2 = false;
+
+    public SoftAndWetPlunderBubbleEntity getPlunderBubble(){
+        SoftAndWetPlunderBubbleEntity bubble = new SoftAndWetPlunderBubbleEntity(this.self,this.self.level());
+        bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+        bubble.setUser(this.self);
+        return bubble;
+    }
+    public boolean bubbleShot(){
+        SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
+
+        if (bubble != null){
+            shootBubbleSpeed(bubble,0.8F);
+            this.getSelf().level().addFreshEntity(bubble);
+        }
+        return true;
+    }
+    public void shootBubble(SoftAndWetBubbleEntity ankh){
+        shootBubbleSpeed(ankh, 1.01F);
+    }
+    public void shootBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
+        ankh.setPos(this.self.getX(), this.self.getEyeY()*0.7, this.self.getZ());
+        ankh.setXRot(this.getSelf().getXRot()%360);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
+    }
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.POWER_2) {
+            return this.bubbleShot();
+        }
+        return super.setPowerOther(move,lastMove);
+    }
+    @Override
+    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+        if (move == PowerIndex.POWER_2) {
+            bubbleType = (byte)chargeTime;
+        }
+        return super.tryChargedPower(move, forced, chargeTime);
+    }
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
@@ -150,7 +192,15 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (!hold2) {
                         if (!this.onCooldown(PowerIndex.SKILL_2)){
                             hold2 = true;
-                            ClientUtil.openPlunderScreen();
+
+                            int bubbleType = 1;
+                            ClientConfig clientConfig = ConfigManager.getClientConfig();
+                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                            }
+                            this.tryChargedPower(PowerIndex.POWER_2, true, bubbleType);
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2, bubbleType);
+                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }
                 } else {
