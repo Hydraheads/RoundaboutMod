@@ -84,6 +84,9 @@ public class ModItems {
     public static Item VALENTINE_MASK;
     public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item AYA_MASK;
+    public static Item SOFT_AND_WET_BUBBLE_PROP;
+    public static Item SOFT_AND_WET_EXPLOSIVE_BUBBLE_PROP;
+    public static Item SOFT_AND_WET_BEYOND_BUBBLE_PROP;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 

@@ -48,8 +48,6 @@ public class ModItemModels {
     public static ModelResourceLocation STREET_SIGN_DANGER_HELD_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_danger_item_held_damaged", "inventory");
     public static ModelResourceLocation STREET_SIGN_DANGER_HELD_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_danger_item_held_damaged_2", "inventory");
 
-
-
     public static ModelResourceLocation STAND_ARROW_CROSSBOW =
             new ModelResourceLocation(Roundabout.MOD_ID, "crossbow_stand_arrow", "inventory");
     public static ModelResourceLocation STAND_BEETLE_CROSSBOW =

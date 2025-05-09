@@ -370,6 +370,14 @@ public class FabricEntities {
                         EntityType.Builder.<GroundHurricaneEntity>of(GroundHurricaneEntity::new, MobCategory.MISC).
                                 sized(0.2f, 0.2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":ground_hurricane")
                 );
+        public static final EntityType<SoftAndWetPlunderBubbleEntity> PLUNDER_BUBBLE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "plunder_bubble"),
+                        EntityType.Builder.<SoftAndWetPlunderBubbleEntity>of(SoftAndWetPlunderBubbleEntity::new, MobCategory.MISC).
+                                sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
+                                clientTrackingRange(10).build(Roundabout.MOD_ID+":plunder_bubble")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -401,6 +409,7 @@ public class FabricEntities {
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
+                ModEntities.PLUNDER_BUBBLE = PLUNDER_BUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;

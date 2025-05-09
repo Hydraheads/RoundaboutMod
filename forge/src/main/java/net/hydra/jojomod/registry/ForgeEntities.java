@@ -314,4 +314,11 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ground_hurricane").toString())
             );
+    public static final RegistryObject<EntityType<SoftAndWetPlunderBubbleEntity>> PLUNDER_BUBBLE =
+            ENTITY_TYPES.register("plunder_bubble", () ->
+                    EntityType.Builder.<SoftAndWetPlunderBubbleEntity>of(SoftAndWetPlunderBubbleEntity::new, MobCategory.MISC).
+                            sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "plunder_bubble").toString())
+            );
 }
