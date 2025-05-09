@@ -17,6 +17,7 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
     private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/beta.png");
     private static final ResourceLocation KING_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/king.png");
     private static final ResourceLocation DROWNED_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/drowned.png");
+    private static final ResourceLocation FIGURE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/figure.png");
 
     public SoftAndWetBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
@@ -29,7 +30,7 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
             case (SoftAndWetEntity.BETA_SKIN) -> BETA_SKIN;
             case (SoftAndWetEntity.KING_SKIN) -> KING_SKIN;
             case (SoftAndWetEntity.DROWNED_SKIN) -> DROWNED_SKIN;
-            case (SoftAndWetEntity.DROWNED_SKIN_2) -> DROWNED_SKIN;
+            case (SoftAndWetEntity.FIGURE_SKIN) -> FIGURE_SKIN;
             default -> LIGHT_SKIN;
         };
     }

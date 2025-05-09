@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -71,6 +72,7 @@ public class PowersSoftAndWet extends PunchingStand {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(SoftAndWetEntity.LIGHT_SKIN);
         $$1.add(SoftAndWetEntity.MANGA_SKIN);
+        $$1.add(SoftAndWetEntity.FIGURE_SKIN);
         $$1.add(SoftAndWetEntity.DROWNED_SKIN);
         $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);
         $$1.add(SoftAndWetEntity.KING_SKIN);
@@ -88,7 +90,7 @@ public class PowersSoftAndWet extends PunchingStand {
         }
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_2_SNEAK);
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE, PowerIndex.SKILL_2);
         }
@@ -101,6 +103,9 @@ public class PowersSoftAndWet extends PunchingStand {
 
         setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
     }
+
+    /**For mob ai, change the bubbleType before trypower to set what kind of plunder it has*/
+    public byte bubbleType = PlunderTypes.ITEM.id;
 
     public boolean hold1 = false;
     @Override
@@ -117,14 +122,40 @@ public class PowersSoftAndWet extends PunchingStand {
             } else {
                 if (keyIsDown) {
                     if (!hold1) {
-                        if (!this.onCooldown(PowerIndex.SKILL_3)){
-                            hold1 = true;
-                           ClientUtil.openPlunderScreen();
-                        }
+                        hold1 = true;
+                       ClientUtil.openPlunderScreen();
                     }
                 } else {
 
                     hold1 = false;
+                }
+            }
+        }
+        super.buttonInput1(keyIsDown, options);
+    }
+    public boolean hold2 = false;
+    @Override
+    public void buttonInput2(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide) {
+            if (isHoldingSneak()) {
+                if (keyIsDown) {
+                    if (!hold2) {
+                        hold2 = true;
+                    }
+                } else {
+                    hold2 = false;
+                }
+            } else {
+                if (keyIsDown) {
+                    if (!hold2) {
+                        if (!this.onCooldown(PowerIndex.SKILL_2)){
+                            hold2 = true;
+                            ClientUtil.openPlunderScreen();
+                        }
+                    }
+                } else {
+
+                    hold2 = false;
                 }
             }
         }
