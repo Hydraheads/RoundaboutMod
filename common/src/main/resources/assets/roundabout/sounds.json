@@ -41,6 +41,18 @@
       "roundabout:bubble_hover_over"
     ]
   },
+  "bubble_pop": {
+    "subtitle": "sounds.roundabout.bubble_pop",
+    "sounds": [
+      "roundabout:bubble_pop"
+    ]
+  },
+  "bubble_create": {
+    "subtitle": "sounds.roundabout.bubble_create",
+    "sounds": [
+      "roundabout:bubble_create"
+    ]
+  },
   "dio_kurei": {
     "subtitle": "sounds.roundabout.dio_kurei",
     "sounds": [

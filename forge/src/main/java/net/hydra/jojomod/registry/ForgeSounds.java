@@ -43,6 +43,10 @@ public class ForgeSounds {
             register(ModSounds.CACKLE, ModSounds.CACKLE_ID);
     public static final RegistryObject<SoundEvent> BUBBLE_HOVERED_OVER_EVENT =
             register(ModSounds.BUBBLE_HOVERED_OVER, ModSounds.BUBBLE_HOVERED_OVER_ID);
+    public static final RegistryObject<SoundEvent> BUBBLE_CREATE_EVENT =
+            register(ModSounds.BUBBLE_CREATE, ModSounds.BUBBLE_CREATE_ID);
+    public static final RegistryObject<SoundEvent> BUBBLE_POP_EVENT =
+            register(ModSounds.BUBBLE_POP, ModSounds.BUBBLE_POP_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_PETRIFY_EVENT =
             register(ModSounds.LOCACACA_PETRIFY, ModSounds.LOCACACA_PETRIFY_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_FUSION_EVENT =
