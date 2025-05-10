@@ -71,6 +71,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -1223,7 +1224,7 @@ public class PowersJustice extends DashPreset {
     @Override
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
         if (hasStandActive(this.getSelf())) {
-            if (!($$1.getBlock() instanceof IceBlock)) {
+            if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE)) {
                 if (Math.random() > 0.62) {
                     addEXP(1);
                 }

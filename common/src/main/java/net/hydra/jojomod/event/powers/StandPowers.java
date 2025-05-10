@@ -56,6 +56,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -2557,7 +2558,7 @@ public class StandPowers {
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
     }
     public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
-        if (!($$1.getBlock() instanceof IceBlock)) {
+        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE)) {
             if (Math.random() > 0.62) {
                 addEXP(1);
             }
