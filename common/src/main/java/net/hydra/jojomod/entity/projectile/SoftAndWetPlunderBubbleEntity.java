@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.minecraft.core.BlockPos;
@@ -9,6 +11,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 
 public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<Byte> PLUNDER_TYPE = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BYTE);
@@ -24,12 +28,32 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         super(ModEntities.PLUNDER_BUBBLE, level);
     }
 
-
-
     @Override
-    public void tick(){
+    protected void onHitBlock(BlockHitResult $$0) {
+        if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()){
+            this.setBlockPos($$0.getBlockPos());
+            this.setActivated(true);
+            this.setDeltaMovement(0,0.1,0);
+        } else {
+            super.onHitBlock($$0);
+        }
+    }
+    @Override
+    protected void onHitEntity(EntityHitResult $$0) {
+        super.onHitEntity($$0);
+    }
+    @Override
+    public void tick() {
+
+        if (this.getActivated()){
+            if (this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id){
+                ((ILevelAccess)this.level()).roundabout$addPlunderBubble(this);
+            }
+        }
+
         super.tick();
     }
+
 
     public int getPlunderType() {
         return this.getEntityData().get(PLUNDER_TYPE);

@@ -423,6 +423,18 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     private void roundabout$playSeed(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
+            return;
+        } if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$0, (int) $$1, (int) $$2))){
+            ci.cancel();
+        }
+    }
+    @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$playSeed(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
+        if (ClientUtil.getScreenFreeze()){
+            ci.cancel();
+            return;
+        } if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$0, (int) $$1, (int) $$2))){
+            ci.cancel();
         }
     }
 

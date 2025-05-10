@@ -311,7 +311,6 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         }
     }
 
-
     public void setWidgetNumber(byte swap){
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.dynamicSettings != null){

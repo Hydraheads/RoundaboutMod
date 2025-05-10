@@ -54,6 +54,7 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
             standUserUUID = User.getUUID();
         }
     }
+
     @Override
     public float getPickRadius() {
         return 0.0F;

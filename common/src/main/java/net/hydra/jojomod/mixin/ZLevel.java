@@ -1,13 +1,22 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +30,7 @@ public class ZLevel implements ILevelAccess {
     @Unique
     public void roundabout$addPlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
         roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
-        };
-        if (!bubbleIteration.isEmpty()) {
-            if (!bubbleIteration.contains(plunder)){
-                roundabout$plunderBubbles.add(plunder);
-            }
-        }
+        roundabout$plunderBubbles.add(plunder);
     }
     @Unique
     public void roundabout$removePlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
@@ -95,6 +98,7 @@ public class ZLevel implements ILevelAccess {
                         BlockPos bpos2 = value.getBlockPos();
                         if (MainUtil.cheapDistanceTo(blockPos.getX(),blockPos.getY(),blockPos.getZ(),
                                 bpos2.getX(),bpos2.getY(),bpos2.getZ()) < 5){
+                            Roundabout.LOGGER.info("3");
                             return true;
                         }
                     }
@@ -102,5 +106,11 @@ public class ZLevel implements ILevelAccess {
             }
         }
         return false;
+    }
+    @Inject(method = "playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$playSeededSound(Entity $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
+        if(this.roundabout$isSoundPlundered($$1)){
+            ci.cancel();
+        }
     }
 }
