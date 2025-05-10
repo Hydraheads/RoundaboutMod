@@ -62,7 +62,7 @@ public class Aesthetician extends StandUsingNPC {
         }
     }
     public int getAmbientSoundInterval() {
-        return 500;
+        return 600;
     }
     @Nullable
     protected SoundEvent getAmbientSound() {
@@ -71,6 +71,12 @@ public class Aesthetician extends StandUsingNPC {
         } else {
             return ModSounds.AESTHETICIAN_EXHALE_EVENT;
         }
+    }
+
+    @Override
+
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.1F + 0.95F;
     }
 
     public boolean canSummonStandThroughFightOrFlightActive(){

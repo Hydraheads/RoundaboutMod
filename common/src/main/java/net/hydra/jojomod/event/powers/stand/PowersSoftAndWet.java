@@ -23,6 +23,8 @@ import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
@@ -151,6 +153,8 @@ public class PowersSoftAndWet extends PunchingStand {
         if (bubble != null){
             shootBubbleSpeed(bubble,0.15F);
             this.getSelf().level().addFreshEntity(bubble);
+
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
         }
         return true;
     }
