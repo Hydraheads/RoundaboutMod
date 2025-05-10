@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SetBlockInstance;
@@ -391,6 +392,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$tickInGeneral(BooleanSupplier $$0, CallbackInfo ci) {
+        ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
         if (!ClientUtil.getScreenFreeze()) {
 
             if (roundabout$setBlockInstance == null){
@@ -404,6 +406,11 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 roundabout$setBlockInstance = ImmutableList.of();
             }
         }
+    }
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    private void roundabout$tickInGeneralTail(BooleanSupplier $$0, CallbackInfo ci) {
+        ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
     }
 
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)

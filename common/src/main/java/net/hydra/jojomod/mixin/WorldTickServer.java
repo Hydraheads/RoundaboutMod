@@ -46,6 +46,8 @@ public class WorldTickServer {
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
+        ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
+
         ((TimeStop) this).tickAllTimeStops();
         ((IPermaCasting) this).roundabout$tickAllPermaCasts();
 
@@ -64,6 +66,10 @@ public class WorldTickServer {
         });
     }
 
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    private void roundabout$tickInGeneralTail(BooleanSupplier $$0, CallbackInfo ci) {
+        ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
+    }
 
     @Unique
     private void roundabout$tickStandIn(LivingEntity entity, StandEntity stand) {

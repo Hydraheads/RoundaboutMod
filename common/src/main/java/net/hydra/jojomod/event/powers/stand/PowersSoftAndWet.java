@@ -155,7 +155,9 @@ public class PowersSoftAndWet extends PunchingStand {
             shootBubbleSpeed(bubble,0.15F);
             this.getSelf().level().addFreshEntity(bubble);
 
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
+            if (bubbleType != PlunderTypes.SOUND.id) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            }
         }
         return true;
     }

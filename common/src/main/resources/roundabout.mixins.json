@@ -45,6 +45,7 @@
     "ZItem",
     "ZItemEntity",
     "ZItemStack",
+    "ZLevel",
     "ZLivingEntity",
     "ZMinecartItem",
     "ZMinecartTNT",
