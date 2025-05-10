@@ -2,17 +2,22 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
@@ -90,6 +95,19 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     @Override
     protected boolean shouldBurn() {
         return false;
+    }
+    @Override
+    protected void onHitBlock(BlockHitResult $$0) {
+        popBubble();
+    }
+    @Override
+    protected void onHitEntity(EntityHitResult $$0) {
+        popBubble();
+    }
+    public void popBubble(){
+        this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
+        this.discard();
     }
     @Override
     protected void defineSynchedData() {

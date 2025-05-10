@@ -151,6 +151,7 @@ public class PowersSoftAndWet extends PunchingStand {
         SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
 
         if (bubble != null){
+            bubble.setPlunderType(bubbleType);
             shootBubbleSpeed(bubble,0.15F);
             this.getSelf().level().addFreshEntity(bubble);
 
