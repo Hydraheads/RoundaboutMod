@@ -795,6 +795,17 @@ public class MainUtil {
         return mdist;
     }
 
+    public static double cheapDistanceTo(int x,int y,int z,int x2,int y2,int z2){
+        double mdist = 0;
+        double cdist = Math.abs(x-x2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(y-y2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(z-z2);
+        if (cdist > mdist){mdist=cdist;}
+        return mdist;
+    }
+
     public static boolean isPlayerNearby(Vec3 pos, Level level, double range, int exemptID) {
         if (level instanceof ServerLevel) {
             ServerLevel serverWorld = ((ServerLevel) level);

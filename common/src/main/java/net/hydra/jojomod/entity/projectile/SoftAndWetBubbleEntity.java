@@ -4,6 +4,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
