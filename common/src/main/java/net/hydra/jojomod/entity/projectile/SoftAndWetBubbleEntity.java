@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -67,6 +68,9 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     }
     @Override
     public boolean isPickable() {
+        if (this.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == getUserID()){
+            return false;
+        }
         return true;
     }
     @Override
