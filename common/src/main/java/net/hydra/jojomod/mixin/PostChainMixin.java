@@ -31,6 +31,15 @@ public class PostChainMixin implements IPostChainAccessor {
     }
 
     @Override
+    public void roundabout$process(float tickDelta) {
+        this.roundabout$resize();
+        ((PostChain)(Object)this).process(tickDelta);
+
+        Minecraft client = Minecraft.getInstance();
+        client.getMainRenderTarget().bindWrite(false);
+    }
+
+    @Override
     public boolean roundabout$setUniform(String name, Object value) {
         try
         {

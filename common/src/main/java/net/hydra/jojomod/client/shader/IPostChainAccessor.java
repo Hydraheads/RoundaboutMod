@@ -12,6 +12,8 @@ public interface IPostChainAccessor {
     /** Resizes the texture buffer if there's an update (i.e. window size changes). */
     void roundabout$resize();
 
+    void roundabout$process(float tickDelta);
+
     /** Attempts to set the uniform in the post effect.
      * @return true if uniform is found, otherwise false */
     boolean roundabout$setUniform(String name, Object value);

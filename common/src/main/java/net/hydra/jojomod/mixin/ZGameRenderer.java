@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGameRenderer;
 import net.hydra.jojomod.client.shader.RCoreShader;
 import net.hydra.jojomod.client.shader.RPostShaderRegistry;
+import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -36,12 +37,12 @@ public abstract class ZGameRenderer {
     @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(IZ)V", shift = At.Shift.BEFORE))
     private void roundabout$beforeClearDepthBuffer(float tickDelta, long $$1, PoseStack $$2, CallbackInfo ci)
     {
+        RenderCallbackRegistry.roundabout$GAME_RENDERER_FINISH(tickDelta);
+
         if (RPostShaderRegistry.DESATURATE != null) {
             if (((IGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
             {
-                RPostShaderRegistry.DESATURATE.roundabout$resize();
-                ((PostChain)RPostShaderRegistry.DESATURATE).process(tickDelta);
-                this.getMinecraft().getMainRenderTarget().bindWrite(false);
+                RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
             }
         }
 

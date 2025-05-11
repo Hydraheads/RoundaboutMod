@@ -4,6 +4,9 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.shader.RPostShaderRegistry;
+import net.hydra.jojomod.client.shader.callback.IRendererCallback;
+import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
@@ -388,6 +391,39 @@ public class PowersD4C extends PunchingStand {
         }
         else if (!keyIsDown)
             held4 = false;
+    }
+
+    private static class ShaderFx implements IRendererCallback {
+        public boolean isDimensionTraveling = false;
+
+        @Override
+        public void roundabout$LEVEL_RENDER_FINISH(float partialTick) {
+
+        }
+
+        @Override
+        public void roundabout$GAME_RENDERER_FINISH(float tickDelta) {
+            //            if (isDimensionTraveling)
+//            {
+//                if (RPostShaderRegistry.D4C_DIMENSION_TRANSITION != null)
+//                {
+//                    RPostShaderRegistry.D4C_DIMENSION_TRANSITION.roundabout$process(tickDelta);
+//                }
+//            }
+        }
+
+        @Override
+        public void roundabout$bootstrap() {
+
+        }
+
+        public ShaderFx()
+        {}
+    }
+
+    static {
+        ShaderFx fx = new ShaderFx();
+        RenderCallbackRegistry.register(fx);
     }
 
     private void yoinkCurrency() {

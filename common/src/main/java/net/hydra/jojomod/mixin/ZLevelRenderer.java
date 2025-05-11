@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.StandFireType;
@@ -113,9 +114,11 @@ public abstract class ZLevelRenderer {
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "TAIL"))
-    private void roundabout$renderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3,
+    private void roundabout$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
                                           Camera $$4, GameRenderer $$5, LightTexture $$6,
                                           Matrix4f $$7, CallbackInfo ci) {
+        RenderCallbackRegistry.roundabout$LEVEL_RENDER_FINISH(partialTick);
+
         Player player = Minecraft.getInstance().player;
         if (player != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
             Vec3 $$9 = $$4.getPosition();
@@ -123,7 +126,7 @@ public abstract class ZLevelRenderer {
             double $$11 = $$9.y();
             double $$12 = $$9.z();
             MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
-            this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, $$1, $$0, (MultiBufferSource)$$20);
+            this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource)$$20);
         }
     }
 
