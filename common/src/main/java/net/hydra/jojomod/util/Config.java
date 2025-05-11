@@ -398,6 +398,10 @@ import java.util.Set;
         public Integer timeStopInterruptedCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
+        @IntOption(group = "inherit", value = 66, min = 0, max = 100)
+        public Integer reducedDamagePercentDealtInTimeStop;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean maxedStarPlatinumBypassesReducedDamageAtFullCharge;
         @BooleanOption(group = "inherit", value = false)
         public Boolean preventsBreathing;
         @BooleanOption(group = "inherit", value = true)
