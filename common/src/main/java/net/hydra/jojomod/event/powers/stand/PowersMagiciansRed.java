@@ -2015,6 +2015,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
 
     private float getRangedBarrage2HitStrength(Entity entity){
+
         float barrageLength = this.getRangedBarrage2Length();
         float power;
         if (this.getReducedDamage(entity)){
@@ -2032,6 +2033,18 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
             }
         }
+
+
+        if (power > 0.005F) {
+            if (getReducedDamage(entity)) {
+                power *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.magicianAttackOnPlayers * 0.01)));
+            } else {
+                power *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.magicianAttackOnMobs * 0.01)));
+            }
+        }
+
         return power;
     }
 
