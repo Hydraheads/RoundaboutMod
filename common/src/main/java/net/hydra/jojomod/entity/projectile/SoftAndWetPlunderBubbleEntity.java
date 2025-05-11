@@ -19,6 +19,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<BlockPos> BLOCK_POS = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BLOCK_POS);
+
+
+    public int lifeSpan = 0;
+
     public SoftAndWetPlunderBubbleEntity(LivingEntity $$1, Level $$2) {
         super(ModEntities.PLUNDER_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
@@ -31,9 +35,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()){
+            this.setBlockPos($$0.getBlockPos().above());
             this.setBlockPos($$0.getBlockPos());
             this.setActivated(true);
-            this.setDeltaMovement(0,0.1,0);
+            this.setDeltaMovement(0,0.01,0);
         } else {
             super.onHitBlock($$0);
         }
@@ -45,11 +50,20 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     @Override
     public void tick() {
 
+        if (!this.level().isClientSide()){
+            lifeSpan--;
+            if (lifeSpan <= 0){
+                popBubble();
+                return;
+            }
+        }
+
         if (this.getActivated()){
             if (this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id){
                 ((ILevelAccess)this.level()).roundabout$addPlunderBubble(this);
             }
         }
+
 
         super.tick();
     }

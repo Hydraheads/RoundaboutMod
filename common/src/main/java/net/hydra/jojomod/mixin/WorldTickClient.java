@@ -417,6 +417,8 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     private void roundabout$playSeed(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
+        } if(((ILevelAccess)this).roundabout$isSoundPlundered($$1.blockPosition())){
+            ci.cancel();
         }
     }
     @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
@@ -429,12 +431,25 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
     }
     @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$playSeed(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
+    private void roundabout$playLocalSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
             return;
         } if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$0, (int) $$1, (int) $$2))){
             ci.cancel();
+            return;
+        } if (((TimeStop) this).inTimeStopRange(new Vec3i((int) $$0, (int) $$1, (int) $$2))){
+            if (($$4 == SoundSource.WEATHER || $$4 == SoundSource.BLOCKS) && !$$3.getLocation().getPath().contains("break")) {
+                ci.cancel();
+                return;
+            }
+        }
+    }
+    @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$playSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
+        if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$0, (int) $$1, (int) $$2))){
+            ci.cancel();
+            return;
         }
     }
 
@@ -606,15 +621,6 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     private void roundabout$StopParticles(ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange(new Vec3i((int) x, (int) y, (int) z))){
             ci.cancel();
-        }
-    }
-
-    @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$PlayLocalSoundCanceler(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
-        if (((TimeStop) this).inTimeStopRange(new Vec3i((int) $$0, (int) $$1, (int) $$2))){
-            if (($$4 == SoundSource.WEATHER || $$4 == SoundSource.BLOCKS) && !$$3.getLocation().getPath().contains("break")) {
-                ci.cancel();
-            }
         }
     }
 
