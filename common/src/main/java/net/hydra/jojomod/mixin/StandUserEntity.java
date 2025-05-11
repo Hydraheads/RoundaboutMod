@@ -43,6 +43,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -2418,7 +2419,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.setReturnValue(false);
             return;
         }
-        if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
+        if (((TimeStop)entity.level()).CanTimeStopEntity(entity) && !($$0.is(DamageTypes.GENERIC_KILL))){
             if (this.roundabout$TSHurtTime <= 0 || $$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
 
                 float dmg = roundabout$getStoredDamage();
