@@ -918,5 +918,7 @@
   "power_inventory.roundabout.settings.next": "Next",
   "roundabout.menu.ts_paused": "Time is Stopped!",
 
-  "roundabout.warden_ts_movement": "It did not stop?!"
+  "roundabout.warden_ts_movement": "It did not stop?!",
+
+  "roundabout.warning.fabulous_graphics": "§cWarning: Roundabout's shader effects are disabled while using the Fabulous graphics mode!§r"
 }

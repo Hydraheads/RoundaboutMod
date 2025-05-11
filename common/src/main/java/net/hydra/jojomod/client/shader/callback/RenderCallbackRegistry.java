@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.shader.callback;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.shader.RRenderUtil;
 
 import java.util.HashSet;
 
@@ -30,6 +31,8 @@ public class RenderCallbackRegistry {
 
     public static void roundabout$GAME_RENDERER_FINISH(float tickDelta)
     {
+        RRenderUtil.sendFabulousWarning();
+
         for (IRendererCallback callback : registry)
         {
             try {

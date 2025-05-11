@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.shader.RPostShaderRegistry;
+import net.hydra.jojomod.client.shader.RRenderUtil;
 import net.hydra.jojomod.client.shader.callback.IRendererCallback;
 import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -403,12 +404,20 @@ public class PowersD4C extends PunchingStand {
 
         @Override
         public void roundabout$GAME_RENDERER_FINISH(float tickDelta) {
+            if (RRenderUtil.isUsingFabulous())
+                return;
+
             //            if (isDimensionTraveling)
 //            {
 //                if (RPostShaderRegistry.D4C_DIMENSION_TRANSITION != null)
 //                {
 //                    RPostShaderRegistry.D4C_DIMENSION_TRANSITION.roundabout$process(tickDelta);
 //                }
+//            }
+
+//            if (RPostShaderRegistry.D4C_DIMENSION_TRANSITION != null)
+//            {
+//                RPostShaderRegistry.D4C_DIMENSION_TRANSITION.roundabout$process(tickDelta);
 //            }
         }
 
