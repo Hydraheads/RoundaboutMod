@@ -17,7 +17,6 @@ import net.minecraft.world.phys.EntityHitResult;
 public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<Byte> PLUNDER_TYPE = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BYTE);
 
-    private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<BlockPos> BLOCK_POS = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BLOCK_POS);
 
 
@@ -88,19 +87,13 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void setBlockPos(BlockPos bpos) {
         this.getEntityData().set(BLOCK_POS, bpos);
     }
-    public boolean getActivated() {
-        return this.getEntityData().get(ACTIVATED);
-    }
-    public void setActivated(boolean activ) {
-        this.getEntityData().set(ACTIVATED, activ);
-    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.entityData.hasItem(PLUNDER_TYPE)){
             this.entityData.define(PLUNDER_TYPE, (byte)0);
             this.entityData.define(BLOCK_POS, BlockPos.ZERO);
-            this.entityData.define(ACTIVATED, false);
         }
     }
 

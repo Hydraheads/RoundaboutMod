@@ -31,6 +31,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -954,6 +956,7 @@ public class BlockGrabPreset extends PunchingStand{
                         && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
                         && !state.is(Blocks.REINFORCED_DEEPSLATE)
                         && !(state.getBlock() instanceof InfestedBlock)
+                        && !this.self.hasEffect(MobEffects.DIG_SLOWDOWN)
                         && !(state.getBlock() instanceof SlabBlock)
                         && !(state.getBlock() instanceof FrostedIceBlock)
                         && !(state.getBlock() instanceof BuddingAmethystBlock)

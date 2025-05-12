@@ -30,6 +30,13 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
 
     public LivingEntity standUser;
     public UUID standUserUUID;
+    private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
+    public boolean getActivated() {
+        return this.getEntityData().get(ACTIVATED);
+    }
+    public void setActivated(boolean activ) {
+        this.getEntityData().set(ACTIVATED, activ);
+    }
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.INT);
     protected SoftAndWetBubbleEntity(EntityType<? extends SoftAndWetBubbleEntity> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
@@ -77,6 +84,8 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     public boolean isPickable() {
         if (this.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == getUserID()){
             return false;
+        } else if (!getActivated()){
+            return false;
         }
         return true;
     }
@@ -114,6 +123,7 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(ACTIVATED, false);
         this.entityData.define(USER_ID, -1);
     }
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
