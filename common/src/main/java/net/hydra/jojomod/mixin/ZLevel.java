@@ -196,4 +196,14 @@ public class ZLevel implements ILevelAccess {
             ci.cancel();
         }
     }
+    @Inject(method = "playSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$playSeededSound(Player $$0, Entity $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
+        if(this.roundabout$isSoundPlunderedEntity($$1)){
+            SoftAndWetPlunderBubbleEntity sbpe = this.roundabout$getSoundPlunderedBubbleEntity($$1);
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$2, $$3, $$4, $$5);
+            }
+            ci.cancel();
+        }
+    }
 }

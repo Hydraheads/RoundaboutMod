@@ -2,10 +2,12 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -21,6 +23,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -412,6 +415,16 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
         roundabout$tickQVec();
+    }
+    @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$playSound(SoundEvent $$0, float $$1, float $$2,CallbackInfo ci) {
+        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(((Entity) (Object)this))){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$0, this.getSoundSource(), $$1, $$2);
+            }
+            ci.cancel();
+        }
     }
     @Inject(method = "thunderHit", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$thunderHit(CallbackInfo ci) {
