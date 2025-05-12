@@ -133,7 +133,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        if (!getActivated() && !getFinished()) {
+        if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())) {
             if (this.getPlunderType() == PlunderTypes.SOUND.id){
                 this.setEntityStolen($$0.getEntity().getId());
                 setFloating();

@@ -153,6 +153,11 @@ public class PowersSoftAndWet extends PunchingStand {
         SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
 
         if (bubble != null){
+            this.setCooldown(PowerIndex.SKILL_2, 10);
+
+            this.poseStand(OffsetIndex.FOLLOW);
+            this.setAttackTimeDuring(-10);
+            this.setActivePower(PowerIndex.POWER_2);
             bubble.setPlunderType(bubbleType);
             bubble.setSingular(true);
             shootBubbleSpeed(bubble,0.15F);
@@ -209,6 +214,7 @@ public class PowersSoftAndWet extends PunchingStand {
                             if (clientConfig != null && clientConfig.dynamicSettings != null) {
                                 bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
                             }
+
                             this.tryChargedPower(PowerIndex.POWER_2, true, bubbleType);
                             ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2, bubbleType);
                             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
