@@ -30,6 +30,7 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
             case (SoftAndWetEntity.BETA_SKIN) -> BETA_SKIN;
             case (SoftAndWetEntity.KING_SKIN) -> KING_SKIN;
             case (SoftAndWetEntity.DROWNED_SKIN) -> DROWNED_SKIN;
+            case (SoftAndWetEntity.DROWNED_SKIN_2) -> DROWNED_SKIN;
             case (SoftAndWetEntity.FIGURE_SKIN) -> FIGURE_SKIN;
             default -> LIGHT_SKIN;
         };

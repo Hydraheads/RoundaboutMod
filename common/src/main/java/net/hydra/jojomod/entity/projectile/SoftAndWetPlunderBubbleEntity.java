@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -32,6 +33,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<BlockPos> BLOCK_POS = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Boolean> FINISHED = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> ENTITY_STOLEN = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> SINGULAR = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
     public List<StoredSoundInstance> bubbleSounds = new ArrayList<>();
@@ -160,6 +162,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
         }
 
+            Entity owner = this.getOwner();
+            if (getSingular() && this.getOwner() != null && !this.getActivated()) {
+                this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+            }
+
 
         super.tick();
 
@@ -194,6 +201,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void setFinished(boolean activ) {
         this.getEntityData().set(FINISHED, activ);
     }
+    public boolean getSingular() {
+        return this.getEntityData().get(SINGULAR);
+    }
+    public void setSingular(boolean single) {
+        this.getEntityData().set(SINGULAR, single);
+    }
     public int getEntityStolen() {
         return this.getEntityData().get(ENTITY_STOLEN);
     }
@@ -207,6 +220,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.entityData.define(PLUNDER_TYPE, (byte)0);
             this.entityData.define(BLOCK_POS, BlockPos.ZERO);
             this.entityData.define(FINISHED, false);
+            this.entityData.define(SINGULAR, false);
             this.entityData.define(ENTITY_STOLEN, -1);
         }
     }

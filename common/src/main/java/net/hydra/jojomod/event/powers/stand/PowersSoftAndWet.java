@@ -153,6 +153,7 @@ public class PowersSoftAndWet extends PunchingStand {
 
         if (bubble != null){
             bubble.setPlunderType(bubbleType);
+            bubble.setSingular(true);
             shootBubbleSpeed(bubble,0.15F);
             this.getSelf().level().addFreshEntity(bubble);
 
@@ -166,6 +167,7 @@ public class PowersSoftAndWet extends PunchingStand {
         shootBubbleSpeed(ankh, 1.01F);
     }
     public void shootBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
+        ankh.setSped(speed);
         ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.7), this.self.getZ());
         ankh.setXRot(this.getSelf().getXRot()%360);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);

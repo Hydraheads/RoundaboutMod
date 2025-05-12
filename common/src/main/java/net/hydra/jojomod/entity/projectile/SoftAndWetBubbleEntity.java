@@ -34,12 +34,20 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
 
     public LivingEntity standUser;
     public UUID standUserUUID;
+    public float speed = 1f;
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.FLOAT);
     public boolean getActivated() {
         return this.getEntityData().get(ACTIVATED);
     }
     public void setActivated(boolean activ) {
         this.getEntityData().set(ACTIVATED, activ);
+    }
+    public float getSped() {
+        return this.getEntityData().get(SPEED);
+    }
+    public void setSped(float sped) {
+        this.getEntityData().set(SPEED, sped);
     }
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.INT);
     protected SoftAndWetBubbleEntity(EntityType<? extends SoftAndWetBubbleEntity> $$0, double $$1, double $$2, double $$3, Level $$4) {
@@ -140,12 +148,33 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         super.defineSynchedData();
         this.entityData.define(ACTIVATED, false);
         this.entityData.define(USER_ID, -1);
+        this.entityData.define(SPEED, 1F);
     }
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
-        Vec3 $$9 = $$0.getDeltaMovement();
+    }
+    public void shootFromRotationDeltaAgnostic2(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
+        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
+        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        this.shoot2((double)$$6, (double)$$7, (double)$$8, $$4);
+    }
+
+    public void shoot2(double $$0, double $$1, double $$2, float $$3) {
+        Vec3 $$5 = (new Vec3($$0, $$1, $$2)).normalize();
+        $$5 = $$5.add(this.getDeltaMovement()).normalize();
+        $$5 = $$5.add(this.getDeltaMovement()).normalize();
+        $$5 = $$5.add(this.getDeltaMovement()).normalize();
+        $$5 = $$5.add(this.getDeltaMovement()).normalize();
+        $$5 = $$5.scale($$3);
+        this.setDeltaMovement($$5);
+        double $$6 = $$5.horizontalDistance();
+        this.setYRot((float)(Mth.atan2($$5.x, $$5.z) * 57.2957763671875));
+        this.setXRot((float)(Mth.atan2($$5.y, $$6) * 57.2957763671875));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 }
