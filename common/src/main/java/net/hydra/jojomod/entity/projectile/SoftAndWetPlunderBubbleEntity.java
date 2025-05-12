@@ -86,8 +86,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void popSounds(){
         bubbleSoundsInit();
 
-        if (bubbleSounds != null && !bubbleSounds.isEmpty()){
-            for (StoredSoundInstance value : bubbleSounds) {
+        List<StoredSoundInstance> bs = new ArrayList<>(bubbleSounds) {};
+        if (bs != null && !bs.isEmpty()){
+                for (StoredSoundInstance value : bs) {
 
                 if (this.level().isClientSide()){
                     this.level().playLocalSound(this.blockPosition().getX(), this.blockPosition().getY(),

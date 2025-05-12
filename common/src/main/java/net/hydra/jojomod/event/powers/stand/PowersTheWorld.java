@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -96,6 +97,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public StandEntity getNewStandEntity(){
+        byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (sk == TheWorldEntity.ULTIMATE_SKIN || sk == TheWorldEntity.ULTIMATE_KARS_SKIN){
+            return ModEntities.THE_WORLD_ULTIMATE.create(this.getSelf().level());
+        }
         return ModEntities.THE_WORLD.create(this.getSelf().level());
     }
 
@@ -317,6 +322,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(TheWorldEntity.MANGA_SKIN);
+                $$1.add(TheWorldEntity.BLACK_SKIN);
             } if (Level > 2 || bypass){
                 $$1.add(TheWorldEntity.OVA_SKIN);
                 $$1.add(TheWorldEntity.FOUR_DEE_EXPERIENCE);
@@ -331,9 +337,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 $$1.add(TheWorldEntity.PART_7_SKIN);
                 $$1.add(TheWorldEntity.PART_7_BLUE);
             } if (Level > 6 || bypass){
-                $$1.add(TheWorldEntity.BLACK_SKIN);
                 $$1.add(TheWorldEntity.AQUA_SKIN);
                 $$1.add(TheWorldEntity.BETA);
+                $$1.add(TheWorldEntity.ULTIMATE_SKIN);
+                $$1.add(TheWorldEntity.ULTIMATE_KARS_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(TheWorldEntity.OVER_HEAVEN);
             }

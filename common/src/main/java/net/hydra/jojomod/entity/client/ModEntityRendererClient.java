@@ -10,6 +10,7 @@ public class ModEntityRendererClient {
      * Forge and Fabric need to actually register this info into the game individually.*/
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
+    public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum"), "main");
     public static final ModelLayerLocation JUSTICE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice"), "main");
     public static final ModelLayerLocation MAGICIANS_RED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red"), "main");

@@ -44,6 +44,7 @@ public class ForgeEvents {
     public static void entityAttributes(EntityAttributeCreationEvent event) {
         event.put(ForgeEntities.TERRIER_DOG.get(), Wolf.createAttributes().build());
         event.put(ForgeEntities.THE_WORLD.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.THE_WORLD_ULTIMATE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.JUSTICE.get(), StandEntity.createStandAttributes().build());
@@ -299,6 +300,7 @@ public class ForgeEvents {
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
 
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
+        ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
         ModEntities.JUSTICE = ForgeEntities.JUSTICE.get();

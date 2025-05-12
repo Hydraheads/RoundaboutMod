@@ -23,6 +23,7 @@ public class ModEntities {
     public static float justiceWidth = 0.65F;
     public static EntityType<TerrierEntity> TERRIER_DOG;
     public static EntityType<TheWorldEntity> THE_WORLD;
+    public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
     public static EntityType<JusticeEntity> JUSTICE;
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED;

@@ -36,6 +36,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StarPlatinumBaseballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED.get(), MagiciansRedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED_OVA.get(), MagiciansRedOVARenderer::new);
@@ -94,6 +95,7 @@ public class ClientForgeEvents {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_LAYER, JusticeModel::getTexturedModelData);

@@ -187,6 +187,14 @@ public class FabricEntities {
                                 sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":the_world")
                 );
 
+        public static final EntityType<TheWorldEntity> THE_WORLD_ULTIMATE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"),
+                        EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).
+                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":the_world_ultimate")
+                );
+
         public static final EntityType<StarPlatinumEntity> STAR_PLATINUM =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -382,6 +390,7 @@ public class FabricEntities {
         public static void register() {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
+                ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
                 ModEntities.STAR_PLATINUM_BASEBALL = STAR_PLATINUM_BASEBALL;
@@ -461,6 +470,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(FALLEN_CREEPER, FallenCreeper.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
+
+                FabricDefaultAttributeRegistry.register(THE_WORLD_ULTIMATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED, StandEntity.createStandAttributes());
