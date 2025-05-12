@@ -786,7 +786,7 @@ public class BlockGrabPreset extends PunchingStand{
     public void addItem(StandEntity standEntity){
         addItemLight(standEntity);
 
-        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
+        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.objectPocket);
         this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.objectPocket);
     }
     public void addItemLight(StandEntity standEntity){

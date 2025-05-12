@@ -320,7 +320,7 @@ import java.util.Set;
         public Integer impaleAttack;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer objectThrow;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 25, min = 0, max = 72000)
         public Integer objectPocket;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer mobThrow;
