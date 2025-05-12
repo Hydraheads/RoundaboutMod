@@ -321,6 +321,8 @@ import java.util.Set;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer objectThrow;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer objectPocket;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer mobThrow;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttack;
