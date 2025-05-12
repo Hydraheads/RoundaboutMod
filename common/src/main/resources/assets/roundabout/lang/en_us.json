@@ -923,5 +923,5 @@
 
   "roundabout.warden_ts_movement": "It did not stop?!",
 
-  "roundabout.warning.fabulous_graphics": "§cWarning: Roundabout's shader effects are disabled while using the Fabulous graphics mode!§r"
+  "roundabout.warning.fabulous_graphics.v2": "§eNote: Some modded shader visual effects do not display with the Fabulous graphics settings.§r"
 }
