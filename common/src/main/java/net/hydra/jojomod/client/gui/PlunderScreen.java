@@ -316,6 +316,7 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         if (clientConfig != null && clientConfig.dynamicSettings != null){
             if (clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble != (int) swap) {
                 clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble = (int) swap;
+                ConfigManager.saveClientConfig();
             }
         }
     }
