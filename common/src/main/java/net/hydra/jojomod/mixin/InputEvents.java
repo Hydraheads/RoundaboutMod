@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
+import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IMultiplayerGameMode;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
@@ -393,6 +394,7 @@ public abstract class InputEvents implements IInputEvents {
             }
         }
     }
+
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundabout$tickTick(CallbackInfo ci) {
         if (ClientUtil.isInCinderellaMobUI > -1){
@@ -1009,9 +1011,17 @@ public abstract class InputEvents implements IInputEvents {
     @Override
     @Unique
     public boolean roundabout$sameKeyOne(KeyMapping key1){
-        return (key1.isDown() || (key1.same(this.options.keyLoadHotbarActivator) && this.options.keyLoadHotbarActivator.isDown())
-                || (key1.same(this.options.keySaveHotbarActivator) && this.options.keySaveHotbarActivator.isDown())
-        );
+        boolean skey = (key1.same(this.options.keyLoadHotbarActivator) && this.options.keyLoadHotbarActivator.isDown());
+        if (skey){
+            key1.setDown(false);
+        }
+        boolean skey2 = (key1.same(this.options.keySaveHotbarActivator) && this.options.keySaveHotbarActivator.isDown());
+        if (skey2){
+            key1.setDown(false);
+        }
+
+        return (key1.isDown() || skey
+                || skey2);
     }
 
     @Override
