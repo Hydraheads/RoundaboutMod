@@ -10,4 +10,5 @@ public interface ILevelAccess {
     void roundabout$tickPlunderBubbleRemoval();
     boolean roundabout$isFrictionPlundered(BlockPos blockPos);
     boolean roundabout$isSoundPlundered(BlockPos blockPos);
+    SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubble(BlockPos blockPos);
 }

@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -81,6 +82,12 @@ public class ClientUtil {
             if (data > 0){
                 ((StandUser) player).roundabout$setMaxSealedTicks(data);
                 ((StandUser) player).roundabout$setSealedTicks(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_BUBBLE_FINISH){
+            Entity target = player.level().getEntity(data);
+            if (target instanceof SoftAndWetPlunderBubbleEntity IE) {
+                IE.setFinished(true);
+                IE.popSounds();
             }
         }
     }

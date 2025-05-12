@@ -2,9 +2,11 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.ConfigManager;
@@ -116,8 +118,17 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                             ((Entity) (Object) this),
                             ((Entity) (Object) this).level().random.nextLong()
                     );
-                    Minecraft.getInstance().getSoundManager().play(qSound);
-                    $$2.add(new PlayedSoundInstance(soundI.roundaboutSoundEvent, soundI.roundaboutSoundByte, qSound));
+                    if(((ILevelAccess)this.level()).roundabout$isSoundPlundered(this.blockPosition())) {
+                        SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess) this.level()).roundabout$getSoundPlunderedBubble(this.blockPosition());
+                        if (sbpe != null) {
+                            sbpe.addPlunderBubbleSounds(soundI.roundaboutSoundEvent, SoundSource.NEUTRAL,
+                                    ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
+                                    ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte));
+                        }
+                    } else {
+                        Minecraft.getInstance().getSoundManager().play(qSound);
+                        $$2.add(new PlayedSoundInstance(soundI.roundaboutSoundEvent, soundI.roundaboutSoundByte, qSound));
+                    }
                 }
             }
             this.roundabout$sounds = ImmutableList.of();
@@ -146,8 +157,18 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                     ((Entity) (Object) this),
                     ((Entity) (Object) this).level().random.nextLong()
             );
-            Minecraft.getInstance().getSoundManager().play(qSound);
-            $$2.add(new PlayedSoundInstance(SE,soundChoice,qSound));
+
+            if(((ILevelAccess)this.level()).roundabout$isSoundPlundered(this.blockPosition())) {
+                SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess) this.level()).roundabout$getSoundPlunderedBubble(this.blockPosition());
+                if (sbpe != null) {
+                    sbpe.addPlunderBubbleSounds(SE, SoundSource.NEUTRAL,
+                            ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundChoice),
+                            ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundChoice));
+                }
+            } else {
+                Minecraft.getInstance().getSoundManager().play(qSound);
+                $$2.add(new PlayedSoundInstance(SE, soundChoice, qSound));
+            }
             this.roundabout$soundsPlaying = ImmutableList.copyOf($$2);
     }
 

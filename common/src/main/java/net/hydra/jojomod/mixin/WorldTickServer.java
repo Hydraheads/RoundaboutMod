@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -73,13 +74,22 @@ public class WorldTickServer {
 
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSeededSound(Player $$0, double $$1, double $$2, double $$3, Holder<SoundEvent> $$4, SoundSource $$5, float $$6, float $$7, long $$8, CallbackInfo ci) {
-        if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$1, (int) $$2, (int) $$3))){
+        BlockPos bpos = new BlockPos((int) $$1, (int) $$2, (int) $$3);
+        if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble(bpos);
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$4.value(), $$5, $$6, $$7);
+            }
             ci.cancel();
         }
     }
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$playSeededSound2(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
         if(((ILevelAccess)this).roundabout$isSoundPlundered($$1.blockPosition())){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble($$1.blockPosition());
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
+            }
             ci.cancel();
         }
     }

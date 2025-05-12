@@ -3,23 +3,54 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.StoredSoundInstance;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Unique;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<Byte> PLUNDER_TYPE = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BYTE);
-
     private static final EntityDataAccessor<BlockPos> BLOCK_POS = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BLOCK_POS);
+    private static final EntityDataAccessor<Boolean> FINISHED = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
 
+    @Unique
+    public List<StoredSoundInstance> bubbleSounds = new ArrayList<>();
 
+    @Unique
+    public void bubbleSoundsInit(){
+        if (bubbleSounds == null) {
+            bubbleSounds = new ArrayList<>();
+        }
+    }
+    @Unique
+    public void addPlunderBubbleSounds(StoredSoundInstance plunder){
+        bubbleSoundsInit();
+        bubbleSounds.add(plunder);
+    }
+    @Unique
+    public void addPlunderBubbleSounds(SoundEvent soundEvent, SoundSource soundSource, float pitch, float volum){
+        bubbleSoundsInit();
+        bubbleSounds.add(new StoredSoundInstance(soundEvent,soundSource,pitch,volum));
+    }
     public int lifeSpan = 0;
 
     public SoftAndWetPlunderBubbleEntity(LivingEntity $$1, Level $$2) {
@@ -41,6 +72,54 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         } else {
             super.onHitBlock($$0);
         }
+    }
+
+    public void popSounds(){
+        bubbleSoundsInit();
+
+        if (bubbleSounds != null && !bubbleSounds.isEmpty()){
+            for (StoredSoundInstance value : bubbleSounds) {
+
+                if (this.level().isClientSide()){
+                    this.level().playLocalSound(this.blockPosition().getX(), this.blockPosition().getY(),
+                            this.blockPosition().getZ(), value.soundEvent, value.soundSource,
+                            value.pitch, value.volume, false);
+                } else {
+                    this.level().playSound(null, this.blockPosition(), value.soundEvent,
+                            value.soundSource, value.pitch, value.volume);
+                }
+            }
+        } else {
+
+        }
+    }
+    @Override
+    public void popBubble(){
+        this.setFinished(true);
+
+        if (!this.level().isClientSide()) {
+            ServerLevel serverWorld = ((ServerLevel) this.level());
+            Vec3 userLocation = new Vec3(this.getX(),  this.getY(), this.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_BUBBLE_FINISH,this.getId());
+                }
+            }
+
+            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                    SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            popSounds();
+        }
+
+
+        this.discard();
     }
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
@@ -65,6 +144,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
 
         super.tick();
+
+        if (this.getFinished()){
+            this.discard();
+        }
     }
 
 
@@ -87,13 +170,19 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void setBlockPos(BlockPos bpos) {
         this.getEntityData().set(BLOCK_POS, bpos);
     }
-
+    public boolean getFinished() {
+        return this.getEntityData().get(FINISHED);
+    }
+    public void setFinished(boolean activ) {
+        this.getEntityData().set(FINISHED, activ);
+    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.entityData.hasItem(PLUNDER_TYPE)){
             this.entityData.define(PLUNDER_TYPE, (byte)0);
             this.entityData.define(BLOCK_POS, BlockPos.ZERO);
+            this.entityData.define(FINISHED, false);
         }
     }
 

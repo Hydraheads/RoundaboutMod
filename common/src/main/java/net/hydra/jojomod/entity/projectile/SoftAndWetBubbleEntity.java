@@ -118,6 +118,7 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     public void popBubble(){
         this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                 SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
+
         this.discard();
     }
     @Override

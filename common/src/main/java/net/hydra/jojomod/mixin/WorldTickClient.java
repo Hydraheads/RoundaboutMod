@@ -418,24 +418,38 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
         } if(((ILevelAccess)this).roundabout$isSoundPlundered($$1.blockPosition())){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble($$1.blockPosition());
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
+            }
             ci.cancel();
         }
     }
     @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSeed(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
+        BlockPos bpos = new BlockPos((int) $$0, (int) $$1, (int) $$2);
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
             return;
-        } if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$0, (int) $$1, (int) $$2))){
+        } if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble(bpos);
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$3, $$4, $$5, $$6);
+            }
             ci.cancel();
         }
     }
     @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playLocalSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
+        BlockPos bpos = new BlockPos((int) $$0, (int) $$1, (int) $$2);
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
             return;
-        } if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$0, (int) $$1, (int) $$2))){
+        } if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble(bpos);
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$3, $$4, $$5, $$6);
+            }
             ci.cancel();
             return;
         } if (((TimeStop) this).inTimeStopRange(new Vec3i((int) $$0, (int) $$1, (int) $$2))){
@@ -447,7 +461,12 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
     @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
-        if(((ILevelAccess)this).roundabout$isSoundPlundered(new BlockPos((int) $$0, (int) $$1, (int) $$2))){
+        BlockPos bpos = new BlockPos((int) $$0, (int) $$1, (int) $$2);
+        if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble(bpos);
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$3, $$4, $$5, $$6);
+            }
             ci.cancel();
             return;
         }
