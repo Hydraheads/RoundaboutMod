@@ -31,6 +31,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<Byte> PLUNDER_TYPE = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<BlockPos> BLOCK_POS = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Boolean> FINISHED = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ENTITY_STOLEN = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.INT);
 
     @Unique
     public List<StoredSoundInstance> bubbleSounds = new ArrayList<>();
@@ -64,14 +65,20 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()){
-            this.setBlockPos($$0.getBlockPos().above());
-            this.setBlockPos($$0.getBlockPos());
-            this.setActivated(true);
-            this.setDeltaMovement(0,0.01,0);
-        } else {
-            super.onHitBlock($$0);
+        if (!getFinished()) {
+            if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()) {
+                this.setBlockPos($$0.getBlockPos().above());
+                this.setBlockPos($$0.getBlockPos());
+                setFloating();
+            } else {
+                super.onHitBlock($$0);
+            }
         }
+    }
+
+    public void setFloating(){
+        this.setActivated(true);
+        this.setDeltaMovement(0,0.01,0);
     }
 
     public void popSounds(){
@@ -123,7 +130,14 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        super.onHitEntity($$0);
+        if (!getActivated() && !getFinished()) {
+            if (this.getPlunderType() == PlunderTypes.SOUND.id){
+                this.setEntityStolen($$0.getEntity().getId());
+                setFloating();
+            } else {
+                super.onHitEntity($$0);
+            }
+        }
     }
     @Override
     public void tick() {
@@ -138,7 +152,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         if (this.getActivated()){
             if (this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id){
-                ((ILevelAccess)this.level()).roundabout$addPlunderBubble(this);
+                if (getEntityStolen() <= 0) {
+                    ((ILevelAccess) this.level()).roundabout$addPlunderBubble(this);
+                } else {
+                    ((ILevelAccess) this.level()).roundabout$addPlunderBubbleEntity(this);
+                }
             }
         }
 
@@ -176,6 +194,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void setFinished(boolean activ) {
         this.getEntityData().set(FINISHED, activ);
     }
+    public int getEntityStolen() {
+        return this.getEntityData().get(ENTITY_STOLEN);
+    }
+    public void setEntityStolen(int entid) {
+        this.getEntityData().set(ENTITY_STOLEN, entid);
+    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -183,6 +207,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.entityData.define(PLUNDER_TYPE, (byte)0);
             this.entityData.define(BLOCK_POS, BlockPos.ZERO);
             this.entityData.define(FINISHED, false);
+            this.entityData.define(ENTITY_STOLEN, -1);
         }
     }
 

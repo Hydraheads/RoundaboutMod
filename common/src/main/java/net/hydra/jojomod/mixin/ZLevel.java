@@ -27,11 +27,18 @@ public class ZLevel implements ILevelAccess {
 
     @Unique
     public List<SoftAndWetPlunderBubbleEntity> roundabout$plunderBubbles = new ArrayList<>();
+    @Unique
+    public List<SoftAndWetPlunderBubbleEntity> roundabout$entityPlunderBubbles = new ArrayList<>();
 
     @Unique
     public void roundabout$addPlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
         roundabout$bubbleInit();
         roundabout$plunderBubbles.add(plunder);
+    }
+    @Unique
+    public void roundabout$addPlunderBubbleEntity(SoftAndWetPlunderBubbleEntity plunder){
+        roundabout$bubbleInit();
+        roundabout$entityPlunderBubbles.add(plunder);
     }
     @Unique
     public void roundabout$removePlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
@@ -48,6 +55,8 @@ public class ZLevel implements ILevelAccess {
     public void roundabout$bubbleInit(){
         if (roundabout$plunderBubbles == null) {
             roundabout$plunderBubbles = new ArrayList<>();
+        } if (roundabout$entityPlunderBubbles == null) {
+            roundabout$entityPlunderBubbles = new ArrayList<>();
         }
     }
 
@@ -61,6 +70,15 @@ public class ZLevel implements ILevelAccess {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
                 if (value.isRemoved() || !value.isAlive()) {
                     roundabout$plunderBubbles.remove(value);
+                }
+            }
+        }
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration2 = new ArrayList<>(roundabout$entityPlunderBubbles) {
+        };
+        if (!bubbleIteration2.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration2) {
+                if (value.isRemoved() || !value.isAlive()) {
+                    roundabout$entityPlunderBubbles.remove(value);
                 }
             }
         }
@@ -127,10 +145,51 @@ public class ZLevel implements ILevelAccess {
         }
         return false;
     }
+
+
+    @Unique
+    public SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubbleEntity(Entity entity){
+        roundabout$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+        };
+        if (!bubbleIteration.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
+                if (!value.getFinished() && value.getPlunderType() == PlunderTypes.SOUND.id) {
+                    if (!value.isRemoved() && value.isAlive() && value.getEntityStolen() == entity.getId()) {
+                            return value;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    @Unique
+    public boolean roundabout$isSoundPlunderedEntity(Entity entity){
+        roundabout$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+        };
+        if (!bubbleIteration.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
+                if (!value.getFinished() && value.getPlunderType() == PlunderTypes.SOUND.id) {
+                    if (!value.isRemoved() && value.isAlive() && value.getEntityStolen() == entity.getId()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     @Inject(method = "playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSeededSound(Entity $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
         if(this.roundabout$isSoundPlundered($$1)){
             SoftAndWetPlunderBubbleEntity sbpe = this.roundabout$getSoundPlunderedBubble($$1);
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$2, $$3, $$4, $$5);
+            }
+            ci.cancel();
+        } else if(this.roundabout$isSoundPlunderedEntity($$0)){
+            SoftAndWetPlunderBubbleEntity sbpe = this.roundabout$getSoundPlunderedBubbleEntity($$0);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2, $$3, $$4, $$5);
             }

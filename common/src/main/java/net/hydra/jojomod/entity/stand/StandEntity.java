@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -44,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public abstract class StandEntity extends Mob{
+public abstract class StandEntity extends Mob implements NoVibrationEntity {
     /**The entity code for a stand. Not to be confused with StandPowers, which contain
      * the actual ability data of stands, this code exists more for the physical
      * entities.*/
@@ -132,6 +133,11 @@ public abstract class StandEntity extends Mob{
     @Nullable
     private LivingEntity Following;
 
+    /**No sculker noises*/
+    @Override
+    public boolean getVibration(){
+        return false;
+    }
 
     @Override
     public boolean isAffectedByPotions() {

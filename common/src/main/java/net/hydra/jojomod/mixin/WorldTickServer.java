@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.entity.EntityTickList;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -70,7 +71,16 @@ public class WorldTickServer {
             }
         });
     }
-
+    @Inject(method = "gameEvent", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$gameEvent(GameEvent $$0, Vec3 $$1, GameEvent.Context $$2, CallbackInfo ci) {
+        if(((ILevelAccess)this).roundabout$isSoundPlundered(BlockPos.containing($$1))){
+            ci.cancel();
+        } else if(((ILevelAccess)this).roundabout$isSoundPlunderedEntity($$2.sourceEntity())){
+            ci.cancel();
+        } else if($$2.sourceEntity() instanceof NoVibrationEntity NVE && !NVE.getVibration()){
+            ci.cancel();
+        }
+    }
 
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSeededSound(Player $$0, double $$1, double $$2, double $$3, Holder<SoundEvent> $$4, SoundSource $$5, float $$6, float $$7, long $$8, CallbackInfo ci) {
@@ -87,6 +97,12 @@ public class WorldTickServer {
     public void roundabout$playSeededSound2(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
         if(((ILevelAccess)this).roundabout$isSoundPlundered($$1.blockPosition())){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble($$1.blockPosition());
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
+            }
+            ci.cancel();
+        } else if(((ILevelAccess)this).roundabout$isSoundPlunderedEntity($$1)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubbleEntity($$1);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
             }

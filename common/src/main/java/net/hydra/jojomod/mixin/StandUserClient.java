@@ -125,6 +125,13 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
                                     ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
                                     ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte));
                         }
+                    } else if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(((Entity) (Object) this))){
+                            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object) this));
+                            if (sbpe !=null) {
+                                sbpe.addPlunderBubbleSounds(soundI.roundaboutSoundEvent, SoundSource.NEUTRAL,
+                                        ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
+                                        ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte));
+                            }
                     } else {
                         Minecraft.getInstance().getSoundManager().play(qSound);
                         $$2.add(new PlayedSoundInstance(soundI.roundaboutSoundEvent, soundI.roundaboutSoundByte, qSound));
@@ -161,6 +168,13 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
             if(((ILevelAccess)this.level()).roundabout$isSoundPlundered(this.blockPosition())) {
                 SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess) this.level()).roundabout$getSoundPlunderedBubble(this.blockPosition());
                 if (sbpe != null) {
+                    sbpe.addPlunderBubbleSounds(SE, SoundSource.NEUTRAL,
+                            ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundChoice),
+                            ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundChoice));
+                }
+            } else if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(((Entity) (Object) this))){
+                SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object) this));
+                if (sbpe !=null) {
                     sbpe.addPlunderBubbleSounds(SE, SoundSource.NEUTRAL,
                             ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundChoice),
                             ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundChoice));

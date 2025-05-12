@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -25,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements UnburnableProjectile {
+public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity {
     public SoftAndWetBubbleEntity(EntityType<? extends SoftAndWetBubbleEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -56,6 +58,12 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
             }
         }
     }
+
+    /**No sculker noises*/
+    @Override
+    public boolean getVibration(){
+        return false;
+    }
     public void setUser(LivingEntity User) {
         standUser = User;
         this.getEntityData().set(USER_ID, User.getId());
@@ -67,9 +75,6 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     /**Bubbles Don't alert skulk at all*/
     @Override
     public void gameEvent(GameEvent $$0, @Nullable Entity $$1) {
-        if (!$$0.equals(GameEvent.PROJECTILE_SHOOT) && !$$0.equals(GameEvent.PROJECTILE_LAND)){
-            super.gameEvent($$0,$$1);
-        }
     }
     @Override
     public float getPickRadius() {

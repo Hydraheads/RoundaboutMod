@@ -423,6 +423,12 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
             }
             ci.cancel();
+        } else if(((ILevelAccess)this).roundabout$isSoundPlunderedEntity($$1)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubbleEntity($$1);
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
+            }
+            ci.cancel();
         }
     }
     @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
