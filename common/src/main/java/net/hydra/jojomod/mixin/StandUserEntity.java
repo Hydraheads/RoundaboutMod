@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -63,6 +64,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PowderSnowBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
@@ -90,6 +92,12 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract boolean onClimbable();
+
+    @Shadow protected abstract Vec3 handleOnClimbable(Vec3 $$0);
+
+    @Shadow protected abstract float getFrictionInfluencedSpeed(float $$0);
+
     @Shadow public abstract Map<MobEffect, MobEffectInstance> getActiveEffectsMap();
 
     @Shadow public abstract boolean removeEffect(MobEffect $$0);
@@ -2098,6 +2106,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+
     @Unique
     @Override
     public boolean roundabout$isOnStandFire() {
@@ -2144,6 +2153,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$damageGuard(amount);
         }
     }
+
+    /**Soft and Wet slipperiness friction plunder*/
+    @Inject(method = "travel", at = @At(value = "TAIL"))
+    private void roundabout$travelEnd(Vec3 $$0, CallbackInfo ci) {
+        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered(this.blockPosition())){
+           if (this.onGround()){
+               this.setDeltaMovement(this.getDeltaMovement().normalize().scale(0.33));
+           }
+        }
+    }
+
 
     /**Entities who are caught in a barrage stop moving from their own volition in the x and z directions.*/
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "HEAD"))
