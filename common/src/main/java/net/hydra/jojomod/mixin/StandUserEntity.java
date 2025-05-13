@@ -2159,7 +2159,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$travelEnd(Vec3 $$0, CallbackInfo ci) {
         if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered(this.blockPosition())){
            if (this.onGround()){
-               this.setDeltaMovement((this.getDeltaMovement().add(getLookAngle()).normalize()).scale(0.33));
+               this.setDeltaMovement((this.getDeltaMovement().add(getLookAngle()).normalize()).scale(0.333));
            }
         }
     }
