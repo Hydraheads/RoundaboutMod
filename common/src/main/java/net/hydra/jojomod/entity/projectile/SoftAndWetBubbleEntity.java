@@ -36,7 +36,6 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
 
     public LivingEntity standUser;
     public UUID standUserUUID;
-    public float speed = 1f;
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.FLOAT);
     public boolean getActivated() {

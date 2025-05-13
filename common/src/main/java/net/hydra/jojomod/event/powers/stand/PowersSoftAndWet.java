@@ -155,7 +155,7 @@ public class PowersSoftAndWet extends PunchingStand {
             this.setActivePower(PowerIndex.POWER_2);
             bubble.setPlunderType(bubbleType);
             bubble.setSingular(true);
-            shootBubbleSpeed(bubble,0.15F);
+            shootBubbleSpeed(bubble,getBubbleSpeed());
             this.getSelf().level().addFreshEntity(bubble);
 
             if (bubbleType != PlunderTypes.SOUND.id) {
@@ -164,6 +164,14 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return true;
     }
+
+    public float getBubbleSpeed(){
+        if (bubbleType == PlunderTypes.OXYGEN.id){
+            return 0.6F;
+        }
+        return 0.15F;
+    }
+
     public void shootBubble(SoftAndWetBubbleEntity ankh){
         shootBubbleSpeed(ankh, 1.01F);
     }

@@ -22,6 +22,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.MagmaBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -75,6 +76,13 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 this.setBlockPos($$0.getBlockPos().above());
                 this.setBlockPos($$0.getBlockPos());
                 setFloating();
+            } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
+                if (this.standUser != null) {
+                    if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
+                        airSupply = this.standUser.getMaxAirSupply();
+                        startReturning();
+                    }
+                }
             } else {
                 super.onHitBlock($$0);
             }
@@ -233,8 +241,34 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         super.tick();
 
+        if (!this.getReturning() && !this.level().isClientSide()){
+            if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
+                if (this.standUser != null) {
+                    if (this.standUser.isUnderWater() && this.level().getBlockState(this.blockPosition()).isAir()){
+                        airSupply = this.standUser.getMaxAirSupply();
+                        startReturning();
+                    }
+                }
+            }
+        }
+
         if (this.getFinished()){
             this.discard();
+        } else if (this.getReturning() && !this.level().isClientSide()){
+            if (this.standUser != null) {
+                if (this.distanceTo(standUser) < 1){
+                    int maxSupply = this.standUser.getMaxAirSupply();
+                    int supply = this.standUser.getAirSupply();
+                    if (supply < maxSupply){
+                        supply+= airSupply;
+                        if (supply > maxSupply){
+                            supply = maxSupply;
+                        }
+                        this.standUser.setAirSupply(supply);
+                    }
+                    popBubble();
+                }
+            }
         }
     }
 
