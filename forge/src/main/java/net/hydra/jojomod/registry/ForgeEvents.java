@@ -289,6 +289,8 @@ public class ForgeEvents {
         ModParticles.CINDERELLA_GLOW = ForgeParticles.CINDERELLA_GLOW.get();
         ModParticles.PINK_SMOKE = ForgeParticles.PINK_SMOKE.get();
         ModParticles.BUBBLE_POP = ForgeParticles.BUBBLE_POP.get();
+        ModParticles.PLUNDER = ForgeParticles.PLUNDER.get();
+        ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;

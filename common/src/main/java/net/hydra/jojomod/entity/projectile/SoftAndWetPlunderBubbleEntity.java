@@ -84,6 +84,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
         }
+
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(ModParticles.PLUNDER,
+                    this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                    10, 0.2, 0.2, 0.2, 0.015);
+        }
         this.setActivated(true);
         this.setDeltaMovement(0, 0.01, 0);
     }
@@ -129,7 +135,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
             if (!this.level().isClientSide()){
                 ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
-                        this.getX(), this.getY() + this.getBbHeight()*0.5, this.getZ(),
+                        this.getX(), this.getY() + this.getBbHeight()*0.6, this.getZ(),
                         1, 0, 0,0, 0.015);
             }
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,

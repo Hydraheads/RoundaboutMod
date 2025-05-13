@@ -81,6 +81,14 @@ public class ForgeParticles {
             "soft_bubble_pop",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> PLUNDER = PARTICLES.register(
+            "plunder",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> FRICTIONLESS = PARTICLES.register(
+            "frictionless",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> D4C_LINES = PARTICLES.register(
             "d4c_lines",
             () -> new SimpleParticleType(true)
