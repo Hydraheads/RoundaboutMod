@@ -53,6 +53,12 @@
       "roundabout:bubble_create"
     ]
   },
+  "bubble_plunder": {
+    "subtitle": "sounds.roundabout.bubble_plunder",
+    "sounds": [
+      "roundabout:bubble_plunder"
+    ]
+  },
   "dio_kurei": {
     "subtitle": "sounds.roundabout.dio_kurei",
     "sounds": [

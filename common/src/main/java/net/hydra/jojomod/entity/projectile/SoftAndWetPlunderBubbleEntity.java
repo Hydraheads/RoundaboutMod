@@ -80,8 +80,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
 
     public void setFloating(){
+        if (this.getPlunderType() != PlunderTypes.SOUND.id) {
+            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT,
+                    SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+        }
         this.setActivated(true);
-        this.setDeltaMovement(0,0.01,0);
+        this.setDeltaMovement(0, 0.01, 0);
     }
 
     public void popSounds(){
@@ -147,6 +151,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
         }
     }
+
+    public boolean isArrayAdded = false;
     @Override
     public void tick() {
 
@@ -159,11 +165,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
 
         if (this.getActivated()){
-            if (this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id){
-                if (getEntityStolen() <= 0) {
-                    ((ILevelAccess) this.level()).roundabout$addPlunderBubble(this);
-                } else {
-                    ((ILevelAccess) this.level()).roundabout$addPlunderBubbleEntity(this);
+            if (this.level().isClientSide() || !isArrayAdded) {
+                if (this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) {
+                    if (getEntityStolen() <= 0) {
+                        ((ILevelAccess) this.level()).roundabout$addPlunderBubble(this);
+                        isArrayAdded = true;
+                    } else {
+                        ((ILevelAccess) this.level()).roundabout$addPlunderBubbleEntity(this);
+                        isArrayAdded = true;
+                    }
                 }
             }
         }

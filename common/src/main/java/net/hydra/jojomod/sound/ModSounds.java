@@ -149,6 +149,10 @@ public class ModSounds {
     public static final ResourceLocation BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_CREATE);
     public static SoundEvent BUBBLE_CREATE_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_CREATE_ID);
 
+    public static final String BUBBLE_PLUNDER = "bubble_plunder";
+    public static final ResourceLocation BUBBLE_PLUNDER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_PLUNDER);
+    public static SoundEvent BUBBLE_PLUNDER_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_PLUNDER_ID);
+
     public static final String KNIFE_IMPACT_GROUND = "knife_impact_ground";
     public static final ResourceLocation KNIFE_IMPACT_GROUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KNIFE_IMPACT_GROUND);
     public static SoundEvent KNIFE_IMPACT_GROUND_EVENT = SoundEvent.createVariableRangeEvent(KNIFE_IMPACT_GROUND_ID);

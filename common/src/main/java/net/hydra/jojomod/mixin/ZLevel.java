@@ -31,14 +31,45 @@ public class ZLevel implements ILevelAccess {
     public List<SoftAndWetPlunderBubbleEntity> roundabout$entityPlunderBubbles = new ArrayList<>();
 
     @Unique
+    public List<SoftAndWetPlunderBubbleEntity> roundabout$frictionBubbles = new ArrayList<>();
+    @Unique
+    public List<SoftAndWetPlunderBubbleEntity> roundabout$entityFrictionBubbles = new ArrayList<>();
+
+    @Unique
     public void roundabout$addPlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
         roundabout$bubbleInit();
-        roundabout$plunderBubbles.add(plunder);
+
+        if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.FRICTION.id) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$frictionBubbles) {
+            };
+            if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
+                roundabout$frictionBubbles.add(plunder);
+            }
+        } else if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.SOUND.id) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
+            };
+            if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
+                roundabout$plunderBubbles.add(plunder);
+            }
+        }
     }
     @Unique
     public void roundabout$addPlunderBubbleEntity(SoftAndWetPlunderBubbleEntity plunder){
         roundabout$bubbleInit();
-        roundabout$entityPlunderBubbles.add(plunder);
+
+        if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.FRICTION.id) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityFrictionBubbles) {
+            };
+            if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
+                roundabout$entityFrictionBubbles.add(plunder);
+            }
+        } else if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.SOUND.id) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+            };
+            if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
+                roundabout$entityPlunderBubbles.add(plunder);
+            }
+        }
     }
     @Unique
     public void roundabout$removePlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
@@ -56,6 +87,10 @@ public class ZLevel implements ILevelAccess {
         if (roundabout$plunderBubbles == null) {
             roundabout$plunderBubbles = new ArrayList<>();
         } if (roundabout$entityPlunderBubbles == null) {
+            roundabout$entityPlunderBubbles = new ArrayList<>();
+        }if (roundabout$frictionBubbles == null) {
+            roundabout$plunderBubbles = new ArrayList<>();
+        } if (roundabout$entityFrictionBubbles == null) {
             roundabout$entityPlunderBubbles = new ArrayList<>();
         }
     }
@@ -82,12 +117,30 @@ public class ZLevel implements ILevelAccess {
                 }
             }
         }
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration3 = new ArrayList<>(roundabout$entityFrictionBubbles) {
+        };
+        if (!bubbleIteration3.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration3) {
+                if (value.isRemoved() || !value.isAlive()) {
+                    roundabout$entityFrictionBubbles.remove(value);
+                }
+            }
+        }
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration4 = new ArrayList<>(roundabout$frictionBubbles) {
+        };
+        if (!bubbleIteration4.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration4) {
+                if (value.isRemoved() || !value.isAlive()) {
+                    roundabout$frictionBubbles.remove(value);
+                }
+            }
+        }
     }
 
     @Unique
     public boolean roundabout$isFrictionPlundered(BlockPos blockPos){
         roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$frictionBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
