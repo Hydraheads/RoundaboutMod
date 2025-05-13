@@ -155,7 +155,7 @@ public class ZLevel implements ILevelAccess {
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
                 if (!value.getFinished() && value.getPlunderType() == PlunderTypes.SOUND.id) {
-                    if (!value.isRemoved() && value.isAlive() && value.getEntityStolen() == entity.getId()) {
+                    if (!value.isRemoved() && value.isAlive() && entity !=null && value.getEntityStolen() == entity.getId()) {
                             return value;
                     }
                 }
@@ -171,7 +171,7 @@ public class ZLevel implements ILevelAccess {
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
                 if (!value.getFinished() && value.getPlunderType() == PlunderTypes.SOUND.id) {
-                    if (!value.isRemoved() && value.isAlive() && value.getEntityStolen() == entity.getId()) {
+                    if (!value.isRemoved() && value.isAlive() && entity !=null && value.getEntityStolen() == entity.getId()) {
                         return true;
                     }
                 }
