@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.StoredSoundInstance;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
@@ -122,7 +123,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     ModPacketHandler.PACKET_ACCESS.sendIntPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_BUBBLE_FINISH,this.getId());
                 }
             }
-
+            if (!this.level().isClientSide()){
+                ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        this.getX(), this.getY() + this.getBbHeight()*0.5, this.getZ(),
+                        1, 0, 0,0, 0.015);
+            }
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             popSounds();

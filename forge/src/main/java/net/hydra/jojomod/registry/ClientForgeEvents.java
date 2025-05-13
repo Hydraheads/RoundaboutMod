@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.substand.LifeTrackerModel;
 import net.hydra.jojomod.entity.substand.LifeTrackerRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.particles.*;
+import net.minecraft.client.particle.BubblePopParticle;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -154,6 +155,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CINDERELLA_GLOW.get(), CinderellaGlowParticle.CinderellaGlowProvider::new);
         event.registerSpriteSet(ForgeParticles.PINK_SMOKE.get(), CinderellaSmokeParticle.CosyProvider::new);
+        event.registerSpriteSet(ForgeParticles.BUBBLE_POP.get(), SoftBubblePopParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.D4C_LINES.get(), D4CLinesParticle.Provider::new);
     }
 }

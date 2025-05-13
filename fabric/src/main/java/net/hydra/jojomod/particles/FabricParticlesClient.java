@@ -1,10 +1,7 @@
 package net.hydra.jojomod.particles;
 
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.minecraft.client.particle.CampfireSmokeParticle;
-import net.minecraft.client.particle.EndRodParticle;
-import net.minecraft.client.particle.ExplodeParticle;
-import net.minecraft.client.particle.FlameParticle;
+import net.minecraft.client.particle.*;
 
 public class FabricParticlesClient {
     public static void registerClientParticles(){
@@ -27,5 +24,6 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.CINDERELLA_GLOW, CinderellaGlowParticle.CinderellaGlowProvider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.D4C_LINES, D4CLinesParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PINK_SMOKE, CinderellaSmokeParticle.CosyProvider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.BUBBLE_POP, SoftBubblePopParticle.Provider::new);
     }
 }

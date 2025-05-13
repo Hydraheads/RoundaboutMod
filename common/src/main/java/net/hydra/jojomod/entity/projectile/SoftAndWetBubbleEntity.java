@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -12,6 +13,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
@@ -140,7 +142,11 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     public void popBubble(){
         this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                 SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
-
+        if (!this.level().isClientSide()){
+            ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    1, 0, 0,0, 0.015);
+        }
         this.discard();
     }
     @Override
