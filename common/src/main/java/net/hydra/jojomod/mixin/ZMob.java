@@ -315,8 +315,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     protected int roundabout$unseenMemoryTicks = 300;
 
+
+
     @Unique
     protected double roundabout$getFollowDistance() {
+        /**Soft and Wet Plunder sight*/
+        if (((StandUser)this).roundabout$getEyeSightTaken() != null && this.getLastHurtByMob() == null){
+            return (this.getAttributeValue(Attributes.FOLLOW_RANGE)*0.07);
+        }
         return this.getAttributeValue(Attributes.FOLLOW_RANGE);
     }
 

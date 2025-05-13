@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.StoredSoundInstance;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -167,6 +168,16 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             } else if (this.getPlunderType() == PlunderTypes.FRICTION.id){
                 this.setEntityStolen($$0.getEntity().getId());
                 setFloating();
+            } else if (this.getPlunderType() == PlunderTypes.SIGHT.id){
+                if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getEyeSightTaken() == null &&
+                MainUtil.canHaveSightTaken(LE)) {
+                    this.setEntityStolen($$0.getEntity().getId());
+                    ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
+                    ((StandUser)LE).roundabout$setEyeSightTaken(this);
+                    setFloating();
+                } else {
+                    super.onHitEntity($$0);
+                }
             } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
                 if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()){
                     int supply = $$0.getEntity().getAirSupply();
@@ -175,6 +186,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         $$0.getEntity().setAirSupply(0);
                         startReturning();
                     }
+                } else {
+                    super.onHitEntity($$0);
                 }
             } else {
                 super.onHitEntity($$0);

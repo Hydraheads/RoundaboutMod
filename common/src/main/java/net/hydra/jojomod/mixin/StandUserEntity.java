@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -92,6 +93,12 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract void setLastHurtMob(Entity $$0);
+
+    @Shadow public abstract void setLastHurtByPlayer(@Nullable Player $$0);
+
+    @Shadow public abstract void setLastHurtByMob(@Nullable LivingEntity $$0);
+
     @Shadow public abstract boolean onClimbable();
 
     @Shadow protected abstract Vec3 handleOnClimbable(Vec3 $$0);
@@ -138,6 +145,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public int roundabout$remainingFireTicks = -1;
     @Unique
     public LivingEntity roundabout$fireStarter;
+    @Unique
+    public SoftAndWetPlunderBubbleEntity roundabout$eyeSightTaken;
     @Unique
     public int roundabout$fireStarterID;
 
@@ -319,6 +328,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setThrower(LivingEntity thrower) {
         this.roundabout$thrower = thrower;
+    }
+    @Unique
+    @Override
+    public void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble) {
+        this.roundabout$eyeSightTaken = bubble;
+    }
+    @Unique
+    @Override
+    public SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken() {
+        return this.roundabout$eyeSightTaken;
     }
 
     @Unique
@@ -845,6 +864,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return $$11;
     }
 
+    @Unique
+    public boolean roundabout$queForTargetDeletion = false;
+    @Unique
+    @Override
+    public void roundabout$deeplyRemoveAttackTarget(){
+        this.setLastHurtByMob(null);
+        this.setLastHurtByPlayer(null);
+        this.setLastHurtMob(null);
+        if (((LivingEntity)(Object)this) instanceof Mob mb){
+            mb.setTarget(null);
+        }
+        roundabout$queForTargetDeletion = true;
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getQueForTargetDeletion(){
+        if (roundabout$queForTargetDeletion){
+            roundabout$queForTargetDeletion = false;
+            return true;
+        }
+        return false;
+    }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
 
@@ -855,6 +896,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
                             OffsetIndex.OffsetStyle(this.roundabout$getStand().getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
                 this.roundabout$summonStand(this.level(),true,false);
+            }
+
+            if (roundabout$getEyeSightTaken() != null){
+                if (roundabout$getEyeSightTaken().isRemoved() || !roundabout$getEyeSightTaken().isAlive()){
+                    roundabout$setEyeSightTaken(null);
+                }
             }
         } else {
             int dt = roundabout$detectTicks;

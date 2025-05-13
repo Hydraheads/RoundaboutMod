@@ -42,9 +42,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -119,7 +121,7 @@ public class MainUtil {
         return ClientNetworking.getAppropriateConfig().worthyMobOdds;
     }
     public static double getStandUserOdds(Mob mob) {
-        if (mob instanceof Warden || mob instanceof WitherBoss || mob instanceof EnderDragon
+        if (isBossMob(mob)
                 || mob instanceof Vex){
             return 0;
         } else if (mob instanceof AbstractVillager){
@@ -1071,6 +1073,19 @@ public class MainUtil {
         float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance
         float distance = phi > 180 ? 360 - phi : phi;
         return distance;
+    }
+
+    public static boolean canHaveSightTaken(LivingEntity LE){
+        if (LE instanceof Sniffer || LE instanceof Bat || LE instanceof Dolphin){
+            return false;
+        }
+        return !(isBossMob(LE));
+    }
+    public static boolean isBossMob(LivingEntity LE){
+        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss){
+            return true;
+        }
+        return false;
     }
 
     public static Entity AttackHitboxNear(Entity User, List<Entity> entities, float distance) {

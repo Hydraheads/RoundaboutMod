@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers;
 
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -17,8 +18,11 @@ public interface StandUser {
     /**This is in a LivingEntity Mixin, granting every living entity stand related functions and ddta.
      * Minimize the amount of synced data to just things you really need.*/
     boolean roundabout$hasStandOut();
+    void roundabout$deeplyRemoveAttackTarget();
+    boolean roundabout$getQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
-
+    void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);
+    SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken();
     LivingEntity roundabout$getEmulator();
     void roundabout$setEmulator(LivingEntity le);
 
