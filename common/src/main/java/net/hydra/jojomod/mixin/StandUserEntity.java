@@ -2170,7 +2170,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                Vec3 rigY = getLookAngle();
                rigY = new Vec3(rigY.x,0,rigY.z);
 
-               this.setDeltaMovement((this.getDeltaMovement().add(rigY).normalize()).scale(0.333));
+               this.setDeltaMovement((this.getDeltaMovement().add(rigY).normalize()).scale(0.36));
            }
         }
     }
