@@ -202,7 +202,8 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Inject(method = "walkingStepSound(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
     public void roundabout$walkingStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci){
-        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered($$0)){
+        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered($$0) ||
+        ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))){
             ci.cancel();
         }
     }

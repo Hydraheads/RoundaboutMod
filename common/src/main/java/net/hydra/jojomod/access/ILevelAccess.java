@@ -11,6 +11,7 @@ public interface ILevelAccess {
     void roundabout$removePlunderBubble(SoftAndWetPlunderBubbleEntity plunder);
     void roundabout$tickPlunderBubbleRemoval();
     boolean roundabout$isFrictionPlundered(BlockPos blockPos);
+    boolean roundabout$isFrictionPlunderedEntity(Entity entity);
     boolean roundabout$isSoundPlundered(BlockPos blockPos);
     SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubble(BlockPos blockPos);
     SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubbleEntity(Entity entity);

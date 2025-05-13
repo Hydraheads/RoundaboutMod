@@ -232,6 +232,22 @@ public class ZLevel implements ILevelAccess {
         }
         return false;
     }
+    @Unique
+    public boolean roundabout$isFrictionPlunderedEntity(Entity entity){
+        roundabout$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityFrictionBubbles) {
+        };
+        if (!bubbleIteration.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
+                if (!value.getFinished() && value.getPlunderType() == PlunderTypes.FRICTION.id) {
+                    if (!value.isRemoved() && value.isAlive() && entity !=null && value.getEntityStolen() == entity.getId()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     @Inject(method = "playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSeededSound(Entity $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {

@@ -2157,7 +2157,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Soft and Wet slipperiness friction plunder*/
     @Inject(method = "travel", at = @At(value = "TAIL"))
     private void roundabout$travelEnd(Vec3 $$0, CallbackInfo ci) {
-        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered(this.blockPosition())){
+        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
+                ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(this)
+        ){
            if (this.onGround()){
 
                if (!this.level().isClientSide()) {
