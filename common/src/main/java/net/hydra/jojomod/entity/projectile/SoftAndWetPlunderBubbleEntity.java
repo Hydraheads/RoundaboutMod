@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -35,6 +36,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<Boolean> FINISHED = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> ENTITY_STOLEN = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> SINGULAR = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> RETURNING = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
     public List<StoredSoundInstance> bubbleSounds = new ArrayList<>();
@@ -68,7 +70,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (!getFinished()) {
+        if (!getFinished() && !getReturning()) {
             if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()) {
                 this.setBlockPos($$0.getBlockPos().above());
                 this.setBlockPos($$0.getBlockPos());
@@ -146,19 +148,52 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         this.discard();
     }
+    public int airSupply = 0;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())) {
+        if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())
+                && !getReturning()) {
             if (this.getPlunderType() == PlunderTypes.SOUND.id) {
                 this.setEntityStolen($$0.getEntity().getId());
                 setFloating();
             } else if (this.getPlunderType() == PlunderTypes.FRICTION.id){
                 this.setEntityStolen($$0.getEntity().getId());
                 setFloating();
+            } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
+                if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()){
+                    int supply = $$0.getEntity().getAirSupply();
+                    if (supply > 0){
+                        airSupply = supply;
+                        $$0.getEntity().setAirSupply(0);
+                        startReturning();
+                    }
+                }
             } else {
                 super.onHitEntity($$0);
             }
         }
+    }
+
+    public void returnToUser(){
+        if (this.standUser != null) {
+            this.setDeltaMovement(this.getPosition(0).subtract(this.standUser.position()).reverse().normalize().scale(0.5));
+        }
+    }
+
+
+    public void startReturning(){
+        if (this.getPlunderType() != PlunderTypes.SOUND.id) {
+            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT,
+                    SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+        }
+
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(ModParticles.PLUNDER,
+                    this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                    10, 0.2, 0.2, 0.2, 0.015);
+        }
+        setReturning(true);
+        returnToUser();
     }
 
     public boolean isArrayAdded = false;
@@ -185,12 +220,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     }
                 }
             }
-        }
-
+        } else if (this.getReturning()){
+            returnToUser();
+        } else {
             Entity owner = this.getOwner();
             if (getSingular() && this.getOwner() != null && !this.getActivated()) {
                 this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
             }
+        }
+
 
 
         super.tick();
@@ -232,6 +270,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void setSingular(boolean single) {
         this.getEntityData().set(SINGULAR, single);
     }
+    public boolean getReturning() {
+        return this.getEntityData().get(RETURNING);
+    }
+    public void setReturning(boolean single) {
+        this.getEntityData().set(RETURNING, single);
+    }
     public int getEntityStolen() {
         return this.getEntityData().get(ENTITY_STOLEN);
     }
@@ -246,6 +290,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.entityData.define(BLOCK_POS, BlockPos.ZERO);
             this.entityData.define(FINISHED, false);
             this.entityData.define(SINGULAR, false);
+            this.entityData.define(RETURNING, false);
             this.entityData.define(ENTITY_STOLEN, -1);
         }
     }
