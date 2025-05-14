@@ -144,11 +144,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     ModPacketHandler.PACKET_ACCESS.sendIntPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_BUBBLE_FINISH,this.getId());
                 }
             }
-            if (!this.level().isClientSide()){
                 ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
                         this.getX(), this.getY() + this.getBbHeight()*0.6, this.getZ(),
                         1, 0, 0,0, 0.015);
-            }
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             popSounds();

@@ -87,7 +87,7 @@ public class ClientUtil {
             Entity target = player.level().getEntity(data);
             if (target instanceof SoftAndWetPlunderBubbleEntity IE) {
                 IE.setFinished(true);
-                IE.popSounds();
+                popSounds = IE;
             }
         }
     }
@@ -214,6 +214,7 @@ public class ClientUtil {
         return  -1;
     }
     public static int wasFrozen = 0;
+    public static SoftAndWetPlunderBubbleEntity popSounds = null;
     public static boolean getWasFrozen(){
         return wasFrozen != 0;
     }
