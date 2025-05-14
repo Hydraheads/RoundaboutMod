@@ -144,6 +144,7 @@
     "ZScreenEffectRenderer",
     "ZScreenShaking",
     "ZSkeletonRenderer",
+    "ZSoundManager",
     "ZTimeStopTextureFreeze",
     "ZWindowMixin",
     "ZWorldRenderer"
