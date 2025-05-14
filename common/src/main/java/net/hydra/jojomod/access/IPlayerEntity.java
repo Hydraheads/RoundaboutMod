@@ -10,7 +10,8 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IPlayerEntity {
     Inventory roundabout$GetInventory();
-
+    boolean roundabout$getBlinded();
+    void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
     int roundabout$getAirTime();
     int roundabout$getClientDodgeTime();

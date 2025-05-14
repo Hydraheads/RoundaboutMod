@@ -4,6 +4,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IClientLevel;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -16,12 +17,14 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.material.FogType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -49,6 +52,19 @@ public class ZFogRenderer {
     private static int previousBiomeFog;
     @Shadow
     private static long biomeChangedTime;
+
+    @Unique
+    private static boolean roundabout$tempBlind = false;
+
+    @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At(value = "TAIL"))
+    private static void roundabout$setupFogTail(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
+        if (roundabout$tempBlind){
+            roundabout$tempBlind = false;
+            if ($$0.getEntity() instanceof Player PE){
+                PE.removeEffect(MobEffects.BLINDNESS);
+            }
+        }
+    }
     @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At(value = "HEAD"),cancellable = true)
     private static void roundabout$setupFog(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
         if (Minecraft.getInstance().player != null){
@@ -56,10 +72,10 @@ public class ZFogRenderer {
             IClientLevel icl = ((IClientLevel) lvl);
             float skyLerp = icl.roundabout$getSkyLerp();
             float maxSkyLerp = icl.roundabout$getMaxSkyLerp();
+            Entity $$6 = $$0.getEntity();
             if (skyLerp > 0){
 
                 FogType $$5 = $$0.getFluidInCamera();
-                Entity $$6 = $$0.getEntity();
                 float fogCutRange = 60f;
                 if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()){
                     fogCutRange = 140;

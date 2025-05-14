@@ -333,6 +333,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble) {
         this.roundabout$eyeSightTaken = bubble;
+        if (((LivingEntity)(Object)this) instanceof Player PL){
+            if (bubble == null){
+                ((IPlayerEntity) PL).roundabout$setBlinded(false);
+            } else {
+                ((IPlayerEntity) PL).roundabout$setBlinded(true);
+            }
+        }
     }
     @Unique
     @Override
@@ -899,8 +906,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
             if (roundabout$getEyeSightTaken() != null){
+                MobEffectInstance mobInstance = this.getEffect(MobEffects.BLINDNESS);
                 if (roundabout$getEyeSightTaken().isRemoved() || !roundabout$getEyeSightTaken().isAlive()){
                     roundabout$setEyeSightTaken(null);
+                    if (mobInstance != null){
+                        if (mobInstance.isInfiniteDuration()){
+                            this.removeEffect(MobEffects.BLINDNESS);
+                        }
+                    }
+                } else {
+                    if (mobInstance == null){
+                        this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, -1, 1));
+                    }
                 }
             }
         } else {

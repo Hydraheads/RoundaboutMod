@@ -541,6 +541,14 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     @Inject(method = "getSkyColor", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$getSkyColor(Vec3 cameraPos, float tickDelta, CallbackInfoReturnable<Vec3> cir) {
         if (minecraft.player != null) {
+
+            /**
+            if (((IPlayerEntity)minecraft.player).roundabout$getBlinded()){
+                cir.setReturnValue(new Vec3(-40,-40,-40));
+                return;
+            }
+             **/
+
             if (roundabout$skyLerp >= 1) {
                 float lerp = tickDelta;
                 if (!((IPermaCasting) minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)) {

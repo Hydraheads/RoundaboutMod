@@ -127,6 +127,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_CONTROLLING = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$IS_BLINDED = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BOOLEAN);
 
     @Shadow
     @Final
@@ -452,6 +455,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public void roundabout$setIsControlling(int pilot){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$IS_CONTROLLING, pilot);
+    }
+    @Override
+    @Unique
+    public boolean roundabout$getBlinded(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$IS_BLINDED);
+    }
+    @Override
+    @Unique
+    public void roundabout$setBlinded(boolean blinded){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$IS_BLINDED, blinded);
     }
 
     @Override
@@ -1139,6 +1152,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BLINDED, false);
         }
     }
 

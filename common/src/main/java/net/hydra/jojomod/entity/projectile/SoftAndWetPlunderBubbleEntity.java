@@ -170,8 +170,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getEyeSightTaken() == null &&
                 MainUtil.canHaveSightTaken(LE)) {
                     this.setEntityStolen($$0.getEntity().getId());
-                    ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
-                    ((StandUser)LE).roundabout$setEyeSightTaken(this);
+                    if (!this.level().isClientSide()) {
+                        ((StandUser) LE).roundabout$deeplyRemoveAttackTarget();
+                        ((StandUser) LE).roundabout$setEyeSightTaken(this);
+                    }
                     setFloating();
                 } else {
                     super.onHitEntity($$0);

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 
 import com.mojang.authlib.GameProfile;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -27,6 +28,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
@@ -150,6 +152,13 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
         if (((StandUser) this).roundabout$isClashing()) {
             ci.cancel();
         }
+    }
+
+
+    /**Soft and Wet blindness disables sprinting like actual blindness*/
+    @Inject(method = "canStartSprinting", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$canStartSprinting(CallbackInfoReturnable<Boolean> cir) {
+
     }
 
     /**If you are stopping time, make it so that you gain a block placement cooldown for blocks with
