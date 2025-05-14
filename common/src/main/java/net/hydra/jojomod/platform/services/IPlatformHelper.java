@@ -30,6 +30,7 @@ public interface IPlatformHelper {
      */
     boolean isDevelopmentEnvironment();
 
+    boolean getBoss(LivingEntity LE);
     /**
      * Gets the name of the environment type as a string.
      *

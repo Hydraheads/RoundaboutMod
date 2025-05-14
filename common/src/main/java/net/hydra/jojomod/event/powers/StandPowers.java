@@ -23,6 +23,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -1379,7 +1380,7 @@ public class StandPowers {
         if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
             /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
             return;
-        } else if (entity instanceof EnderDragon || entity instanceof WitherBoss){
+        } else if (MainUtil.isBossMob(entity)){
             /*Bosses can't be dazed**/
             return;
         }
