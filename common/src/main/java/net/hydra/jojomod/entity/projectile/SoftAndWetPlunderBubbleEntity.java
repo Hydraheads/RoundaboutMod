@@ -298,6 +298,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             supply = maxSupply;
                         }
                         this.standUser.setAirSupply(supply);
+
+                        this.level().playSound(null, this.blockPosition(), ModSounds.AIR_BUBBLE_EVENT,
+                                SoundSource.PLAYERS, 2F, (float) (1.1 + (Math.random() * 0.04)));
                     }
                     popBubble();
                 }

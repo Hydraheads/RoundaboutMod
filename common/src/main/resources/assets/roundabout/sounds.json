@@ -59,6 +59,12 @@
       "roundabout:bubble_plunder"
     ]
   },
+  "air_bubble": {
+    "subtitle": "sounds.roundabout.air_bubble",
+    "sounds": [
+      "roundabout:air_bubble"
+    ]
+  },
   "dio_kurei": {
     "subtitle": "sounds.roundabout.dio_kurei",
     "sounds": [
