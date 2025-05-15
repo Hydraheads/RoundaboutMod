@@ -216,6 +216,44 @@ public class ZLevel implements ILevelAccess {
         }
         return null;
     }
+
+
+    @Unique
+    public void roundabout$raptureBubbles(BlockPos pos){
+        roundabout$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+        };
+        if (!bubbleIteration.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
+                if (!value.getFinished() && value.getPlunderType() == PlunderTypes.SOUND.id) {
+                    if (!value.isRemoved() && value.isAlive()) {
+                        BlockPos bpos2 = value.getBlockPos();
+                        if (MainUtil.cheapDistanceTo(pos.getX(),pos.getY(),pos.getZ(),
+                                bpos2.getX(),bpos2.getY(),bpos2.getZ()) < 50){
+                            value.popBubble();
+                        }
+                    }
+                }
+            }
+        }
+
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration2 = new ArrayList<>(roundabout$plunderBubbles) {
+        };
+        if (!bubbleIteration2.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration2) {
+                if (!value.getFinished() && value.getPlunderType() == PlunderTypes.SOUND.id) {
+                    if (!value.isRemoved() && value.isAlive()) {
+                        BlockPos bpos2 = value.getBlockPos();
+                        if (MainUtil.cheapDistanceTo(pos.getX(),pos.getY(),pos.getZ(),
+                                bpos2.getX(),bpos2.getY(),bpos2.getZ()) < 50){
+                            value.popBubble();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Unique
     public boolean roundabout$isSoundPlunderedEntity(Entity entity){
         roundabout$bubbleInit();

@@ -16,4 +16,5 @@ public interface ILevelAccess {
     SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubble(BlockPos blockPos);
     SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubbleEntity(Entity entity);
     boolean roundabout$isSoundPlunderedEntity(Entity entity);
+    void roundabout$raptureBubbles(BlockPos pos);
 }
