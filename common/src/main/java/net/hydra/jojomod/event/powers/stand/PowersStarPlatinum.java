@@ -1354,10 +1354,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     public boolean starFinger(){
         StandEntity stand = getStandEntity(this.self);
+        ticksForFinger = 100;
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
-            ticksForFinger = 100;
             double rand = Math.random();
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
             if (skn == StarPlatinumEntity.OVA_SKIN ||
