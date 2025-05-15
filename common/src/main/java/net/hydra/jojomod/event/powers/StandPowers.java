@@ -2102,7 +2102,7 @@ public class StandPowers {
         float f = 1.0f;
         AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
 
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(User, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(User, vec3d, vec3d3, box, entity -> !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable(), reach*reach);
         if (entityHitResult != null){
             Entity hitResult = entityHitResult.getEntity();
             if (hitResult.isAlive() && !hitResult.isRemoved() && !hitResult.is(User)) {
@@ -2119,7 +2119,7 @@ public class StandPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
             for (Entity value : entities) {
-                if (!value.showVehicleHealth() || (!value.isPickable() && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
+                if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
                         || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
                 || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
                         ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value))){
@@ -2246,10 +2246,9 @@ public class StandPowers {
     public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
         float nearestDistance = -1;
         Entity nearestMob = null;
-
         if (entities != null){
             for (Entity value : entities) {
-                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (value.isPickable() || value instanceof StandEntity)){
+                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)){
                     if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
                         float distanceTo = value.distanceTo(User);
                         float range = this.getReach();

@@ -161,13 +161,17 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())
                 && !getReturning()) {
             if (this.getPlunderType() == PlunderTypes.SOUND.id) {
-                this.setEntityStolen($$0.getEntity().getId());
-                setFloating();
-            } else if (this.getPlunderType() == PlunderTypes.FRICTION.id){
-                if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getEyeSightTaken() == null &&
-                        MainUtil.canHaveFrictionTaken(LE)) {
+                if (!((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
                     this.setEntityStolen($$0.getEntity().getId());
                     setFloating();
+                }
+            } else if (this.getPlunderType() == PlunderTypes.FRICTION.id){
+                if ($$0.getEntity() instanceof LivingEntity LE &&
+                        MainUtil.canHaveFrictionTaken(LE)) {
+                    if (!((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
+                        this.setEntityStolen($$0.getEntity().getId());
+                        setFloating();
+                    }
                 }
             } else if (this.getPlunderType() == PlunderTypes.SIGHT.id){
                 if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getEyeSightTaken() == null &&

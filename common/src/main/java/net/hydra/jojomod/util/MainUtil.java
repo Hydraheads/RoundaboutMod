@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -77,10 +78,13 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class MainUtil {
     /**Additional math functions for the mod.*/
@@ -1083,6 +1087,98 @@ public class MainUtil {
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         return !(isBossMob(LE));
+    }
+    public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {
+        Vec3 $$2 = $$0.getDeltaMovement();
+        Level $$3 = $$0.level();
+        Vec3 $$4 = $$0.position();
+        return getHitResult($$4, $$0, $$1, $$2, $$3);
+    }
+
+    public static boolean isStandPickable(Entity entity){
+        if (entity instanceof SoftAndWetBubbleEntity sbe){
+            if (entity.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getUserID()){
+                return false;
+            } else {
+                return sbe.getActivated();
+            }
+        }
+        return entity.isPickable();
+    }
+
+    private static HitResult getHitResult(Vec3 $$0, Entity $$1, Predicate<Entity> $$2, Vec3 $$3, Level $$4) {
+        Vec3 $$5 = $$0.add($$3);
+        HitResult $$6 = $$4.clip(new ClipContext($$0, $$5, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, $$1));
+        if ($$6.getType() != HitResult.Type.MISS) {
+            $$5 = $$6.getLocation();
+        }
+
+        HitResult $$7 = getEntityHitResult($$4, $$1, $$0, $$5, $$1.getBoundingBox().expandTowards($$3).inflate(1.5), $$2);
+        if ($$7 != null) {
+            $$6 = $$7;
+        }
+
+        return $$6;
+    }
+
+    @Nullable
+    public static EntityHitResult getEntityHitResult(Level $$0, Entity $$1, Vec3 $$2, Vec3 $$3, AABB $$4, Predicate<Entity> $$5, float $$6) {
+        double $$7 = Double.MAX_VALUE;
+        Entity $$8 = null;
+
+        for (Entity $$9 : $$0.getEntities($$1, $$4, $$5)) {
+            AABB $$10 = $$9.getBoundingBox().inflate((double)$$6);
+            Optional<Vec3> $$11 = $$10.clip($$2, $$3);
+            if ($$11.isPresent()) {
+                double $$12 = $$2.distanceToSqr($$11.get());
+                if ($$12 < $$7) {
+                    $$8 = $$9;
+                    $$7 = $$12;
+                }
+            }
+        }
+
+        return $$8 == null ? null : new EntityHitResult($$8);
+    }
+    @Nullable
+    public static EntityHitResult getEntityHitResult(Level $$0, Entity $$1, Vec3 $$2, Vec3 $$3, AABB $$4, Predicate<Entity> $$5) {
+        return getEntityHitResult($$0, $$1, $$2, $$3, $$4, $$5, 0.3F);
+    }
+    @Nullable
+    public static EntityHitResult getEntityHitResult(Entity $$0, Vec3 $$1, Vec3 $$2, AABB $$3, Predicate<Entity> $$4, double $$5) {
+        Level $$6 = $$0.level();
+        double $$7 = $$5;
+        Entity $$8 = null;
+        Vec3 $$9 = null;
+
+        for (Entity $$10 : $$6.getEntities($$0, $$3, $$4)) {
+            AABB $$11 = $$10.getBoundingBox().inflate((double)$$10.getPickRadius());
+            Optional<Vec3> $$12 = $$11.clip($$1, $$2);
+            if ($$11.contains($$1)) {
+                if ($$7 >= 0.0) {
+                    $$8 = $$10;
+                    $$9 = $$12.orElse($$1);
+                    $$7 = 0.0;
+                }
+            } else if ($$12.isPresent()) {
+                Vec3 $$13 = $$12.get();
+                double $$14 = $$1.distanceToSqr($$13);
+                if ($$14 < $$7 || $$7 == 0.0) {
+                    if ($$10.getRootVehicle() == $$0.getRootVehicle()) {
+                        if ($$7 == 0.0) {
+                            $$8 = $$10;
+                            $$9 = $$13;
+                        }
+                    } else {
+                        $$8 = $$10;
+                        $$9 = $$13;
+                        $$7 = $$14;
+                    }
+                }
+            }
+        }
+
+        return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
     public static boolean isBossMob(LivingEntity LE){
         if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss){
