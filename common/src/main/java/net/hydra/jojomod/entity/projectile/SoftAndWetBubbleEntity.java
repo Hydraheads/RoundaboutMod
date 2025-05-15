@@ -96,8 +96,8 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     protected ParticleOptions getTrailParticle() {
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());
     }
-    public static float eWidth=0.7f;
-    public static float eHeight=0.7f;
+    public static float eWidth=0.8f;
+    public static float eHeight=0.8f;
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         return EntityDimensions.fixed(eWidth, eHeight); // Width, Height

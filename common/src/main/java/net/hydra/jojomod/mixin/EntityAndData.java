@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -199,6 +200,19 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
 
+    }
+    @Inject(method = "moveRelative", at = @At("HEAD"), cancellable = true)
+    private void roundabout$moveRelative(float $$0, Vec3 $$1, CallbackInfo ci){
+
+        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
+                ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))
+        ){
+            if (this.onGround() && ((Entity)(Object)this) instanceof LivingEntity LE) {
+                if (!((StandUser)LE).roundabout$frictionSave().equals(Vec3.ZERO)) {
+                        ci.cancel();
+                }
+            }
+        }
     }
     @Inject(method = "walkingStepSound(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
     public void roundabout$walkingStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci){
@@ -419,6 +433,10 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow public abstract float getBbHeight();
 
     @Shadow public abstract boolean isEffectiveAi();
+
+    @Shadow public abstract boolean onGround();
+
+    @Shadow public abstract BlockPos blockPosition();
 
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
