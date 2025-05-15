@@ -168,6 +168,8 @@ public class PowersSoftAndWet extends PunchingStand {
     public float getBubbleSpeed(){
         if (bubbleType == PlunderTypes.OXYGEN.id){
             return 0.6F;
+        } else if (bubbleType == PlunderTypes.ITEM.id){
+            return 0.5F;
         }
         return 0.15F;
     }

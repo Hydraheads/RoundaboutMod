@@ -3,10 +3,13 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.StoredSoundInstance;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -22,8 +25,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.MagmaBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -258,8 +266,13 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
 
 
+        AABB BB1 = this.getBoundingBox();
 
         super.tick();
+        if (this.getPlunderType() == PlunderTypes.ITEM.id && !this.getReturning()){
+            AABB BB2 = this.getBoundingBox();
+            tryPhaseItemGrab(BB1, BB2);
+        }
 
         if (!this.getReturning() && !this.level().isClientSide()){
             if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
@@ -292,6 +305,60 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
     }
 
+    public void tryPhaseItemGrab(AABB bb1, AABB bb2){
+        if (!this.level().isClientSide) {
+            bb1 = bb1.inflate(1.6F);
+            bb2 = bb2.inflate(1.6F);
+
+            AABB $$2 = bb1.minmax(bb2);
+            List<Entity> $$3 = this.level().getEntities(this, $$2);
+            if (!$$3.isEmpty()) {
+                for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
+                    Entity $$5 = $$3.get($$4);
+                    if ($$5 instanceof ItemEntity IE) {
+                        if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock)) {
+                            this.setHeldItem(IE.getItem().copyWithCount(1));
+                            startReturning();
+
+                            IE.getItem().shrink(1);
+                            itemNearby(IE.getId());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    public final ItemStack getHeldItem() {
+        return this.entityData.get(HELD_ITEM);
+    }
+
+
+    protected static final EntityDataAccessor<ItemStack> HELD_ITEM = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class,
+            EntityDataSerializers.ITEM_STACK);
+    public final void setHeldItem(ItemStack stack) {
+        this.entityData.set(HELD_ITEM, stack);
+    }
+    public final void itemNearby(int id) {
+        if (!this.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.level());
+            Vec3 userLocation = new Vec3(this.getX(),  this.getY(), this.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_GRAB_ITEM,id);
+                }
+            }
+        }
+    }
 
     public int getPlunderType() {
         return this.getEntityData().get(PLUNDER_TYPE);
@@ -345,8 +412,21 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.entityData.define(FINISHED, false);
             this.entityData.define(SINGULAR, false);
             this.entityData.define(RETURNING, false);
+            this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
             this.entityData.define(ENTITY_STOLEN, -1);
         }
     }
 
+    @Override
+    public void remove(Entity.RemovalReason $$0) {
+        if (!this.getHeldItem().isEmpty()) {
+                double $$3 = this.getEyeY() - 0.3F;
+                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem().copy());
+                $$4.setPickUpDelay(40);
+                $$4.setThrower(this.getUUID());
+                this.level().addFreshEntity($$4);
+                this.setHeldItem(ItemStack.EMPTY);
+        }
+        super.remove($$0);
+    }
 }
