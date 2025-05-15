@@ -87,7 +87,10 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     }
     @Override
     public float getPickRadius() {
-        return 0.0F;
+        if (this.getActivated()){
+            return 0;
+        }
+        return 1.0F;
     }
     @Override
     protected ParticleOptions getTrailParticle() {
