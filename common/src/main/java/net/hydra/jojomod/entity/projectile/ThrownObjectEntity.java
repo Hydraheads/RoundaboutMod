@@ -43,6 +43,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -161,7 +162,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state){
 
-        if ((state.isAir() || state.canBeReplaced()) && (this.getOwner() != null && !((this.getOwner() instanceof Player &&
+        try {
+        if (!state.hasProperty(BlockStateProperties.LAYERS) && (state.isAir() || state.canBeReplaced()) && (this.getOwner() != null && !((this.getOwner() instanceof Player &&
                 (((Player) this.getOwner()).blockActionRestricted(this.getOwner().level(), pos, ((ServerPlayer)
                         this.getOwner()).gameMode.getGameModeForPlayer()))) ||
                 !this.getOwner().level().mayInteract(((Player) this.getOwner()), pos)))){
@@ -189,6 +191,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
             }
 
+        }
+        } catch(Exception e) {
+            //put shader debug stuff here
+            Roundabout.LOGGER.info("Mod does not make a safe null check for players, report to devs who made blocks");
         }
         return false;
     }
