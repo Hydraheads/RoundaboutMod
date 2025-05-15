@@ -148,7 +148,7 @@ public class ZLevel implements ILevelAccess {
                     if (!value.isRemoved() && value.isAlive()) {
                         BlockPos bpos2 = value.getBlockPos();
                         if (MainUtil.cheapDistanceTo(blockPos.getX(),blockPos.getY(),blockPos.getZ(),
-                                bpos2.getX(),bpos2.getY(),bpos2.getZ()) < 7){
+                                bpos2.getX(),bpos2.getY(),bpos2.getZ()) < 5){
                             return true;
                         }
                     }
