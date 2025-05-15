@@ -1081,6 +1081,9 @@ public class MainUtil {
         }
         return !(isBossMob(LE));
     }
+    public static boolean canHaveFrictionTaken(LivingEntity LE){
+        return !(isBossMob(LE));
+    }
     public static boolean isBossMob(LivingEntity LE){
         if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss){
             return true;

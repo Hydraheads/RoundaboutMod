@@ -2230,48 +2230,50 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "aiStep", at = @At(value = "HEAD"))
     public void roundabout$aiStep(CallbackInfo ci) {
-        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
-                ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(this)
-        ){
-            if (this.onGround()){
-                if (roundabout$frictionSave.equals(Vec3.ZERO)) {
-                    if (this.getDeltaMovement().x != 0 || this.getDeltaMovement().z != 0){
-                        roundabout$frictionSave = this.getDeltaMovement();
-                        roundabout$frictionSave = new Vec3(roundabout$frictionSave.x,0,roundabout$frictionSave.z);
-                        double scale =0.36;
-                        if (!this.isSprinting()){
-                            scale*=1.3;
+        if (MainUtil.canHaveFrictionTaken(((LivingEntity) (Object)this))) {
+            if (((ILevelAccess) this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
+                    ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this)
+            ) {
+                if (this.onGround()) {
+                    if (roundabout$frictionSave.equals(Vec3.ZERO)) {
+                        if (this.getDeltaMovement().x != 0 || this.getDeltaMovement().z != 0) {
+                            roundabout$frictionSave = this.getDeltaMovement();
+                            roundabout$frictionSave = new Vec3(roundabout$frictionSave.x, 0, roundabout$frictionSave.z);
+                            double scale = 0.36;
+                            if (!this.isSprinting()) {
+                                scale *= 1.3;
+                            }
+                            this.setDeltaMovement((roundabout$frictionSave.normalize()).scale(scale));
+                        }
+                        roundabout$skipFriction = false;
+                    } else {
+                        this.jumping = false;
+                        this.xxa = 0.0F;
+                        this.zza = 0.0F;
+                        double scale = 0.36;
+                        if (!this.isSprinting()) {
+                            scale *= 1.3;
+                        }
+                        Vec3 yesVec = this.getPosition(0).add(this.getDeltaMovement());
+                        BlockPos yesVec2 = new BlockPos((int) yesVec.x, (int) (this.position().y), (int) yesVec.z);
+                        if (this.level().getBlockState(yesVec2).isSolid()) {
+                            roundabout$frictionSave = new Vec3(Math.random() - 0.5, 0, Math.random() - 0.5);
                         }
                         this.setDeltaMovement((roundabout$frictionSave.normalize()).scale(scale));
+                        roundabout$skipFriction = true;
                     }
-                    roundabout$skipFriction = false;
-                } else {
-                    this.jumping = false;
-                    this.xxa = 0.0F;
-                    this.zza = 0.0F;
-                    double scale =0.36;
-                    if (!this.isSprinting()){
-                        scale*=1.3;
-                    }
-                    Vec3 yesVec = this.getPosition(0).add(this.getDeltaMovement());
-                    BlockPos yesVec2 = new BlockPos((int)yesVec.x,(int)(this.position().y),(int)yesVec.z);
-                    if (this.level().getBlockState(yesVec2).isSolid()){
-                        roundabout$frictionSave = new Vec3(Math.random()-0.5,0,Math.random()-0.5);
-                    }
-                    this.setDeltaMovement((roundabout$frictionSave.normalize()).scale(scale));
-                    roundabout$skipFriction = true;
-                }
 
-                if (!this.level().isClientSide()) {
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.FRICTIONLESS,
-                            this.getX(), this.getY() + 0.2, this.getZ(),
-                            1, 0, 0, 0, 0.015);
+                    if (!this.level().isClientSide()) {
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.FRICTIONLESS,
+                                this.getX(), this.getY() + 0.2, this.getZ(),
+                                1, 0, 0, 0, 0.015);
+                    }
+                } else {
+                    roundabout$frictionSave = Vec3.ZERO;
                 }
             } else {
                 roundabout$frictionSave = Vec3.ZERO;
             }
-        } else {
-            roundabout$frictionSave = Vec3.ZERO;
         }
     }
 

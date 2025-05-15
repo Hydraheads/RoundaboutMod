@@ -164,8 +164,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 this.setEntityStolen($$0.getEntity().getId());
                 setFloating();
             } else if (this.getPlunderType() == PlunderTypes.FRICTION.id){
-                this.setEntityStolen($$0.getEntity().getId());
-                setFloating();
+                if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getEyeSightTaken() == null &&
+                        MainUtil.canHaveFrictionTaken(LE)) {
+                    this.setEntityStolen($$0.getEntity().getId());
+                    setFloating();
+                }
             } else if (this.getPlunderType() == PlunderTypes.SIGHT.id){
                 if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getEyeSightTaken() == null &&
                 MainUtil.canHaveSightTaken(LE)) {
