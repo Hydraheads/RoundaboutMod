@@ -2,12 +2,14 @@ package net.hydra.jojomod.mixin;
 
 
 import com.mojang.authlib.GameProfile;
+import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -18,9 +20,11 @@ import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -116,6 +120,18 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
         /*Time Stop Levitation*/
         //this.sprintTriggerTime = ((StandUser)this).getStandPowers().inputSpeedModifiers(this.sprintTriggerTime);
         roundabout$ClashJump();
+        /*Soft and Wet friction cancels input*/
+        if (MainUtil.canHaveFrictionTaken(((LivingEntity) (Object)this))) {
+            if (((ILevelAccess) this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
+                    ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this)
+            ) {
+
+                if (!((StandUser)this).roundabout$frictionSave().equals(Vec3.ZERO)) {
+                    this.input.forwardImpulse *= 0.1F;
+                    this.input.leftImpulse *= 0.1F;
+                }
+            }
+        }
     }
     @Unique
     private void roundabout$ClashJump(){

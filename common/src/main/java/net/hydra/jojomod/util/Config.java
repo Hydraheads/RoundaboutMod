@@ -82,6 +82,8 @@ import java.util.Set;
     public Integer magiciansRedFurnaceTicks;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer d4cDimensionKidnapRadius;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean softAndWetFrictionStopsJumping;
     @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
     public Integer cinderellaLevelCostLipstick;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)

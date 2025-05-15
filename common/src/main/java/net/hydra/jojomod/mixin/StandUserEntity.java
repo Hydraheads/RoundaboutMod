@@ -2896,6 +2896,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.setDeltaMovement($$0.x, (double) this.getJumpPower(), $$0.z);
             this.hasImpulse = true;
             ci.cancel();
+            return;
+        }
+
+        if (ClientNetworking.getAppropriateConfig().softAndWetFrictionStopsJumping) {
+            if (MainUtil.canHaveFrictionTaken(((LivingEntity) (Object) this))) {
+                if (((ILevelAccess) this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
+                        ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this)
+                ) {
+                    ci.cancel();
+                    return;
+                }
+            }
         }
     }
 
