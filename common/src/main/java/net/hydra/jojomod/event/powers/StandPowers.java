@@ -2243,6 +2243,8 @@ public class StandPowers {
                 vec3d2.z);
     }
 
+    /**This function is a sanity check so mobs can't be hit behind doors*/
+
     public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
         float nearestDistance = -1;
         Entity nearestMob = null;

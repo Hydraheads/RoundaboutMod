@@ -312,7 +312,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         AABB BB1 = this.getBoundingBox();
 
         super.tick();
-        if (this.getPlunderType() == PlunderTypes.ITEM.id && !this.getReturning()){
+        if (this.getPlunderType() == PlunderTypes.ITEM.id && !this.getReturning() && !this.getFinished() && !this.isRemoved()){
             AABB BB2 = this.getBoundingBox();
             tryPhaseItemGrab(BB1, BB2);
         }
