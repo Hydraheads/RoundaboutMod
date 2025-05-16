@@ -2244,6 +2244,22 @@ public class StandPowers {
     }
 
     /**This function is a sanity check so mobs can't be hit behind doors*/
+    public boolean canActuallyHit(Entity entity){
+        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
+        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result = this.self.level().clip(new ClipContext(
+                from,
+                to,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                this.self
+        ));
+
+        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+                result.getLocation().distanceTo(from) < to.distanceTo(from);
+        return !isBlocked;
+    }
 
     public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
         float nearestDistance = -1;
@@ -2259,8 +2275,10 @@ public class StandPowers {
                         }
                         if ((nearestDistance < 0 || distanceTo < nearestDistance)
                                 && distanceTo <= range) {
-                            nearestDistance = distanceTo;
-                            nearestMob = value;
+                            if (canActuallyHit(value)) {
+                                nearestDistance = distanceTo;
+                                nearestMob = value;
+                            }
                         }
                     }
                 }
