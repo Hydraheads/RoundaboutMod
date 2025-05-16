@@ -1,20 +1,17 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.StoredSoundInstance;
-import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,6 +23,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -163,6 +162,21 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         this.discard();
     }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0){
+        CompoundTag compoundtag = new CompoundTag();
+        $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
+        super.addAdditionalSaveData($$0);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0){
+        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        ItemStack itemstack = ItemStack.of(compoundtag);
+        this.setHeldItem(itemstack);
+        super.readAdditionalSaveData($$0);
+    }
+
     public int airSupply = 0;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
@@ -209,7 +223,36 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
         }
     }
+    public void addItemLight(){
+        if (standUser instanceof Player PE) {
+            if (canAddItem(getHeldItem(), PE.getInventory()) && standUser.isAlive()) {
+                PE.addItem(getHeldItem());
+            } else {
+                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                        this.getY() + this.getEyeHeight(), this.getZ(),
+                        getHeldItem());
+                $$4.setPickUpDelay(40);
+                $$4.setThrower(this.standUser.getUUID());
+                standUser.level().addFreshEntity($$4);
+            }
+        } else {
+            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                    this.getY() + this.getEyeHeight(), this.getZ(),
+                    getHeldItem());
+            $$4.setPickUpDelay(40);
+            this.level().addFreshEntity($$4);
+        }
+    }
 
+    public boolean canAddItem(ItemStack itemStack, Inventory inventory) {
+        boolean bl = false;
+        for (ItemStack itemStack2 : inventory.items) {
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
+            bl = true;
+            break;
+        }
+        return bl;
+    }
     public void returnToUser(){
         if (this.standUser != null) {
             this.setDeltaMovement(this.getPosition(0).subtract(this.standUser.position()).reverse().normalize().scale(0.4));
@@ -422,13 +465,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     public void remove(Entity.RemovalReason $$0) {
-        if (!this.getHeldItem().isEmpty()) {
-                double $$3 = this.getEyeY() - 0.3F;
-                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItem().copy());
-                $$4.setPickUpDelay(40);
-                $$4.setThrower(this.getUUID());
-                this.level().addFreshEntity($$4);
-                this.setHeldItem(ItemStack.EMPTY);
+        if (!this.getHeldItem().isEmpty() && !this.level().isClientSide()) {
+            addItemLight();
         }
         super.remove($$0);
     }
