@@ -42,6 +42,8 @@ import java.util.Set;
     public Boolean disableBleedingAndBloodSplatters;
     @BooleanOption(group = "inherit", value = false)
     public Boolean standDiscsDropWithKeepGameRuleOff;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean standPunchesGoThroughDoorsAndCorners;
     @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
     public Integer standGuardDelayTicks;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)

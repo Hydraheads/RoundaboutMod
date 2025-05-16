@@ -47,6 +47,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Husk;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -1988,7 +1989,7 @@ public class StandPowers {
     public float getDistanceOut(LivingEntity entity, float range, boolean offset){
         float distanceFront = this.getRayDistance(entity, range);
         if (offset) {
-            Entity targetEntity = this.rayCastEntity(entity,this.getReach());
+            Entity targetEntity = this.rayCastEntity(entity,distanceFront);
             if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
                 distanceFront = targetEntity.distanceTo(entity);
             }
@@ -2090,23 +2091,10 @@ public class StandPowers {
     }
     /** This code grabs an entity in front of you at the specified range, raycasting is used*/
     public Entity rayCastEntity(LivingEntity User, float reach){
-        float tickDelta = 0;
-        if (this.self.level().isClientSide()) {
-            Minecraft mc = Minecraft.getInstance();
-            tickDelta = mc.getDeltaFrameTime();
-        }
-        Vec3 vec3d = User.getEyePosition(tickDelta);
-
-        Vec3 vec3d2 = User.getViewVector(1.0f);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
-        float f = 1.0f;
-        AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
-
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(User, vec3d, vec3d3, box, entity -> !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable(), reach*reach);
+        Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
         if (entityHitResult != null){
-            Entity hitResult = entityHitResult.getEntity();
-            if (hitResult.isAlive() && !hitResult.isRemoved() && !hitResult.is(User)) {
-                return hitResult;
+            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User)) {
+                    return entityHitResult;
             }
         }
         return null;
@@ -2126,6 +2114,8 @@ public class StandPowers {
                     hitEntities.remove(value);
                 } else {
                     if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                        hitEntities.remove(value);
+                    } else if (!canActuallyHit(value)){
                         hitEntities.remove(value);
                     }
                 }
@@ -2245,6 +2235,9 @@ public class StandPowers {
 
     /**This function is a sanity check so mobs can't be hit behind doors*/
     public boolean canActuallyHit(Entity entity){
+        if (ClientNetworking.getAppropriateConfig().standPunchesGoThroughDoorsAndCorners){
+            return true;
+        }
         Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
         Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
 
@@ -2255,7 +2248,6 @@ public class StandPowers {
                 ClipContext.Fluid.NONE,
                 this.self
         ));
-
         boolean isBlocked = result.getType() != HitResult.Type.MISS &&
                 result.getLocation().distanceTo(from) < to.distanceTo(from);
         return !isBlocked;

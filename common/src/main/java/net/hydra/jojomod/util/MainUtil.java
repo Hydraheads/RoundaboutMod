@@ -29,7 +29,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundHorseScreenOpenPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -54,13 +53,11 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
-import net.minecraft.world.inventory.FurnaceMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -69,13 +66,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
@@ -1625,6 +1618,94 @@ public class MainUtil {
         powers.updateMovesFromPacket(activePower);
         powers.setActivePower(activePower);
         powers.kickStartClient();
+    }
+
+    public static Entity raytraceEntity(Level world, LivingEntity player, double maxDistance) {
+        Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)
+        Vec3 lookVec = player.getViewVector(1.0F); // player.getViewVector(float)
+        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
+
+        // Raytrace blocks first
+        ClipContext blockContext = new ClipContext(
+                eyePos,
+                reachVec,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player
+        );
+
+        BlockHitResult blockHit = world.clip(blockContext);
+        double blockHitDistance = blockHit != null
+                ? blockHit.getLocation().distanceTo(eyePos)
+                : maxDistance;
+
+        // Search for potential target entities in bounding box
+        AABB box = player.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
+        List<Entity> candidates = world.getEntities(player, box,
+                (e) -> e instanceof LivingEntity && e.isPickable() && e.isAlive());
+
+        Entity closest = null;
+        double closestDistance = blockHitDistance;
+
+        for (Entity entity : candidates) {
+            AABB aabb = entity.getBoundingBox().inflate(0.3); // widen the target hit box a bit
+            Optional<Vec3> hitOptional = aabb.clip(eyePos, reachVec);
+
+            if (hitOptional.isPresent()) {
+                double hitDistance = eyePos.distanceTo(hitOptional.get());
+                if (hitDistance < closestDistance) {
+                    closestDistance = hitDistance;
+                    closest = entity;
+                }
+            }
+        }
+
+        return closest; // null if no valid hit
+    }
+
+
+    public static Entity raytraceEntityStand(Level world, LivingEntity player, double maxDistance) {
+
+        Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)
+        Vec3 lookVec = player.getViewVector(1.0F); // player.getViewVector(float)
+        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
+
+        // Raytrace blocks first
+        ClipContext blockContext = new ClipContext(
+                eyePos,
+                reachVec,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player
+        );
+
+        BlockHitResult blockHit = world.clip(blockContext);
+        double blockHitDistance = blockHit != null
+                ? blockHit.getLocation().distanceTo(eyePos)
+                : maxDistance;
+
+        // Search for potential target entities in bounding box
+        AABB box = player.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
+        List<Entity> candidates = world.getEntities(player, box,
+                (e) -> e instanceof LivingEntity && e.isPickable() && e.isAlive());
+
+        Entity closest = null;
+        double closestDistance = blockHitDistance;
+
+        for (Entity entity : candidates) {
+            AABB aabb = entity.getBoundingBox().inflate(0.3); // widen the target hit box a bit
+            Optional<Vec3> hitOptional = aabb.clip(eyePos, reachVec);
+
+            if (hitOptional.isPresent()) {
+                double hitDistance = eyePos.distanceTo(hitOptional.get());
+                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()) {
+                    closestDistance = hitDistance;
+                    closest = entity;
+                }
+            }
+        }
+
+        return closest; // null if no valid hit
     }
 
 }
