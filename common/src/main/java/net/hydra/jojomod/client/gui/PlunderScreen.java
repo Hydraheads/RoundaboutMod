@@ -92,17 +92,29 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
     }
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
+        Roundabout.LOGGER.info("key released");
         if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+            Roundabout.LOGGER.info("MAYAHEE MAYAHA");
             this.switchToHoveredGameMode();
             this.minecraft.setScreen(null);
+            this.minecraft.options.keyUse.setDown(false);
         }
         return super.keyReleased($$0, $$1, $$2);
     }
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
-        this.switchToHoveredGameMode();
-        this.minecraft.setScreen(null);
-        return true;
+        if ($$2 == 0) {
+            Roundabout.LOGGER.info("mouse released");
+            this.switchToHoveredGameMode();
+            this.minecraft.setScreen(null);
+            this.minecraft.options.keyUse.setDown(false);
+            return false;
+        } else {
+            if ($$2 == 1) {
+
+            }
+            return false;
+        }
     }
 
     @Override

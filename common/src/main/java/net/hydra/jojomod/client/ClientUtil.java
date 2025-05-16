@@ -314,6 +314,10 @@ public class ClientUtil {
         }
     }
 
+    public static boolean hasPlunderUI() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.screen instanceof PlunderScreen vsc;
+    }
     public static boolean hasCinderellaShopUI() {
         Minecraft mc = Minecraft.getInstance();
         return mc.screen instanceof VisageStoreScreen vsc && vsc.costsEmeralds;

@@ -109,6 +109,12 @@ public class PowersSoftAndWet extends PunchingStand {
     /**For mob ai, change the bubbleType before trypower to set what kind of plunder it has*/
     public byte bubbleType = PlunderTypes.ITEM.id;
 
+
+    @Override
+    public boolean canGuard(){
+        return super.canGuard();
+    }
+
     public boolean hold1 = false;
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
@@ -125,7 +131,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 if (keyIsDown) {
                     if (!hold1) {
                         hold1 = true;
-                       ClientUtil.openPlunderScreen();
+                        ClientUtil.openPlunderScreen();
                     }
                 } else {
 

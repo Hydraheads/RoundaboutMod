@@ -212,7 +212,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     public void returnToUser(){
         if (this.standUser != null) {
-            this.setDeltaMovement(this.getPosition(0).subtract(this.standUser.position()).reverse().normalize().scale(0.5));
+            this.setDeltaMovement(this.getPosition(0).subtract(this.standUser.position()).reverse().normalize().scale(0.4));
         }
     }
 
