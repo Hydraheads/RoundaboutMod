@@ -16,6 +16,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
@@ -49,6 +50,16 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     }
     public void setSped(float sped) {
         this.getEntityData().set(SPEED, sped);
+    }
+
+    @Override
+    public boolean hurt(DamageSource $$0, float $$1) {
+        if (this.isInvulnerableTo($$0)) {
+            return false;
+        } else {
+            this.popBubble();
+        }
+        return true;
     }
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.INT);
     protected SoftAndWetBubbleEntity(EntityType<? extends SoftAndWetBubbleEntity> $$0, double $$1, double $$2, double $$3, Level $$4) {
