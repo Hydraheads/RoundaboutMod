@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,19 +15,26 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TargetGoal.class)
 
-public class ZTargetGoal {
+public class ZTargetGoal implements ITargetGoal {
     @Shadow
     @Final
     protected Mob mob;
 
     @Shadow
     protected LivingEntity targetMob;
+
+    @Override
+    @Unique
+    public void roundabout$removeTarget(){
+        targetMob = null;
+    }
 
     /**Soft and Wet Plunder sight*/
     @Inject(method = "getFollowDistance", at = @At(value = "HEAD"), cancellable = true)
@@ -74,10 +82,6 @@ public class ZTargetGoal {
                     mob.setLastHurtByMob(null);
                 }
             }
-        }
-
-        if (((StandUser)mob).roundabout$getQueForTargetDeletion()){
-            targetMob = null;
         }
 
 

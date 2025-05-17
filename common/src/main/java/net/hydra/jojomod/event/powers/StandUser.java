@@ -23,6 +23,8 @@ public interface StandUser {
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
+
+    void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
     boolean roundabout$skipFriction();
     void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);

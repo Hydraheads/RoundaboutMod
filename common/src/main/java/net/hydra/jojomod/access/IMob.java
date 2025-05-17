@@ -5,6 +5,7 @@ import net.minecraft.world.entity.ai.goal.GoalSelector;
 public interface IMob {
     boolean roundabout$isWorthy();
     void roundabout$setWorthy(boolean $$0);
+    void roundabout$deeplyRemoveTargets();
     boolean roundabout$getIsNaturalStandUser();
     GoalSelector roundabout$getGoalSelector();
     void roundabout$setRetractTicks(int ticks);

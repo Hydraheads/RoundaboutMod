@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
@@ -26,7 +27,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.monster.Enemy;
@@ -54,6 +58,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Mixin(Mob.class)
 public abstract class ZMob extends LivingEntity implements IMob {
@@ -312,6 +318,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public void setTarget(@Nullable LivingEntity $$0) {
     }
 
+    @Shadow @Final protected GoalSelector targetSelector;
+
+    @Shadow public abstract void removeFreeWill();
+
+    @Shadow public abstract void removeAllGoals(Predicate<Goal> $$0);
+
     @Unique
     protected int roundabout$unseenMemoryTicks = 300;
 
@@ -413,6 +425,22 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Override
     public void roundabout$setRetractTicks(int ticks){
         roundabout$retractTicks = ticks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$deeplyRemoveTargets(){
+        if (this.targetSelector != null){
+            Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
+            wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
+
+        }
+    }
+    @Unique
+    public void roundabout$removeGoalTarget(Goal goal){
+        if (goal instanceof TargetGoal tg){
+            ((ITargetGoal)tg).roundabout$removeTarget();
+        }
     }
 
     @Unique
@@ -588,6 +616,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
             }
         }
         return (T) value;
+    }
+
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    private void roundabout$TickTail(CallbackInfo ci) {
+        StandUser user = ((StandUser)this);
+        user.roundabout$removeQueForTargetDeletion();
     }
 
     @SuppressWarnings("deprecation")

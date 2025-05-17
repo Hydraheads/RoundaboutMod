@@ -884,14 +884,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtMob(null);
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
+            ((IMob)mb).roundabout$deeplyRemoveTargets();
         }
-        roundabout$queForTargetDeletion = true;
+
+    }
+    @Unique
+    @Override
+    public void roundabout$removeQueForTargetDeletion(){
+        if (roundabout$queForTargetDeletion){
+            roundabout$queForTargetDeletion = false;
+        }
     }
     @Unique
     @Override
     public boolean roundabout$getQueForTargetDeletion(){
         if (roundabout$queForTargetDeletion){
-            roundabout$queForTargetDeletion = false;
             return true;
         }
         return false;

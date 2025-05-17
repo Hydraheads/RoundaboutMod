@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -115,8 +116,15 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
             if (TG != null){
                 this.target = TG;
                 ci.cancel();
+                return;
             }
         }
+
+        /**
+        if (((StandUser)this.mob).roundabout$getEyeSightTaken() != null && mob.getLastHurtByMob() == null){
+            ci.cancel();
+        }
+         */
     }
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
     protected void roundabout$findTarget(CallbackInfo ci) {
@@ -133,6 +141,12 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
                 } else {
                     this.target = null;
                 }
+            }
+        } else {
+            if (((StandUser)this.mob).roundabout$getEyeSightTaken() != null && mob.getLastHurtByMob() == null){
+                this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), (p_148152_) -> {
+                    return true;
+                }), this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
             }
         }
     }
