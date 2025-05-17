@@ -780,10 +780,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 17* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+                    damageMultipliers.theWorldAttacksOnMobs*0.01) * (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01)));
         }
     }
 

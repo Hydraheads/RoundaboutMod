@@ -195,6 +195,8 @@ import java.util.Set;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer theWorldAttacksOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer theWorldAndStarPlatinumImpalePower;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer standFireOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer standFireOnPlayers;
