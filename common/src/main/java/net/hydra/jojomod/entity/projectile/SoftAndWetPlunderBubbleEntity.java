@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -171,12 +172,14 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void addAdditionalSaveData(CompoundTag $$0){
         CompoundTag compoundtag = new CompoundTag();
         $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
+        $$0.putBoolean("roundabout.ditchedItem",hasDitchedItem);
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
+        hasDitchedItem = $$0.getBoolean("roundabout.ditchedItem");
         this.setHeldItem(itemstack);
         super.readAdditionalSaveData($$0);
     }
@@ -227,24 +230,51 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
         }
     }
+
+    public boolean hasDitchedItem = false;
     public void addItemLight(){
-        if (standUser instanceof Player PE) {
-            if (canAddItem(getHeldItem(), PE.getInventory()) && standUser.isAlive()) {
-                PE.addItem(getHeldItem());
+        if (!hasDitchedItem) {
+            if (standUser instanceof Player PE) {
+                if (canAddItem(getHeldItem(), PE.getInventory()) && standUser.isAlive()) {
+                    PE.addItem(getHeldItem());
+                } else {
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                            this.getY() + this.getEyeHeight(), this.getZ(),
+                            getHeldItem());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.standUser.getUUID());
+                    standUser.level().addFreshEntity($$4);
+                }
             } else {
                 ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
                         this.getY() + this.getEyeHeight(), this.getZ(),
                         getHeldItem());
                 $$4.setPickUpDelay(40);
-                $$4.setThrower(this.standUser.getUUID());
-                standUser.level().addFreshEntity($$4);
+                this.level().addFreshEntity($$4);
             }
-        } else {
-            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
-                    this.getY() + this.getEyeHeight(), this.getZ(),
-                    getHeldItem());
-            $$4.setPickUpDelay(40);
-            this.level().addFreshEntity($$4);
+        }
+    }
+
+    public void addItemNotLight(Entity ent){
+        if (!hasDitchedItem) {
+            if (ent instanceof Player PE) {
+                if (canAddItem(getHeldItem(), PE.getInventory()) && PE.isAlive()) {
+                    PE.addItem(getHeldItem());
+                } else {
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                            this.getY() + this.getEyeHeight(), this.getZ(),
+                            getHeldItem());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(PE.getUUID());
+                    PE.level().addFreshEntity($$4);
+                }
+            } else {
+                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                        this.getY() + this.getEyeHeight(), this.getZ(),
+                        getHeldItem());
+                $$4.setPickUpDelay(40);
+                this.level().addFreshEntity($$4);
+            }
         }
     }
 
@@ -378,6 +408,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean hurt(DamageSource $$0, float $$1) {
+        if (this.getPlunderType() == PlunderTypes.ITEM.id) {
+            addItemNotLight($$0.getEntity());
+            hasDitchedItem = true;
+        }
+        return super.hurt($$0,$$1);
     }
 
 
