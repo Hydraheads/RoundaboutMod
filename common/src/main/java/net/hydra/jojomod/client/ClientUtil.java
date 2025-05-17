@@ -110,6 +110,18 @@ public class ClientUtil {
     public static boolean checkIfGamePaused() {
         return Minecraft.getInstance().isPaused();
     }
+
+    public static boolean checkIfFirstPerson() {
+        return Minecraft.getInstance().options.getCameraType().isFirstPerson();
+    }
+
+    public static boolean checkIfIsFirstPerson(Player pl) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && pl != null && pl.is(player)) {
+            return Minecraft.getInstance().options.getCameraType().isFirstPerson();
+        }
+        return false;
+    }
     public static boolean checkIfStandIsYoursAndFirstPerson(StandEntity stand) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

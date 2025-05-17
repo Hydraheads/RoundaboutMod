@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.visages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.client.HumanoidLikeArmorLayer;
 import net.hydra.jojomod.entity.client.HumanoidLikeArmorModel;
 import net.hydra.jojomod.entity.client.StoneLayer;
@@ -55,8 +56,10 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
 
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        this.setModelProperties(mobEntity);
-        super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        if (!ClientUtil.checkIfIsFirstPerson(mobEntity.host)) {
+            this.setModelProperties(mobEntity);
+            super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        }
     }
     public final int getTrueLight(Entity entity, float tickDelta) {
         BlockPos blockPos = BlockPos.containing(entity.getLightProbePosition(tickDelta));
