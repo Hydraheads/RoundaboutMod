@@ -56,10 +56,9 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
 
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        if (!ClientUtil.checkIfIsFirstPerson(mobEntity.host)) {
+
             this.setModelProperties(mobEntity);
             super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
-        }
     }
     public final int getTrueLight(Entity entity, float tickDelta) {
         BlockPos blockPos = BlockPos.containing(entity.getLightProbePosition(tickDelta));

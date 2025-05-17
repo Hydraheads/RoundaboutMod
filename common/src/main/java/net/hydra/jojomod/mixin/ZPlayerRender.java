@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -468,138 +469,140 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
-        IPlayerEntity ipe = ((IPlayerEntity) $$0);
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
-        if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE){
-            if (shift == ShapeShifts.ZOMBIE) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Zombie))) {
-                    roundabout$setShapeShift($$0,EntityType.ZOMBIE.create(Minecraft.getInstance().level));
-                }
-                if (roundabout$getShapeShift($$0) != null) {
-                    ItemStack tem = $$0.getMainHandItem();
-                    roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
-                    ci.cancel();
-                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
-                }
-            } else if (shift == ShapeShifts.VILLAGER){
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Villager))){
-                    roundabout$setShapeShift($$0,roundabout$getVillager(Minecraft.getInstance().level,ipe));
-                }
-                if (roundabout$getShapeShift($$0) != null) {
-                    if (roundabout$getShapeShift($$0) instanceof Villager ve) {
-                        if ($$0.isSleeping() && !ve.isSleeping()) {
-                            Optional<BlockPos> blk = $$0.getSleepingPos();
-                            blk.ifPresent(ve::startSleeping);
-                        } else {
-                            if (!$$0.isSleeping()){
-                                ve.stopSleeping();
+        if (!ClientUtil.checkIfIsFirstPerson($$0)) {
+            IPlayerEntity ipe = ((IPlayerEntity) $$0);
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+            Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
+            if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE) {
+                if (shift == ShapeShifts.ZOMBIE) {
+                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Zombie))) {
+                        roundabout$setShapeShift($$0, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                    }
+                    if (roundabout$getShapeShift($$0) != null) {
+                        ItemStack tem = $$0.getMainHandItem();
+                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        ci.cancel();
+                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                    }
+                } else if (shift == ShapeShifts.VILLAGER) {
+                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Villager))) {
+                        roundabout$setShapeShift($$0, roundabout$getVillager(Minecraft.getInstance().level, ipe));
+                    }
+                    if (roundabout$getShapeShift($$0) != null) {
+                        if (roundabout$getShapeShift($$0) instanceof Villager ve) {
+                            if ($$0.isSleeping() && !ve.isSleeping()) {
+                                Optional<BlockPos> blk = $$0.getSleepingPos();
+                                blk.ifPresent(ve::startSleeping);
+                            } else {
+                                if (!$$0.isSleeping()) {
+                                    ve.stopSleeping();
+                                }
                             }
                         }
-                    }
-                    roundabout$renderEntityForce1($$1,$$2,$$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
-                    ci.cancel();
-                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
-                }
-            } else if (shift == ShapeShifts.SKELETON){
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Skeleton))) {
-                    roundabout$setShapeShift($$0,roundabout$getSkeleton(Minecraft.getInstance().level,ipe));
-                }
-                if (roundabout$getShapeShift($$0) != null) {
-                    ItemStack tem = $$0.getMainHandItem();
-                    roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
-                    ci.cancel();
-                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
-                }
-            } else if (shift == ShapeShifts.WITHER_SKELETON){
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof WitherSkeleton))) {
-                    roundabout$setShapeShift($$0,roundabout$getWither(Minecraft.getInstance().level,ipe));
-                }
-                if (roundabout$getShapeShift($$0) != null) {
-                    ItemStack tem = $$0.getMainHandItem();
-                    roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
-                    ci.cancel();
-                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
-                }
-            } else if (shift == ShapeShifts.STRAY){
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Stray))) {
-                    roundabout$setShapeShift($$0,roundabout$getStray(Minecraft.getInstance().level,ipe));
-                }
-                if (roundabout$getShapeShift($$0) != null) {
-                    ItemStack tem = $$0.getMainHandItem();
-                    roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                    roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
-                    ci.cancel();
-                    roundabout$corpseShowName($$0,$$3,$$4,$$5);
-                }
-            } else if (shift == ShapeShifts.OVA){
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof OVAEnyaNPC))) {
-                    roundabout$setShapeShift($$0,ModEntities.OVA_ENYA.create(Minecraft.getInstance().level));
-                }
-                if (roundabout$getShapeShift($$0) != null) {
-                    if (roundabout$getShapeShift($$0) instanceof OVAEnyaNPC ve) {
-                                ve.standPos = pose;
-                                ve.setupAnimationStates();
-                                ve.host = $$0;
-                        assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
-                                roundabout$getShapeShift($$0));
+                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
                         ci.cancel();
-                        roundabout$corpseShowName($$0,$$3,$$4,$$5);
+                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
                     }
-                }
-            }
-        } else if (shift != ShapeShifts.EERIE){
-            ItemStack visage = ipe.roundabout$getMaskSlot();
-            roundabout$initializeVisageModel(visage,$$0);
-            ItemStack lv = roundabout$getLastVisage($$0);
-            if (lv == null || lv.isEmpty() || lv.is(ModItems.BLANK_MASK)){
-                if (roundabout$getSwappedModel($$0) != null) {
-                    if (roundabout$getSwappedModel($$0) instanceof JojoNPC swp) {
-                        swp.standPos = pose;
-                        swp.setupAnimationStates();
+                } else if (shift == ShapeShifts.SKELETON) {
+                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Skeleton))) {
+                        roundabout$setShapeShift($$0, roundabout$getSkeleton(Minecraft.getInstance().level, ipe));
                     }
-                }
-                if (pose == Poses.NONE){
-                    roundabout$setSwappedModel($$0,null);
-                }
-            }
-
-            if (roundabout$getSwappedModel($$0) != null) {
-                if (roundabout$getSwappedModel($$0) instanceof JojoNPC ve) {
-                    if (roundabout$getVisageData($$0) != null){
-                        ve.standPos = pose;
-                        ve.setupAnimationStates();
-                        ve.host = $$0;
+                    if (roundabout$getShapeShift($$0) != null) {
+                        ItemStack tem = $$0.getMainHandItem();
+                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        ci.cancel();
+                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
                     }
-                    assertOnPlayerLike(ve,$$0,$$1,$$2,$$3,$$4,$$5,
-                            roundabout$getSwappedModel($$0));
-                    ci.cancel();
-
-                    boolean characterType = true;
-                    if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME){
-                        characterType = ME.visageData.isCharacterVisage();
+                } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof WitherSkeleton))) {
+                        roundabout$setShapeShift($$0, roundabout$getWither(Minecraft.getInstance().level, ipe));
                     }
-                    if (Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
-                            ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null &&
-                            ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode) {
-                        if (this.shouldShowName($$0)) {
-                            this.renderNameTag($$0, $$0.getDisplayName(), $$3, $$4, $$5);
+                    if (roundabout$getShapeShift($$0) != null) {
+                        ItemStack tem = $$0.getMainHandItem();
+                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        ci.cancel();
+                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                    }
+                } else if (shift == ShapeShifts.STRAY) {
+                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Stray))) {
+                        roundabout$setShapeShift($$0, roundabout$getStray(Minecraft.getInstance().level, ipe));
+                    }
+                    if (roundabout$getShapeShift($$0) != null) {
+                        ItemStack tem = $$0.getMainHandItem();
+                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        ci.cancel();
+                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                    }
+                } else if (shift == ShapeShifts.OVA) {
+                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof OVAEnyaNPC))) {
+                        roundabout$setShapeShift($$0, ModEntities.OVA_ENYA.create(Minecraft.getInstance().level));
+                    }
+                    if (roundabout$getShapeShift($$0) != null) {
+                        if (roundabout$getShapeShift($$0) instanceof OVAEnyaNPC ve) {
+                            ve.standPos = pose;
+                            ve.setupAnimationStates();
+                            ve.host = $$0;
+                            assertOnPlayerLike(ve, $$0, $$1, $$2, $$3, $$4, $$5,
+                                    roundabout$getShapeShift($$0));
+                            ci.cancel();
+                            roundabout$corpseShowName($$0, $$3, $$4, $$5);
                         }
-                    } else {
-                        if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
-                            if ((characterType && ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnCharacterVisages)
-                                    || (!characterType && ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnPlayerVisages)) {
-                                if (this.shouldShowName($$0)) {
+                    }
+                }
+            } else if (shift != ShapeShifts.EERIE) {
+                ItemStack visage = ipe.roundabout$getMaskSlot();
+                roundabout$initializeVisageModel(visage, $$0);
+                ItemStack lv = roundabout$getLastVisage($$0);
+                if (lv == null || lv.isEmpty() || lv.is(ModItems.BLANK_MASK)) {
+                    if (roundabout$getSwappedModel($$0) != null) {
+                        if (roundabout$getSwappedModel($$0) instanceof JojoNPC swp) {
+                            swp.standPos = pose;
+                            swp.setupAnimationStates();
+                        }
+                    }
+                    if (pose == Poses.NONE) {
+                        roundabout$setSwappedModel($$0, null);
+                    }
+                }
 
-                                    Component comp = $$0.getDisplayName();
-                                    if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages){
-                                        comp = ve.getDisplayName();
+                if (roundabout$getSwappedModel($$0) != null) {
+                    if (roundabout$getSwappedModel($$0) instanceof JojoNPC ve) {
+                        if (roundabout$getVisageData($$0) != null) {
+                            ve.standPos = pose;
+                            ve.setupAnimationStates();
+                            ve.host = $$0;
+                        }
+                        assertOnPlayerLike(ve, $$0, $$1, $$2, $$3, $$4, $$5,
+                                roundabout$getSwappedModel($$0));
+                        ci.cancel();
+
+                        boolean characterType = true;
+                        if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                            characterType = ME.visageData.isCharacterVisage();
+                        }
+                        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative() &&
+                                ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null &&
+                                ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode) {
+                            if (this.shouldShowName($$0)) {
+                                this.renderNameTag($$0, $$0.getDisplayName(), $$3, $$4, $$5);
+                            }
+                        } else {
+                            if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
+                                if ((characterType && ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnCharacterVisages)
+                                        || (!characterType && ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnPlayerVisages)) {
+                                    if (this.shouldShowName($$0)) {
+
+                                        Component comp = $$0.getDisplayName();
+                                        if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
+                                            comp = ve.getDisplayName();
+                                        }
+
+                                        this.renderNameTag($$0, comp, $$3, $$4, $$5);
                                     }
-
-                                    this.renderNameTag($$0, comp, $$3, $$4, $$5);
                                 }
                             }
                         }
