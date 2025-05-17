@@ -469,7 +469,7 @@
   "sounds.roundabout.arcade_star_platinum_short_ts":  "[Tiempo detenido]",
   "sounds.roundabout.arcade_star_platinum_time_stop":  "[Star Platinum: The World]",
   "sounds.roundabout.arcade_star_finger":  "[Star Finger]",
-  
+
   "sounds.roundabout.pop":  "Pop",
   "sounds.roundabout.sign_hit":  "Bam",
 
@@ -644,7 +644,7 @@
   "ability.roundabout.tactics": "Menú de tácticas",
   "ability.roundabout.tactics.desc": "Resalta cádaveres, y cambia las opciones del cádavere resaltado.",
   "ability.roundabout.fog_pilot": "Control de Justice",
-  "ability.roundabout.fog_pilot.desc": "Cambia a la perspectiva de Justice, y vuela alrededor del cielo brumoso. Además de observar el área, puedes comandar a cadáveres a moverse (tecla usar) o atacar (tecla atacar) objetivos desde arriba, después de resalta el objetivo que miras (tecla atacar). Interactua con cádaveres de creepers que controlas para hacerlos explotar  Presionalo de nuevo para volver a tu cuerpo.", 
+  "ability.roundabout.fog_pilot.desc": "Cambia a la perspectiva de Justice, y vuela alrededor del cielo brumoso. Además de observar el área, puedes comandar a cadáveres a moverse (tecla usar) o atacar (tecla atacar) objetivos desde arriba, después de resalta el objetivo que miras (tecla atacar). Interactua con cádaveres de creepers que controlas para hacerlos explotar  Presionalo de nuevo para volver a tu cuerpo.",
 
   "ability.roundabout.red_lash": "Golpe de fuego",
   "ability.roundabout.red_lash.desc": "Usa la flama del lazo rojo de manera ofensiva para azotar oponentes, ¡tiene un rango incrementado! ¡Mantenlo para hacer un combo de 3 golpes!",
@@ -678,7 +678,7 @@
   "ability.roundabout.crossfire_firestorm.desc": "Crea un ankh gigante que dispersa pequeñas flamas a todos lados, mejorando tus habilidades de crossfire hurricane y permitiendo que las uses bajo la lluvia. Sin embargo, el costo masivo de energía stand aumenta el tiempo de recarga.",
   "ability.roundabout.fire_slam": "Choque de llamas máximo",
   "ability.roundabout.fire_slam.desc": "Lanza a Magician's Red hacia adelante, convirtiéndolo en una bola de fuego. Choca con una fuerza extrema y muchas llamas, pero al hacerlo tu Stand es selladdo por un momento. Sólo usalo como último recurso.",
-  
+
   "ability.roundabout.visage_creation": "Creación de rostro",
   "ability.roundabout.visage_creation.desc": "Te permite usar niveles de experiencia para crear cualquier rostro que quieras, o crear un labial de la suerte. NPCs con este Stand cobran esmeraldas en su lugar.",
   "ability.roundabout.face_removal": "Ataque removedor de rostros",
@@ -721,7 +721,7 @@
   "gamerule.roundaboutSpawnWorthyMobs.description": "Controla si se pueden generar o no criaturas dignas de obtener Stands",
   "gamerule.roundaboutSpawnStandUserMobs": "Generar usuarios de Stand",
   "gamerule.roundaboutSpawnStandUserMobs.description": "Controla si se pueden generar o no criaturas con Stand",
-  
+
   "idle.roundabout.passive": "Pose inactiva",
   "idle.roundabout.battle": "Pose pelea",
 
@@ -824,7 +824,7 @@
   "unlock_skin.roundabout.star_platinum.atomic": "¡Aspecto Star Platinum: Atomic desbloqueado!",
   "unlock_skin.roundabout.justice.bad_bone": "¡Aspecto Justice: Bad to The Bone desbloqueado!",
   "unlock_skin.roundabout.magicians_red.chagaroth": "¡Aspecto Magician's Dread desbloqueado!",
-  
+
   "justice.morph.player": "Jugador",
   "justice.morph.villager": "Aldeano",
   "justice.morph.ova": "Disfraz",
@@ -834,7 +834,7 @@
   "justice.morph.stray": "Glacial",
   "justice.morph.eerie": "Inquietante",
   "justice.morph.select_next": "%1$s: siguiente, %2$s: seleccionar",
-  
+
   "roundabout.pose.giorno": "Requiem",
   "roundabout.pose.joseph": "Bloody Stream",
   "roundabout.pose.koichi": "Bizarre Town",
@@ -918,7 +918,5 @@
   "power_inventory.roundabout.settings.next": "Siguiente",
   "roundabout.menu.ts_paused": "¡El tiempo está detenido!",
 
-  "roundabout.warden_ts_movement": "¡¿No se detuvo?!",
-  
-  "roundabout.warning.fabulous_graphics": "§cWarning: Roundabout's shader effects are disabled while using the Fabulous graphics mode!§r"
+  "roundabout.warden_ts_movement": "¡¿No se detuvo?!"
 }

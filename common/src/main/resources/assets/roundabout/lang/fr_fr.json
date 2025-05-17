@@ -123,6 +123,7 @@
 
   "entity.roundabout.terrier": "Terrier (de Boston)",
   "entity.roundabout.the_world": "The World",
+  "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
   "entity.roundabout.star_platinum_baseball": "Star Platinum",
   "entity.roundabout.magicians_red": "Magician's Red",
@@ -146,8 +147,10 @@
   "entity.roundabout.fallen_zombie": "Cadavre de Zombie",
   "entity.roundabout.fallen_skeleton": "Cadavre de Squelette",
   "entity.roundabout.fallen_spider": "Cadavre d'Araignée",
+  "entity.roundabout.jojo_npc_ova_enya": "Enya",
   "entity.roundabout.jojo_npc_enya": "Enya",
   "entity.roundabout.jojo_npc_avdol": "Avdol",
+  "entity.roundabout.jojo_npc_jotaro": "Jotaro",
   "entity.roundabout.jojo_npc_dio": "DIO",
   "entity.roundabout.jojo_npc_parallel_diego": "Diego alternatif",
   "entity.roundabout.jojo_npc_josuke_part_eight": "Josuke",
@@ -155,6 +158,8 @@
   "entity.roundabout.jojo_npc_aya": "Aya",
   "entity.roundabout.aesthetician": "Esthéticienne",
   "entity.roundabout.zombie_aesthetician": "Esthéticienne zombie",
+  "entity.roundabout.jojo_npc_steve": "Steve",
+  "entity.roundabout.jojo_npc_alex": "Alex",
   "entity.roundabout.jojo_npc_modified": "Custom",
   "entity.roundabout.fog_clone": "Clone brumeux",
   "entity.roundabout.ground_hurricane": "Hurricane souterraine",
@@ -346,6 +351,7 @@
   "sounds.roundabout.bubble_hover_over":  "Bulle",
   "sounds.roundabout.bubble_pop":  "Bulle qui éclate",
   "sounds.roundabout.bubble_create":  "Bulle",
+  "sounds.roundabout.bubble_plunder":  "Quelque chose a été pris",
 
   "sounds.roundabout.snap":  "Claquement de doigt",
   "sounds.roundabout.star_finger_silent":  "Star Finger",
@@ -758,6 +764,8 @@
   "skins.roundabout.the_world.beta": "Beta",
   "skins.roundabout.the_world.arcade_2": "Arcade II",
   "skins.roundabout.the_world.four_dee": "4D",
+  "skins.roundabout.the_world.ultimate": "Ultime",
+  "skins.roundabout.the_world.ultimate_kars": "Ultime K",
 
   "skins.roundabout.justice.base": "Partie 3",
   "skins.roundabout.justice.skeleton": "Squelette",
@@ -916,5 +924,5 @@
 
   "roundabout.warden_ts_movement": "Ça ne s'est pas arrêter ?!",
 
-  "roundabout.warning.fabulous_graphics": "§cAttention : Les effets de shader de Roundabout sont désactivé pendant que le niveau graphique fabuleux est utilisé !§r"
+  "roundabout.warning.fabulous_graphics.v2": "§cNote : Certains effets de shader de Roundabout sont désactivé pendant que le niveau graphique fabuleux est utilisé !§r"
 }

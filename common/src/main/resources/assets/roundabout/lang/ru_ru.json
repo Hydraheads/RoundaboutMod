@@ -123,6 +123,7 @@
 
   "entity.roundabout.terrier": "Бостон-Терьер",
   "entity.roundabout.the_world": "The World",
+  "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.star_platinum": "Star Platinum",
   "entity.roundabout.star_platinum_baseball": "Star Platinum",
   "entity.roundabout.magicians_red": "Magician's Red",
@@ -350,6 +351,7 @@
   "sounds.roundabout.bubble_hover_over":  "Бульканье",
   "sounds.roundabout.bubble_pop":  "Бульканье пузырьков",
   "sounds.roundabout.bubble_create":  "Бульканье",
+  "sounds.roundabout.bubble_plunder":  "Что-то было отобрано",
 
   "sounds.roundabout.snap":  "Щелчок",
   "sounds.roundabout.star_finger_silent":  "Стар Фингер",
@@ -547,7 +549,7 @@
   "sounds.roundabout.jotaro_dio":  "ДИО!",
   "sounds.roundabout.jotaro_getting_closer":  "Если я не подойду...",
 
-  "sounds.roundabout.aesthetician_exhale":  "Дыхание Косметолога",
+  "sounds.roundabout.aesthetician_exhale":  "Выдох",
   "sounds.roundabout.female_zombie_ambient":  "Стоны Зомби Косметолога",
   "sounds.roundabout.female_zombie_hurt":  "Зомби Косметолог",
   "sounds.roundabout.female_zombie_death":  "Смерть Зомби Косметолога",
@@ -762,6 +764,8 @@
   "skins.roundabout.the_world.beta": "Бета",
   "skins.roundabout.the_world.arcade_2": "Аркадный II",
   "skins.roundabout.the_world.four_dee": "4D",
+  "skins.roundabout.the_world.ultimate": "Ultimate",
+  "skins.roundabout.the_world.ultimate_kars": "Ultimate K",
 
   "skins.roundabout.justice.base": "Часть 3",
   "skins.roundabout.justice.skeleton": "Скелетный",
@@ -806,7 +810,7 @@
   "skins.roundabout.soft_and_wet.king": "Королевский",
   "skins.roundabout.soft_and_wet.drowned": "Затонувший",
   "skins.roundabout.soft_and_wet.drowned_2": "Затонувший G",
-  "skins.roundabout.soft_and_wet.figure": "Figure",
+  "skins.roundabout.soft_and_wet.figure": "Статуэтка",
   "skins.roundabout.soft_and_wet.beta": "Бета",
 
   "skins.roundabout.d4c.base": "Манга",
@@ -848,7 +852,7 @@
 
   "roundabout.soft_and_wet_plunder.none": "Похититель Свойств",
   "roundabout.soft_and_wet_plunder.sight": "Зрение",
-  "roundabout.soft_and_wet_plunder.sight.desc": "Лишать зрения тех, кто полагается на зрение, пока оно не лопнет.",
+  "roundabout.soft_and_wet_plunder.sight.desc": "Лишает зрения тех, кто полагается на зрение, пока оно не лопнет.",
   "roundabout.soft_and_wet_plunder.sound": "Звук",
   "roundabout.soft_and_wet_plunder.sound.desc": "Создает звукоизолированные зоны, поглощая все звуки и звуковые атаки, пока не лопнет.",
   "roundabout.soft_and_wet_plunder.friction": "Трение",
@@ -858,8 +862,8 @@
   "roundabout.soft_and_wet_plunder.mobs": "Мобы",
   "roundabout.soft_and_wet_plunder.mobs.desc": "Захватывает малых мобов и подносит их к тебе.",
   "roundabout.soft_and_wet_plunder.oxygen": "Кислород",
-  "roundabout.soft_and_wet_plunder.oxygen.desc": "Забирает воздух из лёгких Моба, если они окажутся под водой, сразу начнут тонуть.",
-  "roundabout.soft_and_wet_plunder.moisture": "Влажность",
+  "roundabout.soft_and_wet_plunder.oxygen.desc": "Забирает воздух из лёгких Моба, если они окажутся под водой - сразу начнут тонуть.",
+  "roundabout.soft_and_wet_plunder.moisture": "Влага",
   "roundabout.soft_and_wet_plunder.moisture.desc": "Собирает жидкости или бензин, для их перемещения.",
   "roundabout.soft_and_wet_plunder.potion_effects": "Эффекты",
   "roundabout.soft_and_wet_plunder.potion_effects.desc": "Перемещает эффекты зелий между мобами или убирает их пока не лопнут пузыри.",
@@ -918,5 +922,7 @@
   "power_inventory.roundabout.settings.next": "Дальше",
   "roundabout.menu.ts_paused": "Время остановлено!",
 
-  "roundabout.warden_ts_movement": "Оно не остановилось?!"
+  "roundabout.warden_ts_movement": "Оно не остановилось?!",
+
+  "roundabout.warning.fabulous_graphics.v2": "§eNote: Некоторые визуальные эффекты шейдеров могут не отображаться при 'Потрясяющих' настройках графики.§r"
 }
