@@ -89,7 +89,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
                         airSupply = this.standUser.getMaxAirSupply();
                         startReturning();
+                    } else {
+                        super.onHitBlock($$0);
                     }
+                } else {
+                    super.onHitBlock($$0);
                 }
             } else {
                 super.onHitBlock($$0);
