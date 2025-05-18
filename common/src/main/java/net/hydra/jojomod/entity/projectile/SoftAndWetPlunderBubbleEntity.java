@@ -15,6 +15,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -25,9 +26,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -98,7 +97,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()) {
                 this.setBlockPos($$0.getBlockPos().above());
                 this.setBlockPos($$0.getBlockPos());
-                setFloating();
+                if ($$0.getDirection() == Direction.DOWN){
+                    setFloatingUpsideDown();
+                } else {
+                    setFloating();
+                }
             } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
                 if (this.standUser != null) {
                     if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
@@ -116,7 +119,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
     }
 
-    public void setFloating(){
+    public void setFloating2(){
         if (this.getPlunderType() != PlunderTypes.SOUND.id) {
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
@@ -128,7 +131,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     10, 0.2, 0.2, 0.2, 0.015);
         }
         this.setActivated(true);
+    }
+    public void setFloating(){
+        setFloating2();
         this.setDeltaMovement(0, 0.01, 0);
+    }
+
+    public void setFloatingUpsideDown(){
+        setFloating2();
+        this.setDeltaMovement(0, -0.01, 0);
     }
 
     public void popSounds(){
@@ -275,6 +286,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 }
             }
         }
+    }
+    protected float getEyeHeight(Pose $$0, EntityDimensions $$1) {
+        return $$1.height * 0.1F;
     }
 
     public boolean hasDitchedItem = false;

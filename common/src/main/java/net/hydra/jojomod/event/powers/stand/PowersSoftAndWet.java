@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -22,6 +23,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +96,13 @@ public class PowersSoftAndWet extends PunchingStand {
         $$1.add(SoftAndWetEntity.BETA_SKIN);
         return $$1;
     }
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 2 && !canDoBubblRedirect() && isHoldingSneak() && !isGuarding()) {
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
@@ -180,11 +191,64 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return true;
     }
+    public boolean canDoBubblRedirect(){
+        bubbleListInit();
+
+        List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+        };
+        if (!bubbleList2.isEmpty()) {
+            int totalnumber = bubbleList2.size();
+            for (SoftAndWetBubbleEntity value : bubbleList2) {
+                if (value.getActivated() && !(value instanceof SoftAndWetPlunderBubbleEntity PBE && (PBE.getPlunderType()==PlunderTypes.SIGHT.id ||
+                        PBE.getPlunderType()==PlunderTypes.FRICTION.id))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public boolean bubbleRedirect(){
         bubbleListInit();
         if (!bubbleList.isEmpty()){
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 3);
 
+            if (canDoBubblRedirect()) {
+                this.setCooldown(PowerIndex.SKILL_2_SNEAK, 3);
+
+                Vec3 vec3d = this.self.getEyePosition(0);
+                Vec3 vec3d2 = this.self.getViewVector(0);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+
+                if (!this.self.level().isClientSide()) {
+                    List<SoftAndWetBubbleEntity> bubbleList3 = new ArrayList<>(bubbleList) {
+                    };
+                    if (!bubbleList3.isEmpty()) {
+                        int totalnumber = bubbleList3.size();
+                        for (SoftAndWetBubbleEntity value : bubbleList3) {
+                            if (value.getActivated() && !(value instanceof SoftAndWetPlunderBubbleEntity PBE && (PBE.getPlunderType()==PlunderTypes.SIGHT.id ||
+                                    PBE.getPlunderType()==PlunderTypes.FRICTION.id))) {
+                                Vec3 vector = new Vec3((blockHit.getLocation().x() - value.getX()),
+                                        (blockHit.getLocation().y() - value.getY()),
+                                        (blockHit.getLocation().z() - value.getZ())).normalize().scale(value.getSped());
+                                value.setDeltaMovement(vector);
+                                value.hurtMarked = true;
+                                value.hasImpulse = true;
+                            }
+                        }
+                    }
+                } else {
+                    this.self.level()
+                            .addParticle(
+                                    ModParticles.POINTER,
+                                    blockHit.getLocation().x() + 0.5,
+                                    blockHit.getLocation().y() + 0.5,
+                                    blockHit.getLocation().z() + 0.5,
+                                    0,
+                                    0,
+                                    0
+                            );
+                }
+            }
             /**
             if (bubbleType != PlunderTypes.SOUND.id) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
