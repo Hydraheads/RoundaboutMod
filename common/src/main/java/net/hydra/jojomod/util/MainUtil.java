@@ -118,7 +118,7 @@ public class MainUtil {
         return ClientNetworking.getAppropriateConfig().worthyMobOdds;
     }
     public static double getStandUserOdds(Mob mob) {
-        if (isBossMob(mob)
+        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().bossMobsCanNaturallyHaveStands)
                 || mob instanceof Vex){
             return 0;
         } else if (mob instanceof AbstractVillager){
