@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.StoredSoundInstance;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -104,15 +105,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         airSupply = this.standUser.getMaxAirSupply();
                         startReturning();
                     } else {
-                        Roundabout.LOGGER.info("3");
                         super.onHitBlock($$0);
                     }
                 } else {
-                    Roundabout.LOGGER.info("4");
                     super.onHitBlock($$0);
                 }
             } else {
-                Roundabout.LOGGER.info("4");
                 super.onHitBlock($$0);
             }
         }
@@ -189,6 +187,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         CompoundTag compoundtag = new CompoundTag();
         $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
         $$0.putBoolean("roundabout.ditchedItem",hasDitchedItem);
+        $$0.putFloat("roundabout.speed",getSped());
         super.addAdditionalSaveData($$0);
     }
     @Override
@@ -196,6 +195,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
         hasDitchedItem = $$0.getBoolean("roundabout.ditchedItem");
+        setSped($$0.getFloat("roundabout.speed"));
         this.setHeldItem(itemstack);
         super.readAdditionalSaveData($$0);
     }
@@ -356,13 +356,40 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
 
     public boolean isArrayAdded = false;
+    public LivingEntity getStandUser(){
+        if (standUser != null){
+            return standUser;
+        } else if (standUserUUID != null && !this.level().isClientSide()){
+            Entity ett = ((ServerLevel)this.level()).getEntity(standUserUUID);
+            if (ett instanceof LivingEntity lett){
+                standUser = lett;
+                this.setUserID(lett.getId());
+            }
+        } else if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            standUser = LE;
+        }
+        return standUser;
+    }
+
     @Override
     public void tick() {
 
         if (!this.level().isClientSide()){
             lifeSpan--;
             if (lifeSpan <= 0){
-                Roundabout.LOGGER.info("1");
+                popBubble();
+                return;
+            }
+        }
+
+
+        LivingEntity usr = this.getStandUser();
+        if (usr != null && ((StandUser)usr).roundabout$getStandPowers() instanceof PowersSoftAndWet PW){
+            if (PW.bubbleList != null && !PW.bubbleList.contains(this)){
+                PW.bubbleList.add(this);
+            }
+        } else {
+            if (!this.level().isClientSide()) {
                 popBubble();
                 return;
             }
@@ -426,7 +453,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         this.level().playSound(null, this.blockPosition(), ModSounds.AIR_BUBBLE_EVENT,
                                 SoundSource.PLAYERS, 2F, (float) (1.1 + (Math.random() * 0.04)));
                     }
-                    Roundabout.LOGGER.info("2");
                     popBubble();
                 }
             }

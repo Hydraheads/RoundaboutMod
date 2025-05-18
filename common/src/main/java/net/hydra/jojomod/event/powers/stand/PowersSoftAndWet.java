@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
@@ -22,6 +23,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PowersSoftAndWet extends PunchingStand {
@@ -29,6 +31,7 @@ public class PowersSoftAndWet extends PunchingStand {
         super(self);
     }
 
+    public List<SoftAndWetBubbleEntity> bubbleList = new ArrayList<>();
     @Override
     public StandEntity getNewStandEntity(){
         byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
@@ -67,6 +70,14 @@ public class PowersSoftAndWet extends PunchingStand {
             return ModSounds.SUMMON_SOFT_AND_WET_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+
+
+    public void bubbleListInit(){
+        if (bubbleList == null) {
+            bubbleList = new ArrayList<>();
+        }
     }
 
     @Override
@@ -169,6 +180,19 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return true;
     }
+    public boolean bubbleRedirect(){
+        bubbleListInit();
+        if (!bubbleList.isEmpty()){
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 3);
+
+            /**
+            if (bubbleType != PlunderTypes.SOUND.id) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            }
+             **/
+        }
+        return true;
+    }
 
     public float getBubbleSpeed(){
         if (bubbleType == PlunderTypes.OXYGEN.id){
@@ -196,6 +220,8 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_2) {
             return this.bubbleShot();
+        } else if (move == PowerIndex.POWER_2_SNEAK) {
+            return this.bubbleRedirect();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -206,13 +232,43 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return super.tryChargedPower(move, forced, chargeTime);
     }
+
+    public void unloadBubbles(){
+        bubbleListInit();
+        List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+        };
+        if (!bubbleList2.isEmpty()) {
+            for (SoftAndWetBubbleEntity value : bubbleList2) {
+                if (value.isRemoved() || !value.isAlive()) {
+                    bubbleList.remove(value);
+                }
+            }
+        }
+    }
+    @Override
+    public void tickPowerEnd(){
+        unloadBubbles();
+        super.tickPowerEnd();
+    }
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
             if (isHoldingSneak()) {
                 if (keyIsDown) {
                     if (!hold2) {
-                        hold2 = true;
+                        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
+                            hold2 = true;
+
+                            int bubbleType = 1;
+                            ClientConfig clientConfig = ConfigManager.getClientConfig();
+                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                            }
+
+                            this.tryChargedPower(PowerIndex.POWER_2_SNEAK, true, bubbleType);
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK, bubbleType);
+                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                        }
                     }
                 } else {
                     hold2 = false;
@@ -235,7 +291,6 @@ public class PowersSoftAndWet extends PunchingStand {
                         }
                     }
                 } else {
-
                     hold2 = false;
                 }
             }
