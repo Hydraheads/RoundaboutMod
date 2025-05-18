@@ -176,6 +176,10 @@ public class PowersSoftAndWet extends PunchingStand {
             return 0.6F;
         } else if (bubbleType == PlunderTypes.ITEM.id){
             return 0.5F;
+        } else if (bubbleType == PlunderTypes.POTION_EFFECTS.id){
+            return 0.25F;
+        } else if (bubbleType == PlunderTypes.SOUND.id){
+            return 0.25F;
         }
         return 0.15F;
     }

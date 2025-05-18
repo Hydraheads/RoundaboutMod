@@ -1,7 +1,10 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.StoredSoundInstance;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -20,6 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +42,7 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
@@ -56,6 +61,14 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         if (bubbleSounds == null) {
             bubbleSounds = new ArrayList<>();
         }
+    }
+
+    @Override
+    public boolean isPickable() {
+        if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id && this.getActivated()){
+            return true;
+        }
+        return super.isPickable();
     }
     @Unique
     public void addPlunderBubbleSounds(StoredSoundInstance plunder){
@@ -91,12 +104,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         airSupply = this.standUser.getMaxAirSupply();
                         startReturning();
                     } else {
+                        Roundabout.LOGGER.info("3");
                         super.onHitBlock($$0);
                     }
                 } else {
+                    Roundabout.LOGGER.info("4");
                     super.onHitBlock($$0);
                 }
             } else {
+                Roundabout.LOGGER.info("4");
                 super.onHitBlock($$0);
             }
         }
@@ -185,48 +201,78 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
 
     public int airSupply = 0;
+    Collection<MobEffectInstance> mobEffects;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())
-                && !getReturning()) {
-            if (this.getPlunderType() == PlunderTypes.SOUND.id) {
-                if (!((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
-                    this.setEntityStolen($$0.getEntity().getId());
-                    setFloating();
-                }
-            } else if (this.getPlunderType() == PlunderTypes.FRICTION.id){
-                if ($$0.getEntity() instanceof LivingEntity LE &&
-                        MainUtil.canHaveFrictionTaken(LE)) {
-                    if (!((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
+        if (!this.level().isClientSide()) {
+            if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())
+                    && !getReturning()) {
+                if (this.getPlunderType() == PlunderTypes.SOUND.id) {
+                    if (!((ILevelAccess) this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
                         this.setEntityStolen($$0.getEntity().getId());
                         setFloating();
+                    } else {
+                        super.onHitEntity($$0);
                     }
-                }
-            } else if (this.getPlunderType() == PlunderTypes.SIGHT.id){
-                if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getEyeSightTaken() == null &&
-                MainUtil.canHaveSightTaken(LE)) {
-                    this.setEntityStolen($$0.getEntity().getId());
-                    if (!this.level().isClientSide()) {
-                        ((StandUser) LE).roundabout$deeplyRemoveAttackTarget();
-                        ((StandUser) LE).roundabout$setEyeSightTaken(this);
+                } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
+                    if ($$0.getEntity() instanceof LivingEntity LE &&
+                            MainUtil.canHaveFrictionTaken(LE)) {
+                        if (!((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
+                            this.setEntityStolen($$0.getEntity().getId());
+                            setFloating();
+                        }
+                    } else {
+                        super.onHitEntity($$0);
                     }
-                    setFloating();
+                } else if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
+                    if ($$0.getEntity() instanceof LivingEntity LE && !LE.getActiveEffects().isEmpty()) {
+                        Collection<MobEffectInstance> effects = new ArrayList<>(LE.getActiveEffects());
+                        if (!effects.isEmpty()) {
+                            Collection<MobEffectInstance> effects2 = new ArrayList<>();
+                            for (MobEffectInstance value : effects) {
+                                if (!MainUtil.isSpecialEffect(value)) {
+                                    effects2.add(new MobEffectInstance(value));
+                                    LE.getActiveEffects().remove(value);
+                                }
+                            }
+                            if (!effects2.isEmpty()) {
+                                mobEffects = effects2;
+                                setFloating();
+                            } else {
+                                super.onHitEntity($$0);
+                            }
+                        } else {
+                            super.onHitEntity($$0);
+                        }
+                    } else {
+                        super.onHitEntity($$0);
+                    }
+                } else if (this.getPlunderType() == PlunderTypes.SIGHT.id) {
+                    if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getEyeSightTaken() == null &&
+                            MainUtil.canHaveSightTaken(LE)) {
+                        this.setEntityStolen($$0.getEntity().getId());
+                        if (!this.level().isClientSide()) {
+                            ((StandUser) LE).roundabout$deeplyRemoveAttackTarget();
+                            ((StandUser) LE).roundabout$setEyeSightTaken(this);
+                        }
+                        setFloating();
+                    } else {
+                        super.onHitEntity($$0);
+                    }
+                } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
+                    if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()) {
+                        int supply = $$0.getEntity().getAirSupply();
+                        if (supply > 0) {
+                            airSupply = supply;
+                            $$0.getEntity().setAirSupply(0);
+                            startReturning();
+                        }
+                    } else {
+                        super.onHitEntity($$0);
+                    }
                 } else {
                     super.onHitEntity($$0);
                 }
-            } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
-                if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()){
-                    int supply = $$0.getEntity().getAirSupply();
-                    if (supply > 0){
-                        airSupply = supply;
-                        $$0.getEntity().setAirSupply(0);
-                        startReturning();
-                    }
-                } else {
-                    super.onHitEntity($$0);
-                }
-            } else {
-                super.onHitEntity($$0);
             }
         }
     }
@@ -316,6 +362,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         if (!this.level().isClientSide()){
             lifeSpan--;
             if (lifeSpan <= 0){
+                Roundabout.LOGGER.info("1");
                 popBubble();
                 return;
             }
@@ -379,6 +426,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         this.level().playSound(null, this.blockPosition(), ModSounds.AIR_BUBBLE_EVENT,
                                 SoundSource.PLAYERS, 2F, (float) (1.1 + (Math.random() * 0.04)));
                     }
+                    Roundabout.LOGGER.info("2");
                     popBubble();
                 }
             }
@@ -412,11 +460,23 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
-        if (this.getPlunderType() == PlunderTypes.ITEM.id) {
-            addItemNotLight($$0.getEntity());
-            hasDitchedItem = true;
+        if (!this.level().isClientSide()) {
+            if (this.getPlunderType() == PlunderTypes.ITEM.id) {
+                addItemNotLight($$0.getEntity());
+                hasDitchedItem = true;
+            } else if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
+                if ($$0.getEntity() instanceof LivingEntity LE) {
+                    if (mobEffects !=null && !mobEffects.isEmpty()) {
+                        Collection<MobEffectInstance> mobEffects2 = new ArrayList<>(mobEffects);
+                        for (MobEffectInstance value : mobEffects2) {
+                            LE.addEffect(value);
+                        }
+                    }
+                }
+            }
+            return super.hurt($$0, $$1);
         }
-        return super.hurt($$0,$$1);
+        return true;
     }
 
 

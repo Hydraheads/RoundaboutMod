@@ -1078,6 +1078,12 @@ public class MainUtil {
         }
         return !(isBossMob(LE));
     }
+
+    /**Is it a potion effect that should not be easily discarded or plundered, or has special particles*/
+    public static boolean isSpecialEffect(MobEffectInstance value){
+        return value.getEffect().equals(ModEffects.BLEED) || value.getEffect().equals(ModEffects.FACELESS) ||
+                value.getEffect().equals(ModEffects.CAPTURING_LOVE);
+    }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         return !(isBossMob(LE));
     }
