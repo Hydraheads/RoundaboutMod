@@ -17,7 +17,7 @@ public class PointerParticle extends SimpleAnimatedParticle {
         this.zd = this.zd * 0.01F + i;
         this.friction = 0.96F;
         this.gravity = 0;
-        this.quadSize *= 2.6f;
+        this.quadSize = 0.5f;
         this.lifetime = 30;
         this.setFadeColor(15916745);
         this.setSpriteFromAge(spriteSet);
