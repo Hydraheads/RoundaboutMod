@@ -12,6 +12,7 @@ public class FabricParticles {
     public static final SimpleParticleType HIT_IMPACT = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER = FabricParticleTypes.simple();
+    public static final SimpleParticleType POINTER_SOFT = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType ENDER_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType AIR_CRACKLE = FabricParticleTypes.simple();
@@ -35,6 +36,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pointer"), POINTER);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pointer_soft"), POINTER_SOFT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ender_blood"), ENDER_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "air_crackle"), AIR_CRACKLE);
@@ -65,6 +67,7 @@ public class FabricParticles {
         ModParticles.FOG_CHAIN = FOG_CHAIN;
         ModParticles.WARDEN_CLOCK = WARDEN_CLOCK;
         ModParticles.POINTER = POINTER;
+        ModParticles.POINTER_SOFT = POINTER_SOFT;
         ModParticles.ORANGE_FLAME = ORANGE_FLAME;
         ModParticles.BLUE_FLAME = BLUE_FLAME;
         ModParticles.PURPLE_FLAME = PURPLE_FLAME;

@@ -237,9 +237,10 @@ public class PowersSoftAndWet extends PunchingStand {
                         }
                     }
                 } else {
+                    this.self.playSound(ModSounds.BUBBLE_HOVERED_OVER_EVENT, 0.2F, (float) (0.95F+Math.random()*0.1F));
                     this.self.level()
                             .addParticle(
-                                    ModParticles.POINTER,
+                                    ModParticles.POINTER_SOFT,
                                     blockHit.getLocation().x() + 0.5,
                                     blockHit.getLocation().y() + 0.5,
                                     blockHit.getLocation().z() + 0.5,

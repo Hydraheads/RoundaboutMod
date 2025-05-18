@@ -275,6 +275,7 @@ public class ForgeEvents {
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();
         ModParticles.POINTER = ForgeParticles.POINTER.get();
+        ModParticles.POINTER_SOFT = ForgeParticles.POINTER_SOFT.get();
         ModParticles.AIR_CRACKLE = ForgeParticles.AIR_CRACKLE.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();

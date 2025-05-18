@@ -15,6 +15,7 @@ public class ModParticles {
     public static SimpleParticleType FOG_CHAIN;
     public static SimpleParticleType WARDEN_CLOCK;
     public static SimpleParticleType POINTER;
+    public static SimpleParticleType POINTER_SOFT;
     public static SimpleParticleType ORANGE_FLAME;
     public static SimpleParticleType BLUE_FLAME;
     public static SimpleParticleType PURPLE_FLAME;

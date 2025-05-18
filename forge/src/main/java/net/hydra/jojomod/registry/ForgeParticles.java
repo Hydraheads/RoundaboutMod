@@ -25,6 +25,9 @@ public class ForgeParticles {
     public static final RegistryObject<SimpleParticleType> POINTER = PARTICLES.register("pointer",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> POINTER_SOFT = PARTICLES.register("pointer_soft",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> AIR_CRACKLE = PARTICLES.register(
             "air_crackle",
             () -> new SimpleParticleType(true)
