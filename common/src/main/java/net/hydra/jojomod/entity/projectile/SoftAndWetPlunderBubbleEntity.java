@@ -241,7 +241,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         if (!effects.isEmpty()) {
                             Collection<MobEffectInstance> effects2 = new ArrayList<>();
                             for (MobEffectInstance value : effects) {
-                                if (!MainUtil.isSpecialEffect(value)) {
+                                if (!MainUtil.isSpecialEffect(value) && !value.isInfiniteDuration()) {
                                     effects2.add(new MobEffectInstance(value));
                                     LE.getActiveEffects().remove(value);
                                 }
@@ -283,6 +283,20 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     }
                 } else {
                     super.onHitEntity($$0);
+                }
+            } else {
+                if (getActivated() && getLaunched()){
+                    if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
+                        if ($$0.getEntity() instanceof LivingEntity LE) {
+                            if (mobEffects != null && !mobEffects.isEmpty()) {
+                                Collection<MobEffectInstance> mobEffects2 = new ArrayList<>(mobEffects);
+                                for (MobEffectInstance value : mobEffects2) {
+                                    LE.addEffect(value);
+                                }
+                            }
+                            super.onHitEntity($$0);
+                        }
+                    }
                 }
             }
         }

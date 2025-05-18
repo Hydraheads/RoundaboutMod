@@ -233,6 +233,9 @@ public class PowersSoftAndWet extends PunchingStand {
                                 value.setDeltaMovement(vector);
                                 value.hurtMarked = true;
                                 value.hasImpulse = true;
+                                if (!value.getLaunched()){
+                                    value.setLaunched(true);
+                                }
                             }
                         }
                     }

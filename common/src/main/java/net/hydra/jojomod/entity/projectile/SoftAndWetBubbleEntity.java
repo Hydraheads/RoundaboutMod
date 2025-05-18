@@ -38,12 +38,19 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     public LivingEntity standUser;
     public UUID standUserUUID;
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.FLOAT);
     public boolean getActivated() {
         return this.getEntityData().get(ACTIVATED);
     }
     public void setActivated(boolean activ) {
         this.getEntityData().set(ACTIVATED, activ);
+    }
+    public boolean getLaunched() {
+        return this.getEntityData().get(LAUNCHED);
+    }
+    public void setLaunched(boolean activ) {
+        this.getEntityData().set(LAUNCHED, activ);
     }
     public float getSped() {
         return this.getEntityData().get(SPEED);
@@ -164,6 +171,7 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ACTIVATED, false);
+        this.entityData.define(LAUNCHED, false);
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
     }
