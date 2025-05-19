@@ -86,7 +86,8 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
     @Override
     public ResourceLocation getTextureLocation(SoftAndWetBubbleEntity entity) {
         if (entity instanceof SoftAndWetPlunderBubbleEntity sp){
-            if (sp.getPlunderType() == 1){
+            int ls = sp.getLiquidStolen();
+            if (ls == 1){
                 return GAS_BUBBLE;
             }
             return TEXTURE;
