@@ -57,6 +57,9 @@ public class DamageHandler {
     public static boolean CorpseDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE, attacker), power);
     }
+    public static boolean CorpseDamageEntity(Entity entity, float power, Entity attacker, Entity attacker2){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE, attacker, attacker2), power);
+    }
     public static boolean CorpseArrowDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE_ARROW, attacker), power);
     }
