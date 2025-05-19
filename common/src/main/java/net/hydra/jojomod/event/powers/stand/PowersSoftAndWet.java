@@ -281,7 +281,6 @@ public class PowersSoftAndWet extends PunchingStand {
     public void shootBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
         ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.62), this.self.getZ());
-        ankh.setXRot(this.getSelf().getXRot()%360);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     @Override

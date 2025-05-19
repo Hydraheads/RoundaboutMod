@@ -114,8 +114,8 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     protected ParticleOptions getTrailParticle() {
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());
     }
-    public static float eWidth=0.7f;
-    public static float eHeight=0.7f;
+    public static float eWidth=0.5f;
+    public static float eHeight=0.5f;
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         return EntityDimensions.fixed(eWidth, eHeight); // Width, Height
@@ -197,9 +197,11 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         $$5 = $$5.scale($$3);
         this.setDeltaMovement($$5);
         double $$6 = $$5.horizontalDistance();
-        this.setYRot((float)(Mth.atan2($$5.x, $$5.z) * 57.2957763671875));
-        this.setXRot((float)(Mth.atan2($$5.y, $$6) * 57.2957763671875));
-        this.yRotO = this.getYRot();
-        this.xRotO = this.getXRot();
+        if (!this.level().isClientSide()) {
+            this.setYRot((float) (Mth.atan2($$5.x, $$5.z) * 180.0F / (float) Math.PI));
+            this.setXRot((float) (Mth.atan2($$5.y, $$6) * 180.0F / (float) Math.PI));
+            this.yRotO = this.getYRot();
+            this.xRotO = this.getXRot();
+        }
     }
 }

@@ -30,15 +30,13 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.MagmaBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
@@ -50,6 +48,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<BlockPos> BLOCK_POS = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Boolean> FINISHED = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> ENTITY_STOLEN = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> LIQUID_STOLEN = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> SINGULAR = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> RETURNING = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -120,6 +119,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
 
     public void setFloating2(){
+        Roundabout.LOGGER.info("8");
         if (this.getPlunderType() != PlunderTypes.SOUND.id) {
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
@@ -133,6 +133,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         this.setActivated(true);
     }
     public void setFloating(){
+        Roundabout.LOGGER.info("7");
         setFloating2();
         this.setDeltaMovement(0, 0.01, 0);
     }
@@ -215,9 +216,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     Collection<MobEffectInstance> mobEffects;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
+        Roundabout.LOGGER.info("1");
         if (!this.level().isClientSide()) {
+            Roundabout.LOGGER.info("2");
             if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())
                     && !getReturning()) {
+                Roundabout.LOGGER.info("3");
                 if (this.getPlunderType() == PlunderTypes.SOUND.id) {
                     if (!((ILevelAccess) this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
                         this.setEntityStolen($$0.getEntity().getId());
@@ -226,9 +230,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         super.onHitEntity($$0);
                     }
                 } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
+                    Roundabout.LOGGER.info("4");
                     if ($$0.getEntity() instanceof LivingEntity LE &&
                             MainUtil.canHaveFrictionTaken(LE)) {
+                        Roundabout.LOGGER.info("5");
                         if (!((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
+                            Roundabout.LOGGER.info("6");
                             this.setEntityStolen($$0.getEntity().getId());
                             setFloating();
                         }
@@ -438,15 +445,42 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         } else if (this.getReturning()){
             returnToUser();
         } else {
-            Entity owner = this.getOwner();
-            if (getSingular() && this.getOwner() != null && !this.getActivated()) {
-                this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+            if (!this.level().isClientSide()) {
+                Entity owner = this.getOwner();
+                if (getSingular() && this.getOwner() != null && !this.getActivated()) {
+                    this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+                }
             }
         }
 
 
-        AABB BB1 = this.getBoundingBox();
+        /**Because the bubble straight up ignores  collision half the time, I need an additional chedk to attempt to collide*/
+        Vec3 currentPos = this.position();
+        Vec3 nextPos = currentPos.add(this.getDeltaMovement());
 
+// Make the projectile's path a swept AABB with thickness
+        // Enlarge sweep area to cover fast motion & small entities
+        AABB sweptBox = this.getBoundingBox()
+                .expandTowards(this.getDeltaMovement())
+                .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
+
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                this.level(), this, currentPos, nextPos, sweptBox,
+                this::canHitEntity
+        );
+
+        if (entityHitResult != null) {
+            this.onHitEntity(entityHitResult);
+            return;
+        }
+
+        AABB box = this.getBoundingBox().inflate(0.7); // Slight growth
+        for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
+            this.onHitEntity(new EntityHitResult(e));
+            return;
+        }
+
+        AABB BB1 = this.getBoundingBox();
         super.tick();
         if (this.getPlunderType() == PlunderTypes.ITEM.id && !this.getReturning() && !this.getFinished() && !this.isRemoved()){
             AABB BB2 = this.getBoundingBox();
@@ -486,7 +520,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
         }
     }
-
     public void tryPhaseItemGrab(AABB bb1, AABB bb2){
         if (!this.level().isClientSide) {
             bb1 = bb1.inflate(1.6F);
@@ -606,6 +639,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void setEntityStolen(int entid) {
         this.getEntityData().set(ENTITY_STOLEN, entid);
     }
+    public int getLiquidStolen() {
+        return this.getEntityData().get(LIQUID_STOLEN);
+    }
+    public void setLiquidStolen(int entid) {
+        this.getEntityData().set(LIQUID_STOLEN, entid);
+    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -617,6 +656,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.entityData.define(RETURNING, false);
             this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
             this.entityData.define(ENTITY_STOLEN, -1);
+            this.entityData.define(LIQUID_STOLEN, -1);
         }
     }
 
