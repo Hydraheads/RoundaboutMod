@@ -134,7 +134,16 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
                     usethis = model2;
                 }
                 boolean flag = this.usesInnerModel(slot);
-                if (armorItem instanceof DyeableArmorItem $$10) {
+                if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge") && armorItem instanceof net.minecraft.world.item.DyeableLeatherItem){
+                    int i = ((net.minecraft.world.item.DyeableLeatherItem)armorItem).getColor(itemStack);
+                    float f = (float)(i >> 16 & 255) / 255.0F;
+                    float f1 = (float)(i >> 8 & 255) / 255.0F;
+                    float f2 = (float)(i & 255) / 255.0F;
+
+                    this.renderModel($$0, $$1, $$4, armorItem, usethis, flag, f, f1, f2, null,
+                            entity, itemStack, slot
+                    );
+                } else if (armorItem instanceof DyeableArmorItem $$10) {
                     int $$11 = $$10.getColor(itemStack);
                     float $$12 = (float)($$11 >> 16 & 0xFF) / 255.0F;
                     float $$13 = (float)($$11 >> 8 & 0xFF) / 255.0F;
