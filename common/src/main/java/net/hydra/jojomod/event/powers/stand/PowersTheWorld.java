@@ -846,7 +846,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && ((StandUser) this.getSelf()).roundabout$getActive()){
                 if (this.getAirAmount() > 0) {
-                    this.getSelf().setAirSupply(((StandUser) this.getSelf()).roundabout$increaseAirSupply(this.getSelf().getAirSupply()));
+                    //this.getSelf().setAirSupply(((StandUser) this.getSelf()).roundabout$increaseAirSupply(this.getSelf().getAirSupply()));
                     this.setAirAmount(Math.max(0, Math.min(this.getAirAmount() - 4, this.getMaxAirAmount())));
                 }
             } else {
