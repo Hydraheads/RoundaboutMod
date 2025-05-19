@@ -1076,7 +1076,7 @@ public class MainUtil {
         if (LE instanceof Sniffer || LE instanceof Bat || LE instanceof Dolphin){
             return false;
         }
-        return !(isBossMob(LE));
+        return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseSight);
     }
 
     /**Is it a potion effect that should not be easily discarded or plundered, or has special particles*/
@@ -1085,7 +1085,7 @@ public class MainUtil {
                 value.getEffect().equals(ModEffects.CAPTURING_LOVE);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
-        return !(isBossMob(LE));
+        return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseFriction);
     }
     public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {
         Vec3 $$2 = $$0.getDeltaMovement();

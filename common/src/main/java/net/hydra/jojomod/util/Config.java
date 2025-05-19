@@ -86,8 +86,6 @@ import java.util.Set;
     public Integer magiciansRedFurnaceTicks;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer d4cDimensionKidnapRadius;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean softAndWetFrictionStopsJumping;
     @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
     public Integer cinderellaLevelCostLipstick;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
@@ -134,6 +132,8 @@ import java.util.Set;
     public DamageMultipliers damageMultipliers;
     @NestedOption(group = "modded")
     public GuardPoints guardPoints;
+    @NestedOption(group = "modded")
+    public SoftAndWetSettings softAndWetSettings;
     @NestedOption(group = "modded")
     public WorldGenSettings worldgenSettings;
     @NestedOption(group = "modded")
@@ -291,10 +291,23 @@ import java.util.Set;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bypassAllNametagHidesInCreativeMode;
     }
+
+    public static class SoftAndWetSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean moistureWithStandGriefingTakesLiquidBlocks;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean frictionStopsJumping;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bossesCannotLoseFriction;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bossesCannotLoseSight;
+    }
+
     public static class Durations {
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer D4CMeltDodgeTicks;
     }
+
     public static class Cooldowns {
         @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
         public Integer standPunch;

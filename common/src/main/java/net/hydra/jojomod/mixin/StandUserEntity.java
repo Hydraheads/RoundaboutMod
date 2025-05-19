@@ -43,7 +43,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -51,8 +50,6 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
@@ -63,7 +60,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.PowderSnowBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
@@ -2904,7 +2900,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
-        if (ClientNetworking.getAppropriateConfig().softAndWetFrictionStopsJumping) {
+        if (ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStopsJumping) {
             if (MainUtil.canHaveFrictionTaken(((LivingEntity) (Object) this))) {
                 if (((ILevelAccess) this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
                         ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this)

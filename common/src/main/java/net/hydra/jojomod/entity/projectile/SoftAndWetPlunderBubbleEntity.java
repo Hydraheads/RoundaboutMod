@@ -474,7 +474,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             return;
         }
 
-        AABB box = this.getBoundingBox().inflate(0.7); // Slight growth
+        AABB box = this.getBoundingBox().inflate(0.4); // Slight growth
         for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
             this.onHitEntity(new EntityHitResult(e));
             return;
