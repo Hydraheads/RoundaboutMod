@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
@@ -62,6 +63,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -1459,6 +1461,16 @@ public class MainUtil {
         }
     }
 
+    public static boolean getIsGamemodeApproriateForGrief(Entity Li){
+        if (Li != null && !Li.level().isClientSide()) {
+            if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
+                    && ((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
+                    && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static boolean isVampireBurnTick(LivingEntity ent) {
         if (ent.level().isDay() && !ent.level().isClientSide) {

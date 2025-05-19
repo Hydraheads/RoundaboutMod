@@ -272,7 +272,7 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (bubbleType == PlunderTypes.SOUND.id){
             return 0.25F;
         }
-        return 0.15F;
+        return 0.18F;
     }
 
     public void shootBubble(SoftAndWetBubbleEntity ankh){

@@ -22,6 +22,8 @@ import org.joml.Vector3f;
 
 public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
+    private static final ResourceLocation BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble.png");
+    private static final ResourceLocation GAS_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/gasoline_bubble.png");
 
     private final float scale;
     private final ItemRenderer itemRenderer;
@@ -50,7 +52,7 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
             poseStack.translate(0, entity.getBbHeight() / 2, 0);
 
             // Draw flat quad here
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(TEXTURE));
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
             Matrix4f matrix = poseStack.last().pose();
             Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
             normal.normalize();
@@ -83,7 +85,13 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
 
     @Override
     public ResourceLocation getTextureLocation(SoftAndWetBubbleEntity entity) {
-        return TEXTURE;
+        if (entity instanceof SoftAndWetPlunderBubbleEntity sp){
+            if (sp.getPlunderType() == 1){
+                return GAS_BUBBLE;
+            }
+            return TEXTURE;
+        }
+        return BUBBLE;
     }
 }
 

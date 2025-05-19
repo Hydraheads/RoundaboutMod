@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
+import net.hydra.jojomod.block.GasolineBlock;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
@@ -34,8 +36,10 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.MagmaBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -90,30 +94,57 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         super(ModEntities.PLUNDER_BUBBLE, level);
     }
 
+    public boolean stolenPhysicalLiquid = false;
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (!getFinished() && !getReturning()) {
-            if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()) {
-                this.setBlockPos($$0.getBlockPos().above());
-                this.setBlockPos($$0.getBlockPos());
-                if ($$0.getDirection() == Direction.DOWN){
-                    setFloatingUpsideDown();
-                } else {
-                    setFloating();
-                }
-            } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
-                if (this.standUser != null) {
-                    if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
-                        airSupply = this.standUser.getMaxAirSupply();
-                        startReturning();
+        if (!this.level().isClientSide()) {
+            if (!getFinished() && !getReturning()) {
+                if ((this.getPlunderType() == PlunderTypes.FRICTION.id || this.getPlunderType() == PlunderTypes.SOUND.id) && !this.getActivated()) {
+                    this.setBlockPos($$0.getBlockPos().above());
+                    this.setBlockPos($$0.getBlockPos());
+                    if ($$0.getDirection() == Direction.DOWN) {
+                        setFloatingUpsideDown();
+                    } else {
+                        setFloating();
+                    }
+                } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
+                        if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof GasolineBlock) {
+                            if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                    ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                                this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 11);
+                                stolenPhysicalLiquid = true;
+                            }
+                            this.setLiquidStolen(1);
+
+                            if ($$0.getDirection() == Direction.DOWN) {
+                                setFloatingUpsideDown();
+                                stolenPhysicalLiquid = true;
+                            } else {
+                                setFloating();
+                            }
+                        } else if (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof GasolineBlock) {
+                            if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                    ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                                this.level().setBlock($$0.getBlockPos().above(), Blocks.AIR.defaultBlockState(), 11);
+                            }
+                            this.setLiquidStolen(1);
+                        } else {
+                            super.onHitBlock($$0);
+                        }
+                } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
+                    if (this.standUser != null) {
+                        if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
+                            airSupply = this.standUser.getMaxAirSupply();
+                            startReturning();
+                        } else {
+                            super.onHitBlock($$0);
+                        }
                     } else {
                         super.onHitBlock($$0);
                     }
                 } else {
                     super.onHitBlock($$0);
                 }
-            } else {
-                super.onHitBlock($$0);
             }
         }
     }
@@ -200,6 +231,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
         $$0.putBoolean("roundabout.ditchedItem",hasDitchedItem);
         $$0.putFloat("roundabout.speed",getSped());
+        $$0.putBoolean("roundabout.stolenLiquid",stolenPhysicalLiquid);
         super.addAdditionalSaveData($$0);
     }
     @Override
@@ -208,6 +240,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         ItemStack itemstack = ItemStack.of(compoundtag);
         hasDitchedItem = $$0.getBoolean("roundabout.ditchedItem");
         setSped($$0.getFloat("roundabout.speed"));
+        stolenPhysicalLiquid = $$0.getBoolean("roundabout.stolenPhysicalLiquid");
         this.setHeldItem(itemstack);
         super.readAdditionalSaveData($$0);
     }
@@ -216,12 +249,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     Collection<MobEffectInstance> mobEffects;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        Roundabout.LOGGER.info("1");
         if (!this.level().isClientSide()) {
-            Roundabout.LOGGER.info("2");
             if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())
                     && !getReturning()) {
-                Roundabout.LOGGER.info("3");
                 if (this.getPlunderType() == PlunderTypes.SOUND.id) {
                     if (!((ILevelAccess) this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
                         this.setEntityStolen($$0.getEntity().getId());
@@ -471,13 +501,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         if (entityHitResult != null) {
             this.onHitEntity(entityHitResult);
-            return;
         }
 
         AABB box = this.getBoundingBox().inflate(0.4); // Slight growth
         for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
             this.onHitEntity(new EntityHitResult(e));
-            return;
         }
 
         AABB BB1 = this.getBoundingBox();
