@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
@@ -37,7 +38,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.UUID;
 
-public class StandFireballEntity extends AbstractHurtingProjectile implements UnburnableProjectile {
+public class StandFireballEntity extends AbstractHurtingProjectile implements UnburnableProjectile, FireProjectile {
     public StandFireballEntity(EntityType<? extends StandFireballEntity> $$0, Level $$1) {
         super($$0, $$1);
     }

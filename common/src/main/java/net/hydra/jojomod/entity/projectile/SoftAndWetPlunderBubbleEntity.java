@@ -6,6 +6,7 @@ import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -211,6 +212,16 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void setFloatingUpsideDown(){
         setFloating2();
         this.setDeltaMovement(0, -0.01, 0);
+    }
+
+    public void gasExplode(){
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY() + this.getEyeHeight(), this.getZ(),
+                    40, 0.0, 0.2, 0.0, 0.2);
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY() + this.getEyeHeight(), this.getZ(),
+                    1, 0.5, 0.5, 0.5, 0.2);
+            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier() * 16);
+        }
     }
 
     public void popSounds(){
@@ -644,12 +655,17 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id){
                 if (getLiquidStolen() == 1) {
                     if (stolenPhysicalLiquid) {
-                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                                15, 0.4, 0.4, 0.25, 0.4);
-                        SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
-                        this.playSound($$6, 1F, 1.5F);
-                        if ($$0.getEntity() instanceof LivingEntity && $$0.getDirectEntity().is($$0.getEntity())) {
-                            ((StandUser) $$0.getEntity()).roundabout$setGasolineTime(((StandUser) $$0.getEntity()).roundabout$getMaxBucketGasolineTime());
+                        if ($$0.getDirectEntity().isOnFire() || $$0.getDirectEntity() instanceof FireProjectile){
+                            gasExplode();
+                            finishedUsingLiquid = true;
+                        } else {
+                            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                                    15, 0.4, 0.4, 0.25, 0.4);
+                            SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
+                            this.playSound($$6, 1F, 1.5F);
+                            if ($$0.getEntity() instanceof LivingEntity && $$0.getDirectEntity().is($$0.getEntity())) {
+                                ((StandUser) $$0.getEntity()).roundabout$setGasolineTime(((StandUser) $$0.getEntity()).roundabout$getMaxBucketGasolineTime());
+                            }
                         }
                     }
                 }
