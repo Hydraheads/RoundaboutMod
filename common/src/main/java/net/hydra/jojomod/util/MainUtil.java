@@ -1722,7 +1722,7 @@ public class MainUtil {
         // Search for potential target entities in bounding box
         AABB box = player.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
         List<Entity> candidates = world.getEntities(player, box,
-                (e) -> e instanceof LivingEntity && e.isPickable() && e.isAlive());
+                (e) -> e instanceof Entity && e.isPickable() && e.isAlive());
 
         Entity closest = null;
         double closestDistance = blockHitDistance;
