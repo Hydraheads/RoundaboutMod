@@ -550,11 +550,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             Entity owner = this.getOwner();
             if (getSingular() && owner != null && !this.getActivated()) {
 
-                if (owner.isCrouching()){
-                    this.shootFromRotationDeltaAgnosticBackwards(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
-                } else {
-                    this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
-                }
+               this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+
             }
         }
 
@@ -578,10 +575,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.onHitEntity(entityHitResult);
         }
 
-        AABB box = this.getBoundingBox().inflate(0.4); // Slight growth
+        AABB box = this.getBoundingBox().inflate(0.3); // Slight growth
         for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
             this.onHitEntity(new EntityHitResult(e));
         }
+        stealLiquids();
 
         AABB BB1 = this.getBoundingBox();
         super.tick();
@@ -589,6 +587,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             AABB BB2 = this.getBoundingBox();
             tryPhaseItemGrab(BB1, BB2);
         }
+
+        stealLiquids();
 
         if (!this.getReturning() && !this.level().isClientSide()){
             if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
@@ -642,6 +642,23 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             itemNearby(IE.getId());
                             return;
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    public void stealLiquids(){
+        if (!this.level().isClientSide()) {
+            if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
+                if (!getActivated()){
+                    BlockState bs = this.level().getBlockState(this.blockPosition());
+                    if (bs.is(Blocks.WATER)){
+                        this.setLiquidStolen(2);
+                        setFloating();
+                    } else if (bs.is(Blocks.LAVA)){
+                        this.setLiquidStolen(3);
+                        setFloating();
                     }
                 }
             }
