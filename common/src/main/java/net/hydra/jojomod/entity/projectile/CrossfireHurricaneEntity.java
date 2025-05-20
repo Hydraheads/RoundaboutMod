@@ -56,6 +56,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
     }
+
     public CrossfireHurricaneEntity(LivingEntity $$1, Level $$2) {
         this(ModEntities.CROSSFIRE_HURRICANE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
