@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.block.GasolineBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -36,6 +37,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.MagmaBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
@@ -108,6 +110,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         setFloating();
                     }
                 } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
+                    if (!this.getActivated()) {
                         if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof GasolineBlock) {
                             if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
                                     ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
@@ -131,6 +134,17 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         } else {
                             super.onHitBlock($$0);
                         }
+                    } else {
+                        if (getLiquidStolen() == 1){
+                            if (stolenPhysicalLiquid) {
+                                BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
+                                if (MainUtil.tryPlaceBlock(this.standUser, bpos)){
+                                    this.level().setBlockAndUpdate(bpos, ModBlocks.GASOLINE_SPLATTER.defaultBlockState().setValue(ModBlocks.GAS_CAN_LEVEL, Integer.valueOf(2)));
+                                }
+                            }
+                        }
+                        super.onHitBlock($$0);
+                    }
                 } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
                     if (this.standUser != null) {
                         if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {

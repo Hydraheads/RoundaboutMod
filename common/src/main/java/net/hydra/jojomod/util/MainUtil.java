@@ -1007,6 +1007,23 @@ public class MainUtil {
         return false;
     }
 
+
+    @SuppressWarnings("deprecation")
+    public static boolean tryPlaceBlock(Entity ent, BlockPos pos){
+        if (ent != null && !ent.level().isClientSide()) {
+            BlockState state = ent.level().getBlockState(pos);
+            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief(ent) && !state.liquid() &&
+                    ent.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+                    !((ent instanceof Player PL &&
+                            (PL.blockActionRestricted(ent.level(), pos, ((ServerPlayer)
+                                    ent).gameMode.getGameModeForPlayer()))) ||
+                            (ent instanceof Player && !ent.level().mayInteract(((Player) ent), pos))))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static List<Entity> GrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, int angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
