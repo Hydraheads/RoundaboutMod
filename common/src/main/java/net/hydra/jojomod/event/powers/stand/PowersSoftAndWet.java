@@ -245,7 +245,7 @@ public class PowersSoftAndWet extends PunchingStand {
                             .addParticle(
                                     ModParticles.POINTER_SOFT,
                                     blockHit.getLocation().x(),
-                                    blockHit.getLocation().y(),
+                                    blockHit.getLocation().y() + 0.5,
                                     blockHit.getLocation().z(),
                                     0,
                                     0,

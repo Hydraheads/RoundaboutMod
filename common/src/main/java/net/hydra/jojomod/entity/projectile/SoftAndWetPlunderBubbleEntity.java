@@ -19,6 +19,8 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -26,6 +28,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -97,6 +100,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
 
     public boolean stolenPhysicalLiquid = false;
+    public boolean finishedUsingLiquid = false;
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide()) {
@@ -140,6 +144,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
                                 if (MainUtil.tryPlaceBlock(this.standUser, bpos)){
                                     this.level().setBlockAndUpdate(bpos, ModBlocks.GASOLINE_SPLATTER.defaultBlockState().setValue(ModBlocks.GAS_CAN_LEVEL, Integer.valueOf(2)));
+                                    finishedUsingLiquid = true;
+                                } else {
+                                    spawnGasSplatter();
                                 }
                             }
                         }
@@ -158,6 +165,24 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     }
                 } else {
                     super.onHitBlock($$0);
+                }
+            }
+        }
+    }
+
+    public void rangedSplash(){
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                    15, 0.4, 0.4, 0.25, 0.4);
+            SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
+            this.playSound($$6, 1F, 1.5F);
+            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), this.getX(), this.getY(),
+                    this.getZ(), 2, 2, 2));
+            if (!entities.isEmpty()) {
+                for (Entity value : entities) {
+                    if (value instanceof LivingEntity) {
+                        ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxBucketGasolineTime());
+                    }
                 }
             }
         }
@@ -233,10 +258,33 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             popSounds();
+
+
+            if (this.getPlunderType() == PlunderTypes.MOISTURE.id){
+                if (!finishedUsingLiquid){
+                    if (stolenPhysicalLiquid){
+                        if (getLiquidStolen() == 1) {
+                           spawnGasSplatter();
+                        }
+                    } else {
+                        if (getLiquidStolen() == 1) {
+                            rangedSplash();
+                        }
+                    }
+                }
+            }
         }
 
 
         this.discard();
+    }
+
+    public void spawnGasSplatter(){
+        if (this.standUser != null) {
+            GasolineSplatterEntity splat = new GasolineSplatterEntity(this.standUser, this.standUser.level());
+            splat.absMoveTo(this.getX(), this.getY(), this.getZ());
+            standUser.level().addFreshEntity(splat);
+        }
     }
 
     @Override
@@ -593,6 +641,18 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             if (this.getPlunderType() == PlunderTypes.ITEM.id) {
                 addItemNotLight($$0.getEntity());
                 hasDitchedItem = true;
+            } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id){
+                if (getLiquidStolen() == 1) {
+                    if (stolenPhysicalLiquid) {
+                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                                15, 0.4, 0.4, 0.25, 0.4);
+                        SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
+                        this.playSound($$6, 1F, 1.5F);
+                        if ($$0.getEntity() instanceof LivingEntity && $$0.getDirectEntity().is($$0.getEntity())) {
+                            ((StandUser) $$0.getEntity()).roundabout$setGasolineTime(((StandUser) $$0.getEntity()).roundabout$getMaxBucketGasolineTime());
+                        }
+                    }
+                }
             } else if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
                 if ($$0.getEntity() instanceof LivingEntity LE) {
                     if (mobEffects !=null && !mobEffects.isEmpty()) {
