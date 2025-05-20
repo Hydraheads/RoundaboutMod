@@ -46,6 +46,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.MagmaBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.*;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -190,7 +191,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
 
     public void setFloating2(){
-        Roundabout.LOGGER.info("8");
         if (this.getPlunderType() != PlunderTypes.SOUND.id) {
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
@@ -332,12 +332,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         super.onHitEntity($$0);
                     }
                 } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
-                    Roundabout.LOGGER.info("4");
                     if ($$0.getEntity() instanceof LivingEntity LE &&
                             MainUtil.canHaveFrictionTaken(LE)) {
-                        Roundabout.LOGGER.info("5");
                         if (!((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
-                            Roundabout.LOGGER.info("6");
                             this.setEntityStolen($$0.getEntity().getId());
                             setFloating();
                         }
@@ -581,6 +578,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
         stealLiquids();
 
+        if (getActivated() && !getReturning() && !getFinished() && !getLaunched()){
+            this.setDeltaMovement(0, 0.01, 0);
+        }
+
         AABB BB1 = this.getBoundingBox();
         super.tick();
         if (this.getPlunderType() == PlunderTypes.ITEM.id && !this.getReturning() && !this.getFinished() && !this.isRemoved()){
@@ -653,10 +654,20 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
                 if (!getActivated()){
                     BlockState bs = this.level().getBlockState(this.blockPosition());
-                    if (bs.is(Blocks.WATER)){
+                    if (bs.is(Blocks.WATER) && bs.getValue(BlockStateProperties.LEVEL) == 0){
+                        if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                            this.level().setBlock(this.blockPosition(), Blocks.AIR.defaultBlockState(), 11);
+                            stolenPhysicalLiquid = true;
+                        }
                         this.setLiquidStolen(2);
                         setFloating();
-                    } else if (bs.is(Blocks.LAVA)){
+                    } else if (bs.is(Blocks.LAVA) && bs.getValue(BlockStateProperties.LEVEL) == 0){
+                        if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                            this.level().setBlock(this.blockPosition(), Blocks.AIR.defaultBlockState(), 11);
+                            stolenPhysicalLiquid = true;
+                        }
                         this.setLiquidStolen(3);
                         setFloating();
                     }
