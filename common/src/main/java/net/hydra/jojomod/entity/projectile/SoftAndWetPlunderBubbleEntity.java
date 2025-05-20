@@ -204,7 +204,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         this.setActivated(true);
     }
     public void setFloating(){
-        Roundabout.LOGGER.info("7");
         setFloating2();
         this.setDeltaMovement(0, 0.01, 0);
     }
@@ -548,9 +547,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         } else if (this.getReturning()){
             returnToUser();
         } else {
-            if (!this.level().isClientSide()) {
-                Entity owner = this.getOwner();
-                if (getSingular() && this.getOwner() != null && !this.getActivated()) {
+            Entity owner = this.getOwner();
+            if (getSingular() && owner != null && !this.getActivated()) {
+
+                if (owner.isCrouching()){
+                    this.shootFromRotationDeltaAgnosticBackwards(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+                } else {
                     this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
                 }
             }
