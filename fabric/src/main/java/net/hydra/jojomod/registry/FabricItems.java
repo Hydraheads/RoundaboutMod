@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.Blocks;
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
     public static Item STAND_BEETLE_ARROW = registerItem("stand_beetle_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
-    public static Item WORTHY_ARROW = registerItem("worthy_arrow", new WorthyArrowItem(new Item.Properties()));
+    public static Item WORTHY_ARROW = registerItem("worthy_arrow", new WorthyArrowItem(new Item.Properties().stacksTo(1)));
     public static Item STAND_DISC_STAR_PLATINUM = registerItem("star_platinum_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
     public static Item MAX_STAND_DISC_STAR_PLATINUM = registerItem("max_star_platinum_disc",
