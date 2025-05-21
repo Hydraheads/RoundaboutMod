@@ -1095,6 +1095,11 @@ public class MainUtil {
         if (LE instanceof Sniffer || LE instanceof Bat || LE instanceof Dolphin){
             return false;
         }
+
+        if (LE instanceof Mob mb && ((IMob)mb).roundabout$getSightProtectionTicks() > 0){
+            return false;
+        }
+
         return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseSight);
     }
 

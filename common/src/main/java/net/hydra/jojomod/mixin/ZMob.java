@@ -74,6 +74,21 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Shadow @Final protected GoalSelector goalSelector;
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$IS_WORTHY = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BOOLEAN);
 
+
+    /**Prevent aggro scumming with bubble spam*/
+    @Unique
+    public int roundabout$sightProtectionTicks = 0;
+    @Override
+    @Unique
+    public int roundabout$getSightProtectionTicks(){
+        return roundabout$sightProtectionTicks;
+    }
+    @Override
+    @Unique
+    public void roundabout$setSightProtectionTicks(int sightProt){
+        roundabout$sightProtectionTicks = sightProt;
+    }
+
     @Override
     @Unique
     public boolean roundabout$isWorthy() {
@@ -630,10 +645,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
         user.roundabout$removeQueForTargetDeletion();
     }
 
+
     @SuppressWarnings("deprecation")
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
+
+            if (roundabout$sightProtectionTicks > 0){
+                roundabout$sightProtectionTicks--;
+            }
+
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
                 if (!this.roundabout$getFightOrFlight()) {
                     if (this.getTarget() != null){

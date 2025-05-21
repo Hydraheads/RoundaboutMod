@@ -301,6 +301,8 @@ import java.util.Set;
         public Boolean bossesCannotLoseFriction;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bossesCannotLoseSight;
+        @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
+        public Integer ticksBetweenSightStealsOnSameMob;
     }
 
     public static class Durations {

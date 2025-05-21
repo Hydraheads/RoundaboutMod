@@ -97,7 +97,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return $$1;
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 2 && !canDoBubblRedirect() && isHoldingSneak() && !isGuarding()) {
+        if (slot == 2 && !canDoBubblRedirect() && isGuarding()) {
+            return true;
+        }
+        if (slot == 2 && !canDoBubblePop() && isHoldingSneak() && !isGuarding()) {
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
@@ -112,8 +115,11 @@ public class PowersSoftAndWet extends PunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_SELECTION, PowerIndex.NO_CD);
         }
 
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_2_SNEAK);
+
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_EXTRA_2);
+        } else if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE, PowerIndex.SKILL_2);
         }
@@ -183,6 +189,8 @@ public class PowersSoftAndWet extends PunchingStand {
             bubble.setPlunderType(bubbleType);
             bubble.setSingular(true);
             shootBubbleSpeed(bubble,getBubbleSpeed());
+            bubbleListInit();
+            this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
 
             if (bubbleType != PlunderTypes.SOUND.id) {
@@ -190,6 +198,10 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
         return true;
+    }
+    public boolean canDoBubblePop(){
+        bubbleListInit();
+        return !bubbleList.isEmpty();
     }
     public boolean canDoBubblRedirect(){
         bubbleListInit();
@@ -207,12 +219,33 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return false;
     }
+    public boolean bubblePop() {
+        bubbleListInit();
+        if (!bubbleList.isEmpty()) {
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
+            if (!this.self.level().isClientSide()) {
+                List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+                };
+                if (!bubbleList2.isEmpty()) {
+                    for (SoftAndWetBubbleEntity value : bubbleList2) {
+                        if (value instanceof SoftAndWetPlunderBubbleEntity plunder){
+                            if (!plunder.getFinished()){
+                               plunder.popBubble();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean bubbleRedirect(){
         bubbleListInit();
         if (!bubbleList.isEmpty()){
 
             if (canDoBubblRedirect()) {
-                this.setCooldown(PowerIndex.SKILL_2_SNEAK, 3);
+                this.setCooldown(PowerIndex.SKILL_EXTRA_2, 3);
 
                 Vec3 vec3d = this.self.getEyePosition(0);
                 Vec3 vec3d2 = this.self.getViewVector(0);
@@ -289,8 +322,10 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_2) {
             return this.bubbleShot();
-        } else if (move == PowerIndex.POWER_2_SNEAK) {
+        } else if (move == PowerIndex.POWER_2_EXTRA) {
             return this.bubbleRedirect();
+        } else if (move == PowerIndex.POWER_2_SNEAK) {
+            return this.bubblePop();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -322,7 +357,27 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
-            if (isHoldingSneak()) {
+            if (isGuarding()) {
+                if (keyIsDown) {
+                    if (!hold2) {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
+                            hold2 = true;
+
+                            int bubbleType = 1;
+                            ClientConfig clientConfig = ConfigManager.getClientConfig();
+                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                            }
+
+                            this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
+                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                        }
+                    }
+                } else {
+                    hold2 = false;
+                }
+            } else if (isHoldingSneak()) {
                 if (keyIsDown) {
                     if (!hold2) {
                         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
