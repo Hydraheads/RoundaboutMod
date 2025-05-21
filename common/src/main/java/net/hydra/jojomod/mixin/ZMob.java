@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
@@ -33,6 +34,7 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -430,16 +432,19 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public void roundabout$deeplyRemoveTargets(){
-        if (this.targetSelector != null){
-            Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
-            wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
-
+        if (((LivingEntity)(Object)this) instanceof EnderMan){
+            ((IEnderMan)this).roundabout$stripGoals();
+        } else {
+            if (this.targetSelector != null) {
+                Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
+                wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
+            }
         }
     }
     @Unique
     public void roundabout$removeGoalTarget(Goal goal){
-        if (goal instanceof TargetGoal tg){
-            ((ITargetGoal)tg).roundabout$removeTarget();
+        if (goal instanceof TargetGoal tg) {
+            ((ITargetGoal) tg).roundabout$removeTarget();
         }
     }
 
