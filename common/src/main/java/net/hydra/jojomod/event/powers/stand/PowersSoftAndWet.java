@@ -350,9 +350,9 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
     @Override
-    public void tickPowerEnd(){
+    public void tickPower(){
         unloadBubbles();
-        super.tickPowerEnd();
+        super.tickPower();
     }
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
