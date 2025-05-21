@@ -404,41 +404,68 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
-            if (!getActivated() && !getFinished() && !($$0.getEntity() instanceof SoftAndWetBubbleEntity) && !($$0.getEntity().getId() == getUserID())
-                    && !getReturning()) {
-                if (this.getPlunderType() == PlunderTypes.SOUND.id) {
-                    if (!((ILevelAccess) this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
-                        this.setEntityStolen($$0.getEntity().getId());
-                        setFloating();
-                    } else {
-                        super.onHitEntity($$0);
-                    }
-                } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
-                    if ($$0.getEntity() instanceof LivingEntity LE &&
-                            MainUtil.canHaveFrictionTaken(LE)) {
-                        if (!((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
+            if (!($$0.getEntity() instanceof SoftAndWetBubbleEntity)) {
+                if (!getActivated() && !getFinished() && !($$0.getEntity().getId() == getUserID())
+                        && !getReturning()) {
+                    if (this.getPlunderType() == PlunderTypes.SOUND.id) {
+                        if (!((ILevelAccess) this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
                             this.setEntityStolen($$0.getEntity().getId());
                             setFloating();
+                        } else {
+                            super.onHitEntity($$0);
                         }
-                    } else {
-                        super.onHitEntity($$0);
-                    }
-                } else if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
-                    if ($$0.getEntity() instanceof LivingEntity LE && !LE.getActiveEffects().isEmpty()) {
-                        Collection<MobEffectInstance> effects = new ArrayList<>(LE.getActiveEffects());
-                        if (!effects.isEmpty()) {
-                            Collection<MobEffectInstance> effects2 = new ArrayList<>();
-                            for (MobEffectInstance value : effects) {
-                                if (!MainUtil.isSpecialEffect(value) && !value.isInfiniteDuration()) {
-                                    effects2.add(new MobEffectInstance(value));
-                                    LE.getActiveEffects().remove(value);
-                                }
-                            }
-                            if (!effects2.isEmpty()) {
-                                mobEffects = effects2;
+                    } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
+                        if ($$0.getEntity() instanceof LivingEntity LE &&
+                                MainUtil.canHaveFrictionTaken(LE)) {
+                            if (!((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
+                                this.setEntityStolen($$0.getEntity().getId());
                                 setFloating();
+                            }
+                        } else {
+                            super.onHitEntity($$0);
+                        }
+                    } else if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
+                        if ($$0.getEntity() instanceof LivingEntity LE && !LE.getActiveEffects().isEmpty()) {
+                            Collection<MobEffectInstance> effects = new ArrayList<>(LE.getActiveEffects());
+                            if (!effects.isEmpty()) {
+                                Collection<MobEffectInstance> effects2 = new ArrayList<>();
+                                for (MobEffectInstance value : effects) {
+                                    if (!MainUtil.isSpecialEffect(value) && !value.isInfiniteDuration()) {
+                                        effects2.add(new MobEffectInstance(value));
+                                        LE.getActiveEffects().remove(value);
+                                    }
+                                }
+                                if (!effects2.isEmpty()) {
+                                    mobEffects = effects2;
+                                    setFloating();
+                                } else {
+                                    super.onHitEntity($$0);
+                                }
                             } else {
                                 super.onHitEntity($$0);
+                            }
+                        } else {
+                            super.onHitEntity($$0);
+                        }
+                    } else if (this.getPlunderType() == PlunderTypes.SIGHT.id) {
+                        if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getEyeSightTaken() == null &&
+                                MainUtil.canHaveSightTaken(LE)) {
+                            this.setEntityStolen($$0.getEntity().getId());
+                            if (!this.level().isClientSide()) {
+                                ((StandUser) LE).roundabout$deeplyRemoveAttackTarget();
+                                ((StandUser) LE).roundabout$setEyeSightTaken(this);
+                            }
+                            setFloating();
+                        } else {
+                            super.onHitEntity($$0);
+                        }
+                    } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
+                        if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()) {
+                            int supply = $$0.getEntity().getAirSupply();
+                            if (supply > 0) {
+                                airSupply = supply;
+                                $$0.getEntity().setAirSupply(0);
+                                startReturning();
                             }
                         } else {
                             super.onHitEntity($$0);
@@ -446,50 +473,25 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     } else {
                         super.onHitEntity($$0);
                     }
-                } else if (this.getPlunderType() == PlunderTypes.SIGHT.id) {
-                    if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getEyeSightTaken() == null &&
-                            MainUtil.canHaveSightTaken(LE)) {
-                        this.setEntityStolen($$0.getEntity().getId());
-                        if (!this.level().isClientSide()) {
-                            ((StandUser) LE).roundabout$deeplyRemoveAttackTarget();
-                            ((StandUser) LE).roundabout$setEyeSightTaken(this);
-                        }
-                        setFloating();
-                    } else {
-                        super.onHitEntity($$0);
-                    }
-                } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
-                    if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()) {
-                        int supply = $$0.getEntity().getAirSupply();
-                        if (supply > 0) {
-                            airSupply = supply;
-                            $$0.getEntity().setAirSupply(0);
-                            startReturning();
-                        }
-                    } else {
-                        super.onHitEntity($$0);
-                    }
                 } else {
-                    super.onHitEntity($$0);
-                }
-            } else {
-                if (getActivated() && getLaunched() && !getFinished()){
-                    if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
-                        if ($$0.getEntity() instanceof LivingEntity LE) {
-                            if (mobEffects != null && !mobEffects.isEmpty()) {
-                                Collection<MobEffectInstance> mobEffects2 = new ArrayList<>(mobEffects);
-                                for (MobEffectInstance value : mobEffects2) {
-                                    LE.addEffect(value);
+                    if (getActivated() && getLaunched() && !getFinished()) {
+                        if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
+                            if ($$0.getEntity() instanceof LivingEntity LE) {
+                                if (mobEffects != null && !mobEffects.isEmpty()) {
+                                    Collection<MobEffectInstance> mobEffects2 = new ArrayList<>(mobEffects);
+                                    for (MobEffectInstance value : mobEffects2) {
+                                        LE.addEffect(value);
+                                    }
                                 }
+                                super.onHitEntity($$0);
+                            }
+                        } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
+                            if (getLiquidStolen() == 1) {
+                                splashGas($$0.getEntity());
+                                finishedUsingLiquid = true;
                             }
                             super.onHitEntity($$0);
                         }
-                    } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id){
-                        if (getLiquidStolen() == 1) {
-                            splashGas($$0.getEntity());
-                            finishedUsingLiquid = true;
-                        }
-                        super.onHitEntity($$0);
                     }
                 }
             }
