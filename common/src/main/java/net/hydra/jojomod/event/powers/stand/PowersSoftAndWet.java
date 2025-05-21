@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -97,10 +98,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return $$1;
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 2 && !canDoBubblRedirect() && isGuarding()) {
+        if (slot == 2 && !canDoBubblRedirect() && isHoldingSneak() && !isGuarding()) {
             return true;
         }
-        if (slot == 2 && !canDoBubblePop() && isHoldingSneak() && !isGuarding()) {
+        if (slot == 2 && !canDoBubblePop() && isGuarding()) {
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
@@ -117,9 +118,9 @@ public class PowersSoftAndWet extends PunchingStand {
 
 
         if (isGuarding()){
-            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_EXTRA_2);
-        } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
+        } else if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_EXTRA_2);
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE, PowerIndex.SKILL_2);
         }
@@ -222,7 +223,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean bubblePop() {
         bubbleListInit();
         if (!bubbleList.isEmpty()) {
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 10);
             if (!this.self.level().isClientSide()) {
                 List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
                 };
@@ -343,8 +344,9 @@ public class PowersSoftAndWet extends PunchingStand {
         };
         if (!bubbleList2.isEmpty()) {
             for (SoftAndWetBubbleEntity value : bubbleList2) {
-                if (value.isRemoved() || !value.isAlive()) {
+                if (value.isRemoved() || !value.isAlive() || (this.self.level().isClientSide() && this.self.level().getEntity(value.getId()) == null)) {
                     bubbleList.remove(value);
+                } else {
                 }
             }
         }
@@ -358,26 +360,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
             if (isGuarding()) {
-                if (keyIsDown) {
-                    if (!hold2) {
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
-                            hold2 = true;
 
-                            int bubbleType = 1;
-                            ClientConfig clientConfig = ConfigManager.getClientConfig();
-                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
-                            }
-
-                            this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
-                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
-                        }
-                    }
-                } else {
-                    hold2 = false;
-                }
-            } else if (isHoldingSneak()) {
                 if (keyIsDown) {
                     if (!hold2) {
                         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
@@ -397,6 +380,30 @@ public class PowersSoftAndWet extends PunchingStand {
                 } else {
                     hold2 = false;
                 }
+
+            } else if (isHoldingSneak()) {
+
+                if (keyIsDown) {
+                    if (!hold2) {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
+                            hold2 = true;
+
+                            int bubbleType = 1;
+                            ClientConfig clientConfig = ConfigManager.getClientConfig();
+                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                            }
+
+                            this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
+                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                        }
+                    }
+                } else {
+                    hold2 = false;
+                }
+
+
             } else {
                 if (keyIsDown) {
                     if (!hold2) {

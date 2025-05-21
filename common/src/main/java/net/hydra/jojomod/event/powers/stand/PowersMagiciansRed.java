@@ -293,7 +293,7 @@ public class PowersMagiciansRed extends PunchingStand {
         };
         if (!hurricaneSpecial2.isEmpty()) {
             for (CrossfireHurricaneEntity value : hurricaneSpecial2) {
-                if (value.isRemoved() || !value.isAlive() || value.getCrossNumber() <= 0) {
+                if (value.isRemoved() || !value.isAlive() || value.getCrossNumber() <= 0  || (this.self.level().isClientSide() && this.self.level().getEntity(value.getId()) == null)) {
                     value.initialized = false;
                     hurricaneSpecial.remove(value);
                 }

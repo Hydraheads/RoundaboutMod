@@ -324,10 +324,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     }
                 }
             }
+            this.discard();
         }
 
 
-        this.discard();
     }
 
     public void splashWater(){
@@ -702,7 +702,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
 
         if (this.getFinished()){
-            this.discard();
+            if (!this.level().isClientSide()) {
+                this.discard();
+            }
         } else if (this.getReturning() && !this.level().isClientSide()){
             if (this.standUser != null) {
                 if (this.distanceTo(standUser) < 1){
