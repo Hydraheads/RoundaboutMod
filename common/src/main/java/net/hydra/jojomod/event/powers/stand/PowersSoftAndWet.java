@@ -113,7 +113,7 @@ public class PowersSoftAndWet extends PunchingStand {
         if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_CONTROL, PowerIndex.SKILL_EXTRA_2);
         } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_1_SNEAK);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_SELECTION, PowerIndex.NO_CD);
         }
@@ -151,16 +151,36 @@ public class PowersSoftAndWet extends PunchingStand {
         if (this.getSelf().level().isClientSide) {
             if (isGuarding()) {
                 if (keyIsDown) {
-                    if (!hold1) {
+                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
                         hold1 = true;
+
+                        int bubbleType = 1;
+                        ClientConfig clientConfig = ConfigManager.getClientConfig();
+                        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                            bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                        }
+
+                        this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
+                        //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                     }
                 } else {
                     hold1 = false;
                 }
             } else if (isHoldingSneak()) {
                 if (keyIsDown) {
-                    if (!hold1) {
+                    if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
                         hold1 = true;
+
+                        int bubbleType = 1;
+                        ClientConfig clientConfig = ConfigManager.getClientConfig();
+                        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                            bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                        }
+
+                        this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
+                        //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                     }
                 } else {
                     hold1 = false;
