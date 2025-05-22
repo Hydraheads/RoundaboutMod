@@ -115,7 +115,11 @@ public class PowersSoftAndWet extends PunchingStand {
         if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_CONTROL, PowerIndex.SKILL_EXTRA_2);
         } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_1_SNEAK);
+            if (canDoBubbleClusterPop()){
+                setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_POP, PowerIndex.SKILL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_1_SNEAK);
+            }
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_SELECTION, PowerIndex.NO_CD);
         }
@@ -165,7 +169,7 @@ public class PowersSoftAndWet extends PunchingStand {
             } else if (isHoldingSneak()) {
                 if (keyIsDown) {
                     if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
-                        if (this.activePower != PowerIndex.POWER_1_SNEAK) {
+                        if (this.activePower != PowerIndex.POWER_1_SNEAK && !canDoBubbleClusterPop()) {
                             hold1 = true;
 
                             int bubbleType = 1;
@@ -177,10 +181,18 @@ public class PowersSoftAndWet extends PunchingStand {
                             this.tryChargedPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
                             ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
                         } else {
-
+                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
+                                hold1 = true;
+                                this.tryPower(PowerIndex.EXTRA_2, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_2);
+                            }
                         }
-                    } else if (this.activePower == PowerIndex.POWER_1_SNEAK){
-
+                    } else if (this.activePower == PowerIndex.POWER_1_SNEAK || this.canDoBubbleClusterRedirect()){
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
+                            hold1 = true;
+                            this.tryPower(PowerIndex.EXTRA_2, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_2);
+                        }
                     }
                 } else {
                     hold1 = false;
@@ -192,7 +204,6 @@ public class PowersSoftAndWet extends PunchingStand {
                         ClientUtil.openPlunderScreen();
                     }
                 } else {
-
                     hold1 = false;
                 }
             }
@@ -250,6 +261,27 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return false;
     }
+    public boolean canDoBubbleClusterPop(){
+        bubbleListInit();
+
+        if (this.activePower == PowerIndex.POWER_1_SNEAK){
+            return true;
+        }
+
+        List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+        };
+        if (!bubbleList2.isEmpty()) {
+            int totalnumber = bubbleList2.size();
+            for (SoftAndWetBubbleEntity value : bubbleList2) {
+                if (value instanceof SoftAndWetPlunderBubbleEntity PBE) {
+                    if (!PBE.getSingular() && !PBE.getFinished()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
     public boolean canDoBubbleRedirect(){
 
         bubbleListInit();
@@ -262,6 +294,27 @@ public class PowersSoftAndWet extends PunchingStand {
                 if (value.getActivated() && !(value instanceof SoftAndWetPlunderBubbleEntity PBE && (PBE.getPlunderType()==PlunderTypes.SIGHT.id ||
                         PBE.getPlunderType()==PlunderTypes.FRICTION.id))) {
                     return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean clusterBubblePop() {
+        bubbleListInit();
+        if (!bubbleList.isEmpty()) {
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 10);
+            if (!this.self.level().isClientSide()) {
+                List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+                };
+                if (!bubbleList2.isEmpty()) {
+                    for (SoftAndWetBubbleEntity value : bubbleList2) {
+                        if (value instanceof SoftAndWetPlunderBubbleEntity plunder){
+                            if (!plunder.getFinished() && !plunder.getSingular()){
+                                plunder.popBubble();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -413,6 +466,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.spawnRandomBubble();
         } else if (move == PowerIndex.POWER_1_BONUS) {
             return this.bubbleClusterRedirect();
+        } else if (move == PowerIndex.EXTRA_2) {
+            return this.clusterBubblePop();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -439,6 +494,9 @@ public class PowersSoftAndWet extends PunchingStand {
         return super.inputSpeedModifiers(basis);
     }
     public boolean bubbleClusterStart(){
+        if (!this.self.level().isClientSide()) {
+            clusterBubblePop();
+        }
         setActivePower(PowerIndex.POWER_1_SNEAK);
         this.poseStand(OffsetIndex.FOLLOW);
         this.attackTimeDuring = 0;
@@ -545,14 +603,9 @@ public class PowersSoftAndWet extends PunchingStand {
                         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
                             hold2 = true;
 
-                            int bubbleType = 1;
-                            ClientConfig clientConfig = ConfigManager.getClientConfig();
-                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
-                            }
 
-                            this.tryChargedPower(PowerIndex.POWER_2_SNEAK, true, bubbleType);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK, bubbleType);
+                            this.tryPower(PowerIndex.POWER_2_SNEAK, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
                             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }
