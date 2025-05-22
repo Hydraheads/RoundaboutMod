@@ -651,7 +651,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
                 }
             } else {
-                if (this.tickCount < 20) {
+                if (this.tickCount < 20 && !this.getLaunched()) {
                     this.setDeltaMovement(this.getDeltaMovement().scale(0.86));
                 }
             }

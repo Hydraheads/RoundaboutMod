@@ -181,6 +181,12 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot2((double)$$6, (double)$$7, (double)$$8, $$4);
     }
+    public void shootFromRotationDeltaAgnostic3(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
+        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
+        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        this.shoot4((double)$$6, (double)$$7, (double)$$8, $$4);
+    }
     public void shootFromRotationDeltaAgnosticBackwards(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
@@ -210,6 +216,19 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         $$5 = $$5.add(this.getDeltaMovement()).normalize();
         $$5 = $$5.add(this.getDeltaMovement()).normalize();
         $$5 = $$5.add(this.getDeltaMovement()).normalize();
+        $$5 = $$5.scale($$3);
+        this.setDeltaMovement($$5);
+        double $$6 = $$5.horizontalDistance();
+        if (!this.level().isClientSide()) {
+            this.setYRot((float) (Mth.atan2($$5.x, $$5.z) * 180.0F / (float) Math.PI));
+            this.setXRot((float) (Mth.atan2($$5.y, $$6) * 180.0F / (float) Math.PI));
+            this.yRotO = this.getYRot();
+            this.xRotO = this.getXRot();
+        }
+    }
+
+    public void shoot4(double $$0, double $$1, double $$2, float $$3) {
+        Vec3 $$5 = (new Vec3($$0, $$1, $$2)).normalize();
         $$5 = $$5.scale($$3);
         this.setDeltaMovement($$5);
         double $$6 = $$5.horizontalDistance();

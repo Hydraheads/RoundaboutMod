@@ -227,7 +227,25 @@ public class PowersSoftAndWet extends PunchingStand {
         bubbleListInit();
         return !bubbleList.isEmpty();
     }
+    public boolean canDoBubbleClusterRedirect(){
+        bubbleListInit();
+
+        List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+        };
+        if (!bubbleList2.isEmpty()) {
+            int totalnumber = bubbleList2.size();
+            for (SoftAndWetBubbleEntity value : bubbleList2) {
+                if (value instanceof SoftAndWetPlunderBubbleEntity PBE) {
+                    if (!PBE.getSingular() && !PBE.getActivated() && !PBE.getFinished()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
     public boolean canDoBubblRedirect(){
+
         bubbleListInit();
 
         List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
@@ -265,6 +283,19 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public boolean bubbleClusterRedirect(){
+        bubbleListInit();
+        List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+        };
+        if (!bubbleList2.isEmpty()) {
+            int totalnumber = bubbleList2.size();
+            for (SoftAndWetBubbleEntity value : bubbleList2) {
+                if (value instanceof SoftAndWetPlunderBubbleEntity PBE) {
+                    if (!PBE.getSingular() && !PBE.getActivated() && !PBE.getFinished()) {
+                        shootBubbleSpeed2(PBE,PBE.getSped());
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -352,6 +383,11 @@ public class PowersSoftAndWet extends PunchingStand {
         ankh.setSped(speed);
         ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.62), this.self.getZ());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
+    }
+    public void shootBubbleSpeed2(SoftAndWetBubbleEntity ankh, float speed){
+        ankh.setSped(speed);
+        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.62), this.self.getZ());
+        ankh.shootFromRotationDeltaAgnostic3(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed);
     }
     public void shootBubbleRandomly(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
