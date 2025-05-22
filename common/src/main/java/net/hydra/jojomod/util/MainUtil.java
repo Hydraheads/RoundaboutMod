@@ -1113,7 +1113,7 @@ public class MainUtil {
                 value.getEffect().equals(ModEffects.CAPTURING_LOVE);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
-        if (LE.onClimbable() || LE.isInWater()|| LE.isInLava()){
+        if (LE.onClimbable()){
             return false;
         }
         return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseFriction);
