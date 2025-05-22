@@ -154,15 +154,8 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
                         hold1 = true;
 
-                        int bubbleType = 1;
-                        ClientConfig clientConfig = ConfigManager.getClientConfig();
-                        if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                            bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
-                        }
-
-                        this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
-                        //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                        this.tryPower(PowerIndex.POWER_1_BONUS, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
                     }
                 } else {
                     hold1 = false;
@@ -178,9 +171,8 @@ public class PowersSoftAndWet extends PunchingStand {
                             bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
                         }
 
-                        this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
-                        //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                        this.tryChargedPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
                     }
                 } else {
                     hold1 = false;
@@ -369,7 +361,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     @Override
     public boolean tryChargedPower(int move, boolean forced, int chargeTime){
-        if (move == PowerIndex.POWER_2) {
+        if (move == PowerIndex.POWER_2 || move == PowerIndex.POWER_1_SNEAK) {
             bubbleType = (byte)chargeTime;
         }
         return super.tryChargedPower(move, forced, chargeTime);
@@ -403,14 +395,9 @@ public class PowersSoftAndWet extends PunchingStand {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
                             hold2 = true;
 
-                            int bubbleType = 1;
-                            ClientConfig clientConfig = ConfigManager.getClientConfig();
-                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
-                            }
 
-                            this.tryChargedPower(PowerIndex.POWER_2_EXTRA, true, bubbleType);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, bubbleType);
+                            this.tryPower(PowerIndex.POWER_2_EXTRA, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_EXTRA);
                             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }
