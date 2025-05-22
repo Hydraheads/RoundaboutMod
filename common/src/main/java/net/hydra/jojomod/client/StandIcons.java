@@ -111,12 +111,12 @@ public class StandIcons {
             "textures/gui/icons/soft_and_wet/plunder_bubble.png");
     public static final ResourceLocation PLUNDER_BUBBLE_CONTROL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/plunder_bubble_control.png");
+    public static final ResourceLocation PLUNDER_BUBBLE_FILL_CONTROL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/plunder_bubble_fill_control.png");
     public static final ResourceLocation PLUNDER_BUBBLE_POP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/bubble_pop.png");
     public static final ResourceLocation PLUNDER_BUBBLE_FILL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/plunder_bubble_fill.png");
-    public static final ResourceLocation PLUNDER_BUBBLE_FILL_CONTROL = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/soft_and_wet/plunder_bubble_fill_control.png");
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fire_clear.png");
     public static final ResourceLocation FURNACE = new ResourceLocation(Roundabout.MOD_ID,

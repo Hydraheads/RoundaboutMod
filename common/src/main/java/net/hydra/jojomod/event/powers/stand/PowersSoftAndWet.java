@@ -98,10 +98,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return $$1;
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 2 && !canDoBubblRedirect() && isHoldingSneak() && !isGuarding()) {
+        if (slot == 2 && !canDoBubblRedirect() && isGuarding()) {
             return true;
         }
-        if (slot == 2 && !canDoBubblePop() && isGuarding()) {
+        if (slot == 2 && !canDoBubblePop() && isHoldingSneak() && !isGuarding()) {
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
@@ -110,7 +110,9 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        if (isHoldingSneak()){
+        if (isGuarding()) {
+            setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_CONTROL, PowerIndex.SKILL_EXTRA_2);
+        } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_SELECTION, PowerIndex.NO_CD);
@@ -118,9 +120,9 @@ public class PowersSoftAndWet extends PunchingStand {
 
 
         if (isGuarding()){
-            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
-        } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_EXTRA_2);
+        } else if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE, PowerIndex.SKILL_2);
         }
@@ -147,7 +149,15 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
-            if (isHoldingSneak()) {
+            if (isGuarding()) {
+                if (keyIsDown) {
+                    if (!hold1) {
+                        hold1 = true;
+                    }
+                } else {
+                    hold1 = false;
+                }
+            } else if (isHoldingSneak()) {
                 if (keyIsDown) {
                     if (!hold1) {
                         hold1 = true;
@@ -250,7 +260,7 @@ public class PowersSoftAndWet extends PunchingStand {
 
                 Vec3 vec3d = this.self.getEyePosition(0);
                 Vec3 vec3d2 = this.self.getViewVector(0);
-                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * 30, vec3d2.y * 30, vec3d2.z * 30);
                 BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
 
                 if (!this.self.level().isClientSide()) {
@@ -264,6 +274,13 @@ public class PowersSoftAndWet extends PunchingStand {
                                 Vec3 vector = new Vec3((blockHit.getLocation().x() - value.getX()),
                                         (blockHit.getLocation().y() - value.getY()),
                                         (blockHit.getLocation().z() - value.getZ())).normalize().scale(value.getSped());
+                                if (totalnumber > 1){
+                                    vector = new Vec3(
+                                            vector.x()+(((Math.random()-0.5)*totalnumber)*value.getSped()*0.03),
+                                            vector.y(),
+                                            vector.z()+(((Math.random()-0.5)*totalnumber)*value.getSped()*0.03)
+                                    ).normalize().scale(value.getSped());
+                                }
                                 value.setDeltaMovement(vector);
                                 value.hurtMarked = true;
                                 value.hasImpulse = true;
@@ -363,28 +380,6 @@ public class PowersSoftAndWet extends PunchingStand {
 
                 if (keyIsDown) {
                     if (!hold2) {
-                        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
-                            hold2 = true;
-
-                            int bubbleType = 1;
-                            ClientConfig clientConfig = ConfigManager.getClientConfig();
-                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
-                            }
-
-                            this.tryChargedPower(PowerIndex.POWER_2_SNEAK, true, bubbleType);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK, bubbleType);
-                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
-                        }
-                    }
-                } else {
-                    hold2 = false;
-                }
-
-            } else if (isHoldingSneak()) {
-
-                if (keyIsDown) {
-                    if (!hold2) {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
                             hold2 = true;
 
@@ -403,6 +398,28 @@ public class PowersSoftAndWet extends PunchingStand {
                     hold2 = false;
                 }
 
+            } else if (isHoldingSneak()) {
+
+
+                if (keyIsDown) {
+                    if (!hold2) {
+                        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
+                            hold2 = true;
+
+                            int bubbleType = 1;
+                            ClientConfig clientConfig = ConfigManager.getClientConfig();
+                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                            }
+
+                            this.tryChargedPower(PowerIndex.POWER_2_SNEAK, true, bubbleType);
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK, bubbleType);
+                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                        }
+                    }
+                } else {
+                    hold2 = false;
+                }
 
             } else {
                 if (keyIsDown) {
