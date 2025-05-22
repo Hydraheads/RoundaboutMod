@@ -24,6 +24,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -263,6 +264,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return false;
     }
 
+    public boolean bubbleClusterRedirect(){
+        return false;
+    }
+
     public boolean bubbleRedirect(){
         bubbleListInit();
         if (!bubbleList.isEmpty()){
@@ -356,6 +361,10 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.bubbleRedirect();
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.bubblePop();
+        } else if (move == PowerIndex.POWER_1_SNEAK) {
+            return this.bubblePop();
+        } else if (move == PowerIndex.POWER_1_BONUS) {
+            return this.bubbleClusterStart();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -365,6 +374,13 @@ public class PowersSoftAndWet extends PunchingStand {
             bubbleType = (byte)chargeTime;
         }
         return super.tryChargedPower(move, forced, chargeTime);
+    }
+
+    public float inputSpeedModifiers(float basis){
+        return super.inputSpeedModifiers(basis);
+    }
+    public boolean bubbleClusterStart(){
+        return true;
     }
 
     public void unloadBubbles(){
