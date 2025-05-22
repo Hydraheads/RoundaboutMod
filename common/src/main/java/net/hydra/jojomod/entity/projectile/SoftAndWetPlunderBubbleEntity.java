@@ -646,10 +646,14 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             returnToUser();
         } else {
             Entity owner = this.getOwner();
-            if (getSingular() && owner != null && !this.getActivated()) {
-
-               this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
-
+            if (getSingular()) {
+                if (owner != null && !this.getActivated()) {
+                    this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+                }
+            } else {
+                if (this.tickCount < 20) {
+                    this.setDeltaMovement(this.getDeltaMovement().scale(0.86));
+                }
             }
         }
 

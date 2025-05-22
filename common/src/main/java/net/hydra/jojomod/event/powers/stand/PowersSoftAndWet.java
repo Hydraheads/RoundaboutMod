@@ -356,7 +356,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public void shootBubbleRandomly(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
         ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.2), this.self.getZ());
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(),-1*(float)(Math.random()*50), (float)(Math.random()*360), 1.0F, speed, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(),-1*(float)(Math.random()*50), (float)(Math.random()*360), 1.0F, 0.25F, 0);
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -445,7 +445,7 @@ public class PowersSoftAndWet extends PunchingStand {
         if (bubble != null) {
             bubble.setPlunderType(bubbleType);
             bubble.setSingular(false);
-            shootBubbleRandomly(bubble, 0.025F);
+            shootBubbleRandomly(bubble, getBubbleSpeed()); //0.025F
             bubbleListInit();
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
