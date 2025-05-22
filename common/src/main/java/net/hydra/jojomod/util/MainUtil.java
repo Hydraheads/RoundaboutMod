@@ -1007,12 +1007,16 @@ public class MainUtil {
         return false;
     }
 
-
     @SuppressWarnings("deprecation")
     public static boolean tryPlaceBlock(Entity ent, BlockPos pos){
+        return tryPlaceBlock(ent, pos, false);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean tryPlaceBlock(Entity ent, BlockPos pos, boolean liquid){
         if (ent != null && !ent.level().isClientSide()) {
             BlockState state = ent.level().getBlockState(pos);
-            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief(ent) && !state.liquid() &&
+            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief(ent) && (!state.liquid() || liquid) &&
                     ent.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
                     !((ent instanceof Player PL &&
                             (PL.blockActionRestricted(ent.level(), pos, ((ServerPlayer)

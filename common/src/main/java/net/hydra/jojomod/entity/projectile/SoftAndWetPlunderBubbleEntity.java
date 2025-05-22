@@ -159,7 +159,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 }
                             } else if (getLiquidStolen() == 2) {
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
-                                if (MainUtil.tryPlaceBlock(this.standUser, bpos)) {
+                                if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
                                     this.level().setBlockAndUpdate(bpos, Blocks.WATER.defaultBlockState());
                                 } else {
                                     splashWater();
@@ -167,7 +167,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 finishedUsingLiquid = true;
                             } else if (getLiquidStolen() == 3) {
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
-                                if (MainUtil.tryPlaceBlock(this.standUser, bpos)) {
+                                if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
                                     this.level().setBlockAndUpdate(bpos, Blocks.LAVA.defaultBlockState());
                                 } else {
                                     splashLava();
@@ -301,13 +301,13 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                            spawnGasSplatter();
                         } else if (getLiquidStolen() == 2) {
 
-                            if (MainUtil.tryPlaceBlock(this.standUser, this.blockPosition())) {
+                            if (MainUtil.tryPlaceBlock(this.standUser, this.blockPosition(),true)) {
                                 this.level().setBlockAndUpdate(this.blockPosition(), Blocks.WATER.defaultBlockState());
                             } else {
                                 splashWater();
                             }
                         } else if (getLiquidStolen() == 3) {
-                            if (MainUtil.tryPlaceBlock(this.standUser, this.blockPosition())) {
+                            if (MainUtil.tryPlaceBlock(this.standUser, this.blockPosition(),true)) {
                                 this.level().setBlockAndUpdate(this.blockPosition(), Blocks.LAVA.defaultBlockState());
                             } else {
                                 splashLava();
