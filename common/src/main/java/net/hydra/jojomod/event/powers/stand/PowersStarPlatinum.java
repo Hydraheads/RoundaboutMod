@@ -872,14 +872,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 } else {
                     BlockHitResult dd = getAheadVec(distanceOut);
                     if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
+                        double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf())),1);
+                        double maxDist2 = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
                         if (!this.getSelf().level().isClientSide) {
-                            SE.setFingerLength((float) Math.max(Math.sqrt(dd.distanceTo(this.getSelf())) * 16 - 32, 1));
+                            SE.setFingerLength((float) maxDist2);
                         }
                         if (this.attackTimeDuring == 27){
                             int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
 
-                            double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
                             List<Entity> fingerTargets = doFinger((float) maxDist);
                             if (!fingerTargets.isEmpty()){
                                 doFingerHit(fingerTargets);
