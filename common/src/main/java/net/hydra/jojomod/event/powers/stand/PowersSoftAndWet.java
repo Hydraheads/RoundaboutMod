@@ -25,6 +25,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -193,7 +194,6 @@ public class PowersSoftAndWet extends PunchingStand {
         super.buttonInput1(keyIsDown, options);
     }
     public boolean hold2 = false;
-
     public SoftAndWetPlunderBubbleEntity getPlunderBubble(){
         SoftAndWetPlunderBubbleEntity bubble = new SoftAndWetPlunderBubbleEntity(this.self,this.self.level());
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
@@ -205,7 +205,7 @@ public class PowersSoftAndWet extends PunchingStand {
         SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
 
         if (bubble != null){
-            this.setCooldown(PowerIndex.SKILL_2, 10);
+            this.setCooldown(PowerIndex.SKILL_2, 20);
 
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
@@ -342,7 +342,7 @@ public class PowersSoftAndWet extends PunchingStand {
         }else if (bubbleType == PlunderTypes.MOISTURE.id){
             return 0.3F;
         }
-        return 0.18F;
+        return 0.17F;
     }
 
     public void shootBubble(SoftAndWetBubbleEntity ankh){
@@ -353,6 +353,11 @@ public class PowersSoftAndWet extends PunchingStand {
         ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.62), this.self.getZ());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
+    public void shootBubbleRandomly(SoftAndWetBubbleEntity ankh, float speed){
+        ankh.setSped(speed);
+        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.2), this.self.getZ());
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(),-1*(float)(Math.random()*50), (float)(Math.random()*360), 1.0F, speed, 0);
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_2) {
@@ -362,9 +367,11 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.bubblePop();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
-            return this.bubblePop();
-        } else if (move == PowerIndex.POWER_1_BONUS) {
             return this.bubbleClusterStart();
+        } else if (move == PowerIndex.POWER_1) {
+            return this.spawnRandomBubble();
+        } else if (move == PowerIndex.POWER_1_BONUS) {
+            return this.bubbleClusterRedirect();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -375,11 +382,79 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return super.tryChargedPower(move, forced, chargeTime);
     }
+    @Override
+    public boolean cancelSprintJump(){
+       if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
 
+    @Override
     public float inputSpeedModifiers(float basis){
+        if (this.activePower == PowerIndex.POWER_1_SNEAK){
+            basis *= 0.2f;
+        }
         return super.inputSpeedModifiers(basis);
     }
     public boolean bubbleClusterStart(){
+        setActivePower(PowerIndex.POWER_1_SNEAK);
+        this.poseStand(OffsetIndex.FOLLOW);
+        this.attackTimeDuring = 0;
+        animateStand((byte) 0);
+        return true;
+    }
+
+    @Override
+    public void updateUniqueMoves() {
+        /*Tick through Time Stop Charge*/
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
+            this.updateBubbleCluster();
+        }
+        super.updateUniqueMoves();
+    }
+    public void updateBubbleCluster(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                bubbleCheck(true);
+            }
+        } else {
+            bubbleCheck(false);
+        }
+    }
+    public void bubbleCheck(boolean packetPlayer){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 37){
+                this.tryPower(PowerIndex.NONE, true);
+                if (packetPlayer) {
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                }
+            } else if (this.attackTimeDuring % 3 == 0){
+                if (packetPlayer){
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                } else {
+                    spawnRandomBubble();
+                }
+            }
+        }
+    }
+
+    public boolean spawnRandomBubble(){
+        SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
+
+        if (bubble != null) {
+            bubble.setPlunderType(bubbleType);
+            bubble.setSingular(false);
+            shootBubbleRandomly(bubble, 0.025F);
+            bubbleListInit();
+            this.bubbleList.add(bubble);
+            this.getSelf().level().addFreshEntity(bubble);
+
+            if (bubbleType != PlunderTypes.SOUND.id) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            }
+        }
+
         return true;
     }
 

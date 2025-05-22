@@ -103,19 +103,13 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     @Override
     public void gameEvent(GameEvent $$0, @Nullable Entity $$1) {
     }
-    @Override
-    public float getPickRadius() {
-        if (this.getActivated()){
-            return 0;
-        }
-        return 1.0F;
-    }
+
     @Override
     protected ParticleOptions getTrailParticle() {
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());
     }
-    public static float eWidth=0.5f;
-    public static float eHeight=0.5f;
+    public static float eWidth=0.4f;
+    public static float eHeight=0.4f;
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         return EntityDimensions.fixed(eWidth, eHeight); // Width, Height
