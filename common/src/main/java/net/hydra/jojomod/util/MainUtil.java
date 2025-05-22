@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -1126,10 +1127,17 @@ public class MainUtil {
     }
 
     public static boolean isStandPickable(Entity entity){
-        if (entity instanceof SoftAndWetBubbleEntity sbe){
-            if (entity.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getUserID()){
+        if (entity instanceof SoftAndWetPlunderBubbleEntity sbe){
+            if (entity.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getUserID()) {
                 return false;
             } else {
+                if (entity.level().isClientSide()){
+                    if (ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getEntityStolen()){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
                 return sbe.getActivated();
             }
         }

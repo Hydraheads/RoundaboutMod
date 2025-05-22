@@ -119,17 +119,13 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         return 1F;
     }
     @Override
-    public boolean isPickable() {
-        if (this.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == getUserID()){
-            return false;
-        }
-        return true;
-    }
-    @Override
     public boolean canBeHitByProjectile() {
         return true;
     }
-
+    @Override
+    public boolean isPickable() {
+        return false;
+    }
     @Override
     public boolean isInWater() {
         return false;

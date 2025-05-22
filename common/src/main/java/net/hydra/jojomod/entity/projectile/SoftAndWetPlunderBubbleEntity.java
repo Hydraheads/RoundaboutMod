@@ -76,7 +76,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id && this.getActivated()){
             return true;
         }
-        return super.isPickable();
+
+        if (this.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == getUserID()){
+            return false;
+        }
+        return true;
     }
     @Unique
     public void addPlunderBubbleSounds(StoredSoundInstance plunder){
@@ -910,6 +914,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public int getEntityStolen() {
         return this.getEntityData().get(ENTITY_STOLEN);
     }
+
     public void setEntityStolen(int entid) {
         this.getEntityData().set(ENTITY_STOLEN, entid);
     }

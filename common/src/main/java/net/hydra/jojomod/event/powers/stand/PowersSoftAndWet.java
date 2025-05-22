@@ -350,7 +350,7 @@ public class PowersSoftAndWet extends PunchingStand {
             for (SoftAndWetBubbleEntity value : bubbleList2) {
                 if (value instanceof SoftAndWetPlunderBubbleEntity PBE) {
                     if (!PBE.getSingular() && !PBE.getActivated() && !PBE.getFinished()) {
-                        shootBubbleSpeed2(PBE,PBE.getSped()*0.7F);
+                        shootBubbleSpeed2(PBE,PBE.getSped()*0.65F);
                         PBE.setLaunched(true);
                     }
                 }
