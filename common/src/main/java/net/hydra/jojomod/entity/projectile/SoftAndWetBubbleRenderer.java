@@ -65,9 +65,17 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
             }
 
             float scaleIt = 0.23f;
-            if (entity instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.getHeldItem().isEmpty()){
-                scaleIt = 0.33f;
+
+            if (entity instanceof SoftAndWetPlunderBubbleEntity sp){
+                int ls = sp.getLiquidStolen();
+                if (ls == 3){
+                    packedLight = 15728880;
+                }
+                if (!sp.getHeldItem().isEmpty()){
+                    scaleIt = 0.33f;
+                }
             }
+
 
             float size = (float) Math.min(scaleIt, (((float)entity.tickCount)+partialTicks)*(scaleIt*0.1)); // Adjust to your needs
             vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
