@@ -227,6 +227,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         this.setActivated(true);
     }
     public void setFloating(){
+        setLaunched(false);
         setFloating2();
         this.setDeltaMovement(0, 0.01, 0);
     }

@@ -1,11 +1,9 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
@@ -24,7 +22,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -100,10 +97,13 @@ public class PowersSoftAndWet extends PunchingStand {
         return $$1;
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 2 && !canDoBubblRedirect() && isGuarding()) {
+        if (slot == 2 && !canDoBubbleRedirect() && isGuarding()) {
             return true;
         }
         if (slot == 2 && !canDoBubblePop() && isHoldingSneak() && !isGuarding()) {
+            return true;
+        }
+        if (slot == 1 && !canDoBubbleClusterRedirect() && isGuarding()) {
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
@@ -165,16 +165,22 @@ public class PowersSoftAndWet extends PunchingStand {
             } else if (isHoldingSneak()) {
                 if (keyIsDown) {
                     if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
-                        hold1 = true;
+                        if (this.activePower != PowerIndex.POWER_1_SNEAK) {
+                            hold1 = true;
 
-                        int bubbleType = 1;
-                        ClientConfig clientConfig = ConfigManager.getClientConfig();
-                        if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                            bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                            int bubbleType = 1;
+                            ClientConfig clientConfig = ConfigManager.getClientConfig();
+                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                            }
+
+                            this.tryChargedPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
+                        } else {
+
                         }
+                    } else if (this.activePower == PowerIndex.POWER_1_SNEAK){
 
-                        this.tryChargedPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
                     }
                 } else {
                     hold1 = false;
@@ -244,7 +250,7 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return false;
     }
-    public boolean canDoBubblRedirect(){
+    public boolean canDoBubbleRedirect(){
 
         bubbleListInit();
 
@@ -291,7 +297,8 @@ public class PowersSoftAndWet extends PunchingStand {
             for (SoftAndWetBubbleEntity value : bubbleList2) {
                 if (value instanceof SoftAndWetPlunderBubbleEntity PBE) {
                     if (!PBE.getSingular() && !PBE.getActivated() && !PBE.getFinished()) {
-                        shootBubbleSpeed2(PBE,PBE.getSped());
+                        shootBubbleSpeed2(PBE,PBE.getSped()*0.7F);
+                        PBE.setLaunched(true);
                     }
                 }
             }
@@ -303,7 +310,7 @@ public class PowersSoftAndWet extends PunchingStand {
         bubbleListInit();
         if (!bubbleList.isEmpty()){
 
-            if (canDoBubblRedirect()) {
+            if (canDoBubbleRedirect()) {
                 this.setCooldown(PowerIndex.SKILL_EXTRA_2, 3);
 
                 Vec3 vec3d = this.self.getEyePosition(0);
@@ -385,8 +392,6 @@ public class PowersSoftAndWet extends PunchingStand {
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     public void shootBubbleSpeed2(SoftAndWetBubbleEntity ankh, float speed){
-        ankh.setSped(speed);
-        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.62), this.self.getZ());
         ankh.shootFromRotationDeltaAgnostic3(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed);
     }
     public void shootBubbleRandomly(SoftAndWetBubbleEntity ankh, float speed){
