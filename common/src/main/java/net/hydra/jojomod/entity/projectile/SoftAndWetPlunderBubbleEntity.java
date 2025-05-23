@@ -19,6 +19,9 @@ import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -404,6 +407,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         super.readAdditionalSaveData($$0);
     }
 
+    @Override
+    public double getPassengersRidingOffset() {
+        return -0.5F;
+    }
     public int airSupply = 0;
     Collection<MobEffectInstance> mobEffects;
     @Override
@@ -416,6 +423,24 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         if (!((ILevelAccess) this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
                             this.setEntityStolen($$0.getEntity().getId());
                             setFloating();
+                        } else {
+                            super.onHitEntity($$0);
+                        }
+                    } else if (this.getPlunderType() == PlunderTypes.MOBS.id) {
+                        if ($$0.getEntity() instanceof LivingEntity LE &&
+                                MainUtil.canBeScoopedUpInBubble(LE)) {
+                            this.setEntityStolen($$0.getEntity().getId());
+                            $$0.getEntity().ejectPassengers();
+                            if ($$0.getEntity().getVehicle() != null){
+                                $$0.getEntity().getVehicle().ejectPassengers();
+                            }
+                            $$0.getEntity().startRiding(this);
+
+                            if ($$0.getEntity().getVehicle() != null && $$0.getEntity().getVehicle().is(this)){
+                                setFloating();
+                            } else {
+                                super.onHitEntity($$0);
+                            }
                         } else {
                             super.onHitEntity($$0);
                         }
@@ -611,6 +636,26 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         return standUser;
     }
 
+    public void popIfSuffocating(){
+        if (!this.level().isClientSide()) {
+            if (this.getPlunderType() == PlunderTypes.MOBS.id) {
+                if (getActivated()) {
+                    Entity ent = this.level().getEntity(getEntityStolen());
+                    if (ent != null) {
+                        if (ent.isInWall() || !(ent.getVehicle() instanceof SoftAndWetPlunderBubbleEntity sbe && sbe.is(this))) {
+                            this.ejectPassengers();
+                            popBubble();
+                        }
+                    } else {
+                        this.ejectPassengers();
+                        popBubble();
+                    }
+                }
+            }
+        }
+    }
+
+
     @Override
     public void tick() {
 
@@ -693,7 +738,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
 
         AABB BB1 = this.getBoundingBox();
+        popIfSuffocating();
         super.tick();
+        popIfSuffocating();
         if (this.getPlunderType() == PlunderTypes.ITEM.id && !this.getReturning() && !this.getFinished() && !this.isRemoved()){
             AABB BB2 = this.getBoundingBox();
             tryPhaseItemGrab(BB1, BB2);

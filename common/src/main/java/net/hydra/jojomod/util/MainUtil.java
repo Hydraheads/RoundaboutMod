@@ -1119,6 +1119,9 @@ public class MainUtil {
         }
         return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseFriction);
     }
+    public static boolean canBeScoopedUpInBubble(LivingEntity LE){
+        return !(isBossMob(LE)) && LE.getBbHeight() < ClientNetworking.getAppropriateConfig().softAndWetSettings.sizeOfMobBubbleMobsStolen && !(LE.getVehicle() instanceof SoftAndWetPlunderBubbleEntity);
+    }
     public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {
         Vec3 $$2 = $$0.getDeltaMovement();
         Level $$3 = $$0.level();

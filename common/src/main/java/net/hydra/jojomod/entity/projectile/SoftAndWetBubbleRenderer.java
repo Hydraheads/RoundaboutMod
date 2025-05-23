@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PlunderTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -73,6 +74,9 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                 }
                 if (!sp.getHeldItem().isEmpty()){
                     scaleIt = 0.33f;
+                }
+                if (sp.getEntityStolen() > 0 && sp.getPlunderType() == PlunderTypes.MOBS.id){
+                    scaleIt = 1.0f;
                 }
             }
 

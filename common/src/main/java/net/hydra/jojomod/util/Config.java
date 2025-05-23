@@ -303,6 +303,9 @@ import java.util.Set;
         public Boolean bossesCannotLoseSight;
         @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
         public Integer ticksBetweenSightStealsOnSameMob;
+
+        @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
+        public Float sizeOfMobBubbleMobsStolen;
     }
 
     public static class Durations {
