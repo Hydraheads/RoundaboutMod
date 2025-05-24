@@ -139,7 +139,7 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (canFallBrace()) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.SKILL_EXTRA);
         } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
