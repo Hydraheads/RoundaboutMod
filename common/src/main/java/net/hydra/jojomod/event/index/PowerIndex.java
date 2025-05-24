@@ -20,7 +20,7 @@ public class PowerIndex {
     public static final byte CLASH_CANCEL = 14;
     public static final byte EXTRA = 15;
     public static final byte EXTRA_2 = 16;
-    public static final byte EXTRA_FINISH = 17;
+    public static final byte FALL_BRACE_FINISH = 17;
     public static final byte EXTRA_2_FINISH = 18;
     public static final byte VAULT = 19;
     public static final byte BOUNCE = 20;

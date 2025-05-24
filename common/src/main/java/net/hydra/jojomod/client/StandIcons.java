@@ -119,6 +119,12 @@ public class StandIcons {
             "textures/gui/icons/soft_and_wet/bubble_fill_pop.png");
     public static final ResourceLocation PLUNDER_BUBBLE_FILL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/plunder_bubble_fill.png");
+
+
+    public static final ResourceLocation SOFT_AND_WET_VAULT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/stand_ledge_grab.png");
+    public static final ResourceLocation SOFT_AND_WET_FALL_CATCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/fall_brace.png");
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fire_clear.png");
     public static final ResourceLocation FURNACE = new ResourceLocation(Roundabout.MOD_ID,

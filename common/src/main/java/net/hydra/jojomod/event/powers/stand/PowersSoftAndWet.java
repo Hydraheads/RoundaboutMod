@@ -19,6 +19,7 @@ import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -133,7 +134,11 @@ public class PowersSoftAndWet extends PunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE, PowerIndex.SKILL_2);
         }
 
-        if (isHoldingSneak()){
+        if (canVault()) {
+            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_VAULT, PowerIndex.SKILL_3_SNEAK);
+        } else if (canFallBrace()) {
+            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+        } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
@@ -460,6 +465,12 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.bubbleRedirect();
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.bubblePop();
+        } else if (move == PowerIndex.EXTRA){
+            return this.fallBraceInit();
+        } else if (move == PowerIndex.FALL_BRACE_FINISH){
+            return this.fallBrace();
+        } else if (move == PowerIndex.VAULT){
+            return this.vault();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return this.bubbleClusterStart();
         } else if (move == PowerIndex.POWER_1) {
@@ -636,6 +647,47 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
         super.buttonInput1(keyIsDown, options);
+    }
+
+    @Override
+    public void playFallBraceImpactParticles(){
+        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BUBBLE_POP,
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                50, 1.1, 0.05, 1.1, 0.4);
+        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BUBBLE_POP,
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                30, 1, 0.05, 1, 0.4);
+    }
+    public boolean hold3 = false;
+    @Override
+    public void buttonInput3(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide) {
+            if (!(keyIsDown && doVault())) {
+                if (canFallBrace()) {
+                    if (keyIsDown) {
+                        hold3 = true;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
+                    } else {
+                        hold3 = false;
+                    }
+                } else if (isGuarding()) {
+                    if (keyIsDown) {
+                        hold3 = true;
+                    } else {
+                        hold3 = false;
+                    }
+                } else if (isHoldingSneak()) {
+                    if (keyIsDown) {
+                        hold3 = true;
+                    } else {
+                        hold1 = false;
+                    }
+                } else {
+                    super.buttonInput1(keyIsDown, options);
+                }
+            }
+        }
     }
 }
 

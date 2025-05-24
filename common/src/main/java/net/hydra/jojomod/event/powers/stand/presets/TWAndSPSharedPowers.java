@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -22,7 +21,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,10 +49,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public TWAndSPSharedPowers(LivingEntity self) {
         super(self);
     }
-    public boolean impactBrace = false;
 
-    public int impactSlowdown = -1;
-    public int impactAirTime = -1;
     public int bonusLeapCount = -1;
     public int spacedJumpTime = -1;
 
@@ -203,7 +198,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 /*Stand leap rebounds*/
                                 standRebound();
                             } else {
-                                if ((!doVault()) && this.getSelf().fallDistance > 3 && impactSlowdown <= -1) {
+                                if ((!doVault()) && canFallBrace()) {
                                     if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
 
                                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
@@ -795,9 +790,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (this.forwardBarrage && !(this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2)){
                 this.forwardBarrage = false;
             }
-            if (impactSlowdown >= -1){
-                impactSlowdown--;
-            }
 
             if (freezeAttackInput > -1){
                 freezeAttackInput--;
@@ -817,42 +809,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 leapEndTicks = -1;
             }
 
-            if (impactBrace){
-                if (((StandUser) this.getSelf()).roundabout$getActive()){
-                    if (this.getSelf().onGround()) {
-                        impactBrace = false;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA_FINISH, true);
-                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_FINISH);
-                        }
-                    }else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)){
-                        impactSlowdown = -1;
-                        impactBrace = false;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                        }
-                    } else {
-                        if (impactAirTime > -1){
-                            impactAirTime--;
-                        }
-                        impactSlowdown = 15;
-                        if (impactAirTime > -1 || this.getSelf().tickCount % 2 == 0){
-                            this.getSelf().fallDistance -= 1;
-                            if (this.getSelf().fallDistance < 0){
-                                this.getSelf().fallDistance = 0;
-                            }
-                        }
-                    }
-                } else {
-                    impactSlowdown = -1;
-                    impactBrace = false;
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                    }
-                }
-            }
 
             if (this.getSelf().onGround()){
                 if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
@@ -937,47 +893,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return true;
     }
 
-    public boolean fallBraceInit() {
-        this.getSelf().fallDistance -= 20;
-        if (this.getSelf().fallDistance < 0){
-            this.getSelf().fallDistance = 0;
-        }
-        impactBrace = true;
-        impactAirTime = 15;
-
-        animateStand((byte) 10);
-        this.setAttackTimeDuring(0);
-        this.setActivePower(PowerIndex.EXTRA);
-        this.poseStand(OffsetIndex.BENEATH);
-        if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
-        }
-        return true;
-    }
-
-    public boolean fallBrace() {
-        impactBrace= false;
-        if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {
-
-            cancelConsumableItem(this.getSelf());
-            this.setAttackTimeDuring(-15);
-            if (!this.getSelf().level().isClientSide()) {
-                ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                        this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
-                        50, 1.1, 0.05, 1.1, 0.4);
-                ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                        this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
-                        30, 1, 0.05, 1, 0.4);
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
-                int degrees = (int) (this.getSelf().getYRot() % 360);
-                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1.2F,
-                        Mth.sin(degrees * ((float) Math.PI / 180)),
-                        Mth.sin(-12 * ((float) Math.PI / 180)),
-                        -Mth.cos(degrees * ((float) Math.PI / 180)));
-            }
-        }
-        return true;
-    }
 
 
     @Override
@@ -1398,7 +1313,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return this.setPowerKickBarrageCharge();
         } else if (move == PowerIndex.EXTRA){
             return this.fallBraceInit();
-        } else if (move == PowerIndex.EXTRA_FINISH){
+        } else if (move == PowerIndex.FALL_BRACE_FINISH){
             return this.fallBrace();
         } else if (move == PowerIndex.VAULT){
             return this.vault();

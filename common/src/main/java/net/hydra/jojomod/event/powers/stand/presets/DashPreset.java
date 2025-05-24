@@ -12,10 +12,12 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -40,27 +42,29 @@ public class DashPreset extends StandPowers {
 
     @SuppressWarnings("deprecation")
     public boolean doVault(){
-        Vec3 vec3d = this.getSelf().getEyePosition(0);
-        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
-                && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
-            if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                /*Stand vaulting*/
-                this.setCooldown(PowerIndex.SKILL_3_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
-                double mag = this.getSelf().getPosition(0).distanceTo(
-                        new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
-                MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                        (blockHit.getLocation().x - this.getSelf().getX()) / mag,
-                        0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
-                        (blockHit.getLocation().z - this.getSelf().getZ()) / mag
-                );
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
+        if (!this.self.onGround()) {
+            Vec3 vec3d = this.getSelf().getEyePosition(0);
+            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+            BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+            if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY() + 1) > this.getSelf().getY()
+                    && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
+                if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                    /*Stand vaulting*/
+                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
+                    double mag = this.getSelf().getPosition(0).distanceTo(
+                            new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
+                    MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                            (blockHit.getLocation().x - this.getSelf().getX()) / mag,
+                            0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
+                            (blockHit.getLocation().z - this.getSelf().getZ()) / mag
+                    );
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
+                    return true;
+                }
                 return true;
             }
-            return true;
         }
         return false;
     }
@@ -79,6 +83,61 @@ public class DashPreset extends StandPowers {
         }
     }
 
+    public boolean fallBraceInit() {
+        this.getSelf().fallDistance -= 20;
+        if (this.getSelf().fallDistance < 0){
+            this.getSelf().fallDistance = 0;
+        }
+        impactBrace = true;
+        impactAirTime = 15;
+
+        animateStand((byte) 10);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.EXTRA);
+        this.poseStand(OffsetIndex.BENEATH);
+        if (!this.getSelf().level().isClientSide()) {
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
+        }
+        return true;
+    }
+
+    public void playFallBraceImpactSounds(){
+        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+    }
+    public void playFallBraceImpactParticles(){
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                50, 1.1, 0.05, 1.1, 0.4);
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                30, 1, 0.05, 1, 0.4);
+    }
+
+    public boolean fallBrace() {
+        impactBrace= false;
+        if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {
+
+            cancelConsumableItem(this.getSelf());
+            this.setAttackTimeDuring(-15);
+            if (!this.getSelf().level().isClientSide()) {
+                playFallBraceImpactParticles();
+                playFallBraceImpactSounds();
+                int degrees = (int) (this.getSelf().getYRot() % 360);
+                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1.2F,
+                        Mth.sin(degrees * ((float) Math.PI / 180)),
+                        Mth.sin(-12 * ((float) Math.PI / 180)),
+                        -Mth.cos(degrees * ((float) Math.PI / 180)));
+            }
+        }
+        return true;
+    }
+    public boolean impactBrace = false;
+
+    public int impactAirTime = -1;
+    public int impactSlowdown = -1;
+    public boolean canFallBrace(){
+        return this.getSelf().fallDistance > 3 && impactSlowdown <= -1;
+    }
     public boolean vault() {
         animateStand((byte) 15);
         this.poseStand(OffsetIndex.GUARD);
@@ -163,6 +222,56 @@ public class DashPreset extends StandPowers {
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         this.buttonInput3(keyIsDown, options, PowerIndex.SKILL_3_SNEAK);
+    }
+
+
+    @Override
+    public void tickPower(){
+
+
+        if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+            if (impactSlowdown >= -1){
+                impactSlowdown--;
+            }
+            if (impactBrace) {
+                if (((StandUser) this.getSelf()).roundabout$getActive()) {
+                    if (this.getSelf().onGround()) {
+                        impactBrace = false;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.FALL_BRACE_FINISH, true);
+                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.FALL_BRACE_FINISH);
+                        }
+                    } else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)) {
+                        impactSlowdown = -1;
+                        impactBrace = false;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                        }
+                    } else {
+                        if (impactAirTime > -1) {
+                            impactAirTime--;
+                        }
+                        impactSlowdown = 15;
+                        if (impactAirTime > -1 || this.getSelf().tickCount % 2 == 0) {
+                            this.getSelf().fallDistance -= 1;
+                            if (this.getSelf().fallDistance < 0) {
+                                this.getSelf().fallDistance = 0;
+                            }
+                        }
+                    }
+                } else {
+                    impactSlowdown = -1;
+                    impactBrace = false;
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    }
+                }
+            }
+        }
+
+        super.tickPower();
     }
 
     public void buttonInput3(boolean keyIsDown, Options options, byte powerIndex)
