@@ -696,7 +696,7 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (keyIsDown) {
                         hold3 = true;
                     } else {
-                        hold1 = false;
+                        hold3 = false;
                     }
                 } else {
                     super.buttonInput3(keyIsDown, options);
