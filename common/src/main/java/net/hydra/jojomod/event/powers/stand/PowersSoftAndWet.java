@@ -162,41 +162,45 @@ public class PowersSoftAndWet extends PunchingStand {
         if (this.getSelf().level().isClientSide) {
             if (isGuarding()) {
                 if (keyIsDown) {
-                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
-                        hold1 = true;
+                    if (!hold1) {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                            hold1 = true;
 
-                        this.tryPower(PowerIndex.POWER_1_BONUS, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+                            this.tryPower(PowerIndex.POWER_1_BONUS, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+                        }
                     }
                 } else {
                     hold1 = false;
                 }
             } else if (isHoldingSneak()) {
                 if (keyIsDown) {
-                    if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)){
-                        if (this.activePower != PowerIndex.POWER_1_SNEAK && !canDoBubbleClusterPop()) {
-                            hold1 = true;
+                    if (!hold1) {
+                        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                            if (this.activePower != PowerIndex.POWER_1_SNEAK && !canDoBubbleClusterPop()) {
+                                hold1 = true;
 
-                            int bubbleType = 1;
-                            ClientConfig clientConfig = ConfigManager.getClientConfig();
-                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                int bubbleType = 1;
+                                ClientConfig clientConfig = ConfigManager.getClientConfig();
+                                if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                }
+
+                                this.tryChargedPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
+                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
+                            } else {
+                                if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                                    hold1 = true;
+                                    this.tryPower(PowerIndex.EXTRA_2, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_2);
+                                }
                             }
-
-                            this.tryChargedPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
-                        } else {
-                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
+                        } else if (this.activePower == PowerIndex.POWER_1_SNEAK || this.canDoBubbleClusterRedirect()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                                 hold1 = true;
                                 this.tryPower(PowerIndex.EXTRA_2, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_2);
                             }
-                        }
-                    } else if (this.activePower == PowerIndex.POWER_1_SNEAK || this.canDoBubbleClusterRedirect()){
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
-                            hold1 = true;
-                            this.tryPower(PowerIndex.EXTRA_2, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA_2);
                         }
                     }
                 } else {
@@ -471,6 +475,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.fallBrace();
         } else if (move == PowerIndex.VAULT){
             return this.vault();
+        } else if (move == PowerIndex.POWER_3){
+            return this.bubbleLadder();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return this.bubbleClusterStart();
         } else if (move == PowerIndex.POWER_1) {
@@ -503,6 +509,17 @@ public class PowersSoftAndWet extends PunchingStand {
             basis *= 0.2f;
         }
         return super.inputSpeedModifiers(basis);
+    }
+
+    public boolean bubbleLadder(){
+        if (!this.self.level().isClientSide()) {
+            clusterBubblePop();
+        }
+        setActivePower(PowerIndex.POWER_3);
+        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+        this.attackTimeDuring = 0;
+        animateStand((byte) 1);
+        return true;
     }
     public boolean bubbleClusterStart(){
         if (!this.self.level().isClientSide()) {
@@ -677,28 +694,39 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
-            if (!(keyIsDown && doVault())) {
+            if (!(keyIsDown && !hold3 && doVault())) {
                 if (canFallBrace()) {
                     if (keyIsDown) {
-                        hold3 = true;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
+                        if (!hold3){
+                            hold3 = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
+                        }
                     } else {
                         hold3 = false;
                     }
                 } else if (isGuarding()) {
                     if (keyIsDown) {
-                        hold3 = true;
+                        if (!hold3) {
+                            hold3 = true;
+                        }
                     } else {
                         hold3 = false;
                     }
                 } else if (isHoldingSneak()) {
                     if (keyIsDown) {
-                        hold3 = true;
+                        if (!hold3) {
+                            hold3 = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                        }
                     } else {
                         hold3 = false;
                     }
                 } else {
+                    if (!keyIsDown) {
+                        hold3 = false;
+                    }
                     super.buttonInput3(keyIsDown, options);
                 }
             }
