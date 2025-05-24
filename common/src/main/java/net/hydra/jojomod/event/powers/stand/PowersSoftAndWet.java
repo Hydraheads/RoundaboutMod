@@ -699,7 +699,7 @@ public class PowersSoftAndWet extends PunchingStand {
                         hold1 = false;
                     }
                 } else {
-                    super.buttonInput1(keyIsDown, options);
+                    super.buttonInput3(keyIsDown, options);
                 }
             }
         }
