@@ -96,9 +96,13 @@ public class DashPreset extends StandPowers {
         this.setActivePower(PowerIndex.EXTRA);
         this.poseStand(OffsetIndex.BENEATH);
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
+            playFallBraceInitSound();
         }
         return true;
+    }
+
+    public void playFallBraceInitSound(){
+        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
     }
 
     public void playFallBraceImpactSounds(){
