@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-
+    "roundabout:regal_wall",
+    "roundabout:regal_floor"
   ]
 }
