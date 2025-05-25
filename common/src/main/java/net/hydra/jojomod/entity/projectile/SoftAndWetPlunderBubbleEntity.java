@@ -193,11 +193,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                     }
                                 }
 
-
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
-                                if (this.level().getBlockState(bpos).hasProperty(BlockStateProperties.WATERLOGGED)){
-                                    this.level().setBlockAndUpdate(bpos, this.level().getBlockState(bpos).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(true)));
-                                    finishedUsingLiquid = true;
+                                if (!finishedUsingLiquid) {
+                                    if (this.level().getBlockState(bpos).hasProperty(BlockStateProperties.WATERLOGGED)) {
+                                        this.level().setBlockAndUpdate(bpos, this.level().getBlockState(bpos).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(true)));
+                                        finishedUsingLiquid = true;
+                                    }
                                 }
 
                                 if (!finishedUsingLiquid) {
