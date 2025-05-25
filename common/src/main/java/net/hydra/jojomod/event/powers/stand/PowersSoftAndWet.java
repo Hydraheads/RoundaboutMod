@@ -23,6 +23,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -144,7 +145,7 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (canFallBrace()) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.SKILL_EXTRA);
         } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.SKILL_3);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
@@ -537,6 +538,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.below();
             } else if (blockPos.getX() < -45){
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.above();
+            } else {
+                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(blockPos.getY()));
             }
         }
         return tryPower(move, forced);
@@ -545,6 +548,14 @@ public class PowersSoftAndWet extends PunchingStand {
         if (!this.self.level().isClientSide()){
             if (MainUtil.tryPlaceBlock(this.self,buildingBubbleScaffoldPos,false)){
                 this.self.level().setBlockAndUpdate(buildingBubbleScaffoldPos, ModBlocks.BUBBLE_SCAFFOLD.defaultBlockState());
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
             }
         }
         return false;
@@ -583,6 +594,7 @@ public class PowersSoftAndWet extends PunchingStand {
                                     0
                                     ));
                     bubbleScaffoldCount++;
+                    this.setCooldown(PowerIndex.SKILL_3, 240);
                     if (bubbleScaffoldCount >= 10){
                         this.tryPower(PowerIndex.NONE, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
@@ -766,10 +778,12 @@ public class PowersSoftAndWet extends PunchingStand {
                     }
                 } else if (isHoldingSneak()) {
                     if (keyIsDown) {
-                        if (!hold3) {
-                            hold3 = true;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                            if (!hold3) {
+                                hold3 = true;
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                            }
                         }
                     } else {
                         hold3 = false;

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class BubbleScaffoldBlockEntity extends BlockEntity {
 
-    public int tickCount = 100;
+    public int tickCount = 0;
 
     public List<Vec3> bubbleList = new ArrayList<>();
     public int getTickCount(){
@@ -27,5 +27,15 @@ public class BubbleScaffoldBlockEntity extends BlockEntity {
 
     public BubbleScaffoldBlockEntity(BlockPos $$0, BlockState $$1) {
         super(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, $$0, $$1);
+    }
+    public static void tickBubbleScaffold(Level lvl, BlockPos bp, BlockState bs, BubbleScaffoldBlockEntity bubble) {
+        bubble.tickCount++;
+        if (bubble.tickCount > 200){
+            if (!lvl.isClientSide()) {
+                if (bs.getBlock() instanceof BubbleScaffoldBlock fb) {
+                    lvl.removeBlock(bp, false);
+                }
+            }
+        }
     }
 }

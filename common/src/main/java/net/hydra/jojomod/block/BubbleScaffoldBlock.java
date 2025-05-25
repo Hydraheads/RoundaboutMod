@@ -2,13 +2,18 @@ package net.hydra.jojomod.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import javax.annotation.Nullable;
 
 public class BubbleScaffoldBlock extends BaseEntityBlock {
 
@@ -24,6 +29,14 @@ public class BubbleScaffoldBlock extends BaseEntityBlock {
         VoxelShape $$4 = Block.box(14.0, 0.0, 14.0, 16.0, 16.0, 16.0);
         STABLE_SHAPE = Shapes.or($$0, $$1, $$2, $$3, $$4);
     }
+
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level $$0, BlockState $$1, BlockEntityType<T> $$2) {
+        return createTickerHelper($$2, ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntity::tickBubbleScaffold);
+    }
+
     @Override
     public BlockEntity newBlockEntity(BlockPos $$0, BlockState $$1) {
         return new BubbleScaffoldBlockEntity($$0, $$1);

@@ -33,10 +33,10 @@ public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<Bu
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
     public BubbleScaffoldBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super();
-        this.scale = 0.6f;
+        this.scale = 0.55f;
     }
     private final float scale;
-    public int bubbleCount = 8;
+    public int bubbleCount = 7;
 
     public void render(BubbleScaffoldBlockEntity bubbleScaffoldBlockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (bubbleScaffoldBlockEntity.bubbleList == null){
