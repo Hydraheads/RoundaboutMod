@@ -27,6 +27,7 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
     private static final ResourceLocation GAS_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/gasoline_bubble.png");
     private static final ResourceLocation WATER_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/water_bubble.png");
     private static final ResourceLocation LAVA_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/lava_bubble.png");
+    private static final ResourceLocation FIRE_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/fire_bubble.png");
 
     private final float scale;
     private final ItemRenderer itemRenderer;
@@ -109,6 +110,10 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                 return WATER_BUBBLE;
             } else if (ls == 3){
                 return LAVA_BUBBLE;
+            }
+
+            if (sp.getActivated() && sp.getPlunderType() == PlunderTypes.OXYGEN.id){
+                return FIRE_BUBBLE;
             }
             return TEXTURE;
         }
