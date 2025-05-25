@@ -21,7 +21,7 @@ public class ForgeBlocks {
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
     public static final RegistryObject<Block> REGAL_WALL = BLOCKS.register("regal_wall",
-            () -> ModBlocks.METEOR_BLOCK_PROPERTIES
+            () -> ModBlocks.REGAL_WALL_PROPERTIES
     );
     public static final RegistryObject<Block> REGAL_FLOOR = BLOCKS.register("regal_floor",
             () -> ModBlocks.REGAL_FLOOR_PROPERTIES
