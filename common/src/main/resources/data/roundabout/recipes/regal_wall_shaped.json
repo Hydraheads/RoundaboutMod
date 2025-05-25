@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:paper"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "D": {
+      "item": "minecraft:magenta_dye"
+    }
+  },
+  "pattern": [
+    "#W#",
+    "WDW",
+    "#W#"
+  ],
+  "result": {
+    "count": 8,
+    "item": "roundabout:regal_wall"
+  },
+  "show_notification": true
+}
