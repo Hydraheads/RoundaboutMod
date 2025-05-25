@@ -1134,14 +1134,7 @@ public class MainUtil {
             if (entity.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getUserID()) {
                 return false;
             } else {
-                if (entity.level().isClientSide()){
-                    if (ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getEntityStolen()){
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                return sbe.getActivated();
+                return sbe.getActivated() && !sbe.isPopPlunderBubbble();
             }
         }
         return entity.isPickable();

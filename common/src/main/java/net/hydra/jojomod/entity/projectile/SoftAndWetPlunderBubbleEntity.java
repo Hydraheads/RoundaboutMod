@@ -76,6 +76,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     public boolean isPickable() {
+        if (isPopPlunderBubbble()) {
+            return false;
+        }
+
+
         if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id && this.getActivated()){
             return true;
         }
@@ -232,6 +237,17 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     10, 0.2, 0.2, 0.2, 0.015);
         }
         this.setActivated(true);
+        if (this.getPlunderType() == PlunderTypes.SIGHT.id) {
+            if (this.getEntityStolen() > 0 && this.level().getEntity(this.getEntityStolen()) instanceof Player PL){
+                lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.sightStealingDurationOnPlayersInTicks;
+            } else {
+                lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.sightStealingDurationOnMobsInTicks;
+            }
+            theatricPop();
+        } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
+            lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStealingDurationInTicks;
+            theatricPop();
+        }
     }
     public void setFloating(){
         setLaunched(false);
@@ -274,6 +290,16 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         }
     }
+
+
+    public void theatricPop(){
+
+        ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                this.getX(), this.getY() + this.getBbHeight() * 0.6, this.getZ(),
+                1, 0, 0, 0, 0.015);
+        this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+    }
     @Override
     public void popBubble(){
         this.setFinished(true);
@@ -293,12 +319,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     ModPacketHandler.PACKET_ACCESS.sendIntPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_BUBBLE_FINISH,this.getId());
                 }
             }
-                ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
-                        this.getX(), this.getY() + this.getBbHeight()*0.6, this.getZ(),
-                        1, 0, 0,0, 0.015);
-            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                    SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-            popSounds();
+            if (!isPopPlunderBubbble()) {
+                theatricPop();
+                popSounds();
+            }
 
 
             if (this.getPlunderType() == PlunderTypes.MOISTURE.id){
@@ -405,6 +429,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         stolenPhysicalLiquid = $$0.getBoolean("roundabout.stolenPhysicalLiquid");
         this.setHeldItem(itemstack);
         super.readAdditionalSaveData($$0);
+    }
+
+    public boolean isPopPlunderBubbble(){
+        return (getPlunderType() == PlunderTypes.FRICTION.id || getPlunderType() == PlunderTypes.SIGHT.id) && getActivated();
     }
 
     @Override
@@ -853,6 +881,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
+        if (isPopPlunderBubbble()){
+            return false;
+        }
         if (!this.level().isClientSide()) {
             if (this.getPlunderType() == PlunderTypes.ITEM.id) {
                 addItemNotLight($$0.getEntity());

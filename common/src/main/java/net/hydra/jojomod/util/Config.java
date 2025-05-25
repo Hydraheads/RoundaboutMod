@@ -297,13 +297,20 @@ import java.util.Set;
         public Boolean moistureWithStandGriefingTakesLiquidBlocks;
         @BooleanOption(group = "inherit", value = false)
         public Boolean frictionStopsJumping;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer frictionStealingDurationInTicks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bossesCannotLoseFriction;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bossesCannotLoseSight;
-        @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer ticksBetweenSightStealsOnSameMob;
-
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer sightStealingDurationOnMobsInTicks;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer sightStealingDurationOnPlayersInTicks;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer primaryPlunderBubbleLifespanInTicks;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
         public Float sizeOfMobBubbleMobsStolen;
     }

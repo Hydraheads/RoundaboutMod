@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -228,7 +229,7 @@ public class PowersSoftAndWet extends PunchingStand {
         SoftAndWetPlunderBubbleEntity bubble = new SoftAndWetPlunderBubbleEntity(this.self,this.self.level());
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
         bubble.setUser(this.self);
-        bubble.lifeSpan = 400;
+        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
         return bubble;
     }
     public boolean bubbleShot(){
@@ -255,6 +256,17 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public boolean canDoBubblePop(){
         bubbleListInit();
+
+        List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
+        };
+        if (!bubbleList2.isEmpty()) {
+            int totalnumber = bubbleList2.size();
+            for (SoftAndWetBubbleEntity value : bubbleList2) {
+                if (!(value instanceof SoftAndWetPlunderBubbleEntity PBE && PBE.isPopPlunderBubbble())) {
+                    return true;
+                }
+            }
+        }
         return !bubbleList.isEmpty();
     }
     public boolean canDoBubbleClusterRedirect(){
@@ -286,7 +298,7 @@ public class PowersSoftAndWet extends PunchingStand {
         if (!bubbleList2.isEmpty()) {
             int totalnumber = bubbleList2.size();
             for (SoftAndWetBubbleEntity value : bubbleList2) {
-                if (value instanceof SoftAndWetPlunderBubbleEntity PBE) {
+                if (value instanceof SoftAndWetPlunderBubbleEntity PBE && !PBE.isPopPlunderBubbble()) {
                     if (!PBE.getSingular() && !PBE.getFinished()) {
                         return true;
                     }
@@ -322,7 +334,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 };
                 if (!bubbleList2.isEmpty()) {
                     for (SoftAndWetBubbleEntity value : bubbleList2) {
-                        if (value instanceof SoftAndWetPlunderBubbleEntity plunder){
+                        if (value instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.isPopPlunderBubbble()){
                             if (!plunder.getFinished() && !plunder.getSingular()){
                                 plunder.popBubble();
                             }
@@ -345,7 +357,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 };
                 if (!bubbleList2.isEmpty()) {
                     for (SoftAndWetBubbleEntity value : bubbleList2) {
-                        if (value instanceof SoftAndWetPlunderBubbleEntity plunder){
+                        if (value instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.isPopPlunderBubbble()){
                             if (!plunder.getFinished()){
                                plunder.popBubble();
                             }
@@ -357,6 +369,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return false;
     }
 
+    /**If there are any cluster bubbles that have not yet entered the plunder state, redirect them*/
     public boolean bubbleClusterRedirect(){
         bubbleListInit();
         List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
@@ -375,6 +388,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return false;
     }
 
+    /**Redirects all bubbles that have entered the plunder state and are compatible*/
     public boolean bubbleRedirect(){
         bubbleListInit();
         if (!bubbleList.isEmpty()){
@@ -545,6 +559,8 @@ public class PowersSoftAndWet extends PunchingStand {
         return tryPower(move, forced);
     }
     public int bubbleNumber = 0;
+
+    /**Bubble Scaffolding, build a ladder overtime somewhat like the Builder blocks in Twilight*/
     public boolean bubbleLadderPlace(){
         if (!this.self.level().isClientSide()){
             if (MainUtil.tryPlaceBlock(this.self,buildingBubbleScaffoldPos,false)){

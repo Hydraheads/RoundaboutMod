@@ -46,54 +46,56 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
     @Override
     public void render(SoftAndWetBubbleEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
-            poseStack.pushPose();
+            if (!(entity instanceof SoftAndWetPlunderBubbleEntity sp && sp.isPopPlunderBubbble())) {
+                poseStack.pushPose();
 
-            // Orient the texture
-            poseStack.scale(this.scale, this.scale, this.scale);
-            poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-            poseStack.translate(0, entity.getBbHeight() / 2, 0);
+                // Orient the texture
+                poseStack.scale(this.scale, this.scale, this.scale);
+                poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+                poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+                poseStack.translate(0, entity.getBbHeight() / 2, 0);
 
-            // Draw flat quad here
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-            Matrix4f matrix = poseStack.last().pose();
-            Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
-            normal.normalize();
+                // Draw flat quad here
+                VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+                Matrix4f matrix = poseStack.last().pose();
+                Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
+                normal.normalize();
 
-            Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
-            if (normal.y > 0){
-               coursecorrect = new Vector3f( 0.01f, 1f, 0.01f);
-            }
-
-            float scaleIt = 0.23f;
-
-            if (entity instanceof SoftAndWetPlunderBubbleEntity sp){
-                int ls = sp.getLiquidStolen();
-                if (ls == 3){
-                    packedLight = 15728880;
+                Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
+                if (normal.y > 0) {
+                    coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
                 }
-                if (!sp.getHeldItem().isEmpty()){
-                    scaleIt = 0.33f;
+
+                float scaleIt = 0.23f;
+
+                if (entity instanceof SoftAndWetPlunderBubbleEntity sp) {
+                    int ls = sp.getLiquidStolen();
+                    if (ls == 3) {
+                        packedLight = 15728880;
+                    }
+                    if (!sp.getHeldItem().isEmpty()) {
+                        scaleIt = 0.33f;
+                    }
+                    if (sp.getEntityStolen() > 0 && sp.getPlunderType() == PlunderTypes.MOBS.id) {
+                        scaleIt = 1.0f;
+                    }
                 }
-                if (sp.getEntityStolen() > 0 && sp.getPlunderType() == PlunderTypes.MOBS.id){
-                    scaleIt = 1.0f;
+
+
+                float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
+                vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+
+                if (entity instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.getHeldItem().isEmpty()) {
+                    poseStack.translate(0, -0.12, 0);
+                    this.itemRenderer.renderStatic(plunder.getHeldItem(), ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, ((Entity) entity).level(), ((Entity) entity).getId());
                 }
+
+                poseStack.popPose();
+                super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
             }
-
-
-            float size = (float) Math.min(scaleIt, (((float)entity.tickCount)+partialTicks)*(scaleIt*0.1)); // Adjust to your needs
-            vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-
-            if (entity instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.getHeldItem().isEmpty()){
-                poseStack.translate(0,-0.12,0);
-                this.itemRenderer.renderStatic(plunder.getHeldItem(), ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, ((Entity)entity).level(), ((Entity)entity).getId());
-            }
-
-            poseStack.popPose();
-            super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
         }
     }
 
