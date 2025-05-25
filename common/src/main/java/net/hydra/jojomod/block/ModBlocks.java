@@ -317,7 +317,7 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().instabreak().lightLevel((p_152607_) -> {
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static StandFireBlock STAND_FIRE_PROPERTIES = new StandFireBlock(

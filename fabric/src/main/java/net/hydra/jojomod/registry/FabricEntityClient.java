@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.BubbleScaffoldBlockEntityRenderer;
 import net.hydra.jojomod.block.MirrorBlockEntityRenderer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireRenderer;
@@ -132,5 +133,6 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
         BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
         BlockEntityRenderers.register(ModBlocks.MIRROR_BLOCK_ENTITY, MirrorBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
     }
 }
