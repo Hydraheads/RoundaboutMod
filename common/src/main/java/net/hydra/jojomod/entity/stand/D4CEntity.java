@@ -16,7 +16,9 @@ public class D4CEntity extends StandEntity {
         MANGA_SKIN = 0,
         WONDER_FESTIVAL = 1,
         PROMO = 2,
-        PROMO_L = 3;
+        PROMO_L = 3,
+        SPECIAL = 4,
+        GRAND = 5;
 
     @Override public Component getSkinName(byte skinId) {
         switch (skinId)
@@ -24,6 +26,8 @@ public class D4CEntity extends StandEntity {
             case WONDER_FESTIVAL -> {return Component.translatable("skins.roundabout.d4c.wonder_festival");}
             case PROMO -> {return Component.translatable("skins.roundabout.d4c.promo");}
             case PROMO_L -> {return Component.translatable("skins.roundabout.d4c.promo_l");}
+            case SPECIAL -> {return Component.translatable("skins.roundabout.d4c.special");}
+            case GRAND -> {return Component.translatable("skins.roundabout.d4c.grand");}
             default -> {return Component.translatable("skins.roundabout.d4c.base");}
         }
     }

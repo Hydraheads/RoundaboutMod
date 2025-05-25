@@ -605,7 +605,9 @@ public class PowersD4C extends PunchingStand {
                 D4CEntity.MANGA_SKIN,
                 D4CEntity.WONDER_FESTIVAL,
                 D4CEntity.PROMO,
-                D4CEntity.PROMO_L
+                D4CEntity.PROMO_L,
+                D4CEntity.SPECIAL,
+                D4CEntity.GRAND
         );
     }
 

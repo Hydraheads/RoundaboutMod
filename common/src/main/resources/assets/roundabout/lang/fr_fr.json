@@ -168,6 +168,8 @@
   "entity.roundabout.plunder_bubble": "Bulle de savon flibustière",
 
   "block.roundabout.meteor_block": "Bloc de météorite",
+  "block.roundabout.regal_wall": "Mur régale",
+  "block.roundabout.regal_floor": "Sol régale",
   "block.roundabout.ancient_meteor": "Météorite antique",
   "block.roundabout.locacaca_cactus": "Cactus enracinée",
   "block.roundabout.locacaca_plant": "Plante de locacaca",
@@ -183,6 +185,7 @@
   "block.roundabout.ceiling_light": "Lumière de plafond",
   "block.roundabout.mirror": "Miroir",
   "block.roundabout.stereo": "Stéréo",
+  "block.roundabout.bubble_scaffold": "Chemin de bulle",
   "block.roundabout.fog_block": "Bloc brumeux",
   "block.roundabout.fog_block.title": "Brumeux(se)",
   "block.roundabout.fog_block_coating.title": "de revêtement",
@@ -348,10 +351,14 @@
   "sounds.roundabout.justice_select":  "Sélection",
   "sounds.roundabout.justice_select_attack":  "Ordre d'attaque",
   "sounds.roundabout.cackle":  "Ricanement",
+
   "sounds.roundabout.bubble_hover_over":  "Bulle",
   "sounds.roundabout.bubble_pop":  "Bulle qui éclate",
   "sounds.roundabout.bubble_create":  "Bulle",
   "sounds.roundabout.bubble_plunder":  "Quelque chose a été pris",
+  "sounds.roundabout.air_bubble":  "Oxygène",
+  "sounds.roundabout.soft_and_wet_barrage":  "ORA",
+  "sounds.roundabout.soft_and_wet_barrage_2":  "ORA",
 
   "sounds.roundabout.snap":  "Claquement de doigt",
   "sounds.roundabout.star_finger_silent":  "Star Finger",
@@ -812,6 +819,7 @@
   "skins.roundabout.soft_and_wet.drowned_2": "Coulé G",
   "skins.roundabout.soft_and_wet.figure": "Figure",
   "skins.roundabout.soft_and_wet.beta": "Beta",
+  "skins.roundabout.soft_and_wet.debut": "Debut",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "Wonder Festival",
@@ -862,7 +870,7 @@
   "roundabout.soft_and_wet_plunder.mobs": "Créatures",
   "roundabout.soft_and_wet_plunder.mobs.desc": "Captures une petite créature et la ramène à vous.",
   "roundabout.soft_and_wet_plunder.oxygen": "Oxygène",
-  "roundabout.soft_and_wet_plunder.oxygen.desc": "Retire l'air des poumons d'une créature, such that if they are underwater, they begin to drown.",
+  "roundabout.soft_and_wet_plunder.oxygen.desc": "Retire l'air des poumons d'une créature, de telle manière que si iel est sous l'eau, iel commence à se noyer.",
   "roundabout.soft_and_wet_plunder.moisture": "Moisture",
   "roundabout.soft_and_wet_plunder.moisture.desc": "Captures un liquide ou du gasoil, les rendant plus facile à transporté.",
   "roundabout.soft_and_wet_plunder.potion_effects": "Effets",
