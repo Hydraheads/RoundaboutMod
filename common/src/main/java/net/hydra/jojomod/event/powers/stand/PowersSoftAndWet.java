@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -105,9 +106,6 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (slot == 2 && !canDoBubbleRedirect() && isGuarding()) {
-            return true;
-        }
-        if (slot == 2 && !canDoBubblePop() && isHoldingSneak() && !isGuarding()) {
             return true;
         }
         if (slot == 1 && !canDoBubbleClusterRedirect() && isGuarding()) {
@@ -337,6 +335,9 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public boolean bubblePop() {
         bubbleListInit();
+        if (!this.self.level().isClientSide()) {
+            bubbleNumber++;
+        }
         if (!bubbleList.isEmpty()) {
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, 10);
             if (!this.self.level().isClientSide()) {
@@ -544,18 +545,23 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return tryPower(move, forced);
     }
+    public int bubbleNumber = 0;
     public boolean bubbleLadderPlace(){
         if (!this.self.level().isClientSide()){
             if (MainUtil.tryPlaceBlock(this.self,buildingBubbleScaffoldPos,false)){
                 this.self.level().setBlockAndUpdate(buildingBubbleScaffoldPos, ModBlocks.BUBBLE_SCAFFOLD.defaultBlockState());
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
-                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
-                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
-                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
-                        SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                if (this.self.level().getBlockEntity(buildingBubbleScaffoldPos) instanceof BubbleScaffoldBlockEntity SBE) {
+                    SBE.standuser = this.self;
+                    SBE.bubbleNo = bubbleNumber;
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                            SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                            SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                            SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                            SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
+                }
             }
         }
         return false;
