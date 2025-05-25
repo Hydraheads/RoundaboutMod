@@ -1,6 +1,8 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -17,14 +19,17 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -477,6 +482,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.vault();
         } else if (move == PowerIndex.POWER_3){
             return this.bubbleLadder();
+        } else if (move == PowerIndex.POWER_3_EXTRA){
+            return this.bubbleLadderPlace();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return this.bubbleClusterStart();
         } else if (move == PowerIndex.POWER_1) {
@@ -511,16 +518,6 @@ public class PowersSoftAndWet extends PunchingStand {
         return super.inputSpeedModifiers(basis);
     }
 
-    public boolean bubbleLadder(){
-        if (!this.self.level().isClientSide()) {
-            clusterBubblePop();
-        }
-        setActivePower(PowerIndex.POWER_3);
-        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
-        this.attackTimeDuring = 0;
-        animateStand((byte) 1);
-        return true;
-    }
     public boolean bubbleClusterStart(){
         if (!this.self.level().isClientSide()) {
             clusterBubblePop();
@@ -531,14 +528,68 @@ public class PowersSoftAndWet extends PunchingStand {
         animateStand((byte) 0);
         return true;
     }
+    @Override
+    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos) {
 
+        if (move == PowerIndex.POWER_3_EXTRA) {
+            Roundabout.LOGGER.info(String.valueOf(blockPos.getX()));
+            if (blockPos.getX() > 45){
+                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.below();
+            } else if (blockPos.getX() < -45){
+                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.above();
+            }
+        }
+        return tryPower(move, forced);
+    }
+    public boolean bubbleLadderPlace(){
+        if (!this.self.level().isClientSide()){
+            if (MainUtil.tryPlaceBlock(this.self,buildingBubbleScaffoldPos,false)){
+                this.self.level().setBlockAndUpdate(buildingBubbleScaffoldPos, ModBlocks.BUBBLE_SCAFFOLD.defaultBlockState());
+            }
+        }
+        return false;
+    }
+    public boolean bubbleLadder(){
+        setActivePower(PowerIndex.POWER_3);
+        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+        this.attackTimeDuring = 0;
+        bubbleScaffoldCount = 0;
+        animateStand((byte) 1);
+        buildingBubbleScaffoldPos = this.self.blockPosition();
+        return true;
+    }
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
             this.updateBubbleCluster();
+        } else if (this.getActivePower() == PowerIndex.POWER_3){
+            this.updateBubbleScaffold();
         }
         super.updateUniqueMoves();
+    }
+    int bubbleScaffoldCount = 0;
+    public BlockPos buildingBubbleScaffoldPos = BlockPos.ZERO;
+    public void updateBubbleScaffold(){
+        if (this.self instanceof Player PE && this.self.level().isClientSide()) {
+            if (isPacketPlayer()) {
+                if (this.attackTimeDuring % 6 == 2) {
+
+                    /**The client is the only one with accurate rotation and timings so it should be deciding how to build the ladder*/
+                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA,
+                            new BlockPos(
+                                    (int)this.self.getXRot(),
+                                    (int)this.self.getYRot(),
+                                    0
+                                    ));
+                    bubbleScaffoldCount++;
+                    if (bubbleScaffoldCount >= 10){
+                        this.tryPower(PowerIndex.NONE, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    }
+                }
+            }
+        }
     }
     public void updateBubbleCluster(){
         if (this.self instanceof Player){

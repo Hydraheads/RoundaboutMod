@@ -55,6 +55,8 @@ public class ModBlocks {
     public static Block MIRROR;
     public static Block STEREO;
 
+    public static Block BUBBLE_SCAFFOLD;
+
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
     public static Block BLUE_FIRE;

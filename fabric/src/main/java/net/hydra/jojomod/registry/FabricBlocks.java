@@ -179,6 +179,7 @@ public class FabricBlocks {
         ModBlocks.CEILING_LIGHT = CEILING_LIGHT;
         ModBlocks.MIRROR = MIRROR;
         ModBlocks.STEREO = STEREO;
+        ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;
         ModBlocks.BLUE_FIRE = BLUE_FIRE;
