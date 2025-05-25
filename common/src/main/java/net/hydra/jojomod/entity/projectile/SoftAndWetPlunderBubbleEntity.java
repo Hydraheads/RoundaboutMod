@@ -190,7 +190,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                     if (this.level().getBlockState(bpos1).hasProperty(BlockStateProperties.WATERLOGGED)){
                                         this.level().setBlockAndUpdate(bpos1, this.level().getBlockState(bpos1).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(true)));
                                         finishedUsingLiquid = true;
-                                        return;
                                     }
                                 }
 
@@ -199,14 +198,16 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 if (this.level().getBlockState(bpos).hasProperty(BlockStateProperties.WATERLOGGED)){
                                     this.level().setBlockAndUpdate(bpos, this.level().getBlockState(bpos).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(true)));
                                     finishedUsingLiquid = true;
-                                    return;
                                 }
-                                if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
-                                    this.level().setBlockAndUpdate(bpos, Blocks.WATER.defaultBlockState());
-                                } else {
-                                    splashWater();
+
+                                if (!finishedUsingLiquid) {
+                                    if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
+                                        this.level().setBlockAndUpdate(bpos, Blocks.WATER.defaultBlockState());
+                                    } else {
+                                        splashWater();
+                                    }
+                                    finishedUsingLiquid = true;
                                 }
-                                finishedUsingLiquid = true;
                             } else if (getLiquidStolen() == 3) {
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
                                 if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
@@ -749,7 +750,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         if (!this.level().isClientSide()){
             lifeSpan--;
-            if (lifeSpan <= 0){
+            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser)this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))){
                 popBubble();
                 return;
             }
