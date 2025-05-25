@@ -28,6 +28,8 @@ public class ModBlocks {
     public static final IntegerProperty COLOR = IntegerProperty.create("color", 0, 12);
     public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
+    public static Block REGAL_FLOOR;
+    public static Block REGAL_WALL;
     public static Block LOCACACA_CACTUS;
     public static Block LOCACACA_BLOCK;
     public static Block NEW_LOCACACA_BLOCK;
@@ -143,6 +145,18 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL)
+    );
+    public static Block REGAL_WALL_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+    );
+    public static Block REGAL_FLOOR_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
     );
 
     public static Block LOCACACA_CACTUS_PROPERTIES = new LocacacaCactusBlock(

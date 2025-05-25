@@ -67,6 +67,14 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToTab(ITEMS.register("regal_wall",
+            () -> new BlockItem(ForgeBlocks.REGAL_WALL.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> REGAL_FLOOR_ITEM = addToTab(ITEMS.register("regal_floor",
+            () -> new BlockItem(ForgeBlocks.REGAL_FLOOR.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToTab(ITEMS.register("locacaca_cactus",
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()

@@ -99,6 +99,8 @@ public class ForgeEvents {
         /*Common Code Bridge*/
 
         ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
+        ModBlocks.REGAL_FLOOR = ForgeBlocks.REGAL_FLOOR.get();
+        ModBlocks.REGAL_WALL = ForgeBlocks.REGAL_WALL.get();
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();

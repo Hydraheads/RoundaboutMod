@@ -244,6 +244,8 @@ public class FabricItems {
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(ModBlocks.METEOR_BLOCK);
+                        entries.accept(ModBlocks.REGAL_FLOOR);
+                        entries.accept(ModBlocks.REGAL_WALL);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
                         entries.accept(MUSIC_DISC_HALLELUJAH);

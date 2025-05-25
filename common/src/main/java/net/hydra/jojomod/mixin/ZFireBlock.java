@@ -66,5 +66,7 @@ public class ZFireBlock implements IFireBlock {
     /**Register Flammable blocks here*/
     public void roundabout$bootstrap() {
         this.roundabout$setFlammableBlock(ModBlocks.GASOLINE_SPLATTER, 15, 100);
+        this.roundabout$setFlammableBlock(ModBlocks.REGAL_WALL, 5, 5);
+        this.roundabout$setFlammableBlock(ModBlocks.REGAL_FLOOR, 5, 5);
     }
 }
