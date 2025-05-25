@@ -165,7 +165,7 @@
   "entity.roundabout.ground_hurricane": "Вариация урагана",
   "entity.roundabout.concealed_flame_object": "Невидимый вихрь",
   "entity.roundabout.visage_display": "Парящее лицо",
-  "entity.roundabout.plunder_bubble": "Пузырь грабежа",
+  "entity.roundabout.plunder_bubble": "Пузырь кражи",
 
   "block.roundabout.meteor_block": "Блок Метеорита",
   "block.roundabout.ancient_meteor": "Древний метеор",
@@ -352,6 +352,7 @@
   "sounds.roundabout.bubble_pop":  "Бульканье пузырьков",
   "sounds.roundabout.bubble_create":  "Бульканье",
   "sounds.roundabout.bubble_plunder":  "Что-то было отобрано",
+  "sounds.roundabout.air_bubble":  "Кислород",
 
   "sounds.roundabout.snap":  "Щелчок",
   "sounds.roundabout.star_finger_silent":  "Стар Фингер",
@@ -707,7 +708,7 @@
   "leveling.roundabout.disc_wip": "Ведутся работы, не доступно в Выживании",
   "leveling.roundabout.disc_wip_2": "Это означает, что не все приёмы доступны",
 
-  "gamerule.roundaboutStandGriefing": "Гриферство при помощи Стенда",
+  "gamerule.roundaboutStandGriefing": "Грифинг Стендов",
   "gamerule.roundaboutStandGriefing.description": "Контролирует будут ли стенды устраивать беспорядки с блоками или нет",
   "gamerule.roundaboutMonsterStandFireSpreads": "Распространение огня стенда у мобов",
   "gamerule.roundaboutMonsterStandFireSpreads.description": "Регулирует возможность распространения огня стенда мобам с Magician's Red.",
@@ -812,6 +813,7 @@
   "skins.roundabout.soft_and_wet.drowned_2": "Затонувший G",
   "skins.roundabout.soft_and_wet.figure": "Статуэтка",
   "skins.roundabout.soft_and_wet.beta": "Бета",
+  "skins.roundabout.soft_and_wet.debut": "Манга 'Debut'",
 
   "skins.roundabout.d4c.base": "Манга",
   "skins.roundabout.d4c.wonder_festival": "Фестивальный",
@@ -852,9 +854,9 @@
 
   "roundabout.soft_and_wet_plunder.none": "Похититель Свойств",
   "roundabout.soft_and_wet_plunder.sight": "Зрение",
-  "roundabout.soft_and_wet_plunder.sight.desc": "Лишает зрения тех, кто полагается на зрение, пока оно не лопнет.",
+  "roundabout.soft_and_wet_plunder.sight.desc": "Лишает зрения тех, кто полагается на зрение, пока не лопнет пузырь.",
   "roundabout.soft_and_wet_plunder.sound": "Звук",
-  "roundabout.soft_and_wet_plunder.sound.desc": "Создает звукоизолированные зоны, поглощая все звуки и звуковые атаки, пока не лопнет.",
+  "roundabout.soft_and_wet_plunder.sound.desc": "Создает звукоизолированные зоны, поглощая все звуки и звуковые атаки, пока не лопнет пузырь.",
   "roundabout.soft_and_wet_plunder.friction": "Трение",
   "roundabout.soft_and_wet_plunder.friction.desc": "Поглощает трение от поверхности, делая ее скользкой.",
   "roundabout.soft_and_wet_plunder.items": "Предметы",
@@ -862,7 +864,7 @@
   "roundabout.soft_and_wet_plunder.mobs": "Мобы",
   "roundabout.soft_and_wet_plunder.mobs.desc": "Захватывает малых мобов и подносит их к тебе.",
   "roundabout.soft_and_wet_plunder.oxygen": "Кислород",
-  "roundabout.soft_and_wet_plunder.oxygen.desc": "Забирает воздух из лёгких Моба, если они окажутся под водой - сразу начнут тонуть.",
+  "roundabout.soft_and_wet_plunder.oxygen.desc": "Забирает воздух из лёгких Моба, если они окажутся под водой - сразу начнут тонуть. Также можно затягивать кислород из воздуха или магмовых блоков в воду, чтобы восстановить свой запас кислорода.",
   "roundabout.soft_and_wet_plunder.moisture": "Влага",
   "roundabout.soft_and_wet_plunder.moisture.desc": "Собирает жидкости или бензин, для их перемещения.",
   "roundabout.soft_and_wet_plunder.potion_effects": "Эффекты",
