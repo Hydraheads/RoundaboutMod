@@ -534,7 +534,6 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos) {
 
         if (move == PowerIndex.POWER_3_EXTRA) {
-            Roundabout.LOGGER.info(String.valueOf(blockPos.getX()));
             if (blockPos.getX() > 45){
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.below();
             } else if (blockPos.getX() < -45){

@@ -50,4 +50,9 @@ public class BubbleScaffoldBlock extends BaseEntityBlock {
             return Shapes.empty();
         }
     }
+
+    @Override
+    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+         return Shapes.empty();
+    }
 }
