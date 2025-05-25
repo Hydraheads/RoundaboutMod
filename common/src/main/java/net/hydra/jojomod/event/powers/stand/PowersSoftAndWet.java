@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -74,13 +75,23 @@ public class PowersSoftAndWet extends PunchingStand {
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
-
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_2) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
+    }
 
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_SOFT_AND_WET_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE) {
+            return ModSounds.SOFT_AND_WET_BARRAGE_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE_2) {
+            return ModSounds.SOFT_AND_WET_BARRAGE_2_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -510,6 +521,21 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.clusterBubblePop();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+
+    public static final byte BARRAGE_NOISE = 20;
+    public static final byte BARRAGE_NOISE_2 = BARRAGE_NOISE+1;
+    public static final byte BARRAGE_NOISE_3 = BARRAGE_NOISE+2;
+    @Override
+    public byte chooseBarrageSound(){
+        double rand = Math.random();
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+       if (rand > 0.5) {
+            return BARRAGE_NOISE;
+        } else {
+            return BARRAGE_NOISE_2;
+        }
     }
     @Override
     public boolean tryChargedPower(int move, boolean forced, int chargeTime){

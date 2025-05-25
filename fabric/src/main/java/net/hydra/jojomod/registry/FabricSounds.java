@@ -88,6 +88,8 @@ public class FabricSounds {
         addSound(ModSounds.BUBBLE_POP_ID, ModSounds.BUBBLE_POP_EVENT);
         addSound(ModSounds.BUBBLE_CREATE_ID, ModSounds.BUBBLE_CREATE_EVENT);
         addSound(ModSounds.BUBBLE_PLUNDER_ID, ModSounds.BUBBLE_PLUNDER_EVENT);
+        addSound(ModSounds.SOFT_AND_WET_BARRAGE_ID, ModSounds.SOFT_AND_WET_BARRAGE_EVENT);
+        addSound(ModSounds.SOFT_AND_WET_BARRAGE_2_ID, ModSounds.SOFT_AND_WET_BARRAGE_2_EVENT);
 
         addSound(ModSounds.LOCACACA_PETRIFY_ID, ModSounds.LOCACACA_PETRIFY_EVENT);
         addSound(ModSounds.LOCACACA_FUSION_ID, ModSounds.LOCACACA_FUSION_EVENT);

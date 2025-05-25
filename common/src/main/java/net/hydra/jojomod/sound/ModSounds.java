@@ -156,6 +156,12 @@ public class ModSounds {
     public static final String BUBBLE_PLUNDER = "bubble_plunder";
     public static final ResourceLocation BUBBLE_PLUNDER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_PLUNDER);
     public static SoundEvent BUBBLE_PLUNDER_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_PLUNDER_ID);
+    public static final String SOFT_AND_WET_BARRAGE = "soft_and_wet_barrage";
+    public static final ResourceLocation SOFT_AND_WET_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_AND_WET_BARRAGE);
+    public static SoundEvent SOFT_AND_WET_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(SOFT_AND_WET_BARRAGE_ID);
+    public static final String SOFT_AND_WET_BARRAGE_2 = "soft_and_wet_barrage_2";
+    public static final ResourceLocation SOFT_AND_WET_BARRAGE_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_AND_WET_BARRAGE_2);
+    public static SoundEvent SOFT_AND_WET_BARRAGE_2_EVENT = SoundEvent.createVariableRangeEvent(SOFT_AND_WET_BARRAGE_2_ID);
 
     public static final String KNIFE_IMPACT_GROUND = "knife_impact_ground";
     public static final ResourceLocation KNIFE_IMPACT_GROUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KNIFE_IMPACT_GROUND);

@@ -59,6 +59,18 @@
       "roundabout:bubble_plunder"
     ]
   },
+  "soft_and_wet_barrage": {
+    "subtitle": "sounds.roundabout.soft_and_wet_barrage",
+    "sounds": [
+      "roundabout:soft_and_wet_barrage"
+    ]
+  },
+  "soft_and_wet_barrage_2": {
+    "subtitle": "sounds.roundabout.soft_and_wet_barrage_2",
+    "sounds": [
+      "roundabout:soft_and_wet_barrage_2"
+    ]
+  },
   "air_bubble": {
     "subtitle": "sounds.roundabout.air_bubble",
     "sounds": [

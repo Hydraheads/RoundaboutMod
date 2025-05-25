@@ -349,11 +349,14 @@
   "sounds.roundabout.justice_select":  "Selection",
   "sounds.roundabout.justice_select_attack":  "Attack Order",
   "sounds.roundabout.cackle":  "Cackle",
+
   "sounds.roundabout.bubble_hover_over":  "Bubble",
   "sounds.roundabout.bubble_pop":  "Bubble popping",
   "sounds.roundabout.bubble_create":  "Bubble",
   "sounds.roundabout.bubble_plunder":  "Something was taken",
   "sounds.roundabout.air_bubble":  "Oxygen",
+  "sounds.roundabout.soft_and_wet_barrage":  "ORA",
+  "sounds.roundabout.soft_and_wet_barrage_2":  "ORA",
 
   "sounds.roundabout.snap":  "Snap",
   "sounds.roundabout.star_finger_silent":  "Star Finger",
