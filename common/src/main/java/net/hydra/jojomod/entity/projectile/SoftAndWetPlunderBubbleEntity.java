@@ -190,15 +190,33 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         super.onHitBlock($$0);
                     }
                 } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
-                    if (this.standUser != null) {
-                        if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
-                            airSupply = this.standUser.getMaxAirSupply();
-                            startReturning();
+                    if (getLaunched()){
+                        BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
+                        if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof GasolineBlock) {
+                            gasExplode();
+                        } else {
+                            if (MainUtil.tryPlaceBlock(this.standUser, bpos) && MainUtil.getIsGamemodeApproriateForGrief(standUser)) {
+                                this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState());
+                            }
+                        }
+                        super.onHitBlock($$0);
+                    } else {
+                        if (this.standUser != null) {
+                            if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
+                                airSupply = this.standUser.getMaxAirSupply();
+                                startReturning();
+                            } else if (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof FireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)){
+                                fireTicks = 100;
+                                if (MainUtil.tryPlaceBlock(standUser, $$0.getBlockPos().above(), false)) {
+                                    this.level().setBlockAndUpdate($$0.getBlockPos().above(), Blocks.AIR.defaultBlockState());
+                                }
+                                setFloating();
+                            } else {
+                                super.onHitBlock($$0);
+                            }
                         } else {
                             super.onHitBlock($$0);
                         }
-                    } else {
-                        super.onHitBlock($$0);
                     }
                 } else {
                     super.onHitBlock($$0);
@@ -518,7 +536,14 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             super.onHitEntity($$0);
                         }
                     } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
-                        if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()) {
+                        if (getLaunched()) {
+                            $$0.getEntity().setRemainingFireTicks($$0.getEntity().getRemainingFireTicks()+fireTicks);
+                            super.onHitEntity($$0);
+                        } else if ($$0.getEntity().isOnFire()) {
+                            fireTicks = $$0.getEntity().getRemainingFireTicks();
+                            $$0.getEntity().clearFire();
+                            setFloating();
+                        } else if ($$0.getEntity() instanceof LivingEntity LE && !LE.canBreatheUnderwater()) {
                             int supply = $$0.getEntity().getAirSupply();
                             if (supply > 0) {
                                 airSupply = supply;
@@ -543,6 +568,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 }
                                 super.onHitEntity($$0);
                             }
+                        } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
+                            $$0.getEntity().setRemainingFireTicks($$0.getEntity().getRemainingFireTicks()+fireTicks);
+                            super.onHitEntity($$0);
                         } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
                             if (getLiquidStolen() == 1) {
                                 splashGas($$0.getEntity());
@@ -555,6 +583,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
         }
     }
+
+    public int fireTicks;
 
     public void splashGas(Entity ent){
         ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,

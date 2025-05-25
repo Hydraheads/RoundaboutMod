@@ -865,7 +865,7 @@
   "roundabout.soft_and_wet_plunder.mobs": "Mobs",
   "roundabout.soft_and_wet_plunder.mobs.desc": "Captures small mobs and brings them to you.",
   "roundabout.soft_and_wet_plunder.oxygen": "Oxygen",
-  "roundabout.soft_and_wet_plunder.oxygen.desc": "Takes air out of the lungs of a mob, such that if they are underwater, they begin to drown. Also can drag oxygen from the air or magma blocks into the water to restore your own oxygen.",
+  "roundabout.soft_and_wet_plunder.oxygen.desc": "Takes air out of the lungs of a mob, such that if they are underwater, they begin to drown. Also can drag oxygen from the air or magma blocks into the water to restore your own oxygen. Can also be used to put out fires, and take fires away from mobs, putting them elsewhere.",
   "roundabout.soft_and_wet_plunder.moisture": "Moisture",
   "roundabout.soft_and_wet_plunder.moisture.desc": "Captures liquids or gasoline, so they can easily be moved around.",
   "roundabout.soft_and_wet_plunder.potion_effects": "Effects",
