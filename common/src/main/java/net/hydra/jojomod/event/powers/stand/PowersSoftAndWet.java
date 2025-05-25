@@ -579,7 +579,8 @@ public class PowersSoftAndWet extends PunchingStand {
             } else if (blockPos.getX() < -45){
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.above();
             } else {
-                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(blockPos.getY()));
+                int yomi= blockPos.getY();
+                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(this.self.getYHeadRot()));
             }
         }
         return tryPower(move, forced);
