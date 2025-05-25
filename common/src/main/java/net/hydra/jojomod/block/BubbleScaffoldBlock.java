@@ -1,6 +1,8 @@
 package net.hydra.jojomod.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -11,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -45,12 +48,14 @@ public class BubbleScaffoldBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getCollisionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
-        if ($$3.isAbove(Shapes.block(), $$2, true) && !$$3.isDescending()) {
+        if ($$3.isAbove(Shapes.block(), $$2, true) && !$$3.isDescending() &&
+                !($$3 instanceof EntityCollisionContext ECC && ECC.getEntity() instanceof LivingEntity LE && LE.onClimbable())) {
             return STABLE_SHAPE;
         } else {
             return Shapes.empty();
         }
     }
+
     @Override
     protected void spawnDestroyParticles(Level $$0, Player $$1, BlockPos $$2, BlockState $$3) {
 
