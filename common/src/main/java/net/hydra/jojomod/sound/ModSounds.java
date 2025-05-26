@@ -152,6 +152,9 @@ public class ModSounds {
     public static final String BUBBLE_CREATE = "bubble_create";
     public static final ResourceLocation BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_CREATE);
     public static SoundEvent BUBBLE_CREATE_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_CREATE_ID);
+    public static final String BIG_BUBBLE_CREATE = "big_bubble_create";
+    public static final ResourceLocation BIG_BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BIG_BUBBLE_CREATE);
+    public static SoundEvent BIG_BUBBLE_CREATE_EVENT = SoundEvent.createVariableRangeEvent(BIG_BUBBLE_CREATE_ID);
 
     public static final String BUBBLE_PLUNDER = "bubble_plunder";
     public static final ResourceLocation BUBBLE_PLUNDER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_PLUNDER);

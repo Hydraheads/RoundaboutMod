@@ -53,6 +53,12 @@
       "roundabout:bubble_create"
     ]
   },
+  "big_bubble_create": {
+    "subtitle": "sounds.roundabout.big_bubble_create",
+    "sounds": [
+      "roundabout:big_bubble_create"
+    ]
+  },
   "bubble_plunder": {
     "subtitle": "sounds.roundabout.bubble_plunder",
     "sounds": [

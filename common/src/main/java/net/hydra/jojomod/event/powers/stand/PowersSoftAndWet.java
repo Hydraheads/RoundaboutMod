@@ -121,6 +121,9 @@ public class PowersSoftAndWet extends PunchingStand {
         if (slot == 1 && !canDoBubbleClusterRedirect() && isGuarding()) {
             return true;
         }
+        if (slot == 3 && (!canVault() && !canFallBrace() && !isGuarding() && isHoldingSneak()) && !canBridge()){
+            return true;
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -605,6 +608,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 encasement.setUser(this.self);
                 encasement.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleFloatingLifespanInTicks;
                 this.getSelf().level().addFreshEntity(encasement);
+
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             }
         }
         return false;
@@ -855,9 +860,11 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (keyIsDown) {
                         if (!this.onCooldown(PowerIndex.SKILL_3)) {
                             if (!hold3) {
-                                hold3 = true;
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                                if (canBridge()) {
+                                    hold3 = true;
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                                }
                             }
                         }
                     } else {
@@ -871,6 +878,9 @@ public class PowersSoftAndWet extends PunchingStand {
                 }
             }
         }
+    }
+    public boolean canBridge(){
+        return ((this.self.onGround() && !this.self.isInWater()) || this.self.onClimbable() || (this.self instanceof Player PE && PE.isCreative()));
     }
 }
 
