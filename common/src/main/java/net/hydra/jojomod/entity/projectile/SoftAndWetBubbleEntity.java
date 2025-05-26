@@ -1,12 +1,10 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.NoVibrationEntity;
-import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,7 +19,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -30,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity {
+public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile {
     public SoftAndWetBubbleEntity(EntityType<? extends SoftAndWetBubbleEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -66,6 +63,12 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         } else {
             this.popBubble();
         }
+        return true;
+    }
+
+    @Override
+    public boolean dealWithPenetration(Entity proj){
+        popBubble();
         return true;
     }
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.INT);

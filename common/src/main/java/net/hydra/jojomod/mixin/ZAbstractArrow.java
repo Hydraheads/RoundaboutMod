@@ -2,8 +2,8 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.entity.TimeMovingProjectile;
-import net.hydra.jojomod.entity.projectile.HarpoonEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -18,10 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ThrownTrident;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
@@ -170,6 +167,13 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
             if (entityPowers.dealWithProjectile(this)){
                 ci.cancel();
                 this.discard();
+            }
+        }
+
+
+        if ($$1 instanceof PenetratableWithProjectile PP){
+            if (PP.dealWithPenetration(this)){
+                ci.cancel();
             }
         }
     }

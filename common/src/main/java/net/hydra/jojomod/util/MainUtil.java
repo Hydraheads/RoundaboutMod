@@ -93,6 +93,7 @@ public class MainUtil {
         return start + (delta * (end - start))*multiplier;
     }
 
+
     public static boolean isDreadBook(ItemStack stack) {
         if (stack != null && !stack.isEmpty() && stack.is(Items.BOOK)){
             Component name = stack.getHoverName();
