@@ -208,6 +208,11 @@ public interface StandUser {
     void roundabout$setStandSkin(byte skin);
     void roundabout$setDrowning(boolean drown);
     boolean roundabout$getDrowning();
+    /**Soft and Wet Bubble Encasing**/
+    void roundabout$setBubbleEncased(byte adj);
+
+    byte roundabout$getBubbleEncased();
+    boolean roundabout$isBubbleEncased();
 
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);

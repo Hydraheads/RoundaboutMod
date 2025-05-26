@@ -53,6 +53,7 @@ import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
@@ -1123,6 +1124,10 @@ public class MainUtil {
     }
     public static boolean canBeScoopedUpInBubble(LivingEntity LE){
         return !(isBossMob(LE)) && LE.getBbHeight() < ClientNetworking.getAppropriateConfig().softAndWetSettings.sizeOfMobBubbleMobsStolen && !(LE.getVehicle() instanceof SoftAndWetPlunderBubbleEntity);
+    }
+
+    public static boolean isActuallyALivingEntityNoCap(Entity LE){
+        return LE instanceof LivingEntity && !(LE instanceof ArmorStand);
     }
     public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {
         Vec3 $$2 = $$0.getDeltaMovement();

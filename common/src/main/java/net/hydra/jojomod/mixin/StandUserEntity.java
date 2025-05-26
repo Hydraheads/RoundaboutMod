@@ -273,6 +273,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$ADJUSTED_GRAVITY = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$IS_BUBBLE_ENCASED = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BYTE);
+    @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
     @Unique
@@ -795,12 +798,41 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void roundabout$setAdjustedGravity(int adj) {
-        this.getEntityData().set(ROUNDABOUT$ADJUSTED_GRAVITY, adj);
+        if (this.entityData.hasItem(ROUNDABOUT$ADJUSTED_GRAVITY)) {
+            this.getEntityData().set(ROUNDABOUT$ADJUSTED_GRAVITY, adj);
+        }
     }
     @Unique
     @Override
     public int roundabout$getAdjustedGravity() {
-        return this.getEntityData().get(ROUNDABOUT$ADJUSTED_GRAVITY);
+        if (this.entityData.hasItem(ROUNDABOUT$ADJUSTED_GRAVITY)) {
+            return this.getEntityData().get(ROUNDABOUT$ADJUSTED_GRAVITY);
+        }
+        return -1;
+    }
+    @Unique
+    @Override
+    public void roundabout$setBubbleEncased(byte adj) {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
+            this.getEntityData().set(ROUNDABOUT$IS_BUBBLE_ENCASED, adj);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getBubbleEncased() {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
+            return this.getEntityData().get(ROUNDABOUT$IS_BUBBLE_ENCASED);
+        }
+        return 0;
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$isBubbleEncased() {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
+            return this.getEntityData().get(ROUNDABOUT$IS_BUBBLE_ENCASED) == 0;
+        }
+        return false;
     }
     @Unique
     @Override
@@ -2018,6 +2050,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ON_STAND_FIRE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
