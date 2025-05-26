@@ -391,6 +391,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                             sm.attackTime = 0.0F;
                             sm.crouching = false;
                             sm.swimAmount = 0.0F;
+                            skl.host = $$3;
                             sm.setupAnim2(skl, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
                             float $$5 = right ? 1.0F : -1.0F;
                             $$0.translate($$5 * -0.3F, 0F, 0F);
