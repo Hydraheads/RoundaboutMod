@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.core.Registry;
@@ -386,6 +387,14 @@ public class FabricEntities {
                                 sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":plunder_bubble")
                 );
+        public static final EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "encasement_bubble"),
+                        EntityType.Builder.<EncasementBubbleEntity>of(EncasementBubbleEntity::new, MobCategory.MISC).
+                                sized(EncasementBubbleEntity.eWidth, EncasementBubbleEntity.eHeight).
+                                clientTrackingRange(10).build(Roundabout.MOD_ID+":encasement_bubble")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -419,6 +428,7 @@ public class FabricEntities {
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
                 ModEntities.PLUNDER_BUBBLE = PLUNDER_BUBBLE;
+                ModEntities.ENCASEMENT_BUBBLE = ENCASEMENT_BUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;

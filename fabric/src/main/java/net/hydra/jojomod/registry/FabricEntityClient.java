@@ -19,6 +19,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAestheticianRenderer;
 import net.hydra.jojomod.entity.pathfinding.NoRenderer;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.EncasementBubbleRenderer;
 import net.hydra.jojomod.entity.substand.LifeTrackerModel;
 import net.hydra.jojomod.entity.substand.LifeTrackerRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -71,6 +72,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.CINDERELLA_VISAGE_DISPLAY, CinderellaVisageDisplayRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GROUND_HURRICANE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLUNDER_BUBBLE, SoftAndWetBubbleRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ENCASEMENT_BUBBLE, EncasementBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.OVA_ENYA, OVAEnyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENYA, EnyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOTARO, JotaroRenderer::new);

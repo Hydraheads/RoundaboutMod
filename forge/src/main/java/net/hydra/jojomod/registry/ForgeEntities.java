@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.resources.ResourceLocation;
@@ -326,5 +327,12 @@ public class ForgeEntities {
                             sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "plunder_bubble").toString())
+            );
+    public static final RegistryObject<EntityType<EncasementBubbleEntity>> ENCASEMENT_BUBBLE =
+            ENTITY_TYPES.register("encasement_bubble", () ->
+                    EntityType.Builder.<EncasementBubbleEntity>of(EncasementBubbleEntity::new, MobCategory.MISC).
+                            sized(EncasementBubbleEntity.eWidth, EncasementBubbleEntity.eHeight).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "encasement_bubble").toString())
             );
 }

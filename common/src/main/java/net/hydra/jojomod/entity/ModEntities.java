@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.JojoNPCGoToClosestVillage;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -54,6 +55,7 @@ public class ModEntities {
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
     public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;
     public static EntityType<SoftAndWetPlunderBubbleEntity> PLUNDER_BUBBLE;
+    public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;
     public static EntityType<OVAEnyaNPC> OVA_ENYA;
     public static EntityType<EnyaNPC> ENYA;
 

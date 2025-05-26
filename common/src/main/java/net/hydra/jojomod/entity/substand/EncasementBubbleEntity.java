@@ -1,6 +1,8 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.access.PenetratableWithProjectile;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
@@ -20,10 +22,12 @@ import java.util.UUID;
 public class EncasementBubbleEntity extends Entity implements PenetratableWithProjectile {
 
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(EncasementBubbleEntity.class, EntityDataSerializers.INT);
-    public EncasementBubbleEntity(EntityType<?> $$0, Level $$1) {
+    public EncasementBubbleEntity(EntityType<EncasementBubbleEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
 
+    public static float eWidth=1.2f;
+    public static float eHeight=1.2f;
     public void setUser(LivingEntity User) {
         standUser = User;
         this.getEntityData().set(USER_ID, User.getId());

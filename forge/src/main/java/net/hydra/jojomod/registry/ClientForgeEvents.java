@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAestheticianRenderer;
 import net.hydra.jojomod.entity.pathfinding.NoRenderer;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.EncasementBubbleRenderer;
 import net.hydra.jojomod.entity.substand.LifeTrackerModel;
 import net.hydra.jojomod.entity.substand.LifeTrackerRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -65,6 +66,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get(), CinderellaVisageDisplayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GROUND_HURRICANE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PLUNDER_BUBBLE.get(), SoftAndWetBubbleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ENCASEMENT_BUBBLE.get(), EncasementBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), OVAEnyaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), EnyaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), JotaroRenderer::new);
