@@ -148,14 +148,16 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             }
                             this.setLiquidStolen(1);
                             setFloating();
-                        } else if (this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.WATERLOGGED)) {
+                        } else if (this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.WATERLOGGED)) {
                             if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
                                     ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
                                 this.level().setBlockAndUpdate($$0.getBlockPos(), this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(false)));
                                 this.setLiquidStolen(2);
                                 setFloating();
                             }
-                        } else if (this.level().getBlockState($$0.getBlockPos().relative($$0.getDirection())).hasProperty(BlockStateProperties.WATERLOGGED)) {
+                        } else if (this.level().getBlockState($$0.getBlockPos().relative($$0.getDirection())).hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                this.level().getBlockState($$0.getBlockPos().relative($$0.getDirection())).getValue(BlockStateProperties.WATERLOGGED)) {
                             if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
                                     ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
                                 this.level().setBlockAndUpdate($$0.getBlockPos().relative($$0.getDirection()), this.level().getBlockState($$0.getBlockPos().relative($$0.getDirection())).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(false)));
@@ -187,7 +189,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             } else if (getLiquidStolen() == 2) {
                                 BlockPos bpos1 = $$0.getBlockPos();
                                 if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser)) {
-                                    if (this.level().getBlockState(bpos1).hasProperty(BlockStateProperties.WATERLOGGED)){
+                                    if (this.level().getBlockState(bpos1).hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                    !this.level().getBlockState(bpos1).getValue(BlockStateProperties.WATERLOGGED)){
                                         this.level().setBlockAndUpdate(bpos1, this.level().getBlockState(bpos1).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(true)));
                                         finishedUsingLiquid = true;
                                     }
@@ -195,9 +198,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
                                 if (!finishedUsingLiquid) {
-                                    if (this.level().getBlockState(bpos).hasProperty(BlockStateProperties.WATERLOGGED)) {
-                                        this.level().setBlockAndUpdate(bpos, this.level().getBlockState(bpos).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(true)));
-                                        finishedUsingLiquid = true;
+                                    if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser)) {
+                                        if (this.level().getBlockState(bpos).hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                                !this.level().getBlockState(bpos).getValue(BlockStateProperties.WATERLOGGED)) {
+                                            this.level().setBlockAndUpdate(bpos, this.level().getBlockState(bpos).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(true)));
+                                            finishedUsingLiquid = true;
+                                        }
                                     }
                                 }
 
