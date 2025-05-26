@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import java.util.UUID;
 
 public class EncasementBubbleEntity extends Entity implements PenetratableWithProjectile {
+    public int bubbleNo = 0;
 
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(EncasementBubbleEntity.class, EntityDataSerializers.INT);
     public EncasementBubbleEntity(EntityType<EncasementBubbleEntity> $$0, Level $$1) {
@@ -75,7 +76,9 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
 
         if (!this.level().isClientSide()) {
             lifeSpan--;
-            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))) {
+            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet) ||
+                    (((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet PW && PW.bubbleNumber != bubbleNo)
+                    )) {
                 popBubble();
                 return;
             }

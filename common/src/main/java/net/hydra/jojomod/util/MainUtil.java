@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
@@ -1137,6 +1138,8 @@ public class MainUtil {
             } else {
                 return sbe.getActivated() && !sbe.isPopPlunderBubbble();
             }
+        } else if (entity instanceof EncasementBubbleEntity sbe){
+            return false;
         }
         return entity.isPickable();
     }

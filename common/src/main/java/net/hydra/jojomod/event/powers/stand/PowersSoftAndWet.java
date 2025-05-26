@@ -1,7 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -12,7 +11,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -33,7 +32,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -153,7 +151,7 @@ public class PowersSoftAndWet extends PunchingStand {
         if (canVault()) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_VAULT, PowerIndex.SKILL_3_SNEAK);
         } else if (canFallBrace()) {
-            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.NONE);
         } else if (isGuarding()) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_ENCASEMENT, PowerIndex.SKILL_EXTRA);
         } else if (isHoldingSneak()){
@@ -514,7 +512,7 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (move == PowerIndex.POWER_3_EXTRA){
             return this.bubbleLadderPlace();
         } else if (move == PowerIndex.POWER_3_BONUS){
-            return this.bigBubbleCreate();
+            return this.bigEncasementBubbleCreate();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return this.bubbleClusterStart();
         } else if (move == PowerIndex.POWER_1) {
@@ -595,9 +593,20 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public int bubbleNumber = 0;
 
-    public boolean bigBubbleCreate() {
+    public boolean bigEncasementBubbleCreate() {
+        this.setCooldown(PowerIndex.SKILL_EXTRA, 120);
         if (!this.self.level().isClientSide()) {
+            EncasementBubbleEntity encasement = ModEntities.ENCASEMENT_BUBBLE.create(this.getSelf().level());
+            if (encasement != null){
 
+                encasement.bubbleNo = bubbleNumber;
+                Vec3 movevec = this.self.getPosition(0).add(0,(this.self.getEyeHeight()*0.3F),0).add(this.self.getForward().normalize().scale(1));
+                encasement.absMoveTo(movevec.x(), movevec.y(), movevec.z());
+                encasement.setUser(this.self);
+                encasement.setDeltaMovement(0,0.001,0);
+                encasement.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleFloatingLifespanInTicks;
+                this.getSelf().level().addFreshEntity(encasement);
+            }
         }
         return false;
     }
@@ -835,8 +844,10 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (keyIsDown) {
                         if (!hold3){
                             hold3 = true;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
+                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
+                            }
                         }
                     } else {
                         hold3 = false;

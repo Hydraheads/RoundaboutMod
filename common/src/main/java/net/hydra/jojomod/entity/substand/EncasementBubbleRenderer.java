@@ -36,7 +36,7 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
     public EncasementBubbleRenderer(EntityRendererProvider.Context context) {
         super(context);
         this.itemRenderer = context.getItemRenderer();
-        this.scale = 1f;
+        this.scale = 2.9f;
     }
 
     @Override
@@ -63,6 +63,8 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
 
                 float scaleIt = 0.23f;
 
+
+                poseStack.translate(0, -0.4, 0);
 
                 float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
                 vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();

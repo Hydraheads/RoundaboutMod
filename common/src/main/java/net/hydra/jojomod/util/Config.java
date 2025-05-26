@@ -313,6 +313,8 @@ import java.util.Set;
         public Integer sightStealingDurationOnPlayersInTicks;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer primaryPlunderBubbleLifespanInTicks;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer encasementBubbleFloatingLifespanInTicks;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
         public Float sizeOfMobBubbleMobsStolen;
     }
