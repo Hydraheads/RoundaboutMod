@@ -600,10 +600,9 @@ public class PowersSoftAndWet extends PunchingStand {
             if (encasement != null){
 
                 encasement.bubbleNo = bubbleNumber;
-                Vec3 movevec = this.self.getPosition(0).add(0,(this.self.getEyeHeight()*0.3F),0).add(this.self.getForward().normalize().scale(1));
+                Vec3 movevec = this.self.getPosition(0).add(0,(this.self.getEyeHeight()*0.65F),0).add(this.self.getForward().normalize().scale(0.72));
                 encasement.absMoveTo(movevec.x(), movevec.y(), movevec.z());
                 encasement.setUser(this.self);
-                encasement.setDeltaMovement(0,0.001,0);
                 encasement.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleFloatingLifespanInTicks;
                 this.getSelf().level().addFreshEntity(encasement);
             }

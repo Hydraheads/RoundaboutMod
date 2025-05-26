@@ -120,8 +120,8 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
                 SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
             ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
-                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
-                    1, 0, 0,0, 0.015);
+                    this.getX(), this.getY() + this.getBbHeight()*0.5, this.getZ(),
+                    5, 0.25, 0.25,0.25, 0.025);
         }
         this.discard();
     }
