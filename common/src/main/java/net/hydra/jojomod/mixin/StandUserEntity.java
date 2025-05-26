@@ -39,8 +39,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -266,6 +268,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.INT);
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_BOUND_TO = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$ADJUSTED_GRAVITY = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
@@ -784,6 +789,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public int roundabout$getBoundToID() {
             return this.getEntityData().get(ROUNDABOUT$IS_BOUND_TO);
+    }
+
+    /**-1 gravity is no change, 0 is suspending gravity, 1000 is the base amount*/
+    @Unique
+    @Override
+    public void roundabout$setAdjustedGravity(int adj) {
+        this.getEntityData().set(ROUNDABOUT$ADJUSTED_GRAVITY, adj);
+    }
+    @Unique
+    @Override
+    public int roundabout$getAdjustedGravity() {
+        return this.getEntityData().get(ROUNDABOUT$ADJUSTED_GRAVITY);
     }
     @Unique
     @Override
@@ -2002,6 +2019,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
@@ -2279,9 +2297,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Unique
+    @Override
+    public void roundabout$adjustGravity(){
+
+    }
+
+    @Override
+    public double roundabout$getGravity(double ogGrav){
+        if (this.getEntityData().hasItem(ROUNDABOUT$ADJUSTED_GRAVITY)){
+            double basegrav = (double) this.getEntityData().get(ROUNDABOUT$ADJUSTED_GRAVITY);
+            if (basegrav >= 0) {
+                ogGrav *= basegrav / 1000;
+                return ogGrav;
+            }
+        }
+        return ogGrav;
+    }
+
     @SuppressWarnings("deprecation")
     @Inject(method = "travel", at = @At(value = "HEAD"))
     public void roundabout$aiSteps(CallbackInfo ci) {
+        roundabout$adjustGravity();
     }
 
 
@@ -2300,8 +2337,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private double roundabout$Travel2(double $$1) {
         if (this.roundabout$isDazed()) {
             return 0;
+        } else {
+            return $$1;
         }
-        return $$1;
+    }
+
+    /**Modifies the gravity influence*/
+    @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "STORE"),ordinal = 0)
+    private double roundabout$TravelGravity(double $$1) {
+        if (this.roundabout$isDazed()) {
+            return 0;
+        } else {
+            return roundabout$getGravity($$1);
+        }
+    }
+    @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "STORE"),ordinal = 1)
+    private double roundabout$TravelGravitySlowFall(double $$1) {
+        if (this.roundabout$isDazed()) {
+            return 0;
+        } else {
+            return roundabout$getGravity($$1);
+        }
     }
 
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"),ordinal = 0)
@@ -2388,11 +2444,39 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**reduce or nullify fall damage */
     @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
+
         if (this.roundabout$leapTicks > -1) {
             this.level().gameEvent(GameEvent.HIT_GROUND, this.getPosition(0F),
                     GameEvent.Context.of(this, this.mainSupportingBlockPos.map(blockPos -> this.level().getBlockState((BlockPos)blockPos)).orElse(this.level().getBlockState($$3))));
+        }
+    }
+
+    /**Reduced gravity changes fall damage calcs*/
+    @Inject(method = "calculateFallDamage", at = @At(value = "HEAD"), cancellable = true)
+    protected void rooundabout$calculateFallDamage(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
+        int yesInt = roundabout$getAdjustedGravity();
+        if (yesInt > 0){
+            cir.setReturnValue(roundabout$calculateFallDamage($$0,$$1,yesInt));
+        }
+
+        if (this.roundabout$leapTicks > -1) {
+            cir.setReturnValue(0);
+        }
+    }
+
+
+    /**gravity calcs into fall damage*/
+    @Unique
+    protected int roundabout$calculateFallDamage(float blockmultiplier, float fallLength,int yesInt) {
+        if (this.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE)) {
+            return 0;
+        } else {
+            MobEffectInstance jumpEffect = this.getEffect(MobEffects.JUMP);
+            float jumpLevel = jumpEffect == null ? 0.0F : (float)(jumpEffect.getAmplifier() + 1);
+            return Mth.ceil(((roundabout$getGravity(blockmultiplier)) - 3.0F - jumpLevel) * fallLength);
         }
     }
 

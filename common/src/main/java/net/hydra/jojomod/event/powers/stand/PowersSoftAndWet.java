@@ -609,6 +609,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 encasement.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleFloatingLifespanInTicks;
                 this.getSelf().level().addFreshEntity(encasement);
 
+                //((StandUser)this.self).roundabout$setAdjustedGravity(30);
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             }
         }

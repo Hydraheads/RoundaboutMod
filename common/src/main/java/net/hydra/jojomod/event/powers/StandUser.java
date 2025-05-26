@@ -209,4 +209,10 @@ public interface StandUser {
     void roundabout$setDrowning(boolean drown);
     boolean roundabout$getDrowning();
 
+    /**Play around with falling gravity*/
+    void roundabout$setAdjustedGravity(int adj);
+    int roundabout$getAdjustedGravity();
+    double roundabout$getGravity(double baseGrav);
+    void roundabout$adjustGravity();
+
 }
