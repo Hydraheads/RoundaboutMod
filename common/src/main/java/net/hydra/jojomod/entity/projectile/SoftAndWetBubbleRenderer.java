@@ -73,6 +73,8 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                     int ls = sp.getLiquidStolen();
                     if (ls == 3) {
                         packedLight = 15728880;
+                    } else if (sp.getActivated() && sp.getPlunderType() == PlunderTypes.OXYGEN.id){
+                        packedLight = 15728880;
                     }
                     if (!sp.getHeldItem().isEmpty()) {
                         scaleIt = 0.33f;

@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -9,7 +8,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.StoredSoundInstance;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -19,9 +17,6 @@ import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.ReportedException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -230,14 +225,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
                     if (getLaunched() && getActivated()){
                         BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
+                        BlockPos bpos2 = $$0.getBlockPos();
                         if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof GasolineBlock) {
                             gasExplode();
                         } else if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof CampfireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)
                                 && this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.LIT) && !this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.LIT)) {
-                            this.level().setBlockAndUpdate(bpos, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
+                            this.level().setBlockAndUpdate(bpos2, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
                         } else if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof CandleBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)
                                 && this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.LIT) && !this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.LIT)) {
-                            this.level().setBlockAndUpdate(bpos, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
+                            this.level().setBlockAndUpdate(bpos2, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
                         } else {
                             if (MainUtil.tryPlaceBlock(this.standUser, bpos) && MainUtil.getIsGamemodeApproriateForGrief(standUser)) {
                                 this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState());
@@ -261,9 +257,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 setFloating();
                             } else if (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof BaseFireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)){
                                 fireTicks = 100;
-                                if (MainUtil.tryPlaceBlock(standUser, $$0.getBlockPos().above(), false)) {
-                                    this.level().setBlockAndUpdate($$0.getBlockPos().above(), Blocks.AIR.defaultBlockState());
-                                }
+                                this.level().setBlockAndUpdate($$0.getBlockPos().above(), Blocks.AIR.defaultBlockState());
                                 setFloating();
                             } else {
                                 super.onHitBlock($$0);
@@ -843,7 +837,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
             this.onHitEntity(new EntityHitResult(e));
         }
-        stealLiquids();
+        stealLiquidsAndFlames();
 
         if (getActivated() && !getReturning() && !getFinished() && !getLaunched()){
             this.setDeltaMovement(0, 0.01, 0);
@@ -858,7 +852,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             tryPhaseItemGrab(BB1, BB2);
         }
 
-        stealLiquids();
+        stealLiquidsAndFlames();
 
         if (!this.getReturning() && !this.level().isClientSide()){
             if (this.getPlunderType() == PlunderTypes.OXYGEN.id){
@@ -924,7 +918,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         }
     }
 
-    public void stealLiquids(){
+    public void stealLiquidsAndFlames(){
         if (!this.level().isClientSide() && !isRemoved()) {
             if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
                 BlockState bs = this.level().getBlockState(this.blockPosition());
@@ -953,6 +947,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             gasExplode();
                             popBubble();
                         }
+                    }
+                }
+            } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
+                BlockState bs = this.level().getBlockState(this.blockPosition());
+                if (!getActivated()) {
+                    if (bs.getBlock() instanceof BaseFireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)) {
+                        fireTicks = 100;
+                            this.level().setBlockAndUpdate(this.blockPosition(), Blocks.AIR.defaultBlockState());
+                        setFloating();
                     }
                 }
             }
