@@ -232,6 +232,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
                         if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof GasolineBlock) {
                             gasExplode();
+                        } else if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof CampfireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)
+                                && this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.LIT) && !this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.LIT)) {
+                            this.level().setBlockAndUpdate(bpos, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
+                        } else if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof CandleBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)
+                                && this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.LIT) && !this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.LIT)) {
+                            this.level().setBlockAndUpdate(bpos, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
                         } else {
                             if (MainUtil.tryPlaceBlock(this.standUser, bpos) && MainUtil.getIsGamemodeApproriateForGrief(standUser)) {
                                 this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState());
@@ -243,7 +249,17 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof MagmaBlock) {
                                 airSupply = this.standUser.getMaxAirSupply();
                                 startReturning();
-                            } else if (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof FireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)){
+                            } else if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof CampfireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)
+                            && this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.LIT) && this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.LIT)) {
+                                fireTicks = 100;
+                                this.level().setBlockAndUpdate($$0.getBlockPos(), this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(false)));
+                                setFloating();
+                            } else if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof CandleBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)
+                            && this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.LIT) && this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.LIT)){
+                                fireTicks = 100;
+                                this.level().setBlockAndUpdate($$0.getBlockPos(),  this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT,Boolean.valueOf(false)));
+                                setFloating();
+                            } else if (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof BaseFireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)){
                                 fireTicks = 100;
                                 if (MainUtil.tryPlaceBlock(standUser, $$0.getBlockPos().above(), false)) {
                                     this.level().setBlockAndUpdate($$0.getBlockPos().above(), Blocks.AIR.defaultBlockState());
