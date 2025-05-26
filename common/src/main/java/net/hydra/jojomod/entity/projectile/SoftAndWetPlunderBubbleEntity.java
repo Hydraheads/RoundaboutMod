@@ -222,7 +222,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         super.onHitBlock($$0);
                     }
                 } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
-                    if (getLaunched()){
+                    if (getLaunched() && getActivated()){
                         BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
                         if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof GasolineBlock) {
                             gasExplode();
@@ -568,7 +568,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             super.onHitEntity($$0);
                         }
                     } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
-                        if (getLaunched()) {
+                        if (getLaunched() && getActivated()) {
                             $$0.getEntity().setRemainingFireTicks($$0.getEntity().getRemainingFireTicks()+fireTicks);
                             super.onHitEntity($$0);
                         } else if ($$0.getEntity().isOnFire()) {
