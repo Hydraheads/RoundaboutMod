@@ -154,6 +154,8 @@ public class PowersSoftAndWet extends PunchingStand {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_VAULT, PowerIndex.SKILL_3_SNEAK);
         } else if (canFallBrace()) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+        } else if (isGuarding()) {
+            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_ENCASEMENT, PowerIndex.SKILL_EXTRA);
         } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.SKILL_3);
         } else {
@@ -511,6 +513,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.bubbleLadder();
         } else if (move == PowerIndex.POWER_3_EXTRA){
             return this.bubbleLadderPlace();
+        } else if (move == PowerIndex.POWER_3_BONUS){
+            return this.bigBubbleCreate();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return this.bubbleClusterStart();
         } else if (move == PowerIndex.POWER_1) {
@@ -590,6 +594,13 @@ public class PowersSoftAndWet extends PunchingStand {
         return tryPower(move, forced);
     }
     public int bubbleNumber = 0;
+
+    public boolean bigBubbleCreate() {
+        if (!this.self.level().isClientSide()) {
+
+        }
+        return false;
+    }
 
     /**Bubble Scaffolding, build a ladder overtime somewhat like the Builder blocks in Twilight*/
     public boolean bubbleLadderPlace(){
@@ -822,8 +833,10 @@ public class PowersSoftAndWet extends PunchingStand {
                     }
                 } else if (isGuarding()) {
                     if (keyIsDown) {
-                        if (!hold3) {
+                        if (!hold3){
                             hold3 = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
                         }
                     } else {
                         hold3 = false;
