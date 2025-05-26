@@ -1750,7 +1750,8 @@ public class MainUtil {
 
             if (hitOptional.isPresent()) {
                 double hitDistance = eyePos.distanceTo(hitOptional.get());
-                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()) {
+                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
+                && !entity.hasPassenger(player)) {
                     closestDistance = hitDistance;
                     closest = entity;
                 }
