@@ -55,6 +55,10 @@ public class BubbleScaffoldBlock extends BaseEntityBlock {
             return Shapes.empty();
         }
     }
+    @Override
+    public void fallOn(Level $$0, BlockState $$1, BlockPos $$2, Entity $$3, float $$4) {
+        super.fallOn($$0, $$1, $$2, $$3, $$4 * 0.2F);
+    }
 
     @Override
     protected void spawnDestroyParticles(Level $$0, Player $$1, BlockPos $$2, BlockState $$3) {
