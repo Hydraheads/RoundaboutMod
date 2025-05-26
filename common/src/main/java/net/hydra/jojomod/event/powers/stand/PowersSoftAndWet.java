@@ -571,6 +571,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return true;
     }
     @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().guardPoints.softAndWetDefend;
+    }
+    @Override
     public boolean tryPosPower(int move, boolean forced, BlockPos blockPos) {
 
         if (move == PowerIndex.POWER_3_EXTRA) {
