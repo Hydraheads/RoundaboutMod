@@ -236,7 +236,21 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             this.level().setBlockAndUpdate(bpos2, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
                         } else {
                             if (MainUtil.tryPlaceBlock(this.standUser, bpos) && MainUtil.getIsGamemodeApproriateForGrief(standUser)) {
-                                this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState());
+                                if (this.level().getBlockState($$0.getBlockPos().below()).isAir()) {
+                                    if ($$0.getDirection().equals(Direction.NORTH)) {
+                                        this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState().setValue(PipeBlock.SOUTH, true));
+                                    } else if ($$0.getDirection().equals(Direction.SOUTH)) {
+                                        this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState().setValue(PipeBlock.NORTH, true));
+                                    } else if ($$0.getDirection().equals(Direction.EAST)) {
+                                        this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState().setValue(PipeBlock.WEST, true));
+                                    } else if ($$0.getDirection().equals(Direction.WEST)) {
+                                        this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState().setValue(PipeBlock.EAST, true));
+                                    } else {
+                                        this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState());
+                                    }
+                                } else {
+                                    this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState());
+                                }
                             }
                         }
                         super.onHitBlock($$0);
@@ -669,6 +683,18 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 $$4.setPickUpDelay(40);
                 this.level().addFreshEntity($$4);
             }
+        }
+    }
+
+    public void forceDropItem(){
+        if (!hasDitchedItem) {
+            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                    this.getY() + this.getEyeHeight(), this.getZ(),
+                    getHeldItem());
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(this.getUUID());
+            this.level().addFreshEntity($$4);
+            hasDitchedItem = true;
         }
     }
 

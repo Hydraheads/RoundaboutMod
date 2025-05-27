@@ -353,6 +353,9 @@ public class PowersSoftAndWet extends PunchingStand {
                     for (SoftAndWetBubbleEntity value : bubbleList2) {
                         if (value instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.isPopPlunderBubbble()){
                             if (!plunder.getFinished() && !plunder.getSingular()){
+                                if (plunder.getPlunderType() == PlunderTypes.ITEM.id){
+                                    plunder.forceDropItem();
+                                }
                                 plunder.popBubble();
                             }
                         }
@@ -376,6 +379,9 @@ public class PowersSoftAndWet extends PunchingStand {
                     for (SoftAndWetBubbleEntity value : bubbleList2) {
                         if (value instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.isPopPlunderBubbble()){
                             if (!plunder.getFinished()){
+                                if (plunder.getPlunderType() == PlunderTypes.ITEM.id){
+                                    plunder.forceDropItem();
+                                }
                                plunder.popBubble();
                             }
                         }
