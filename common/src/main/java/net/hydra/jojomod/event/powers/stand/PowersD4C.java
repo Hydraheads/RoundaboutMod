@@ -369,6 +369,8 @@ public class PowersD4C extends PunchingStand {
     private boolean held4 = false;
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
+        fx.shouldShowDimensionFx = (this.getSelf().level().dimension().location().getNamespace().equals("roundabout"));
+
         if (keyIsDown && !held4 && !(this.onCooldown(PowerIndex.SKILL_4)))
         {
             held4 = true;
@@ -396,28 +398,33 @@ public class PowersD4C extends PunchingStand {
 
     private static class ShaderFx implements IRendererCallback {
         public boolean isDimensionTraveling = false;
+        public boolean shouldShowDimensionFx = false;
 
         @Override
         public void roundabout$LEVEL_RENDER_FINISH(float partialTick) {
+            if (RRenderUtil.isUsingFabulous())
+                return;
 
+            if (shouldShowDimensionFx && ClientNetworking.getAppropriateConfig().experiments.d4cShouldUseColorShader)
+            {
+                if (RPostShaderRegistry.D4C_ALT_DIMENSION != null)
+                {
+                    RPostShaderRegistry.D4C_ALT_DIMENSION.roundabout$process(partialTick);
+                }
+            }
         }
 
         @Override
         public void roundabout$GAME_RENDERER_FINISH(float tickDelta) {
-            if (RRenderUtil.isUsingFabulous())
-                return;
-
-            //            if (isDimensionTraveling)
+//            if (RRenderUtil.isUsingFabulous())
+//                return;
+//
+//            if (shouldShowDimensionFx)
 //            {
-//                if (RPostShaderRegistry.D4C_DIMENSION_TRANSITION != null)
+//                if (RPostShaderRegistry.D4C_ALT_DIMENSION != null)
 //                {
-//                    RPostShaderRegistry.D4C_DIMENSION_TRANSITION.roundabout$process(tickDelta);
+//                    RPostShaderRegistry.D4C_ALT_DIMENSION.roundabout$process(tickDelta);
 //                }
-//            }
-
-//            if (RPostShaderRegistry.D4C_DIMENSION_TRANSITION != null)
-//            {
-//                RPostShaderRegistry.D4C_DIMENSION_TRANSITION.roundabout$process(tickDelta);
 //            }
         }
 
@@ -430,8 +437,10 @@ public class PowersD4C extends PunchingStand {
         {}
     }
 
+    private static ShaderFx fx;
+
     static {
-        ShaderFx fx = new ShaderFx();
+        fx = new ShaderFx();
         RenderCallbackRegistry.register(fx);
     }
 

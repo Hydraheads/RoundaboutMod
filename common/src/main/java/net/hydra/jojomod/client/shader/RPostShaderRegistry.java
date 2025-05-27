@@ -15,6 +15,7 @@ public class RPostShaderRegistry {
     private static HashMap<String, IPostChainAccessor> shaders = new HashMap<>();
 
     public static IPostChainAccessor D4C_DIMENSION_TRANSITION = null;
+    public static IPostChainAccessor D4C_ALT_DIMENSION = null;
     public static IPostChainAccessor DESATURATE = null;
 
     public static void bootstrap()
@@ -22,6 +23,7 @@ public class RPostShaderRegistry {
         Roundabout.LOGGER.info("Registering post effects");
 
         D4C_DIMENSION_TRANSITION = register("d4cdimtransition");
+        D4C_ALT_DIMENSION = register("d4caltdim");
         DESATURATE = register("desaturate");
     }
 

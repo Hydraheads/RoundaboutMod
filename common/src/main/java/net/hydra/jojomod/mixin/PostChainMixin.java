@@ -12,12 +12,14 @@ import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 
 @Mixin(PostChain.class)
 public class PostChainMixin implements IPostChainAccessor {
     @Shadow @Final private List<PostPass> passes;
+    @Unique private float processCount;
 
     @Override
     public List<PostPass> roundabout$getPasses() {
@@ -32,9 +34,11 @@ public class PostChainMixin implements IPostChainAccessor {
 
     @Override
     public void roundabout$process(float tickDelta) {
-        this.roundabout$resize();
-        ((PostChain)(Object)this).process(tickDelta);
+        processCount += 1;
 
+        this.roundabout$resize();
+        roundabout$setUniform("FrameCount", processCount);
+        ((PostChain)(Object)this).process(tickDelta);
         Minecraft client = Minecraft.getInstance();
         client.getMainRenderTarget().bindWrite(false);
     }

@@ -458,5 +458,7 @@ import java.util.Set;
 
     }
     public static class Experiments {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean d4cShouldUseColorShader;
     }
 }
