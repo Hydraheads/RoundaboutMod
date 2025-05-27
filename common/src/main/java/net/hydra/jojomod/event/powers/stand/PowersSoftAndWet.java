@@ -124,6 +124,9 @@ public class PowersSoftAndWet extends PunchingStand {
         if (slot == 3 && (!canVault() && !canFallBrace() && !isGuarding() && isHoldingSneak()) && !canBridge()){
             return true;
         }
+        if (slot == 3 && (!canVault() && !canFallBrace() && isGuarding() && !canBigBubble())){
+            return false;
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -849,7 +852,7 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (keyIsDown) {
                         if (!hold3){
                             hold3 = true;
-                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && canBigBubble()) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
                                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
                             }
@@ -882,6 +885,11 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public boolean canBridge(){
         return ((this.self.onGround() && !this.self.isInWater()) || this.self.onClimbable() || (this.self instanceof Player PE && PE.isCreative()));
+    }
+
+
+    public boolean canBigBubble(){
+        return ((this.self.onGround() || this.self.isInWater()) || this.self.onClimbable() || (this.self instanceof Player PE && PE.isCreative()));
     }
 }
 
