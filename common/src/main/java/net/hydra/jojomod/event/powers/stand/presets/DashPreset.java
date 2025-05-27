@@ -141,7 +141,7 @@ public class DashPreset extends StandPowers {
     public int impactAirTime = -1;
     public int impactSlowdown = -1;
     public boolean canFallBrace(){
-        return this.getSelf().fallDistance > 3 && impactSlowdown <= -1;
+        return this.getSelf().fallDistance > 3 && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
     }
     public boolean vault() {
         animateStand((byte) 15);
