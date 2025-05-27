@@ -236,7 +236,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             this.level().setBlockAndUpdate(bpos2, this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT, Boolean.valueOf(true)));
                         } else {
                             if (MainUtil.tryPlaceBlock(this.standUser, bpos) && MainUtil.getIsGamemodeApproriateForGrief(standUser)) {
-                                if (this.level().getBlockState($$0.getBlockPos().below()).isAir()) {
+                                if (this.level().getBlockState(bpos.below()).isAir()) {
                                     if ($$0.getDirection().equals(Direction.NORTH)) {
                                         this.level().setBlockAndUpdate(bpos, Blocks.FIRE.defaultBlockState().setValue(PipeBlock.SOUTH, true));
                                     } else if ($$0.getDirection().equals(Direction.SOUTH)) {
@@ -269,7 +269,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 fireTicks = 100;
                                 this.level().setBlockAndUpdate($$0.getBlockPos(),  this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.LIT,Boolean.valueOf(false)));
                                 setFloating();
-                            } else if (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof BaseFireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)){
+                            } else if (this.level().getBlockState($$0.getBlockPos().relative($$0.getDirection())).getBlock() instanceof BaseFireBlock && MainUtil.getIsGamemodeApproriateForGrief(standUser)){
                                 fireTicks = 100;
                                 this.level().setBlockAndUpdate($$0.getBlockPos().above(), Blocks.AIR.defaultBlockState());
                                 setFloating();
