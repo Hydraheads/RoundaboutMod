@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class KnifeRenderer extends EntityRenderer<KnifeEntity> {
-
     private final KnifeModel model;
 
     public KnifeRenderer(EntityRendererProvider.Context $$0) {
@@ -36,13 +35,8 @@ public class KnifeRenderer extends EntityRenderer<KnifeEntity> {
         }
     }
 
-
-
-
     @Override
     public ResourceLocation getTextureLocation(KnifeEntity var1) {
         return ModEntities.KNIFE_TEXTURE;
     }
-
-
 }

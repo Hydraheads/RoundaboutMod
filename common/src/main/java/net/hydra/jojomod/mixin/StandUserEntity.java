@@ -830,7 +830,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public boolean roundabout$isBubbleEncased() {
         if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
-            return this.getEntityData().get(ROUNDABOUT$IS_BUBBLE_ENCASED) == 0;
+            return this.getEntityData().get(ROUNDABOUT$IS_BUBBLE_ENCASED) > 0;
         }
         return false;
     }

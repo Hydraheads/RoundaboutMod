@@ -45,10 +45,10 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
                 poseStack.pushPose();
 
                 // Orient the texture
+                poseStack.translate(0, entity.getBbHeight() / 2, 0);
                 poseStack.scale(this.scale, this.scale, this.scale);
                 poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                poseStack.translate(0, entity.getBbHeight() / 2, 0);
 
                 // Draw flat quad here
                 VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
@@ -64,7 +64,7 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
                 float scaleIt = 0.23f;
 
 
-                poseStack.translate(0, -0.4, 0);
+                //poseStack.translate(0, 0.1, 0);
 
                 float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
                 vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();

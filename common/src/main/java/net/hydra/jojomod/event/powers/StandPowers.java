@@ -2568,7 +2568,8 @@ public class StandPowers {
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
     }
     public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
-        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE)) {
+        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1)) {
             if (Math.random() > 0.62) {
                 addEXP(1);
             }

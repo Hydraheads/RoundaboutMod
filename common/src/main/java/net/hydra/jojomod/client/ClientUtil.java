@@ -57,6 +57,8 @@ import org.spongepowered.asm.mixin.Unique;
 
 
 public class ClientUtil {
+
+    public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
 

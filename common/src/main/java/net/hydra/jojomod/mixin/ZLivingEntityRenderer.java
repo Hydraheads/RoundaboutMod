@@ -4,8 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.entity.client.BigBubbleLayer;
+import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenSpider;
+import net.hydra.jojomod.entity.projectile.KnifeLayer;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
@@ -18,6 +23,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,6 +43,8 @@ import javax.annotation.Nullable;
 public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements RenderLayerParent<T, M>,
         ILivingEntityRenderer {
 
+
+    @Shadow protected abstract boolean addLayer(RenderLayer<T, M> $$0);
 
     @Shadow protected M model;
 
@@ -59,10 +67,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         return $$0 | $$1;
     }
 
-    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"), cancellable = true)
+    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+        ClientUtil.savedPose = $$3.last().pose();
     }
-
+    @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
+    private void roundabout$init(EntityRendererProvider.Context $$0, EntityModel $$1, float $$2, CallbackInfo ci) {
+        this.addLayer(new BigBubbleLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
+    }
 
     @Nullable
     public RenderType roundabout$getRenderType(LivingEntity $$0, boolean $$1, boolean $$2, boolean $$3) {
