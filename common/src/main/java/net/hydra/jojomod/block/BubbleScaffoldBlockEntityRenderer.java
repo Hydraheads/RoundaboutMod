@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -52,7 +53,12 @@ public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<Bu
             }
         }
 
+
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+
+            if (((TimeStop)bubbleScaffoldBlockEntity.getLevel()).inTimeStopRange(bubbleScaffoldBlockEntity.getBlockPos())){
+                partialTick = 0;
+            }
             for (Vec3 value : bubbleScaffoldBlockEntity.bubbleList) {
                 poseStack.pushPose();
 
