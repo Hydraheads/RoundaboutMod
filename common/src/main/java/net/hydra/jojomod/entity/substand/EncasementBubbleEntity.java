@@ -1,11 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.access.PenetratableWithProjectile;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.FogCloneEntity;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -18,6 +13,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -62,11 +59,22 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
         return true;
     }
 
+    @Override
+
+    public InteractionResult interact(Player $$0, InteractionHand $$1) {
+        if (!$$0.level().isClientSide()){
+            ((StandUser)$$0).roundabout$setBubbleEncased((byte)1);
+            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_HOVERED_OVER_EVENT, SoundSource.PLAYERS, 2F, (float) (1.38 + (Math.random() * 0.04)));
+            this.discard();
+        }
+        return InteractionResult.PASS;
+    }
+
 
     public boolean collideBubbleFinally(Entity collision){
         if (collision instanceof LivingEntity LE){
             ((StandUser) LE).roundabout$setBubbleEncased((byte) 1);
-            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT, SoundSource.PLAYERS, 2F, (float) (1.38 + (Math.random() * 0.04)));
+            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_HOVERED_OVER_EVENT, SoundSource.PLAYERS, 2F, (float) (1.38 + (Math.random() * 0.04)));
             this.discard();
             return true;
         }
@@ -119,7 +127,7 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
                 popBubble();
                 return;
             }
-            AABB box = this.getBoundingBox().inflate(0.01); // Slight growth
+            AABB box = this.getBoundingBox().inflate(0.2); // Slight growth
             for (Entity e : level().getEntities(this, box, this::canCollideWith)) {
                 if (collideBubbleFinally(e)){
                     break;

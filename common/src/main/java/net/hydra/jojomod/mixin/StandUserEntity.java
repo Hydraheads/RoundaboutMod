@@ -2339,18 +2339,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**Update gravitational pull*/
     @Unique
     @Override
     public void roundabout$adjustGravity(){
+        float gravityConstant = 1000;
+        boolean modified = false;
 
+        if (roundabout$isBubbleEncased()){
+            gravityConstant *= 0.9F;
+            modified = true;
+        }
+
+        if (modified){
+            int gravityConstandAdjusted = (int) gravityConstant;
+            roundabout$setAdjustedGravity(gravityConstandAdjusted);
+        } else {
+            roundabout$setAdjustedGravity(-1);
+        }
     }
 
     @Override
     public double roundabout$getGravity(double ogGrav){
-        if (this.getEntityData().hasItem(ROUNDABOUT$ADJUSTED_GRAVITY)){
+        if (this.getEntityData().hasItem(ROUNDABOUT$ADJUSTED_GRAVITY) && this.getDeltaMovement().y <= 0){
             double basegrav = (double) this.getEntityData().get(ROUNDABOUT$ADJUSTED_GRAVITY);
             if (basegrav >= 0) {
-                ogGrav *= basegrav / 1000;
+                ogGrav *= (basegrav / 1000);
                 return ogGrav;
             }
         }
@@ -2528,13 +2542,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Reduced gravity changes fall damage calcs*/
     @Inject(method = "calculateFallDamage", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$calculateFallDamage(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
+
+        if (this.roundabout$leapTicks > -1 || roundabout$isBubbleEncased()) {
+            cir.setReturnValue(0);
+            return;
+        }
         int yesInt = roundabout$getAdjustedGravity();
         if (yesInt > 0){
             cir.setReturnValue(roundabout$calculateFallDamage($$0,$$1,yesInt));
-        }
-
-        if (this.roundabout$leapTicks > -1) {
-            cir.setReturnValue(0);
         }
     }
 
@@ -2542,7 +2557,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**gravity calcs into fall damage*/
     @Unique
     protected int roundabout$calculateFallDamage(float blockmultiplier, float fallLength,int yesInt) {
-        if (this.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE)) {
+        if (this.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE) || roundabout$isBubbleEncased()) {
             return 0;
         } else {
             MobEffectInstance jumpEffect = this.getEffect(MobEffects.JUMP);

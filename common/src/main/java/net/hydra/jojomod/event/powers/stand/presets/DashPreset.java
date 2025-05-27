@@ -20,6 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -226,6 +227,16 @@ public class DashPreset extends StandPowers {
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         this.buttonInput3(keyIsDown, options, PowerIndex.SKILL_3_SNEAK);
+    }
+
+
+    @Override
+    /**Stand related things that slow you down or speed you up*/
+    public float inputSpeedModifiers(float basis){
+        if (impactSlowdown > -1) {
+            basis = 0f;
+        }
+        return super.inputSpeedModifiers(basis);
     }
 
 
