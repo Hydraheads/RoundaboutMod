@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -47,6 +48,9 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
     @Override
     public void render(SoftAndWetBubbleEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+            if (((TimeStop)entity.level()).inTimeStopRange(entity)){
+                partialTicks = 0;
+            }
             if (!(entity instanceof SoftAndWetPlunderBubbleEntity sp && sp.isPopPlunderBubbble())) {
                 poseStack.pushPose();
 

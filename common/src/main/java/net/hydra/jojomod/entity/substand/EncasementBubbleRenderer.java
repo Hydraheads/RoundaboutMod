@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -42,6 +43,9 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
     @Override
     public void render(EncasementBubbleEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+            if (((TimeStop)entity.level()).inTimeStopRange(entity)){
+                partialTicks = 0;
+            }
                 poseStack.pushPose();
 
                 // Orient the texture
