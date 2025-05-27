@@ -24,6 +24,8 @@ public class StandIcons {
     public static final ResourceLocation GASOLINE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/gasoline_splatter.png");
 
+    public static final ResourceLocation IN_BUBBLE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/in_bubble.png");
     public static final ResourceLocation NO_FACE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/faceless.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,

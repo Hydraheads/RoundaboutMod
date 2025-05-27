@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -70,7 +71,7 @@ public abstract class HudRendering implements IHudAccess {
 
 
     /** The stand move HUD renders with the hotbar so that it may exist in all gamemodes.*/
-    @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
+    @Inject(method = "renderHotbar", at = @At(value = "HEAD"))
     private void roundabout$renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
 
 
@@ -90,7 +91,13 @@ public abstract class HudRendering implements IHudAccess {
                 }
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                if (((StandUser) this.minecraft.player).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
+                StandUser user = ((StandUser) this.minecraft.player);
+                if (user.roundabout$isBubbleEncased()){
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
+                    RenderSystem.disableBlend();
+                }
+                if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
                     if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
                             !((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().isEmpty() &&
                             ((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
