@@ -595,6 +595,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((StandUser)this).roundabout$dropString();
             }
         }
+
+        if (((StandUser)this).roundabout$mutualActuallyHurt($$0,$$1)){
+            ci.cancel();
+        }
     }
 
     private final TargetingConditions roundabout$attackTargeting = TargetingConditions.forCombat().range(64.0);

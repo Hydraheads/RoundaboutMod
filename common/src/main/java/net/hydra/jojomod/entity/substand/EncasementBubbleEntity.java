@@ -160,9 +160,9 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
         return 0;
     }
     public void popBubble(){
-        this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
+            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
             ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
                     this.getX(), this.getY() + this.getBbHeight()*0.5, this.getZ(),
                     5, 0.25, 0.25,0.25, 0.025);

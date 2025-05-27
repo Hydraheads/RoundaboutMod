@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -208,6 +209,7 @@ public interface StandUser {
     void roundabout$setStandSkin(byte skin);
     void roundabout$setDrowning(boolean drown);
     boolean roundabout$getDrowning();
+    boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1);
     /**Soft and Wet Bubble Encasing**/
     void roundabout$setBubbleEncased(byte adj);
 

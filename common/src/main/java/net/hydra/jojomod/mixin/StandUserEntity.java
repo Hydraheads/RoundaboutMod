@@ -38,6 +38,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
@@ -2477,12 +2478,41 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
+        }
+        if (roundabout$mutualActuallyHurt($$0,$$1)){
+            ci.cancel();
+        }
+        ;
+    }
+
+
+    @Override
+    @Unique
+    public boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1){
+        if (!this.isInvulnerableTo($$0)) {
+
+            /**Big bubble pops*/
+            if (roundabout$isBubbleEncased()){
+                if ($$0.getEntity() != null || $$0.is(DamageTypes.THORNS) || $$0.is(DamageTypes.ARROW)
+                        || $$0.is(DamageTypes.THROWN) || $$0.is(ModDamageTypes.KNIFE)
+                        || $$0.is(DamageTypes.CACTUS) || $$0.is(ModDamageTypes.THROWN_OBJECT)){
+                    roundabout$setBubbleEncased((byte) 0);
+                    if (!this.level().isClientSide()){
+                        this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                                SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                                this.getX(), this.getY() + this.getBbHeight()*0.5, this.getZ(),
+                                5, 0.25, 0.25,0.25, 0.025);
+                    }
+                }
+            }
 
             Entity bound = roundabout$getBoundTo();
             if (bound != null && ($$0.getEntity() != null || $$0.is(DamageTypes.MAGIC) || $$0.is(DamageTypes.EXPLOSION)) && !$$0.is(ModDamageTypes.STAND_FIRE)){
                 roundabout$dropString();
             }
         }
+        return false;
     }
 
     /**reduce or nullify fall damage */
