@@ -2452,7 +2452,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        if (this.roundabout$leapTicks > -1){
+        if (this.roundabout$leapTicks > -1 || roundabout$isBubbleEncased()){
             ((LivingEntity) (Object) this).resetFallDistance();
         }
         return $$1;
