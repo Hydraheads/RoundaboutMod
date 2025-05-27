@@ -597,7 +597,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public int bubbleNumber = 0;
 
     public boolean bigEncasementBubbleCreate() {
-        this.setCooldown(PowerIndex.SKILL_EXTRA, 120);
+        this.setCooldown(PowerIndex.SKILL_EXTRA, 80);
         if (!this.self.level().isClientSide()) {
             EncasementBubbleEntity encasement = ModEntities.ENCASEMENT_BUBBLE.create(this.getSelf().level());
             if (encasement != null){

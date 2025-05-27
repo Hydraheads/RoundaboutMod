@@ -21,8 +21,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -90,6 +89,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Shadow public abstract ItemStack getItemInHand(InteractionHand $$0);
+
     @Shadow public float zza;
     @Shadow public float xxa;
 
@@ -2529,6 +2530,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return false;
     }
+
+    /**swing sharp item to pop bubble */
+    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void rooundabout$swing(InteractionHand $$0, boolean $$1, CallbackInfo ci) {
+        if (!this.level().isClientSide()){
+            if (roundabout$getBubbleEncased() == 1) {
+                ItemStack stack = this.getItemInHand($$0);
+                if (stack.getItem() instanceof ScissorItem || stack.getItem() instanceof SwordItem
+                        || stack.getItem() instanceof KnifeItem || stack.getItem() instanceof AxeItem
+                        || stack.getItem() instanceof GlaiveItem) {
+                    roundabout$setBubbleEncased((byte) 0);
+                    this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                            SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                            5, 0.25, 0.25, 0.25, 0.025);
+                }
+            }
+        }
+    }
+
 
     /**reduce or nullify fall damage */
     @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true)
