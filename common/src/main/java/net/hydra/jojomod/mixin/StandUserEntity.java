@@ -1475,6 +1475,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             $$0.put("roundabout.StandRejectionDisc",this.roundabout$getRejectionStandDisc().save(compoundtag));
         }
+
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+        compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
+        $$0.put("roundabout",compoundtag);
+
         return $$0;
     }
 
@@ -1496,6 +1501,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 SD.generateStandPowerRejection((LivingEntity)(Object)this);
             }
         }
+
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+        roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
     }
     @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
     public List<Entity> roundabout$checkAutoSpin(List<Entity> list){

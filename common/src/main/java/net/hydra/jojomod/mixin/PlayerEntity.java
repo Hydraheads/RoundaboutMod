@@ -824,7 +824,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             CompoundTag compoundtag = new CompoundTag();
             $$0.put("roundabout.VoiceMask",m2.save(compoundtag));
         }
-        CompoundTag compoundtag = new CompoundTag();
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
         compoundtag.putInt("anchorPlaceAttack",roundabout$anchorPlaceAttack);
         compoundtag.putFloat("distanceOut",roundabout$distanceOut);
