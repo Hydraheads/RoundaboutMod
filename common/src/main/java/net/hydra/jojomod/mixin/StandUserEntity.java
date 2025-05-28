@@ -1231,7 +1231,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public void roundabout$setBigJump(boolean bigJump){
-        this.roundabout$tsJump = bigJump;
+        this.roundabout$bigJump = bigJump;
     }
     @Unique
     float roundabout$currentBigJump = 0;
