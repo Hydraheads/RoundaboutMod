@@ -1557,6 +1557,12 @@ public class MainUtil {
             ple.roundabout$setIdleYOffset(data);
         } else if (context == PacketDataIndex.FLOAT_UPDATE_STAND_MOVE) {
             ((StandUser)player).roundabout$getStandPowers().updateMove(data);
+        } else if (context == PacketDataIndex.FLOAT_BIG_JUMP) {
+            ((StandUser)player).roundabout$setBigJump(true);
+            ((StandUser)player).roundabout$setBigJumpCurrentProgress(data);
+        } else if (context == PacketDataIndex.FLOAT_BIG_JUMP_CANCEL) {
+            ((StandUser)player).roundabout$setBigJump(false);
+            ((StandUser)player).roundabout$setBigJumpCurrentProgress(data);
         }
     }
     @SuppressWarnings("deprecation")

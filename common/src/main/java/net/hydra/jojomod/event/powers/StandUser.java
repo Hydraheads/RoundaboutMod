@@ -154,6 +154,7 @@ public interface StandUser {
     Entity roundabout$getTargetEntity(LivingEntity User, float distMax);
 
     LivingEntity roundabout$getPowerUser();
+    float roundabout$getBonusJumpHeight();
 
     void roundabout$setTSJump(boolean roundaboutTSJump);
 

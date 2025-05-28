@@ -1234,6 +1234,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$bigJump = bigJump;
     }
     @Unique
+    public float roundabout$getBonusJumpHeight(){
+        float TOT = 0;
+        if (roundabout$isBubbleEncased()){
+            TOT+=4;
+        }
+        return TOT;
+    }
+    @Unique
     float roundabout$currentBigJump = 0;
     @Unique
     public float roundabout$getBigJumpCurrentProgress(){
@@ -2393,14 +2401,43 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ogGrav *= (basegrav / 1000);
                 return ogGrav;
             }
+        } else if (roundabout$getBigJump() && this.getDeltaMovement().y >= 0){
+            return ogGrav;
         }
         return ogGrav;
     }
 
     @SuppressWarnings("deprecation")
     @Inject(method = "travel", at = @At(value = "HEAD"))
-    public void roundabout$aiSteps(CallbackInfo ci) {
+    public void roundabout$travelHead(CallbackInfo ci) {
         roundabout$adjustGravity();
+
+        if (this.isControlledByLocalInstance()) {
+            float curr = roundabout$getBigJumpCurrentProgress();
+            float max = roundabout$getBonusJumpHeight();
+            if (roundabout$getBigJump() || (curr < 1 && getDeltaMovement().y >= 0)) {
+                if (curr < max+1) {
+                    roundabout$setBigJumpCurrentProgress(curr+0.495F);
+                    Vec3 $$0 = this.getDeltaMovement();
+
+
+                    if (!onGround()){
+                        if (roundabout$getBigJump()){
+                            this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
+                        }
+                    }
+
+                }
+            } else {
+                /**Air Drag*/
+                Vec3 $$0 = this.getDeltaMovement();
+                if (roundabout$isBubbleEncased() && !onGround()){
+                    this.setDeltaMovement($$0.x*0.95, (double)$$0.y, $$0.z*0.95);
+
+                }
+            }
+        }
+
     }
 
 
@@ -2522,7 +2559,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
         }
-        ;
     }
 
 

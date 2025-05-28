@@ -760,10 +760,11 @@ public abstract class InputEvents implements IInputEvents {
     @Unique
     public void roundabout$SetBonusJump(boolean bigJump, float jumpHeight, float current){
          ((StandUser)player).roundabout$setBigJump(bigJump);
-         if (!bigJump){
-             ((StandUser)player).roundabout$setBigJumpCurrentProgress(0);
+         if (bigJump){
+             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(current, PacketDataIndex.FLOAT_BIG_JUMP);
+         } else {
+             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(current, PacketDataIndex.FLOAT_BIG_JUMP_CANCEL);
          }
-            //ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
     }
 
     @javax.annotation.Nullable
@@ -831,14 +832,7 @@ public abstract class InputEvents implements IInputEvents {
     }
 
 
-    @Unique
-    public float roundabout$getBonusJumpHeight(LivingEntity player){
-        float TOT = 0;
-        if (((StandUser)player).roundabout$isBubbleEncased()){
-            TOT+=4;
-        }
-        return TOT;
-    }
+
     @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
     public void roundabout$Input(CallbackInfo ci){
         if (player != null) {
@@ -875,11 +869,17 @@ public abstract class InputEvents implements IInputEvents {
                 }
 
                 /**Tall Jump*/
-                float bigJump = roundabout$getBonusJumpHeight(player);
+
+                if (player.onGround()){
+                    ((StandUser) player).roundabout$setBigJumpCurrentProgress(0);
+                }
+
+                float bigJump = ((StandUser) player).roundabout$getBonusJumpHeight();
                 float totalHeight = bigJump + 1;
                 boolean canJump = bigJump > 0;
                 boolean isJumping = ((StandUser) player).roundabout$getBigJump();
                 float getCurrentJump = ((StandUser) player).roundabout$getBigJumpCurrentProgress();
+
                 if (canJump) {
                     if (player.getAbilities().flying) {
                         if (isJumping) {
@@ -893,7 +893,9 @@ public abstract class InputEvents implements IInputEvents {
                             if (player.onGround() && getCurrentJump > 0) {
                                 this.roundabout$SetBonusJump(false, totalHeight, getCurrentJump);
                             } else {
-                                this.roundabout$SetBonusJump(true, totalHeight, getCurrentJump);
+                                if (player.onGround() || isJumping) {
+                                    this.roundabout$SetBonusJump(true, totalHeight, getCurrentJump);
+                                }
                             }
                         } else {
                             this.roundabout$SetBonusJump(false, totalHeight, getCurrentJump);

@@ -16,6 +16,8 @@ public class PacketDataIndex {
     public static final byte FLOAT_IDLE_ROTATION = 5;
     public static final byte FLOAT_IDLE_Y_OFFSET = 6;
     public static final byte FLOAT_UPDATE_STAND_MOVE = 7;
+    public static final byte FLOAT_BIG_JUMP = 8;
+    public static final byte FLOAT_BIG_JUMP_CANCEL = 9;
 
 
     /**C2S Inventory*/
