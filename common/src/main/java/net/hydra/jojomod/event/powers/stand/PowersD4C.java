@@ -21,8 +21,11 @@ import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.world.DynamicWorld;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
@@ -39,6 +42,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -369,8 +373,6 @@ public class PowersD4C extends PunchingStand {
     private boolean held4 = false;
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
-        fx.shouldShowDimensionFx = (this.getSelf().level().dimension().location().getNamespace().equals("roundabout"));
-
         if (keyIsDown && !held4 && !(this.onCooldown(PowerIndex.SKILL_4)))
         {
             held4 = true;
@@ -402,6 +404,15 @@ public class PowersD4C extends PunchingStand {
 
         @Override
         public void roundabout$LEVEL_RENDER_FINISH(float partialTick) {
+            Minecraft client = Minecraft.getInstance();
+            LocalPlayer player = client.player;
+
+            if (player == null) return;
+
+            Level level = player.level();
+
+            shouldShowDimensionFx = (level.dimension().location().getNamespace().equals("roundabout")) && ((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C;
+
             if (RRenderUtil.isUsingFabulous())
                 return;
 
