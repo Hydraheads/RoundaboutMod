@@ -41,6 +41,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeableArmorItem;
@@ -77,13 +78,15 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
                     }
                 }
                 poseStack.pushPose();
+                float height = entity.getDimensions(Pose.STANDING).height;
+                float width = entity.getDimensions(Pose.STANDING).width;
                 if (ClientUtil.savedPose != null) {
                     poseStack.last().pose().set(ClientUtil.savedPose);
                 }
 
 
                 // Orient the texture
-                poseStack.translate(0, entity.getBbHeight() * 0.69F, 0);
+                poseStack.translate(0, height * 0.69F, 0);
                 poseStack.scale(this.scale, this.scale, this.scale);
                 poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
@@ -97,7 +100,7 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
                     coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
                 }
                 // Position bubble above entity's head
-                float size = Math.max(entity.getBbHeight(), entity.getBbWidth()) * 0.75F;
+                float size = Math.max(height, width) * 0.75F;
 
                 // Create vertices
                 Matrix4f matrix = poseStack.last().pose();
