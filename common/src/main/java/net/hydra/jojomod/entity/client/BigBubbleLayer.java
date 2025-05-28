@@ -9,6 +9,8 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientPlatform;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.gui.NoCancelInputScreen;
+import net.hydra.jojomod.client.gui.PoseSwitcherScreen;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.PlayerLikeModel;
@@ -68,6 +70,12 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
             if (((StandUser)entity).roundabout$isBubbleEncased()) {
 
+                if (Minecraft.getInstance().screen != null && !(Minecraft.getInstance().screen instanceof NoCancelInputScreen)
+                        && !(Minecraft.getInstance().screen instanceof PoseSwitcherScreen)){
+                    if (ClientUtil.getPlayer() != null && ClientUtil.getPlayer().is(entity)){
+                        return;
+                    }
+                }
                 poseStack.pushPose();
                 if (ClientUtil.savedPose != null) {
                     poseStack.last().pose().set(ClientUtil.savedPose);

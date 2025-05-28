@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ScissorItem;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -40,6 +41,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -1175,6 +1178,26 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     }
 
+    @Inject(method = "interactOn(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at=@At("HEAD"))
+    private void roundabout$interactOn(Entity $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir)
+    {
+        if (!$$0.level().isClientSide()) {
+            if (!this.isSpectator()) {
+                ItemStack $$2 = this.getItemInHand($$1);
+                if ($$0 instanceof LivingEntity LE && ((StandUser) LE).roundabout$isBubbleEncased()) {
+                    if (!$$2.isEmpty() && ($$2.getItem() instanceof ShearsItem || $$2.getItem() instanceof ScissorItem)) {
+                        ((StandUser) LE).roundabout$setBubbleEncased((byte) 0);
+                        this.level().playSound(null, $$0.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                                SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                                this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                                5, 0.25, 0.25, 0.25, 0.025);
+                        cir.setReturnValue(InteractionResult.PASS);
+                    }
+                }
+            }
+        }
+    }
     @Inject(method = "killedEntity", at=@At("HEAD"))
     private void roundabout$killedEntity(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir)
     {
