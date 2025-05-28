@@ -97,6 +97,7 @@
     "dworlds.ServerAccessorMixin"
   ],
   "client": [
+    "CustomItemRendererMixin",
     "GeckolibCompatAttempt",
     "HudRendering",
     "InputEvents",
