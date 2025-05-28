@@ -158,6 +158,10 @@ public interface StandUser {
     void roundabout$setTSJump(boolean roundaboutTSJump);
 
     boolean roundabout$getTSJump();
+    boolean roundabout$getBigJump();
+    void roundabout$setBigJump(boolean bigJump);
+    float roundabout$getBigJumpCurrentProgress();
+    void roundabout$setBigJumpCurrentProgress(float bigJump);
     void roundabout$setBlip(Vector3f vec);
     void roundabout$tryBlip();
 

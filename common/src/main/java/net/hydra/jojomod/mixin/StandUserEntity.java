@@ -1220,6 +1220,31 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**Tall Jumping Code*/
+
+    @Unique
+    boolean roundabout$bigJump = false;
+    @Unique
+    public boolean roundabout$getBigJump(){
+        return this.roundabout$bigJump;
+    }
+
+    @Unique
+    public void roundabout$setBigJump(boolean bigJump){
+        this.roundabout$tsJump = bigJump;
+    }
+    @Unique
+    float roundabout$currentBigJump = 0;
+    @Unique
+    public float roundabout$getBigJumpCurrentProgress(){
+        return this.roundabout$currentBigJump;
+    }
+
+    @Unique
+    public void roundabout$setBigJumpCurrentProgress(float bigJump){
+        this.roundabout$currentBigJump = bigJump;
+    }
+
     /**TS Floating Code*/
     @Unique
     boolean roundabout$tsJump = false;
