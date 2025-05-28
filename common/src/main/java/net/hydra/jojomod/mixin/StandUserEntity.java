@@ -3092,7 +3092,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (roundabout$isBubbleEncased()){
             if (this.tickCount % 2 == 0){
-                cir.setReturnValue(0);
+                cir.setReturnValue($$0);
                 return;
             }
         }
