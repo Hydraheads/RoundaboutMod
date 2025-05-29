@@ -5,20 +5,20 @@
       "y": 0
     },
     "north=true,south=false,east=false,west=false": {
-      "model": "roundabout:block/wooden_manor_table_b",
-      "y": 0
-    },
-    "north=false,south=false,east=true,west=false": {
-      "model": "roundabout:block/wooden_manor_table_b",
-      "y": 90
-    },
-    "north=false,south=true,east=false,west=false": {
-      "model": "roundabout:block/wooden_manor_table_b",
+      "model": "roundabout:block/wooden_manor_table_a",
       "y": 180
     },
-    "north=false,south=false,east=false,west=true": {
-      "model": "roundabout:block/wooden_manor_table_b",
+    "north=false,south=false,east=true,west=false": {
+      "model": "roundabout:block/wooden_manor_table_a",
       "y": 270
+    },
+    "north=false,south=true,east=false,west=false": {
+      "model": "roundabout:block/wooden_manor_table_a",
+      "y": 0
+    },
+    "north=false,south=false,east=false,west=true": {
+      "model": "roundabout:block/wooden_manor_table_a",
+      "y": 90
     }
   }
 }
