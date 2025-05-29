@@ -166,6 +166,8 @@ public class ForgeBlocks {
             () -> ModBlocks.STAND_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BUBBLE_SCAFFOLD = BLOCKS.register("bubble_scaffold",
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> D4C_LIGHT_BLOCK = BLOCKS.register("d4c_light_block",
+            () -> ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> ORANGE_FIRE = BLOCKS.register("colored_fire_orange",
             () -> ModBlocks.ORANGE_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BLUE_FIRE = BLOCKS.register("colored_fire_blue",
@@ -186,6 +188,8 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stand_fire")));
     public static final RegistryObject<BlockEntityType<BubbleScaffoldBlockEntity>> BUBBLE_SCAFFOLD_BLOCK_ENTITY = BLOCK_ENTITIES.register("block_scaffold",
             () -> BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "block_scaffold")));
+    public static final RegistryObject<BlockEntityType<D4CLightBlockEntity>> D4C_LIGHT_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_light_block",
+            () -> BlockEntityType.Builder.of(D4CLightBlockEntity::new, BUBBLE_SCAFFOLD.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "d4c_light_block")));
 
     static
     {

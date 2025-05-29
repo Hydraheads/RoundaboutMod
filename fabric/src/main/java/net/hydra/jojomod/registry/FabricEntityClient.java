@@ -2,10 +2,7 @@ package net.hydra.jojomod.registry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.BubbleScaffoldBlockEntityRenderer;
-import net.hydra.jojomod.block.MirrorBlockEntityRenderer;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireRenderer;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.entity.D4CCloneRenderer;
 import net.hydra.jojomod.entity.FogCloneRenderer;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
@@ -23,6 +20,7 @@ import net.hydra.jojomod.entity.substand.EncasementBubbleRenderer;
 import net.hydra.jojomod.entity.substand.LifeTrackerModel;
 import net.hydra.jojomod.entity.substand.LifeTrackerRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.Registry;
@@ -136,5 +134,6 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
         BlockEntityRenderers.register(ModBlocks.MIRROR_BLOCK_ENTITY, MirrorBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.D4C_LIGHT_BLOCK_ENTITY, D4CLightBlockEntityRenderer::new);
     }
 }

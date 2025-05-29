@@ -172,6 +172,8 @@ public class ForgeEvents {
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
+        ModBlocks.D4C_LIGHT_BLOCK = ForgeBlocks.D4C_LIGHT_BLOCK.get();
+
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
         ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
@@ -183,6 +185,7 @@ public class ForgeEvents {
         ModBlocks.MIRROR_BLOCK_ENTITY = ForgeBlocks.MIRROR_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get();
+        ModBlocks.D4C_LIGHT_BLOCK_ENTITY = ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
         ModItems.WORTHY_ARROW = ForgeItems.WORTHY_ARROW.get();

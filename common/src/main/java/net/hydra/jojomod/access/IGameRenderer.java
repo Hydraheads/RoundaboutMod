@@ -6,4 +6,6 @@ public interface IGameRenderer {
     void roundabout$loadEffect(ResourceLocation $$0);
 
     boolean roundabout$tsShaderStatus();
+
+    float roundabout$getFrameCount();
 }

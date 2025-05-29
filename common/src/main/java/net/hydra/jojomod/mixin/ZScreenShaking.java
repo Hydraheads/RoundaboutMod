@@ -59,6 +59,12 @@ public class ZScreenShaking implements IGameRenderer {
         return roundabout$tsShaderStatus == 1;
     }
 
+    @Unique private int roundabout$frameCount = 0;
+    @Override
+    public float roundabout$getFrameCount() {
+        return (float)roundabout$frameCount;
+    }
+
     @Inject(method = "shouldRenderBlockOutline()Z", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$shouldOutline(CallbackInfoReturnable<Boolean> cir) {
         LivingEntity player = Minecraft.getInstance().player;
@@ -246,6 +252,7 @@ public class ZScreenShaking implements IGameRenderer {
 
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderLevel(float $$0, long $$1, PoseStack $$2, CallbackInfo ci) {
+        roundabout$frameCount++;
         /*
         if (this.minecraft.options.getCameraType().isFirstPerson() && this.minecraft.player != null){
             $$2.pushPose();

@@ -110,10 +110,13 @@ public class ModBlocks {
     public static Block FOG_NETHER_BRICKS;
     public static Block FOG_NETHER_BRICKS_COATING;
 
+    public static Block D4C_LIGHT_BLOCK;
+
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
+    public static BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
@@ -333,6 +336,10 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
+                return 1;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+    public static D4CLightBlock D4C_LIGHT_BLOCK_PROPERTIES = new D4CLightBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));

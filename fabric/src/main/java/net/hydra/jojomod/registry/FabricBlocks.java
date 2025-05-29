@@ -66,6 +66,7 @@ public class FabricBlocks {
     public static final Block CEILING_LIGHT = registerBlock("ceiling_light",ModBlocks.CEILING_LIGHT_BLOCK_PROPERTIES);
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
+    public static final Block D4C_LIGHT_BLOCK = registerBlockItemless("d4c_light_block",ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block STAND_FIRE = registerBlockItemless("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
@@ -128,6 +129,8 @@ public class FabricBlocks {
             registerBE("mirror",BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR));
     public static final BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY =
             registerBE("bubble_scaffold",BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD));
+    public static final BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY =
+            registerBE("d4c_light_block",BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK));
 
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
@@ -197,6 +200,8 @@ public class FabricBlocks {
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
+        ModBlocks.D4C_LIGHT_BLOCK_ENTITY = D4C_LIGHT_BLOCK_ENTITY;
+        ModBlocks.D4C_LIGHT_BLOCK = D4C_LIGHT_BLOCK;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_CLAY = FOG_CLAY;
