@@ -19,7 +19,8 @@ public class SoftAndWetEntity extends StandEntity {
             BETA_SKIN = 4,
             DROWNED_SKIN = 5,
             DROWNED_SKIN_2 = 6,
-            FIGURE_SKIN = 7;
+            FIGURE_SKIN = 7,
+            STRIPED = 8;
 
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
@@ -30,6 +31,7 @@ public class SoftAndWetEntity extends StandEntity {
             case DROWNED_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.drowned");
             case DROWNED_SKIN_2 -> Component.translatable("skins.roundabout.soft_and_wet.drowned_2");
             case FIGURE_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.figure");
+            case STRIPED -> Component.translatable("skins.roundabout.soft_and_wet.striped");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }

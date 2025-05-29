@@ -107,6 +107,7 @@ public class PowersSoftAndWet extends PunchingStand {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(SoftAndWetEntity.LIGHT_SKIN);
         $$1.add(SoftAndWetEntity.MANGA_SKIN);
+        $$1.add(SoftAndWetEntity.STRIPED);
         $$1.add(SoftAndWetEntity.FIGURE_SKIN);
         $$1.add(SoftAndWetEntity.DROWNED_SKIN);
         $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);

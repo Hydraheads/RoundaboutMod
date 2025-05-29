@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_paper",
+      "has_blue",
       "has_the_recipe"
     ]
   ],
