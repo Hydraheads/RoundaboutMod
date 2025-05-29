@@ -3,7 +3,9 @@ package net.hydra.jojomod.block;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.access.IGameRenderer;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.shader.RCoreShader;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -23,6 +25,13 @@ public class D4CLightBlockEntityRenderer implements BlockEntityRenderer<D4CLight
 
     @Override
     public void render(D4CLightBlockEntity blockEntity, float v, PoseStack matrices, MultiBufferSource bufferSource, int light, int overlay) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null)
+            return;
+
+        if (!ClientUtil.canSeeStands(client.player))
+            return;
+
         matrices.pushPose();
         matrices.translate(0.5, 0.5, 0.5);
 
