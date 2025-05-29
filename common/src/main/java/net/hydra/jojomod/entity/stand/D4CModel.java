@@ -29,20 +29,20 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
 
         PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -7.85F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
+        PartDefinition mask = head2.addOrReplaceChild("mask", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, -8.15F, -0.7F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.2F))
+                .texOffs(32, 30).addBox(-1.0F, -3.6F, -0.901F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 30).addBox(-1.0F, -2.3F, -0.901F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 31).addBox(-1.0F, -1.0F, -0.901F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.6F, -3.3F));
+
         PartDefinition ears = head2.addOrReplaceChild("ears", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_ear = ears.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(64, 50).addBox(-0.75F, -9.5F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 69).addBox(-0.75F, -9.5F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.1F))
-                .texOffs(48, 69).addBox(-0.75F, -10.5F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.75F, -8.85F, 0.0F));
+        PartDefinition right_ear = ears.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(64, 51).addBox(-1.75F, -9.5F, -1.0F, 3.0F, 11.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 70).addBox(-1.75F, -9.5F, -1.0F, 3.0F, 11.0F, 1.0F, new CubeDeformation(0.1F))
+                .texOffs(49, 70).addBox(-0.75F, -10.5F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.75F, -8.85F, 0.4F));
 
-        PartDefinition left_ear = ears.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(64, 63).addBox(-1.25F, -9.5F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.1F))
-                .texOffs(54, 69).addBox(-0.25F, -10.5F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(40, 69).addBox(-1.25F, -9.5F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.75F, -8.85F, 0.0F));
-
-        PartDefinition bone = head2.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, -6.65F, -1.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.2F))
-                .texOffs(32, 30).addBox(-1.0F, -2.3F, -1.202F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 30).addBox(-1.0F, -1.0F, -1.202F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 31).addBox(-1.0F, 0.3F, -1.202F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -0.8F, -3.0F));
+        PartDefinition left_ear = ears.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(65, 64).addBox(-1.25F, -9.5F, -1.0F, 3.0F, 11.0F, 1.0F, new CubeDeformation(0.1F))
+                .texOffs(55, 70).addBox(-0.25F, -10.5F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(41, 70).addBox(-1.25F, -9.5F, -1.0F, 3.0F, 11.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.75F, -8.85F, 0.4F));
 
         PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
@@ -50,10 +50,8 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
-
-        PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(0, 32).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 10).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(0, 32).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 10).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(3.25F, -5.25F, 0.0F));
 
@@ -61,9 +59,9 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
                 .texOffs(56, 30).addBox(0.75F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.2F))
                 .texOffs(16, 52).addBox(0.75F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(24, 32).addBox(-1.25F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(56, 10).addBox(-1.25F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.1F))
-                .texOffs(1, 76).addBox(-1.25F, -0.25F, 2.25F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 5.5F, 0.0F));
+        PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(24, 32).addBox(-1.25F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
+                .texOffs(56, 10).addBox(-1.25F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.11F))
+                .texOffs(1, 76).addBox(-1.25F, -0.25F, 2.25F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.011F)), PartPose.offset(2.0F, 5.5F, 0.0F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-3.25F, -5.25F, 0.0F));
 
@@ -71,9 +69,9 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
                 .texOffs(56, 0).addBox(-4.75F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.2F))
                 .texOffs(56, 40).addBox(-4.75F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(32, 50).addBox(-2.75F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.1F))
-                .texOffs(56, 20).addBox(-2.75F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).mirror().addBox(-2.75F, -0.25F, 2.25F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.0F, 5.5F, 0.0F));
+        PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(32, 50).addBox(-2.75F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.11F))
+                .texOffs(56, 20).addBox(-2.75F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
+                .texOffs(0, 0).mirror().addBox(-2.75F, -0.25F, 2.25F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.011F)).mirror(false), PartPose.offset(-2.0F, 5.5F, 0.0F));
 
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
@@ -84,23 +82,23 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
 
         PartDefinition left_leg = legs.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(2.0F, -1.0F, 0.0F));
 
-        PartDefinition upper_left_leg = left_leg.addOrReplaceChild("upper_left_leg", CubeListBuilder.create().texOffs(32, 60).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.199F))
+        PartDefinition upper_left_leg = left_leg.addOrReplaceChild("upper_left_leg", CubeListBuilder.create().texOffs(32, 60).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.18F))
                 .texOffs(40, 30).addBox(-2.0F, 1.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
                 .texOffs(32, 42).addBox(-2.0F, 5.5F, -2.3F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(40, 40).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(48, 60).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.197F)), PartPose.offset(0.0F, 7.0F, 0.0F));
+        PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(40, 40).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0001F))
+                .texOffs(48, 60).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.179F)), PartPose.offset(0.0F, 7.0F, 0.0F));
 
         PartDefinition right_leg = legs.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(-2.0F, -1.0F, 0.0F));
 
-        PartDefinition upper_right_leg = right_leg.addOrReplaceChild("upper_right_leg", CubeListBuilder.create().texOffs(0, 62).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.198F))
-                .texOffs(0, 42).addBox(-2.0F, 1.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
+        PartDefinition upper_right_leg = right_leg.addOrReplaceChild("upper_right_leg", CubeListBuilder.create().texOffs(0, 62).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.181F))
+                .texOffs(0, 42).addBox(-2.0F, 1.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.011F))
                 .texOffs(32, 45).addBox(-2.0F, 5.5F, -2.3F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition lower_right_leg = right_leg.addOrReplaceChild("lower_right_leg", CubeListBuilder.create().texOffs(16, 42).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(16, 62).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.196F)), PartPose.offset(0.0F, 7.0F, 0.0F));
+                .texOffs(16, 62).addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.178F)), PartPose.offset(0.0F, 7.0F, 0.0F));
 
-        PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -4.0F));
+        PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -2.0F));
 
         PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-12.0F, -8.0F, 1.0F));
 
@@ -173,27 +171,6 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
         PartDefinition upper_left_leg_r4 = Four.addOrReplaceChild("upper_left_leg_r4", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-11.0F, 4.0F, -2.5F, -0.0873F, 0.0F, 0.0F));
 
         PartDefinition base_r4 = Four.addOrReplaceChild("base_r4", CubeListBuilder.create().texOffs(45, 110).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
-
-        PartDefinition kick_barrage2 = stand2.addOrReplaceChild("kick_barrage2", CubeListBuilder.create(), PartPose.offset(11.0F, -12.0F, -2.0F));
-
-        PartDefinition Five = kick_barrage2.addOrReplaceChild("Five", CubeListBuilder.create().texOffs(45, 118).addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
-                .texOffs(61, 119).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F))
-                .texOffs(45, 118).addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
-                .texOffs(61, 119).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F))
-                .texOffs(45, 118).addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
-                .texOffs(61, 119).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F))
-                .texOffs(45, 118).addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
-                .texOffs(61, 119).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
-
-        PartDefinition upper_right_leg_r1 = Five.addOrReplaceChild("upper_right_leg_r1", CubeListBuilder.create().texOffs(66, 116).mirror().addBox(-12.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(66, 116).mirror().addBox(-12.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(66, 116).mirror().addBox(-12.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(66, 116).mirror().addBox(-12.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(11.0F, 4.0F, -2.5F, -0.0873F, 0.0F, 0.0F));
-
-        PartDefinition base_r5 = Five.addOrReplaceChild("base_r5", CubeListBuilder.create().texOffs(45, 110).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(45, 110).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(45, 110).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(45, 110).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
