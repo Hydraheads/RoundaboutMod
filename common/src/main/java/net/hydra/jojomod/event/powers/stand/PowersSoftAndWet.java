@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -81,6 +82,12 @@ public class PowersSoftAndWet extends PunchingStand {
         return super.getSoundCancelingGroupByte(soundChoice);
     }
 
+    @Override
+    public void playBarrageClashSound(){
+        if (!this.self.level().isClientSide()) {
+            playStandUserOnlySoundsIfNearby(BARRAGE_NOISE, 27, false,true);
+        }
+    }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
