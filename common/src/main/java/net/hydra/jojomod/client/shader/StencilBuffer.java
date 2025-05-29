@@ -26,6 +26,12 @@ public class StencilBuffer {
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
     }
 
+    public static void beginRender() {
+        GL11.glStencilFunc(GL11.GL_NOTEQUAL, 1, 0xFF);
+        GL11.glStencilMask(0x00);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+    }
+
     public static void endRender()
     {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
