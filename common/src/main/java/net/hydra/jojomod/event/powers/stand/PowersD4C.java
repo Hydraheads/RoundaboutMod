@@ -409,7 +409,6 @@ public class PowersD4C extends PunchingStand {
             {
                 if (!isHoldingSneak())
                 {
-                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
                 }
@@ -534,6 +533,10 @@ public class PowersD4C extends PunchingStand {
 
     private void updateTeleport()
     {
+        if (this.getSelf().level().isClientSide)
+            if (!this.getSelf().level().dimension().location().getPath().equals("overworld"))
+                this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
+
         if (this.getSelf().getServer() == null)
             return;
 
