@@ -3,8 +3,11 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -82,6 +85,18 @@ public class KnifeItem extends Item{
                             } else {
                                 $$1.playSound(null, $$7, ModSounds.KNIFE_THROW_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
+                            }
+
+                            if ($$2 != null && ((StandUser)$$2).roundabout$isBubbleEncased()){
+                                StandUser SE = ((StandUser)$$2);
+                                if (!$$1.isClientSide()){
+                                    SE.roundabout$setBubbleEncased((byte) 0);
+                                    $$1.playSound(null, $$2.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                                            SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                                    ((ServerLevel) $$1).sendParticles(ModParticles.BUBBLE_POP,
+                                            $$2.getX(), $$2.getY() + $$2.getBbHeight() * 0.5, $$2.getZ(),
+                                            5, 0.25, 0.25, 0.25, 0.025);
+                                }
                             }
                         }
                     }

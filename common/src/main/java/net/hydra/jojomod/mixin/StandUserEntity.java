@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.BarbedWireBlock;
 import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.block.GoddessStatueBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -62,6 +64,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
@@ -2600,7 +2603,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ItemStack stack = this.getItemInHand($$0);
                 if (stack.getItem() instanceof ScissorItem || stack.getItem() instanceof SwordItem
                         || stack.getItem() instanceof KnifeItem || stack.getItem() instanceof AxeItem
-                        || stack.getItem() instanceof GlaiveItem) {
+                        || stack.getItem() instanceof GlaiveItem
+                        || (stack.getItem() instanceof BlockItem BI && (BI.getBlock() instanceof CactusBlock
+                || BI.getBlock() instanceof GoddessStatueBlock|| BI.getBlock() instanceof BarbedWireBlock))) {
                     roundabout$setBubbleEncased((byte) 0);
                     this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                             SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
