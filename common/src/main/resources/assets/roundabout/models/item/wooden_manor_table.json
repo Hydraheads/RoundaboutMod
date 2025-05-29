@@ -5,7 +5,7 @@
     "thirdperson_righthand": {
       "rotation": [ 0, 0, 0 ],
       "translation": [ 0, 4, 1 ],
-      "scale": [ 0.55, 0.55, 0.55 ]
+      "scale": [ 0.47, 0.47, 0.47 ]
     },
     "firstperson_righthand": {
       "rotation": [ 0, 45, 0 ],
@@ -16,6 +16,11 @@
       "rotation": [ 30, 160, 0 ],
       "translation": [ 0, 0, 0],
       "scale":[ 0.5625, 0.5625, 0.5625]
+    },
+    "ground": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 1, 2],
+      "scale":[ 0.25, 0.25, 0.25]
     }
   }
 }
