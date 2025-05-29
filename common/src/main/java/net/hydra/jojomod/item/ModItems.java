@@ -88,6 +88,8 @@ public class ModItems {
     public static Item SOFT_AND_WET_EXPLOSIVE_BUBBLE_PROP;
     public static Item SOFT_AND_WET_BEYOND_BUBBLE_PROP;
 
+    public static Item INTERDIMENSIONAL_KEY;
+
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();

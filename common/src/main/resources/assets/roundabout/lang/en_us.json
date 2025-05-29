@@ -234,6 +234,12 @@
   "item.minecraft.splash_potion.effect.roundabout.hex": "Splash Potion of Hex",
   "item.minecraft.tipped_arrow.effect.roundabout.hex": "Arrow of Hex",
 
+  "item.roundabout.interdimensional_key": "Interdimensional Key",
+  "item.roundabout.interdimensional_key.error": "You don't know how to use this.",
+  "item.roundabout.interdimensional_key.success": "Linked!",
+  "item.roundabout.interdimensional_key.unlinked": "§cUnlinked§r",
+  "item.roundabout.interdimensional_key.linked": "§aLinked§r",
+
   "roundabout:upgrade.roundabout.luck_upgrade": "Luck Upgrade",
   "roundabout:upgrade.roundabout.execution_upgrade": "Execution Upgrade",
 

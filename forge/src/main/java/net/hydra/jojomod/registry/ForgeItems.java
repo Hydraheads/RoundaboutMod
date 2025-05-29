@@ -443,6 +443,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null))));
     public static final RegistryObject<Item> AYA_MASK = addToTab(ITEMS.register("aya_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
+    public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = addToTab(ITEMS.register("interdimensional_key",
+            () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1))));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

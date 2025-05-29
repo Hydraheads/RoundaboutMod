@@ -152,6 +152,8 @@ public class FabricItems {
     public static Item FOG_NETHER_BRICKS = registerItem("fog_nether_bricks", (Item) new FogBlockItem(ModBlocks.FOG_NETHER_BRICKS, new Item.Properties(), Blocks.NETHER_BRICKS));
     public static Item FOG_NETHER_BRICKS_COATING = registerItem("fog_nether_bricks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_NETHER_BRICKS_COATING, new Item.Properties(), Blocks.NETHER_BRICKS));
 
+    public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
+
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840));
@@ -266,6 +268,8 @@ public class FabricItems {
                         entries.accept(VALENTINE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(AYA_MASK);
+
+                        entries.accept(INTERDIMENSIONAL_KEY);
 
                     }).build());
 
@@ -439,6 +443,7 @@ public class FabricItems {
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
+        ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
 
         ModItems.initializeVisageStore();
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);

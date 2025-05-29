@@ -20,6 +20,8 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
+import net.hydra.jojomod.item.InterdimensionalKeyItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.world.DynamicWorld;
@@ -30,7 +32,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
@@ -104,10 +110,16 @@ public class PowersD4C extends PunchingStand {
             else
                 setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
 
-        if (!isHoldingSneak())
-            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+        if (!InterdimensionalKeyItem.isLinked(this.getSelf().getOffhandItem()))
+            if (!isHoldingSneak())
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+            else
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
         else
-            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4_SNEAK);
+            if (!isHoldingSneak())
+                setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
+            else
+                setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
 
         fx.roundabout$onGUI(context);
     }
@@ -549,7 +561,17 @@ public class PowersD4C extends PunchingStand {
             return false;
 
         StandEntity thisEntity = getStandEntity(this.getSelf());
-        if (thisEntity != null)
+        if (thisEntity == null)
+            return false;
+
+        if (InterdimensionalKeyItem.isLinked(this.getSelf().getOffhandItem()))
+        {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_4_EXTRA);
+            this.animateStand((byte) 30);
+            this.poseStand(OffsetIndex.GUARD);
+        }
+        else
         {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_4);
@@ -562,35 +584,75 @@ public class PowersD4C extends PunchingStand {
 
     private void updateTeleport()
     {
-        if (this.getSelf().level().isClientSide)
-            if (!this.getSelf().level().dimension().location().getPath().equals("overworld"))
-                this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
-
-        if (this.getSelf().getServer() == null)
-            return;
-
-        if (attackTimeDuring > 39)
+        if (InterdimensionalKeyItem.isLinked(this.getSelf().getOffhandItem()))
         {
-            attackTimeDuring = -1;
+            if (this.getSelf().level().isClientSide)
+                if (!this.getSelf().level().dimension().location().getPath().equals("overworld"))
+                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToOldDimension);
 
-            ServerLevel overworld = this.getSelf().getServer().overworld();
-            ServerPlayer player = (ServerPlayer)this.getSelf();
-            if (player.level() != player.getServer().overworld() && player.level().dimension().location().getNamespace().equals("roundabout"))
+            if (this.getSelf().getServer() == null)
+                return;
+
+            if (attackTimeDuring > 39)
             {
-                yoinkCurrency();
-                player.teleportTo(overworld.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
-                DynamicWorld.deregisterWorld(player.getServer(), player.level().dimension().location().getPath());
+                attackTimeDuring = -1;
 
+                this.animateStand((byte)0);
+
+                MinecraftServer server = this.getSelf().getServer();
+
+                ServerLevel oldLevel = server.getLevel(
+                        ResourceKey.create(Registries.DIMENSION, InterdimensionalKeyItem.getLinkedDimension(this.getSelf().getOffhandItem()))
+                );
+                if (oldLevel == null)
+                {
+                    Roundabout.LOGGER.error("Exception while teleporting to linked level: oldLevel was null!");
+                    return;
+                }
+
+                yoinkCurrency();
+
+                ServerPlayer player = (ServerPlayer)this.getSelf();
+
+                player.teleportTo(oldLevel, player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
                 return;
             }
+        }
+        else
+        {
+            if (this.getSelf().level().isClientSide)
+                if (!this.getSelf().level().dimension().location().getPath().equals("overworld"))
+                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
 
-            DynamicWorld world = DynamicWorld.generateD4CWorld(player.getServer());
-            if (world.getLevel() != null)
+            if (attackTimeDuring > 39)
             {
-                yoinkCurrency();
-                queuedWorldTransports.put(player.getId(), world);
-                world.broadcastPacketsToPlayers(player.getServer());
-                return;
+                attackTimeDuring = -1;
+
+                this.animateStand((byte)0);
+
+                MinecraftServer server = this.getSelf().getServer();
+                if (server == null)
+                    return;
+
+                ServerLevel overworld = server.overworld();
+                ServerPlayer player = (ServerPlayer)this.getSelf();
+                if (player.level() != player.getServer().overworld() && player.level().dimension().location().getNamespace().equals("roundabout"))
+                {
+                    yoinkCurrency();
+                    player.teleportTo(overworld.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                    DynamicWorld.deregisterWorld(player.getServer(), player.level().dimension().location().getPath());
+
+                    return;
+                }
+
+                DynamicWorld world = DynamicWorld.generateD4CWorld(player.getServer());
+                if (world.getLevel() != null)
+                {
+                    yoinkCurrency();
+                    queuedWorldTransports.put(player.getId(), world);
+                    world.broadcastPacketsToPlayers(player.getServer());
+                    return;
+                }
             }
         }
     }
@@ -815,7 +877,7 @@ public class PowersD4C extends PunchingStand {
             case PowerIndex.POWER_3_BLOCK -> {
                 return this.parallelRunning();
             }
-            case PowerIndex.POWER_4 -> {
+            case PowerIndex.POWER_4, PowerIndex.POWER_4_EXTRA -> {
                 return this.teleportToD4CWorld();
             }
             case PowerIndex.POWER_4_SNEAK -> {
@@ -839,7 +901,7 @@ public class PowersD4C extends PunchingStand {
 
     @Override
     public void updateUniqueMoves() {
-        if (this.getActivePower() == PowerIndex.POWER_4)
+        if (this.getActivePower() == PowerIndex.POWER_4 || this.getActivePower() == PowerIndex.POWER_4_EXTRA)
             updateTeleport();
 
         super.updateUniqueMoves();
