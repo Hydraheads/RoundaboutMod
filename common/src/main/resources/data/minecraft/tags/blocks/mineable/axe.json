@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "roundabout:regal_wall",
-    "roundabout:regal_floor"
+    "roundabout:regal_floor",
+    "roundabout:wooden_manor_table"
   ]
 }

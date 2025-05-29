@@ -27,8 +27,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ManorTableBlock extends CrossCollisionBlock {
-    private final VoxelShape[] occlusionByIndex;
 
+    protected static final VoxelShape SHAPE = Block.box(0.0, 15, 0.0, 16.0, 16.0, 16.0);
     public ManorTableBlock(BlockBehaviour.Properties $$0) {
         super(2.0F, 2.0F, 16.0F, 16.0F, 24.0F, $$0);
         this.registerDefaultState(
@@ -40,17 +40,26 @@ public class ManorTableBlock extends CrossCollisionBlock {
                         .setValue(WEST, Boolean.valueOf(false))
                         .setValue(WATERLOGGED, Boolean.valueOf(false))
         );
-        this.occlusionByIndex = this.makeShapes(2.0F, 1.0F, 16.0F, 6.0F, 15.0F);
     }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
-        return this.occlusionByIndex[this.getAABBIndex($$0)];
+        return SHAPE;
+    }
+
+
+    @Override
+    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+        return SHAPE;
     }
 
     @Override
+    public VoxelShape getCollisionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+        return SHAPE;
+    }
+    @Override
     public VoxelShape getVisualShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
-        return this.getShape($$0, $$1, $$2, $$3);
+        return SHAPE;
     }
 
     @Override
