@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -32,7 +33,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.RelativeMovement;
@@ -43,6 +46,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -90,10 +95,13 @@ public class PowersD4C extends PunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
         }
 
-        if (!isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+        if (isGuarding())
+            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.SKILL_EXTRA);
         else
-            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
+            if (!isHoldingSneak())
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+            else
+                setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
 
         if (!isHoldingSneak())
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
@@ -171,6 +179,9 @@ public class PowersD4C extends PunchingStand {
 
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
+        if (isPRunning)
+            return;
+
         if (isHoldingSneak() && !isGuarding())
         {
             if (MainUtil.getTargetEntity(this.getSelf(), 100, 2) instanceof D4CCloneEntity clone)
@@ -348,6 +359,8 @@ public class PowersD4C extends PunchingStand {
         CSU.roundabout$setOnStandFire(playerOnStandFire);
     }
 
+    public static int pRunningTimeLimit = 10;
+    private volatile boolean isPRunning = false;
     private boolean held3 = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
@@ -362,7 +375,18 @@ public class PowersD4C extends PunchingStand {
                     }
                     inputDash = true;
                 } else {
-                    super.buttonInput3(keyIsDown, options);
+                    if (isGuarding())
+                    {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA))
+                            if (isPRunning || isBetweenTwoThings(this.getSelf().blockPosition()))
+                            {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BLOCK);
+                                this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
+                            }
+                    }
+                    else
+                        super.buttonInput3(keyIsDown, options);
                 }
             }
         } else {
@@ -373,6 +397,9 @@ public class PowersD4C extends PunchingStand {
     private boolean held4 = false;
     @Override
     public void buttonInput4(boolean keyIsDown, Options options) {
+        if (isPRunning)
+            return;
+
         if (keyIsDown && !held4 && !(this.onCooldown(PowerIndex.SKILL_4)))
         {
             held4 = true;
@@ -408,6 +435,16 @@ public class PowersD4C extends PunchingStand {
             LocalPlayer player = client.player;
 
             if (player == null) return;
+            if (!(((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C))
+                return;
+
+            if (((StandUser)player).roundabout$isParallelRunning())
+            {
+                if (RPostShaderRegistry.DESATURATE != null)
+                {
+                    RPostShaderRegistry.DESATURATE.roundabout$process(partialTick);
+                }
+            }
 
             Level level = player.level();
 
@@ -559,6 +596,90 @@ public class PowersD4C extends PunchingStand {
         return true;
     }
 
+    private static MobEffectInstance pRunningEffect = new MobEffectInstance(MobEffects.INVISIBILITY, pRunningTimeLimit * 20, 1, true, false, false);
+
+    private Thread parallelThread = null;
+    // TODO: add a owner system for D4C light blocks, proper shader fx, better invis (instead of using potions), fov change, more polish
+    private boolean parallelRunning() {
+        if (isPRunning) {
+            if (parallelThread != null && parallelThread.isAlive()) {
+                parallelThread.interrupt();
+                Roundabout.LOGGER.info("Parallel running interrupted");
+            }
+            return false;
+        }
+
+        LivingEntity self = this.getSelf();
+        Level level = self.level();
+        BlockPos bottom = self.blockPosition();
+        BlockPos top = bottom.above();
+
+        double oldX = self.getX();
+        double oldY = self.getY();
+        double oldZ = self.getZ();
+
+        float yaw = self.getYHeadRot();
+        float pitch = self.getXRot();
+        float yRot = self.getYRot();
+
+        isPRunning = true;
+        ((StandUser) self).roundabout$setParallelRunning(true);
+
+        parallelThread = new Thread(() -> {
+            try {
+                Thread.sleep(pRunningTimeLimit * 1000L);
+            } catch (InterruptedException e) {
+            }
+
+            Runnable cleanup = () -> {
+                isPRunning = false;
+                ((StandUser) self).roundabout$setParallelRunning(false);
+
+                if (!level.isClientSide) {
+                    if (level.getBlockState(bottom).is(ModBlocks.D4C_LIGHT_BLOCK)) {
+                        level.setBlock(bottom, Blocks.AIR.defaultBlockState(), 3);
+                    }
+                    if (level.getBlockState(top).is(ModBlocks.D4C_LIGHT_BLOCK)) {
+                        level.setBlock(top, Blocks.AIR.defaultBlockState(), 3);
+                    }
+                }
+
+                if (!isBetweenTwoThings(self.blockPosition())) {
+                    self.teleportTo(oldX, oldY, oldZ);
+                    self.setXRot(pitch);
+                    self.setYHeadRot(yaw);
+                    self.setYBodyRot(yRot);
+                }
+
+                Roundabout.LOGGER.info("Stopped P Running");
+                setCooldown(PowerIndex.SKILL_EXTRA, pRunningTimeLimit + 5);
+            };
+
+            if (level.isClientSide) {
+                Minecraft.getInstance().execute(cleanup);
+            } else {
+                self.getServer().execute(cleanup);
+                self.removeEffect(MobEffects.INVISIBILITY);
+            }
+        });
+
+        parallelThread.start();
+
+        if (!level.isClientSide && self.getServer() != null) {
+            if (level.getBlockState(bottom).isAir()) {
+                level.setBlock(bottom, ModBlocks.D4C_LIGHT_BLOCK.defaultBlockState(), 3);
+            }
+
+            if (level.getBlockState(top).isAir()) {
+                level.setBlock(top, ModBlocks.D4C_LIGHT_BLOCK.defaultBlockState(), 3);
+            }
+
+            self.addEffect(pRunningEffect);
+        }
+
+        return true;
+    }
+
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
@@ -569,7 +690,7 @@ public class PowersD4C extends PunchingStand {
         switch (activeP)
         {
             case PowerIndex.SKILL_4, PowerIndex.SKILL_4_SNEAK, PowerIndex.SKILL_2, PowerIndex.SKILL_3 -> {
-                return !(isBetweenTwoThings());
+                return !(isBetweenTwoThings()) && (!isPRunning);
             }
         }
 
@@ -640,6 +761,9 @@ public class PowersD4C extends PunchingStand {
             }
             case PowerIndex.POWER_3 -> {
                 return this.meltDodge();
+            }
+            case PowerIndex.POWER_3_BLOCK -> {
+                return this.parallelRunning();
             }
             case PowerIndex.POWER_4 -> {
                 return this.teleportToD4CWorld();

@@ -227,4 +227,7 @@ public interface StandUser {
     double roundabout$getGravity(double baseGrav);
     void roundabout$adjustGravity();
 
+    /** D4C */
+    void roundabout$setParallelRunning(boolean value);
+    boolean roundabout$isParallelRunning();
 }

@@ -3,6 +3,8 @@ package net.hydra.jojomod.entity.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -36,6 +38,11 @@ public class D4CRenderer extends StandRenderer<D4CEntity> {
 
     @Override
     public void render(D4CEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+        if (mobEntity.getUser() != null)
+            if (((StandUser)mobEntity.getUser()).roundabout$isParallelRunning())
+                if (mobEntity.getUser() != Minecraft.getInstance().player)
+                    return;
+
         float factor = 0.5F + (mobEntity.getSizePercent()/2);
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);

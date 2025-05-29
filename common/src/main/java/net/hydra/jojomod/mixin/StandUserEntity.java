@@ -3218,4 +3218,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected float getJumpPower() {
         return 0;
     }
+
+    @Unique private boolean roundabout$isPRunning = false;
+
+    @Override
+    public void roundabout$setParallelRunning(boolean value) {
+        this.roundabout$isPRunning = value;
+    }
+
+    @Override
+    public boolean roundabout$isParallelRunning() {
+        if (roundabout$getStandPowers() instanceof PowersD4C)
+        {
+            return this.roundabout$isPRunning;
+        }
+        else
+        {
+            roundabout$isPRunning = false;
+            return false;
+        }
+    }
 }

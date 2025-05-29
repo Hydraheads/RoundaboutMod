@@ -24,6 +24,7 @@
     "ZBeehiveBlock",
     "ZBlaze",
     "ZBlock",
+    "ZBlockBehaviour",
     "ZBlockEntity",
     "ZBlockFaceContext",
     "ZBoat",
