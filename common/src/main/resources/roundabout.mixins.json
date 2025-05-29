@@ -16,6 +16,7 @@
     "ZAbstractArrow",
     "ZAbstractFurnaceBlockEntity",
     "ZAbstractFurnaceMenu",
+    "ZAbstractHorse",
     "ZAbstractSchoolingFish",
     "ZAllaySounds",
     "ZAnimal",
