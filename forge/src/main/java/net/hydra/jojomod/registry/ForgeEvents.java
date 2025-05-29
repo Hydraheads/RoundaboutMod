@@ -100,6 +100,7 @@ public class ForgeEvents {
 
         ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
         ModBlocks.REGAL_FLOOR = ForgeBlocks.REGAL_FLOOR.get();
+        ModBlocks.WOODEN_MANOR_TABLE = ForgeBlocks.WOODEN_MANOR_TABLE.get();
         ModBlocks.REGAL_WALL = ForgeBlocks.REGAL_WALL.get();
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();

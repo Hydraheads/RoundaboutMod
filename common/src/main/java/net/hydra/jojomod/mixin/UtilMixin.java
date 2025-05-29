@@ -15,6 +15,7 @@ public class UtilMixin {
     @Inject(method = "doFetchChoiceType(Lcom/mojang/datafixers/DSL$TypeReference;Ljava/lang/String;)Lcom/mojang/datafixers/types/Type;", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$doFetchChoiceType(DSL.TypeReference $$0, String $$1, CallbackInfoReturnable<Type<?>> cir) {
         if ($$1.contains("roundabout") || $$1.contains("stereo") || $$1.contains("stand_fire") || $$1.contains("mirror")
+                || $$1.contains("d4c")
                 || $$1.contains("bubble_scaffold")){
             cir.setReturnValue(null);
         }

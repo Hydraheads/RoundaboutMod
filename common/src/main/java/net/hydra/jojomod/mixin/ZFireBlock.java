@@ -68,5 +68,6 @@ public class ZFireBlock implements IFireBlock {
         this.roundabout$setFlammableBlock(ModBlocks.GASOLINE_SPLATTER, 15, 100);
         this.roundabout$setFlammableBlock(ModBlocks.REGAL_WALL, 5, 5);
         this.roundabout$setFlammableBlock(ModBlocks.REGAL_FLOOR, 5, 5);
+        this.roundabout$setFlammableBlock(ModBlocks.WOODEN_MANOR_TABLE, 5, 5);
     }
 }

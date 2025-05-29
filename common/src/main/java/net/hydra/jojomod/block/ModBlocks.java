@@ -30,6 +30,7 @@ public class ModBlocks {
     public static Block METEOR_BLOCK;
     public static Block REGAL_FLOOR;
     public static Block REGAL_WALL;
+    public static Block WOODEN_MANOR_TABLE;
     public static Block LOCACACA_CACTUS;
     public static Block LOCACACA_BLOCK;
     public static Block NEW_LOCACACA_BLOCK;
@@ -156,6 +157,12 @@ public class ModBlocks {
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
     );
     public static Block REGAL_FLOOR_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+    );
+    public static Block WOODEN_MANOR_TABLE_PROPERTIES = new ManorTableBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.HARP)

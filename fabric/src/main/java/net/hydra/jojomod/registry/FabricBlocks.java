@@ -26,6 +26,8 @@ public class FabricBlocks {
     );
     public static final Block REGAL_WALL = registerBlock("regal_wall", ModBlocks.REGAL_WALL_PROPERTIES
     );
+    public static final Block WOODEN_MANOR_TABLE = registerBlock("wooden_manor_table", ModBlocks.WOODEN_MANOR_TABLE_PROPERTIES
+    );
     public static final Block LOCACACA_CACTUS = registerBlock("locacaca_cactus", ModBlocks.LOCACACA_CACTUS_PROPERTIES
     );
     public static final Block LOCACACA_BLOCK = registerBlock("locacaca_plant", ModBlocks.LOCACACA_BLOCK_PROPERTIES
@@ -164,6 +166,7 @@ public class FabricBlocks {
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;
         ModBlocks.REGAL_WALL = REGAL_WALL;
+        ModBlocks.WOODEN_MANOR_TABLE = WOODEN_MANOR_TABLE;
         ModBlocks.LOCACACA_CACTUS = LOCACACA_CACTUS;
         ModBlocks.LOCACACA_BLOCK = LOCACACA_BLOCK;
         ModBlocks.NEW_LOCACACA_BLOCK = NEW_LOCACACA_BLOCK;

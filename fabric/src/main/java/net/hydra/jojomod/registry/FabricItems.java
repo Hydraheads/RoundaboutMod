@@ -246,6 +246,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.METEOR_BLOCK);
                         entries.accept(ModBlocks.REGAL_FLOOR);
                         entries.accept(ModBlocks.REGAL_WALL);
+                        entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
                         entries.accept(MUSIC_DISC_HALLELUJAH);

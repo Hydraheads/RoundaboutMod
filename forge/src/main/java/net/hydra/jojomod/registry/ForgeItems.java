@@ -75,6 +75,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.REGAL_FLOOR.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> WOODEN_MANOR_TABLE_ITEM = addToTab(ITEMS.register("wooden_manor_table",
+            () -> new BlockItem(ForgeBlocks.WOODEN_MANOR_TABLE.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToTab(ITEMS.register("locacaca_cactus",
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
