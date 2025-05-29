@@ -80,7 +80,10 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             if (entity instanceof Player player)
             {
                 if (player != Minecraft.getInstance().player)
+                {
+                    this.shadowRadius = 0.0f;
                     ci.cancel();
+                }
                 else
                 {
                     if (model instanceof AgeableListModel<?> ageableListModel)
@@ -94,7 +97,10 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         {
             if (entity instanceof Player)
                 if (model instanceof AgeableListModel<?> ageableListModel)
+                {
                     ((IAlphaModel)ageableListModel).roundabout$setAlpha(1.0f);
+                    this.shadowRadius = 0.5f;
+                }
         }
     }
 
