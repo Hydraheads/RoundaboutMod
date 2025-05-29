@@ -872,11 +872,11 @@
 
   "roundabout.soft_and_wet_plunder.none": "Plunder",
   "roundabout.soft_and_wet_plunder.sight": "Sight",
-  "roundabout.soft_and_wet_plunder.sight.desc": "Takes away eyesight from those who rely on vision until it pops.",
+  "roundabout.soft_and_wet_plunder.sight.desc": "Takes away eyesight from those who rely on vision after it pops, lasts a few seconds.",
   "roundabout.soft_and_wet_plunder.sound": "Sound",
   "roundabout.soft_and_wet_plunder.sound.desc": "Turns areas into sound-free zones, absorbs all sound and sound based attacks until it pops.",
   "roundabout.soft_and_wet_plunder.friction": "Friction",
-  "roundabout.soft_and_wet_plunder.friction.desc": "Takes friction from the ground making it slippery.",
+  "roundabout.soft_and_wet_plunder.friction.desc": "Takes friction from the ground making it slippery. Can also take friction from a mob to make it slippery on any block",
   "roundabout.soft_and_wet_plunder.items": "Items",
   "roundabout.soft_and_wet_plunder.items.desc": "Picks up items and brings them back to you.",
   "roundabout.soft_and_wet_plunder.mobs": "Mobs",
