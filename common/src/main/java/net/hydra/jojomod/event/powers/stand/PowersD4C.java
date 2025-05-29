@@ -32,6 +32,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -39,6 +41,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -87,10 +91,13 @@ public class PowersD4C extends PunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (!isHoldingSneak())
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.SKILL_1);
+        if (isGuarding())
+            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.SKILL_1_SNEAK);
         else
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_DIMENSION_KIDNAP, PowerIndex.SKILL_1_SNEAK);
+            if (!isHoldingSneak())
+                setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.SKILL_1);
+            else
+                setSkillIcon(context, x, y, 1, StandIcons.D4C_DIMENSION_KIDNAP, PowerIndex.SKILL_1);
 
         if (!isHoldingSneak() && !isGuarding())
             setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2);
@@ -135,14 +142,77 @@ public class PowersD4C extends PunchingStand {
         {
             held1 = true;
 
-            if (this.onCooldown(PowerIndex.SKILL_1))
-                return;
+            if (isGuarding())
+            {
+                if (this.onCooldown(PowerIndex.SKILL_1))
+                    return;
 
-            betweenVision = !betweenVision;
-            this.setCooldown(PowerIndex.SKILL_1, 20);
+                if (!isInD4CWorld())
+                    return;
+
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BLOCK);
+                this.setCooldown(PowerIndex.SKILL_1, 20);
+            }
+            else
+            {
+                if (!isHoldingSneak())
+                {
+                    if (this.onCooldown(PowerIndex.SKILL_1))
+                        return;
+
+                    betweenVision = !betweenVision;
+                    this.setCooldown(PowerIndex.SKILL_1, 20);
+                }
+            }
         } else if (!keyIsDown) {
             held1 = false;
         }
+    }
+
+    private boolean generateKey()
+    {
+        if (this.getSelf().level().isClientSide)
+            return true;
+
+        if (!isInD4CWorld())
+            return false;
+
+        Level level = this.getSelf().level();
+        StandEntity entity = getStandEntity(this.getSelf());
+
+        if (entity == null)
+            return false;
+
+        ((ServerLevel)level).sendParticles(
+                ParticleTypes.SONIC_BOOM,
+                entity.getX(),
+                entity.getY()+1.0f,
+                entity.getZ(),
+                1,
+                0.0f,
+                0.0f,
+                0.0f,
+                1.0f
+        );
+
+        ((ServerLevel)level).sendParticles(
+                ParticleTypes.END_ROD,
+                entity.getX(),
+                entity.getY()+1.0f,
+                entity.getZ(),
+                25,
+                0.2f,
+                0.4f,
+                0.2f,
+                0.3f
+        );
+
+        ItemStack stack = ModItems.INTERDIMENSIONAL_KEY.getDefaultInstance();
+        InterdimensionalKeyItem.setLinkedDimension(stack, this.getSelf().level().dimension().location());
+        ((ServerPlayer)this.getSelf()).addItem(stack);
+
+        return true;
     }
 
     private int betweenVisionTicks = 0;
@@ -801,6 +871,9 @@ public class PowersD4C extends PunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP)
         {
+            case PowerIndex.SKILL_1_SNEAK -> {
+                return (!isInD4CWorld());
+            }
             case PowerIndex.SKILL_4, PowerIndex.SKILL_4_SNEAK, PowerIndex.SKILL_2, PowerIndex.SKILL_3 -> {
                 return !(isBetweenTwoThings()) && (!isPRunning);
             }
@@ -846,6 +919,10 @@ public class PowersD4C extends PunchingStand {
                 );
     };
 
+    public boolean isInD4CWorld()
+    {
+        return (this.getSelf().level().dimension().location().toString().startsWith("roundabout:d4c-"));
+    }
 
     @Override
     public boolean isWip(){
@@ -868,6 +945,9 @@ public class PowersD4C extends PunchingStand {
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
+            case PowerIndex.POWER_1_BLOCK -> {
+                return this.generateKey();
+            }
             case PowerIndex.POWER_2 -> {
                 return this.spawnClone();
             }
