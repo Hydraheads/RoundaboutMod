@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ManorTableBlock extends CrossCollisionBlock {
 
-    protected static final VoxelShape SHAPE = Block.box(0.0, 15, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SHAPE = Block.box(0.0, 13, 0.0, 16.0, 16.0, 16.0);
     public ManorTableBlock(BlockBehaviour.Properties $$0) {
         super(2.0F, 2.0F, 16.0F, 16.0F, 24.0F, $$0);
         this.registerDefaultState(
