@@ -188,6 +188,7 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
+        this.animate(pEntity.parallelWorldWindupAnimationState, StandAnimations.TIMESTOP, pAgeInTicks, 1f);
     }
 
     @Override

@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -516,31 +517,50 @@ public class PowersD4C extends PunchingStand {
     public static HashMap<Integer, DynamicWorld> queuedWorldTransports = new HashMap<>();
     private boolean teleportToD4CWorld()
     {
-        if (this.getSelf().getServer() == null){
+        if (this.getSelf().getServer() == null)
             return false;
-        }
 
-        ServerLevel overworld = this.getSelf().getServer().overworld();
-        ServerPlayer player = (ServerPlayer)this.getSelf();
-        if (player.level() != player.getServer().overworld() && player.level().dimension().location().getNamespace().equals("roundabout"))
+        StandEntity thisEntity = getStandEntity(this.getSelf());
+        if (thisEntity != null)
         {
-            yoinkCurrency();
-            player.teleportTo(overworld.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
-            DynamicWorld.deregisterWorld(player.getServer(), player.level().dimension().location().getPath());
-
-            return true;
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_4);
+            this.animateStand((byte) 30);
+            this.poseStand(OffsetIndex.GUARD);
         }
 
-        DynamicWorld world = DynamicWorld.generateD4CWorld(player.getServer());
-        if (world.getLevel() != null)
+        return true;
+    }
+
+    private void updateTeleport()
+    {
+        if (this.getSelf().getServer() == null)
+            return;
+
+        if (attackTimeDuring > 39)
         {
-            yoinkCurrency();
-            queuedWorldTransports.put(player.getId(), world);
-            world.broadcastPacketsToPlayers(player.getServer());
-            return true;
-        }
+            attackTimeDuring = -1;
 
-        return false;
+            ServerLevel overworld = this.getSelf().getServer().overworld();
+            ServerPlayer player = (ServerPlayer)this.getSelf();
+            if (player.level() != player.getServer().overworld() && player.level().dimension().location().getNamespace().equals("roundabout"))
+            {
+                yoinkCurrency();
+                player.teleportTo(overworld.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                DynamicWorld.deregisterWorld(player.getServer(), player.level().dimension().location().getPath());
+
+                return;
+            }
+
+            DynamicWorld world = DynamicWorld.generateD4CWorld(player.getServer());
+            if (world.getLevel() != null)
+            {
+                yoinkCurrency();
+                queuedWorldTransports.put(player.getId(), world);
+                world.broadcastPacketsToPlayers(player.getServer());
+                return;
+            }
+        }
     }
 
     private boolean teleportToD4CWorldKidnap()
@@ -697,7 +717,7 @@ public class PowersD4C extends PunchingStand {
         return super.isAttackIneptVisually(activeP, slot);
     }
 
-    /** if = -1, not meld dodging */
+    /** if = -1, not melt dodging */
     public int meltDodgeTicks = -1;
 
     @Override
@@ -710,7 +730,7 @@ public class PowersD4C extends PunchingStand {
 
     }
 
-    /** Is the entity inbetween two tings? */
+    /** Is the entity inbetween two things? */
     @SuppressWarnings("deprecation") // isSolid()
     boolean isBetweenTwoThings()
     {
@@ -785,5 +805,13 @@ public class PowersD4C extends PunchingStand {
         }
 
         super.updateIntMove(in);
+    }
+
+    @Override
+    public void updateUniqueMoves() {
+        if (this.getActivePower() == PowerIndex.POWER_4)
+            updateTeleport();
+
+        super.updateUniqueMoves();
     }
 }

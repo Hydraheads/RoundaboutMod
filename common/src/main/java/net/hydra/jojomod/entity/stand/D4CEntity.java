@@ -32,6 +32,7 @@ public class D4CEntity extends StandEntity {
         }
     }
 
+    public final AnimationState parallelWorldWindupAnimationState = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
@@ -66,6 +67,11 @@ public class D4CEntity extends StandEntity {
             } else {
                 this.kick_barrage_end.stop();
             }
+
+            if (this.getAnimation() == 30)
+                this.parallelWorldWindupAnimationState.startIfStopped(this.tickCount);
+            else
+                this.parallelWorldWindupAnimationState.stop();
         }
     }
 
