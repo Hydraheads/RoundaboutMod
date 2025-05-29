@@ -204,4 +204,13 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         return 90.0F;
     }
 
+    @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
+    private void roundabout$shouldShowName(T entity, CallbackInfoReturnable<Boolean> cir)
+    {
+        if (((StandUser)entity).roundabout$isParallelRunning())
+        {
+            cir.setReturnValue(false);
+            cir.cancel();
+        }
+    }
 }

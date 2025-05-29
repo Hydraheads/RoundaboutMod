@@ -13,9 +13,11 @@ import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,6 +37,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 
@@ -54,23 +57,28 @@ public abstract class ZLevelRenderer {
     @Shadow
     protected abstract void renderHitOutline(PoseStack $$0, VertexConsumer $$1, Entity $$2, double $$3, double $$4, double $$5, BlockPos $$6, BlockState $$7);
 
-    @Shadow @Final private EntityRenderDispatcher entityRenderDispatcher;
+    @Shadow
+    @Final
+    private EntityRenderDispatcher entityRenderDispatcher;
 
-    @Shadow @Nullable public abstract RenderTarget entityTarget();
+    @Shadow
+    @Nullable
+    public abstract RenderTarget entityTarget();
 
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "HEAD"),
             cancellable = true)
-    private void roundabout$renderEntity(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci){
-        if ($$0 instanceof PreRenderEntity pre){
-            if (pre.preRender($$0,$$1,$$2,$$3,$$4,$$5,$$6)){
+    private void roundabout$renderEntity(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
+        if ($$0 instanceof PreRenderEntity pre) {
+            if (pre.preRender($$0, $$1, $$2, $$3, $$4, $$5, $$6)) {
                 ci.cancel();
             }
         }
 
     }
+
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 1,shift = At.Shift.BEFORE),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V", ordinal = 1, shift = At.Shift.BEFORE),
             cancellable = true)
     private void roundabout$shouldOutline(PoseStack poseStack, float $$1, long $$2, boolean $$3,
                                           Camera camera, GameRenderer gameRenderer, LightTexture $$6,
@@ -81,7 +89,7 @@ public abstract class ZLevelRenderer {
             StandPowers powers = sus.roundabout$getStandPowers();
             if (powers.isPiloting()) {
                 StandEntity piloting = powers.getPilotingStand();
-                if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
+                if (piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                     MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
                     if (this.minecraft.level != null) {
                         double d0 = 10;
@@ -103,11 +111,12 @@ public abstract class ZLevelRenderer {
             }
         }
     }
+
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "HEAD"))
     private void roundabout$renderLevelHead(PoseStack $$0, float $$1, long $$2, boolean $$3,
-                                        Camera $$4, GameRenderer $$5, LightTexture $$6,
-                                        Matrix4f $$7, CallbackInfo ci) {
+                                            Camera $$4, GameRenderer $$5, LightTexture $$6,
+                                            Matrix4f $$7, CallbackInfo ci) {
         ClientUtil.mirrorCycles = 0;
     }
 
@@ -115,8 +124,8 @@ public abstract class ZLevelRenderer {
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "TAIL"))
     private void roundabout$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
-                                          Camera $$4, GameRenderer $$5, LightTexture $$6,
-                                          Matrix4f $$7, CallbackInfo ci) {
+                                        Camera $$4, GameRenderer $$5, LightTexture $$6,
+                                        Matrix4f $$7, CallbackInfo ci) {
         RenderCallbackRegistry.roundabout$LEVEL_RENDER_FINISH(partialTick);
 
         Player player = Minecraft.getInstance().player;
@@ -126,43 +135,31 @@ public abstract class ZLevelRenderer {
             double $$11 = $$9.y();
             double $$12 = $$9.z();
             MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
-            this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource)$$20);
+            this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20);
         }
     }
 
     @Unique
-    public void roundabout$renderStringOnPlayer(Player $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6){
+    public void roundabout$renderStringOnPlayer(Player $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6) {
 
-        Entity entity = ((StandUser)$$0).roundabout$getBoundTo();
+        Entity entity = ((StandUser) $$0).roundabout$getBoundTo();
         if (entity != null) {
-            ClientUtil.roundabout$renderBound ($$0, $$4, $$5, $$6,entity,1.93F);
+            ClientUtil.roundabout$renderBound($$0, $$4, $$5, $$6, entity, 1.93F);
         }
 
     }
     /**This is also where red bind and other string-like moves will be rendered*/
 
-    // test the shader
-//    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER, ordinal = 0))
-//    private void roundabout$renderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
-//    {
-//        if (RCoreShader.roundabout$timestopProgram == null)
-//            return;
-//
-//        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-//        RenderSystem.setShader(()-> RCoreShader.roundabout$timestopProgram);
-//        RenderSystem.depthFunc(GL20C.GL_ALWAYS);
-//        RenderSystem.depthMask(false);
-//        RenderSystem.enableBlend();
-//
-//        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
-//        bufferbuilder.vertex(-0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 0).endVertex();
-//        bufferbuilder.vertex(0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 1).endVertex();
-//        bufferbuilder.vertex(0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1, 1).endVertex();
-//        bufferbuilder.vertex(-0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1, 0).endVertex();
-//        BufferUploader.drawWithShader(bufferbuilder.end());
-//
-//        RenderSystem.disableBlend();
-//        RenderSystem.depthMask(true);
-//        RenderSystem.depthFunc(GL20C.GL_LEQUAL);
-//    }
+    @Inject(method = "addParticleInternal(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)Lnet/minecraft/client/particle/Particle;", at=@At("HEAD"), cancellable = true)
+    private void roundabout$addParticle(ParticleOptions $$0, boolean $$1, boolean $$2, double $$3, double $$4, double $$5, double $$6, double $$7, double $$8, CallbackInfoReturnable<Particle> cir)
+    {
+        if (Minecraft.getInstance().player == null)
+            return;
+
+        if (((StandUser)Minecraft.getInstance().player).roundabout$isParallelRunning())
+        {
+            cir.setReturnValue(null);
+            cir.cancel();
+        }
+    }
 }
