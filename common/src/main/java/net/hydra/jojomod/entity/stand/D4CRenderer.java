@@ -3,7 +3,9 @@ package net.hydra.jojomod.entity.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -56,5 +58,18 @@ public class D4CRenderer extends StandRenderer<D4CEntity> {
     @Override
     protected RenderType getRenderType(D4CEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
         return super.getRenderType(entity, showBody, true, showOutline);
+    }
+
+    @Override
+    public float getStandOpacity(D4CEntity entity) {
+        float base = super.getStandOpacity(entity);
+
+        if (!entity.hasUser())
+            return base;
+
+        if (((StandUser)entity.getUser()).roundabout$isParallelRunning())
+            return base/2f;
+        else
+            return base;
     }
 }

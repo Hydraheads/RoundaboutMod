@@ -110,6 +110,7 @@
     "WorldTickClient",
     "ZAbstractFurnaceScreen",
     "ZAbstractZombieRenderer",
+    "ZAgeableListModel",
     "ZBannerRenderer",
     "ZBlockEntityClient",
     "ZBlockEntityRenderDispatcher",

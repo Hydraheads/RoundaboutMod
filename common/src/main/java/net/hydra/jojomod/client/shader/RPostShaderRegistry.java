@@ -16,7 +16,11 @@ public class RPostShaderRegistry {
 
     public static IPostChainAccessor D4C_DIMENSION_TRANSITION = null;
     public static IPostChainAccessor D4C_ALT_DIMENSION = null;
+
+    /** Super Secret Shaders */
     public static IPostChainAccessor DESATURATE = null;
+    public static IPostChainAccessor DECONVERGE = null;
+    public static IPostChainAccessor PHOSPHOR = null;
 
     public static void bootstrap()
     {
@@ -24,7 +28,11 @@ public class RPostShaderRegistry {
 
         D4C_DIMENSION_TRANSITION = register("d4cdimtransition");
         D4C_ALT_DIMENSION = register("d4caltdim");
+
+        /** Super Secret Shaders */
         DESATURATE = register("desaturate");
+        DECONVERGE = register("deconverge");
+        PHOSPHOR = register("phosphor");
     }
 
     public static @Nullable IPostChainAccessor register(String name)

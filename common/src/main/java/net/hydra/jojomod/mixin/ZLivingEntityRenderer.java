@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.IAlphaModel;
 import net.hydra.jojomod.entity.client.BigBubbleLayer;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -16,6 +17,9 @@ import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -68,9 +72,32 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+    private void roundabout$render(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         ClientUtil.savedPose = $$3.last().pose();
+
+        if (((StandUser)entity).roundabout$isParallelRunning())
+        {
+            if (entity instanceof Player player)
+            {
+                if (player != Minecraft.getInstance().player)
+                    ci.cancel();
+                else
+                {
+                    if (model instanceof AgeableListModel<?> ageableListModel)
+                        ((IAlphaModel)ageableListModel).roundabout$setAlpha(0.5f);
+                }
+            }
+            else
+                ci.cancel();
+        }
+        else
+        {
+            if (entity instanceof Player)
+                if (model instanceof AgeableListModel<?> ageableListModel)
+                    ((IAlphaModel)ageableListModel).roundabout$setAlpha(1.0f);
+        }
     }
+
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
     private void roundabout$init(EntityRendererProvider.Context $$0, EntityModel $$1, float $$2, CallbackInfo ci) {
         this.addLayer(new BigBubbleLayer<>($$0, ((LivingEntityRenderer)(Object)this)));

@@ -268,7 +268,7 @@ public class ZScreenShaking implements IGameRenderer {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             StandPowers SP = ((StandUser) player).roundabout$getStandPowers();
-            if (SP.scopeLevel > 0) {
+            if (SP.scopeLevel > 0 && (!((StandUser)player).roundabout$isParallelRunning())) {
                 ci.cancel();
             }
         }

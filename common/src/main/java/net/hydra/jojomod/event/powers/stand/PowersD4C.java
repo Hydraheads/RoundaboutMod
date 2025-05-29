@@ -108,6 +108,8 @@ public class PowersD4C extends PunchingStand {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
         else
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4_SNEAK);
+
+        fx.roundabout$onGUI(context);
     }
 
     private boolean held1 = false;
@@ -362,6 +364,7 @@ public class PowersD4C extends PunchingStand {
 
     public static int pRunningTimeLimit = 10;
     private volatile boolean isPRunning = false;
+    public int pRunningFrames = 0;
     private boolean held3 = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
@@ -441,9 +444,13 @@ public class PowersD4C extends PunchingStand {
             if (((StandUser)player).roundabout$isParallelRunning())
             {
                 if (RPostShaderRegistry.DESATURATE != null)
-                {
                     RPostShaderRegistry.DESATURATE.roundabout$process(partialTick);
-                }
+
+                if (RPostShaderRegistry.DECONVERGE != null)
+                    RPostShaderRegistry.DECONVERGE.roundabout$process(partialTick);
+
+                if (RPostShaderRegistry.PHOSPHOR != null)
+                    RPostShaderRegistry.PHOSPHOR.roundabout$process(partialTick);
             }
 
             Level level = player.level();
@@ -464,16 +471,38 @@ public class PowersD4C extends PunchingStand {
 
         @Override
         public void roundabout$GAME_RENDERER_FINISH(float tickDelta) {
-//            if (RRenderUtil.isUsingFabulous())
-//                return;
-//
-//            if (shouldShowDimensionFx)
-//            {
-//                if (RPostShaderRegistry.D4C_ALT_DIMENSION != null)
-//                {
-//                    RPostShaderRegistry.D4C_ALT_DIMENSION.roundabout$process(tickDelta);
-//                }
-//            }
+            if (Minecraft.getInstance().player == null)
+                return;
+
+            if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersD4C d4c)
+            {
+                if (((StandUser)Minecraft.getInstance().player).roundabout$isParallelRunning())
+                    d4c.pRunningFrames++;
+                else
+                    d4c.pRunningFrames = 0;
+            }
+        }
+
+        public void roundabout$onGUI(GuiGraphics graphics) {
+            if (Minecraft.getInstance().player == null)
+                return;
+
+            if (((StandUser) Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersD4C d4c) {
+                if (((StandUser) Minecraft.getInstance().player).roundabout$isParallelRunning()) {
+                    int whiteFlashFrameCount = 8;
+                    if (d4c.pRunningFrames < whiteFlashFrameCount) {
+                        float alpha = 1.0f - (d4c.pRunningFrames / (float) whiteFlashFrameCount);
+                        int alphaInt = (int) (alpha * 255);
+                        int color = (alphaInt << 24) | 0xFFFFFF;
+
+                        graphics.fill(0, 0,
+                                Minecraft.getInstance().getWindow().getWidth(),
+                                Minecraft.getInstance().getWindow().getHeight(),
+                                color
+                        );
+                    }
+                }
+            }
         }
 
         @Override
@@ -619,8 +648,6 @@ public class PowersD4C extends PunchingStand {
         return true;
     }
 
-    private static MobEffectInstance pRunningEffect = new MobEffectInstance(MobEffects.INVISIBILITY, pRunningTimeLimit * 20, 1, true, false, false);
-
     private Thread parallelThread = null;
     // TODO: add a owner system for D4C light blocks, proper shader fx, better invis (instead of using potions), fov change, more polish
     private boolean parallelRunning() {
@@ -647,6 +674,7 @@ public class PowersD4C extends PunchingStand {
 
         isPRunning = true;
         ((StandUser) self).roundabout$setParallelRunning(true);
+        this.scopeLevel = 3;
 
         parallelThread = new Thread(() -> {
             try {
@@ -674,6 +702,8 @@ public class PowersD4C extends PunchingStand {
                     self.setYBodyRot(yRot);
                 }
 
+                this.scopeLevel = 0;
+
                 Roundabout.LOGGER.info("Stopped P Running");
                 setCooldown(PowerIndex.SKILL_EXTRA, pRunningTimeLimit + 5);
             };
@@ -682,7 +712,6 @@ public class PowersD4C extends PunchingStand {
                 Minecraft.getInstance().execute(cleanup);
             } else {
                 self.getServer().execute(cleanup);
-                self.removeEffect(MobEffects.INVISIBILITY);
             }
         });
 
@@ -696,8 +725,6 @@ public class PowersD4C extends PunchingStand {
             if (level.getBlockState(top).isAir()) {
                 level.setBlock(top, ModBlocks.D4C_LIGHT_BLOCK.defaultBlockState(), 3);
             }
-
-            self.addEffect(pRunningEffect);
         }
 
         return true;
