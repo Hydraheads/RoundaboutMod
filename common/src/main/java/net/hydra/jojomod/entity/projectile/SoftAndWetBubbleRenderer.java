@@ -24,6 +24,7 @@ import org.joml.Vector3f;
 
 public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
+    private static final ResourceLocation MOB = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder_mob.png");
     private static final ResourceLocation BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble.png");
     private static final ResourceLocation GAS_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/gasoline_bubble.png");
     private static final ResourceLocation WATER_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/water_bubble.png");
@@ -120,6 +121,9 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
 
             if (sp.getActivated() && sp.getPlunderType() == PlunderTypes.OXYGEN.id){
                 return FIRE_BUBBLE;
+            }
+            if (sp.getActivated() && sp.getPlunderType() == PlunderTypes.MOBS.id){
+                return MOB;
             }
             return TEXTURE;
         }
