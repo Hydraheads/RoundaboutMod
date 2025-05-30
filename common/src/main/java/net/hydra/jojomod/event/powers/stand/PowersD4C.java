@@ -891,6 +891,9 @@ public class PowersD4C extends PunchingStand {
             case PowerIndex.SKILL_1_SNEAK -> {
                 return (!isInD4CWorld());
             }
+            case PowerIndex.SKILL_EXTRA -> {
+                return !(isBetweenTwoThings());
+            }
             case PowerIndex.SKILL_4, PowerIndex.SKILL_4_SNEAK, PowerIndex.SKILL_2, PowerIndex.SKILL_3 -> {
                 return !(isBetweenTwoThings()) && (!isPRunning);
             }
