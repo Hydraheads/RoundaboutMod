@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.*;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.client.PreRenderEntity;
@@ -69,12 +70,24 @@ public abstract class ZLevelRenderer {
             at = @At(value = "HEAD"),
             cancellable = true)
     private void roundabout$renderEntity(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
+        if ($$0 != null){
+            ((IEntityAndData)$$0).roundabout$setExclusiveLayers(true);
+        }
+
         if ($$0 instanceof PreRenderEntity pre) {
             if (pre.preRender($$0, $$1, $$2, $$3, $$4, $$5, $$6)) {
                 ci.cancel();
+                ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
             }
         }
 
+    }
+    @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
+            at = @At(value = "TAIL"))
+    private void roundabout$renderEntityEnd(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
+        if ($$0 != null){
+            ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
+        }
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",

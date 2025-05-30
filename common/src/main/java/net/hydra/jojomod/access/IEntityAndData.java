@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 public interface IEntityAndData {
 
     float roundabout$getPreTSTick();
+    void roundabout$setExclusiveLayers(boolean exclusive);
+    boolean roundabout$getExclusiveLayers();
 
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();

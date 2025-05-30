@@ -69,7 +69,7 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
-            if (((StandUser)entity).roundabout$isBubbleEncased()) {
+            if (((StandUser)entity).roundabout$isBubbleEncased() && ((IEntityAndData)entity).roundabout$getExclusiveLayers()) {
 
                 if (Minecraft.getInstance().screen != null && !(Minecraft.getInstance().screen instanceof NoCancelInputScreen)
                         && !(Minecraft.getInstance().screen instanceof PoseSwitcherScreen)){

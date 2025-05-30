@@ -74,7 +74,17 @@ public abstract class EntityAndData implements IEntityAndData {
     public @Nullable ItemStack roundabout$RenderOffHand;
     @Unique
     public int roundabout$noGravityTicks = 0;
+    @Unique
+    public boolean roundabout$renderingExclusiveLayers = false;
 
+    @Unique
+    public void roundabout$setExclusiveLayers(boolean exclusive){
+        this.roundabout$renderingExclusiveLayers = exclusive;
+    }
+    @Unique
+    public boolean roundabout$getExclusiveLayers(){
+        return this.roundabout$renderingExclusiveLayers;
+    }
     public void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest){
         this.roundabout$RenderChest = chest;
     }

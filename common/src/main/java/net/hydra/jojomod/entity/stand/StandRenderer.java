@@ -34,6 +34,8 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
      * to make sure stand lighting doesn't mess up when they clip through blocks.*/
     public StandRenderer(EntityRendererProvider.Context context, StandModel<T> entityModel, float f) {
         super(context, entityModel, f);
+        this.shadowRadius = 0;
+        this.shadowStrength = 0;
         this.addLayer(new StandHeldItemLayer<>(this, context.getItemInHandRenderer()));
     }
 
