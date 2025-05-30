@@ -102,6 +102,7 @@
   ],
   "client": [
     "CustomItemRendererMixin",
+    "D4CDisableBlockInteraction",
     "GeckolibCompatAttempt",
     "HudRendering",
     "InputEvents",
@@ -139,6 +140,7 @@
     "ZLevelRenderer",
     "ZLightTexture",
     "ZLivingEntityRenderer",
+    "ZMinecraftClient",
     "ZMobRenderer",
     "ZModelBakery",
     "ZMouseHandler",

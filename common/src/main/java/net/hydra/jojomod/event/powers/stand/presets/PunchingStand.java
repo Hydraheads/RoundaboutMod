@@ -104,6 +104,11 @@ public class PunchingStand extends DashPreset {
 
     @Override
     public boolean setPowerAttack(){
+        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
+        {
+            return false;
+        }
+
         if (this.activePowerPhase >= 3){
             this.activePowerPhase = 1;
         } else {
@@ -215,6 +220,11 @@ public class PunchingStand extends DashPreset {
 
     @Override
     public boolean setPowerBarrageCharge() {
+        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
+        {
+            return false;
+        }
+
         animateStand((byte) 11);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
@@ -237,6 +247,11 @@ public class PunchingStand extends DashPreset {
 
     @Override
     public boolean setPowerBarrage() {
+        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
+        {
+            return false;
+        }
+
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);

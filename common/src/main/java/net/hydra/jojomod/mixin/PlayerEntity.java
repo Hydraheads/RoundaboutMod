@@ -54,6 +54,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
@@ -1178,9 +1179,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     }
 
-    @Inject(method = "interactOn(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at=@At("HEAD"))
+    @Inject(method = "interactOn(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at=@At("HEAD"), cancellable = true)
     private void roundabout$interactOn(Entity $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir)
     {
+        if (((StandUser)(Player)(Object)this).roundabout$isParallelRunning())
+        {
+            cir.setReturnValue(InteractionResult.PASS);
+            cir.cancel();
+        }
+
         if (!$$0.level().isClientSide()) {
             if (!this.isSpectator()) {
                 ItemStack $$2 = this.getItemInHand($$1);
@@ -1205,7 +1212,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$getVoiceData().playIfKilled($$1);
         }
     }
-    @Inject(method = "attack", at=@At("HEAD"))
+    @Inject(method = "attack", at=@At("HEAD"), cancellable = true)
     private void roundabout$attack(Entity $$0, CallbackInfo ci)
     {
         if (roundabout$getVoiceData() != null){
@@ -1235,6 +1242,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 cir.setReturnValue(false);
                 cir.cancel();
             }
+        }
+    }
+
+    @Inject(method = "blockActionRestricted", at = @At("HEAD"), cancellable = true)
+    private void roundabout$disableBlockBreaking(Level level, BlockPos pos, GameType gameType, CallbackInfoReturnable<Boolean> cir)
+    {
+        if (((StandUser)(Player)(Object)this).roundabout$isParallelRunning())
+        {
+            cir.setReturnValue(true);
+            cir.cancel();
         }
     }
 }
