@@ -14,9 +14,11 @@ out vec2 texCoord0;
 out vec4 worldCoordinate;
 
 void main() {
+    vec4 worldPos = vec4(Position + ChunkOffset + CameraPosition, 1.0);
+
     gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
 
     vertexColor = Color;
     texCoord0 = UV0;
-    worldCoordinate = ProjMat * vec4(Position + ChunkOffset + CameraPosition, 1.0);
+    worldCoordinate = worldPos;
 }

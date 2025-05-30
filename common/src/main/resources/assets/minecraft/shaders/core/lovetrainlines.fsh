@@ -9,8 +9,7 @@ in vec4 worldCoordinate;
 
 out vec4 fragColor;
 
-void main()
-{
+void main() {
     vec2 uv = worldCoordinate.xy * 0.5;
 
     float speed = 0.005;
