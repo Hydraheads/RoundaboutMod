@@ -32,6 +32,7 @@ public class StandHudRender {
                                       int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                       float flashAlpha, float otherFlashAlpha) {
         if (playerEntity != null) {
+            RenderSystem.enableBlend();
             int x = 0;
             int y = 0;
 
@@ -64,10 +65,7 @@ public class StandHudRender {
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
 
 
-
-                RenderSystem.enableBlend();
                 ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
-                RenderSystem.disableBlend();
 
 
                 context.setColor(1.0f, 1.0f, 1.0f, 1f);

@@ -603,7 +603,6 @@ public class StandPowers {
                 if (!cd.isFrozen())
                     context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
 
-                RenderSystem.disableBlend();
             }
             context.setColor(1f, 1f, 1f, 0.9f);
         } else {

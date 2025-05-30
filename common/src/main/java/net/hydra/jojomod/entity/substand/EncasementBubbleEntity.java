@@ -165,7 +165,7 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
         return standUser;
     }
     protected float getEyeHeight(Pose $$0, EntityDimensions $$1) {
-        return 0;
+        return 0.15F;
     }
     public void popBubble(){
         if (!this.level().isClientSide()){
