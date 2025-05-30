@@ -10,7 +10,7 @@ float LinearizeDepth(in vec2 uv)
 {
     float zNear = 0.005;
     float zFar  = 12.0;
-    float depth = texture2D(MainDepthSampler, uv).r * 2 - 1;
+    float depth = texture(MainDepthSampler, uv).r * 2 - 1;
     return (2.0 * zNear) / (zFar + zNear - depth * (zFar - zNear));
 }
 
