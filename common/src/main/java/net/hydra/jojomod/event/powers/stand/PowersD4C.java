@@ -120,10 +120,16 @@ public class PowersD4C extends PunchingStand {
                 setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
 
         if (!InterdimensionalKeyItem.isLinked(this.getSelf().getOffhandItem()))
-            if (!isHoldingSneak())
-                setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+            if (!isInD4CWorld())
+                if (!isHoldingSneak())
+                    setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+                else
+                    setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
             else
-                setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+                if (!isHoldingSneak())
+                    setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_RETURN, PowerIndex.SKILL_4);
+                else
+                    setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_RETURN, PowerIndex.SKILL_4);
         else
             if (!isHoldingSneak())
                 setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_KEY, PowerIndex.SKILL_EXTRA_2);

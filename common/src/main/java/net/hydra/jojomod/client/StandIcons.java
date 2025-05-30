@@ -267,6 +267,7 @@ public class StandIcons {
     public static final ResourceLocation D4C_CLONE_SWAP = Roundabout.location("textures/gui/icons/d4c/clone_swap.png");
     public static final ResourceLocation D4C_MELT_DODGE = Roundabout.location("textures/gui/icons/d4c/melt_dodge.png");
     public static final ResourceLocation D4C_DIMENSION_HOP = Roundabout.location("textures/gui/icons/d4c/dimension_hop.png");
+    public static final ResourceLocation D4C_DIMENSION_RETURN = Roundabout.location("textures/gui/icons/d4c/dimension_hop_return.png");
     public static final ResourceLocation D4C_CLONE_MINING = Roundabout.location("textures/gui/icons/d4c/clone_mining.png");
     public static final ResourceLocation D4C_DIMENSION_HOP_KEY = Roundabout.location("textures/gui/icons/d4c/dimension_hop_key.png");
     public static final ResourceLocation D4C_GENERATE_KEY = Roundabout.location("textures/gui/icons/d4c/key_generation.png");
