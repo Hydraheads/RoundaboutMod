@@ -28,6 +28,7 @@ public class ForgeAckDynamicWorld {
                 DynamicWorld world = PowersD4C.queuedWorldTransports.remove(player.getId());
                 if (world != null && world.getLevel() != null) {
                     player.teleportTo(world.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                    ((StandUser)player).roundabout$summonStand(world.getLevel(), true, false);
                 }
             }
         });

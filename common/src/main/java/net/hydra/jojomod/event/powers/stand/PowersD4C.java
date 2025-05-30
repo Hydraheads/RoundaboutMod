@@ -700,6 +700,7 @@ public class PowersD4C extends PunchingStand {
                 ServerPlayer player = (ServerPlayer)this.getSelf();
 
                 player.teleportTo(oldLevel, player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                ((StandUser)player).roundabout$summonStand(oldLevel, true, false);
                 return;
             }
         }
@@ -724,7 +725,8 @@ public class PowersD4C extends PunchingStand {
                 if (player.level() != player.getServer().overworld() && player.level().dimension().location().getNamespace().equals("roundabout"))
                 {
                     yoinkCurrency();
-                    player.teleportTo(overworld.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                    player.teleportTo(overworld, player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                    ((StandUser)player).roundabout$summonStand(overworld, true, false);
                     DynamicWorld.deregisterWorld(player.getServer(), player.level().dimension().location().getPath());
 
                     return;
