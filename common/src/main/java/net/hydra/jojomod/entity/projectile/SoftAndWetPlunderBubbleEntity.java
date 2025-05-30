@@ -148,6 +148,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
                                     ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
                                 this.level().setBlockAndUpdate($$0.getBlockPos(), this.level().getBlockState($$0.getBlockPos()).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(false)));
+
+                                if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                        ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                                    this.level().setBlock(this.blockPosition(), Blocks.AIR.defaultBlockState(), 11);
+                                    stolenPhysicalLiquid = true;
+                                }
                                 this.setLiquidStolen(2);
                                 setFloating();
                             }
@@ -156,6 +162,13 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
                                     ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
                                 this.level().setBlockAndUpdate($$0.getBlockPos().relative($$0.getDirection()), this.level().getBlockState($$0.getBlockPos().relative($$0.getDirection())).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(false)));
+
+                                if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                        ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                                    this.level().setBlock(this.blockPosition(), Blocks.AIR.defaultBlockState(), 11);
+                                    stolenPhysicalLiquid = true;
+                                }
+
                                 this.setLiquidStolen(2);
                                 setFloating();
                             }
