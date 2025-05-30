@@ -48,6 +48,8 @@ public class ClientConfig {
     public ClientConfig.DynamicSettings dynamicSettings;
     @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
+    @NestedOption(group="modded")
+    public ClientConfig.Experiments experiments;
 
     private ClientConfig() {
     }
@@ -98,4 +100,8 @@ public class ClientConfig {
         public Boolean simpleTimeStopShader;
     }
 
+    public static class Experiments {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean d4cShouldUseColorShader;
+    }
 }

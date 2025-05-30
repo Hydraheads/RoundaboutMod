@@ -23,6 +23,8 @@ import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.InterdimensionalKeyItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.ClientConfig;
+import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.client.Minecraft;
@@ -542,7 +544,8 @@ public class PowersD4C extends PunchingStand {
             if (RRenderUtil.isUsingFabulous())
                 return;
 
-            if (shouldShowDimensionFx && ClientNetworking.getAppropriateConfig().experiments.d4cShouldUseColorShader)
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            if (shouldShowDimensionFx && clientConfig.experiments.d4cShouldUseColorShader)
             {
                 if (RPostShaderRegistry.D4C_ALT_DIMENSION != null)
                 {
