@@ -94,7 +94,7 @@ public class PowersD4C extends PunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding())
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.SKILL_1_SNEAK);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_GENERATE_KEY, PowerIndex.SKILL_1_SNEAK);
         else
             if (!isHoldingSneak())
                 setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.SKILL_1);
@@ -108,11 +108,11 @@ public class PowersD4C extends PunchingStand {
         }
         else
         {
-            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
+            setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_MINING, PowerIndex.SKILL_1);
         }
 
         if (isGuarding())
-            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_PARALLEL_RUNNING, PowerIndex.SKILL_EXTRA);
         else
             if (!isHoldingSneak())
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
@@ -126,9 +126,9 @@ public class PowersD4C extends PunchingStand {
                 setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
         else
             if (!isHoldingSneak())
-                setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_KEY, PowerIndex.SKILL_EXTRA_2);
             else
-                setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_KEY, PowerIndex.SKILL_EXTRA_2);
 
         fx.roundabout$onGUI(context);
     }

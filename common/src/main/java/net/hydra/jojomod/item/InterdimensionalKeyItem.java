@@ -24,7 +24,6 @@ public class InterdimensionalKeyItem extends Item {
     public static ResourceLocation getLinkedDimension(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains(LINKED_DIM_KEY)) {
-            Roundabout.LOGGER.info(tag.getString(LINKED_DIM_KEY));
             return ResourceLocation.tryParse(tag.getString(LINKED_DIM_KEY));
         }
         return EMPTY;
