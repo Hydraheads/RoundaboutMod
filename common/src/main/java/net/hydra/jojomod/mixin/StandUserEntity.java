@@ -65,6 +65,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CactusBlock;
+import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -2529,6 +2530,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected void rooundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
         if (this.roundabout$isClashing()) {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$fallOn(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
+        if (roundabout$isBubbleEncased()){
+            if (!this.level().isClientSide() && $$2.getBlock() instanceof PointedDripstoneBlock){
+                roundabout$setBubbleEncased((byte) 0);
+                this.level().playSound(null, $$3, ModSounds.BUBBLE_POP_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                        5, 0.25, 0.25, 0.25, 0.025);
+            }
         }
     }
 
