@@ -48,8 +48,10 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public StandEntity getNewStandEntity(){
         byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (sk == SoftAndWetEntity.KING_SKIN){
+        if (sk == SoftAndWetEntity.KING_SKIN) {
             return ModEntities.SOFT_AND_WET_KING.create(this.getSelf().level());
+        } else if (sk == SoftAndWetEntity.DEBUT){
+                return ModEntities.SOFT_AND_WET_DEBUT.create(this.getSelf().level());
         } else if (sk == SoftAndWetEntity.DROWNED_SKIN
         || sk == SoftAndWetEntity.DROWNED_SKIN_2){
             return ModEntities.SOFT_AND_WET_DROWNED.create(this.getSelf().level());
@@ -114,6 +116,7 @@ public class PowersSoftAndWet extends PunchingStand {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(SoftAndWetEntity.LIGHT_SKIN);
         $$1.add(SoftAndWetEntity.MANGA_SKIN);
+        $$1.add(SoftAndWetEntity.DEBUT);
         $$1.add(SoftAndWetEntity.STRIPED);
         $$1.add(SoftAndWetEntity.FIGURE_SKIN);
         $$1.add(SoftAndWetEntity.DROWNED_SKIN);

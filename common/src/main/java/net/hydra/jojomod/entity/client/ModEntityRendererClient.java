@@ -19,6 +19,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation SOFT_AND_WET_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_KING_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_king"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_DROWNED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_drowned"), "main");
+    public static final ModelLayerLocation SOFT_AND_WET_DEBUT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_debut"), "main");
     public static final ModelLayerLocation KILLER_QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "killer_queen"), "main");
     public static final ModelLayerLocation CINDERELLA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "cinderella"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");

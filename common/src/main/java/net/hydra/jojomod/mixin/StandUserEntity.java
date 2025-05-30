@@ -2573,6 +2573,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             /**Big bubble pops*/
             if (roundabout$isBubbleEncased()){
                 if ($$0.getEntity() != null || $$0.is(DamageTypes.THORNS) || $$0.is(DamageTypes.ARROW)
+                        || $$0.is(DamageTypes.STALAGMITE) || $$0.is(DamageTypes.FALLING_STALACTITE)
                         || $$0.is(DamageTypes.THROWN) || $$0.is(ModDamageTypes.KNIFE)
                         || $$0.is(DamageTypes.CACTUS) || $$0.is(ModDamageTypes.THROWN_OBJECT)
                         || $$0.is(ModDamageTypes.BARBED_WIRE) || $$0.is(ModDamageTypes.STATUE)){
