@@ -69,7 +69,7 @@ public class SoftAndWetDebutModel<T extends SoftAndWetEntity> extends StandModel
 
         PartDefinition upper_left_arm_r1 = upper_left_arm.addOrReplaceChild("upper_left_arm_r1", CubeListBuilder.create().texOffs(26, 58).addBox(-0.5F, -3.5F, -2.0F, 1.0F, 6.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(2.9F, 1.55F, 0.0F, 0.0F, 0.0F, -0.2182F));
 
-        PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(35, 70).addBox(-2.5F, -6.0F, -2.025F, 5.0F, 1.0F, 4.0F, new CubeDeformation(-0.002F))
+        PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(35, 70).addBox(-2.5F, -6.175F, -2.025F, 5.0F, 1.0F, 4.0F, new CubeDeformation(-0.002F))
                 .texOffs(0, 32).addBox(-4.0F, -5.0F, -2.0F, 8.0F, 5.0F, 4.0F, new CubeDeformation(0.4F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
