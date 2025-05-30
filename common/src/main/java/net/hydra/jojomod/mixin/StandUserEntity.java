@@ -65,6 +65,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CactusBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
@@ -2574,6 +2575,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (roundabout$isBubbleEncased()){
                 if ($$0.getEntity() != null || $$0.is(DamageTypes.THORNS) || $$0.is(DamageTypes.ARROW)
                         || $$0.is(DamageTypes.STALAGMITE) || $$0.is(DamageTypes.FALLING_STALACTITE)
+                        || $$0.is(DamageTypes.SWEET_BERRY_BUSH)
                         || $$0.is(DamageTypes.THROWN) || $$0.is(ModDamageTypes.KNIFE)
                         || $$0.is(DamageTypes.CACTUS) || $$0.is(ModDamageTypes.THROWN_OBJECT)
                         || $$0.is(ModDamageTypes.BARBED_WIRE) || $$0.is(ModDamageTypes.STATUE)){
@@ -2606,7 +2608,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         || stack.getItem() instanceof KnifeItem || stack.getItem() instanceof AxeItem
                         || stack.getItem() instanceof GlaiveItem
                         || (stack.getItem() instanceof BlockItem BI && (BI.getBlock() instanceof CactusBlock
-                || BI.getBlock() instanceof GoddessStatueBlock|| BI.getBlock() instanceof BarbedWireBlock))) {
+                || BI.getBlock() instanceof GoddessStatueBlock || BI.getBlock() instanceof SweetBerryBushBlock || BI.getBlock() instanceof BarbedWireBlock))) {
                     roundabout$setBubbleEncased((byte) 0);
                     this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                             SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
