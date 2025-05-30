@@ -1,12 +1,15 @@
 package net.hydra.jojomod.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.access.IGameRenderer;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.IAlphaModel;
+import net.hydra.jojomod.client.shader.RCoreShader;
 import net.hydra.jojomod.entity.client.BigBubbleLayer;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -28,6 +31,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,8 +75,13 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         return $$0 | $$1;
     }
 
+    @Unique private boolean roundabout$isRenderingYellowLines = false;
+
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$render(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+//        if (roundabout$isRenderingYellowLines)
+//            return;
+
         ClientUtil.savedPose = $$3.last().pose();
 
         if (((StandUser)entity).roundabout$isParallelRunning())
@@ -102,6 +111,10 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     this.shadowRadius = 0.5f;
                 }
         }
+
+//        if (!ci.isCancelled()) {
+//            roundabout$isRenderingYellowLines = true;
+//        }
     }
 
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
@@ -111,6 +124,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Nullable
     public RenderType roundabout$getRenderType(LivingEntity $$0, boolean $$1, boolean $$2, boolean $$3) {
+//        if (roundabout$isRenderingYellowLines)
+//        {
+//            return RenderType.translucent();
+//        }
+
         ResourceLocation $$4 = this.getTextureLocation((T) $$0);
         if ($$2) {
             return RenderType.itemEntityTranslucentCull($$4);
@@ -185,6 +203,52 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             );
         }
     }
+
+//    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+//            at = @At(value = "INVOKE",
+//                    target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V",
+//                    shift = At.Shift.AFTER))
+//    private void roundabout$renderYellowLines(T entity, float $$1, float $$2, PoseStack matrices, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+//        if (roundabout$isRenderingYellowLines) {
+//            roundabout$isRenderingYellowLines = false;
+//
+//            matrices.pushPose();
+//
+//            float scale = 1.05f;
+//            float height = entity.getBbHeight();
+//
+//            matrices.translate(0, height, 0);
+//            matrices.scale(-1f, -1f, 1f);
+//            matrices.scale(scale, scale, scale);
+//
+//            RenderSystem.enableDepthTest();
+//            RenderSystem.depthMask(true);
+//            RenderSystem.enableBlend();
+//            RenderSystem.defaultBlendFunc();
+//
+//            RenderSystem.setShader(() -> RCoreShader.roundabout$loveTrainProgram);
+//            RenderSystem.setShaderTexture(0, 0);
+//            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+//
+//            RCoreShader.roundabout$loveTrainProgram.getUniform("FrameCount").set(((IGameRenderer) Minecraft.getInstance().gameRenderer).roundabout$getFrameCount());
+//
+//            Tesselator tesselator = Tesselator.getInstance();
+//            BufferBuilder buffer = tesselator.getBuilder();
+//            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY);
+//
+//            model.renderToBuffer(
+//                    matrices,
+//                    buffer,
+//                    $$5,
+//                    OverlayTexture.NO_OVERLAY,
+//                    1f, 1f, 0f, 1f
+//            );
+//
+//            tesselator.end();
+//
+//            matrices.popPose();
+//        }
+//    }
 
     @Inject(method = "getOverlayCoords", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$GetOverlayCoords(LivingEntity $$0, float $$1, CallbackInfoReturnable<Integer> ci) {
