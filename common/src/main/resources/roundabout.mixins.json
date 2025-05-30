@@ -95,6 +95,8 @@
     "ZZombie",
     "ZZombieVillager",
     "dworlds.ChunkGeneratorD4CMixin",
+    "dworlds.D4CDimensionArgument",
+    "dworlds.D4CStopLogger",
     "dworlds.RegistryMixin",
     "dworlds.ServerAccessorMixin"
   ],
