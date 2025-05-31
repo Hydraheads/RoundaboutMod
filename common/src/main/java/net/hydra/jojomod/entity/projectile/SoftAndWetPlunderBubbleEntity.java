@@ -643,10 +643,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 }
                                 super.onHitEntity($$0);
                             }
-                        } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
+                        } else if (this.getPlunderType() == PlunderTypes.OXYGEN.id && !($$0.getEntity().getId() == getUserID())) {
                             $$0.getEntity().setRemainingFireTicks($$0.getEntity().getRemainingFireTicks()+fireTicks);
                             super.onHitEntity($$0);
-                        } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id) {
+                        } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id && !($$0.getEntity().getId() == getUserID())) {
                             if (getLiquidStolen() == 1) {
                                 splashGas($$0.getEntity());
                                 finishedUsingLiquid = true;
