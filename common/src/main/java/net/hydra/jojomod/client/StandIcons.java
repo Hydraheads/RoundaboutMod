@@ -121,6 +121,10 @@ public class StandIcons {
             "textures/gui/icons/soft_and_wet/bubble_fill_pop.png");
     public static final ResourceLocation PLUNDER_BUBBLE_FILL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/plunder_bubble_fill.png");
+    public static final ResourceLocation SOFT_SHOOTING_MODE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/shooting_mode.png");
+    public static final ResourceLocation SOFT_SHOOTING_MODE_EXIT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/shooting_mode_exit.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_VAULT = new ResourceLocation(Roundabout.MOD_ID,

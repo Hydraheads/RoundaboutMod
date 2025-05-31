@@ -213,7 +213,18 @@ public class PowersSoftAndWet extends PunchingStand {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
 
-        setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+        } else if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+        } else {
+            if (true == true) {
+                setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
+            }
+        }
+
     }
 
     /**For mob ai, change the bubbleType before trypower to set what kind of plunder it has*/
