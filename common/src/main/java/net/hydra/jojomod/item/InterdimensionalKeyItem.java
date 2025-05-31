@@ -79,6 +79,9 @@ public class InterdimensionalKeyItem extends Item {
                         : Component.translatable("item.roundabout.interdimensional_key.unlinked")
         );
 
+        if (tooltipFlag.isAdvanced())
+            hoverText.add(Component.literal("§8§o"+getLinkedDimension(stack).toString()+"§r"));
+
         super.appendHoverText(stack, level, hoverText, tooltipFlag);
     }
 }
