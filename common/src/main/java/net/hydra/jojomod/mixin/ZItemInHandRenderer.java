@@ -50,7 +50,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemInHandRenderer.class)
-public class ZItemInHandRenderer {
+public abstract class ZItemInHandRenderer {
 
     @Shadow
     private void applyItemArmTransform(PoseStack poseStack, HumanoidArm humanoidArm, float f) {
@@ -72,6 +72,8 @@ public class ZItemInHandRenderer {
     private float offHandHeight;
     @Shadow
     private float oOffHandHeight;
+
+    @Shadow protected abstract void renderPlayerArm(PoseStack $$0, MultiBufferSource $$1, int $$2, float $$3, float $$4, HumanoidArm $$5);
 
     float d1 = 1;
     float d2 = -0.3F;
@@ -207,6 +209,21 @@ public class ZItemInHandRenderer {
         if (abstractClientPlayer.isScoping()) {
             return;
         }
+
+        if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getCombatMode() && !abstractClientPlayer.isUsingItem()){
+            poseStack.pushPose();
+            boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
+            HumanoidArm humarm = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+            if ($$10 && !abstractClientPlayer.isInvisible()) {
+                this.renderPlayerArm(poseStack, multiBufferSource, j, i, h, humarm);
+            }
+            poseStack.popPose();
+            ci.cancel();
+            return;
+        }
+
+
+
         if (!itemStack.isEmpty()) {
             if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
 
