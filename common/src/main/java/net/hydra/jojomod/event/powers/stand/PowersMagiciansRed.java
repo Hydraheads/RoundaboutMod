@@ -107,6 +107,10 @@ public class PowersMagiciansRed extends PunchingStand {
         return 500;
     }
 
+    @Override
+    public float getShovelMiningSpeed() {
+        return 9F;
+    }
     public float bumpDamage(float baseDamage, boolean isActive){
         if (isActive) {
             return baseDamage * 1.4F;
