@@ -1,0 +1,38 @@
+{
+  "parent": "roundabout:roundabout/root",
+  "criteria": {
+    "stand_arrow": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "roundabout:stand_arrow"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.roundabout.stand_arrow.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "roundabout:stand_arrow"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.roundabout.stand_arrow.title"
+    }
+  },
+  "requirements": [
+    [
+      "stand_arrow"
+    ]
+  ]
+}

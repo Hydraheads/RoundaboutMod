@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "meteorite": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "roundabout:meteorite"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.roundabout.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "roundabout:meteorite"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.roundabout.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "meteorite"
+    ]
+  ]
+}

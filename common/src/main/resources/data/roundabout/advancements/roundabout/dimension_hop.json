@@ -1,4 +1,5 @@
 {
+  "parent": "roundabout:roundabout/stand_arrow",
   "criteria": {
     "dimension_hopped": {
       "trigger": "roundabout:dimension_hop"
