@@ -677,6 +677,8 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean tryChargedPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_2 || move == PowerIndex.POWER_1_SNEAK) {
             bubbleType = (byte)chargeTime;
+        } else if (move == PowerIndex.SNEAK_ATTACK) {
+            this.chargedFinal = chargeTime;
         }
         return super.tryChargedPower(move, forced, chargeTime);
     }
@@ -801,11 +803,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public float getKickAttackKnockback(){
-        if (chargedFinal >= maxSuperHitTime) {
-            return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
-        } else {
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*1.5F);
-        }
+        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.2F);
     }
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
@@ -864,6 +862,9 @@ public class PowersSoftAndWet extends PunchingStand {
 
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            if (chargedFinal >= maxSuperHitTime && entity instanceof LivingEntity) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, pitch);
+            }
         }
     }
 
@@ -875,7 +876,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public SoundEvent getKickAttackSound(){
-        return ModSounds.FINAL_KICK_EVENT;
+        return ModSounds.SOFT_AND_WET_KICK_EVENT;
     }
     public int getKickAttackKnockShieldTime(){
         return 100;

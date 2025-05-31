@@ -80,6 +80,8 @@ public class FabricSounds {
         addSound(ModSounds.KNIFE_BUNDLE_THROW_SOUND_ID, ModSounds.KNIFE_BUNDLE_THROW_SOUND_EVENT);
         addSound(ModSounds.KNIFE_IMPACT_ID, ModSounds.KNIFE_IMPACT_EVENT);
         addSound(ModSounds.KNIFE_IMPACT_GROUND_ID, ModSounds.KNIFE_IMPACT_GROUND_EVENT);
+        addSound(ModSounds.SOFT_AND_WET_KICK_ID, ModSounds.SOFT_AND_WET_KICK_EVENT);
+        addSound(ModSounds.WATER_ENCASE_ID, ModSounds.WATER_ENCASE_EVENT);
 
         addSound(ModSounds.FOG_MORPH_ID, ModSounds.FOG_MORPH_EVENT);
         addSound(ModSounds.CACKLE_ID, ModSounds.CACKLE_EVENT);

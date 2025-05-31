@@ -166,6 +166,13 @@ public class ModSounds {
     public static final ResourceLocation SOFT_AND_WET_BARRAGE_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_AND_WET_BARRAGE_2);
     public static SoundEvent SOFT_AND_WET_BARRAGE_2_EVENT = SoundEvent.createVariableRangeEvent(SOFT_AND_WET_BARRAGE_2_ID);
 
+    public static final String WATER_ENCASE = "water_encase";
+    public static final ResourceLocation WATER_ENCASE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WATER_ENCASE);
+    public static SoundEvent WATER_ENCASE_EVENT = SoundEvent.createVariableRangeEvent(WATER_ENCASE_ID);
+
+    public static final String SOFT_AND_WET_KICK = "soft_and_wet_kick";
+    public static final ResourceLocation SOFT_AND_WET_KICK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_AND_WET_KICK);
+    public static SoundEvent SOFT_AND_WET_KICK_EVENT = SoundEvent.createVariableRangeEvent(SOFT_AND_WET_KICK_ID);
     public static final String KNIFE_IMPACT_GROUND = "knife_impact_ground";
     public static final ResourceLocation KNIFE_IMPACT_GROUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KNIFE_IMPACT_GROUND);
     public static SoundEvent KNIFE_IMPACT_GROUND_EVENT = SoundEvent.createVariableRangeEvent(KNIFE_IMPACT_GROUND_ID);

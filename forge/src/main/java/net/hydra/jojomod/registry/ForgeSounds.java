@@ -55,6 +55,10 @@ public class ForgeSounds {
             register(ModSounds.SOFT_AND_WET_BARRAGE, ModSounds.SOFT_AND_WET_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> SOFT_AND_WET_BARRAGE_2_EVENT =
             register(ModSounds.SOFT_AND_WET_BARRAGE_2, ModSounds.SOFT_AND_WET_BARRAGE_2_ID);
+    public static final RegistryObject<SoundEvent> WATER_ENCASE_EVENT =
+            register(ModSounds.WATER_ENCASE, ModSounds.WATER_ENCASE_ID);
+    public static final RegistryObject<SoundEvent> SOFT_AND_WET_KICK_EVENT =
+            register(ModSounds.SOFT_AND_WET_KICK, ModSounds.SOFT_AND_WET_KICK_ID);
     public static final RegistryObject<SoundEvent> BUBBLE_POP_EVENT =
             register(ModSounds.BUBBLE_POP, ModSounds.BUBBLE_POP_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_PETRIFY_EVENT =

@@ -23,6 +23,18 @@
       "roundabout:sign_hit"
     ]
   },
+  "soft_and_wet_kick": {
+    "subtitle": "sounds.roundabout.soft_and_wet_kick",
+    "sounds": [
+      "roundabout:soft_and_wet_kick"
+    ]
+  },
+  "water_encase": {
+    "subtitle": "sounds.roundabout.water_encase",
+    "sounds": [
+      "roundabout:water_encase"
+    ]
+  },
   "dio_hoho": {
     "subtitle": "sounds.roundabout.dio_hoho",
     "sounds": [
