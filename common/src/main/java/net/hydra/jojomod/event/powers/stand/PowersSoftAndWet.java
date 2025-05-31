@@ -30,9 +30,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -831,6 +834,37 @@ public class PowersSoftAndWet extends PunchingStand {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getKickAttackKnockShieldTime());
 
+                }
+            }
+
+            if (entity instanceof LivingEntity LE) {
+                if (chargedFinal >= maxSuperHitTime) {
+                    StandUser SE = ((StandUser) LE);
+                    if (!SE.roundabout$isLaunchBubbleEncased()) {
+                        float xRot = this.self.getXRot();
+                        SE.roundabout$setStoredVelocity(
+                                new Vec3(
+                                        Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)),
+                                        Mth.sin((xRot - 20) * ((float) Math.PI / 180)),
+                                        -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180))
+                                )
+                        );
+                        SE.roundabout$setBubbleLaunchEncased();
+
+                        Vec3 $$2 = LE.getDeltaMovement();
+                        float $$4 = (float)Mth.floor(LE.getY());
+                        for (int $$8 = 0; (float)$$8 < 1.0F + LE.getBbWidth() * 20.0F; $$8++) {
+                            double $$9 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double)LE.getBbWidth();
+                            double $$10 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double)LE.getBbWidth();
+                            LE.level().addParticle(ParticleTypes.SPLASH, LE.getX() + $$9, (double)($$4 + 1.0F), LE.getZ() + $$10, $$2.x, $$2.y, $$2.z);
+                        }
+
+                        if (SE instanceof Player && !this.self.level().isClientSide) {
+                            ((ServerPlayer) SE).displayClientMessage(Component.translatable("text.roundabout.launch_bubble_encased"), true);
+                        }
+                        Vec3 storedVec = SE.roundabout$getStoredVelocity();
+                        MainUtil.takeUnresistableKnockbackWithY(LE, 0.13f, storedVec.x, storedVec.y, storedVec.z);
+                    }
                 }
             }
 

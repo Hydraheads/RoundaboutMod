@@ -220,6 +220,10 @@ public interface StandUser {
 
     byte roundabout$getBubbleEncased();
     boolean roundabout$isBubbleEncased();
+    void roundabout$setStoredVelocity(Vec3 store);
+    Vec3 roundabout$getStoredVelocity();
+    boolean roundabout$isLaunchBubbleEncased();
+    void roundabout$setBubbleLaunchEncased();
 
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);

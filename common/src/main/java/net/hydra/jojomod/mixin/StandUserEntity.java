@@ -826,6 +826,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public void roundabout$setBubbleLaunchEncased() {
+        this.roundabout$encasedTimer = 140;
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
+            this.getEntityData().set(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte)2);
+        }
+    }
+    @Unique
+    @Override
     public byte roundabout$getBubbleEncased() {
         if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
             return this.getEntityData().get(ROUNDABOUT$IS_BUBBLE_ENCASED);
@@ -838,6 +846,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean roundabout$isBubbleEncased() {
         if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
             return this.getEntityData().get(ROUNDABOUT$IS_BUBBLE_ENCASED) > 0;
+        }
+        return false;
+    }
+    @Unique
+    @Override
+    public boolean roundabout$isLaunchBubbleEncased() {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BUBBLE_ENCASED)) {
+            return this.getEntityData().get(ROUNDABOUT$IS_BUBBLE_ENCASED) == 2;
         }
         return false;
     }
@@ -2322,6 +2338,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**For things like bubble encasement delta*/
+    @Unique
+    public Vec3 roundabout$storedVelocity = Vec3.ZERO;
+    @Unique
+    @Override
+    public void roundabout$setStoredVelocity(Vec3 store){
+        roundabout$storedVelocity = store;
+    }
+    @Unique
+    @Override
+    public Vec3 roundabout$getStoredVelocity(){
+        return roundabout$storedVelocity;
+    }
+
     @Unique
     public Vec3 roundabout$frictionSave = Vec3.ZERO;
     @Unique
@@ -3039,6 +3069,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Unique
+    public int roundabout$encasedTimer = 0;
+
     /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
@@ -3051,6 +3084,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+
+
+        /**Soft and Wet Bubble Encase launch*/
+        if (roundabout$isLaunchBubbleEncased() && !this.level().isClientSide()){
+            if (roundabout$encasedTimer > 0){
+                roundabout$encasedTimer--;
+                Vec3 storedVec = roundabout$getStoredVelocity();
+                MainUtil.takeUnresistableKnockbackWithY(this,0.13f,storedVec.x,storedVec.y,storedVec.z);
+            }
+            if (roundabout$encasedTimer <= 0) {
+                roundabout$setBubbleEncased((byte) 0);
+                this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                        5, 0.25, 0.25, 0.25, 0.025);
+                roundabout$setBubbleEncased((byte)0);
+            }
+        }
+
         if (this.hasEffect(ModEffects.STAND_VIRUS)) {
             if (this.tickCount % 20 == 0) {
                 if (!this.level().isClientSide() && this.isAlive()){
