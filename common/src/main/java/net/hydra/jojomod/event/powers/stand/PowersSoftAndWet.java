@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
@@ -23,13 +24,16 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -219,6 +223,66 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public boolean hold1 = false;
+    public boolean holdDownClick = false;
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (!consumeClickInput) {
+            if (holdDownClick) {
+                if (keyIsDown) {
+
+                } else {
+                    if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        int atd = this.getAttackTimeDuring();
+                        this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                    }
+                    holdDownClick = false;
+                }
+            } else {
+                if (keyIsDown) {
+                    Minecraft mc = Minecraft.getInstance();
+
+                    if (!isHoldingSneak()) {
+                        super.buttonInputAttack(keyIsDown, options);
+                    } else {
+                        if (this.canAttack()) {
+                            this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                            holdDownClick = true;
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                        } else {
+                            super.buttonInputAttack(keyIsDown, options);
+                        }
+                    }
+                }
+            }
+        } else {
+            if (!keyIsDown) {
+                consumeClickInput = false;
+            }
+        }
+    }
+
+    public static int maxSuperHitTime = 25;
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        StandUser standUser = ((StandUser) playerEntity);
+        StandPowers powers = standUser.roundabout$getStandPowers();
+        boolean standOn = standUser.roundabout$getActive();
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
+    }
+
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
@@ -571,12 +635,30 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.spawnRandomBubble();
         } else if (move == PowerIndex.POWER_1_BONUS) {
             return this.bubbleClusterRedirect();
+        } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
+            return this.setPowerKickAttack();
+        } else if (move == PowerIndex.SNEAK_ATTACK){
+            return this.setPowerSuperHit();
         } else if (move == PowerIndex.EXTRA_2) {
             return this.clusterBubblePop();
         }
         return super.setPowerOther(move,lastMove);
     }
-
+    public int chargedFinal;
+    public boolean setPowerSuperHit() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.SNEAK_ATTACK);
+        this.poseStand(OffsetIndex.ATTACK);
+        chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
+        //playBarrageCrySound();
+        return true;
+    }
+    public boolean setPowerKickAttack() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
+        this.poseStand(OffsetIndex.GUARD);
+        return true;
+    }
 
     public static final byte BARRAGE_NOISE = 20;
     public static final byte BARRAGE_NOISE_2 = BARRAGE_NOISE+1;
@@ -700,10 +782,137 @@ public class PowersSoftAndWet extends PunchingStand {
         /*Tick through Time Stop Charge*/
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
             this.updateBubbleCluster();
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            updateKickAttackCharge();
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
+            updateKickAttack();
         } else if (this.getActivePower() == PowerIndex.POWER_3){
             this.updateBubbleScaffold();
         }
         super.updateUniqueMoves();
+    }
+
+    public void updateKickAttack(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring == 5) {
+                this.encasementKick();
+            }
+        }
+    }
+
+    public float getKickAttackKnockback(){
+        if (chargedFinal >= maxSuperHitTime) {
+            return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
+        } else {
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*1.5F);
+        }
+    }
+    public float getKickAttackStrength(Entity entity){
+        float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
+        if (this.getReducedDamage(entity)){
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+        } else {
+            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+1;
+        }
+    }
+    public void kickAttackImpact(Entity entity){
+        this.setAttackTimeDuring(-20);
+        if (entity != null) {
+            float pow;
+            float knockbackStrength;
+            pow = getKickAttackStrength(entity);
+            knockbackStrength = getKickAttackKnockback();
+            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                if (entity instanceof LivingEntity LE) {
+                    if (chargedFinal >= maxSuperHitTime) {
+                        addEXP(5, LE);
+                    }
+                }
+                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+            } else {
+                if (chargedFinal >= maxSuperHitTime) {
+                    knockShield2(entity, getKickAttackKnockShieldTime());
+
+                }
+            }
+
+            int fireCount = 50;
+            float firespeed =0.05F;
+            if (chargedFinal >= maxSuperHitTime){
+                fireCount = 100;
+                firespeed =0.1F;
+            }
+        } else {
+            // This is less accurate raycasting as it is server sided but it is important for particle effects
+            float distMax = this.getDistanceOut(this.self, this.getReach(), false);
+            float halfReach = (float) (distMax * 0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
+            if (!this.self.level().isClientSide) {
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                        1, 0.0, 0.0, 0.0, 1);
+            }
+        }
+
+        SoundEvent SE;
+        float pitch = 1F;
+        if (entity != null) {
+            SE = getKickAttackSound();
+            pitch = 1.2F;
+        } else {
+            SE = ModSounds.PUNCH_2_SOUND_EVENT;
+        }
+
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
+    }
+
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
+            kickAttackImpact(target);
+        }
+    }
+
+    public SoundEvent getKickAttackSound(){
+        return ModSounds.FINAL_KICK_EVENT;
+    }
+    public int getKickAttackKnockShieldTime(){
+        return 100;
+    }
+    public void encasementKick(){
+
+        if (chargedFinal >= maxSuperHitTime) {
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianKickMinimum + chargedFinal * 1.5));
+        } else {
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianKickMinimum + chargedFinal));
+        }
+        this.setAttackTime(0);
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
+                this.attackTimeDuring = -10;
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId(), PacketDataIndex.INT_STAND_ATTACK);
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+            Entity targetEntity = getTargetEntity(this.self,-1);
+            kickAttackImpact(targetEntity);
+        }
+    }
+    public void updateKickAttackCharge(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring >= maxSuperHitTime &&
+                    (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
+                int atd = this.getAttackTimeDuring();
+                ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                if (this.self.level().isClientSide()){
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                }
+            }
+        }
     }
     int bubbleScaffoldCount = 0;
     public BlockPos buildingBubbleScaffoldPos = BlockPos.ZERO;
