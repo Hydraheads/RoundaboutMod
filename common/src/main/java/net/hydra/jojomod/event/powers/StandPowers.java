@@ -1874,6 +1874,12 @@ public class StandPowers {
             targetEntity = EDP.parentMob;
         }
 
+        if (targetEntity instanceof LivingEntity LE)
+        {
+            if (((StandUser)LE).roundabout$isParallelRunning())
+                return null;
+        }
+
         return targetEntity;
     }
     public boolean hasMoreThanOneSkin(){
