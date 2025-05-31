@@ -553,7 +553,7 @@ public class PowersD4C extends PunchingStand {
 
             Level level = player.level();
 
-            shouldShowDimensionFx = (level.dimension().location().getNamespace().equals("roundabout")) && ((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C;
+            shouldShowDimensionFx = (DynamicWorld.isWorldDynamic(level) && ((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C);
 
             if (RRenderUtil.isUsingFabulous())
                 return;
@@ -724,7 +724,7 @@ public class PowersD4C extends PunchingStand {
 
                 ServerLevel overworld = server.overworld();
                 ServerPlayer player = (ServerPlayer)this.getSelf();
-                if (player.level() != player.getServer().overworld() && player.level().dimension().location().getNamespace().equals("roundabout"))
+                if (player.level() != player.getServer().overworld() && DynamicWorld.isWorldDynamic(player.level()))
                 {
                     yoinkCurrency();
                     player.teleportTo(overworld, player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());

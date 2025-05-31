@@ -3,6 +3,7 @@ package net.hydra.jojomod;
 import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.Networking;
+import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class Roundabout {
     {
         Networking.setServer(server);
         ConfigManager.loadStandArrowPool();
+        DynamicWorld.loadDynamicWorlds(server);
     }
 
     public static ResourceLocation location(String path) {

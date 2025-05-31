@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -21,7 +22,7 @@ public class DynamicWorld {
     private ServerLevel level;
     private final String name;
 
-    public static HashMap<String, ServerLevel> levels = new HashMap<>();
+    public static HashMap<String, Level> levels = new HashMap<>();
 
     public ResourceKey<Level> LEVEL_KEY;
 
@@ -152,5 +153,21 @@ public class DynamicWorld {
     public static DynamicWorld generateD4CWorld(MinecraftServer server)
     {
         return new DynamicWorld(server, "d4c-"+generateRandomStringByWords(7)+"-"+server.overworld().getRandom().nextIntBetweenInclusive(0, 999999), false);
+    }
+
+    public static void loadDynamicWorlds(MinecraftServer server)
+    {
+        for (ServerLevel level : server.getAllLevels())
+        {
+            if (level.dimension().location().getNamespace().equals("roundabout"))
+            {
+                levels.put(level.dimension().location().getPath(), level);
+            }
+        }
+    }
+
+    public static boolean isWorldDynamic(Level level)
+    {
+        return levels.containsValue(level);
     }
 }

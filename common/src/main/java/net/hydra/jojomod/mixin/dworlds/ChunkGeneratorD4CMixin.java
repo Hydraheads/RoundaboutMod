@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.dworlds;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -26,8 +27,7 @@ public class ChunkGeneratorD4CMixin {
     * unfortunately, it's the only way to do this without a custom chunk generator */
     private void roundabout$copyWorlds(WorldGenLevel level, ChunkAccess chunk, StructureManager structures, CallbackInfo ci)
     {
-        // TODO: load dynamic worlds at runtime and compare it against a list of them instead of this really slow string check
-        if (level.getLevel().dimension().location().getNamespace().equals("roundabout"))
+        if (DynamicWorld.isWorldDynamic(level.getLevel()))
         {
             try
             {
