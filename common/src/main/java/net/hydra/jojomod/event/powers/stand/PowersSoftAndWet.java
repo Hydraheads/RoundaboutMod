@@ -218,10 +218,10 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
         } else {
-            if (true == true) {
-                setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
-            } else {
+            if (getStandUserSelf().roundabout$getCombatMode()) {
                 setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
             }
         }
 
@@ -366,6 +366,11 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.setUser(this.self);
         bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
         return bubble;
+    }
+
+    public boolean switchModes(){
+        getStandUserSelf().roundabout$setCombatMode(!getStandUserSelf().roundabout$getCombatMode());
+        return true;
     }
     public boolean bubbleShot(){
         SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
@@ -637,6 +642,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.fallBrace();
         } else if (move == PowerIndex.VAULT){
             return this.vault();
+        } else if (move == PowerIndex.POWER_4){
+            return this.switchModes();
         } else if (move == PowerIndex.POWER_3){
             return this.bubbleLadder();
         } else if (move == PowerIndex.POWER_3_EXTRA){
@@ -1119,7 +1126,6 @@ public class PowersSoftAndWet extends PunchingStand {
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 30, 1, 0.05, 1, 0.4);
     }
-    public boolean hold3 = false;
 
     @Override
     public void playFallBraceInitSound(){
@@ -1135,6 +1141,7 @@ public class PowersSoftAndWet extends PunchingStand {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
     }
+    public boolean hold3 = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
@@ -1184,6 +1191,45 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
     }
+
+    public boolean hold4 = false;
+    @Override
+    public void buttonInput4(boolean keyIsDown, Options options) {
+        if (this.getSelf().level().isClientSide) {
+            if (isGuarding()) {
+                if (keyIsDown) {
+                    if (!hold4){
+                        hold4 = true;
+                    }
+                } else {
+                    hold4 = false;
+                }
+            } else if (isHoldingSneak()) {
+                if (keyIsDown) {
+                    if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                        if (!hold4) {
+                           hold4 = true;
+                        }
+                    }
+                } else {
+                    hold4 = false;
+                }
+            } else {
+                if (keyIsDown) {
+                    if (!hold4) {
+                        hold4 = true;
+
+                        this.tryPower(PowerIndex.POWER_4, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
+
+                    }
+                } else {
+                    hold4 = false;
+                }
+            }
+        }
+    }
+
     public boolean canBridge(){
         return ((this.self.onGround() && !this.self.isInWater()) || this.self.onClimbable() || (this.self instanceof Player PE && PE.isCreative()));
     }

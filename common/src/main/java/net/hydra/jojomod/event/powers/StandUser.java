@@ -219,6 +219,8 @@ public interface StandUser {
     void roundabout$setBubbleEncased(byte adj);
 
     byte roundabout$getBubbleEncased();
+    boolean roundabout$getCombatMode();
+    void roundabout$setCombatMode(boolean only);
     boolean roundabout$isBubbleEncased();
     void roundabout$setStoredVelocity(Vec3 store);
     Vec3 roundabout$getStoredVelocity();

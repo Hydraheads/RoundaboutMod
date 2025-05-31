@@ -289,6 +289,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<ItemStack> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.ITEM_STACK);
     @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BOOLEAN);
+    @Unique
     private StandPowers roundabout$Powers;
     @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
@@ -1356,6 +1359,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     @Override
+    public void roundabout$setCombatMode(boolean only) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$COMBAT_MODE, only);
+        }
+    }
+
+    @Unique
+    @Override
     public byte roundabout$getLocacacaCurse() {
         if (getEntityData().hasItem(ROUNDABOUT$LOCACACA_CURSE)) {
             return this.getEntityData().get(ROUNDABOUT$LOCACACA_CURSE);
@@ -1415,6 +1426,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean roundabout$getOnlyBleeding() {
         if (getEntityData().hasItem(ROUNDABOUT$ONLY_BLEEDING)) {
             return this.getEntityData().get(ROUNDABOUT$ONLY_BLEEDING);
+        } else {
+            return false;
+        }
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getCombatMode() {
+        if (getEntityData().hasItem(ROUNDABOUT$COMBAT_MODE)) {
+            return this.getEntityData().get(ROUNDABOUT$COMBAT_MODE);
         } else {
             return false;
         }
@@ -2118,6 +2138,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
         }

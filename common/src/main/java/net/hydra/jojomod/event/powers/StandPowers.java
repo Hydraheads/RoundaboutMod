@@ -111,6 +111,9 @@ public class StandPowers {
         return generateStandPowers(entity);
     }
 
+    public StandUser getStandUserSelf(){
+        return ((StandUser)this.self);
+    }
     public LivingEntity getSelf(){
         return this.self;
     }
