@@ -5,13 +5,13 @@ import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -51,31 +51,19 @@ public class D4CLightBlock extends BaseEntityBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecated")
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        Player owner = getOwner(level, pos);
-        if (owner == null) {
-            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-            return;
-        }
-
-        if (level.getBlockState(pos.above()).is(ModBlocks.D4C_LIGHT_BLOCK)) {
-            if (((StandUser) owner).roundabout$getStandPowers() instanceof PowersD4C d4c) {
-                if (!d4c.isBetweenTwoThings(pos)) {
-                    d4c.ejectParallelRunning();
-
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                    level.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 3);
-                }
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock()) {
+            Player owner = getOwner(level, pos);
+            if (owner != null && ((StandUser) owner).roundabout$getStandPowers() instanceof PowersD4C d4c) {
+                d4c.ejectParallelRunning();
             }
         }
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override
-    public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
-        if (!(level instanceof Level world)) return;
-
-        Player owner = getOwner(world, pos);
+    public void wasExploded(Level level, BlockPos pos, Explosion explosion) {
+        Player owner = getOwner(level, pos);
         if (owner == null) return;
 
         if (((StandUser) owner).roundabout$getStandPowers() instanceof PowersD4C d4c) {
@@ -93,5 +81,34 @@ public class D4CLightBlock extends BaseEntityBlock {
                 d4c.ejectParallelRunning();
             }
         }
+    }
+
+    /* todo: migrate this to chunk update instead of neighbor update
+       so it can run even when the top block gets some funny things happening to it */
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+        if (!level.getBlockState(pos.above()).is(ModBlocks.D4C_LIGHT_BLOCK)) return;
+
+        Player owner = getOwner(level, pos);
+        if (owner == null) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            return;
+        }
+
+        if (((StandUser) owner).roundabout$getStandPowers() instanceof PowersD4C d4c) {
+            boolean inBetweenStillValid = d4c.isBetweenTwoThings(pos);
+
+            if (!inBetweenStillValid) {
+                d4c.ejectParallelRunning();
+
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                BlockPos top = pos.above();
+                if (level.getBlockState(top).is(ModBlocks.D4C_LIGHT_BLOCK)) {
+                    level.setBlock(top, Blocks.AIR.defaultBlockState(), 3);
+                }
+            }
+        }
+
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
     }
 }

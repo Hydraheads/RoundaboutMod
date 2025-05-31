@@ -859,6 +859,10 @@ public class PowersD4C extends PunchingStand {
                 this.scopeLevel = 0;
 
                 Roundabout.LOGGER.info("Stopped P Running");
+
+                if (!this.getSelf().level().isClientSide)
+                    ModPacketHandler.PACKET_ACCESS.ejectPRunning((ServerPlayer) this.getSelf());
+
                 setCooldown(PowerIndex.SKILL_EXTRA, pRunningTimeLimit + 5);
             };
 
@@ -944,9 +948,15 @@ public class PowersD4C extends PunchingStand {
     };
 
     @SuppressWarnings("deprecation") // isSolid()
-    private boolean isBlockSolid(BlockPos pos)
+    public boolean isBlockSolid(BlockPos pos)
     {
-        return (this.getSelf().level().getBlockState(pos).isSolid() && !this.getSelf().level().getBlockState(pos).isAir());
+        BlockState state = this.getSelf().level().getBlockState(pos);
+
+        return (
+                state.isSolid() &&
+                !state.isAir() &&
+                !state.is(ModBlocks.D4C_LIGHT_BLOCK)
+        );
     }
 
     // TODO: replace this with a more advanced predicate

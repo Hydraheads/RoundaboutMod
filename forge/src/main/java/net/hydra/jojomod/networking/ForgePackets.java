@@ -137,6 +137,11 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
+    public void ejectPRunning(ServerPlayer sp) {
+        ForgePacketHandler.sendToClient(new ForgeEjectPRunning(), sp);
+    }
+
+    @Override
     public void StandGuardCancelClientPacket() {
         ForgePacketHandler.sendToServer(new ForgeGuardCancelPacket());
     }

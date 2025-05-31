@@ -45,6 +45,8 @@ public interface IPacketAccess {
     void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player);
     void deregisterDynamicWorld(ServerPlayer sp, String name);
 
+    void ejectPRunning(ServerPlayer sp);
+
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();
     void StandPowerPacket(byte power);
