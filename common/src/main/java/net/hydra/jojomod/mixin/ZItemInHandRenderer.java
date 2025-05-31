@@ -210,7 +210,7 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
-        if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getCombatMode() && !abstractClientPlayer.isUsingItem()){
+        if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem()){
             poseStack.pushPose();
             boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
             HumanoidArm humarm = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();

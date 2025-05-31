@@ -46,7 +46,7 @@ public class ZHeldItemLowering {
             LocalPlayer clientPlayerEntity2 = this.minecraft.player;
             if (!clientPlayerEntity2.isHandsBusy()) {
                 if (((StandUser) clientPlayerEntity2).roundabout$getActive() && ((StandUser) clientPlayerEntity2).roundabout$getStandPowers().isMiningStand() &&
-                        !((StandUser)clientPlayerEntity2).roundabout$getCombatMode()) {
+                        !((StandUser)clientPlayerEntity2).roundabout$getEffectiveCombatMode()) {
                     ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
                     ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();
                     //if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)) {

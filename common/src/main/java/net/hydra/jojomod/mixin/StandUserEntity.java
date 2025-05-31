@@ -1441,6 +1441,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public boolean roundabout$getEffectiveCombatMode() {
+        if (getEntityData().hasItem(ROUNDABOUT$COMBAT_MODE)) {
+            return this.getEntityData().get(ROUNDABOUT$COMBAT_MODE) && (((StandUser)this).roundabout$hasAStand() &&
+                    this.roundabout$getStandPowers().hasStandActive(((LivingEntity) (Object)this)));
+        } else {
+            return false;
+        }
+    }
+    @Unique
+    @Override
+    public boolean roundabout$hasAStand(){
+        return !this.roundabout$getStandDisc().isEmpty() && this.roundabout$getStandDisc().is(ModItems.STAND_DISC);
+    }
+    @Unique
+    @Override
     public StandPowers roundabout$getRejectionStandPowers() {
         return this.roundabout$RejectionStandPowers;
     }

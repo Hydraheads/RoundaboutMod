@@ -123,7 +123,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((Mob)(Object)this) instanceof Enemy && !((StandUser)this).roundabout$getStandDisc().isEmpty()) {
+                if (((Mob)(Object)this) instanceof Enemy && ((StandUser)this).roundabout$hasAStand()) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
                             ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
@@ -174,11 +174,11 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
         if (((StandUser) this).roundabout$isDazed() ||
-                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
+                (((StandUser)this).roundabout$hasAStand() &&
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
             ci.setReturnValue(false);
         } else {
-            if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
+            if (((StandUser)this).roundabout$hasAStand()){
                 float $$1 = 1F;
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)){
                     $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
@@ -473,7 +473,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             float mindist = -1;
 
             for (LivingEntity $$3 : $$1) {
-                if (!((StandUser)$$3).roundabout$getStandDisc().isEmpty()){
+                if (!((StandUser)$$3).roundabout$hasAStand()){
                     if (mindist == -1 || this.distanceToSqr($$3) < mindist){
                         mindist = (float) this.distanceToSqr($$3);
                         potentialTarget = $$3;
@@ -500,7 +500,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
         /**Passive to neutral stuff for stand users*/
         if (this.isAlive()) {
-            if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
+            if (((StandUser)this).roundabout$hasAStand()) {
 
                 Mob mb = ((Mob) (Object) this);
                 if (this.getTarget() != null && !this.roundabout$getFightOrFlight()){

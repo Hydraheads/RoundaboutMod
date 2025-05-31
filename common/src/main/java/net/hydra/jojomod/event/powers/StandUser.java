@@ -215,11 +215,12 @@ public interface StandUser {
     void roundabout$setDrowning(boolean drown);
     boolean roundabout$getDrowning();
     boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1);
+    boolean roundabout$hasAStand();
     /**Soft and Wet Bubble Encasing**/
     void roundabout$setBubbleEncased(byte adj);
-
     byte roundabout$getBubbleEncased();
     boolean roundabout$getCombatMode();
+    boolean roundabout$getEffectiveCombatMode();
     void roundabout$setCombatMode(boolean only);
     boolean roundabout$isBubbleEncased();
     void roundabout$setStoredVelocity(Vec3 store);
