@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -161,11 +162,15 @@ public class PowersSoftAndWet extends PunchingStand {
         $$1.add(SoftAndWetEntity.BETA_SKIN);
         return $$1;
     }
+
+    public boolean goBeyondCharged(){
+        return false;
+    }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 2 && !canDoBubbleRedirect() && isGuarding()) {
+        if (slot == 2 && ((inShootingMode() && !goBeyondCharged()) || (!canDoBubbleRedirect() && isGuarding()))) {
             return true;
         }
-        if (slot == 1 && !canDoBubbleClusterRedirect() && isGuarding()) {
+        if (slot == 1 && (inShootingMode() || (!canDoBubbleClusterRedirect() && isGuarding()))) {
             return true;
         }
         if (slot == 3 && (!canVault() && !canFallBrace() && !isGuarding() && isHoldingSneak()) && !canBridge()){
@@ -193,7 +198,9 @@ public class PowersSoftAndWet extends PunchingStand {
         }
 
 
-        if (isGuarding()){
+        if (inShootingMode()) {
+            setSkillIcon(context, x, y, 2, StandIcons.GO_BEYOND, PowerIndex.SKILL_EXTRA_2);
+        } else if (isGuarding()){
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_EXTRA_2);
         } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
@@ -218,7 +225,7 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
         } else {
-            if (getStandUserSelf().roundabout$getCombatMode()) {
+            if (inShootingMode()) {
                 setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
             } else {
                 setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
@@ -299,7 +306,7 @@ public class PowersSoftAndWet extends PunchingStand {
 
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
+        if (this.getSelf().level().isClientSide && !inShootingMode()) {
             if (isGuarding()) {
                 if (keyIsDown) {
                     if (!hold1) {
@@ -368,6 +375,9 @@ public class PowersSoftAndWet extends PunchingStand {
         return bubble;
     }
 
+    public boolean inShootingMode(){
+        return getStandUserSelf().roundabout$getCombatMode();
+    }
     public boolean switchModes(){
         getStandUserSelf().roundabout$setCombatMode(!getStandUserSelf().roundabout$getCombatMode());
         return true;
@@ -869,12 +879,17 @@ public class PowersSoftAndWet extends PunchingStand {
                         );
                         SE.roundabout$setBubbleLaunchEncased();
 
-                        Vec3 $$2 = LE.getDeltaMovement();
-                        float $$4 = (float)Mth.floor(LE.getY());
-                        for (int $$8 = 0; (float)$$8 < 1.0F + LE.getBbWidth() * 20.0F; $$8++) {
-                            double $$9 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double)LE.getBbWidth();
-                            double $$10 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double)LE.getBbWidth();
-                            LE.level().addParticle(ParticleTypes.SPLASH, LE.getX() + $$9, (double)($$4 + 1.0F), LE.getZ() + $$10, $$2.x, $$2.y, $$2.z);
+                        if (!this.self.level().isClientSide()) {
+                            Vec3 $$2 = LE.getDeltaMovement();
+                            float $$4 = (float) Mth.floor(LE.getY());
+                            for (int $$8 = 0; (float) $$8 < 1.0F + LE.getBbWidth() * 20.0F; $$8++) {
+                                double $$9 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double) LE.getBbWidth();
+                                double $$10 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double) LE.getBbWidth();
+
+                                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SPLASH,
+                                        LE.getX() + $$9, (double) ($$4 + 1.0F), LE.getZ() + $$10,
+                                        30, $$2.x, $$2.y, $$2.z, 0.4);
+                            }
                         }
 
                         if (SE instanceof Player && !this.self.level().isClientSide) {
@@ -1057,7 +1072,8 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
-            if (isGuarding()) {
+            if (inShootingMode()) {
+            } else if (isGuarding()) {
 
                 if (keyIsDown) {
                     if (!hold2) {
