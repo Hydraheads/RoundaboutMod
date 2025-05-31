@@ -45,6 +45,7 @@
     "ZFireBlock",
     "ZFishingHook",
     "ZFoodData",
+    "ZLookAtPlayerGoal",
     "ZInventoryAccess",
     "ZIronGolem",
     "ZItem",

@@ -2768,8 +2768,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         private void roundabout$roundabouthurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
         if (((StandUser)this).roundabout$getStandPowers() instanceof PowersD4C powers)
         {
-            Roundabout.LOGGER.info("meltDodgeTicks: {}", powers.meltDodgeTicks);
-            if (powers.meltDodgeTicks >= 0)
+            if (powers.meltDodgeTicks >= 0 || ((StandUser)this).roundabout$isParallelRunning())
             {
                 ci.setReturnValue(false);
                 return;

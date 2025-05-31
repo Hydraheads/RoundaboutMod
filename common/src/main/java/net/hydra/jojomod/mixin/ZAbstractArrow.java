@@ -152,9 +152,16 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
-        Entity $$1 = $$0.getEntity();
-        if ($$1 instanceof LivingEntity LE){
-            StandPowers entityPowers = ((StandUser)LE).roundabout$getStandPowers();
+        Entity entity = $$0.getEntity();
+
+        if (entity instanceof LivingEntity LE){
+            StandUser user = ((StandUser) entity);
+            if (user.roundabout$isParallelRunning())
+            {
+                ci.cancel();
+            }
+
+            StandPowers entityPowers = user.roundabout$getStandPowers();
             if (!this.level().isClientSide && entityPowers instanceof PowersD4C d4cPowers)
             {
                 if (d4cPowers.meltDodgeTicks >= 0)
@@ -171,7 +178,7 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
         }
 
 
-        if ($$1 instanceof PenetratableWithProjectile PP){
+        if (entity instanceof PenetratableWithProjectile PP){
             if (PP.dealWithPenetration(this)){
                 ci.cancel();
             }

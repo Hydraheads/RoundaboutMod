@@ -1231,13 +1231,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "canHarmPlayer", at=@At("HEAD"), cancellable = true)
     private void roundabout$canHarmPlayer(Player player, CallbackInfoReturnable<Boolean> cir)
     {
-        Roundabout.LOGGER.info("canHarmPlayer || isClientSide: {} || isD4CPowers: {}", player.level().isClientSide, ((StandUser)player).roundabout$getStandPowers().getClass().equals(PowersD4C.class));
         if (player.level().isClientSide)
             return;
 
         if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C powers)
         {
-            if (powers.meltDodgeTicks != -1)
+            if (powers.meltDodgeTicks != -1 || ((StandUser)player).roundabout$isParallelRunning())
             {
                 cir.setReturnValue(false);
                 cir.cancel();

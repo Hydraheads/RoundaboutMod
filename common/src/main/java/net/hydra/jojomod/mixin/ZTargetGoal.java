@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
@@ -44,8 +45,17 @@ public class ZTargetGoal implements ITargetGoal {
         }
     }
 
-    @Inject(method = "canContinueToUse", at = @At(value = "HEAD"))
+    @Inject(method = "canContinueToUse", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$tick(CallbackInfoReturnable<Boolean> cir) {
+        if (mob.getTarget() != null)
+        {
+            if (((StandUser)mob.getTarget()).roundabout$isParallelRunning())
+            {
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
+        }
+
         if (mob instanceof Zombie ZE && targetMob instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
             byte shape = ple.roundabout$getShapeShift();
@@ -83,7 +93,18 @@ public class ZTargetGoal implements ITargetGoal {
                 }
             }
         }
+    }
 
-
+    @Inject(method = "canAttack", at = @At("HEAD"), cancellable = true)
+    private void roundabout$stopAttack(LivingEntity entity, TargetingConditions conditions, CallbackInfoReturnable<Boolean> cir)
+    {
+        if (entity != null)
+        {
+            if (((StandUser)entity).roundabout$isParallelRunning())
+            {
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
+        }
     }
 }
