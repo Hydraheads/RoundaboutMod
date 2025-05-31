@@ -948,5 +948,8 @@
 
   "roundabout.warden_ts_movement": "It did not stop?!",
 
-  "roundabout.warning.fabulous_graphics.v2": "§eNote: Some modded shader visual effects do not display with the Fabulous graphics settings.§r"
+  "roundabout.warning.fabulous_graphics.v2": "§eNote: Some modded shader visual effects do not display with the Fabulous graphics settings.§r",
+
+  "advancements.roundabout.dimension_hop.title": "Don't Fence Me In",
+  "advancements.roundabout.dimension_hop.description": "Dimension hop with D4C for the first time"
 }

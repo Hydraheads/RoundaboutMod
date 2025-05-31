@@ -2,6 +2,7 @@ package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
@@ -26,6 +27,7 @@ public class AckDynamicWorld {
                 if (world != null && world.getLevel() != null) {
                     player.teleportTo(world.getLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
                     ((StandUser)player).roundabout$summonStand(world.getLevel(), true, false);
+                    ModCriteria.DIMENSION_HOP_TRIGGER.trigger(player);
                 }
             }
         });

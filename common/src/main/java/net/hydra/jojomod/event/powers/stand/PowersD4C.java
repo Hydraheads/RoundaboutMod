@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.block.D4CLightBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
