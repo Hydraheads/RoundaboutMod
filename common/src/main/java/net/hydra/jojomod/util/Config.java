@@ -270,12 +270,16 @@ import java.util.Set;
         public Integer speedMultiplierTheWorld;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer speedMultiplierMagiciansRed;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer speedMultiplierSoftAndWet;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierStarPlatinum;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierTheWorld;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierMagiciansRed;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierSoftAndWet;
         @BooleanOption(group = "inherit", value = true)
         public Boolean crouchingStopsMiningOres;
     }

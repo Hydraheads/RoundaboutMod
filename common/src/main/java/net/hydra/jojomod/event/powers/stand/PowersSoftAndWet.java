@@ -58,6 +58,35 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return ModEntities.SOFT_AND_WET.create(this.getSelf().level());
     }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                miningSettings.speedMultiplierSoftAndWet*0.01));
+    }
+
+
+    @Override
+    public float getPickMiningSpeed() {
+        return 12F;
+    }
+    @Override
+    public float getAxeMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getSwordMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getShovelMiningSpeed() {
+        return 8F;
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierSoftAndWet;
+    }
     @Override
     public boolean canSummonStand(){
         return true;
