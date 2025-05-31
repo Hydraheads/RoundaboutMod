@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.D4CLightBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -61,6 +62,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -797,8 +799,16 @@ public class PowersD4C extends PunchingStand {
         return true;
     }
 
+    public void ejectParallelRunning()
+    {
+        if (parallelThread != null)
+        {
+            parallelThread.interrupt();
+        }
+    }
+
     private Thread parallelThread = null;
-    // TODO: add a owner system for D4C light blocks, proper shader fx, better invis (instead of using potions), fov change, more polish
+    // TODO: add a owner system for D4C light blocks, more polish
     private boolean parallelRunning() {
         if (isPRunning) {
             if (parallelThread != null && parallelThread.isAlive()) {
@@ -826,11 +836,6 @@ public class PowersD4C extends PunchingStand {
         this.scopeLevel = 3;
 
         parallelThread = new Thread(() -> {
-            try {
-                Thread.sleep(pRunningTimeLimit * 1000L);
-            } catch (InterruptedException e) {
-            }
-
             Runnable cleanup = () -> {
                 isPRunning = false;
                 ((StandUser) self).roundabout$setParallelRunning(false);
@@ -857,22 +862,39 @@ public class PowersD4C extends PunchingStand {
                 setCooldown(PowerIndex.SKILL_EXTRA, pRunningTimeLimit + 5);
             };
 
-            if (level.isClientSide) {
-                Minecraft.getInstance().execute(cleanup);
-            } else {
-                self.getServer().execute(cleanup);
+            try {
+                Thread.sleep(pRunningTimeLimit * 1000L);
+            } catch (InterruptedException e) {
+            }
+            finally
+            {
+                if (level.isClientSide) {
+                    Minecraft.getInstance().execute(cleanup);
+                } else {
+                    self.getServer().execute(cleanup);
+                }
             }
         });
 
         parallelThread.start();
 
+        UUID uuid = this.getSelf().getUUID();
+
         if (!level.isClientSide && self.getServer() != null) {
             if (level.getBlockState(bottom).isAir()) {
                 level.setBlock(bottom, ModBlocks.D4C_LIGHT_BLOCK.defaultBlockState(), 3);
+                BlockEntity be = level.getBlockEntity(bottom);
+                if (be instanceof D4CLightBlockEntity d4cBe) {
+                    d4cBe.setOwner(uuid);
+                }
             }
 
             if (level.getBlockState(top).isAir()) {
                 level.setBlock(top, ModBlocks.D4C_LIGHT_BLOCK.defaultBlockState(), 3);
+                BlockEntity be = level.getBlockEntity(top);
+                if (be instanceof D4CLightBlockEntity d4cBe) {
+                    d4cBe.setOwner(uuid);
+                }
             }
         }
 
@@ -916,20 +938,19 @@ public class PowersD4C extends PunchingStand {
     }
 
     /** Is the entity inbetween two things? */
-    @SuppressWarnings("deprecation") // isSolid()
-    boolean isBetweenTwoThings()
+    public boolean isBetweenTwoThings()
     {
         return (isBetweenTwoThings(this.getSelf().blockPosition()));
     };
 
+    @SuppressWarnings("deprecation") // isSolid()
     private boolean isBlockSolid(BlockPos pos)
     {
         return (this.getSelf().level().getBlockState(pos).isSolid() && !this.getSelf().level().getBlockState(pos).isAir());
     }
 
     // TODO: replace this with a more advanced predicate
-    @SuppressWarnings("deprecation") // isSolid()
-    boolean isBetweenTwoThings(BlockPos pos)
+    public boolean isBetweenTwoThings(BlockPos pos)
     {
         return (
                 isBlockSolid(pos.subtract(new Vec3i(0, 1, 0))) &&
