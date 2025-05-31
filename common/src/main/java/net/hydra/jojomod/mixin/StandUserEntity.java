@@ -2795,21 +2795,49 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-        private void roundabout$roundabouthurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+        private void roundabout$roundabouthurt(DamageSource damageSource, float $$1, CallbackInfoReturnable<Boolean> ci) {
         if (((StandUser)this).roundabout$getStandPowers() instanceof PowersD4C powers)
         {
-            if (powers.meltDodgeTicks >= 0 || ((StandUser)this).roundabout$isParallelRunning())
+            if (((StandUser)this).roundabout$isParallelRunning())
+            {
+                if (damageSource.is(DamageTypes.IN_FIRE) ||
+                        damageSource.is(DamageTypes.ON_FIRE) ||
+                        damageSource.is(DamageTypes.LAVA) ||
+                        damageSource.is(DamageTypes.MAGIC) ||
+                        damageSource.is(DamageTypes.STARVE) ||
+                        damageSource.is(DamageTypes.WITHER) ||
+                        damageSource.is(DamageTypes.DROWN) ||
+                        damageSource.is(DamageTypes.SWEET_BERRY_BUSH) ||
+                        damageSource.is(DamageTypes.CACTUS) ||
+                        damageSource.is(DamageTypes.FALL)
+                )
+                {
+                    if (damageSource.is(DamageTypes.MAGIC))
+                    {
+                        if (hasEffect(MobEffects.POISON))
+                            return;
+                    }
+                    else
+                        return;
+                }
+
+                ci.setReturnValue(false);
+                ci.cancel();
+            }
+
+            if (powers.meltDodgeTicks >= 0)
             {
                 ci.setReturnValue(false);
+                ci.cancel();
                 return;
             }
         }
 
-        if (roundabout$gasolineIFRAMES > 0 && $$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
+        if (roundabout$gasolineIFRAMES > 0 && damageSource.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             ci.setReturnValue(false);
             return;
         } else {
-            if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)) {
+            if (damageSource.is(ModDamageTypes.GASOLINE_EXPLOSION)) {
                 roundabout$gasolineIFRAMES = 10;
                 roundabout$knifeIFrameTicks = 10;
                 roundabout$stackedKnivesAndMatches = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
@@ -2817,7 +2845,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && !this.level().isClientSide()){
-            if (SE.dismountOnHit() && ($$0.getDirectEntity() != null || $$0.is(DamageTypes.IN_WALL))) {
+            if (SE.dismountOnHit() && (damageSource.getDirectEntity() != null || damageSource.is(DamageTypes.IN_WALL))) {
                 Vec3 sanityCheckCoordinates = this.getPosition(0);
                 SE.ejectPassengers();
                 if (SE.getUser() != null) {
@@ -2856,7 +2884,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         this.teleportTo(sanityCheckCoordinates.x,sanityCheckCoordinates.y,sanityCheckCoordinates.z);
                     }
                 }
-                if ($$0.is(DamageTypes.IN_WALL)) {
+                if (damageSource.is(DamageTypes.IN_WALL)) {
                     ci.setReturnValue(false);
                 }
             }
@@ -2867,30 +2895,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.setReturnValue(false);
             return;
         }
-        if (((TimeStop)entity.level()).CanTimeStopEntity(entity) && !($$0.is(DamageTypes.GENERIC_KILL))){
-            if (this.roundabout$TSHurtTime <= 0 || $$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+        if (((TimeStop)entity.level()).CanTimeStopEntity(entity) && !(damageSource.is(DamageTypes.GENERIC_KILL))){
+            if (this.roundabout$TSHurtTime <= 0 || damageSource.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
 
                 float dmg = roundabout$getStoredDamage();
                 float max = roundaboutGetMaxStoredDamage();
 
 
-                if (((LivingEntity)(Object) this).isInvulnerableTo($$0)) {
+                if (((LivingEntity)(Object) this).isInvulnerableTo(damageSource)) {
                     ci.setReturnValue(false);
                 } else if (((LivingEntity)(Object) this).isDeadOrDying()) {
                     ci.setReturnValue(false);
-                } else if ($$0.is(DamageTypeTags.IS_FIRE) && ((LivingEntity)(Object) this).hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                } else if (damageSource.is(DamageTypeTags.IS_FIRE) && ((LivingEntity)(Object) this).hasEffect(MobEffects.FIRE_RESISTANCE)) {
                     ci.setReturnValue(false);
                 }
-                $$1 = getDamageAfterArmorAbsorb($$0, $$1);
-                $$1 = getDamageAfterMagicAbsorb($$0, $$1);
+                $$1 = getDamageAfterArmorAbsorb(damageSource, $$1);
+                $$1 = getDamageAfterMagicAbsorb(damageSource, $$1);
 
                 if (roundaboutTSHurtSound < 1){
                     roundaboutTSHurtSound = 1;
-                } if (roundaboutTSHurtSound < 2 && ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.PENETRATING_STAND)
-                        || $$0.is(ModDamageTypes.STAND_RUSH))){
+                } if (roundaboutTSHurtSound < 2 && (damageSource.is(ModDamageTypes.STAND) || damageSource.is(ModDamageTypes.PENETRATING_STAND)
+                        || damageSource.is(ModDamageTypes.STAND_RUSH))){
                     roundaboutTSHurtSound = 2;
                 }
-                if (MainUtil.isStandDamage($$0) && $$0.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().fullTSChargeBonus()){
+                if (MainUtil.isStandDamage(damageSource) && damageSource.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().fullTSChargeBonus()){
                     if (!this.level().isClientSide()){
                         ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.74F,0.73F,0.98F), 1f), this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                                 1, 0.3, 0.3, 0.3, 0.3);
@@ -2903,17 +2931,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 } else {
                     roundabout$setStoredDamage((dmg + $$1));
                 }
-                if ($$0 != null && $$0.getEntity() != null) {
-                    if ($$0.getEntity() instanceof LivingEntity){
-                        ((StandUser)$$0.getEntity()).roundabout$getStandPowers().hasActedInTS = true;
+                if (damageSource != null && damageSource.getEntity() != null) {
+                    if (damageSource.getEntity() instanceof LivingEntity){
+                        ((StandUser)damageSource.getEntity()).roundabout$getStandPowers().hasActedInTS = true;
                     }
-                    roundaboutSetStoredAttacker($$0.getEntity());
+                    roundaboutSetStoredAttacker(damageSource.getEntity());
                 } else {
                     roundaboutSetStoredAttacker(null);
                 }
                 this.roundabout$TSHurtTime = 7;
-                Entity $$8 = $$0.getEntity();
-                if ($$8 != null && !$$0.is(DamageTypeTags.IS_EXPLOSION)) {
+                Entity $$8 = damageSource.getEntity();
+                if ($$8 != null && !damageSource.is(DamageTypeTags.IS_EXPLOSION)) {
                     double $$13 = $$8.getX() - entity.getX();
                     double $$14;
                     for ($$14 = $$8.getZ() - entity.getZ(); $$13 * $$13 + $$14 * $$14 < 1.0E-4; $$14 = (Math.random() - Math.random()) * 0.01) {
@@ -2930,7 +2958,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
 
             boolean dothis = false;
-            if ((float)this.invulnerableTime > 10.0F && !$$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+            if ((float)this.invulnerableTime > 10.0F && !damageSource.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
                 if (!($$1 <= this.lastHurt)) {
                     dothis = true;
                 }
@@ -2939,7 +2967,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             if (dothis) {
                 LivingEntity living = ((LivingEntity) (Object) this);
-                if (((StandUser) living).roundabout$getStandPowers().interceptDamageEvent($$0, $$1)) {
+                if (((StandUser) living).roundabout$getStandPowers().interceptDamageEvent(damageSource, $$1)) {
                     ci.setReturnValue(false);
                     return;
                 }
@@ -2947,10 +2975,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
             /*This extra check ensures that extra damage will not be dealt if a projectile ticks before the TS damage catch-up*/
-            if (roundabout$getStoredDamage() > 0 && !$$0.is(ModDamageTypes.TIME)) {
+            if (roundabout$getStoredDamage() > 0 && !damageSource.is(ModDamageTypes.TIME)) {
                 ci.setReturnValue(false);
                 return;
-            } if ($$0.is(ModDamageTypes.TIME)){
+            } if (damageSource.is(ModDamageTypes.TIME)){
                 roundabout$postTSHurtTime = 17;
             } else {
                 /*Knife and match code*/
@@ -2958,8 +2986,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     ci.setReturnValue(false);
                     return;
                 } else {
-                    if ($$0.is(ModDamageTypes.KNIFE) || $$0.is(ModDamageTypes.MATCH)) {
-                        if ($$0.is(ModDamageTypes.KNIFE)){
+                    if (damageSource.is(ModDamageTypes.KNIFE) || damageSource.is(ModDamageTypes.MATCH)) {
+                        if (damageSource.is(ModDamageTypes.KNIFE)){
                             roundabout$gasolineIFRAMES = 10;
                         }
                         int knifeCap = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
@@ -2972,7 +3000,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (roundabout$stackedKnivesAndMatches >= knifeCap) {
                                 roundabout$extraIFrames = 8;
                             }
-                            if ($$0.is(ModDamageTypes.KNIFE) && entity instanceof Player) {
+                            if (damageSource.is(ModDamageTypes.KNIFE) && entity instanceof Player) {
                                 ((IPlayerEntity) entity).roundabout$addKnife();
                             }
                         } else {
@@ -2987,7 +3015,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (!((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity) &&
-                ($$0.is(DamageTypes.ON_FIRE) || $$0.is(DamageTypes.IN_FIRE))){
+                (damageSource.is(DamageTypes.ON_FIRE) || damageSource.is(DamageTypes.IN_FIRE))){
             ci.setReturnValue(false);
         }
     }

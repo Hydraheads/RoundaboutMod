@@ -27,6 +27,7 @@
     "ZBlockBehaviour",
     "ZBlockEntity",
     "ZBlockFaceContext",
+    "ZBlockStateBase",
     "ZBoat",
     "ZBoatAccess",
     "ZBoatItem",
