@@ -394,6 +394,14 @@ public class FabricEntities {
                                 sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":plunder_bubble")
                 );
+        public static final EntityType<SoftAndWetExplosiveBubbleEntity> EXPLOSIVE_BUBBLE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "explosive_bubble"),
+                        EntityType.Builder.<SoftAndWetExplosiveBubbleEntity>of(SoftAndWetExplosiveBubbleEntity::new, MobCategory.MISC).
+                                sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
+                                clientTrackingRange(10).build(Roundabout.MOD_ID+":explosive_bubble")
+                );
         public static final EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -436,6 +444,7 @@ public class FabricEntities {
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
                 ModEntities.PLUNDER_BUBBLE = PLUNDER_BUBBLE;
+                ModEntities.EXPLOSIVE_BUBBLE = EXPLOSIVE_BUBBLE;
                 ModEntities.ENCASEMENT_BUBBLE = ENCASEMENT_BUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
 

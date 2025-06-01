@@ -68,6 +68,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get(), CinderellaVisageDisplayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GROUND_HURRICANE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PLUNDER_BUBBLE.get(), SoftAndWetBubbleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.EXPLOSIVE_BUBBLE.get(), SoftAndWetBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENCASEMENT_BUBBLE.get(), EncasementBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), OVAEnyaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), EnyaRenderer::new);

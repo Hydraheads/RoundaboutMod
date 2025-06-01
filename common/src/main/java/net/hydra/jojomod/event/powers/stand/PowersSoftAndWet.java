@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -221,9 +222,9 @@ public class PowersSoftAndWet extends PunchingStand {
         }
 
         if (isGuarding()){
-            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
         } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
         } else {
             if (inShootingMode()) {
                 setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
@@ -261,17 +262,27 @@ public class PowersSoftAndWet extends PunchingStand {
                 }
             } else {
                 if (keyIsDown) {
-                    Minecraft mc = Minecraft.getInstance();
-
-                    if (!isHoldingSneak()) {
-                        super.buttonInputAttack(keyIsDown, options);
+                    if (inShootingMode()){
+                        if (!holdDownClick){
+                            if (!this.onCooldown(PowerIndex.SKILL_4)) {
+                                this.tryPower(PowerIndex.POWER_4_EXTRA, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_EXTRA);
+                                holdDownClick = true;
+                            }
+                        }
                     } else {
-                        if (this.canAttack()) {
-                            this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
-                            holdDownClick = true;
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
-                        } else {
+                        Minecraft mc = Minecraft.getInstance();
+
+                        if (!isHoldingSneak()) {
                             super.buttonInputAttack(keyIsDown, options);
+                        } else {
+                            if (this.canAttack()) {
+                                this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                                holdDownClick = true;
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                            } else {
+                                super.buttonInputAttack(keyIsDown, options);
+                            }
                         }
                     }
                 }
@@ -374,6 +385,12 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
         return bubble;
     }
+    public SoftAndWetExplosiveBubbleEntity getExplosiveBubble(){
+        SoftAndWetExplosiveBubbleEntity bubble = new SoftAndWetExplosiveBubbleEntity(this.self,this.self.level());
+        bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+        bubble.setUser(this.self);
+        return bubble;
+    }
     public int getMaxShootTicks(){
         return 10000;
     }
@@ -383,6 +400,25 @@ public class PowersSoftAndWet extends PunchingStand {
 
     public boolean inShootingMode(){
         return getStandUserSelf().roundabout$getCombatMode();
+    }
+    public boolean shootExplosiveBubble(){
+        this.setCooldown(PowerIndex.SKILL_4, 3);
+        SoftAndWetExplosiveBubbleEntity bubble = getExplosiveBubble();
+
+        if (bubble != null){
+
+            this.poseStand(OffsetIndex.FOLLOW);
+            this.setAttackTimeDuring(-10);
+            this.setActivePower(PowerIndex.POWER_2);
+            shootBubbleSpeed(bubble,getBubbleSpeed());
+            bubbleListInit();
+            this.bubbleList.add(bubble);
+            this.getSelf().level().addFreshEntity(bubble);
+
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+
+        }
+        return true;
     }
     public boolean switchModes(){
         getStandUserSelf().roundabout$setCombatMode(!getStandUserSelf().roundabout$getCombatMode());
@@ -664,6 +700,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.vault();
         } else if (move == PowerIndex.POWER_4){
             return this.switchModes();
+        } else if (move == PowerIndex.POWER_4_EXTRA){
+            return this.shootExplosiveBubble();
         } else if (move == PowerIndex.POWER_3){
             return this.bubbleLadder();
         } else if (move == PowerIndex.POWER_3_EXTRA){

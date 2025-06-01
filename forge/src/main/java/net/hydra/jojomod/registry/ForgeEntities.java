@@ -334,6 +334,13 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "plunder_bubble").toString())
             );
+    public static final RegistryObject<EntityType<SoftAndWetExplosiveBubbleEntity>> EXPLOSIVE_BUBBLE =
+            ENTITY_TYPES.register("explosive_bubble", () ->
+                    EntityType.Builder.<SoftAndWetExplosiveBubbleEntity>of(SoftAndWetExplosiveBubbleEntity::new, MobCategory.MISC).
+                            sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "explosive_bubble").toString())
+            );
     public static final RegistryObject<EntityType<EncasementBubbleEntity>> ENCASEMENT_BUBBLE =
             ENTITY_TYPES.register("encasement_bubble", () ->
                     EntityType.Builder.<EncasementBubbleEntity>of(EncasementBubbleEntity::new, MobCategory.MISC).

@@ -24,6 +24,10 @@ import org.joml.Vector3f;
 
 public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
+    private static final ResourceLocation SHOOTING_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_1.png");
+    private static final ResourceLocation SHOOTING_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_2.png");
+    private static final ResourceLocation SHOOTING_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_3.png");
+    private static final ResourceLocation SHOOTING_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_4.png");
     private static final ResourceLocation MOB = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder_mob.png");
     private static final ResourceLocation BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble.png");
     private static final ResourceLocation GAS_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/gasoline_bubble.png");
@@ -126,6 +130,14 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                 return MOB;
             }
             return TEXTURE;
+        } else if (entity instanceof SoftAndWetExplosiveBubbleEntity seb){
+            int div = seb.tickCount % 4;
+            return switch (div) {
+                case 1 -> SHOOTING_2;
+                case 2 -> SHOOTING_3;
+                case 3 -> SHOOTING_4;
+                default -> SHOOTING_1;
+            };
         }
         return BUBBLE;
     }

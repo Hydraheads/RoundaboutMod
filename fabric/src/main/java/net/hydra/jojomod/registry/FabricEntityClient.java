@@ -71,6 +71,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.CINDERELLA_VISAGE_DISPLAY, CinderellaVisageDisplayRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GROUND_HURRICANE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLUNDER_BUBBLE, SoftAndWetBubbleRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.EXPLOSIVE_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENCASEMENT_BUBBLE, EncasementBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.OVA_ENYA, OVAEnyaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENYA, EnyaRenderer::new);
