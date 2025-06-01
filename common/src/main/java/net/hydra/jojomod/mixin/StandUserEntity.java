@@ -1574,6 +1574,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return $$0;
     }
 
+    /**The items that shoot and brawl mode are allowed to use*/
+    @Inject(method = "getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$getItemInHand(InteractionHand $$0, CallbackInfoReturnable<ItemStack> cir){
+        if (roundabout$getEffectiveCombatMode()){
+            ItemStack stack = ItemStack.EMPTY;
+            if ($$0 == InteractionHand.MAIN_HAND) {
+                stack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+            } else if ($$0 == InteractionHand.OFF_HAND) {
+                stack = this.getItemBySlot(EquipmentSlot.OFFHAND);
+            }
+            if (stack.isEdible() || stack.getItem() instanceof HarpoonItem || stack.getItem() instanceof TridentItem
+                    || stack.getItem() instanceof KnifeItem){
+                cir.setReturnValue(stack);
+                return;
+            }
+            cir.setReturnValue(ItemStack.EMPTY);
+        }
+    }
+
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         if ($$0.contains("roundabout.StandDisc", 10)) {
@@ -3354,6 +3373,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected float getJumpPower() {
         return 0;
     }
+
+    @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot var1);
 
     @Unique private boolean roundabout$isPRunning = false;
 
