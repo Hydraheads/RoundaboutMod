@@ -225,7 +225,6 @@ public abstract class InputEvents implements IInputEvents {
                                 BlockHitResult $$2 = (BlockHitResult) this.hitResult;
                                 BlockPos $$3 = $$2.getBlockPos();
                                 if (!this.level.getBlockState($$3).isAir()) {
-                                    this.gameMode.startDestroyBlock($$3, $$2.getDirection());
                                     if (this.level.getBlockState($$3).isAir()) {
                                         $$1 = true;
                                     }
@@ -245,6 +244,7 @@ public abstract class InputEvents implements IInputEvents {
         }
     }
 
+    @Unique
     private void roundabout$justiceContinueAttack(boolean $$0) {
         if (!$$0) {
             this.missTime = 0;
@@ -1025,7 +1025,7 @@ public abstract class InputEvents implements IInputEvents {
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();
-                if (this.options.keyAttack.isDown() && !player.isUsingItem()) {
+                if (this.options.keyAttack.isDown() && !player.isUsingItem() && !standComp.roundabout$getEffectiveCombatMode()) {
                     if (powers.isMiningStand()){
                         Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                         if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
