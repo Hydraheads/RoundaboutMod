@@ -208,6 +208,10 @@ public abstract class InputEvents implements IInputEvents {
                 powers.pilotInputAttack();
                 return;
             }
+            if (standComp.roundabout$getEffectiveCombatMode()){
+                ci.setReturnValue(false);
+                return;
+            }
 
             boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
             if (standComp.roundabout$isDazed() || ((TimeStop) player.level()).CanTimeStopEntity(player)) {
@@ -290,6 +294,10 @@ public abstract class InputEvents implements IInputEvents {
                     return;
                 }
 
+                if (standComp.roundabout$getEffectiveCombatMode()){
+                    ci.cancel();
+                    return;
+                }
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
                 if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     if (!$$0){
