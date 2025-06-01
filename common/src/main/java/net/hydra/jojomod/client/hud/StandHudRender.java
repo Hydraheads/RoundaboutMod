@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -159,6 +160,38 @@ public class StandHudRender {
         context.blit(StandIcons.JOJO_ICONS, k, l, u, 60, 9, 9);
     }
 
+    public static void renderShootModeSoftAndWet(GuiGraphics context, Minecraft client, Player playerEntity,
+                                    int scaledWidth, int scaledHeight, int x,
+                                    PowersSoftAndWet PW) {
+        int l;
+        int k;
+        int v;
+        int gb = PW.getMaxGoBeyondChargeTicks();
+        int st = PW.getMaxShootTicks();
+        StandUser standUser = ((StandUser)playerEntity);
+        byte level = ((IPlayerEntity)playerEntity).roundabout$getStandLevel();
+        int exp = ((IPlayerEntity)playerEntity).roundabout$getStandExp();
+        int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
+        if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
+                (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
+                        instanceof MaxStandDiscItem)) {
+            exp = maxXP;
+        }
+        int blt = (int) Math.floor(((double) 182 /maxXP)*(exp));
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 141, 182, 2);
+        context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 143, 182, 3);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 146, blt, 2);
+            context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 148, 182, 3);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+        context.blit(StandIcons.JOJO_ICONS, k, l, u, 70, 9, 9);
+
+    }
     public static void renderExpHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                            int scaledWidth, int scaledHeight, int ticks, int x,
                                            float flashAlpha, float otherFlashAlpha) {

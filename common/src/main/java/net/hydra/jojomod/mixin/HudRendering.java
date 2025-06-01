@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.ClientConfig;
@@ -283,16 +284,16 @@ public abstract class HudRendering implements IHudAccess {
     private boolean roundabout$RenderBars(GuiGraphics context, int x){
         if (minecraft.player != null && minecraft.level != null) {
 
-
+            StandUser user = ((StandUser) minecraft.player);
 
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
-            } else if (((StandUser) minecraft.player).roundabout$isClashing()) {
+            } else if (user.roundabout$isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
-                float c = (((StandUser) minecraft.player).roundabout$getStandPowers().getClashProgress());
+                float c = (user.roundabout$getStandPowers().getClashProgress());
                 ((StandUserClientPlayer) minecraft.player).roundabout$setLastClashPower(c);
                 StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, c);
                 return true;
@@ -322,6 +323,9 @@ public abstract class HudRendering implements IHudAccess {
                 if (this.getCameraPlayer() != null) {
                     StandHudRender.renderDistanceHUDJustice(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
                 }
+                return true;
+            } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode()){
+                StandHudRender.renderShootModeSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
                 return true;
             } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp()){
 

@@ -374,6 +374,12 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
         return bubble;
     }
+    public int getMaxShootTicks(){
+        return 10000;
+    }
+    public int getMaxGoBeyondChargeTicks(){
+        return 10000;
+    }
 
     public boolean inShootingMode(){
         return getStandUserSelf().roundabout$getCombatMode();

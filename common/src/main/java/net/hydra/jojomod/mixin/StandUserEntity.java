@@ -1452,7 +1452,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean roundabout$hasAStand(){
-        return !this.roundabout$getStandDisc().isEmpty() && this.roundabout$getStandDisc().is(ModItems.STAND_DISC);
+        return !this.roundabout$getStandDisc().isEmpty() && !this.roundabout$getStandDisc().is(ModItems.STAND_DISC);
     }
     @Unique
     @Override
