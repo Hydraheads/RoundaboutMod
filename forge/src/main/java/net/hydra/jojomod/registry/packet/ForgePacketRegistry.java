@@ -1,30 +1,27 @@
 package net.hydra.jojomod.registry.packet;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import io.netty.buffer.Unpooled;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
-import net.hydra.jojomod.networking.packet.api.args.s2c.AbstractBaseS2CPacket;
+import net.hydra.jojomod.networking.ForgePacketHandler;
 import net.hydra.jojomod.networking.packet.api.IPacketRegistrar;
+import net.hydra.jojomod.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
 import net.hydra.jojomod.networking.packet.api.args.c2s.PacketArgsC2S;
+import net.hydra.jojomod.networking.packet.api.args.s2c.AbstractBaseS2CPacket;
 import net.hydra.jojomod.networking.packet.api.args.s2c.PacketArgsS2C;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-public class FabricPacketRegistry implements IPacketRegistrar {
-    private final static FabricPacketRegistry INSTANCE = new FabricPacketRegistry();
+public class ForgePacketRegistry implements IPacketRegistrar {
+    private final static ForgePacketRegistry INSTANCE = new ForgePacketRegistry();
 
     private final HashMap<AbstractBaseC2SPacket, ResourceLocation> C2SPackets = new HashMap<>();
     private final HashMap<AbstractBaseS2CPacket, ResourceLocation> S2CPackets = new HashMap<>();
@@ -56,13 +53,31 @@ public class FabricPacketRegistry implements IPacketRegistrar {
                 packetId
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(packetId, (MinecraftServer server, ServerPlayer player,
-                                                               ServerGamePacketListenerImpl handler,
-                                                               FriendlyByteBuf buf, PacketSender responseSender) -> {
-            PacketArgsC2S args = new PacketArgsC2S(server, player, handler, buf, responseSender);
+        ForgePacketHandler.INSTANCE.messageBuilder(packet.getClass(), ForgePacketHandler.id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder((FriendlyByteBuf buf) -> {
+                    packet.serialize(buf);
+                    return null;
+                })
+                .encoder((pack, friendlyByteBuf) -> {
+                    packet.deserialize(friendlyByteBuf);
+                })
+                .consumerMainThread((pack, supplier) -> {
+                    ServerPlayer sender = supplier.get().getSender();
+                    if (sender == null)
+                        return;
 
-            packet.handle(args);
-        });
+                    PacketArgsC2S args = new PacketArgsC2S(
+                            sender.getServer(),
+                            sender,
+                            null, // fabric only
+                            null, // fabric only
+                            null // fabric only
+
+                    );
+
+                    packet.handle(args);
+                })
+                .add();
     }
 
     @Override
@@ -80,17 +95,35 @@ public class FabricPacketRegistry implements IPacketRegistrar {
                 packetId
         );
 
-        ClientPlayNetworking.registerGlobalReceiver(packetId, (Minecraft client, ClientPacketListener handler,
-                                                               FriendlyByteBuf buf, PacketSender responseSender) -> {
-            PacketArgsS2C args = new PacketArgsS2C(client, handler, buf, responseSender);
+        ForgePacketHandler.INSTANCE.messageBuilder(packet.getClass(), ForgePacketHandler.id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder((FriendlyByteBuf buf) -> {
+                    packet.serialize(buf);
+                    return null;
+                })
+                .encoder((pack, friendlyByteBuf) -> {
+                    packet.deserialize(friendlyByteBuf);
+                })
+                .consumerMainThread((pack, supplier) -> {
+                    ServerPlayer sender = supplier.get().getSender();
+                    if (sender == null)
+                        return;
 
-            packet.handle(args);
-        });
+                    PacketArgsS2C args = new PacketArgsS2C(
+                            Minecraft.getInstance(),
+                            null, // fabric only
+                            null, // fabric only
+                            null // fabric only
+
+                    );
+
+                    packet.handle(args);
+                })
+                .add();
     }
 
     private FriendlyByteBuf createBufferFromVArgs(Object... args)
     {
-        FriendlyByteBuf buf = PacketByteBufs.create();
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         for (Object arg : args) {
             if (arg instanceof Integer i) {
@@ -127,17 +160,19 @@ public class FabricPacketRegistry implements IPacketRegistrar {
         return buf;
     }
 
+    // TODO: add support for friendlybytebuf shenanigans with vargs
     @Override
     public <T extends AbstractBaseC2SPacket> void send(T packetType, Object... args) {
         if (!C2SPackets.containsKey(packetType))
             return;
 
-        ClientPlayNetworking.send(C2SPackets.get(packetType), createBufferFromVArgs(args));
+        ForgePacketHandler.INSTANCE.sendToServer(packetType);
     }
 
+    // TODO: add support for friendlybytebuf shenanigans with vargs
     @Override
     public <T extends AbstractBaseS2CPacket> void send(T packetType, ServerPlayer recipient, Object... args) {
-        ServerPlayNetworking.send(recipient, S2CPackets.get(packetType), createBufferFromVArgs(args));
+        ForgePacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> recipient), packetType);
     }
 
     public static IPacketRegistrar getInstance() {
