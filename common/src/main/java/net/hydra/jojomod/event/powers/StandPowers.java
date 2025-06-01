@@ -132,6 +132,9 @@ public class StandPowers {
     public byte getActivePowerPhaseMax(){
         return this.activePowerPhaseMax;
     }
+    public boolean hasShootingModeVisually(){
+        return false;
+    }
 
     public void setAttackTime(int attackTime){
         this.attackTime = attackTime;

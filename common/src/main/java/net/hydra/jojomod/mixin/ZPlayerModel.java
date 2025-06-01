@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
@@ -13,6 +14,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Vector3f;
@@ -69,7 +71,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
         if ($$0 instanceof Player) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
-            if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
+            boolean pose = ipe.roundabout$GetPoseEmote() != Poses.NONE.id;
+            if (pose) {
                 this.head.resetPose();
                 this.body.resetPose();
                 this.rightLeg.resetPose();
@@ -87,6 +90,21 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+
+            /**Shoot mode aiming*/
+            StandUser user = ((StandUser)$$0);
+            if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
+                if (user.roundabout$rotateArmToShoot()){
+                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                    if ($$9) {
+                        this.rightArm.yRot = -0.1F + this.head.yRot;
+                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                    } else {
+                        this.leftArm.yRot = 0.1F + this.head.yRot;
+                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                    }
+                }
+            }
             this.hat.copyFrom(this.head);
         }
     }

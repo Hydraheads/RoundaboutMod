@@ -613,6 +613,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return true;
     }
 
+    @Override
+    public boolean hasShootingModeVisually(){
+        return true;
+    }
     public float getBubbleSpeed(){
         if (bubbleType == PlunderTypes.OXYGEN.id){
             return 0.6F;

@@ -698,6 +698,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public boolean roundabout$rotateArmToShoot(){
+        if (roundabout$getStandPowers().hasShootingModeVisually()){
+            return true;
+        }
+        return false;
+    }
+    @Unique
+    @Override
     public boolean roundabout$getDrowning(){
         return roundabout$isDrown;
     }
