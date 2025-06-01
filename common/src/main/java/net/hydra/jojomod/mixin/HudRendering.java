@@ -286,6 +286,12 @@ public abstract class HudRendering implements IHudAccess {
 
             StandUser user = ((StandUser) minecraft.player);
 
+            boolean removeNum = false;
+            if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
+                    (PW.getShootTicks() > 0)){
+                removeNum = true;
+            }
+
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 
@@ -329,7 +335,20 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp()){
 
-                StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
+                StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,removeNum);
+                if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
+                        (PW.getShootTicks() > 0)){
+                    StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
+                    removeNum = true;
+                }
+                return true;
+            } else if (removeNum){
+                StandHudRender.renderExperienceBar(minecraft,screenWidth, screenHeight,context);
+                if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
+                        (PW.getShootTicks() > 0)){
+                    StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
+                    removeNum = true;
+                }
                 return true;
             }
         }

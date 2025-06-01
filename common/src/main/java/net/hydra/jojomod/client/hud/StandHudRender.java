@@ -19,6 +19,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -165,36 +167,53 @@ public class StandHudRender {
                                     PowersSoftAndWet PW) {
         int l;
         int k;
-        int v;
         int gb = PW.getMaxGoBeyondChargeTicks();
         int st = PW.getMaxShootTicks();
+        int gc = PW.getGoBeyondCharge(); gc= Mth.clamp(gc,0,gb);
+        int sc = PW.getShootTicks();  sc= Mth.clamp(sc,0,st);
         StandUser standUser = ((StandUser)playerEntity);
-        byte level = ((IPlayerEntity)playerEntity).roundabout$getStandLevel();
-        int exp = ((IPlayerEntity)playerEntity).roundabout$getStandExp();
-        int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
-        if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
-                (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
-                        instanceof MaxStandDiscItem)) {
-            exp = maxXP;
-        }
-        int blt = (int) Math.floor(((double) 182 /maxXP)*(exp));
+        int blt = (int) Math.floor(((double) 182 /gb)*(gc));
+        int blt2 = (int) Math.floor(((double) 182 /st)*(sc));
         l = scaledHeight - 32 + 3;
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 141, 182, 2);
         context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 143, 182, 3);
         if (blt > 0) {
             context.blit(StandIcons.JOJO_ICONS, x, l, 0, 146, blt, 2);
-            context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 148, 182, 3);
+        }
+        if (blt2 > 0) {
+            context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 148, blt2, 3);
         }
 
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        context.blit(StandIcons.JOJO_ICONS, k, l, u, 70, 9, 9);
+        if (PW.canShootExplosive(PW.getUseTicks())){
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 70, 9, 9);
+        } else {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);
+        }
 
     }
+
+    public static void renderShootModeLightSoftAndWet(GuiGraphics context, Minecraft client, Player playerEntity,
+                                                 int scaledWidth, int scaledHeight, int x,
+                                                 PowersSoftAndWet PW) {
+
+        int l;
+        int k;
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+        if (PW.canShootExplosive(PW.getUseTicks())){
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 70, 9, 9);
+        } else {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);
+        }
+    }
+
     public static void renderExpHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                            int scaledWidth, int scaledHeight, int ticks, int x,
-                                           float flashAlpha, float otherFlashAlpha) {
+                                           float flashAlpha, float otherFlashAlpha, boolean removeNum) {
         int l;
         int k;
         int v;
@@ -214,20 +233,35 @@ public class StandHudRender {
             context.blit(StandIcons.JOJO_ICONS, x, l, 0, 105, blt, 5);
         }
 
-        int u = 183;
-        k = scaledWidth/2 - 5;
-        l = scaledHeight - 31 - 5;
+        if (!removeNum) {
 
-        int y = 6141337;
-        Font renderer = client.font;
-        String $$6 = level + "";
-        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
-        int $$8 = scaledHeight - 31 - 4;
-        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
-        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
-        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
-        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
-        context.drawString(renderer, $$6, $$7, $$8, y, false);
+            int y = 6141337;
+            Font renderer = client.font;
+            String $$6 = level + "";
+            int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+            int $$8 = scaledHeight - 31 - 4;
+            context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+            context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+            context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+            context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+            context.drawString(renderer, $$6, $$7, $$8, y, false);
+        }
+    }
+
+    private static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
+    public static void renderExperienceBar(Minecraft client,int scaledWidth, int scaledHeight, GuiGraphics $$0) {
+        int $$2 = client.player.getXpNeededForNextLevel();
+        if ($$2 > 0) {
+            int $$3 = 182;
+            int $$4 = (int)(client.player.experienceProgress * 183.0F);
+            int $$5 = scaledHeight - 32 + 3;
+            int $$7 = scaledWidth / 2 - 91;
+            $$0.blit(GUI_ICONS_LOCATION, $$7, $$5, 0, 64, 182, 5);
+            if ($$4 > 0) {
+                $$0.blit(GUI_ICONS_LOCATION, $$7, $$5, 0, 69, $$4, 5);
+            }
+        }
+
     }
 
     public static void renderDistanceHUDJustice(GuiGraphics context, Minecraft client, Player playerEntity,

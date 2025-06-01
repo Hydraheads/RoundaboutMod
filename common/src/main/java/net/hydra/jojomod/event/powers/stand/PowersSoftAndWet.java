@@ -246,6 +246,13 @@ public class PowersSoftAndWet extends PunchingStand {
 
     public boolean hold1 = false;
     public boolean holdDownClick = false;
+
+    public int getUseTicks(){
+        return 2500;
+    }
+    public int getGoBeyondUseTicks(){
+        return 400;
+    }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
@@ -265,9 +272,10 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (inShootingMode()){
                         if (!holdDownClick){
                             if (!this.onCooldown(PowerIndex.SKILL_4)) {
-                                this.tryPower(PowerIndex.POWER_4_EXTRA, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_EXTRA);
-                                holdDownClick = true;
+                                if (confirmShot(getUseTicks())) {
+                                    this.tryPower(PowerIndex.POWER_4_EXTRA, true);
+                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_EXTRA);
+                                }
                             }
                         }
                     } else {
@@ -391,6 +399,37 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.setUser(this.self);
         return bubble;
     }
+
+    public boolean canShootExplosive(int useTicks){
+        if ((shootTicks+useTicks) <= getMaxShootTicks()){
+            return true;
+        }
+        return false;
+    }
+    public boolean confirmShot(int useTicks){
+        if (canShootExplosive(useTicks)){
+            setGoBeyondChargeTicks(goBeyondChargeTicks+getGoBeyondUseTicks());
+            setShootTicks((shootTicks+useTicks));
+            return true;
+        }
+        return false;
+    }
+
+    public int shootTicks = 0;
+    public int getShootTicks(){
+        return shootTicks;
+    }
+    public void setShootTicks(int shootTicks){
+        this.shootTicks = Mth.clamp(shootTicks,0,getMaxShootTicks());
+
+    }
+    public int goBeyondChargeTicks = 0;
+    public int getGoBeyondCharge(){
+        return goBeyondChargeTicks;
+    }
+    public void setGoBeyondChargeTicks(int goBeyondChargeTicks){
+        this.goBeyondChargeTicks = Mth.clamp(goBeyondChargeTicks,0,getMaxGoBeyondChargeTicks());
+    }
     public int getMaxShootTicks(){
         return 10000;
     }
@@ -410,7 +449,7 @@ public class PowersSoftAndWet extends PunchingStand {
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
             this.setActivePower(PowerIndex.POWER_2);
-            shootBubbleSpeed(bubble,getBubbleSpeed());
+            shootExplosiveBubbleSpeed(bubble,getBubbleSpeed());
             bubbleListInit();
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
@@ -670,6 +709,11 @@ public class PowersSoftAndWet extends PunchingStand {
 
     public void shootBubble(SoftAndWetBubbleEntity ankh){
         shootBubbleSpeed(ankh, 1.01F);
+    }
+    public void shootExplosiveBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
+        ankh.setSped(speed);
+        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.72F), this.self.getZ());
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     public void shootBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
@@ -989,7 +1033,6 @@ public class PowersSoftAndWet extends PunchingStand {
             kickAttackImpact(target);
         }
     }
-
     public SoundEvent getKickAttackSound(){
         return ModSounds.SOFT_AND_WET_KICK_EVENT;
     }
@@ -1112,9 +1155,28 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
     }
+
+    public int getLowerTicks(){
+        return 50;
+    }
+    public int getLowerGoBeyondTicks(){
+        return 3;
+    }
     @Override
     public void tickPower(){
         unloadBubbles();
+        /**Burn through ticks*/
+        if (getShootTicks()>0){
+            if (this.self instanceof Player PE && PE.isCreative()){
+                setShootTicks(0);
+            } else {
+                setShootTicks(getShootTicks()-getLowerTicks());
+            }
+        }
+        if (getGoBeyondCharge()>0){
+            setGoBeyondChargeTicks(getGoBeyondCharge()-getLowerGoBeyondTicks());
+        }
+
         super.tickPower();
     }
     @Override
