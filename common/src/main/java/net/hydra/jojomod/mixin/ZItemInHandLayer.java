@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
@@ -10,6 +11,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,28 +36,32 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     public @Nullable ItemStack roundabout$RenderOffHand;
     public boolean dominant$Hand;
     @Inject(method = "render", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
-        dominant$Hand = $$3.getMainArm() == HumanoidArm.RIGHT;
-        if ($$3 instanceof Player) {
-            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3) || ClientUtil.getScreenFreeze();
+    public void roundabout$Render(PoseStack poseStack, MultiBufferSource $$1, int $$2, T Entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
+        dominant$Hand = Entity.getMainArm() == HumanoidArm.RIGHT;
+        if (Entity instanceof Player) {
+            roundabout$ModifyEntity = ((TimeStop) Entity.level()).CanTimeStopEntity(Entity) || ClientUtil.getScreenFreeze();
             if (roundabout$ModifyEntity) {
-                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderMainHand() == null){
-                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderMainHand($$3.getMainHandItem().copy());
+                if (((IEntityAndData) Entity).roundabout$getRoundaboutRenderMainHand() == null){
+                    ((IEntityAndData) Entity).roundabout$setRoundaboutRenderMainHand(Entity.getMainHandItem().copy());
                 }
-                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderOffHand() == null){
-                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderOffHand($$3.getOffhandItem().copy());
+                if (((IEntityAndData) Entity).roundabout$getRoundaboutRenderOffHand() == null){
+                    ((IEntityAndData) Entity).roundabout$setRoundaboutRenderOffHand(Entity.getOffhandItem().copy());
                 }
-                roundabout$RenderMainHand = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderMainHand();
-                roundabout$RenderOffHand = ((IEntityAndData) $$3).roundabout$getRoundaboutRenderOffHand();
+                roundabout$RenderMainHand = ((IEntityAndData) Entity).roundabout$getRoundaboutRenderMainHand();
+                roundabout$RenderOffHand = ((IEntityAndData) Entity).roundabout$getRoundaboutRenderOffHand();
             } else {
-                if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderOffHand() != null){
-                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderOffHand(null);
-                } else if (((IEntityAndData) $$3).roundabout$getRoundaboutRenderMainHand() != null){
-                    ((IEntityAndData) $$3).roundabout$setRoundaboutRenderMainHand(null);
+                if (((IEntityAndData) Entity).roundabout$getRoundaboutRenderOffHand() != null){
+                    ((IEntityAndData) Entity).roundabout$setRoundaboutRenderOffHand(null);
+                } else if (((IEntityAndData) Entity).roundabout$getRoundaboutRenderMainHand() != null){
+                    ((IEntityAndData) Entity).roundabout$setRoundaboutRenderMainHand(null);
                 }
             }
         } else {
             roundabout$ModifyEntity = false;
+        }
+        if (((StandUser)Entity).roundabout$getEffectiveCombatMode() && !Entity.isUsingItem()){
+            ci.cancel();
+            return;
         }
     }
 
