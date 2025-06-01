@@ -10,7 +10,6 @@ import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.particles.FabricParticles;
 import net.hydra.jojomod.registry.*;
-import net.hydra.jojomod.registry.packet.FabricPacketRegistry;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.BlockBlacklist;
 import net.hydra.jojomod.util.ConfigManager;
@@ -51,7 +50,6 @@ public class RoundaboutFabric implements ModInitializer {
         FabricItems.register();
         FabricSounds.register();
         FabricPacketManager.registerC2SPackets();
-        FabricPacketRegistry.getInstance().roundabout$bootstrap();
         FabricParticles.registerParticles();
         FabricGamerules.registerGamerules();
         CommandRegistryFabric.register();

@@ -1,4 +1,4 @@
-package net.hydra.jojomod.networking.packet.impl;
+package net.hydra.jojomod.networking.packet.impl.packet;
 
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.entity.stand.D4CEntity;
@@ -11,28 +11,26 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
-public class AckDynamicWorld extends AbstractBaseC2SPacket {
+public class AckDynamicWorldP extends AbstractBaseC2SPacket {
     @Override
     public void deserialize(Object... vargs) {
-        // not needed
+
     }
 
     @Override
     public void serialize(FriendlyByteBuf buf) {
-        // not needed
+
     }
 
     @Override
     public void toBytes(FriendlyByteBuf buf) {
-        // not needed
+
     }
 
     @Override
     public void handle(PacketArgsC2S args) {
         MinecraftServer server = args.server;
         ServerPlayer player = args.player;
-
-        assert server != null;
 
         server.execute(()->{
             if (player != null && ((StandUser)player).roundabout$getStand() instanceof D4CEntity)

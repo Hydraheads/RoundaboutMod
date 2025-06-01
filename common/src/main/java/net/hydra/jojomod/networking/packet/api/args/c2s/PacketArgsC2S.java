@@ -12,16 +12,14 @@ public class PacketArgsC2S {
     public ServerPlayer player;
     public ServerGamePacketListenerImpl handler;
     public FriendlyByteBuf buf;
-    public Object responseSender;
 
     public PacketArgsC2S(MinecraftServer server, ServerPlayer player,
                                @Nullable ServerGamePacketListenerImpl handler,
-                               FriendlyByteBuf buf, @Nullable Object responseSender)
+                               FriendlyByteBuf buf)
     {
         this.server = server;
         this.player = player;
         this.handler = handler;
         this.buf = buf;
-        this.responseSender = responseSender;
     }
 }

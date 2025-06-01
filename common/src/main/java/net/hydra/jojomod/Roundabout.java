@@ -1,6 +1,7 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
+import net.hydra.jojomod.networking.packet.impl.ModNetworking;
 import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.Networking;
@@ -36,6 +37,7 @@ public class Roundabout {
         }
 
         ModCriteria.bootstrap();
+        ModNetworking.bootstrap();
     }
 
     public static void onServerStarted(MinecraftServer server)

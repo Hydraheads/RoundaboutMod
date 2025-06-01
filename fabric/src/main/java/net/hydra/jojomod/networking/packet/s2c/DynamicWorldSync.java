@@ -2,7 +2,8 @@ package net.hydra.jojomod.networking.packet.s2c;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.networking.packet.impl.packet.AckDynamicWorldP;
+import net.hydra.jojomod.networking.packet.impl.ModNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
@@ -21,7 +22,8 @@ public class DynamicWorldSync {
         LocalPlayer player = client.player;
 
         player.connection.levels().add(LEVEL_KEY);
-        ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
+        //ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
+        ModNetworking.send(new AckDynamicWorldP());
 
 //        if (buf.readInt() == player.getId())
 //            ModPacketHandler.PACKET_ACCESS.requestTeleportToWorld(name);
