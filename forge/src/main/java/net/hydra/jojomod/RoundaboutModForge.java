@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.networking.ForgePacketHandler;
 import net.hydra.jojomod.registry.*;
+import net.hydra.jojomod.registry.packet.ForgePacketRegistry;
 import net.hydra.jojomod.util.BlockBlacklist;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.Networking;
@@ -83,9 +84,10 @@ public class RoundaboutModForge {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event){
-        event.enqueueWork(() ->
-                ForgePacketHandler.register()
-        );
+        event.enqueueWork(() -> {
+                    ForgePacketHandler.register();
+                    ForgePacketRegistry.getInstance().roundabout$bootstrap();
+        });
     }
 
 
