@@ -149,6 +149,19 @@ public class ModSounds {
     public static final ResourceLocation BUBBLE_POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_POP);
     public static SoundEvent BUBBLE_POP_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_POP_ID);
 
+    public static final String EXPLOSIVE_BUBBLE_POP = "explosive_bubble_pop";
+    public static final ResourceLocation EXPLOSIVE_BUBBLE_POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_POP);
+    public static SoundEvent EXPLOSIVE_BUBBLE_POP_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BUBBLE_POP_ID);
+    public static final String EXPLOSIVE_BUBBLE_SHOT = "explosive_bubble_shot";
+    public static final ResourceLocation EXPLOSIVE_BUBBLE_SHOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_SHOT);
+    public static SoundEvent EXPLOSIVE_BUBBLE_SHOT_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BUBBLE_SHOT_ID);
+    public static final String EXPLOSIVE_BUBBLE_SWITCH = "explosive_bubble_switch";
+    public static final ResourceLocation EXPLOSIVE_BUBBLE_SWITCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_SWITCH);
+    public static SoundEvent EXPLOSIVE_BUBBLE_SWITCH_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BUBBLE_SWITCH_ID);
+    public static final String EXPLOSIVE_BUBBLE_SWITCH_OFF = "explosive_bubble_switch_off";
+    public static final ResourceLocation EXPLOSIVE_BUBBLE_SWITCH_OFF_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_SWITCH_OFF);
+    public static SoundEvent EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BUBBLE_SWITCH_OFF_ID);
+
     public static final String BUBBLE_CREATE = "bubble_create";
     public static final ResourceLocation BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_CREATE);
     public static SoundEvent BUBBLE_CREATE_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_CREATE_ID);

@@ -38,4 +38,16 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
         super(ModEntities.EXPLOSIVE_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
+
+    public void popBubble(){
+
+        this.level().playSound(null, this.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_POP_EVENT,
+                SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
+        if (!this.level().isClientSide()){
+            ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    1, 0, 0,0, 0.015);
+        }
+        this.discard();
+    }
 }

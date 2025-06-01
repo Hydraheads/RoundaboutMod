@@ -35,6 +35,30 @@
       "roundabout:water_encase"
     ]
   },
+  "explosive_bubble_pop": {
+    "subtitle": "sounds.roundabout.explosive_bubble_pop",
+    "sounds": [
+      "roundabout:explosive_bubble_pop"
+    ]
+  },
+  "explosive_bubble_shot": {
+    "subtitle": "sounds.roundabout.explosive_bubble_shot",
+    "sounds": [
+      "roundabout:explosive_bubble_shot"
+    ]
+  },
+  "explosive_bubble_switch": {
+    "subtitle": "sounds.roundabout.explosive_bubble_switch",
+    "sounds": [
+      "roundabout:explosive_bubble_switch"
+    ]
+  },
+  "explosive_bubble_switch_off": {
+    "subtitle": "sounds.roundabout.explosive_bubble_switch_off",
+    "sounds": [
+      "roundabout:explosive_bubble_switch_off"
+    ]
+  },
   "dio_hoho": {
     "subtitle": "sounds.roundabout.dio_hoho",
     "sounds": [

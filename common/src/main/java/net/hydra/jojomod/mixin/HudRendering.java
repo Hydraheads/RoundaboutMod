@@ -339,7 +339,6 @@ public abstract class HudRendering implements IHudAccess {
                 if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
                         (PW.getShootTicks() > 0)){
                     StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
-                    removeNum = true;
                 }
                 return true;
             } else if (removeNum){
@@ -347,7 +346,6 @@ public abstract class HudRendering implements IHudAccess {
                 if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
                         (PW.getShootTicks() > 0)){
                     StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
-                    removeNum = true;
                 }
                 return true;
             }

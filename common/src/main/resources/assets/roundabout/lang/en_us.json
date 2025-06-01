@@ -169,6 +169,7 @@
   "entity.roundabout.visage_display": "Floating Face",
   "entity.roundabout.plunder_bubble": "Plunder Soap Bubble",
   "entity.roundabout.encasement_bubble": "Encasement Bubble",
+  "entity.roundabout.explosive_bubble": "Explosive Soap Bubble",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
@@ -364,6 +365,10 @@
 
   "sounds.roundabout.bubble_hover_over":  "Bubble",
   "sounds.roundabout.bubble_pop":  "Bubble popping",
+  "sounds.roundabout.explosive_bubble_pop":  "Loud popping",
+  "sounds.roundabout.explosive_bubble_shot":  "Bobble Shot",
+  "sounds.roundabout.explosive_bubble_switch":  "Shooting Mode On",
+  "sounds.roundabout.explosive_bubble_switch_off":  "Shooting Mode Off",
   "sounds.roundabout.bubble_create":  "Bubble",
   "sounds.roundabout.big_bubble_create":  "Bubble",
   "sounds.roundabout.bubble_plunder":  "Something was taken",

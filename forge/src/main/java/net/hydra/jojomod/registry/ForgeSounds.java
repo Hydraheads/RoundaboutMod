@@ -61,6 +61,14 @@ public class ForgeSounds {
             register(ModSounds.SOFT_AND_WET_KICK, ModSounds.SOFT_AND_WET_KICK_ID);
     public static final RegistryObject<SoundEvent> BUBBLE_POP_EVENT =
             register(ModSounds.BUBBLE_POP, ModSounds.BUBBLE_POP_ID);
+    public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_POP_EVENT =
+            register(ModSounds.EXPLOSIVE_BUBBLE_POP, ModSounds.EXPLOSIVE_BUBBLE_POP_ID);
+    public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SHOT_EVENT =
+            register(ModSounds.EXPLOSIVE_BUBBLE_SHOT, ModSounds.EXPLOSIVE_BUBBLE_SHOT_ID);
+    public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SWITCH_EVENT =
+            register(ModSounds.EXPLOSIVE_BUBBLE_SWITCH, ModSounds.EXPLOSIVE_BUBBLE_SWITCH_ID);
+    public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT =
+            register(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF, ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_PETRIFY_EVENT =
             register(ModSounds.LOCACACA_PETRIFY, ModSounds.LOCACACA_PETRIFY_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_FUSION_EVENT =

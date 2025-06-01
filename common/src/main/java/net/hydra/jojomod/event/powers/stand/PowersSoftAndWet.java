@@ -454,13 +454,24 @@ public class PowersSoftAndWet extends PunchingStand {
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
 
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
 
         }
         return true;
     }
     public boolean switchModes(){
-        getStandUserSelf().roundabout$setCombatMode(!getStandUserSelf().roundabout$getCombatMode());
+        if (getStandUserSelf().roundabout$getCombatMode()){
+            getStandUserSelf().roundabout$setCombatMode(false);
+            if (this.self.level().isClientSide()){
+                this.self.playSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT, 1F, 1.0F);
+            }
+        } else {
+            getStandUserSelf().roundabout$setCombatMode(true);
+            if (this.self.level().isClientSide()){
+                this.self.playSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_EVENT, 1F, 1.0F);
+            }
+        }
+
         return true;
     }
     public boolean bubbleShot(){
@@ -1157,7 +1168,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public int getLowerTicks(){
-        return 50;
+        return 45;
     }
     public int getLowerGoBeyondTicks(){
         return 3;
