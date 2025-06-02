@@ -41,6 +41,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -887,6 +888,13 @@ public class PowersSoftAndWet extends PunchingStand {
     public float inputSpeedModifiers(float basis){
         if (this.activePower == PowerIndex.POWER_1_SNEAK){
             basis *= 0.2f;
+        } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE){
+            if (this.getSelf().isCrouching()) {
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1 / f;
+                basis *= g;
+            }
+            basis *= 0.6f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -999,7 +1007,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.2F);
     }
     public float getKickAttackStrength(Entity entity){
-        float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
+        float punchD = this.getPunchStrength(entity)*1.8F+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
             return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
         } else {
