@@ -168,26 +168,38 @@ public class StandHudRender {
         int l;
         int k;
         int gb = PW.getMaxGoBeyondChargeTicks();
-        int st = PW.getMaxShootTicks();
         int gc = PW.getGoBeyondCharge(); gc= Mth.clamp(gc,0,gb);
-        int sc = PW.getShootTicks();  sc= Mth.clamp(sc,0,st);
-        StandUser standUser = ((StandUser)playerEntity);
-        int blt = (int) Math.floor(((double) 182 /gb)*(gc));
-        int blt2 = (int) Math.floor(((double) 182 /st)*(sc));
         l = scaledHeight - 32 + 3;
-        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 141, 182, 2);
-        context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 143, 182, 3);
-        if (blt > 0) {
-            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 146, blt, 2);
-        }
-        if (blt2 > 0) {
-            context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 148, blt2, 3);
+        StandUser standUser = ((StandUser)playerEntity);
+        if (PW.getInExplosiveSpinMode()) {
+
+            int blt = (int) Math.floor(((double) 182 /gb)*(gc));
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 151, 182, 5);
+            if (blt > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 156, blt, 5);
+            }
+        } else {
+
+            int st = PW.getMaxShootTicks();
+            int sc = PW.getShootTicks();  sc= Mth.clamp(sc,0,st);
+            int blt = (int) Math.floor(((double) 182 /gb)*(gc));
+            int blt2 = (int) Math.floor(((double) 182 /st)*(sc));
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 141, 182, 2);
+            context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 143, 182, 3);
+            if (blt > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 146, blt, 2);
+            }
+            if (blt2 > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l+2, 0, 148, blt2, 3);
+            }
         }
 
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        if (PW.canShootExplosive(PW.getUseTicks())){
+        if (PW.getInExplosiveSpinMode()) {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 80, 9, 9);
+        } else if (PW.canShootExplosive(PW.getUseTicks())){
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 70, 9, 9);
         } else {
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);
@@ -204,7 +216,9 @@ public class StandHudRender {
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        if (PW.canShootExplosive(PW.getUseTicks())){
+        if (PW.getInExplosiveSpinMode()) {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 80, 9, 9);
+        } else if (PW.canShootExplosive(PW.getUseTicks())){
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 70, 9, 9);
         } else {
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);

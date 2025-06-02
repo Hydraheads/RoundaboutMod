@@ -251,8 +251,9 @@ public class PowersSoftAndWet extends PunchingStand {
         return 2499;
     }
     public int getGoBeyondUseTicks(){
-        return 500;
-    }
+        return 800;
+
+}
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
@@ -272,7 +273,7 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (inShootingMode()){
                         if (!holdDownClick){
                             if (!this.onCooldown(PowerIndex.SKILL_4)) {
-                                if (confirmShot(getUseTicks())) {
+                                if (getInExplosiveSpinMode() || confirmShot(getUseTicks())) {
                                     this.tryPower(PowerIndex.POWER_4_EXTRA, true);
                                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_EXTRA);
                                 }
@@ -307,6 +308,8 @@ public class PowersSoftAndWet extends PunchingStand {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
+
+
         StandUser standUser = ((StandUser) playerEntity);
         StandPowers powers = standUser.roundabout$getStandPowers();
         boolean standOn = standUser.roundabout$getActive();
@@ -432,11 +435,25 @@ public class PowersSoftAndWet extends PunchingStand {
 
     }
     public int goBeyondChargeTicks = 0;
+    public boolean inExplosiveSpinMode = false;
+    public boolean getInExplosiveSpinMode(){
+        return inExplosiveSpinMode;
+    }
+    public void setInExplosiveSpinMode(boolean mode){
+        this.inExplosiveSpinMode = mode;
+    }
     public int getGoBeyondCharge(){
         return goBeyondChargeTicks;
     }
     public void setGoBeyondChargeTicks(int goBeyondChargeTicks){
         this.goBeyondChargeTicks = Mth.clamp(goBeyondChargeTicks,0,getMaxGoBeyondChargeTicks());
+
+        if (getInExplosiveSpinMode() && getGoBeyondCharge() == 0){
+            setInExplosiveSpinMode(false);
+        }
+        if (!getInExplosiveSpinMode() && getGoBeyondCharge() >= getMaxGoBeyondChargeTicks()){
+            setInExplosiveSpinMode(true);
+        }
     }
     public int getMaxShootTicks(){
         return 10000;
@@ -446,7 +463,10 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public float getExplosiveSpeed(){
-        return 0.33F;
+        if (getInExplosiveSpinMode()){
+            return 0.75F;
+        }
+        return 0.375F;
     }
 
     public boolean inShootingMode(){
@@ -1185,7 +1205,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return 50;
     }
     public int getLowerGoBeyondTicks(){
-        return 3;
+        return 5;
+    }
+    public int getLowerExplosiveSpinTicks(){
+        return 62;
     }
     @Override
     public void tickPower(){
@@ -1200,8 +1223,19 @@ public class PowersSoftAndWet extends PunchingStand {
                setShootTicks(getShootTicks() - getLowerTicks());
             }
         }
-        if (getGoBeyondCharge()>0){
-            setGoBeyondChargeTicks(getGoBeyondCharge()-getLowerGoBeyondTicks());
+
+        if (this.self instanceof Player PE && PE.isCreative()) {
+            if (getGoBeyondCharge()>0) {
+                setGoBeyondChargeTicks(0);
+            }
+        } else {
+            if (getGoBeyondCharge()>0){
+                if (getInExplosiveSpinMode()){
+                    setGoBeyondChargeTicks(getGoBeyondCharge()-getLowerExplosiveSpinTicks());
+                } else {
+                    setGoBeyondChargeTicks(getGoBeyondCharge()-getLowerGoBeyondTicks());
+                }
+            }
         }
 
         super.tickPower();
