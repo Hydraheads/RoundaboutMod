@@ -133,6 +133,8 @@
     "ZFogRenderer",
     "ZGameRenderer",
     "ZHeldItemLowering",
+    "ZHorseMarkingLayer",
+    "ZHorseRenderer",
     "ZHumanoidArmorLayer",
     "ZHumanoidMobRenderer",
     "ZHumanoidModel",
