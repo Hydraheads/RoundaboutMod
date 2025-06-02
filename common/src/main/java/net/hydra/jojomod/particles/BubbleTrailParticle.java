@@ -21,6 +21,7 @@ public class BubbleTrailParticle extends SimpleAnimatedParticle {
         this.quadSize *= 1.7f;
         this.sprites = $$7;
         this.gravity = 0;
+        this.scale(0.9F);
         this.setSpriteFromAge($$7);
     }
 

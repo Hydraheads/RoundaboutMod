@@ -163,6 +163,9 @@ public class SoftAndWetDrownedModel<T extends SoftAndWetEntity> extends StandMod
             this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
             this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
             this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
+            this.animate(pEntity.kick, SoftAndWetAnimations.Kick, pAgeInTicks, 1f);
+            this.animate(pEntity.kick_charge, SoftAndWetAnimations.ChargeKick, pAgeInTicks, 1f);
+            this.animate(pEntity.encasement_punch, SoftAndWetAnimations.ChargedPunch, pAgeInTicks, 1f);
         }
 
         @Override

@@ -43,6 +43,9 @@ public class SoftAndWetEntity extends StandEntity {
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
+    public final AnimationState kick = new AnimationState();
+    public final AnimationState kick_charge = new AnimationState();
+    public final AnimationState encasement_punch = new AnimationState();
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -60,6 +63,21 @@ public class SoftAndWetEntity extends StandEntity {
                 this.kick_barrage.startIfStopped(this.tickCount);
             }
 
+            if (this.getAnimation() == 30) {
+                this.kick.startIfStopped(this.tickCount);
+            } else {
+                this.kick.stop();
+            }
+            if (this.getAnimation() == 31) {
+                this.kick_charge.startIfStopped(this.tickCount);
+            } else {
+                this.kick_charge.stop();
+            }
+            if (this.getAnimation() == 32) {
+                this.encasement_punch.startIfStopped(this.tickCount);
+            } else {
+                this.encasement_punch.stop();
+            }
 
             if (this.getAnimation() == 42) {
                 this.kick_barrage_windup.startIfStopped(this.tickCount);

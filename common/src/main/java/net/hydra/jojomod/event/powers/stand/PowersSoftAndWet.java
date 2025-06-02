@@ -837,12 +837,18 @@ public class PowersSoftAndWet extends PunchingStand {
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
         chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
+        if (chargedFinal >= maxSuperHitTime){
+            this.animateStand((byte) 32);
+        } else {
+            this.animateStand((byte) 30);
+        }
         //playBarrageCrySound();
         return true;
     }
     public boolean setPowerKickAttack() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
+        this.animateStand((byte) 31);
         this.poseStand(OffsetIndex.GUARD);
         return true;
     }
@@ -1033,7 +1039,9 @@ public class PowersSoftAndWet extends PunchingStand {
                                         -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180))
                                 )
                         );
-                        SE.roundabout$setBubbleLaunchEncased();
+                        if (LE.isAlive()) {
+                            SE.roundabout$setBubbleLaunchEncased();
+                        }
 
                         if (!this.self.level().isClientSide()) {
                             Vec3 $$2 = LE.getDeltaMovement();
