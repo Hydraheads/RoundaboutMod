@@ -75,6 +75,8 @@ public abstract class ZItemInHandRenderer {
 
     @Shadow protected abstract void renderPlayerArm(PoseStack $$0, MultiBufferSource $$1, int $$2, float $$3, float $$4, HumanoidArm $$5);
 
+    @Shadow private ItemStack offHandItem;
+    @Shadow private ItemStack mainHandItem;
     float d1 = 1;
     float d2 = -0.3F;
     float d3 = 0.4F;
@@ -203,7 +205,9 @@ public abstract class ZItemInHandRenderer {
             $$15.renderLeftHand($$0, $$1, $$2, JE);
         }
     }
-
+    @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$tick(CallbackInfo ci) {
+    }
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer, float ff, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
         if (abstractClientPlayer.isScoping()) {

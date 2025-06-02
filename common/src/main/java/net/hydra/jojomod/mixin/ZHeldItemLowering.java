@@ -14,6 +14,7 @@ import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,6 +36,10 @@ public class ZHeldItemLowering {
     @Final
     @Shadow
     private Minecraft minecraft;
+
+    @Shadow private ItemStack mainHandItem;
+
+    @Shadow private ItemStack offHandItem;
 
     /** This makes certain items lower when your stand is out. Indicates that you can't really use tools
      * like swords or pickaxes while a stand is out.
@@ -71,6 +76,8 @@ public class ZHeldItemLowering {
         }
     }
 
+    @Unique
+    public float roundabout$ticker = 0;
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$HeldItems2(CallbackInfo ci) {
         LocalPlayer clientPlayerEntity2 = this.minecraft.player;
@@ -78,6 +85,44 @@ public class ZHeldItemLowering {
             mainHandHeight = oMainHandHeight;
             offHandHeight = oOffHandHeight;
             ci.cancel();
+            return;
+        }
+
+        if (this.minecraft.player != null && ((StandUser)this.minecraft.player).roundabout$getEffectiveCombatMode() &&
+        !this.minecraft.player.isUsingItem()){
+            if (roundabout$ticker == 0){
+                this.mainHandHeight = 0;
+                this.offHandHeight = 0;
+            }
+            roundabout$ticker++;
+            this.mainHandItem = ItemStack.EMPTY;
+            this.offHandItem = ItemStack.EMPTY;
+
+            this.oMainHandHeight = this.mainHandHeight;
+            this.oOffHandHeight = this.offHandHeight;
+            LocalPlayer $$0 = this.minecraft.player;
+            ItemStack $$1 = mainHandItem;
+            ItemStack $$2 = offHandItem;
+
+            if ($$0.isHandsBusy()) {
+                this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4F, 0.0F, 1.0F);
+                this.offHandHeight = Mth.clamp(this.offHandHeight - 0.4F, 0.0F, 1.0F);
+            } else {
+                float $$3 = Mth.clamp(((float)roundabout$ticker + 1) / 2, 0.0F, 1.0F);
+                this.mainHandHeight = this.mainHandHeight + Mth.clamp((this.mainHandItem == $$1 ? $$3 * $$3 * $$3 : 0.0F) - this.mainHandHeight, -0.4F, 0.4F);
+                this.offHandHeight = this.offHandHeight + Mth.clamp((float)(this.offHandItem == $$2 ? 1 : 0) - this.offHandHeight, -0.4F, 0.4F);
+            }
+
+            if (this.mainHandHeight < 0.1F) {
+                this.mainHandItem = $$1;
+            }
+
+            if (this.offHandHeight < 0.1F) {
+                this.offHandItem = $$2;
+            }
+            ci.cancel();
+        } else {
+            roundabout$ticker = 0;
         }
     }
 }

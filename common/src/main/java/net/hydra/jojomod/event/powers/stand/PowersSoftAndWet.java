@@ -251,7 +251,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return 2500;
     }
     public int getGoBeyondUseTicks(){
-        return 400;
+        return 500;
     }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
@@ -449,7 +449,7 @@ public class PowersSoftAndWet extends PunchingStand {
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
             this.setActivePower(PowerIndex.POWER_2);
-            shootExplosiveBubbleSpeed(bubble,getBubbleSpeed());
+            shootExplosiveBubbleSpeed(bubble,0.26F);
             bubbleListInit();
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
