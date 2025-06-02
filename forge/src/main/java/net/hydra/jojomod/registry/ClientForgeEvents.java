@@ -160,6 +160,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.DREAD_FLAME.get(), StandFlameParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CREAM_FLAME.get(), StandFlameParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.FOG_CHAIN.get(), FogChainParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BUBBLE_TRAIL.get(), BubbleTrailParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CINDERELLA_GLOW.get(), CinderellaGlowParticle.CinderellaGlowProvider::new);
         event.registerSpriteSet(ForgeParticles.PINK_SMOKE.get(), CinderellaSmokeParticle.CosyProvider::new);

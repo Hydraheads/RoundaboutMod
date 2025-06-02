@@ -297,6 +297,7 @@ public class ForgeEvents {
         ModParticles.DREAD_FLAME = ForgeParticles.DREAD_FLAME.get();
         ModParticles.CREAM_FLAME = ForgeParticles.CREAM_FLAME.get();
         ModParticles.FOG_CHAIN = ForgeParticles.FOG_CHAIN.get();
+        ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
         ModParticles.CINDERELLA_GLOW = ForgeParticles.CINDERELLA_GLOW.get();
         ModParticles.PINK_SMOKE = ForgeParticles.PINK_SMOKE.get();

@@ -25,6 +25,7 @@ public class FabricParticles {
     public static final SimpleParticleType DREAD_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType CREAM_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType FOG_CHAIN = FabricParticleTypes.simple();
+    public static final SimpleParticleType BUBBLE_TRAIL = FabricParticleTypes.simple();
     public static final SimpleParticleType WARDEN_CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType CINDERELLA_GLOW = FabricParticleTypes.simple();
     public static final SimpleParticleType PINK_SMOKE = FabricParticleTypes.simple();
@@ -43,6 +44,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "menacing"), MENACING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "vacuum"), VACUUM);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "fog_chain"), FOG_CHAIN);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bubble_trail"), BUBBLE_TRAIL);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "warden_clock"), WARDEN_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "orange_flame"), ORANGE_FLAME);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_flame"), BLUE_FLAME);
@@ -65,6 +67,7 @@ public class FabricParticles {
         ModParticles.MENACING = MENACING;
         ModParticles.VACUUM = VACUUM;
         ModParticles.FOG_CHAIN = FOG_CHAIN;
+        ModParticles.BUBBLE_TRAIL = BUBBLE_TRAIL;
         ModParticles.WARDEN_CLOCK = WARDEN_CLOCK;
         ModParticles.POINTER = POINTER;
         ModParticles.POINTER_SOFT = POINTER_SOFT;

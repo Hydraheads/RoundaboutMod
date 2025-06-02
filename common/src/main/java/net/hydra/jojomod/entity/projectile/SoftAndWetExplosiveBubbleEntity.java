@@ -33,6 +33,14 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
         super($$0, $$1);
     }
 
+    public void tick(){
+        super.tick();
+        if (!this.level().isClientSide()){
+            ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL,
+                    this.getX(), this.getY() + this.getBbHeight()/2, this.getZ(),
+                    0, 0, 0,0, 0.015);
+        }
+    }
 
     public SoftAndWetExplosiveBubbleEntity(LivingEntity $$1, Level $$2) {
         super(ModEntities.EXPLOSIVE_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);

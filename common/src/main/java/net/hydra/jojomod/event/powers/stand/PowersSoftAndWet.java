@@ -275,7 +275,11 @@ public class PowersSoftAndWet extends PunchingStand {
                             if (!this.onCooldown(PowerIndex.SKILL_4)) {
                                 if (getInExplosiveSpinMode() || confirmShot(getUseTicks())) {
                                     this.tryPower(PowerIndex.POWER_4_EXTRA, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_EXTRA);
+                                    if (getInExplosiveSpinMode()){
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
+                                    } else {
+                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_EXTRA);
+                                    }
                                 }
                             }
                         }
@@ -464,9 +468,9 @@ public class PowersSoftAndWet extends PunchingStand {
 
     public float getExplosiveSpeed(){
         if (getInExplosiveSpinMode()){
-            return 0.75F;
+            return 0.8F;
         }
-        return 0.375F;
+        return 0.4F;
     }
 
     public boolean inShootingMode(){
@@ -788,6 +792,14 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (move == PowerIndex.POWER_4){
             return this.switchModes();
         } else if (move == PowerIndex.POWER_4_EXTRA){
+            if (!this.self.level().isClientSide()) {
+                this.setInExplosiveSpinMode(false);
+            }
+            return this.shootExplosiveBubble();
+        } else if (move == PowerIndex.POWER_4_BONUS){
+            if (!this.self.level().isClientSide()) {
+                this.setInExplosiveSpinMode(true);
+            }
             return this.shootExplosiveBubble();
         } else if (move == PowerIndex.POWER_3){
             return this.bubbleLadder();

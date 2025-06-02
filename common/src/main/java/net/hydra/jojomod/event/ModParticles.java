@@ -13,6 +13,7 @@ public class ModParticles {
     public static SimpleParticleType MENACING;
     public static SimpleParticleType VACUUM;
     public static SimpleParticleType FOG_CHAIN;
+    public static SimpleParticleType BUBBLE_TRAIL;
     public static SimpleParticleType WARDEN_CLOCK;
     public static SimpleParticleType POINTER;
     public static SimpleParticleType POINTER_SOFT;
