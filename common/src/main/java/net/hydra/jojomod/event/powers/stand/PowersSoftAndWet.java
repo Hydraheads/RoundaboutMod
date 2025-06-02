@@ -466,6 +466,9 @@ public class PowersSoftAndWet extends PunchingStand {
             setInExplosiveSpinMode(false);
         }
         if (!getInExplosiveSpinMode() && getGoBeyondCharge() >= getMaxGoBeyondChargeTicks()){
+            if (this.self.level().isClientSide()){
+                this.self.playSound(ModSounds.EXPLOSIVE_SPIN_MODE_EVENT, 1F, 1.0F);
+            }
             setInExplosiveSpinMode(true);
         }
     }

@@ -59,6 +59,12 @@
       "roundabout:explosive_bubble_switch_off"
     ]
   },
+  "explosive_spin_mode": {
+    "subtitle": "sounds.roundabout.explosive_spin_mode",
+    "sounds": [
+      "roundabout:explosive_spin_mode"
+    ]
+  },
   "dio_hoho": {
     "subtitle": "sounds.roundabout.dio_hoho",
     "sounds": [

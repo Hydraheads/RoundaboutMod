@@ -67,6 +67,8 @@ public class ForgeSounds {
             register(ModSounds.EXPLOSIVE_BUBBLE_SHOT, ModSounds.EXPLOSIVE_BUBBLE_SHOT_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SWITCH_EVENT =
             register(ModSounds.EXPLOSIVE_BUBBLE_SWITCH, ModSounds.EXPLOSIVE_BUBBLE_SWITCH_ID);
+    public static final RegistryObject<SoundEvent> EXPLOSIVE_SPIN_MODE_EVENT =
+            register(ModSounds.EXPLOSIVE_SPIN_MODE, ModSounds.EXPLOSIVE_SPIN_MODE_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT =
             register(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF, ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_ID);
     public static final RegistryObject<SoundEvent> LOCACACA_PETRIFY_EVENT =

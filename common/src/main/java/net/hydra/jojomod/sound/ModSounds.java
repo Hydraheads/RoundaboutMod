@@ -161,6 +161,9 @@ public class ModSounds {
     public static final String EXPLOSIVE_BUBBLE_SWITCH_OFF = "explosive_bubble_switch_off";
     public static final ResourceLocation EXPLOSIVE_BUBBLE_SWITCH_OFF_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_SWITCH_OFF);
     public static SoundEvent EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BUBBLE_SWITCH_OFF_ID);
+    public static final String EXPLOSIVE_SPIN_MODE = "explosive_spin_mode";
+    public static final ResourceLocation EXPLOSIVE_SPIN_MODE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_SPIN_MODE);
+    public static SoundEvent EXPLOSIVE_SPIN_MODE_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_SPIN_MODE_ID);
 
     public static final String BUBBLE_CREATE = "bubble_create";
     public static final ResourceLocation BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_CREATE);

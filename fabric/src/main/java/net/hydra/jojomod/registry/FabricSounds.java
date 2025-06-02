@@ -93,6 +93,7 @@ public class FabricSounds {
         addSound(ModSounds.EXPLOSIVE_BUBBLE_SHOT_ID, ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT);
         addSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_ID, ModSounds.EXPLOSIVE_BUBBLE_SWITCH_EVENT);
         addSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_ID, ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT);
+        addSound(ModSounds.EXPLOSIVE_SPIN_MODE_ID, ModSounds.EXPLOSIVE_SPIN_MODE_EVENT);
 
         addSound(ModSounds.BUBBLE_CREATE_ID, ModSounds.BUBBLE_CREATE_EVENT);
         addSound(ModSounds.BIG_BUBBLE_CREATE_ID, ModSounds.BIG_BUBBLE_CREATE_EVENT);
