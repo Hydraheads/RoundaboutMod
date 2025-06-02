@@ -248,7 +248,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean holdDownClick = false;
 
     public int getUseTicks(){
-        return 2500;
+        return 2499;
     }
     public int getGoBeyondUseTicks(){
         return 500;
@@ -406,8 +406,16 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return false;
     }
+
+    public int pauseTicks(){
+        return 20;
+    }
+    public int getPauseGrowthTicks(){
+        return pauseGrowthTicks;
+    }
     public boolean confirmShot(int useTicks){
         if (canShootExplosive(useTicks)){
+            pauseGrowthTicks = pauseTicks();
             setGoBeyondChargeTicks(goBeyondChargeTicks+getGoBeyondUseTicks());
             setShootTicks((shootTicks+useTicks));
             return true;
@@ -437,6 +445,10 @@ public class PowersSoftAndWet extends PunchingStand {
         return 10000;
     }
 
+    public float getExplosiveSpeed(){
+        return 0.33F;
+    }
+
     public boolean inShootingMode(){
         return getStandUserSelf().roundabout$getCombatMode();
     }
@@ -449,7 +461,7 @@ public class PowersSoftAndWet extends PunchingStand {
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
             this.setActivePower(PowerIndex.POWER_2);
-            shootExplosiveBubbleSpeed(bubble,0.26F);
+            shootExplosiveBubbleSpeed(bubble,getExplosiveSpeed());
             bubbleListInit();
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
@@ -1085,6 +1097,8 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
     int bubbleScaffoldCount = 0;
+
+    public int pauseGrowthTicks = 0;
     public BlockPos buildingBubbleScaffoldPos = BlockPos.ZERO;
     public void updateBubbleScaffold(){
         if (this.self instanceof Player PE && this.self.level().isClientSide()) {
@@ -1168,7 +1182,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public int getLowerTicks(){
-        return 45;
+        return 50;
     }
     public int getLowerGoBeyondTicks(){
         return 3;
@@ -1177,11 +1191,13 @@ public class PowersSoftAndWet extends PunchingStand {
     public void tickPower(){
         unloadBubbles();
         /**Burn through ticks*/
-        if (getShootTicks()>0){
-            if (this.self instanceof Player PE && PE.isCreative()){
-                setShootTicks(0);
-            } else {
-                setShootTicks(getShootTicks()-getLowerTicks());
+        if (this.self instanceof Player PE && PE.isCreative()) {
+            setShootTicks(0);
+        } else if (getPauseGrowthTicks() > 0){
+            pauseGrowthTicks-=1;
+        } else {
+            if (getShootTicks() > 0) {
+               setShootTicks(getShootTicks() - getLowerTicks());
             }
         }
         if (getGoBeyondCharge()>0){
