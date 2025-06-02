@@ -1229,7 +1229,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return 5;
     }
     public int getLowerExplosiveSpinTicks(){
-        return 62;
+        return 100;
     }
     @Override
     public void tickPower(){

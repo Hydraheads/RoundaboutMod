@@ -3,10 +3,15 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
     public SoftAndWetExplosiveBubbleEntity(EntityType<? extends SoftAndWetExplosiveBubbleEntity> $$0, Level $$1) {
@@ -37,5 +42,14 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                     1, 0, 0,0, 0.015);
         }
         this.discard();
+    }
+    @Override
+    protected void onHitBlock(BlockHitResult $$0) {
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
+                    $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
+                    30, 0.2, 0.05, 0.2, 0.3);
+        }
+        popBubble();
     }
 }
