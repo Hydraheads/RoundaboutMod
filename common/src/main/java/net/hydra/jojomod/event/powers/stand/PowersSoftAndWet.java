@@ -483,7 +483,7 @@ public class PowersSoftAndWet extends PunchingStand {
         if (getInExplosiveSpinMode()){
             return 0.8F;
         }
-        return 0.4F;
+        return 0.54F;
     }
 
     public boolean inShootingMode(){

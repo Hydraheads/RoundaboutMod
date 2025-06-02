@@ -254,6 +254,10 @@ public class StandPowers {
     public void buttonInput1(boolean keyIsDown, Options options){
     }
 
+    public void onDesummon(){
+
+    }
+
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {

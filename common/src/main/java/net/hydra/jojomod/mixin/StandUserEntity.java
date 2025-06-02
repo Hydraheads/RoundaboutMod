@@ -984,7 +984,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
 
-
+        roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand() && (this.roundabout$getStand() == null ||
@@ -1365,6 +1365,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    /**Combat mode goes down when you don't have a stand or power active NO MATTER WHAT*/
+    @Unique
+    public void roundabout$tickStandOrStandless(){
+        if (!this.roundabout$getStandPowers().hasStandActive(((LivingEntity) (Object)this))){
+            roundabout$setCombatMode(false);
+        }
+    }
     @Unique
     @Override
     public void roundabout$setCombatMode(boolean only) {
