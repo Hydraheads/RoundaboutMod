@@ -21,6 +21,8 @@ public class ZHorseMarkingLayer {
             ci.cancel();
         } else if ("Valkyrie".equals(s) || "Varukirī".equals(s) || "ヴァルキリー".equals(s)) {
             ci.cancel();
+        } else if ("Silver Bullet".equals(s) || "Shirubā Baretto".equals(s) || "シルバーバレット".equals(s)) {
+            ci.cancel();
         }
 
     }
