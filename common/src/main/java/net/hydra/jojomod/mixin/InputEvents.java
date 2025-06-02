@@ -208,7 +208,7 @@ public abstract class InputEvents implements IInputEvents {
                 powers.pilotInputAttack();
                 return;
             }
-            if (standComp.roundabout$getEffectiveCombatMode()){
+            if (standComp.roundabout$getCombatMode()){
                 ci.setReturnValue(false);
                 return;
             }
@@ -294,7 +294,7 @@ public abstract class InputEvents implements IInputEvents {
                     return;
                 }
 
-                if (standComp.roundabout$getEffectiveCombatMode()){
+                if (standComp.roundabout$getCombatMode()){
                     ci.cancel();
                     return;
                 }
@@ -1030,10 +1030,19 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            if (standComp.roundabout$getCombatMode()){
+                if (roundabout$activeMining || Minecraft.getInstance().gameMode.isDestroying()) {
+                    roundabout$activeMining = false;
+                    Minecraft.getInstance().gameMode.stopDestroyBlock();
+
+                    standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                }
+            }
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();
-                if (this.options.keyAttack.isDown() && !player.isUsingItem() && !standComp.roundabout$getEffectiveCombatMode()) {
+                if (this.options.keyAttack.isDown() && !player.isUsingItem() && !standComp.roundabout$getCombatMode()) {
                     if (powers.isMiningStand()){
                         Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                         if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
@@ -1061,6 +1070,8 @@ public abstract class InputEvents implements IInputEvents {
                         }
                     }
                 }
+
+
                 powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
                 if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
                     powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(),this.options);

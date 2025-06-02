@@ -307,6 +307,15 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
 
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (keyIsDown) {
+            if (!inShootingMode()) {
+                super.buttonInputBarrage(keyIsDown, options);
+            }
+        }
+    }
+
     public static int maxSuperHitTime = 25;
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -1421,6 +1430,9 @@ public class PowersSoftAndWet extends PunchingStand {
                         this.tryPower(PowerIndex.POWER_4, true);
                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
 
+                        getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                        ClientUtil.stopDestroyingBlock();
                     }
                 } else {
                     hold4 = false;

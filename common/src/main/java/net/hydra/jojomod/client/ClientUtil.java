@@ -320,6 +320,10 @@ public class ClientUtil {
         }
     }
 
+    public static void stopDestroyingBlock(){
+        Minecraft.getInstance().gameMode.stopDestroyBlock();
+    }
+
     public static void handlePlaySoundPacket(int startPlayerID, byte soundQue) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
