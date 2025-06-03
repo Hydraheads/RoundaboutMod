@@ -1,16 +1,12 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.NoVibrationEntity;
-import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
-import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +17,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -543,7 +538,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
      * Controls the visibility of stands, specifically their fading in or out when summoned.
      * Potentially can be used to make stand blink on the verge of death?
      *
-     * @see StandRenderer#getStandOpacity
+     * see StandRenderer#getStandOpacity
      * <p>
      * When a stand hits negative opacity, it automatically despawns
      * @see #TickDown
