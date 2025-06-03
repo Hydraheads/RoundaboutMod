@@ -1120,7 +1120,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return ModSounds.SOFT_AND_WET_KICK_EVENT;
     }
     public int getKickAttackKnockShieldTime(){
-        return 100;
+        return 40;
     }
     public void encasementKick(){
 
