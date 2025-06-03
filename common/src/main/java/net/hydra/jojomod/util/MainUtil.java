@@ -96,6 +96,20 @@ public class MainUtil {
     }
 
 
+    public static boolean isMobOrItsMounts(Entity ent, Entity checkAgaist){
+        if (ent != null && checkAgaist != null){
+            if (ent.is(checkAgaist)){
+                return true;
+            }
+            if (ent.hasPassenger(checkAgaist)){
+                return true;
+            }
+            if (checkAgaist.hasPassenger(ent)){
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean isDreadBook(ItemStack stack) {
         if (stack != null && !stack.isEmpty() && stack.is(Items.BOOK)){
             Component name = stack.getHoverName();

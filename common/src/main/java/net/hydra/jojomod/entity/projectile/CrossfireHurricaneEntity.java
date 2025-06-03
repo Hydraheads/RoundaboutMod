@@ -406,7 +406,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         int crossno = this.getCrossNumber();
         if (crossno <= 0 || crossno == 7){
             Entity $$1 = $$0.getEntity();
-            if (getUserID() != $$1.getId() && !($$1 instanceof MagiciansRedEntity)) {
+            if (!MainUtil.isMobOrItsMounts($$1,getUser()) && !($$1 instanceof MagiciansRedEntity)) {
                 if ($$1 instanceof LivingEntity LE){
                     radialExplosion(LE);
                 } else {
@@ -496,7 +496,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
 
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
-        if (gotten !=null && gotten.getId() != getUserID()) {
+        if (gotten !=null && !MainUtil.isMobOrItsMounts(gotten,getUser())) {
             int size = this.getSize();
             blastEntity(gotten,this,size,this.standUser,direct,PMR,fireStormCreated);
         }
