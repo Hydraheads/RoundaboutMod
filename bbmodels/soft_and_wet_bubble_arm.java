@@ -16,7 +16,7 @@ public class soft_and_wet_bubble_arm<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition arm_addon = partdefinition.addOrReplaceChild("arm_addon", CubeListBuilder.create().texOffs(0, 0).addBox(3.0F, 8.525F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offset(-6.0F, 9.475F, 0.0F));
+		PartDefinition arm_addon = partdefinition.addOrReplaceChild("arm_addon", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, 21.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}

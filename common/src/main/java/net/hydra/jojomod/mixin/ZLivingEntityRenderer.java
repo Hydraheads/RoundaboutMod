@@ -6,7 +6,7 @@ import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.IAlphaModel;
-import net.hydra.jojomod.entity.client.BigBubbleLayer;
+import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenSpider;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;

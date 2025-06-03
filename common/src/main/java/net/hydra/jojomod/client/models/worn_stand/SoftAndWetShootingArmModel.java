@@ -8,7 +8,9 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
@@ -22,8 +24,8 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
         super(RenderType::entityTranslucent);
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition partdefinition = mesh.getRoot();
-        PartDefinition arm_addon = partdefinition.addOrReplaceChild("arm_addon", CubeListBuilder.create().texOffs(0, 0).addBox(3.0F, 8.525F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offset(-6.0F, 9.475F, 0.0F));
-        this.Root = LayerDefinition.create(mesh, 32, 32).bakeRoot();
+        PartDefinition arm_addon = partdefinition.addOrReplaceChild("arm_addon", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        this.Root = LayerDefinition.create(mesh, 64, 64).bakeRoot();
         this.armAddon = Root.getChild("arm_addon");
     }
 
@@ -40,6 +42,17 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
     @Override
     public void setupAnim(Entity var1,  float pAgeInTicks) {
 
+    }
+    public static ResourceLocation rl = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/soft_and_wet/projectiles/shooting_mode.png");
+
+    public ResourceLocation getTextureLocation(Entity context){
+        return rl;
+    }
+
+    public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
+        root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
 
 }

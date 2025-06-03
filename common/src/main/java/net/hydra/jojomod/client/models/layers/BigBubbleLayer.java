@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity.client;
+package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;

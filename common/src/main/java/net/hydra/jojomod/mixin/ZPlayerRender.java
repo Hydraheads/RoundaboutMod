@@ -2,10 +2,9 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.FacelessLayer;
-import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
+import net.hydra.jojomod.client.models.layers.ShootingArmLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.StoneLayer;
 import net.hydra.jojomod.client.models.layers.KnifeLayer;
@@ -71,6 +70,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         //this.addLayer(new LocacacaBeamLayer<>($$0, this));
         this.addLayer(new StoneLayer<>($$0, this));
         this.addLayer(new FacelessLayer<>($$0, this));
+        this.addLayer(new ShootingArmLayer<>($$0, this));
     }
 
     private static AbstractClientPlayer ACP;
@@ -606,9 +606,16 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 }
             }
         }
+
     }
 
-    @Unique
+    @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            at = @At(value = "TAIL"), cancellable = true)
+    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$renderTail(AbstractClientPlayer entity, float $$1, float $$2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+
+    }
+
+        @Unique
     public void roundabout$doJojoAnims(JojoNPC jj){
         jj.WRYYY.stop();
         jj.JOTARO.stop();
@@ -820,7 +827,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     }
     @Inject(method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$render(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
+    public void roundabout$getTextureLocation(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
         byte shape = ple.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
