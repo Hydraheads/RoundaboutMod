@@ -96,6 +96,13 @@ public class MainUtil {
     }
 
 
+
+    public static boolean isCreativeOrInvincible(Entity ent){
+        if (ent != null && (ent.isInvulnerable() || (ent instanceof Player PL && PL.isCreative()))){
+            return true;
+        }
+        return false;
+    }
     public static boolean isMobOrItsMounts(Entity ent, Entity checkAgaist){
         if (ent != null && checkAgaist != null){
             if (ent.is(checkAgaist)){
@@ -106,6 +113,20 @@ public class MainUtil {
             }
             if (checkAgaist.hasPassenger(ent)){
                 return true;
+            }
+            if (checkAgaist instanceof LivingEntity LE){
+                StandUser user = ((StandUser)LE);
+                StandEntity st = user.roundabout$getStand();
+                if (st != null && st.is(ent)){
+                    return true;
+                }
+            }
+            if (ent instanceof LivingEntity LE){
+                StandUser user = ((StandUser)LE);
+                StandEntity st = user.roundabout$getStand();
+                if (st != null && st.is(checkAgaist)){
+                    return true;
+                }
             }
         }
         return false;
@@ -1077,7 +1098,7 @@ public class MainUtil {
     }
     public static boolean isStandDamage(DamageSource sauce){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
-                || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)
+                || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)){
             return true;
         }

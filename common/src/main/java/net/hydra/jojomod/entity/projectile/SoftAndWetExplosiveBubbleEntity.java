@@ -2,7 +2,10 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
@@ -19,6 +23,13 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
     }
 
     public void tick(){
+        if (!this.level().isClientSide()) {
+            lifeSpan--;
+            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))) {
+                popBubble();
+                return;
+            }
+        }
         super.tick();
         if (!this.level().isClientSide()){
             ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL,
@@ -51,5 +62,16 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                     30, 0.2, 0.05, 0.2, 0.3);
         }
         popBubble();
+    }
+    public int lifeSpan = 0;
+    @Override
+    protected void onHitEntity(EntityHitResult $$0) {
+        if (!this.level().isClientSide()) {
+            if (!($$0.getEntity() instanceof SoftAndWetBubbleEntity)) {
+                if (!(MainUtil.isMobOrItsMounts($$0.getEntity(),getOwner())) && !MainUtil.isCreativeOrInvincible($$0.getEntity())){
+
+                }
+            }
+        }
     }
 }

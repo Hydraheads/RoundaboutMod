@@ -1259,6 +1259,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (cross != null) {
                     cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                     cross.setUser(this.self);
+                    cross.setOwner(this.self);
                     cross.setCrossNumber(7);
                     cross.setMaxSize(getKamikazeSize());
                     cross.setSize(getKamikazeSize());
@@ -1286,6 +1287,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (cross != null) {
                         cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                         cross.setUser(this.self);
+                        cross.setOwner(this.self);
                         cross.setCrossNumber(6);
                         cross.setMaxSize(getMassiveCrossfireSize());
                         bigAnkh = cross;
@@ -1538,6 +1540,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 Vec3 vec3d2ST = this.self.getViewVector(0);
 
                 fireball.setUser(this.self);
+                fireball.setOwner(this.self);
                 Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * 1.1, vec3d2ST.y * 1.1, vec3d2ST.z * 1.1);
                 fireball.absMoveTo(vec3d3ST.x(), vec3d3ST.y(), vec3d3ST.z());
 
@@ -2154,6 +2157,7 @@ public class PowersMagiciansRed extends PunchingStand {
         if (cross != null){
             cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
             cross.setUser(this.self);
+            cross.setOwner(this.self);
 
             if (hurricaneSpecial == null) {hurricaneSpecial = new ArrayList<>();}
             cross.setCrossNumber(crossNumber);
@@ -2335,6 +2339,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 if (cross != null) {
                     cross.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                     cross.setUser(this.self);
+                    cross.setOwner(this.self);
                     cross.setCrossNumber(5);
                     cross.setMaxSize(getChargingCrossfireSize());
                     cross.fireStormCreated = isUsingFirestorm();

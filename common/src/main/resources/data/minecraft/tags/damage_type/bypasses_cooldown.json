@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "roundabout:stand",
+    "roundabout:explosive_stand",
     "roundabout:crossfire",
     "roundabout:stand_rush",
     "roundabout:penetrating_stand",
