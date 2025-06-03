@@ -87,7 +87,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                     $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
                     30, 0.2, 0.05, 0.2, 0.3);
         }
-        popWithForce();
+        popOnGroundWithForce($$0.getLocation());
     }
     public int lifeSpan = 0;
     @Override
@@ -112,6 +112,32 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                     }
                 }
             }
+        }
+    }
+
+    public void popOnGroundWithForce(Vec3 location) {
+        if (!this.level().isClientSide()) {
+            Entity user = this.getOwner();
+            if (user instanceof LivingEntity LE) {
+                List<Entity> entityList = DamageHandler.genHitbox(LE, this.getX(), this.getY(),
+                        this.getZ(), 5, 5, 5);
+                if (!entityList.isEmpty()) {
+                    for (Entity ent : entityList) {
+                        if (!(ent instanceof SoftAndWetBubbleEntity)) {
+                            if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                                if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
+                                    float degrees = MainUtil.getLookAtEntityYawWithAngle(location, ent);
+                                    MainUtil.takeKnockbackWithY(ent, 0.9F,
+                                            Mth.sin(degrees * ((float) Math.PI / 180)),
+                                            Mth.sin(-17 * ((float) Math.PI / 180)),
+                                            -Mth.cos(degrees * ((float) Math.PI / 180)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            popBubble();
         }
     }
 
