@@ -1,7 +1,8 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;

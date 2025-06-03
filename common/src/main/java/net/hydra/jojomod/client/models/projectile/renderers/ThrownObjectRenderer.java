@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

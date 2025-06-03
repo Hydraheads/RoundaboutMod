@@ -1,11 +1,13 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.client.models.projectile.renderers;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.client.models.projectile.GasolineCanModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;

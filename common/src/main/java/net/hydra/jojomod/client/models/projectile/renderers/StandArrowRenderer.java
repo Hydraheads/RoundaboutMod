@@ -1,9 +1,10 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

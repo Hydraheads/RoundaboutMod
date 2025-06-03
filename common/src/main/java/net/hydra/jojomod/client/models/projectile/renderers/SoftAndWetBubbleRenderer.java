@@ -1,10 +1,13 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;

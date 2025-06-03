@@ -1,11 +1,13 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.projectile.KnifeModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
