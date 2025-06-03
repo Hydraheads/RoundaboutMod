@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class StandFireballModel<T extends StandFireballEntity> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_hurricane"), "main");
     private final ModelPart Fireball;
     private final ModelPart Root;
 

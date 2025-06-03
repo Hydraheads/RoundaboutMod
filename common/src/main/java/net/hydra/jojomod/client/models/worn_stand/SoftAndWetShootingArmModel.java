@@ -18,21 +18,14 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
     private final ModelPart armAddon;
     private final ModelPart Root;
 
-    public SoftAndWetShootingArmModel(ModelPart root) {
+    public SoftAndWetShootingArmModel() {
         super(RenderType::entityTranslucent);
-        this.Root = root;
-        this.armAddon = root.getChild("arm_addon");
-    }
-
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition partdefinition = mesh.getRoot();
         PartDefinition arm_addon = partdefinition.addOrReplaceChild("arm_addon", CubeListBuilder.create().texOffs(0, 0).addBox(3.0F, 8.525F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offset(-6.0F, 9.475F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        this.Root = LayerDefinition.create(mesh, 32, 32).bakeRoot();
+        this.armAddon = Root.getChild("arm_addon");
     }
-
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {

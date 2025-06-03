@@ -2871,21 +2871,26 @@ public class PowersMagiciansRed extends PunchingStand {
                         this.getSelf().setYRot(yrot);
                         this.getSelf().setYHeadRot(yrot);
                     }
-                    if (dist <= 25 && !hasHurricane() && activePower == PowerIndex.NONE) {
 
-                        if ((this.self instanceof Raider || this.self instanceof Villager || this.self instanceof AvdolNPC ||
-                        this.self instanceof Blaze || this.self instanceof Piglin || this.self instanceof EnderMan||
-                                this.self instanceof Hoglin || this.self instanceof ZombifiedPiglin || this.self instanceof PiglinBrute)
-                                && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)
-                        ){
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                        } else if (dist > 7 && !this.onCooldown(PowerIndex.SKILL_2) && !isLockedByWater()) {
-                            double RNG = Math.random();
-                            if (RNG < 0.3){
-                                wentForCharge = true;
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
-                            } else {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                    boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);
+
+                    if (!(isBasicMob)) {
+                        if (dist <= 25 && !hasHurricane() && activePower == PowerIndex.NONE) {
+
+                            if ((this.self instanceof Raider || this.self instanceof Villager || this.self instanceof AvdolNPC ||
+                                    this.self instanceof Blaze || this.self instanceof Piglin || this.self instanceof EnderMan ||
+                                    this.self instanceof Hoglin || this.self instanceof ZombifiedPiglin || this.self instanceof PiglinBrute)
+                                    && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)
+                            ) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                            } else if (dist > 7 && !this.onCooldown(PowerIndex.SKILL_2) && !isLockedByWater()) {
+                                double RNG = Math.random();
+                                if (RNG < 0.3) {
+                                    wentForCharge = true;
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
+                                } else {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                                }
                             }
                         }
                     }
@@ -2896,7 +2901,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         if (targetEntity != null && targetEntity.is(attackTarget)) {
                             if (this.attackTimeDuring <= -1) {
                                 double RNG = Math.random();
-                                if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge && !isLockedByWater()){
+                                if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge && !isLockedByWater() && !(isBasicMob)){
                                     wentForCharge = true;
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
                                 } else if ((this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) &&

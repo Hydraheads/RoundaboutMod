@@ -5,10 +5,12 @@ import net.hydra.jojomod.block.BubbleScaffoldBlockEntityRenderer;
 import net.hydra.jojomod.block.D4CLightBlockEntityRenderer;
 import net.hydra.jojomod.block.MirrorBlockEntityRenderer;
 import net.hydra.jojomod.block.StandFireRenderer;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
+import net.hydra.jojomod.client.models.worn_stand.SoftAndWetShootingArmModel;
 import net.hydra.jojomod.entity.D4CCloneRenderer;
 import net.hydra.jojomod.entity.FogCloneRenderer;
 import net.hydra.jojomod.entity.Terrier.TerrierEntityModel;
@@ -140,7 +142,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.MODIFIED_LAYER, PlayerModifiedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
-
+        ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent
