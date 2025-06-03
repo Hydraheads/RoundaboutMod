@@ -2,30 +2,22 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
-import net.hydra.jojomod.client.gui.NoCancelInputScreen;
-import net.hydra.jojomod.client.gui.PoseSwitcherScreen;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
 
@@ -51,16 +43,20 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
 
                             // Translate to the right/left hand
 
-                            getParentModel().rightArm.translateAndRotate(poseStack); // Use leftArm for off-hand
+                            if (entity.getMainArm() == HumanoidArm.RIGHT) {
+                                getParentModel().rightArm.translateAndRotate(poseStack); // Use leftArm for off-hand
+                                // Apply additional transformations
+                                poseStack.translate(-0.05F, 0.63, 0F); //1 1
+                                // The third value pushes it up (negative)
 
-                            // Apply additional transformations
-                            poseStack.translate(-0.05F, 0.65, 0F); //1 1
-                            // The third value pushes it up (negative)
-                            poseStack.scale(1.0F, 1.0F, 1.0F);
-
+                            } else {
+                                getParentModel().leftArm.translateAndRotate(poseStack); // Use leftArm for off-hand
+                                // Apply additional transformations
+                                poseStack.translate(0.05F, 0.63, 0F);
+                            }
                             // Render your model here
+                            poseStack.scale(1.0F, 1.0F, 1.0F);
                             ModStrayModels.SHOOTING_ARM.render(entity, poseStack, bufferSource, packedLight);
-
                             poseStack.popPose();
                         }
                     }
