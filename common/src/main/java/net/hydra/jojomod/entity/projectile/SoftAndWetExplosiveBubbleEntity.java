@@ -16,8 +16,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -86,8 +90,41 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
                     $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
                     30, 0.2, 0.05, 0.2, 0.3);
+
+            BlockState bs = this.level().getBlockState($$0.getBlockPos());
+            if (MainUtil.getIsGamemodeApproriateForGrief(this.getOwner())){
+                if (bs.getBlock() instanceof TntBlock tnt){
+                        this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
+                        wasExploded(this.level(),$$0.getBlockPos());
+                } else if (bs.getBlock() instanceof AbstractGlassBlock || bs.getBlock() instanceof StainedGlassPaneBlock
+                        || bs.getBlock().defaultBlockState().is(Blocks.GLASS_PANE)){
+                    this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
+                    blockBreakParticles(bs.getBlock(),
+                            new Vec3($$0.getBlockPos().getX()+0.5,
+                                    $$0.getBlockPos().getY()+0.5,
+                                    $$0.getBlockPos().getZ()+0.5));
+                    this.playSound(bs.getBlock().defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                }
+            }
         }
         popOnGroundWithForce($$0.getLocation());
+    }
+
+    public void blockBreakParticles(Block block, Vec3 pos){
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    100, 0, 0, 0, 0.5);
+        }
+    }
+    public void wasExploded(Level $$0, BlockPos $$1) {
+        if (!$$0.isClientSide) {
+            PrimedTnt $$3 = new PrimedTnt($$0, (double)$$1.getX() + 0.5, (double)$$1.getY(), (double)$$1.getZ() + 0.5, null);
+            int $$4 = $$3.getFuse();
+            $$3.setFuse((short)($$0.random.nextInt($$4 / 4) + $$4 / 8));
+            $$0.addFreshEntity($$3);
+        }
     }
     public int lifeSpan = 0;
     @Override
