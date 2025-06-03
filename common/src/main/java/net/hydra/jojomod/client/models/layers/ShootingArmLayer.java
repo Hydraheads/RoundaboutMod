@@ -56,7 +56,11 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                             }
                             // Render your model here
                             poseStack.scale(1.0F, 1.0F, 1.0F);
-                            ModStrayModels.SHOOTING_ARM.render(entity, poseStack, bufferSource, packedLight);
+                            boolean isHurt = entity.hurtTime > 0;
+                            float r = isHurt ? 1.0F : 1.0F;
+                            float g = isHurt ? 0.0F : 1.0F;
+                            float b = isHurt ? 0.0F : 1.0F;
+                            ModStrayModels.SHOOTING_ARM.render(entity, poseStack, bufferSource, packedLight, r, g, b, 0.8F);
                             poseStack.popPose();
                         }
                     }

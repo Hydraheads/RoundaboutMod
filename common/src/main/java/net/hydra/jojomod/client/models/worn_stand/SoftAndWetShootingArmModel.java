@@ -54,5 +54,9 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
+    public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha) {
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
+        root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+    }
 
 }
