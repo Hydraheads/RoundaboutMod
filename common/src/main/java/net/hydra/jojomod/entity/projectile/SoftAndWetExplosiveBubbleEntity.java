@@ -1,7 +1,9 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
@@ -11,6 +13,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -67,11 +70,27 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
-            if (!($$0.getEntity() instanceof SoftAndWetBubbleEntity)) {
-                if (!(MainUtil.isMobOrItsMounts($$0.getEntity(),getOwner())) && !MainUtil.isCreativeOrInvincible($$0.getEntity())){
+            Entity ent = $$0.getEntity();
+            if (!(ent instanceof SoftAndWetBubbleEntity)) {
+                if (this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                    if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
 
+                        if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()),
+                                PW.getExplosiveBubbleStrength(ent))) {
+                            //You don't need to hurt them to launch them
+                        }
+
+                        float degrees = MainUtil.getLookAtEntityYawWithAngle(ent.position().add(this.getDeltaMovement().reverse()), ent);
+                        MainUtil.takeKnockbackWithY(ent, 1.0F,
+                                Mth.sin(degrees * ((float) Math.PI / 180)),
+                                Mth.sin(-17 * ((float) Math.PI / 180)),
+                                -Mth.cos(degrees * ((float) Math.PI / 180)));
+                        popBubble();
+                    }
                 }
             }
         }
     }
+
+
 }

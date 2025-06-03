@@ -1127,6 +1127,11 @@ public class MainUtil {
         double e = targetEntity.getZ() - user.getZ();
         return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
+    public static float getLookAtEntityYawWithAngle(Vec3 user, Entity targetEntity) {
+        double d = targetEntity.getX() - user.x();
+        double e = targetEntity.getZ() - user.z();
+        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+    }
 
     public static float angleDistance(float alpha, float beta) {
         float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance

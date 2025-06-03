@@ -1009,6 +1009,40 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
 
+
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 1.65* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 4.7* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+        }
+    }
+
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 2.35* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 5.7* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+        }
+    }
+
+
+    public float getExplosiveBubbleStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 1.1* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+        }
+    }
+
     public float getKickAttackKnockback(){
         return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.2F);
     }
@@ -1020,6 +1054,7 @@ public class PowersSoftAndWet extends PunchingStand {
             return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+1;
         }
     }
+
     public void kickAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
