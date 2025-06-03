@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
@@ -15,10 +16,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
     public SoftAndWetExplosiveBubbleEntity(EntityType<? extends SoftAndWetExplosiveBubbleEntity> $$0, Level $$1) {
@@ -38,6 +43,24 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
             ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL,
                     this.getX(), this.getY() + this.getBbHeight()/2, this.getZ(),
                     0, 0, 0,0, 0.015);
+
+            if (!isRemoved()){
+
+                Vec3 currentPos = this.position();
+                Vec3 nextPos = currentPos.add(this.getDeltaMovement());
+                AABB sweptBox = this.getBoundingBox()
+                        .expandTowards(this.getDeltaMovement())
+                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
+
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                        this.level(), this, currentPos, nextPos, sweptBox,
+                        this::canHitEntity
+                );
+
+                if (entityHitResult != null) {
+                    this.onHitEntity(entityHitResult);
+                }
+            }
         }
     }
 
@@ -64,7 +87,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                     $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
                     30, 0.2, 0.05, 0.2, 0.3);
         }
-        popBubble();
+        popWithForce();
     }
     public int lifeSpan = 0;
     @Override
@@ -81,7 +104,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                         }
 
                         float degrees = MainUtil.getLookAtEntityYawWithAngle(ent.position().add(this.getDeltaMovement().reverse()), ent);
-                        MainUtil.takeKnockbackWithY(ent, 1.0F,
+                        MainUtil.takeKnockbackWithY(ent, 1.05F,
                                 Mth.sin(degrees * ((float) Math.PI / 180)),
                                 Mth.sin(-17 * ((float) Math.PI / 180)),
                                 -Mth.cos(degrees * ((float) Math.PI / 180)));
@@ -92,5 +115,30 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
         }
     }
 
+    public void popWithForce() {
+        if (!this.level().isClientSide()) {
+            Entity user = this.getOwner();
+            if (user instanceof LivingEntity LE) {
+                List<Entity> entityList = DamageHandler.genHitbox(LE, this.getX(), this.getY(),
+                        this.getZ(), 5, 5, 5);
+                if (!entityList.isEmpty()) {
+                    for (Entity ent : entityList) {
+                        if (!(ent instanceof SoftAndWetBubbleEntity)) {
+                            if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                                if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
+                                    float degrees = MainUtil.getLookAtEntityYawWithAngle(ent.position(), ent);
+                                    MainUtil.takeKnockbackWithY(ent, 0.9F,
+                                            Mth.sin(degrees * ((float) Math.PI / 180)),
+                                            Mth.sin(-17 * ((float) Math.PI / 180)),
+                                            -Mth.cos(degrees * ((float) Math.PI / 180)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            popBubble();
+        }
+    }
 
 }
