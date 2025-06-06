@@ -345,6 +345,8 @@ import java.util.Set;
         public Integer starPlatinumGuardian;
         @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
         public Integer barrageRecoil;
+        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
+        public Integer kickBarrageRecoil;
         @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
         public Integer starFinger;
         @IntOption(group = "inherit", value = 90, min = 0, max = 72000)

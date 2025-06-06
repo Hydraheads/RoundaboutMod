@@ -1402,7 +1402,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     public int getKickBarrageRecoilTime(){
-        return 35;
+        return ClientNetworking.getAppropriateConfig().
+                cooldownsInTicks.kickBarrageRecoil;
     }
     public void updateKickBarrage(){
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
