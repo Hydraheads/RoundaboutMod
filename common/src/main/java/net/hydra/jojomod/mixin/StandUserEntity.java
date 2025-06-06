@@ -1015,7 +1015,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$detectTicks = dt;
             }
         }
-
         this.roundabout$getStandPowers().tickPower();
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();
@@ -1700,6 +1699,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public float roundabout$getMaxGuardPoints(){
         return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().guardPoints.standGuardMultiplier*0.01));
+    }
+
+    @Unique
+    public AnimationState roundabout$handLayerAnimation = new AnimationState();
+
+    @Unique
+    @Override
+    public AnimationState roundabout$getHandLayerAnimation(){
+        return roundabout$handLayerAnimation;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setHandLayerAnimation(AnimationState layer){
+        roundabout$handLayerAnimation = layer;
     }
     @Unique
     public float roundabout$getGuardCooldown(){

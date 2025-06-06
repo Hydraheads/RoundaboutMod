@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -82,6 +83,8 @@ public interface StandUser {
     void roundabout$setActive(boolean active);
 
     void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
+    AnimationState roundabout$getHandLayerAnimation();
+    void roundabout$setHandLayerAnimation(AnimationState layer);
 
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
