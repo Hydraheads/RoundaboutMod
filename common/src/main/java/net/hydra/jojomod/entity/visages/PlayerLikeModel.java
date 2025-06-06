@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
@@ -220,18 +221,6 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
    }
     @Override
     public void setupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
-
-        this.animate($$0.WRYYY, Poses.WRY.ad, $$3, 1f);
-        this.animate($$0.GIORNO, Poses.GIORNO.ad, $$3, 1f);
-        this.animate($$0.JOSEPH, Poses.JOSEPH.ad, $$3, 1f);
-        this.animate($$0.KOICHI, Poses.KOICHI.ad, $$3, 1f);
-        this.animate($$0.OH_NO, Poses.OH_NO.ad, $$3, 1f);
-        this.animate($$0.TORTURE_DANCE, Poses.TORTURE_DANCE.ad, $$3, 1f);
-        this.animate($$0.WAMUU, Poses.WAMUU.ad, $$3, 1f);
-        this.animate($$0.JOTARO, Poses.JOTARO.ad, $$3, 1f);
-        this.animate($$0.JONATHAN, Poses.JONATHAN.ad, $$3, 1f);
-
-
         if ($$0.standPos == Poses.NONE || $$0.standPos == null) {
             boolean $$6 = $$0.getFallFlyingTicks() > 4;
             boolean $$7 = $$0.isVisuallySwimming();
@@ -425,6 +414,50 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
             }
         }
 
+
+
+
+
+
+
+        this.animate($$0.WRYYY, Poses.WRY.ad, $$3, 1f);
+        this.animate($$0.GIORNO, Poses.GIORNO.ad, $$3, 1f);
+        this.animate($$0.JOSEPH, Poses.JOSEPH.ad, $$3, 1f);
+        this.animate($$0.KOICHI, Poses.KOICHI.ad, $$3, 1f);
+        this.animate($$0.OH_NO, Poses.OH_NO.ad, $$3, 1f);
+        this.animate($$0.TORTURE_DANCE, Poses.TORTURE_DANCE.ad, $$3, 1f);
+        this.animate($$0.WAMUU, Poses.WAMUU.ad, $$3, 1f);
+        this.animate($$0.JOTARO, Poses.JOTARO.ad, $$3, 1f);
+        this.animate($$0.JONATHAN, Poses.JONATHAN.ad, $$3, 1f);
+
+
+        StandUser user = ((StandUser)$$0);
+        if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
+            if (user.roundabout$rotateArmToShoot()){
+                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                if ($$9) {
+                    this.rightArm.yRot = -0.1F + this.head.yRot;
+                    this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                } else {
+                    this.leftArm.yRot = 0.1F + this.head.yRot;
+                    this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                }
+            }
+        } else if ($$0.host != null){
+            StandUser user2 = ((StandUser)$$0.host);
+            if (user2.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
+                if (user2.roundabout$rotateArmToShoot()){
+                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                    if ($$9) {
+                        this.rightArm.yRot = -0.1F + this.head.yRot;
+                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                    } else {
+                        this.leftArm.yRot = 0.1F + this.head.yRot;
+                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                    }
+                }
+            }
+        }
 
         this.leftPants.copyFrom(this.leftLeg);
         this.rightPants.copyFrom(this.rightLeg);

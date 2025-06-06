@@ -455,16 +455,14 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
             $$4.xRot = 0.0F;
             $$4.render(stack, buffer.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
 
-            ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,acl.tickCount+ ClientUtil.getFrameTime(),
-                    0,0,$$5);
         }
         if ($$5 != null && texture != null) {
             $$5.xRot = 0.0F;
             $$5.render(stack, buffer.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
+        }
 
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,acl.tickCount+ ClientUtil.getFrameTime(),
                     0,0,$$5);
-        }
     }
 
     @Unique

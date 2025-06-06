@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.minecraft.client.model.HumanoidModel;
@@ -33,16 +34,20 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+            LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity!= null) {
-                    StandUser user = ((StandUser)entity);
+                    if (entity instanceof JojoNPC jnp && jnp.host != null){
+                        livent = jnp.host;
+                    }
+                    StandUser user = ((StandUser)livent);
                     if (user.roundabout$getCombatMode()) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                             poseStack.pushPose();
 
                             // Translate to the right/left hand
 
-                            if (entity.getMainArm() == HumanoidArm.RIGHT) {
+                            if (livent.getMainArm() == HumanoidArm.RIGHT) {
                                 getParentModel().rightArm.translateAndRotate(poseStack); // Use leftArm for off-hand
                                 // Apply additional transformations
                                 poseStack.translate(-0.05F, 0.63, 0F); //1 1
@@ -55,11 +60,11 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                             }
                             // Render your model here
                             poseStack.scale(1.0F, 1.0F, 1.0F);
-                            boolean isHurt = entity.hurtTime > 0;
+                            boolean isHurt = livent.hurtTime > 0;
                             float r = isHurt ? 1.0F : 1.0F;
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
-                            ModStrayModels.SHOOTING_ARM.render(entity, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 0.8F);
+                            ModStrayModels.SHOOTING_ARM.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 0.8F);
                             poseStack.popPose();
                         }
                     }

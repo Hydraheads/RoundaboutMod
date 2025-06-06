@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
@@ -36,12 +37,15 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
     }
 
     @Override
-    public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
-        if ($$3.standPos == Poses.NONE || $$3.standPos == null) {
-            play = $$3.host;
-            boolean $$10 = $$3.getMainArm() == HumanoidArm.RIGHT;
-            ItemStack $$11 = $$10 ? $$3.getOffhandItem() : $$3.getMainHandItem();
-            ItemStack $$12 = $$10 ? $$3.getMainHandItem() : $$3.getOffhandItem();
+    public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
+        if (entity.host != null && ((StandUser)entity.host).roundabout$getEffectiveCombatMode() && !entity.host.isUsingItem()){
+            return;
+        }
+        if (entity.standPos == Poses.NONE || entity.standPos == null) {
+            play = entity.host;
+            boolean $$10 = entity.getMainArm() == HumanoidArm.RIGHT;
+            ItemStack $$11 = $$10 ? entity.getOffhandItem() : entity.getMainHandItem();
+            ItemStack $$12 = $$10 ? entity.getMainHandItem() : entity.getOffhandItem();
             if (!$$11.isEmpty() || !$$12.isEmpty()) {
                 $$0.pushPose();
                 if (this.getParentModel().young) {
@@ -50,8 +54,8 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
                     $$0.scale(0.5F, 0.5F, 0.5F);
                 }
 
-                this.renderArmWithItem($$3, $$12, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, $$0, $$1, $$2);
-                this.renderArmWithItem($$3, $$11, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, $$0, $$1, $$2);
+                this.renderArmWithItem(entity, $$12, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, $$0, $$1, $$2);
+                this.renderArmWithItem(entity, $$11, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, $$0, $$1, $$2);
                 $$0.popPose();
             }
         }
