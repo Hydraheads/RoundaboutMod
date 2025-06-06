@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.LayerAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
@@ -69,7 +70,7 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
-            if (((TimeStop)context.level()).CanTimeStopEntity(context)){
+            if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
             StandUser user = ((StandUser) LE);
