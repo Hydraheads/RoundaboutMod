@@ -298,7 +298,16 @@ public abstract class InputEvents implements IInputEvents {
                     ci.cancel();
                     return;
                 }
+
                 boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
+                if (isMining) {
+                    if (player.getMainHandItem().getItem() instanceof ShearsItem) {
+                        standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    }
+                }
+
+                isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
                 if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                     if (!$$0){
                         this.missTime = 0;
@@ -1030,6 +1039,15 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+
+            boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
+            if (isMining) {
+                if (player.getMainHandItem().getItem() instanceof ShearsItem) {
+                    standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                }
+            }
+
             if (standComp.roundabout$getCombatMode()){
                 if (roundabout$activeMining || Minecraft.getInstance().gameMode.isDestroying()) {
                     roundabout$activeMining = false;
@@ -1040,7 +1058,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
-                boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
+                isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();
                 if (this.options.keyAttack.isDown() && !player.isUsingItem() && !standComp.roundabout$getCombatMode()) {
                     if (powers.isMiningStand()){

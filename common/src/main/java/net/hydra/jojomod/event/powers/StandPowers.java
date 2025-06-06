@@ -2578,7 +2578,10 @@ public class StandPowers {
     }
 
     public boolean canUseMiningStand() {
-        return (isMiningStand() && (!(this.getSelf().getMainHandItem().getItem() instanceof DiggerItem) || this.getActivePower() == PowerIndex.MINING));
+        return (isMiningStand() && (!(this.getSelf().getMainHandItem().getItem() instanceof DiggerItem ||
+                this.getSelf().getMainHandItem().getItem() instanceof ShearsItem) || (this.getActivePower() == PowerIndex.MINING
+        && !(this.getSelf().getMainHandItem().getItem() instanceof ShearsItem))
+        ));
     }
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
     }
