@@ -138,7 +138,11 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                                                                                                 CallbackInfo ci) {
         //PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity,
         // float var5, float var6, float var7, float partialTicks, float var9, float var10)
-        ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,acl.tickCount+ ClientUtil.getFrameTime(),
+        float yes = acl.tickCount;
+        if (!ClientUtil.checkIfGamePaused()){
+            yes+=ClientUtil.getFrameTime();
+        }
+        ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
     }
 
@@ -461,7 +465,12 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
             $$5.render(stack, buffer.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
         }
 
-            ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,acl.tickCount+ ClientUtil.getFrameTime(),
+
+            float yes = acl.tickCount;
+            if (!ClientUtil.checkIfGamePaused()){
+                yes+=ClientUtil.getFrameTime();
+            }
+            ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
     }
 
